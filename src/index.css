@@ -10,6 +10,34 @@ body {
   font-family: 'apercu-regular';
 }
 
+h1 {
+  font-family: 'apercu-medium';
+  font-size: 32px;
+  text-transform: uppercase;
+}
+h2 {
+  font-family: 'apercu-medium';
+  font-size: 24px;
+  text-transform: uppercase;
+}
+h3 {
+  font-family: 'apercu-medium';
+  font-size: 24px;
+}
+h4 {
+  font-family: 'apercu-medium';
+  font-size: 22px;
+  text-transform: uppercase;
+}
+h5 {
+  font-family: 'apercu-medium';
+  font-size: 18px;
+}
+h6 {
+  font-family: 'apercu-regular';
+  font-size: 20px;
+}
+
 @font-face {
   font-family: 'apercu-regular';
   src: url('/fonts/apercu-regular.eot');
