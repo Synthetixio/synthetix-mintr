@@ -1,13 +1,44 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'apercu-regular';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+* {
+  box-sizing: border-box;
+  font-family: 'apercu-regular';
+}
+
+@font-face {
+  font-family: 'apercu-regular';
+  src: url('/fonts/apercu-regular.eot');
+  src: url('/fonts/apercu-regular.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/apercu-regular.woff2') format('woff2'),
+    url('/fonts/apercu-regular.woff') format('woff'),
+    url('/fonts/apercu-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'apercu-medium';
+  src: url('/fonts/apercu-medium.eot');
+  src: url('/fonts/apercu-medium.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/apercu-medium.woff2') format('woff2'),
+    url('/fonts/apercu-medium.woff') format('woff'),
+    url('/fonts/apercu-medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'apercu-bold';
+  src: url('/fonts/apercu-bold.eot');
+  src: url('/fonts/apercu-bold.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/apercu-bold.woff2') format('woff2'),
+    url('/fonts/apercu-bold.woff') format('woff'),
+    url('/fonts/apercu-bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
