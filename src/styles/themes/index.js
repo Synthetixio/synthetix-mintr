@@ -1,16 +1,5 @@
-const white = '#FFFFFF';
-const black = '#161617';
-const gray = '#F8F8F9';
-
-const themeLight = {
-  background: gray,
-  body: black,
-};
-
-const themeDark = {
-  background: black,
-  body: white,
-};
+import themeLight from './light';
+import themeDark from './dark';
 
 const theme = mode => (mode === 'dark' ? themeDark : themeLight);
 
