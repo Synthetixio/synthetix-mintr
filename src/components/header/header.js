@@ -23,7 +23,7 @@ const Header = ({ t }) => {
 const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 32px;
 `;
 
 const Logo = styled.img`
