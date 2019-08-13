@@ -1,6 +1,6 @@
 import COLORS from '../colors';
 
 export default {
-  background: COLORS.blueDark,
+  background: COLORS.backgroundBlue,
   body: COLORS.white,
 };

@@ -1,7 +1,9 @@
 export default {
   white: '#FFFFFF',
   backgroundWhite: '#FCFCFE',
+  backgroundBlue: '#0F0C26',
   grey: '#F6F6FD',
+  green: '#10BA97',
   // Purple palette
   purpleVDark: '#28275A',
   purpleDark: '#484697',
