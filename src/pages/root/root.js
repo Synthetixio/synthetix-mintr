@@ -1,32 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from '../../components/header';
-import { withTranslation } from 'react-i18next';
-import { useTheme } from '../../contexts/themeContext';
+import Dashboard from '../dashboard';
+import MainContainer from '../main-container';
 
 const Root = ({ t }) => {
-  const themeState = useTheme();
   return (
-    <Wrapper>
-      <h1>Dark Mode example</h1>
-      <div>
-        <button onClick={() => themeState.toggle()}>
-          {themeState.dark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        </button>
-      </div>
-    </Wrapper>
+    <RootWrapper>
+      <Dashboard />
+      <MainContainer />
+    </RootWrapper>
   );
 };
 
-const Wrapper = styled('div')`
+const RootWrapper = styled('div')`
   background: ${props => props.theme.background};
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen';
   h1 {
     color: ${props => props.theme.body};
+    margin: 0;
   }
   transition: all ease-out 0.5s;
+  display: flex;
 `;
 
-export default withTranslation()(Root);
+export default Root;
