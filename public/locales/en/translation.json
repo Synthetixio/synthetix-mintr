@@ -1,8 +1,17 @@
 {
-  "header": {
-    "title": "This is the title"
+  "dashboard": {
+    "header": {
+      "title": "Mintr"
+    }
   },
-  "body": {
-    "subTitle": "this is the subtitle"
+  "mainContent": {
+    "header": {
+      "buttons": {
+        "home": "Home",
+        "depot": "Depot",
+        "transactionsHistory": "Transactions History",
+        "escrow": "Escrow"
+      }
+    }
   }
 }

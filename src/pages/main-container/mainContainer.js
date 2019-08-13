@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 import Home from '../home';
 
-const MainContainer = () => {
+const MainContainer = ({ t }) => {
   return (
     <MainContainerWrapper>
       <Header>
-        <button>Home</button>
-        <button>Depot</button>
-        <button>Transaction history</button>
-        <button>Escrow</button>
+        <button>{t('mainContent.header.buttons.home')}</button>
+        <button>{t('mainContent.header.buttons.depot')}</button>
+        <button>{t('mainContent.header.buttons.transactionsHistory')} </button>
+        <button>{t('mainContent.header.buttons.escrow')}</button>
       </Header>
       <Home />
     </MainContainerWrapper>
@@ -27,4 +28,4 @@ const Header = styled('div')`
   height: 50px;
 `;
 
-export default MainContainer;
+export default withTranslation()(MainContainer);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Dashboard from '../dashboard';
 import MainContainer from '../main-container';
 
-const Root = ({ t }) => {
+const Root = () => {
   return (
     <RootWrapper>
       <Dashboard />

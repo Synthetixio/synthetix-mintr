@@ -7,7 +7,7 @@ const Header = ({ t }) => {
   const themeState = useTheme();
   return (
     <HeaderWrapper>
-      <h1>{t('header.title')}</h1>
+      <h1>{t('dashboard.header.title')}</h1>
       <div>
         <button onClick={() => themeState.toggle()}>
           {themeState.dark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
