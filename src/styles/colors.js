@@ -14,6 +14,8 @@ export default {
   purple4: '#CACAF1', 
   purple5: '#E8E7FD',
   purple6: '#F3F3FE',
+  //accents
+
   // darkMode 
   // purple palette
   dPurple1: '#0D0B21',
@@ -22,4 +24,7 @@ export default {
   dPurple4: '#1A1732',
   dPurple5: '#212140',
   dPurple6: '#26214A',
+  // accents
+  dAccent1: '#443D7D',
+  dAccent2: '#9492C4',
 };

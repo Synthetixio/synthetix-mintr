@@ -15,7 +15,7 @@ const DashboardWrapper = styled('div')`
   background: ${props => props.theme.background};
   width: 623px;
   h1 {
-    color: ${props => props.theme.body};
+    color: ${props => props.theme.bodyFont};
     margin: 0;
   }
   transition: all ease-out 0.5s;
