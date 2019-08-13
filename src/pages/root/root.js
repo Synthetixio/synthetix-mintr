@@ -22,7 +22,7 @@ const RootWrapper = styled('div')`
   }
   transition: all ease-out 0.5s;
   display: flex;
-  padding: 32px;
+  padding: 32px 0;
 `;
 
 export default Root;

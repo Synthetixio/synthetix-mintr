@@ -1,24 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
+import DashboardHeaderButton from '../dashboard-header-button';
 import COLORS from '../../styles/colors';
 
 const WalletStatusButton = ({ children }) => {
   return (
-    <Button>
-      <GreenDot />
-      {children}
-    </Button>
+    <DashboardHeaderButton>
+      <ButtonInner>
+        <GreenDot />
+        {children}
+      </ButtonInner>
+    </DashboardHeaderButton>
   );
 };
 
-const Button = styled.button`
-  background-color: white;
-  width: 161px;
-  height: 40px;
-  border-radius: 20px;
+const ButtonInner = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
-  padding: 12px;
   justify-content: space-between;
   font-family: 'apercu-regular';
   font-size: 14px;
@@ -28,6 +27,7 @@ const GreenDot = styled.div`
   border-radius: 50%;
   width: 16px;
   height: 16px;
+  margin-right: 12px;
   background-color: ${COLORS.green};
 `;
 
