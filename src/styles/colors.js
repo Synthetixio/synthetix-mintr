@@ -1,22 +1,24 @@
 export default {
   white: '#FFFFFF',
-  backgroundWhite: '#FCFCFE', 
+  backgroundWhite: '#FCFCFE',
   grey: '#F6F6FD',
+  green: '#10BA97',
   //Blue palette
   blue1: '#5A66F8',
   blue2: '#727CFF',
-  blueVLight: '#E8E7FD', 
-  // lightMode 
+  blueVLight: '#E8E7FD',
+  // lightMode
   // purple palette
   purple1: '#28275A',
-  purple2: '#484697', 
-  purple3: '#6F6E98', 
-  purple4: '#CACAF1', 
+  purple2: '#484697',
+  purple3: '#6F6E98',
+  purple4: '#CACAF1',
   purple5: '#E8E7FD',
   purple6: '#F3F3FE',
   //accents
 
   // darkMode 
+  // darkMode
   // purple palette
   dPurple1: '#0D0B21',
   dPurple2: '#0F0C26',

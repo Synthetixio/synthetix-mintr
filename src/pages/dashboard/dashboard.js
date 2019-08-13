@@ -19,6 +19,7 @@ const DashboardWrapper = styled('div')`
     margin: 0;
   }
   transition: all ease-out 0.5s;
+  flex-shrink: 0;
 `;
 
 const Content = styled('div')`
