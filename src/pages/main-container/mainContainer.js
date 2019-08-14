@@ -1,24 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
-import Home from '../home';
+import { Home, Depot, Transactions, Escrow } from './screens';
 import ContentHeaderButton from '../../components/content-header-button';
 
-const renderButtons = t => {
+const defaultScreen = 'home';
+
+const renderButtons = (t, currentScreen, setScreen) => {
   return ['home', 'depot', 'transactionsHistory', 'escrow'].map(page => {
     return (
-      <ContentHeaderButton isSelected={page === 'home'}>
+      <ContentHeaderButton
+        isSelected={page === currentScreen}
+        onClick={() => setScreen(page)}
+      >
         {t(`mainContent.header.buttons.${page}`)}
       </ContentHeaderButton>
     );
   });
 };
 
+const renderScreen = screen => {
+  switch (screen) {
+    case 'home':
+    default:
+      return <Home />;
+    case 'depot':
+      return <Depot />;
+    case 'transactionsHistory':
+      return <Transactions />;
+    case 'escrow':
+      return <Escrow />;
+  }
+};
+
 const MainContainer = ({ t }) => {
+  const [currentScreen, setScreen] = useState(defaultScreen);
+
   return (
     <MainContainerWrapper>
-      <Header>{renderButtons(t)}</Header>
-      <Home />
+      <Header>{renderButtons(t, currentScreen, setScreen)}</Header>
+      {renderScreen(currentScreen)}
     </MainContainerWrapper>
   );
 };
@@ -31,7 +52,7 @@ const MainContainerWrapper = styled('div')`
 const Header = styled('div')`
   display: flex;
   justify-content: space-between;
-  height: 88px;
+  height: 80px;
   background-color: ${props => props.theme.accentLight};
 `;
 
