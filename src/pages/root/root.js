@@ -15,10 +15,8 @@ const Root = () => {
 const RootWrapper = styled('div')`
   background: ${props => props.theme.background};
   width: 100%;
-  height: 100vh;
   h1 {
     color: ${props => props.theme.body};
-    margin: 0;
   }
   transition: all ease-out 0.5s;
   display: flex;

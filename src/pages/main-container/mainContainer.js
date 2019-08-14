@@ -4,18 +4,20 @@ import { withTranslation } from 'react-i18next';
 import Home from '../home';
 import ContentHeaderButton from '../../components/content-header-button';
 
-const renderButtons = (t) => {
+const renderButtons = t => {
   return ['home', 'depot', 'transactionsHistory', 'escrow'].map(page => {
-    return <ContentHeaderButton isSelected={page === 'home'}>{t(`mainContent.header.buttons.${page}`)}</ContentHeaderButton>
+    return (
+      <ContentHeaderButton isSelected={page === 'home'}>
+        {t(`mainContent.header.buttons.${page}`)}
+      </ContentHeaderButton>
+    );
   });
-}
+};
 
 const MainContainer = ({ t }) => {
   return (
     <MainContainerWrapper>
-      <Header>
-        {renderButtons(t)} 
-      </Header>
+      <Header>{renderButtons(t)}</Header>
       <Home />
     </MainContainerWrapper>
   );
@@ -23,7 +25,7 @@ const MainContainer = ({ t }) => {
 
 const MainContainerWrapper = styled('div')`
   width: 100%;
-  border-left: 2px solid black;
+  background-color: #fcfcfe;
 `;
 
 const Header = styled('div')`

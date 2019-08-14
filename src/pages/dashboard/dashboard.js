@@ -150,6 +150,7 @@ const DashboardWrapper = styled('div')`
   }
   transition: all ease-out 0.5s;
   flex-shrink: 0;
+  border-right: 1px solid #e8e7fd;
 `;
 
 const Content = styled('div')`

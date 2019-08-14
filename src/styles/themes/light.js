@@ -4,7 +4,7 @@ export default {
   headingFont: COLORS.purple1,
   bodyFont: COLORS.purple2,
   subFont: COLORS.purple3,
-  background: COLORS.backgroundWhite,
+  background: '#FFFFFF',
   accentLight: COLORS.purple6,
   accentDark: COLORS.purple5,
 

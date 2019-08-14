@@ -11,17 +11,19 @@ body {
 }
 
 h1 {
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   font-size: 32px;
   text-transform: uppercase;
+  letter-spacing: 2px;
 }
 h2 {
   font-family: 'apercu-medium';
   font-size: 24px;
   text-transform: uppercase;
+  letter-spacing: 2px;
 }
 h3 {
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   font-size: 24px;
 }
 h4 {
@@ -39,6 +41,7 @@ h5 {
 h6 {
   font-family: 'apercu-regular';
   font-size: 20px;
+  margin: 0;
 }
 
 @font-face {
