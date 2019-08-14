@@ -30,8 +30,11 @@ h4 {
   text-transform: uppercase;
 }
 h5 {
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
+  text-transform: uppercase;
   font-size: 18px;
+  letter-spacing: 1px;
+  margin: 0;
 }
 h6 {
   font-family: 'apercu-regular';

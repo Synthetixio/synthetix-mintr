@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>atoms / button / tiny / 24px / info</title>
+    <desc>Created with Sketch.</desc>
+    <g id="dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="organisms-/-lightMode-/-dashboard-/-rewards-/-open" transform="translate(-524.000000, -8.000000)">
+            <g id="atoms-/-button-/-lightMode-/-tiny-/-24px-/-info" transform="translate(524.000000, 8.000000)">
+                <circle id="Oval" stroke="#E8E7FD" stroke-width="1" fill="#F3F3FE" cx="12" cy="12" r="11.5"></circle>
+                <path d="M9.4,10 L9.4,9.168 C9.4,9.056 9.448,9.008 9.56,9.008 L12.376,9.008 C12.488,9.008 12.536,9.056 12.536,9.168 L12.536,15.856 L14.744,15.856 C14.856,15.856 14.904,15.904 14.904,16.016 L14.904,16.88 C14.904,16.992 14.856,17.04 14.744,17.04 L9.16,17.04 C9.048,17.04 9,16.992 9,16.88 L9,16.016 C9,15.904 9.048,15.856 9.16,15.856 L11.288,15.856 L11.288,10.16 L9.56,10.16 C9.448,10.16 9.4,10.112 9.4,10 Z M10.968,7.536 L10.968,6.16 C10.968,6.048 11.016,6 11.128,6 L12.504,6 C12.616,6 12.664,6.048 12.664,6.16 L12.664,7.536 C12.664,7.648 12.616,7.696 12.504,7.696 L11.128,7.696 C11.016,7.696 10.968,7.648 10.968,7.536 Z" id="i" fill="#6F6E98"></path>
+            </g>
+        </g>
+    </g>
+</svg>
