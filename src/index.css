@@ -7,11 +7,12 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: 'apercu-regular';
+  font-weight: normal;
+  font-style: normal;
 }
 
 h1 {
-  font-family: 'apercu-regular';
+  font-family: 'apercu-medium';
   font-size: 32px;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -23,7 +24,7 @@ h2 {
   letter-spacing: 2px;
 }
 h3 {
-  font-family: 'apercu-regular';
+  font-family: 'apercu-medium';
   font-size: 24px;
 }
 h4 {
@@ -32,14 +33,14 @@ h4 {
   text-transform: uppercase;
 }
 h5 {
-  font-family: 'apercu-regular';
+  font-family: 'apercu-medium';
   text-transform: uppercase;
   font-size: 18px;
   letter-spacing: 1px;
   margin: 0;
 }
 h6 {
-  font-family: 'apercu-regular';
+  font-family: 'apercu-medium';
   font-size: 20px;
   margin: 0;
 }
@@ -51,8 +52,6 @@ h6 {
     url('/fonts/apercu-regular.woff2') format('woff2'),
     url('/fonts/apercu-regular.woff') format('woff'),
     url('/fonts/apercu-regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 @font-face {
@@ -62,8 +61,6 @@ h6 {
     url('/fonts/apercu-medium.woff2') format('woff2'),
     url('/fonts/apercu-medium.woff') format('woff'),
     url('/fonts/apercu-medium.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }
 
 @font-face {
@@ -73,6 +70,4 @@ h6 {
     url('/fonts/apercu-bold.woff2') format('woff2'),
     url('/fonts/apercu-bold.woff') format('woff'),
     url('/fonts/apercu-bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
 }

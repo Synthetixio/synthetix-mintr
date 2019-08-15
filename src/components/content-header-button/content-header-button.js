@@ -10,6 +10,7 @@ const ContentHeaderButton = ({ children, isSelected, onClick }) => {
 };
 
 const Button = styled.button`
+  font-family: ${props => (props.isSelected ? 'apercu-bold' : 'apercu-medium')};
   cursor: pointer;
   outline: none;
   background-color: ${props =>
@@ -20,7 +21,6 @@ const Button = styled.button`
       props.isSelected ? props.theme.purple4 : props.theme.accentLight};
   flex: 1;
   font-size: 14px;
-  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: ${props => props.theme.subFont};
