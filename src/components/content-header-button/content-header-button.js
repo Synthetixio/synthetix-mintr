@@ -12,7 +12,9 @@ const ContentHeaderButton = ({ children, isSelected, onClick }) => {
 const Button = styled.button`
   font-family: ${props => (props.isSelected ? 'apercu-bold' : 'apercu-medium')};
   cursor: pointer;
+  height: 85px;
   outline: none;
+  padding-top: 8px;
   background-color: ${props =>
     props.isSelected ? props.theme.accentDark : props.theme.accentLight};
   border: none;
