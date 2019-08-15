@@ -31,14 +31,14 @@ const Home = () => {
             <ButtonContainer>
               <ActionImage src="/images/actions/claim.svg" />
               <H2>Claim</H2>
-              <P>sUSD or SNX to another wallet</P>
+              <P>sUSD and SNX staking rewards</P>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
               <ActionImage src="/images/actions/trade.svg" />
               <H2>Trade</H2>
-              <P>sUSD or SNX to another wallet</P>
+              <P>Synths on the Synthetix.Exchange</P>
             </ButtonContainer>
           </Button>
           <Button>
@@ -83,7 +83,7 @@ const Button = styled.button`
   box-shadow: 0px 5px 10px 5px rgba(247, 244, 255, 40);
   transition: transform ease-in 0.2s;
   &:hover {
-    transform: scale(1.1);
+    transform: translateY(-4px);
   }
 `;
 

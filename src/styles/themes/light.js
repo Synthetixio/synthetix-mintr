@@ -6,6 +6,8 @@ export default {
   subtext: COLORS.light3,
   background: COLORS.light7,
   borders: COLORS.purple5,
+  panelDefault: COLORS.white,
+  panelHover: COLORS.white,
 
   menu: COLORS.purple6,
   buttonTertiaryHover: COLORS.purple5,

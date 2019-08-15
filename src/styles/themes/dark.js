@@ -6,6 +6,8 @@ export default {
   subtext: COLORS.dark5,
   background: COLORS.dark1,
   borders: COLORS.dark4,
+  panelDefault: COLORS.dark3,
+  panelHover: COLORS.dark4,
 
   accentLight: COLORS.dark2,
   accentDark: COLORS.dark4,
