@@ -46,7 +46,7 @@ const MainContainer = ({ t }) => {
 
 const MainContainerWrapper = styled('div')`
   width: 100%;
-  background-color: #fcfcfe;
+  background-color: ${props => props.theme.background};
 `;
 
 const Header = styled('div')`

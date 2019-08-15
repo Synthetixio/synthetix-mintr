@@ -23,7 +23,7 @@ const Button = styled.button`
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: ${props => props.theme.subFont};
+  color: ${props => props.theme.subtext};
   &:hover,
   &:focus {
     background-color: ${props => props.theme.accentDark};
