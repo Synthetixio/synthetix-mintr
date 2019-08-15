@@ -117,9 +117,9 @@ const Dashboard = () => {
         </Container>
         <Container curved={true}>
           <Row>
-            <div>
+            <Rewards>
               <Highlighted>2 days</Highlighted> left to claim rewards
-            </div>
+            </Rewards>
             <InfoIcon src="/images/info-icon.svg" />
           </Row>
         </Container>
@@ -180,6 +180,7 @@ const CurrencyIcon = styled.img`
 `;
 
 const Balance = styled.div`
+  font-family: 'apercu-medium';
   margin-left: 12px;
   & :first-child {
     margin-bottom: 8px;
@@ -203,6 +204,10 @@ const Row = styled.div`
   align-items: center;
   margin: ${props => (props.margin ? props.margin : 0)};
   padding: ${props => (props.padding ? props.padding : 0)};
+`;
+
+const Rewards = styled.div`
+  font-family: 'apercu-medium';
 `;
 
 const Highlighted = styled.span`
@@ -235,7 +240,7 @@ const Button = styled.button`
   justify-content: center;
   color: #6f6e98;
   background-color: #e8e7fd;
-  font-family: 'apercu-bold';
+  font-family: 'apercu-medium';
   font-size: 14px;
   border: 1px solid #e8e7fd;
 `;

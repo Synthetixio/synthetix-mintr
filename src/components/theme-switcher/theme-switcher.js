@@ -30,6 +30,7 @@ const Label = styled.span`
   align-items: center;
   height: 100%;
 	justify-content: center;
+	font-family: 'apercu-medium';
 	color: ${props => props.theme.themeToggleFontColor}
   font-size: 14px;
 `;
