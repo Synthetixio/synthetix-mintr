@@ -15,11 +15,11 @@ const Root = () => {
 const RootWrapper = styled('div')`
   background: ${props => props.theme.background};
   width: 100%;
+  transition: all ease-out 0.5s;
+  display: flex;
   h1 {
     color: ${props => props.theme.body};
   }
-  transition: all ease-out 0.5s;
-  display: flex;
 `;
 
 export default Root;

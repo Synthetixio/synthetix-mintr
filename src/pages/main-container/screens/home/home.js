@@ -65,13 +65,11 @@ const Container = styled.div`
 `;
 
 const Heading = styled.h3`
-  color: #28275a;
   margin: 0;
 `;
 
 const SubHeading = styled.p`
   font-size: 16px;
-  color: #484697;
   font-family: 'apercu-medium';
 `;
 
@@ -107,12 +105,10 @@ const ActionImage = styled.img`
 
 const H1 = styled.h1`
   margin: 30px 0;
-  color: #28275a;
 `;
 
 const H2 = styled.h2`
   margin: 30px 0;
-  color: #28275a;
 `;
 
 const H4 = styled.h4`
@@ -120,14 +116,12 @@ const H4 = styled.h4`
 `;
 
 const H6 = styled.h6`
-  color: #484697;
   line-height: 30px;
 `;
 
 const P = styled.p`
   font-family: 'apercu-medium';
   font-size: 16px;
-  color: #484697;
   margin: 10px 0;
   line-height: 20px;
 `;
