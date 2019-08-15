@@ -248,13 +248,14 @@ const Button = styled.button`
 const CollRatioValue = styled.div`
   font-family: 'apercu-medium';
   font-size: 32px;
-  color: #484697;
+  color: ${props => props.theme.body};
   margin-bottom: 10px;
   letter-spacing: 1px;
 `;
 const CollRatioCaption = styled.div`
   font-family: 'apercu-medium';
   font-size: 14px;
+  color: ${props => props.theme.heading};
 `;
 
 const PieChartLegend = styled.div`
