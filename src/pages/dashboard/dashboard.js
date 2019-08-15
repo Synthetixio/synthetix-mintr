@@ -142,7 +142,7 @@ const Dashboard = () => {
 };
 
 const DashboardWrapper = styled('div')`
-  background: ${props => props.theme.background};
+  background: ${props => props.theme.colorStyles.background};
   width: 623px;
   h1 {
     color: ${props => props.theme.body};
@@ -150,7 +150,7 @@ const DashboardWrapper = styled('div')`
   }
   transition: all ease-out 0.5s;
   flex-shrink: 0;
-  border-right: 1px solid #e8e7fd;
+  border-right: 1px solid ${props => props.theme.borders};
 `;
 
 const Content = styled('div')`
@@ -158,8 +158,8 @@ const Content = styled('div')`
 `;
 
 const Container = styled.div`
-  border: 1px solid #e8e7fd;
-  border-radius: ${props => (props.curved ? '20px' : '5px')};
+  border: 1px solid ${props => props.theme.borders};
+  border-radius: ${props => (props.curved ? '40px' : '5px')};
   padding: ${props => (props.curved ? '10px' : '32px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
@@ -221,7 +221,7 @@ const InfoIcon = styled.img`
 
 const Box = styled.div`
   border-radius: 2px;
-  border: 1px solid #e8e7fd;
+  border: 1px solid ${props => props.theme.borders};
   width: ${props => (props.full ? '100%' : '240px')};
   height: ${props => (props.full ? '100%' : '96px')};
   display: flex;
@@ -242,19 +242,20 @@ const Button = styled.button`
   background-color: #e8e7fd;
   font-family: 'apercu-medium';
   font-size: 14px;
-  border: 1px solid #e8e7fd;
+  border: 1px solid ${props => props.theme.borders};
 `;
 
 const CollRatioValue = styled.div`
   font-family: 'apercu-medium';
   font-size: 32px;
-  color: #484697;
+  color: ${props => props.theme.body};
   margin-bottom: 10px;
   letter-spacing: 1px;
 `;
 const CollRatioCaption = styled.div`
   font-family: 'apercu-medium';
   font-size: 14px;
+  color: ${props => props.theme.heading};
 `;
 
 const PieChartLegend = styled.div`
