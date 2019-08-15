@@ -78,11 +78,13 @@ const Button = styled.button`
   cursor: pointer;
   height: 352px;
   max-width: ${props => (props.big ? '336px' : '216px')};
-  background-color: ${props => props.theme.background};
-  border: 1px solid #e8e7fd;
-  box-shadow: 0px 5px 10px 5px rgba(247, 244, 255, 40);
+  background-color: ${props => props.theme.panelButton};
+  border: 1px solid ${props => props.theme.borders};
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px 5px ${props => props.theme.shadow1};
   transition: transform ease-in 0.2s;
   &:hover {
+    background-color: ${props => props.theme.panelButtonDefault};
     transform: translateY(-4px);
   }
 `;

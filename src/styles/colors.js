@@ -19,7 +19,8 @@ export default {
   light5: '#E8E7FD',
   light6: '#F3F3FE',
   light7: '#FCFCFE',
-
+  // shadows
+  lightShadow1: 'rgba(247, 244, 255, 40)',
   // darkMode 
   // UI palette (dark > light)
   dark1: '#0E0D14',
@@ -31,4 +32,6 @@ export default {
   // accents
   accentDark: '#3A3B74',
   accentLight: '#6865A3',
+  // shadows
+  darkShadow1: 'rgba(36, 35, 78, 0)',
 };

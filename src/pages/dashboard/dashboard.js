@@ -150,7 +150,7 @@ const DashboardWrapper = styled('div')`
   }
   transition: all ease-out 0.5s;
   flex-shrink: 0;
-  border-right: 1px solid #e8e7fd;
+  border-right: 1px solid ${props => props.theme.borders};
 `;
 
 const Content = styled('div')`
@@ -158,8 +158,8 @@ const Content = styled('div')`
 `;
 
 const Container = styled.div`
-  border: 1px solid #e8e7fd;
-  border-radius: ${props => (props.curved ? '20px' : '5px')};
+  border: 1px solid ${props => props.theme.borders};
+  border-radius: ${props => (props.curved ? '40px' : '5px')};
   padding: ${props => (props.curved ? '10px' : '32px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
@@ -221,7 +221,7 @@ const InfoIcon = styled.img`
 
 const Box = styled.div`
   border-radius: 2px;
-  border: 1px solid #e8e7fd;
+  border: 1px solid ${props => props.theme.borders};
   width: ${props => (props.full ? '100%' : '240px')};
   height: ${props => (props.full ? '100%' : '96px')};
   display: flex;
@@ -242,7 +242,7 @@ const Button = styled.button`
   background-color: #e8e7fd;
   font-family: 'apercu-medium';
   font-size: 14px;
-  border: 1px solid #e8e7fd;
+  border: 1px solid ${props => props.theme.borders};
 `;
 
 const CollRatioValue = styled.div`

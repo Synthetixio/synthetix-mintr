@@ -53,7 +53,7 @@ const Header = styled('div')`
   display: flex;
   justify-content: space-between;
   height: 80px;
-  background-color: ${props => props.theme.accentLight};
+  background-color: ${props => props.theme.menu};
 `;
 
 export default withTranslation()(MainContainer);
