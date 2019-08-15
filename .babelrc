@@ -1,4 +1,4 @@
 {
-  "presets": ["react-app"],
-  "plugins": ["i18next-extract"]
+  "presets": ["react-app"]
+  // "plugins": ["i18next-extract"]
 }

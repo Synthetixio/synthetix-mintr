@@ -1,11 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
+import { Canon, Trafalgar } from '../../../../components/typography';
 
 const Home = () => {
+  const { colorStyles } = useContext(ThemeContext);
+  console.log(colorStyles);
   return (
     <HomeWrapper>
       <Container>
-        <Heading>What would you like to do?</Heading>
+        <Canon color={colorStyles.subtext}>
+          LIDJDLKJ sdkfljds klfjsd fkldsjf{' '}
+        </Canon>
+        <Trafalgar>LIDJDLKJ sdkfljds klfjsd fkldsjf </Trafalgar>
+        {/* <Heading>What would you like to do?</Heading>
         <SubHeading>
           Click any button to view more info, confirm or change the amount
           before submitting.
@@ -48,7 +55,7 @@ const Home = () => {
               <P>sUSD or SNX to another wallet</P>
             </ButtonContainer>
           </Button>
-        </ButtonRow>
+        </ButtonRow> */}
       </Container>
     </HomeWrapper>
   );
