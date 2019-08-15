@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-    <title>icon</title>
+    <title>Send</title>
     <desc>Created with Sketch.</desc>
-    <g id="buttons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="atoms-/-button-/-lightMode-/-process-/-home-/-large-/-default" transform="translate(-144.000000, -78.000000)">
-            <g id="atoms-/-icon-/-64px-/-thick-/-send" transform="translate(136.000000, 70.000000)">
-                <g id="atoms-/-spacing-/-boundingBox">
-                    <rect id="boundingBox" x="0" y="0" width="64" height="64"></rect>
-                </g>
-                <path d="M52,52 L52,32 C52,30.8954305 52.8954305,30 54,30 C55.1045695,30 56,30.8954305 56,32 L56,52.1666667 C56,54.2837582 54.2837582,56 52.1666667,56 L11.8333333,56 C9.71624179,56 8,54.2837582 8,52.1666667 L8,11.8333333 C8,9.71624179 9.71624179,8 11.8333333,8 L32,8 C33.1045695,8 34,8.8954305 34,10 C34,11.1045695 33.1045695,12 32,12 L12,12 L12,52 L52,52 Z M49.0098154,12 L46,12 C44.8954305,12 44,11.1045695 44,10 C44,8.8954305 44.8954305,8 46,8 L54,8 C55.1045695,8 56,8.8954305 56,10 L56,18 C56,19.1045695 55.1045695,20 54,20 C52.8954305,20 52,19.1045695 52,18 L52,14.9306997 L31.5494627,34.4200067 C30.7127699,35.2173727 29.3846718,35.189074 28.5830725,34.3567998 C27.7814732,33.5245256 27.8099222,32.2034412 28.646615,31.4060753 L49.0098154,12 Z" id="🎨-icon-colour" fill="#935DFF" fill-rule="evenodd"></path>
-            </g>
+    <g id="Send" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g transform="translate(0.000000, 8.000000)" fill-rule="nonzero" id="Path" stroke="#6D3AD3">
+            <polygon fill="#935DFF" points="34.5518369 34.4165762 23.8614693 46.08 28.3070812 29.44 34.56 34.4015618"></polygon>
+            <polygon fill="#935DFF" points="50.5800973 46.08 35.5207585 35.2257087 28.3070812 29.44 62.72 1.28"></polygon>
+            <polygon fill="#7E4EDC" points="62.72 1.28 28.3722939 30.1931887 23.8614693 46.08 20.48 25.441871"></polygon>
+            <polygon fill="#935DFF" points="20.5083468 25.6 1.28 17.605264 62.72 1.28"></polygon>
         </g>
     </g>
 </svg>

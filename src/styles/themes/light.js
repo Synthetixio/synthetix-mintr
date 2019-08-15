@@ -1,9 +1,9 @@
 import COLORS from '../colors';
 
 export default {
-  heading: COLORS.light7,
-  body: COLORS.light6,
-  subtext: COLORS.light5,
+  heading: COLORS.light1,
+  body: COLORS.light2,
+  subtext: COLORS.light3,
   background: COLORS.light7,
   borders: COLORS.purple5,
 
