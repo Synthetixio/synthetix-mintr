@@ -85,7 +85,8 @@ const Button = styled.button`
   transition: transform ease-in 0.2s;
   &:hover {
     background-color: ${props => props.theme.panelButtonDefault};
-    transform: translateY(-4px);
+    box-shadow: 0px 5px 10px 8px ${props => props.theme.shadow1};
+    transform: translateY(-2px);
   }
 `;
 
