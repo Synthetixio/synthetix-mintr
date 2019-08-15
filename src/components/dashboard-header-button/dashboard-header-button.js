@@ -16,6 +16,7 @@ const Button = styled.button`
   justify-content: space-between;
   font-family: 'apercu-regular';
   font-size: 14px;
+  text-transform: uppercase;
 `;
 
 export default DashboardHeaderButton;

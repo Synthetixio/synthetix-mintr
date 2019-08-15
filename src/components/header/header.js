@@ -11,11 +11,14 @@ const Header = ({ t }) => {
     <HeaderWrapper>
       <Logo src="/images/mintr-logo.svg" />
       <WalletStatusButton>1111dfljhsdfdf111</WalletStatusButton>
-      <DashboardHeaderButton>SUPPORT</DashboardHeaderButton>
+      <DashboardHeaderButton>{t('header.support')}</DashboardHeaderButton>
       <GlobeButton>
         <GlobeIcon src="/images/globe.svg" />
       </GlobeButton>
-      <ThemeSwitcher />
+      <ThemeSwitcher
+        onLabel={t('header.onLabel')}
+        offLabel={t('header.offLabel')}
+      />
     </HeaderWrapper>
   );
 };
