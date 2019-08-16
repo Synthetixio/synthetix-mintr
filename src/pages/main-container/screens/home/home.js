@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { PageTitle, H1 } from '../../../../components/typography';
+import { PageTitle, PageSubtitle, H1, H2, H6 } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
@@ -8,10 +8,10 @@ const Home = () => {
     <HomeWrapper>
       <Container>
         <PageTitle>What would you like to do?</PageTitle>
-        <SubHeading>
+        <PageSubtitle>
           Click any button to view more info, confirm or change the amount
           before submitting.
-        </SubHeading>
+        </PageSubtitle>
         <ButtonRow margin="30px 0 40px 0">
           <Button big>
             <ButtonContainer>
@@ -33,21 +33,21 @@ const Home = () => {
             <ButtonContainer>
               <ActionImage src="/images/actions/claim.svg" />
               <H2>Claim</H2>
-              <P>sUSD and SNX staking rewards</P>
+              <PageSubtitle>sUSD and SNX staking rewards</PageSubtitle>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
               <ActionImage src="/images/actions/trade.svg" />
               <H2>Trade</H2>
-              <P>Synths on the Synthetix.Exchange</P>
+              <PageSubtitle>Synths on the Synthetix.Exchange</PageSubtitle>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
               <ActionImage src="/images/actions/send.svg" />
               <H2>Send</H2>
-              <P>sUSD or SNX to another wallet</P>
+              <PageSubtitle>sUSD or SNX to another wallet</PageSubtitle>
             </ButtonContainer>
           </Button>
         </ButtonRow>
@@ -64,15 +64,6 @@ const Container = styled.div`
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
-`;
-
-const Heading = styled.h3`
-  margin: 0;
-`;
-
-const SubHeading = styled.p`
-  font-size: 16px;
-  font-family: 'apercu-medium';
 `;
 
 const Button = styled.button`
@@ -106,25 +97,6 @@ const ButtonRow = styled.div`
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-`;
-
-const H2 = styled.h2`
-  margin: 30px 0;
-`;
-
-const H4 = styled.h4`
-  margin: 18px 0;
-`;
-
-const H6 = styled.h6`
-  line-height: 30px;
-`;
-
-const P = styled.p`
-  font-family: 'apercu-medium';
-  font-size: 16px;
-  margin: 10px 0;
-  line-height: 20px;
 `;
 
 export default Home;

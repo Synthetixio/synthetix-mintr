@@ -30,6 +30,15 @@ export const PageTitle = props => {
   );
 };
 
+export const PageSubtitle = props => {
+    const { pageSubtitle } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...pageSubtitle} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+};
+
 export const H1 = props => {
   const { h1 } = useContext(ThemeContext).textStyles;
   return (
@@ -38,3 +47,48 @@ export const H1 = props => {
     </DynamicComponent>
   );
 };
+
+export const H2 = props => {
+    const { h2 } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...h2} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+};
+
+export const H4 = props => {
+    const { h4 } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...h4} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+  };
+  
+  export const H5 = props => {
+      const { h5 } = useContext(ThemeContext).textStyles;
+      return (
+        <DynamicComponent {...h5} {...props}>
+          {props.children}
+        </DynamicComponent>
+      );
+  };
+
+  export const H6 = props => {
+    const { h6 } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...h6} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+  };
+
+  export const Figure = props => {
+    const { figure } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...figure} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+  };

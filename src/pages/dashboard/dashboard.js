@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Header from '../../components/header';
 import PieChart from '../../components/pie-chart';
 import Table from '../../components/table';
-import { ChartData } from '../../components/typography';
+import { ChartData, H5, Figure } from '../../components/typography';
 
 
 const renderBalances = () => {
@@ -12,22 +12,22 @@ const renderBalances = () => {
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div>0.89 SNX</div>
-          <div>$1.00 USD</div>
+          <div><ChartData>0.89 SNX</ChartData></div>
+          <div><ChartData>$1.00 USD</ChartData></div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div>0.89 SNX</div>
-          <div>$1.00 USD</div>
+          <div><ChartData>0.89 SNX</ChartData></div>
+          <div><ChartData>$1.00 USD</ChartData></div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/eth-icon.svg" />
         <Balance>
-          <div>0.89 SNX</div>
-          <div>$1.00 USD</div>
+          <div><ChartData>0.89 SNX</ChartData></div>
+          <div><ChartData>$1.00 USD</ChartData></div>
         </Balance>
       </BalanceItem>
     </BalanceRow>
@@ -38,11 +38,11 @@ const renderCollRatios = () => {
   return (
     <Row margin="0 0 22px 0">
       <Box>
-        <CollRatioValue>450%</CollRatioValue>
+        <Figure>450%</Figure>
         <CollRatioCaption>Current collateralization ratio</CollRatioCaption>
       </Box>
       <Box>
-        <CollRatioValue>500%</CollRatioValue>
+        <Figure>500%</Figure>
         <CollRatioCaption>Target collateralization ratio</CollRatioCaption>
       </Box>
     </Row>
@@ -113,29 +113,29 @@ const Dashboard = () => {
       <Content>
         <Container>
           <ContainerHeader>
-            <h5>Current Prices:</h5>
+            <H5>Current Prices:</H5>
           </ContainerHeader>
           {renderBalances()}
         </Container>
         <Container curved={true}>
           <Row>
-            <Rewards>
+            <ChartData>
               <Highlighted>2 days</Highlighted> left to claim rewards
-            </Rewards>
+            </ChartData>
             <InfoIcon src="/images/info-icon.svg" />
           </Row>
         </Container>
         <Container>
           <ContainerHeader>
-            <h5>Wallet Details:</h5>
-            <span>User ID: #100,000,000</span>
+            <H5>Wallet Details:</H5>
+            <ChartData margin="0px 0px 32px 0px">User ID: #100,000,000</ChartData>
           </ContainerHeader>
           {renderCollRatios()}
           {renderPieChart()}
           {renderTable()}
           <Row margin="18px 0 0 0 ">
             <Button>Go to synthetix.exchange</Button>
-            <Button>view synths balance</Button>
+            <Button>View Synths balance</Button>
           </Row>
         </Container>
       </Content>
@@ -197,10 +197,6 @@ const ContainerHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  & span {
-    font-size: 14px;
-  }
 `;
 
 const Row = styled.div`
@@ -218,6 +214,7 @@ const Rewards = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
+  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 const InfoIcon = styled.img`
@@ -251,13 +248,6 @@ const Button = styled.button`
   border: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
-const CollRatioValue = styled.div`
-  font-family: 'apercu-medium';
-  font-size: 32px;
-  color: ${props => props.theme.colorStyles.body};
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-`;
 const CollRatioCaption = styled.div`
   font-family: 'apercu-medium';
   font-size: 14px;
@@ -273,7 +263,7 @@ const PieChartHeading = styled.div`
   font-family: 'apercu-bold';
   font-size: 14px;
   text-transform: uppercase;
-  color: #484697;
+  color: ${props => props.theme.colorStyles.body};
 `;
 
 const LegendRow = styled.div`
