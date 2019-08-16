@@ -12,11 +12,10 @@ body {
 }
 
 h1 {
-  font-family: 'apercu-medium';
-  font-size: 32px;
   text-transform: uppercase;
-  letter-spacing: 2px;
 }
+
+/*
 h2 {
   font-family: 'apercu-medium';
   font-size: 24px;
@@ -48,7 +47,7 @@ h6 {
   font-family: 'apercu-medium';
   font-size: 100px;
   margin: 0;
-}
+} */
 
 @font-face {
   font-family: 'apercu-regular';
