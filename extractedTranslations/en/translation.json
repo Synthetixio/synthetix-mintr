@@ -1,7 +1,11 @@
 {
+  "dashboard": {
+    "header": {
+      "support": ""
+    }
+  },
   "header": {
     "offLabel": "",
-    "onLabel": "",
-    "support": ""
+    "onLabel": ""
   }
 }

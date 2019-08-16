@@ -136,6 +136,7 @@
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.4.3",
-    "babel-plugin-i18next-extract": "^0.2.3"
+    "babel-plugin-i18next-extract": "^0.2.3",
+    "react-hot-loader": "^4.12.11"
   }
 }

@@ -11,7 +11,9 @@ const Header = ({ t }) => {
     <HeaderWrapper>
       <Logo src="/images/mintr-logo.svg" />
       <WalletStatusButton>0x3e...bAe0</WalletStatusButton>
-      <DashboardHeaderButton>{t('header.support')}</DashboardHeaderButton>
+      <DashboardHeaderButton>
+        {t('dashboard.header.support')}
+      </DashboardHeaderButton>
       <GlobeButton>
         <GlobeIcon src="/images/globe.svg" />
       </GlobeButton>
