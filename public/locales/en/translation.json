@@ -1,7 +1,9 @@
 {
   "dashboard": {
     "header": {
-      "support": "Support"
+      "support": "Support",
+      "onLabel": "On",
+      "offLabel": "Off"
     }
   },
   "mainContent": {

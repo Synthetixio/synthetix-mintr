@@ -18,8 +18,8 @@ const Header = ({ t }) => {
         <GlobeIcon src="/images/globe.svg" />
       </GlobeButton>
       <ThemeSwitcher
-        onLabel={t('header.onLabel')}
-        offLabel={t('header.offLabel')}
+        onLabel={t('dashboard.header.onLabel')}
+        offLabel={t('dashboard.header.offLabel')}
       />
     </HeaderWrapper>
   );
