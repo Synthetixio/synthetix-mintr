@@ -13,6 +13,7 @@ const renderButtons = (t, currentScreen, setScreen) => {
         isSelected={page === currentScreen}
         onClick={() => setScreen(page)}
       >
+        {/* i18next-extract-disable-next-line */}
         {t(`mainContent.header.buttons.${page}`)}
       </ContentHeaderButton>
     );
