@@ -1,21 +1,17 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { PageTitle, PageSubtitle } from '../../../../components/typography';
+import { PageTitle, H1 } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
   return (
     <HomeWrapper>
       <Container>
-        {/* <Canon color={colorStyles.subtext}>
-          THIS IS THE CANON TITLE{' '}
-        </Canon>
-        <Trafalgar>This is the Trafalgar subtitle </Trafalgar> */}
         <PageTitle>What would you like to do?</PageTitle>
-        <PageSubtitle>
+        <SubHeading>
           Click any button to view more info, confirm or change the amount
           before submitting.
-        </PageSubtitle>
+        </SubHeading>
         <ButtonRow margin="30px 0 40px 0">
           <Button big>
             <ButtonContainer>
@@ -70,6 +66,15 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+const Heading = styled.h3`
+  margin: 0;
+`;
+
+const SubHeading = styled.p`
+  font-size: 16px;
+  font-family: 'apercu-medium';
+`;
+
 const Button = styled.button`
   flex: 1;
   cursor: pointer;
@@ -101,10 +106,6 @@ const ButtonRow = styled.div`
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-`;
-
-const H1 = styled.h1`
-  margin: 30px 0;
 `;
 
 const H2 = styled.h2`

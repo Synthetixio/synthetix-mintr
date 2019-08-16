@@ -10,6 +10,13 @@ const fontFamilies = {
 const theme = mode => {
   const colorStyles = mode === 'dark' ? themeDark : themeLight;
   const textStyles = {
+    h1: {
+      as: 'h1',
+      fontSize: [32],
+      letterSpacing: 2,
+      fontFamily: fontFamilies.medium,
+      m: '30px 0px',
+    },
     pageTitle: {
       as: 'h3',
       fontSize: [18, 22, 24],
@@ -31,7 +38,7 @@ const theme = mode => {
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
-      fontFamily: fontFamilies.regular, 
+      fontFamily: fontFamilies.regular,
       color: colorStyles.subtext,
     },
     chartData: {
@@ -39,7 +46,7 @@ const theme = mode => {
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 600,
-      fontFamily: fontFamilies.regular, 
+      fontFamily: fontFamilies.regular,
       color: colorStyles.heading,
     },
   };
