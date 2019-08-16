@@ -12,7 +12,7 @@ const Home = () => {
           LIDJDLKJ sdkfljds klfjsd fkldsjf{' '}
         </Canon>
         <Trafalgar>LIDJDLKJ sdkfljds klfjsd fkldsjf </Trafalgar>
-        {/* <Heading>What would you like to do?</Heading>
+        <Heading>What would you like to do?</Heading>
         <SubHeading>
           Click any button to view more info, confirm or change the amount
           before submitting.
@@ -55,7 +55,7 @@ const Home = () => {
               <P>sUSD or SNX to another wallet</P>
             </ButtonContainer>
           </Button>
-        </ButtonRow> */}
+        </ButtonRow>
       </Container>
     </HomeWrapper>
   );
