@@ -4,7 +4,6 @@ import { Canon, Trafalgar } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
-  console.log(colorStyles);
   return (
     <HomeWrapper>
       <Container>
