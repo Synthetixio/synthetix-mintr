@@ -19,7 +19,7 @@ export default {
   shadow1: COLORS.darkShadow1,
 
   //To remove or replace (for test only)
-  themeToggleBackgroundColor: COLORS.dark2,
+  themeToggleBackgroundColor: COLORS.dark3,
   themeToggleFontColor: COLORS.dark5,
   themeToggleHandleColor: COLORS.dark5,
 };

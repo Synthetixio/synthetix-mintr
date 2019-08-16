@@ -5,3 +5,4 @@ const ButtonText = ({children}) => {
     return <ButtonTextElement>{children}</ButtonTextElement>
 };
 
+const ButtonTextElement = styled.span``

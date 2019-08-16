@@ -46,14 +46,14 @@ const MainContainer = ({ t }) => {
 
 const MainContainerWrapper = styled('div')`
   width: 100%;
-  background-color: ${props => props.theme.background};
+  background-color: ${props => props.theme.colorStyles.background};
 `;
 
 const Header = styled('div')`
   display: flex;
   justify-content: space-between;
   height: 80px;
-  background-color: ${props => props.theme.menu};
+  background-color: ${props => props.theme.colorStyles.menu};
 `;
 
 export default withTranslation()(MainContainer);

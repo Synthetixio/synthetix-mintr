@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { Canon, Trafalgar } from '../../../../components/typography';
+import { PageTitle } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
@@ -8,11 +8,11 @@ const Home = () => {
   return (
     <HomeWrapper>
       <Container>
-        <Canon color={colorStyles.subtext}>
-          LIDJDLKJ sdkfljds klfjsd fkldsjf{' '}
+        {/* <Canon color={colorStyles.subtext}>
+          THIS IS THE CANON TITLE{' '}
         </Canon>
-        <Trafalgar>LIDJDLKJ sdkfljds klfjsd fkldsjf </Trafalgar>
-        {/* <Heading>What would you like to do?</Heading>
+        <Trafalgar>This is the Trafalgar subtitle </Trafalgar> */}
+        <PageTitle>What would you like to do?</PageTitle>
         <SubHeading>
           Click any button to view more info, confirm or change the amount
           before submitting.
@@ -55,7 +55,7 @@ const Home = () => {
               <P>sUSD or SNX to another wallet</P>
             </ButtonContainer>
           </Button>
-        </ButtonRow> */}
+        </ButtonRow>
       </Container>
     </HomeWrapper>
   );
@@ -88,11 +88,11 @@ const Button = styled.button`
   background-color: ${props => props.theme.colorStyles.panelButton};
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 5px;
-  box-shadow: 0px 5px 10px 5px ${props => props.theme.shadow1};
+  box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   transition: transform ease-in 0.2s;
   &:hover {
-    background-color: ${props => props.theme.panelButtonDefault};
-    box-shadow: 0px 5px 10px 8px ${props => props.theme.shadow1};
+    background-color: ${props => props.theme.colorStyles.panelButtonHover};
+    box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
     transform: translateY(-2px);
   }
 `;

@@ -16,10 +16,10 @@ const ThemeSwitcher = ({ props, onLabel, offLabel }) => {
       handleDiameter={24}
       onChange={toggle}
       checked={dark}
-      offColor={theme.themeToggleBackgroundColor}
-      onColor={theme.themeToggleBackgroundColor}
-      onHandleColor={theme.themeToggleHandleColor}
-      offHandleColor={theme.themeToggleHandleColor}
+      offColor={theme.colorStyles.themeToggleBackgroundColor}
+      onColor={theme.colorStyles.themeToggleBackgroundColor}
+      onHandleColor={theme.colorStyles.themeToggleHandleColor}
+      offHandleColor={theme.colorStyles.themeToggleHandleColor}
     />
   );
 };
@@ -31,7 +31,7 @@ const Label = styled.span`
   height: 100%;
 	justify-content: center;
 	font-family: 'apercu-medium';
-	color: ${props => props.theme.themeToggleFontColor}
+	color: ${props => props.theme.colorStyles.themeToggleFontColor}
   font-size: 14px;
 `;
 

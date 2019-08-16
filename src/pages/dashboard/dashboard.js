@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Header from '../../components/header';
 import PieChart from '../../components/pie-chart';
 import Table from '../../components/table';
+import { ChartData } from '../../components/typography';
+
 
 const renderBalances = () => {
   return (
@@ -55,12 +57,12 @@ const renderPieChart = () => {
         <PieChartLegend>
           <PieChartHeading>Your SNX holdings:</PieChartHeading>
           <LegendRow color="#E8E7FD">
-            <LegendValue>10,000.00 SNX</LegendValue>
+            <ChartData>10,000.00 SNX</ChartData>
             <LegendDescription>Staking</LegendDescription>
           </LegendRow>
 
           <LegendRow color="#F3F3F3">
-            <LegendValue>5,000.00 SNX</LegendValue>
+            <ChartData>5,000.00 SNX</ChartData>
             <LegendDescription>Transferable</LegendDescription>
           </LegendRow>
         </PieChartLegend>
@@ -142,15 +144,19 @@ const Dashboard = () => {
 };
 
 const DashboardWrapper = styled('div')`
-  background: ${props => props.theme.colorStyles.background};
+  background: ${props => props.theme.colorStyles.panels};
   width: 623px;
   h1 {
-    color: ${props => props.theme.body};
+    color: ${props => props.theme.colorStyles.heading};
+    margin: 0;
+  }
+  p {
+    color: ${props => props.theme.colorStyles.body};
     margin: 0;
   }
   transition: all ease-out 0.5s;
   flex-shrink: 0;
-  border-right: 1px solid ${props => props.theme.borders};
+  border-right: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
 const Content = styled('div')`
@@ -158,7 +164,7 @@ const Content = styled('div')`
 `;
 
 const Container = styled.div`
-  border: 1px solid ${props => props.theme.borders};
+  border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: ${props => (props.curved ? '40px' : '5px')};
   padding: ${props => (props.curved ? '10px' : '32px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
@@ -221,7 +227,7 @@ const InfoIcon = styled.img`
 
 const Box = styled.div`
   border-radius: 2px;
-  border: 1px solid ${props => props.theme.borders};
+  border: 1px solid ${props => props.theme.colorStyles.borders};
   width: ${props => (props.full ? '100%' : '240px')};
   height: ${props => (props.full ? '100%' : '96px')};
   display: flex;
@@ -239,23 +245,23 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   color: #6f6e98;
-  background-color: #e8e7fd;
+  background-color: ${props => props.theme.colorStyles.buttonTertiary};
   font-family: 'apercu-medium';
   font-size: 14px;
-  border: 1px solid ${props => props.theme.borders};
+  border: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
 const CollRatioValue = styled.div`
   font-family: 'apercu-medium';
   font-size: 32px;
-  color: ${props => props.theme.body};
+  color: ${props => props.theme.colorStyles.body};
   margin-bottom: 10px;
   letter-spacing: 1px;
 `;
 const CollRatioCaption = styled.div`
   font-family: 'apercu-medium';
   font-size: 14px;
-  color: ${props => props.theme.heading};
+  color: ${props => props.theme.colorStyles.heading};
 `;
 
 const PieChartLegend = styled.div`
@@ -271,7 +277,7 @@ const PieChartHeading = styled.div`
 `;
 
 const LegendRow = styled.div`
-  background-color: ${props => props.color};
+  background-color: ${props => props.theme.colorStyles.accentDark};
   margin-top: 16px;
   padding: 14px;
   display: flex;
