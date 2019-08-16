@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React from 'react';
 import styled from 'styled-components';
 import Dashboard from '../dashboard';
@@ -22,10 +23,10 @@ const RootWrapper = styled('div')`
   }
   h2 {
     color: ${props => props.theme.heading};
-  }  
+  }
   h3 {
     color: ${props => props.theme.heading};
-  }  
+  }
   h4 {
     color: ${props => props.theme.heading};
   }
@@ -40,4 +41,4 @@ const RootWrapper = styled('div')`
   }
 `;
 
-export default Root;
+export default hot(Root);

@@ -1,7 +1,4 @@
 {
   "presets": ["react-app"],
-  "plugins": [
-    ["i18next-extract", { "discardOldKeys": "true" }],
-    "react-hot-loader/babel"
-  ]
+  "plugins": [["i18next-extract", { "discardOldKeys": "true" }]]
 }
