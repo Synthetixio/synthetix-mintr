@@ -44,6 +44,11 @@ h6 {
   font-size: 20px;
   margin: 0;
 }
+.subheading {
+  font-family: 'apercu-medium';
+  font-size: 100px;
+  margin: 0;
+}
 
 @font-face {
   font-family: 'apercu-regular';

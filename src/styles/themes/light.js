@@ -1,15 +1,25 @@
 import COLORS from '../colors';
 
 export default {
-  headingFont: COLORS.purple1,
-  bodyFont: COLORS.purple2,
-  subFont: COLORS.purple3,
-  background: '#FFFFFF',
-  accentLight: COLORS.purple6,
-  accentDark: COLORS.purple5,
+  heading: COLORS.light1,
+  body: COLORS.light2,
+  subtext: COLORS.light3,
+  borders: COLORS.light5,
+  buttonTertiary: COLORS.light6,
+  panels: COLORS.white,
+  background: COLORS.light7,
+
+  panelButton: COLORS.white,
+  panelButtonHover: COLORS.white,
+  menu: COLORS.light6,
+
+  accentDark: COLORS.light5,
+  accentLight: COLORS.light6,
+
+  shadow1: COLORS.lightShadow1,
 
   //To remove or replace (for test only)
-  themeToggleBackgroundColor: COLORS.purple6,
-  themeToggleFontColor: '#000000',
-  themeToggleHandleColor: '#ffffff',
+  themeToggleBackgroundColor: COLORS.light6,
+  themeToggleFontColor: COLORS.light3,
+  themeToggleHandleColor: COLORS.white,
 };

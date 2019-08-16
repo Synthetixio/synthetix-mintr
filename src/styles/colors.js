@@ -1,32 +1,37 @@
 export default {
   white: '#FFFFFF',
-  backgroundWhite: '#FCFCFE',
-  grey: '#F6F6FD',
-  green: '#10BA97',
-  //Blue palette
-  blue1: '#5A66F8',
-  blue2: '#727CFF',
-  blueVLight: '#E8E7FD',
-  // lightMode
-  // purple palette
-  purple1: '#28275A',
-  purple2: '#484697',
-  purple3: '#6F6E98',
-  purple4: '#CACAF1',
-  purple5: '#E8E7FD',
-  purple6: '#F3F3FE',
-  //accents
+  brandGreen: '#10BA97',
+  brandYellow: '#F4C14D',
+  brandBlue: '#5485FF',
+  brandRed: '#D94454',
+  brandPurple: '#935DFF',
 
+  // button palette
+  buttonDark: '#5A66F8',
+  buttonLight: '#727CFF',
+
+  // lightMode
+  // UI palette (dark > light)
+  light1: '#28275A',
+  light2: '#484697',
+  light3: '#6F6E98',
+  light4: '#CACAF1',
+  light5: '#E8E7FD',
+  light6: '#F3F3FE',
+  light7: '#FCFCFE',
+  // shadows
+  lightShadow1: 'rgba(247, 244, 255, 40)',
   // darkMode 
-  // darkMode
-  // purple palette
-  dPurple1: '#0D0B21',
-  dPurple2: '#0F0C26',
-  dPurple3: '#16142B',
-  dPurple4: '#1A1732',
-  dPurple5: '#212140',
-  dPurple6: '#26214A',
+  // UI palette (dark > light)
+  dark1: '#0E0D14',
+  dark2: '#14131E',
+  dark3: '#1C1A28',
+  dark4: '#262439',
+  dark5: '#9492C4',
+  dark6: '#C2C1E1',
   // accents
-  dAccent1: '#443D7D',
-  dAccent2: '#9492C4',
+  accentDark: '#3A3B74',
+  accentLight: '#6865A3',
+  // shadows
+  darkShadow1: 'rgba(36, 35, 78, 0)',
 };

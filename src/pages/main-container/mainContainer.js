@@ -13,6 +13,7 @@ const renderButtons = (t, currentScreen, setScreen) => {
         isSelected={page === currentScreen}
         onClick={() => setScreen(page)}
       >
+        {/* i18next-extract-disable-next-line */}
         {t(`mainContent.header.buttons.${page}`)}
       </ContentHeaderButton>
     );
@@ -46,14 +47,14 @@ const MainContainer = ({ t }) => {
 
 const MainContainerWrapper = styled('div')`
   width: 100%;
-  background-color: #fcfcfe;
+  background-color: ${props => props.theme.colorStyles.background};
 `;
 
 const Header = styled('div')`
   display: flex;
   justify-content: space-between;
   height: 80px;
-  background-color: ${props => props.theme.accentLight};
+  background-color: ${props => props.theme.colorStyles.menu};
 `;
 
 export default withTranslation()(MainContainer);

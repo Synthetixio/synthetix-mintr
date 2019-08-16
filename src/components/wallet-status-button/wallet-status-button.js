@@ -28,7 +28,7 @@ const GreenDot = styled.div`
   width: 16px;
   height: 16px;
   margin-right: 12px;
-  background-color: ${COLORS.green};
+  background-color: ${COLORS.brandGreen};
 `;
 
 export default WalletStatusButton;

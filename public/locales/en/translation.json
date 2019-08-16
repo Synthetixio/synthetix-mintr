@@ -10,7 +10,8 @@
         "home": "Home",
         "depot": "Depot",
         "transactionsHistory": "Transactions History",
-        "escrow": "Escrow"
+        "escrow": "Escrow",
+        "support": "Support"
       }
     }
   }

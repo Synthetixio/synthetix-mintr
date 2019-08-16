@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.4.3",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
@@ -58,6 +57,7 @@
     "semver": "6.0.0",
     "style-loader": "0.23.1",
     "styled-components": "^4.3.2",
+    "styled-system": "^5.1.0",
     "synthetix-js": "^2.6.1-alpha",
     "terser-webpack-plugin": "1.2.3",
     "ts-pnp": "1.1.2",
@@ -70,7 +70,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -132,9 +133,9 @@
       "jest-watch-typeahead/testname"
     ]
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.4.3",
+    "babel-plugin-i18next-extract": "^0.2.3"
   }
 }
