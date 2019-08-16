@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { PageTitle } from '../../../../components/typography';
+import { PageTitle, PageSubtitle } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
@@ -12,10 +12,10 @@ const Home = () => {
         </Canon>
         <Trafalgar>This is the Trafalgar subtitle </Trafalgar> */}
         <PageTitle>What would you like to do?</PageTitle>
-        <SubHeading>
+        <PageSubtitle>
           Click any button to view more info, confirm or change the amount
           before submitting.
-        </SubHeading>
+        </PageSubtitle>
         <ButtonRow margin="30px 0 40px 0">
           <Button big>
             <ButtonContainer>
@@ -68,15 +68,6 @@ const Container = styled.div`
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
-`;
-
-const Heading = styled.h3`
-  margin: 0;
-`;
-
-const SubHeading = styled.p`
-  font-size: 16px;
-  font-family: 'apercu-medium';
 `;
 
 const Button = styled.button`

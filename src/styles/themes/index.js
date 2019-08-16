@@ -11,12 +11,20 @@ const theme = mode => {
   const colorStyles = mode === 'dark' ? themeDark : themeLight;
   const textStyles = {
     pageTitle: {
-      as: 'span',
+      as: 'h3',
       fontSize: [18, 22, 24],
       fontWeight: 500,
       lineHeight: ['18px', '22px', '24px'],
       fontFamily: fontFamilies.medium,
       color: colorStyles.heading,
+    },
+    pageSubtitle: {
+      as: 'p',
+      fontSize: [12, 14, 16],
+      fontWeight: 400,
+      lineHeight: ['14px', '18px', '24px'],
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.body,
     },
     buttonTertiary: {
       as: 'span',

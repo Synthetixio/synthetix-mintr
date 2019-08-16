@@ -28,3 +28,12 @@ export const PageTitle = props => {
     </DynamicComponent>
     );
 };
+
+export const PageSubtitle = props => {
+    const { pageSubtitle } = useContext(ThemeContext).textStyles;
+    return (
+    <DynamicComponent {...pageSubtitle} {...props}>
+        {props.children}
+    </DynamicComponent>
+    );
+};
