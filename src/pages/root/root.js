@@ -18,27 +18,6 @@ const RootWrapper = styled('div')`
   width: 100%;
   transition: all ease-out 0.5s;
   display: flex;
-  h1 {
-    color: ${props => props.theme.colorStyles.heading};
-  }
-  h2 {
-    color: ${props => props.theme.colorStyles.heading};
-  }
-  h3 {
-    color: ${props => props.theme.colorStyles.heading};
-  }
-  h4 {
-    color: ${props => props.theme.colorStyles.heading};
-  }
-  h5 {
-    color: ${props => props.theme.colorStyles.heading};
-  }
-  h6 {
-    color: ${props => props.theme.colorStyles.body};
-  }
-  p {
-    color: ${props => props.theme.colorStyles.body};
-  }
 `;
 
 export default hot(Root);

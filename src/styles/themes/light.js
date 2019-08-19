@@ -18,6 +18,8 @@ export default {
 
   shadow1: COLORS.lightShadow1,
 
+  hyperlink: COLORS.buttonLight,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
   themeToggleFontColor: COLORS.light3,

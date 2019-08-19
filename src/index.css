@@ -15,39 +15,17 @@ h1 {
   text-transform: uppercase;
 }
 
-/*
 h2 {
-  font-family: 'apercu-medium';
-  font-size: 24px;
   text-transform: uppercase;
-  letter-spacing: 2px;
 }
-h3 {
-  font-family: 'apercu-medium';
-  font-size: 24px;
-}
+
 h4 {
-  font-family: 'apercu-medium';
-  font-size: 22px;
   text-transform: uppercase;
 }
+
 h5 {
-  font-family: 'apercu-medium';
   text-transform: uppercase;
-  font-size: 18px;
-  letter-spacing: 1px;
-  margin: 0;
 }
-h6 {
-  font-family: 'apercu-medium';
-  font-size: 20px;
-  margin: 0;
-}
-.subheading {
-  font-family: 'apercu-medium';
-  font-size: 100px;
-  margin: 0;
-} */
 
 @font-face {
   font-family: 'apercu-regular';

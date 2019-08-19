@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { DataLarge, DataSmall, DataHeaderLarge, DataHeaderSmall } from '../../components/typography';
+
 
 const Table = ({ data, header }) => {
   return (
     <TableElement cellSpacing="0">
       <Thead>
         {header.map((h, i) => (
-          <Th alignRight={i >= header.length - 2}>{h.value}</Th>
+          <Th alignRight={i >= header.length - 2}><DataHeaderSmall>{h.value}</DataHeaderSmall></Th>
         ))}
       </Thead>
       <Tbody>
@@ -30,15 +32,15 @@ const TableElement = styled.table`
 `;
 
 const Thead = styled.thead`
-  background-color: #e8e7fd;
-  color: #484697;
+  background-color: ${props => props.theme.colorStyles.borders};
+  color: ${props => props.theme.colorStyles.body};
   font-size: 12px;
   text-transform: uppercase;
   font-family: 'apercu-bold';
 `;
 
 const Tbody = styled.tbody`
-  color: #28275a;
+  color: ${props => props.theme.colorStyles.heading};
 `;
 
 const Th = styled.th`
@@ -52,7 +54,7 @@ const Td = styled.td`
   padding: 13px;
   font-size: 12px;
   font-family: 'apercu-medium';
-  border-top: 1px solid #e8e7fd;
+  border-top: 1px solid ${props => props.theme.colorStyles.borders};
   & :first-child {
     border-top: none;
   }

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import styled, { ThemeContext } from 'styled-components';
 
 const Chart = ({}) => {
+  const { colorStyles } = useContext(ThemeContext);
   const data = [
-    { name: 'staking', value: 60, color: '#E8E7FD' },
-    { name: 'transferable', value: 40, color: '#F3F3F3' },
+    { name: 'staking', value: 60, color: colorStyles.accentLight },
+    { name: 'transferable', value: 40, color: colorStyles.accentDark },
   ];
   return (
     <PieChart width={160} height={160}>
