@@ -13,8 +13,8 @@ export default {
   panelButton: COLORS.dark3,
   panelButtonHover: COLORS.dark4,
 
-  accentLight: COLORS.dark2,
-  accentDark: COLORS.dark3,
+  accentLight: COLORS.dark7,
+  accentDark: COLORS.dark8,
 
   shadow1: COLORS.darkShadow1,
 

@@ -8,7 +8,7 @@ const Table = ({ data, header }) => {
     <TableElement cellSpacing="0">
       <Thead>
         {header.map((h, i) => (
-          <Th alignRight={i >= header.length - 2}>{h.value}</Th>
+          <Th alignRight={i >= header.length - 2}><DataHeaderSmall>{h.value}</DataHeaderSmall></Th>
         ))}
       </Thead>
       <Tbody>

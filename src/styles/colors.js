@@ -30,8 +30,8 @@ export default {
   dark5: '#9492C4',
   dark6: '#C2C1E1',
   // accents
-  accentDark: '#3A3B74',
-  accentLight: '#6865A3',
+  dark7: '#3A3B74',
+  dark8: '#6865A3',
   // shadows
   darkShadow1: 'rgba(36, 35, 78, 0)',
 };
