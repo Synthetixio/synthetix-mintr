@@ -21,17 +21,17 @@ const Button = styled.button`
   letter-spacing: 1px;
   font-family: ${props => (props.isSelected ? 'apercu-bold' : 'apercu-medium')};
   background-color: ${props =>
-    props.isSelected ? props.theme.colorStyles.accentDark : props.theme.colorStyles.accentLight};
+    props.isSelected ? props.theme.colorStyles.borders : props.theme.colorStyles.menu};
   border-bottom: 8px solid
     ${props =>
-      props.isSelected ? props.theme.colorStyles.purple4 : props.theme.colorStyles.accentLight};
+      props.isSelected ? props.theme.colorStyles.subtext : props.theme.colorStyles.menu};
   color: ${props => props.theme.colorStyles.subtext};
   &:hover,
   &:focus {
-    background-color: ${props => props.theme.colorStyles.accentDark};
+    background-color: ${props => props.theme.colorStyles.borders};
     border-bottom: 8px solid
       ${props =>
-        props.isSelected ? props.theme.colorStyles.purple4 : props.theme.colorStyles.accentDark};
+        props.isSelected ? props.theme.colorStyles.subtext : props.theme.colorStyles.borders};
   }
 `;
 

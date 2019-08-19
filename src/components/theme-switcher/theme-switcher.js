@@ -32,7 +32,7 @@ const Label = styled.span`
   height: 100%;
 	justify-content: center;
 	font-family: 'apercu-medium';
-	color: ${props => props.theme.colorStyles.themeToggleFontColor}
+  color: ${props => props.theme.colorStyles.themeToggleFontColor};
   font-size: 14px;
 `;
 

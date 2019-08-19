@@ -17,7 +17,7 @@ const Table = ({ data, header }) => {
             <Tr>
               {header.map((h, i) => {
                 const CellType = i === 0 ? HighlightedTd : Td;
-                return <CellType>{d[h.key]}</CellType>;
+                return <CellType><DataSmall>{d[h.key]}</DataSmall></CellType>;
               })}
             </Tr>
           );

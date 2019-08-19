@@ -8,17 +8,16 @@ export default {
   buttonTertiary: COLORS.light6,
   panels: COLORS.white,
   background: COLORS.light7,
+  hyperlink: COLORS.buttonLight,
 
   panelButton: COLORS.white,
   panelButtonHover: COLORS.white,
   menu: COLORS.light6,
 
-  accentDark: COLORS.light5,
-  accentLight: COLORS.light6,
+  accentDark: COLORS.light4,
+  accentLight: COLORS.light5,
 
   shadow1: COLORS.lightShadow1,
-
-  hyperlink: COLORS.buttonLight,
 
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
