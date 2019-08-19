@@ -48,21 +48,45 @@ const theme = mode => {
       color: colorStyles.heading,
       m: '0px 0px 32px 0px',
     },
-    h6: {
-      as: 'h6',
+    pMega: {
+      as: 'p',
       fontSize: [20],
       lineHeight: ['28px'],
       fontFamily: fontFamilies.regular,
       color: colorStyles.body,
       m: '24px 0px 0px 0px',
     },
-    pageSubtitle: {
+    pLarge: {
       as: 'p',
       fontSize: [12, 14, 16],
       fontWeight: 400,
       lineHeight: ['14px', '18px', '24px'],
       fontFamily: fontFamilies.regular,
       color: colorStyles.body,
+    },
+    pMedium: {
+      as: 'p',
+      fontSize: [14],
+      lineHeight: ['16px'],
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.body,
+    },
+    pSmall: {
+      as: 'p',
+      fontSize: [12],
+      fontWeight: 400,
+      lineHeight: ['14px'],
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.body,
+    },
+    pTiny: {
+      as: 'p',
+      fontSize: [10],
+      fontWeight: 400,
+      lineHeight: ['14px'],
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.body,
+      letterSpacing: 0.5,
     },
     buttonTertiary: {
       as: 'span',
@@ -71,6 +95,7 @@ const theme = mode => {
       fontWeight: 400,
       fontFamily: fontFamilies.regular,
       color: colorStyles.subtext,
+      letterSpacing: 0.5,
     },
     chartData: {
       as: 'span',
@@ -79,6 +104,7 @@ const theme = mode => {
       fontWeight: 600,
       fontFamily: fontFamilies.regular,
       color: colorStyles.heading,
+      letterSpacing: 0.5,
     },
     figure: {
       as: 'span',

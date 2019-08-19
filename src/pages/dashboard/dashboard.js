@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/header';
 import PieChart from '../../components/pie-chart';
 import Table from '../../components/table';
-import { ChartData, H5, Figure } from '../../components/typography';
+import { ChartData, H5, Figure, ButtonTertiary, PSmall } from '../../components/typography';
 
 
 const renderBalances = () => {
@@ -38,11 +38,11 @@ const renderCollRatios = () => {
   return (
     <Row margin="0 0 22px 0">
       <Box>
-        <Figure>450%</Figure>
+        <Figure>700%</Figure>
         <CollRatioCaption>Current collateralization ratio</CollRatioCaption>
       </Box>
       <Box>
-        <Figure>500%</Figure>
+        <Figure>750%</Figure>
         <CollRatioCaption>Target collateralization ratio</CollRatioCaption>
       </Box>
     </Row>
@@ -58,12 +58,12 @@ const renderPieChart = () => {
           <PieChartHeading>Your SNX holdings:</PieChartHeading>
           <LegendRow color="#E8E7FD">
             <ChartData>10,000.00 SNX</ChartData>
-            <LegendDescription>Staking</LegendDescription>
+            <PSmall>STAKING</PSmall>
           </LegendRow>
 
           <LegendRow color="#F3F3F3">
             <ChartData>5,000.00 SNX</ChartData>
-            <LegendDescription>Transferable</LegendDescription>
+            <PSmall>TRANSFERRABLE</PSmall>
           </LegendRow>
         </PieChartLegend>
       </Row>
@@ -118,7 +118,7 @@ const Dashboard = () => {
           {renderBalances()}
         </Container>
         <Container curved={true}>
-          <Row>
+          <Row padding="0px 8px">
             <ChartData>
               <Highlighted>2 days</Highlighted> left to claim rewards
             </ChartData>
@@ -128,14 +128,14 @@ const Dashboard = () => {
         <Container>
           <ContainerHeader>
             <H5>Wallet Details:</H5>
-            <ChartData margin="0px 0px 32px 0px">User ID: #100,000,000</ChartData>
+            <ChartData margin="0px 0px 32px 0px">User ID: #100000000</ChartData>
           </ContainerHeader>
           {renderCollRatios()}
           {renderPieChart()}
           {renderTable()}
           <Row margin="18px 0 0 0 ">
-            <Button>Go to synthetix.exchange</Button>
-            <Button>View Synths balance</Button>
+            <Button><ButtonTertiary>Go to synthetix.exchange</ButtonTertiary></Button>
+            <Button><ButtonTertiary>View Synths balance</ButtonTertiary></Button>
           </Row>
         </Container>
       </Content>
@@ -276,16 +276,5 @@ const LegendRow = styled.div`
   justify-content: space-between;
 `;
 
-const LegendValue = styled.div`
-  font-family: 'apercu-bold';
-  font-size: 14px;
-  color: #28275a;
-`;
-
-const LegendDescription = styled.div`
-  font-size: 10px;
-  font-family: 'apercu-bold';
-  text-transform: uppercase;
-`;
 
 export default Dashboard;

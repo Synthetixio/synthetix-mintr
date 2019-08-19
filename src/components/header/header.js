@@ -43,6 +43,7 @@ const GlobeButton = styled.button`
   align-items: center;
   justify-content: center;
   border-radius: 20px;
+  height: 40px;
 `;
 
 const GlobeIcon = styled.img`

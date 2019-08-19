@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { PageTitle, PageSubtitle, H1, H2, H6 } from '../../../../components/typography';
+import { PageTitle, PLarge, H1, H2, PMega } from '../../../../components/typography';
 
 const Home = () => {
   const { colorStyles } = useContext(ThemeContext);
@@ -8,23 +8,23 @@ const Home = () => {
     <HomeWrapper>
       <Container>
         <PageTitle>What would you like to do?</PageTitle>
-        <PageSubtitle>
+        <PLarge>
           Click any button to view more info, confirm or change the amount
           before submitting.
-        </PageSubtitle>
+        </PLarge>
         <ButtonRow margin="30px 0 40px 0">
           <Button big>
             <ButtonContainer>
               <ActionImage src="/images/actions/mint.svg" big />
               <H1>Mint</H1>
-              <H6>lock SNX to mint sUSD</H6>
+              <PMega>lock SNX to mint sUSD</PMega>
             </ButtonContainer>
           </Button>
           <Button big>
             <ButtonContainer>
               <ActionImage src="/images/actions/burn.svg" big />
               <H1>Burn</H1>
-              <H6>burn sUSD to unlock SNX</H6>
+              <PMega>burn sUSD to unlock SNX</PMega>
             </ButtonContainer>
           </Button>
         </ButtonRow>
@@ -33,21 +33,21 @@ const Home = () => {
             <ButtonContainer>
               <ActionImage src="/images/actions/claim.svg" />
               <H2>Claim</H2>
-              <PageSubtitle>sUSD and SNX staking rewards</PageSubtitle>
+              <PLarge>sUSD and SNX staking rewards</PLarge>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
               <ActionImage src="/images/actions/trade.svg" />
               <H2>Trade</H2>
-              <PageSubtitle>Synths on the Synthetix.Exchange</PageSubtitle>
+              <PLarge>Synths on the Synthetix.Exchange</PLarge>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
               <ActionImage src="/images/actions/send.svg" />
               <H2>Send</H2>
-              <PageSubtitle>sUSD or SNX to another wallet</PageSubtitle>
+              <PLarge>sUSD or SNX to another wallet</PLarge>
             </ButtonContainer>
           </Button>
         </ButtonRow>
