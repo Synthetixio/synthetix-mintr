@@ -5,7 +5,7 @@ import { Store } from '../../store';
 import { ThemeContext } from 'styled-components';
 import { toggleTheme } from '../../ducks/ui';
 
-const ThemeSwitcher = ({ props, onLabel, offLabel }) => {
+const ThemeSwitcher = ({ onLabel, offLabel }) => {
   const { state, dispatch } = useContext(Store);
   const theme = useContext(ThemeContext);
   return (
@@ -30,8 +30,8 @@ const Label = styled.span`
   display: flex;
   align-items: center;
   height: 100%;
-	justify-content: center;
-	font-family: 'apercu-medium';
+  justify-content: center;
+  font-family: 'apercu-medium';
   color: ${props => props.theme.colorStyles.themeToggleFontColor};
   font-size: 14px;
 `;

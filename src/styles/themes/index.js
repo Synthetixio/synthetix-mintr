@@ -142,7 +142,7 @@ const theme = mode => {
       fontFamily: fontFamilies.medium,
       color: colorStyles.body,
       letterSpacing: 1,
-      m: '0px 0px 8px 0px'
+      m: '0px 0px 8px 0px',
     },
   };
   return { textStyles, colorStyles };
