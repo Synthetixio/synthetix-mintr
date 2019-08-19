@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import COLORS from '../../styles/colors';
 import { ButtonTertiary } from '../typography';
 
 const DashboardHeaderButton = ({ children }) => {
-  return <Button><ButtonTertiary>{children}</ButtonTertiary></Button>;
+  return (
+    <Button>
+      <ButtonTertiary>{children}</ButtonTertiary>
+    </Button>
+  );
 };
 
 const Button = styled.button`
@@ -17,7 +20,6 @@ const Button = styled.button`
   align-items: center;
   padding: 12px;
   justify-content: space-between;
-  font-family: 'apercu-regular';
   font-size: 14px;
   text-transform: uppercase;
 `;

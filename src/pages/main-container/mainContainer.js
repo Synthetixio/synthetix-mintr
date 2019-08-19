@@ -10,6 +10,7 @@ const renderButtons = (t, currentScreen, setScreen) => {
   return ['home', 'depot', 'transactionsHistory', 'escrow'].map(page => {
     return (
       <ContentHeaderButton
+        key={page}
         isSelected={page === currentScreen}
         onClick={() => setScreen(page)}
       >

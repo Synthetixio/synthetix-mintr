@@ -3,32 +3,61 @@ import styled, { ThemeContext } from 'styled-components';
 import Header from '../../components/header';
 import PieChart from '../../components/pie-chart';
 import Table from '../../components/table';
-import { DataLarge, DataSmall, DataHeaderLarge, DataHeaderSmall, H5, Figure, ButtonTertiary, PSmall } from '../../components/typography';
+import {
+  DataLarge,
+  DataSmall,
+  DataHeaderLarge,
+  H5,
+  Figure,
+  ButtonTertiary,
+} from '../../components/typography';
 
 import { Info } from '../../components/icons';
 
-const renderBalances = (theme) => {
+const renderBalances = theme => {
   return (
     <BalanceRow>
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div><DataHeaderLarge>0.89 SNX</DataHeaderLarge></div>
-          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
+          <div>
+            <DataHeaderLarge>0.89 SNX</DataHeaderLarge>
+          </div>
+          <div>
+            <DataHeaderLarge color={theme.colorStyles.heading}>
+              $1.00 USD
+            </DataHeaderLarge>
+          </div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div><DataHeaderLarge color={theme.colorStyles.body}>0.89 sUSD</DataHeaderLarge></div>
-          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
+          <div>
+            <DataHeaderLarge color={theme.colorStyles.body}>
+              0.89 sUSD
+            </DataHeaderLarge>
+          </div>
+          <div>
+            <DataHeaderLarge color={theme.colorStyles.heading}>
+              $1.00 USD
+            </DataHeaderLarge>
+          </div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/eth-icon.svg" />
         <Balance>
-          <div><DataHeaderLarge color={theme.colorStyles.body}>1.00 ETH</DataHeaderLarge></div>
-          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
+          <div>
+            <DataHeaderLarge color={theme.colorStyles.body}>
+              1.00 ETH
+            </DataHeaderLarge>
+          </div>
+          <div>
+            <DataHeaderLarge color={theme.colorStyles.heading}>
+              $1.00 USD
+            </DataHeaderLarge>
+          </div>
         </Balance>
       </BalanceItem>
     </BalanceRow>
@@ -56,7 +85,9 @@ const renderPieChart = () => {
       <Row padding="32px 16px">
         <PieChart data={[]} />
         <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">YOUR SNX HOLDINGS:</DataHeaderLarge>
+          <DataHeaderLarge margin="0px 0px 24px 0px">
+            YOUR SNX HOLDINGS:
+          </DataHeaderLarge>
           <LegendRow color="#E8E7FD">
             <DataLarge>10,000.00 SNX</DataLarge>
             <DataSmall>STAKING</DataSmall>
@@ -130,14 +161,23 @@ const Dashboard = () => {
         <Container>
           <ContainerHeader>
             <H5>Wallet Details:</H5>
-            <DataHeaderLarge margin="0px 0px 22px 0px" color={theme.colorStyles.body}>USER ID: #100000000</DataHeaderLarge>
+            <DataHeaderLarge
+              margin="0px 0px 22px 0px"
+              color={theme.colorStyles.body}
+            >
+              USER ID: #100000000
+            </DataHeaderLarge>
           </ContainerHeader>
           {renderCollRatios()}
           {renderPieChart()}
           {renderTable()}
           <Row margin="18px 0 0 0 ">
-            <Button><ButtonTertiary>Go to Synthetix.Exchange</ButtonTertiary></Button>
-            <Button><ButtonTertiary>View your Synths balance</ButtonTertiary></Button>
+            <Button>
+              <ButtonTertiary>Go to Synthetix.Exchange</ButtonTertiary>
+            </Button>
+            <Button>
+              <ButtonTertiary>View your Synths balance</ButtonTertiary>
+            </Button>
           </Row>
         </Container>
       </Content>
@@ -156,7 +196,7 @@ const DashboardWrapper = styled('div')`
     color: ${props => props.theme.colorStyles.body};
     margin: 0;
   }
-  transition: all ease-out 0.5s;
+  // transition: all ease-out 0.5s;
   flex-shrink: 0;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
 `;
@@ -255,6 +295,5 @@ const LegendRow = styled.div`
   border-radius: 2px;
   justify-content: space-between;
 `;
-
 
 export default Dashboard;
