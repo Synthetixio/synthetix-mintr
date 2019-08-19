@@ -79,7 +79,7 @@ const renderCollRatios = () => {
   );
 };
 
-const renderPieChart = () => {
+const renderPieChart = (theme) => {
   return (
     <Box full={true}>
       <Row padding="32px 16px">
@@ -88,12 +88,12 @@ const renderPieChart = () => {
           <DataHeaderLarge margin="0px 0px 24px 0px">
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
-          <LegendRow color="#E8E7FD">
+          <LegendRow style={{backgroundColor : theme.colorStyles.accentLight}}>
             <DataLarge>10,000.00 SNX</DataLarge>
             <DataSmall>STAKING</DataSmall>
           </LegendRow>
 
-          <LegendRow color="#F3F3F3">
+          <LegendRow style={{backgroundColor : theme.colorStyles.accentDark}}>
             <DataLarge>5,000.00 SNX</DataLarge>
             <DataSmall>TRANSFERRABLE</DataSmall>
           </LegendRow>
@@ -169,7 +169,7 @@ const Dashboard = () => {
             </DataHeaderLarge>
           </ContainerHeader>
           {renderCollRatios()}
-          {renderPieChart()}
+          {renderPieChart(theme)}
           {renderTable()}
           <Row margin="18px 0 0 0 ">
             <Button>
@@ -287,7 +287,6 @@ const PieChartLegend = styled.div`
 `;
 
 const LegendRow = styled.div`
-  background-color: ${props => props.theme.colorStyles.accentDark};
   margin-top: 16px;
   padding: 14px;
   display: flex;
