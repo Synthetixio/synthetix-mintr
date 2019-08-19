@@ -1,9 +1,14 @@
-import React, { useContext } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import { PageTitle, PLarge, H1, H2, PMega } from '../../../../components/typography';
+import React from 'react';
+import styled from 'styled-components';
+import {
+  PageTitle,
+  PLarge,
+  H1,
+  H2,
+  PMega,
+} from '../../../../components/typography';
 
 const Home = () => {
-  const { colorStyles } = useContext(ThemeContext);
   return (
     <HomeWrapper>
       <Container>

@@ -1,23 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DataLarge, DataSmall, DataHeaderLarge, DataHeaderSmall } from '../../components/typography';
-
+import { DataHeaderSmall } from '../../components/typography';
 
 const Table = ({ data, header }) => {
   return (
     <TableElement cellSpacing="0">
       <Thead>
-        {header.map((h, i) => (
-          <Th alignRight={i >= header.length - 2}><DataHeaderSmall>{h.value}</DataHeaderSmall></Th>
-        ))}
+        <Tr>
+          {header.map((h, i) => (
+            <Th key={i} alignRight={i >= header.length - 2}>
+              <DataHeaderSmall>{h.value}</DataHeaderSmall>
+            </Th>
+          ))}
+        </Tr>
       </Thead>
       <Tbody>
-        {data.map(d => {
+        {data.map((d, i) => {
           return (
-            <Tr>
+            <Tr key={i}>
               {header.map((h, i) => {
                 const CellType = i === 0 ? HighlightedTd : Td;
-                return <CellType><DataSmall>{d[h.key]}</DataSmall></CellType>;
+                return <CellType alignRight={i >= header.length - 2}><DataSmall>{d[h.key]}</DataSmall></CellType>;
               })}
             </Tr>
           );
@@ -55,6 +58,7 @@ const Td = styled.td`
   font-size: 12px;
   font-family: 'apercu-medium';
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
+  text-align: ${props => (props.alignRight ? 'right' : 'left')};
   & :first-child {
     border-top: none;
   }

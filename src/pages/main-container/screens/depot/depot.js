@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Depot = () => {
-  return 'this is depot';
+  return <div>this is depot</div>;
 };
 
 export default Depot;

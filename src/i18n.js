@@ -12,7 +12,7 @@ i18n
     detection: {
       order: ['navigator'],
     },
-    debug: true,
+    // debug: true,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // react already safes from xss

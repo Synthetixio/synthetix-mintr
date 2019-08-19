@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Escrow = () => {
-  return 'this is Escrow';
+  return <div>this is escrow</div>;
 };
 
 export default Escrow;
