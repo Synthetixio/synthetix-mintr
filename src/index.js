@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from './contexts/themeContext';
+import { StoreProvider } from './store';
+import rootReducer from './ducks';
 import './index.css';
 import Root from './pages/root';
 import './i18n';
 
+const initialState = {
+  ui: {
+    themeIsDark: localStorage.getItem('dark') === 'true' || false,
+  },
+};
+
 ReactDOM.render(
-  <ThemeProvider>
+  <StoreProvider reducers={rootReducer} initialState={initialState}>
     <Root />
-  </ThemeProvider>,
+  </StoreProvider>,
   document.getElementById('root')
 );
