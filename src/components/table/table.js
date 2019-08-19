@@ -19,8 +19,16 @@ const Table = ({ data, header }) => {
           return (
             <Tr key={i}>
               {header.map((h, i) => {
-                const CellType = i === 0 ? HighlightedTd : Td;
-                return <CellType alignRight={i >= header.length - 2}><DataSmall>{d[h.key]}</DataSmall></CellType>;
+                const DataLabelType = i === 0 ? DataHeaderSmall : DataSmall;
+                return (
+                  <Td alignRight={i >= header.length - 2}>
+                    <DataLabelType
+                      style={{ textTransform: i === 0 ? 'uppercase' : 'none' }}
+                    >
+                      {d[h.key]}
+                    </DataLabelType>
+                  </Td>
+                );
               })}
             </Tr>
           );
@@ -62,11 +70,6 @@ const Td = styled.td`
   & :first-child {
     border-top: none;
   }
-`;
-
-const HighlightedTd = styled(Td)`
-  font-family: 'apercu-bold';
-  text-transform: uppercase;
 `;
 
 export default Table;
