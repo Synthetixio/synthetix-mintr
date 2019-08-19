@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Switch from 'react-switch';
-import { useTheme } from '../../contexts/themeContext';
+import { Store } from '../../store';
 import { ThemeContext } from 'styled-components';
+import { toggleTheme } from '../../ducks/ui';
 
 const ThemeSwitcher = ({ props, onLabel, offLabel }) => {
-  const { dark, toggle } = useTheme();
+  const { state, dispatch } = useContext(Store);
   const theme = useContext(ThemeContext);
   return (
     <Switch
@@ -14,8 +15,8 @@ const ThemeSwitcher = ({ props, onLabel, offLabel }) => {
       checkedIcon={<Label>{onLabel}</Label>}
       uncheckedIcon={<Label>{offLabel}</Label>}
       handleDiameter={24}
-      onChange={toggle}
-      checked={dark}
+      onChange={() => toggleTheme(!state.ui.themeIsDark, dispatch)}
+      checked={state.ui.themeIsDark}
       offColor={theme.colorStyles.themeToggleBackgroundColor}
       onColor={theme.colorStyles.themeToggleBackgroundColor}
       onHandleColor={theme.colorStyles.themeToggleHandleColor}
