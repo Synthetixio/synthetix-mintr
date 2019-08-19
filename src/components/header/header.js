@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
 import WalletStatusButton from '../wallet-status-button';
 import DashboardHeaderButton from '../dashboard-header-button';
 import ThemeSwitcher from '../theme-switcher';
+import { ThemeContext } from 'styled-components';
+import { Globe } from '../icons';
 
 const Header = ({ t }) => {
+  const theme = useContext(ThemeContext);
   return (
     <HeaderWrapper>
       <Logo src="/images/mintr-logo.svg" />
@@ -15,7 +18,7 @@ const Header = ({ t }) => {
         {t('dashboard.header.support')}
       </DashboardHeaderButton>
       <GlobeButton>
-        <GlobeIcon src="/images/globe.svg" />
+        <Globe theme={theme} />
       </GlobeButton>
       <ThemeSwitcher
         onLabel={t('dashboard.header.onLabel')}
@@ -44,11 +47,6 @@ const GlobeButton = styled.button`
   justify-content: center;
   border-radius: 20px;
   height: 40px;
-`;
-
-const GlobeIcon = styled.img`
-  width: 25x;
-  height: 24px;
 `;
 
 export default withTranslation()(Header);
