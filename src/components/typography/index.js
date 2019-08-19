@@ -12,15 +12,6 @@ export const ButtonTertiary = props => {
   );
 };
 
-export const ChartData = props => {
-  const { chartData } = useContext(ThemeContext).textStyles;
-  return (
-    <DynamicComponent {...chartData} {...props}>
-      {props.children}
-    </DynamicComponent>
-  );
-};
-
 export const PageTitle = props => {
   const { pageTitle } = useContext(ThemeContext).textStyles;
   return (
@@ -117,5 +108,41 @@ export const Figure = props => {
         <DynamicComponent {...figure} {...props}>
         {props.children}
         </DynamicComponent>
+    );
+};
+
+export const DataLarge = props => {
+    const { dataLarge } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...dataLarge} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+};
+
+export const DataHeaderLarge = props => {
+    const { dataHeaderLarge } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...dataHeaderLarge} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+};
+
+export const DataHeaderSmall = props => {
+    const { dataHeaderSmall } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...dataHeaderSmall} {...props}>
+        {props.children}
+      </DynamicComponent>
+    );
+};
+
+export const DataSmall = props => {
+    const { dataSmall } = useContext(ThemeContext).textStyles;
+    return (
+      <DynamicComponent {...dataSmall} {...props}>
+        {props.children}
+      </DynamicComponent>
     );
 };

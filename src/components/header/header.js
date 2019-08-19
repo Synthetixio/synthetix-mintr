@@ -12,7 +12,7 @@ const Header = ({ t }) => {
   const theme = useContext(ThemeContext);
   return (
     <HeaderWrapper>
-      <Logo src="/images/mintr-logo.svg" />
+      <Logo src="/images/mintr-logo-dark.svg" />
       <WalletStatusButton>0x3e...bAe0</WalletStatusButton>
       <DashboardHeaderButton>
         {t('dashboard.header.support')}
@@ -47,6 +47,8 @@ const GlobeButton = styled.button`
   justify-content: center;
   border-radius: 20px;
   height: 40px;
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  background-color: ${props => props.theme.colorStyles.buttonTertiary};
 `;
 
 export default withTranslation()(Header);

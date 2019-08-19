@@ -1,5 +1,6 @@
 import React from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import styled from 'styled-components';
 
 const Chart = ({}) => {
   const data = [

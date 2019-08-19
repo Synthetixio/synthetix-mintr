@@ -1,33 +1,34 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import Header from '../../components/header';
 import PieChart from '../../components/pie-chart';
 import Table from '../../components/table';
-import { ChartData, H5, Figure, ButtonTertiary, PSmall } from '../../components/typography';
+import { DataLarge, DataSmall, DataHeaderLarge, DataHeaderSmall, H5, Figure, ButtonTertiary, PSmall } from '../../components/typography';
 
+import { Info } from '../../components/icons';
 
-const renderBalances = () => {
+const renderBalances = (theme) => {
   return (
     <BalanceRow>
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div><ChartData>0.89 SNX</ChartData></div>
-          <div><ChartData>$1.00 USD</ChartData></div>
+          <div><DataHeaderLarge>0.89 SNX</DataHeaderLarge></div>
+          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
-          <div><ChartData>0.89 SNX</ChartData></div>
-          <div><ChartData>$1.00 USD</ChartData></div>
+          <div><DataHeaderLarge color={theme.colorStyles.body}>0.89 sUSD</DataHeaderLarge></div>
+          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
         </Balance>
       </BalanceItem>
       <BalanceItem>
         <CurrencyIcon src="/images/eth-icon.svg" />
         <Balance>
-          <div><ChartData>0.89 SNX</ChartData></div>
-          <div><ChartData>$1.00 USD</ChartData></div>
+          <div><DataHeaderLarge color={theme.colorStyles.body}>1.00 ETH</DataHeaderLarge></div>
+          <div><DataHeaderLarge color={theme.colorStyles.heading}>$1.00 USD</DataHeaderLarge></div>
         </Balance>
       </BalanceItem>
     </BalanceRow>
@@ -39,11 +40,11 @@ const renderCollRatios = () => {
     <Row margin="0 0 22px 0">
       <Box>
         <Figure>700%</Figure>
-        <CollRatioCaption>Current collateralization ratio</CollRatioCaption>
+        <DataLarge>Current collateralization ratio</DataLarge>
       </Box>
       <Box>
         <Figure>750%</Figure>
-        <CollRatioCaption>Target collateralization ratio</CollRatioCaption>
+        <DataLarge>Target collateralization ratio</DataLarge>
       </Box>
     </Row>
   );
@@ -52,18 +53,18 @@ const renderCollRatios = () => {
 const renderPieChart = () => {
   return (
     <Box full={true}>
-      <Row padding="18px">
+      <Row padding="32px 16px">
         <PieChart data={[]} />
         <PieChartLegend>
-          <PieChartHeading>Your SNX holdings:</PieChartHeading>
+          <DataHeaderLarge margin="0px 0px 24px 0px">YOUR SNX HOLDINGS:</DataHeaderLarge>
           <LegendRow color="#E8E7FD">
-            <ChartData>10,000.00 SNX</ChartData>
-            <PSmall>STAKING</PSmall>
+            <DataLarge>10,000.00 SNX</DataLarge>
+            <DataSmall>STAKING</DataSmall>
           </LegendRow>
 
           <LegendRow color="#F3F3F3">
-            <ChartData>5,000.00 SNX</ChartData>
-            <PSmall>TRANSFERRABLE</PSmall>
+            <DataLarge>5,000.00 SNX</DataLarge>
+            <DataSmall>TRANSFERRABLE</DataSmall>
           </LegendRow>
         </PieChartLegend>
       </Row>
@@ -107,6 +108,7 @@ const renderTable = () => {
 };
 
 const Dashboard = () => {
+  const theme = useContext(ThemeContext);
   return (
     <DashboardWrapper>
       <Header />
@@ -115,27 +117,27 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Current Prices:</H5>
           </ContainerHeader>
-          {renderBalances()}
+          {renderBalances(theme)}
         </Container>
         <Container curved={true}>
           <Row padding="0px 8px">
-            <ChartData>
+            <DataLarge>
               <Highlighted>2 days</Highlighted> left to claim rewards
-            </ChartData>
-            <InfoIcon src="/images/info-icon.svg" />
+            </DataLarge>
+            <Info theme={theme} />
           </Row>
         </Container>
         <Container>
           <ContainerHeader>
             <H5>Wallet Details:</H5>
-            <ChartData margin="0px 0px 32px 0px">User ID: #100000000</ChartData>
+            <DataHeaderLarge margin="0px 0px 22px 0px" color={theme.colorStyles.body}>USER ID: #100000000</DataHeaderLarge>
           </ContainerHeader>
           {renderCollRatios()}
           {renderPieChart()}
           {renderTable()}
           <Row margin="18px 0 0 0 ">
-            <Button><ButtonTertiary>Go to synthetix.exchange</ButtonTertiary></Button>
-            <Button><ButtonTertiary>View Synths balance</ButtonTertiary></Button>
+            <Button><ButtonTertiary>Go to Synthetix.Exchange</ButtonTertiary></Button>
+            <Button><ButtonTertiary>View your Synths balance</ButtonTertiary></Button>
           </Row>
         </Container>
       </Content>
@@ -166,7 +168,7 @@ const Content = styled('div')`
 const Container = styled.div`
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: ${props => (props.curved ? '40px' : '5px')};
-  padding: ${props => (props.curved ? '10px' : '32px')};
+  padding: ${props => (props.curved ? '10px' : '32px 24px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
 
@@ -208,18 +210,9 @@ const Row = styled.div`
   padding: ${props => (props.padding ? props.padding : 0)};
 `;
 
-const Rewards = styled.div`
-  font-family: 'apercu-medium';
-`;
-
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
   color: ${props => props.theme.colorStyles.hyperlink};
-`;
-
-const InfoIcon = styled.img`
-  width: 24px;
-  height: 24px;
 `;
 
 const Box = styled.div`
@@ -248,22 +241,9 @@ const Button = styled.button`
   border: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
-const CollRatioCaption = styled.div`
-  font-family: 'apercu-medium';
-  font-size: 14px;
-  color: ${props => props.theme.colorStyles.heading};
-`;
-
 const PieChartLegend = styled.div`
   flex: 1;
   margin-left: 18px;
-`;
-
-const PieChartHeading = styled.div`
-  font-family: 'apercu-bold';
-  font-size: 14px;
-  text-transform: uppercase;
-  color: ${props => props.theme.colorStyles.body};
 `;
 
 const LegendRow = styled.div`

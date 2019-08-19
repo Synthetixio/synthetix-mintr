@@ -9,7 +9,7 @@ const Home = () => {
       <Container>
         <PageTitle>What would you like to do?</PageTitle>
         <PLarge>
-          Click any button to view more info, confirm or change the amount
+          Click any button below to view more info, confirm or change the amount
           before submitting.
         </PLarge>
         <ButtonRow margin="30px 0 40px 0">

@@ -44,9 +44,10 @@ const theme = mode => {
       as: 'h5',
       fontSize: [14, 16, 18],
       letterSpacing: 1,
+      fontWeight: 500,
       fontFamily: fontFamilies.medium,
       color: colorStyles.heading,
-      m: '0px 0px 32px 0px',
+      m: '0px 0px 24px 0px',
     },
     pMega: {
       as: 'p',
@@ -60,7 +61,7 @@ const theme = mode => {
       as: 'p',
       fontSize: [12, 14, 16],
       fontWeight: 400,
-      lineHeight: ['14px', '18px', '24px'],
+      lineHeight: ['14px', '18x', '22px'],
       fontFamily: fontFamilies.regular,
       color: colorStyles.body,
     },
@@ -92,19 +93,46 @@ const theme = mode => {
       as: 'span',
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
-      fontWeight: 400,
+      fontWeight: 500,
       fontFamily: fontFamilies.regular,
       color: colorStyles.subtext,
       letterSpacing: 0.5,
     },
-    chartData: {
+    dataLarge: {
       as: 'span',
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
-      fontWeight: 600,
+      fontWeight: 400,
       fontFamily: fontFamilies.regular,
       color: colorStyles.heading,
       letterSpacing: 0.5,
+    },
+    dataSmall: {
+      as: 'span',
+      fontSize: [10, 12],
+      lineHeight: ['12px', '14px', '16px'],
+      fontWeight: 400,
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.heading,
+      letterSpacing: 0.5,
+    },
+    dataHeaderLarge: {
+      as: 'span',
+      fontSize: [12, 14],
+      lineHeight: ['12px', '14px', '16px'],
+      fontWeight: 400,
+      fontFamily: fontFamilies.medium,
+      color: colorStyles.body,
+      letterSpacing: 0.5,
+    },
+    dataHeaderSmall: {
+      as: 'span',
+      fontSize: [10, 12],
+      lineHeight: ['12px', '14px', '16px'],
+      fontWeight: 600,
+      fontFamily: fontFamilies.medium,
+      color: colorStyles.body,
+      letterSpacing: 1,
     },
     figure: {
       as: 'span',
@@ -115,7 +143,7 @@ const theme = mode => {
       color: colorStyles.body,
       letterSpacing: 1,
       m: '0px 0px 8px 0px'
-    }
+    },
   };
   return { textStyles, colorStyles };
 };
