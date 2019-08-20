@@ -2,15 +2,6 @@ import React, { useContext } from 'react';
 import DynamicComponent from './dynamic-component';
 import { ThemeContext } from 'styled-components';
 
-export const ButtonTertiary = props => {
-  const { buttonTertiary } = useContext(ThemeContext).textStyles;
-  return (
-    <DynamicComponent {...buttonTertiary} {...props}>
-      {props.children}
-    </DynamicComponent>
-  );
-};
-
 export const PageTitle = props => {
   const { pageTitle } = useContext(ThemeContext).textStyles;
   return (
@@ -101,6 +92,15 @@ export const PTiny = props => {
   );
 };
 
+export const Subtext = props => {
+  const { subtext } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...subtext} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
 export const Figure = props => {
   const { figure } = useContext(ThemeContext).textStyles;
   return (
@@ -141,6 +141,42 @@ export const DataSmall = props => {
   const { dataSmall } = useContext(ThemeContext).textStyles;
   return (
     <DynamicComponent {...dataSmall} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const ButtonPrimaryLabel = props => {
+  const { buttonPrimaryLabel } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...buttonPrimaryLabel} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const ButtonPrimaryLabelSmall = props => {
+  const { buttonPrimaryLabelSmall } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...buttonPrimaryLabelSmall} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const ButtonSecondaryLabel = props => {
+  const { buttonSecondaryLabel } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...buttonSecondaryLabel} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const ButtonTertiaryLabel = props => {
+  const { buttonTertiaryLabel } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...buttonTertiaryLabel} {...props}>
       {props.children}
     </DynamicComponent>
   );

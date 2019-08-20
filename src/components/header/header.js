@@ -54,7 +54,7 @@ const GlobeButton = styled.button`
   border-radius: 20px;
   height: 40px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
-  background-color: ${props => props.theme.colorStyles.buttonTertiary};
+  background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
 `;
 
 export default withTranslation()(Header);

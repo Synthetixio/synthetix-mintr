@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="78px" height="73px" version="1.1" viewBox="0 0 78 73">
+<!--Generator: Sketch 56.3 (81716) - https://sketch.com-->
+    <title>
+        Group 10
+    </title>
+    <desc>
+        Created with Sketch.
+    </desc>
+    <g id="icons" fill="none" fill-rule="evenodd" stroke="none" stroke-width="1">
+        <g id="atoms-/-icon-/-80px-/-ledger" transform="translate(-1.000000, -3.000000)">
+            <g id="Group-10" transform="translate(47.028837, 38.472451) rotate(-345.000000) translate(-47.028837, -38.472451) translate(7.028837, 5.972451)">
+                <polygon id="Rectangle-6" fill="#0E0B23" points="0.617719176 40.2665465 74.6177192 40.2665465 74.6177192 61.2665465 0.617719176 61.2665465"/>
+                <polygon id="Rectangle-7" fill="#25244B" points="9.23311504 47.3451881 42.233115 47.3451881 42.233115 54.3451881 9.23311504 54.3451881"/>
+                <path id="Rectangle-6" fill="#6F6E98" d="M8.22685038,22.4059657 L72.556254,22.8002249 C78.0337756,22.8337953 82.4658886,27.2659433 82.4994158,32.7434651 C82.5324171,38.1350619 78.1884171,42.5325676 72.7968203,42.5655688 C72.7569589,42.5658128 72.7170965,42.5658127 72.6772351,42.5655684 L8.3478315,42.1713091 L8.22685038,22.4059657 Z" transform="translate(45.393378, 32.516051) rotate(42.000000) translate(-45.393378, -32.516051) "/>
+                <circle id="Oval-3" cx="65.6388593" cy="51.022876" r="5" fill="#11112F" stroke="#8F8EB1"/>
+                <polygon id="Rectangle-8" fill="#25244B" points="9.92715244 61.8084338 17.9271524 61.8084338 17.9271524 63.8084338 9.92715244 63.8084338"/>
+                <polygon id="Rectangle-8-Copy" fill="#25244B" points="34.6622865 61.3923316 42.6622865 61.3923316 42.6622865 63.3923316 34.6622865 63.3923316"/>
+            </g>
+        </g>
+    </g>
+</svg>

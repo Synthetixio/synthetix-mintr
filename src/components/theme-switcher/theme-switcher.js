@@ -31,7 +31,7 @@ const Label = styled.span`
   align-items: center;
   height: 100%;
   justify-content: center;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   color: ${props => props.theme.colorStyles.themeToggleFontColor};
   font-size: 14px;
 `;

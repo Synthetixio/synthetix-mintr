@@ -6,10 +6,10 @@ const Slider = ({ children }) => {
 };
 
 const SliderWrapper = styled.div`
-  background: white;
+  background: ${props => props.theme.colorStyles.panels};
   position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 90vh;
 `;
 
 export default Slider;

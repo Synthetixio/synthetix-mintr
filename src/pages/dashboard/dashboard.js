@@ -9,9 +9,8 @@ import {
   DataHeaderLarge,
   H5,
   Figure,
-  ButtonTertiary,
+  ButtonTertiaryLabel,
 } from '../../components/typography';
-
 import { Info } from '../../components/icons';
 
 const renderBalances = theme => {
@@ -173,10 +172,14 @@ const Dashboard = () => {
           {renderTable()}
           <Row margin='18px 0 0 0 '>
             <Button>
-              <ButtonTertiary>Go to Synthetix.Exchange</ButtonTertiary>
+              <ButtonTertiaryLabel>
+                Go to Synthetix.Exchange
+              </ButtonTertiaryLabel>
             </Button>
             <Button>
-              <ButtonTertiary>View your Synths balance</ButtonTertiary>
+              <ButtonTertiaryLabel>
+                View your Synths balance
+              </ButtonTertiaryLabel>
             </Button>
           </Row>
         </Container>
@@ -266,21 +269,6 @@ const Box = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button`
-  width: 240px;
-  border-radius: 5px;
-  text-transform: uppercase;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6f6e98;
-  background-color: ${props => props.theme.colorStyles.buttonTertiary};
-  font-family: 'apercu-medium';
-  font-size: 14px;
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-`;
-
 const PieChartLegend = styled.div`
   flex: 1;
   margin-left: 18px;
@@ -293,6 +281,15 @@ const LegendRow = styled.div`
   align-items: center;
   border-radius: 2px;
   justify-content: space-between;
+`;
+
+const Button = styled.div`
+  background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+  text-transform: uppercase;
+  height: 48px;
+  padding: 16px;
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  border-radius: 2px;
 `;
 
 export default Dashboard;

@@ -5,10 +5,16 @@ export default {
   body: COLORS.dark6,
   subtext: COLORS.dark5,
   borders: COLORS.dark4,
-  buttonTertiary: COLORS.dark3,
   panels: COLORS.dark2,
   background: COLORS.dark1,
   hyperlink: COLORS.buttonLight,
+
+  buttonPrimaryText: COLORS.white,
+  buttonPrimaryBg: COLORS.buttonLight,
+  buttonPrimaryBgFocus: COLORS.buttonDark,
+
+  buttonTertiaryText: COLORS.dark6,
+  buttonTertiaryBgFocus: COLORS.dark3,
 
   menu: COLORS.dark2,
   panelButton: COLORS.dark3,
