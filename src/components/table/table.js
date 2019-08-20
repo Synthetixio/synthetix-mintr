@@ -21,7 +21,7 @@ const Table = ({ data, header }) => {
               {header.map((h, i) => {
                 const DataLabelType = i === 0 ? DataHeaderSmall : DataSmall;
                 return (
-                  <Td alignRight={i >= header.length - 2}>
+                  <Td key={i} alignRight={i >= header.length - 2}>
                     <DataLabelType
                       style={{ textTransform: i === 0 ? 'uppercase' : 'none' }}
                     >
