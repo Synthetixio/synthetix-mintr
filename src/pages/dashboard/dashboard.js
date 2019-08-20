@@ -18,7 +18,7 @@ const renderBalances = theme => {
   return (
     <BalanceRow>
       <BalanceItem>
-        <CurrencyIcon src="/images/snx-icon.svg" />
+        <CurrencyIcon src='/images/snx-icon.svg' />
         <Balance>
           <div>
             <DataHeaderLarge>0.89 SNX</DataHeaderLarge>
@@ -31,7 +31,7 @@ const renderBalances = theme => {
         </Balance>
       </BalanceItem>
       <BalanceItem>
-        <CurrencyIcon src="/images/snx-icon.svg" />
+        <CurrencyIcon src='/images/snx-icon.svg' />
         <Balance>
           <div>
             <DataHeaderLarge color={theme.colorStyles.body}>
@@ -46,7 +46,7 @@ const renderBalances = theme => {
         </Balance>
       </BalanceItem>
       <BalanceItem>
-        <CurrencyIcon src="/images/eth-icon.svg" />
+        <CurrencyIcon src='/images/eth-icon.svg' />
         <Balance>
           <div>
             <DataHeaderLarge color={theme.colorStyles.body}>
@@ -66,7 +66,7 @@ const renderBalances = theme => {
 
 const renderCollRatios = () => {
   return (
-    <Row margin="0 0 22px 0">
+    <Row margin='0 0 22px 0'>
       <Box>
         <Figure>700%</Figure>
         <DataLarge>Current collateralization ratio</DataLarge>
@@ -79,21 +79,21 @@ const renderCollRatios = () => {
   );
 };
 
-const renderPieChart = (theme) => {
+const renderPieChart = theme => {
   return (
     <Box full={true}>
-      <Row padding="32px 16px">
+      <Row padding='32px 16px'>
         <PieChart data={[]} />
         <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">
+          <DataHeaderLarge margin='0px 0px 24px 0px'>
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
-          <LegendRow style={{backgroundColor : theme.colorStyles.accentLight}}>
+          <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
             <DataLarge>10,000.00 SNX</DataLarge>
             <DataSmall>STAKING</DataSmall>
           </LegendRow>
 
-          <LegendRow style={{backgroundColor : theme.colorStyles.accentDark}}>
+          <LegendRow style={{ backgroundColor: theme.colorStyles.accentDark }}>
             <DataLarge>5,000.00 SNX</DataLarge>
             <DataSmall>TRANSFERRABLE</DataSmall>
           </LegendRow>
@@ -105,7 +105,7 @@ const renderPieChart = (theme) => {
 
 const renderTable = () => {
   return (
-    <Row margin="22px 0 0 0">
+    <Row margin='22px 0 0 0'>
       <Table
         header={[
           { key: 'rowLegend', value: '' },
@@ -151,7 +151,7 @@ const Dashboard = () => {
           {renderBalances(theme)}
         </Container>
         <Container curved={true}>
-          <Row padding="0px 8px">
+          <Row padding='0px 8px'>
             <DataLarge>
               <Highlighted>2 days</Highlighted> left to claim rewards
             </DataLarge>
@@ -162,7 +162,7 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Wallet Details:</H5>
             <DataHeaderLarge
-              margin="0px 0px 22px 0px"
+              margin='0px 0px 22px 0px'
               color={theme.colorStyles.body}
             >
               USER ID: #100000000
@@ -171,7 +171,7 @@ const Dashboard = () => {
           {renderCollRatios()}
           {renderPieChart(theme)}
           {renderTable()}
-          <Row margin="18px 0 0 0 ">
+          <Row margin='18px 0 0 0 '>
             <Button>
               <ButtonTertiary>Go to Synthetix.Exchange</ButtonTertiary>
             </Button>

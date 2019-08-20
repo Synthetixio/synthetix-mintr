@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   PageTitle,
@@ -7,50 +7,64 @@ import {
   H2,
   PMega,
 } from '../../../../components/typography';
+import { Mint } from '../../scenarios';
+
+const initialScenario = 'mint';
+
+const renderScenario = currentScenario => {
+  switch (currentScenario) {
+    case 'mint':
+      return <Mint />;
+    default:
+      return null;
+  }
+};
 
 const Home = () => {
+  const [currentScenario] = useState(initialScenario);
   return (
     <HomeWrapper>
       <Container>
+        {renderScenario(currentScenario)}
         <PageTitle>What would you like to do?</PageTitle>
         <PLarge>
           Click any button below to view more info, confirm or change the amount
           before submitting.
         </PLarge>
-        <ButtonRow margin="30px 0 40px 0">
+        <ButtonRow margin='30px 0 40px 0'>
           <Button big>
             <ButtonContainer>
-              <ActionImage src="/images/actions/mint.svg" big />
+              <ActionImage src='/images/actions/mint.svg' big />
               <H1>Mint</H1>
               <PMega>lock SNX to mint sUSD</PMega>
             </ButtonContainer>
           </Button>
           <Button big>
             <ButtonContainer>
-              <ActionImage src="/images/actions/burn.svg" big />
+              <ActionImage src='/images/actions/burn.svg' big />
               <H1>Burn</H1>
               <PMega>burn sUSD to unlock SNX</PMega>
             </ButtonContainer>
           </Button>
         </ButtonRow>
-        <ButtonRow margin="0 0 40px 0">
+        <ButtonRow margin='0 0 40px 0'>
           <Button>
             <ButtonContainer>
-              <ActionImage src="/images/actions/claim.svg" />
+              <ActionImage src='/images/actions/claim.svg' />
               <H2>Claim</H2>
               <PLarge>sUSD and SNX staking rewards</PLarge>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
-              <ActionImage src="/images/actions/trade.svg" />
+              <ActionImage src='/images/actions/trade.svg' />
               <H2>Trade</H2>
               <PLarge>Synths on the Synthetix.Exchange</PLarge>
             </ButtonContainer>
           </Button>
           <Button>
             <ButtonContainer>
-              <ActionImage src="/images/actions/send.svg" />
+              <ActionImage src='/images/actions/send.svg' />
               <H2>Send</H2>
               <PLarge>sUSD or SNX to another wallet</PLarge>
             </ButtonContainer>
@@ -66,9 +80,11 @@ const HomeWrapper = styled.div`
 `;
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
+  overflow: hidden;
 `;
 
 const Button = styled.button`

@@ -9,7 +9,7 @@ export default {
   panels: COLORS.dark2,
   background: COLORS.dark1,
   hyperlink: COLORS.buttonLight,
-  
+
   menu: COLORS.dark2,
   panelButton: COLORS.dark3,
   panelButtonHover: COLORS.dark4,
