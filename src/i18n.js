@@ -18,7 +18,8 @@ i18n
       escapeValue: false, // react already safes from xss
     },
     react: {
-      useSuspense: false,
+      useSuspense: true,
+      wait: true,
     },
     // backend: {
     //   projectId: '08a9281f-25bb-4476-b41a-7792c3b32b54',

@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonTertiaryLabel } from '../typography';
 
-const ButtonTertiary = ({ children }) => {
+const ButtonTertiary = ({ children, onClick }) => {
   return (
-    <Button>
+    <Button onClick={onClick}>
       <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
     </Button>
   );

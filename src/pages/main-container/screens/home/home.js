@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 import {
   PageTitle,
@@ -9,67 +9,66 @@ import {
 } from '../../../../components/typography';
 import { Mint } from '../../scenarios';
 
-const initialScenario = 'mint';
+const initialScenario = null;
 
-const renderScenario = currentScenario => {
+const renderScenario = (currentScenario, setCurrentScenario) => {
+  if (!currentScenario) return;
+  let ScenarioComponent = null;
   switch (currentScenario) {
     case 'mint':
-      return <Mint />;
+      ScenarioComponent = Mint;
+      break;
     default:
-      return null;
+      ScenarioComponent = null;
   }
+  return <ScenarioComponent onDestroy={() => setCurrentScenario(null)} />;
+};
+
+const renderHomeButtons = setCurrentScenario => {
+  return (
+    <Fragment>
+      <PageTitle>What would you like to do?</PageTitle>
+      <PLarge>
+        Click any button below to view more info, confirm or change the amount
+        before submitting.
+      </PLarge>
+      <ButtonRow margin="30px 0 40px 0">
+        {['mint', 'burn'].map(action => {
+          return (
+            <Button key={action} onClick={() => setCurrentScenario(action)} big>
+              <ButtonContainer>
+                <ActionImage src={`/images/actions/${action}.svg`} big />
+                <H1>{action}</H1>
+                <PMega>lock SNX to mint sUSD</PMega>
+              </ButtonContainer>
+            </Button>
+          );
+        })}
+      </ButtonRow>
+      <ButtonRow margin="0 0 40px 0">
+        {['claim', 'trade', 'send'].map(action => {
+          return (
+            <Button key={action}>
+              <ButtonContainer>
+                <ActionImage src={`/images/actions/${action}.svg`} />
+                <H2>{action}</H2>
+                <PLarge>sUSD and SNX staking rewards</PLarge>
+              </ButtonContainer>
+            </Button>
+          );
+        })}
+      </ButtonRow>
+    </Fragment>
+  );
 };
 
 const Home = () => {
-  const [currentScenario] = useState(initialScenario);
+  const [currentScenario, setCurrentScenario] = useState(initialScenario);
   return (
     <HomeWrapper>
       <Container>
-        {renderScenario(currentScenario)}
-        <PageTitle>What would you like to do?</PageTitle>
-        <PLarge>
-          Click any button below to view more info, confirm or change the amount
-          before submitting.
-        </PLarge>
-        <ButtonRow margin='30px 0 40px 0'>
-          <Button big>
-            <ButtonContainer>
-              <ActionImage src='/images/actions/mint.svg' big />
-              <H1>Mint</H1>
-              <PMega>lock SNX to mint sUSD</PMega>
-            </ButtonContainer>
-          </Button>
-          <Button big>
-            <ButtonContainer>
-              <ActionImage src='/images/actions/burn.svg' big />
-              <H1>Burn</H1>
-              <PMega>burn sUSD to unlock SNX</PMega>
-            </ButtonContainer>
-          </Button>
-        </ButtonRow>
-        <ButtonRow margin='0 0 40px 0'>
-          <Button>
-            <ButtonContainer>
-              <ActionImage src='/images/actions/claim.svg' />
-              <H2>Claim</H2>
-              <PLarge>sUSD and SNX staking rewards</PLarge>
-            </ButtonContainer>
-          </Button>
-          <Button>
-            <ButtonContainer>
-              <ActionImage src='/images/actions/trade.svg' />
-              <H2>Trade</H2>
-              <PLarge>Synths on the Synthetix.Exchange</PLarge>
-            </ButtonContainer>
-          </Button>
-          <Button>
-            <ButtonContainer>
-              <ActionImage src='/images/actions/send.svg' />
-              <H2>Send</H2>
-              <PLarge>sUSD or SNX to another wallet</PLarge>
-            </ButtonContainer>
-          </Button>
-        </ButtonRow>
+        {renderScenario(currentScenario, setCurrentScenario)}
+        {renderHomeButtons(setCurrentScenario)}
       </Container>
     </HomeWrapper>
   );

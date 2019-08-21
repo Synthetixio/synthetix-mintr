@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Slider from '../../../components/slider';
-import ButtonTertiary from '../../../components/button-tertiary';
+import { SlidePage, SliderContext } from '../../../../components/slider';
+import ButtonTertiary from '../../../../components/button-tertiary';
 import {
   PLarge,
   H1,
-  PageTitle,
   ButtonPrimaryLabel,
   ButtonPrimaryLabelSmall,
-  ButtonSecondaryLabel,
   Subtext,
-  DataHeaderLarge,
-} from '../../../components/typography';
+} from '../../../../components/typography';
 
-const Mint = () => {
+const Action = ({ onDestroy }) => {
+  const { handleNext } = useContext(SliderContext);
   return (
-    <Slider>
+    <SlidePage>
       <Container>
-        <ButtonTertiary alignSelf='flex-start'>Cancel</ButtonTertiary>
+        <ButtonTertiary onClick={onDestroy} alignSelf="flex-start">
+          Cancel
+        </ButtonTertiary>
+        <ButtonTertiary onClick={handleNext} alignSelf="flex-start">
+          Next
+        </ButtonTertiary>
         <Intro>
-          <ActionImage src='/images/actions/mint.svg' big />
+          <ActionImage src="/images/actions/mint.svg" big />
           <H1>MINT</H1>
           <PLarge>
             Minting sUSD will lock your SNX, increasing your collateralization
@@ -31,7 +34,7 @@ const Mint = () => {
           <PLarge>Confirm or enter amount to mint:</PLarge>
           <InputField>
             <InputText>
-              10,000.00 <Placeholder marginLeft='16px'>sUSD</Placeholder>
+              10,000.00 <Placeholder marginLeft="16px">sUSD</Placeholder>
             </InputText>
             <ButtonMax>
               <ButtonPrimaryLabelSmall>MAX</ButtonPrimaryLabelSmall>
@@ -42,43 +45,10 @@ const Mint = () => {
           GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
         </Subtext>
         <ButtonPrimary>
-          <ButtonPrimaryLabel margin='auto'>MINT NOW</ButtonPrimaryLabel>
+          <ButtonPrimaryLabel margin="auto">MINT NOW</ButtonPrimaryLabel>
         </ButtonPrimary>
       </Container>
-
-      <Container>
-        <ButtonTertiary alignSelf='flex-start'>Cancel</ButtonTertiary>
-        <Intro>
-          <ActionImage src='/images/ledger.svg' big />
-          <PageTitle>Please confirm transaction</PageTitle>
-          <PLarge>
-            To continue, follow the prompts on your Ledger Wallet.
-          </PLarge>
-        </Intro>
-        <Details>
-          <Box>
-            <DataHeaderLarge>MINTING:</DataHeaderLarge>
-            <Amount>5,000.00 sUSD</Amount>
-          </Box>
-          <Box>
-            <DataHeaderLarge>BY BURNING:</DataHeaderLarge>
-            <Amount>5,000.00 SNX</Amount>
-          </Box>
-        </Details>
-        <Subtext>
-          Ethereum network fees (Gas): $0.083 {'\n'}
-          Estimated transaction speed: ~5.24 mins
-        </Subtext>
-        <ButtonSecondary>
-          <ButtonSecondaryLabel margin='auto'>
-            VIEW ON ETHERSCAN
-          </ButtonSecondaryLabel>
-        </ButtonSecondary>
-        <ButtonPrimary>
-          <ButtonPrimaryLabel margin='auto'>WAITING...</ButtonPrimaryLabel>
-        </ButtonPrimary>
-      </Container>
-    </Slider>
+    </SlidePage>
   );
 };
 
@@ -176,41 +146,4 @@ const ButtonPrimary = styled.div`
   }
 `;
 
-const ButtonSecondary = styled.div`
-  width: 320px;
-  height: 64px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg};
-  transition: transform ease-in 0.1s;
-  &:hover {
-    background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
-    transform: translateY(-2px);
-  }
-`;
-
-const Details = styled.div`
-  display: flex;
-`;
-
-const Box = styled.div`
-  height: auto;
-  width: auto;
-  padding: 24px 40px;
-  margin: 0px 16px;
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-  display: flex;
-  flex-direction: column;
-`;
-
-const Amount = styled.span`
-  color: ${props => props.theme.colorStyles.hyperlink};
-  font-family: 'apercu-medium';
-  font-size: 24px;
-  margin: 16px 0px 0px 0px;
-`;
-
-export default Mint;
+export default Action;
