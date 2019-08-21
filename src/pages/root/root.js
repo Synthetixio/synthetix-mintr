@@ -1,18 +1,37 @@
 import { hot } from 'react-hot-loader/root';
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import styled from 'styled-components';
-import Dashboard from '../dashboard';
-import MainContainer from '../main-container';
-// import Landing from '../landing';
+
+import { Store } from '../../store';
+
+import Landing from '../Landing';
+import WalletConnection from '../WalletConnection';
+import WalletSelection from '../WalletSelection';
+import Main from '../Main';
+
+const renderCurrentPage = currentPage => {
+  switch (currentPage) {
+    case 'landing':
+    default:
+      return <Landing />;
+    case 'walletConnection':
+      return <WalletConnection />;
+    case 'walletSelection':
+      return <WalletSelection />;
+    case 'main':
+      return <Main />;
+  }
+};
 
 const Root = () => {
-  // const [currentPage, setCurrentPage] = useContext();
+  const {
+    state: {
+      ui: { currentPage },
+    },
+  } = useContext(Store);
   return (
     <Suspense fallback="loading">
-      <RootWrapper>
-        <Dashboard />
-        <MainContainer />
-      </RootWrapper>
+      <RootWrapper>{renderCurrentPage(currentPage)}</RootWrapper>
     </Suspense>
   );
 };
@@ -20,7 +39,6 @@ const Root = () => {
 const RootWrapper = styled('div')`
   background: ${props => props.theme.background};
   width: 100%;
-  display: flex;
   // & > * {
   //   transition-property: background, border, color;
   //   transition-duration: 0.3s;

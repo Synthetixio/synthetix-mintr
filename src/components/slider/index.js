@@ -1,6 +1,6 @@
-import Slider from './slider';
-import SlidePage from './slidePage';
-import SliderContext from './context';
+import Slider from './Slider';
+import SlidePage from './SlidePage';
+import SliderContext from './Context';
 
 export default Slider;
 export { SlidePage };

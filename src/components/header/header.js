@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
-import WalletStatusButton from '../wallet-status-button';
-import DashboardHeaderButton from '../dashboard-header-button';
-import ThemeSwitcher from '../theme-switcher';
 import { ThemeContext } from 'styled-components';
-import { Globe } from '../icons';
+
+import { WalletStatusButton } from '../Button';
+import { HeaderButton } from '../Button';
+import ThemeSwitcher from '../ThemeSwitcher';
+
+import { Globe } from '../Icons';
 
 const Header = ({ t }) => {
   const theme = useContext(ThemeContext);
@@ -20,9 +22,7 @@ const Header = ({ t }) => {
         }.svg`}
       />
       <WalletStatusButton>0x3e...bAe0</WalletStatusButton>
-      <DashboardHeaderButton>
-        {t('dashboard.header.support')}
-      </DashboardHeaderButton>
+      <HeaderButton>{t('dashboard.header.support')}</HeaderButton>
       <GlobeButton>
         <Globe theme={theme} />
       </GlobeButton>

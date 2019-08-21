@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import DynamicComponent from './dynamic-component';
+import DynamicComponent from './DynamicComponent';
 import { ThemeContext } from 'styled-components';
 
 export const PageTitle = props => {

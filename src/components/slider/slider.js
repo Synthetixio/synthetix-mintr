@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-import SliderContext from './context';
+import SliderContext from './Context';
 import useSizeElement from './useSizeElement';
 import useSliding from './useSliding';
 

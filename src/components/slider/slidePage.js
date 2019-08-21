@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import SliderContext from './context';
+import SliderContext from './Context';
 
 const SlidePage = ({ children }) => {
   const { elementRef } = useContext(SliderContext);

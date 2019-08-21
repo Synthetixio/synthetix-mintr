@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DataHeaderSmall, DataSmall } from '../../components/typography';
+import { DataHeaderSmall, DataSmall } from '../Typography';
 
 const Table = ({ data, header }) => {
   return (

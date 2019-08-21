@@ -1,4 +1,4 @@
-import Globe from './globe';
-import Info from './info';
+import Globe from './Globe';
+import Info from './Info';
 
 export { Globe, Info };
