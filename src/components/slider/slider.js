@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import SliderContext from './context';
 import useSizeElement from './useSizeElement';
@@ -25,13 +25,23 @@ const Slider = ({ children, isVisible }) => {
   );
 };
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const SliderWrapper = styled.div`
   background: ${props => props.theme.colorStyles.panels};
   transition: opacity ease-in 0.2s, transform ease-in 0.2s;
   position: absolute;
+  animation: ${fadeIn} 0.25s linear both;
+  height: 100%;
   left: 0;
   width: 100%;
-  height: 100%;
   display: flex;
   z-index: 100;
 `;
