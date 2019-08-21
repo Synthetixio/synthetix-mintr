@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { StoreProvider } from './store';
 import rootReducer from './ducks';
 import './index.css';
-import Root from './pages/Root';
+import Root from './pages/root';
 import './i18n';
 
 const initialState = {
