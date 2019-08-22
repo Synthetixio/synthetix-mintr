@@ -186,6 +186,14 @@ const theme = mode => {
       color: colorStyles.buttonTertiaryText,
       letterSpacing: 1,
     },
+    inputTextLarge: {
+      as: 'span',
+      fontSize: [20, 22, 24],
+      fontWeight: 500,
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.heading,
+      letterSpacing: 0.5,
+    },
   };
   return { textStyles, colorStyles };
 };

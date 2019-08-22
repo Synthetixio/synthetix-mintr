@@ -21,11 +21,12 @@ const Button = styled.button`
   justify-content: space-between;
   font-size: 14px;
   text-transform: uppercase;
-  transition: transform ease-in 0.2s;
+  transition: all ease-in 0.1s;
   &:hover,
   &:focus {
     background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
   }
+  cursor: pointer;
 `;
 
 export default ButtonTertiary;

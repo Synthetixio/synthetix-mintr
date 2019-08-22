@@ -19,6 +19,7 @@ const Button = styled.button`
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: all ease-in 0.1s;
   font-family: ${props => (props.isSelected ? 'apercu-bold' : 'apercu-medium')};
   background-color: ${props =>
     props.isSelected

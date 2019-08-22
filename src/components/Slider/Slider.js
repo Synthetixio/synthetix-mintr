@@ -35,7 +35,7 @@ const fadeIn = keyframes`
 `;
 
 const SliderWrapper = styled.div`
-  background: ${props => props.theme.colorStyles.panels};
+  background: ${props => props.theme.colorStyles.background};
   transition: opacity ease-in 0.2s, transform ease-in 0.2s;
   position: absolute;
   animation: ${fadeIn} 0.25s linear both;

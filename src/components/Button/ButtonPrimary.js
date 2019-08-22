@@ -26,7 +26,7 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
-  transition: transform ease-in 0.1s;
+  transition: all ease-in 0.1s;
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }
