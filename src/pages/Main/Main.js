@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Dashboard from '../../screens/MintrTabs/Dashboard';
+import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
 
 const Main = () => {
