@@ -1,3 +1,4 @@
+/*eslint-disable */
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { SlidePage, SliderContext } from '../../../components/Slider';
@@ -9,6 +10,7 @@ import {
   ButtonPrimaryLabelSmall,
   Subtext,
 } from '../../../components/Typography';
+import Input from '../../../components/Input';
 
 const Action = ({ onDestroy }) => {
   const { handleNext } = useContext(SliderContext);
@@ -32,14 +34,11 @@ const Action = ({ onDestroy }) => {
         </Intro>
         <Form>
           <PLarge>Confirm or enter amount to mint:</PLarge>
-          <InputField>
-            <InputText>
-              10,000.00 <Placeholder marginLeft="16px">sUSD</Placeholder>
-            </InputText>
-            <ButtonMax>
-              <ButtonPrimaryLabelSmall>MAX</ButtonPrimaryLabelSmall>
-            </ButtonMax>
-          </InputField>
+          <Input
+            placeholder="enter an amout"
+            leftComponent={<div>left</div>}
+            rightComponent={<button>my button</button>}
+          />
         </Form>
         <Subtext>
           GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
