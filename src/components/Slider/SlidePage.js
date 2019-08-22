@@ -11,7 +11,7 @@ const Slide = styled.div`
   width: 100%;
   flex-shrink: 0;
   height: 100%;
-  background-color: white;
+  background-color: ${props => props.theme.colorStyles.panelButton};
 `;
 
 export default SlidePage;
