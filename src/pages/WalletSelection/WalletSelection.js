@@ -7,7 +7,14 @@ import { updateCurrentPage } from '../../ducks/ui';
 
 import { ButtonPrimaryMedium, ButtonTertiary } from '../../components/Button';
 import Spinner from '../../components/Spinner';
+import List from '../../components/List';
+
 import { H1, H2, PMega } from '../../components/Typography';
+
+const renderBodyContent = () => {
+  // return <Spinner />;
+  return <List />;
+};
 
 const WalletConnection = () => {
   const { state, dispatch } = useContext(Store);
@@ -28,13 +35,12 @@ const WalletConnection = () => {
       </Header>
       <Content>
         <HeadingContent>
-          <WalletConnectionH1>Connect to Ledger</WalletConnectionH1>
+          <WalletConnectionH1>Connect via Ledger</WalletConnectionH1>
           <WalletConnectionPMega>
             Please Connect and Unlock your Trezor.
           </WalletConnectionPMega>
         </HeadingContent>
-        <Spinner />
-        <BodyContent>table here</BodyContent>
+        <BodyContent>{renderBodyContent()}</BodyContent>
         <Footer>
           <ButtonTertiary>Having trouble?</ButtonTertiary>
         </Footer>
@@ -74,11 +80,11 @@ const HeadingContent = styled.div`
 
 const BodyContent = styled.div`
   width: 100%;
-  margin: 100px auto 0 auto;
+  margin: 50px 0;
   max-width: 1400px;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const Content = styled.div`
@@ -95,7 +101,7 @@ const Footer = styled.div`
 `;
 
 const WalletConnectionH1 = styled(H1)`
-  text-transform: capitalize;
+  text-transform: none;
   font-size: 48px;
 `;
 
