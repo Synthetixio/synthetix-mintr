@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonPrimaryLabel } from '../Typography';
+import { ButtonPrimaryLabel, ButtonPrimaryLabelMedium } from '../Typography';
 
-const ButtonPrimary = ({ children, onClick }) => {
+export const ButtonPrimary = ({ children, onClick }) => {
   return (
     <Button onClick={onClick}>
       <ButtonPrimaryLabel>{children}</ButtonPrimaryLabel>
@@ -10,8 +10,16 @@ const ButtonPrimary = ({ children, onClick }) => {
   );
 };
 
+export const ButtonPrimaryMedium = ({ children, onClick }) => {
+  return (
+    <ButtonMedium onClick={onClick}>
+      <ButtonPrimaryLabelMedium>{children}</ButtonPrimaryLabelMedium>
+    </ButtonMedium>
+  );
+};
+
 const Button = styled.button`
-  width: 320px;
+  width: ${props => (props.width ? props.width + 'px' : '320px')};
   height: 64px;
   border-radius: 5px;
   text-transform: uppercase;
@@ -24,4 +32,7 @@ const Button = styled.button`
   }
 `;
 
-export default ButtonPrimary;
+const ButtonMedium = styled(Button)`
+  width: 162px;
+  height: 40px;
+`;
