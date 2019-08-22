@@ -152,6 +152,14 @@ const theme = mode => {
       color: colorStyles.buttonPrimaryText,
       letterSpacing: 2,
     },
+    buttonPrimaryLabelMedium: {
+      as: 'span',
+      fontSize: [10, 12, 14],
+      fontWeight: 600,
+      fontFamily: fontFamilies.regular,
+      color: colorStyles.buttonPrimaryText,
+      letterSpacing: 1,
+    },
     buttonPrimaryLabelSmall: {
       as: 'span',
       fontSize: [10, 12, 14],

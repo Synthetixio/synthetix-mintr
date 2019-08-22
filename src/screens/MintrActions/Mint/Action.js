@@ -2,9 +2,11 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { SlidePage, SliderContext } from '../../../components/Slider';
-import { ButtonPrimary } from '../../../components/Button';
-import { ButtonTertiary } from '../../../components/Button';
-import { ButtonMax } from '../../../components/Button';
+import {
+  ButtonPrimary,
+  ButtonTertiary,
+  ButtonMax,
+} from '../../../components/Button';
 import {
   PLarge,
   H1,

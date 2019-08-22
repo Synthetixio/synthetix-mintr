@@ -37,8 +37,9 @@ const Root = () => {
 };
 
 const RootWrapper = styled('div')`
-  background: ${props => props.theme.background};
+  background: ${props => props.theme.colorStyles.background};
   width: 100%;
+  height: 100vh;
   // & > * {
   //   transition-property: background, border, color;
   //   transition-duration: 0.3s;

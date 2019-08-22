@@ -155,6 +155,15 @@ export const ButtonPrimaryLabel = props => {
   );
 };
 
+export const ButtonPrimaryLabelMedium = props => {
+  const { buttonPrimaryLabelMedium } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...buttonPrimaryLabelMedium} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
 export const ButtonPrimaryLabelSmall = props => {
   const { buttonPrimaryLabelSmall } = useContext(ThemeContext).textStyles;
   return (

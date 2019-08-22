@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="66px" viewBox="0 0 33 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57 (83077) - https://sketch.com -->
+    <title>atoms / icon / 80px / trezor</title>
+    <desc>Created with Sketch.</desc>
+    <g id="misc" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Connect-Wallet" transform="translate(-703.000000, -471.000000)">
+            <g id="atoms-/-icon-/-80px-/-trezor" transform="translate(680.000000, 464.000000)">
+                <g id="boundingBox" stroke-width="1">
+                    <rect x="0" y="0" width="64" height="64"></rect>
+                </g>
+                <path d="M27.5771236,7.55059051 C31.9016126,7.18353017 36.0425714,7 40,7 C43.8132745,7 47.6245493,7.17040307 51.4338246,7.51120921 C54.0122831,7.74189877 55.9882656,9.90255986 55.9882656,12.4913175 L55.9882656,48 L55.9882656,48 C55.9960885,53.3333333 55.3296589,57.6666667 53.9889768,61 C52.7635172,64.0468558 50.987792,67.3722114 48.6618011,70.976067 L48.6617992,70.9760657 C48.2284492,71.6474918 47.5451257,72.1182736 46.7633722,72.284004 C44.5117945,72.7613347 42.2573371,73 40,73 C37.7194961,73 35.4389863,72.7564107 33.1584706,72.2692322 L33.1584692,72.2692389 C32.4114573,72.1096574 31.7534525,71.6711308 31.3186449,71.0430898 C29.0579953,67.7777826 27.2847581,64.430086 25.9989332,61 C24.587192,57.2340176 23.5875476,52.9006843 23,48 L23,12.5326711 C23.0000049,9.93517811 24.9889373,7.77027441 27.5771236,7.55059051 Z" id="Rectangle" fill="#131722"></path>
+                <rect id="Rectangle" fill="#28275A" x="26" y="22" width="27" height="16" rx="2"></rect>
+                <rect id="Rectangle" fill="#28275A" x="26" y="40" width="13" height="4" rx="1"></rect>
+                <rect id="Rectangle" fill="#28275A" x="40" y="40" width="13" height="4" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

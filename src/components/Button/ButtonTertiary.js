@@ -11,10 +11,10 @@ const ButtonTertiary = ({ children, onClick }) => {
 };
 
 const Button = styled.button`
-  background-color: ${props => props.theme.colorStyles.panels};
+  background-color: transparent;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   height: 40px;
-  padding: 0px 20px;
+  padding: 2px 20px 0 20px;
   border-radius: 20px;
   display: flex;
   align-items: center;

@@ -1,4 +1,4 @@
-import ButtonPrimary from './ButtonPrimary';
+import { ButtonPrimary, ButtonPrimaryMedium } from './ButtonPrimary';
 import ButtonTertiary from './ButtonTertiary';
 import ButtonMax from './ButtonMax';
 import HeaderButton from './HeaderButton';
@@ -9,6 +9,7 @@ export {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
+  ButtonPrimaryMedium,
   HeaderButton,
   TabButton,
   WalletStatusButton,
