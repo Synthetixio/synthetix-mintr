@@ -10,20 +10,17 @@ const ButtonPrimary = ({ children, onClick }) => {
   );
 };
 
-const Button = styled.div`
+const Button = styled.button`
   width: 320px;
   height: 64px;
-  margin-bottom: 64px;
   border-radius: 5px;
+  text-transform: uppercase;
+  border: none;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  text-align: center;
   background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
   transition: transform ease-in 0.1s;
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
-    transform: translateY(-2px);
   }
 `;
 
