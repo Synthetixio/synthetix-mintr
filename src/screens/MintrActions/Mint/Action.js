@@ -24,29 +24,33 @@ const Action = ({ onDestroy }) => {
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
         </Navigation>
-        <Intro>
-          <ActionImage src='/images/actions/mint.svg' big />
-          <H1>MINT</H1>
-          <PLarge>
-            Minting sUSD will lock your SNX, increasing your collateralization
-            ratio, and will allow you to begin earning fees if you choose to
-            sell your sUSD.
-          </PLarge>
-        </Intro>
-        <Form>
-          <PLarge>Confirm or enter amount to mint:</PLarge>
-          <Input
-            placeholder='0.00'
-            leftComponent={<div>sUSD</div>}
-            rightComponent={<ButtonMax />}
-          />
-        </Form>
-        <Subtext>
-          GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-        </Subtext>
-        <ButtonPrimary onClick={handleNext} margin='auto'>
-          MINT NOW
-        </ButtonPrimary>
+        <Top>
+          <Intro>
+            <ActionImage src='/images/actions/mint.svg' big />
+            <H1>MINT</H1>
+            <PLarge>
+              Minting sUSD will lock your SNX, increasing your collateralization
+              ratio, and will allow you to begin earning fees if you choose to
+              sell your sUSD.
+            </PLarge>
+          </Intro>
+          <Form>
+            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <Input
+              placeholder='0.00'
+              leftComponent={<div>sUSD</div>}
+              rightComponent={<ButtonMax />}
+            />
+          </Form>
+        </Top>
+        <Bottom>
+          <Subtext marginBottom='32px'>
+            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+          </Subtext>
+          <ButtonPrimary onClick={handleNext} margin='auto'>
+            MINT NOW
+          </ButtonPrimary>
+        </Bottom>
       </Container>
     </SlidePage>
   );
@@ -71,6 +75,15 @@ const Container = styled.div`
   justify-content: space-around;
 `;
 
+const Top = styled.div`
+  height: auto;
+`;
+
+const Bottom = styled.div`
+  height: auto;
+  margin-bottom: 64px;
+`;
+
 const Navigation = styled.div`
   width: 100%;
   display: flex;
@@ -78,12 +91,14 @@ const Navigation = styled.div`
 `;
 
 const Intro = styled.div`
-  max-width: 400px;
+  max-width: 380px;
+  margin-bottom: 64px;
 `;
 
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
+  margin-bottom: 8px;
 `;
 
 const Form = styled.div`

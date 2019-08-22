@@ -1,39 +1,31 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { SlidePage, SliderContext } from '../../../components/Slider';
-import {
-  ButtonPrimary,
-  ButtonSecondary,
-  ButtonTertiary,
-} from '../../../components/Button';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,
   PageTitle,
   DataHeaderLarge,
-  Subtext,
 } from '../../../components/Typography';
 
-const Confirmation = ({ onDestroy }) => {
-  const { handlePrev } = useContext(SliderContext);
+const Complete = () => {
   const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
       <Container>
-        <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
-          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
-        </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/wallets/ledger.svg' big />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <ActionImage src='/images/success.svg' big />
+            <PageTitle>Minting in progress!</PageTitle>
             <PLarge>
-              To continue, follow the prompts on your Ledger Wallet.
+              Sent to the Ethereum network and will be available in your wallet
+              shortly. You may close this window as the transaction completes in
+              the background.
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>MINTING:</DataHeaderLarge>
+              <DataHeaderLarge>MINTED:</DataHeaderLarge>
               <Amount>5,000.00 sUSD</Amount>
             </Box>
             <Box>
@@ -43,13 +35,11 @@ const Confirmation = ({ onDestroy }) => {
           </Details>
         </Top>
         <Bottom>
-          <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
-          </Fees>
           <Buttons>
             <ButtonSecondary>VIEW ON ETHERSCAN</ButtonSecondary>
-            <ButtonPrimary onClick={handleNext}>WAITING...</ButtonPrimary>
+            <ButtonPrimary onClick={handleNext}>
+              FINISH & RETURN HOME
+            </ButtonPrimary>
           </Buttons>
         </Bottom>
       </Container>
@@ -76,39 +66,21 @@ const Container = styled.div`
   justify-content: space-around;
 `;
 
-const Navigation = styled.div`
-  width: 100%;
-  display: flex;
-  text-align: left;
-  & :first-child {
-    margin-right: 12px;
-  }
-`;
-
-const Top = styled.div`
-  height: auto;
-  margin-top: 32px;
-`;
-
-const Bottom = styled.div`
-  height: auto;
-  margin-bottom: 64px;
-`;
-
 const Intro = styled.div`
-  max-width: 400px;
-  margin: 0px auto 32px auto;
+  max-width: 530px;
+  margin-top: 24px;
+  margin-bottom: 48px;
 `;
 
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const Details = styled.div`
   display: flex;
-  margin: 0px auto 64px auto;
+  margin-bottom: 48px;
 `;
 
 const Box = styled.div`
@@ -129,11 +101,6 @@ const Amount = styled.span`
   margin: 16px 0px 0px 0px;
 `;
 
-const Fees = styled.div`
-  height: auto;
-  margin-bottom: 40px;
-`;
-
 const Buttons = styled.div`
   height: auto;
   & :first-child {
@@ -141,4 +108,13 @@ const Buttons = styled.div`
   }
 `;
 
-export default Confirmation;
+const Top = styled.div`
+  height: auto;
+`;
+
+const Bottom = styled.div`
+  height: auto;
+  margin-bottom: 32px;
+`;
+
+export default Complete;

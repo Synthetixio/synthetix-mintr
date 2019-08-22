@@ -22,7 +22,7 @@ const Button = styled.button`
   border: transparent;
   border-radius: 3px;
   cursor: pointer;
-  transition: transform ease-in 0.1s;
+  transition: all ease-in 0.1s;
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }

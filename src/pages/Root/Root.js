@@ -30,7 +30,7 @@ const Root = () => {
     },
   } = useContext(Store);
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback='loading'>
       <RootWrapper>{renderCurrentPage(currentPage)}</RootWrapper>
     </Suspense>
   );

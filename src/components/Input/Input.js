@@ -22,20 +22,25 @@ const InputWrapper = styled.div`
   inner-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   align-items: center;
   justify-content: center;
+  margin: auto;
 `;
 
 const LeftComponentWrapper = styled.div`
   height: 100%;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
   padding: 16px 24px;
 `;
 
 const RightComponentWrapper = styled.div`
-  width: 56px;
-  height: 64px;
-  display: flex:
+  display: flex;
   justify-content: center;
+  align-items: center;
   margin: auto;
+  padding: 16px;
 `;
 
 const InputElement = styled.input`
