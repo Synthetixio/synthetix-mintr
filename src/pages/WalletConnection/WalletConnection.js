@@ -7,10 +7,26 @@ import { updateCurrentPage } from '../../ducks/ui';
 import { ButtonPrimaryMedium, ButtonTertiary } from '../../components/Button';
 import { H1, H2, PMega } from '../../components/Typography';
 
-const Landing = () => {
+const renderWalletButtons = dispatch => {
+  return ['metamask', 'trezor', 'ledger'].map(wallet => {
+    return (
+      <Wallet key={wallet}>
+        <Icon src={`images/wallets/${wallet}.svg`} />
+        <WalletConnectionH2>{wallet}</WalletConnectionH2>
+        <ButtonPrimaryMedium
+          onClick={() => updateCurrentPage('walletSelection', dispatch)}
+        >
+          Connect
+        </ButtonPrimaryMedium>
+      </Wallet>
+    );
+  });
+};
+
+const WalletConnection = () => {
   const { state, dispatch } = useContext(Store);
   return (
-    <LandingWrapper>
+    <Wrapper>
       <Header>
         <HeaderBlock>
           <Logo
@@ -26,46 +42,18 @@ const Landing = () => {
       </Header>
       <Content>
         <HeadingContent>
-          <LandingH1>Connect Wallet</LandingH1>
-          <LandingPMega>
+          <WalletConnectionH1>Connect Wallet</WalletConnectionH1>
+          <WalletConnectionPMega>
             Please connect a wallet with your SNX holdings to continue.
-          </LandingPMega>
+          </WalletConnectionPMega>
         </HeadingContent>
-        <BodyContent>
-          <Wallet>
-            <Icon src="images/wallets/metamask.svg" />
-            <LandingH2>Metamask</LandingH2>
-            <ButtonPrimaryMedium
-              onClick={() => updateCurrentPage('walletSelection', dispatch)}
-            >
-              connect
-            </ButtonPrimaryMedium>
-          </Wallet>
-          <Wallet>
-            <Icon src="images/wallets/trezor.svg" />
-            <LandingH2>Trezor</LandingH2>
-            <ButtonPrimaryMedium
-              onClick={() => updateCurrentPage('walletSelection', dispatch)}
-            >
-              connect
-            </ButtonPrimaryMedium>
-          </Wallet>
-          <Wallet>
-            <Icon src="images/wallets/ledger.svg" />
-            <LandingH2>Ledger</LandingH2>
-            <ButtonPrimaryMedium
-              onClick={() => updateCurrentPage('walletSelection', dispatch)}
-            >
-              connect
-            </ButtonPrimaryMedium>
-          </Wallet>
-        </BodyContent>
+        <BodyContent>{renderWalletButtons(dispatch)}</BodyContent>
       </Content>
-    </LandingWrapper>
+    </Wrapper>
   );
 };
 
-const LandingWrapper = styled.div`
+const Wrapper = styled.div`
   padding: 42px;
   height: 100%;
 `;
@@ -112,18 +100,18 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const LandingH1 = styled(H1)`
+const WalletConnectionH1 = styled(H1)`
   text-transform: capitalize;
   font-size: 48px;
 `;
 
-const LandingH2 = styled(H2)`
+const WalletConnectionH2 = styled(H2)`
   text-transform: capitalize;
   font-size: 22px;
   margin: 40px 0;
 `;
 
-const LandingPMega = styled(PMega)`
+const WalletConnectionPMega = styled(PMega)`
   font-size: 22px;
   font-family: 'apercu-medium';
   text-align: center;
@@ -148,4 +136,4 @@ const Icon = styled.img`
   height: 80px;
 `;
 
-export default Landing;
+export default WalletConnection;
