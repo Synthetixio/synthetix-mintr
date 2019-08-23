@@ -199,3 +199,21 @@ export const InputTextLarge = props => {
     </DynamicComponent>
   );
 };
+
+export const TableDataMedium = props => {
+  const { tableDataMedium } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...tableDataMedium} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const TableHeaderMedium = props => {
+  const { tableHeaderMedium } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...tableHeaderMedium} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};

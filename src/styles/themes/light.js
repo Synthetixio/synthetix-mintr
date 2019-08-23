@@ -25,6 +25,10 @@ export default {
 
   shadow1: COLORS.lightShadow1,
 
+  listBackgroundFocus: COLORS.light6,
+  tableHeading: COLORS.light2,
+  tableBody: COLORS.light1,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
   themeToggleFontColor: COLORS.light3,

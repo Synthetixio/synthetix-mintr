@@ -25,6 +25,10 @@ export default {
 
   shadow1: COLORS.darkShadow1,
 
+  listBackgroundFocus: COLORS.dark3,
+  tableHeading: COLORS.dark5,
+  tableBody: COLORS.white,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.dark3,
   themeToggleFontColor: COLORS.dark5,

@@ -11,9 +11,9 @@ import List from '../../components/List';
 
 import { H1, H2, PMega } from '../../components/Typography';
 
-const renderBodyContent = () => {
+const renderBodyContent = dispatch => {
   // return <Spinner />;
-  return <List />;
+  return <List onClick={() => updateCurrentPage('main', dispatch)} />;
 };
 
 const WalletConnection = () => {
@@ -40,7 +40,7 @@ const WalletConnection = () => {
             Please Connect and Unlock your Trezor.
           </WalletConnectionPMega>
         </HeadingContent>
-        <BodyContent>{renderBodyContent()}</BodyContent>
+        <BodyContent>{renderBodyContent(dispatch)}</BodyContent>
         <Footer>
           <ButtonTertiary>Having trouble?</ButtonTertiary>
         </Footer>

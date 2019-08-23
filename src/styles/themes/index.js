@@ -133,6 +133,21 @@ const theme = mode => {
       color: colorStyles.body,
       letterSpacing: 1,
     },
+    tableHeaderMedium: {
+      as: 'th',
+      fontSize: [12, 14],
+      fontFamily: fontFamilies.bold,
+      fontWeight: 700,
+      letterSpacing: 0.5,
+      color: colorStyles.tableHeading,
+    },
+    tableDataMedium: {
+      as: 'td',
+      fontSize: [12, 14],
+      fontFamily: fontFamilies.regular,
+      fontWeight: 400,
+      color: colorStyles.tableBody,
+    },
     figure: {
       as: 'span',
       fontSize: [16, 24, 32],
