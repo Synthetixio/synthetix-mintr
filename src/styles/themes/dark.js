@@ -29,6 +29,10 @@ export default {
   tableHeading: COLORS.dark5,
   tableBody: COLORS.white,
 
+  paginatorButtonBackground: COLORS.dark3,
+  paginatorButtonBackgroundHover: COLORS.dark4,
+  paginatorButtonBackgroundActive: COLORS.dark4,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.dark3,
   themeToggleFontColor: COLORS.dark5,

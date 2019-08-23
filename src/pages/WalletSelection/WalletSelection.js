@@ -1,19 +1,29 @@
-/* eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import styled from 'styled-components';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 
-import { ButtonPrimaryMedium, ButtonTertiary } from '../../components/Button';
+import { ButtonTertiary } from '../../components/Button';
 import Spinner from '../../components/Spinner';
 import List from '../../components/List';
+import Paginator from '../../components/Paginator';
 
-import { H1, H2, PMega } from '../../components/Typography';
+import { H1, PMega } from '../../components/Typography';
 
-const renderBodyContent = dispatch => {
-  // return <Spinner />;
-  return <List onClick={() => updateCurrentPage('main', dispatch)} />;
+const renderBodyContent = (state, dispatch) => {
+  return (
+    <BodyContent>
+      {state ? (
+        <Spinner />
+      ) : (
+        <Fragment>
+          <List onClick={() => updateCurrentPage('main', dispatch)} />
+          <Paginator />
+        </Fragment>
+      )}
+    </BodyContent>
+  );
 };
 
 const WalletConnection = () => {
@@ -40,7 +50,7 @@ const WalletConnection = () => {
             Please Connect and Unlock your Trezor.
           </WalletConnectionPMega>
         </HeadingContent>
-        <BodyContent>{renderBodyContent(dispatch)}</BodyContent>
+        {renderBodyContent(true, dispatch)}
         <Footer>
           <ButtonTertiary>Having trouble?</ButtonTertiary>
         </Footer>
@@ -82,9 +92,10 @@ const BodyContent = styled.div`
   width: 100%;
   margin: 50px 0;
   max-width: 1400px;
-  text-align: center;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Content = styled.div`
@@ -105,35 +116,11 @@ const WalletConnectionH1 = styled(H1)`
   font-size: 48px;
 `;
 
-const WalletConnectionH2 = styled(H2)`
-  text-transform: capitalize;
-  font-size: 22px;
-  margin: 40px 0;
-`;
-
 const WalletConnectionPMega = styled(PMega)`
   font-size: 22px;
   font-family: 'apercu-medium';
   text-align: center;
   line-height: 32px;
-`;
-
-const Wallet = styled.div`
-  background-color: ${props => props.theme.colorStyles.panels};
-  display: flex;
-  width: 340px;
-  height: 340px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2px;
-  text-align: center;
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-`;
-
-const Icon = styled.img`
-  width: 80px;
-  height: 80px;
 `;
 
 export default WalletConnection;
