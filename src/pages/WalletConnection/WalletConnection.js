@@ -1,20 +1,41 @@
+/* eslint-disable */
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
+import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
+import { hasWeb3, SUPPORTED_WALLETS } from '../../helpers/networkHelper';
+
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
+import { updateWalletStatus } from '../../ducks/wallet';
 
 import { ButtonPrimaryMedium, ButtonTertiary } from '../../components/Button';
-import { H1, H2, PMega } from '../../components/Typography';
+import { H1, H2, PMega, PLarge } from '../../components/Typography';
+
+const onWalletClick = (wallet, dispatch) => {
+  return async () => {
+    const walletStatus = await connectToWallet(wallet);
+
+    updateWalletStatus(walletStatus, dispatch);
+    if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
+      updateCurrentPage('main', dispatch);
+    } else updateCurrentPage('walletSelection', dispatch);
+  };
+};
 
 const renderWalletButtons = dispatch => {
-  return ['metamask', 'trezor', 'ledger'].map(wallet => {
+  return SUPPORTED_WALLETS.map(wallet => {
+    const noMetamask = wallet === 'metamask' && !hasWeb3();
     return (
-      <Wallet key={wallet}>
+      <Wallet disabled={noMetamask} key={wallet}>
         <Icon src={`images/wallets/${wallet}.svg`} />
-        <WalletConnectionH2>{wallet}</WalletConnectionH2>
+        <WalletTitle>
+          <WalletConnectionH2>{wallet}</WalletConnectionH2>
+          <PLarge mt={0}>{noMetamask ? '(not installed)' : ''}</PLarge>
+        </WalletTitle>
         <ButtonPrimaryMedium
-          onClick={() => updateCurrentPage('walletSelection', dispatch)}
+          disabled={noMetamask}
+          onClick={onWalletClick(wallet, dispatch)}
         >
           Connect
         </ButtonPrimaryMedium>
@@ -25,6 +46,7 @@ const renderWalletButtons = dispatch => {
 
 const WalletConnection = () => {
   const { state, dispatch } = useContext(Store);
+  console.log(state);
   return (
     <Wrapper>
       <Header>
@@ -108,7 +130,7 @@ const WalletConnectionH1 = styled(H1)`
 const WalletConnectionH2 = styled(H2)`
   text-transform: capitalize;
   font-size: 22px;
-  margin: 40px 0;
+  margin: 40px 0 0 0;
 `;
 
 const WalletConnectionPMega = styled(PMega)`
@@ -129,11 +151,16 @@ const Wallet = styled.div`
   border-radius: 2px;
   text-align: center;
   border: 1px solid ${props => props.theme.colorStyles.borders};
+  opacity: ${props => (props.disabled ? '0.4' : 1)};
 `;
 
 const Icon = styled.img`
   width: 80px;
   height: 80px;
+`;
+
+const WalletTitle = styled.div`
+  height: 120px;
 `;
 
 export default WalletConnection;

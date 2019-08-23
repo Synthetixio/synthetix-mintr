@@ -10,9 +10,9 @@ export const ButtonPrimary = ({ children, onClick }) => {
   );
 };
 
-export const ButtonPrimaryMedium = ({ children, onClick }) => {
+export const ButtonPrimaryMedium = ({ children, onClick, disabled }) => {
   return (
-    <ButtonMedium onClick={onClick}>
+    <ButtonMedium disabled={disabled} onClick={onClick}>
       <ButtonPrimaryLabelMedium>{children}</ButtonPrimaryLabelMedium>
     </ButtonMedium>
   );
@@ -35,4 +35,8 @@ const Button = styled.button`
 const ButtonMedium = styled(Button)`
   width: 162px;
   height: 40px;
+  :disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
 `;

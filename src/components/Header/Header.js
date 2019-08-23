@@ -11,7 +11,12 @@ import ThemeSwitcher from '../ThemeSwitcher';
 
 import { Globe } from '../Icons';
 
-const Header = ({ t }) => {
+const shortenAddress = address => {
+  if (!address) return null;
+  return address.slice(0, 6) + '...' + address.slice(-4, address.length);
+};
+
+const Header = ({ t, currentWallet }) => {
   const theme = useContext(ThemeContext);
   const { state } = useContext(Store);
   return (
@@ -21,7 +26,7 @@ const Header = ({ t }) => {
           state.ui.themeIsDark ? 'light' : 'dark'
         }.svg`}
       />
-      <WalletStatusButton>0x3e...bAe0</WalletStatusButton>
+      <WalletStatusButton>{shortenAddress(currentWallet)}</WalletStatusButton>
       <HeaderButton>{t('dashboard.header.support')}</HeaderButton>
       <GlobeButton>
         <Globe theme={theme} />

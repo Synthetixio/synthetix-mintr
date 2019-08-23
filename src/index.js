@@ -11,6 +11,9 @@ const initialState = {
     themeIsDark: localStorage.getItem('dark') === 'true' || false,
     currentPage: 'walletConnection',
   },
+  wallet: {
+    unlocked: false,
+  },
 };
 
 ReactDOM.render(

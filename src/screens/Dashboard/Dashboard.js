@@ -1,5 +1,8 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
+
+import { Store } from '../../store';
+
 import Header from '../../components/Header';
 import PieChart from '../../components/PieChart';
 import Table from '../../components/Table';
@@ -17,7 +20,7 @@ const renderBalances = theme => {
   return (
     <BalanceRow>
       <BalanceItem>
-        <CurrencyIcon src='/images/snx-icon.svg' />
+        <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
           <div>
             <DataHeaderLarge>0.89 SNX</DataHeaderLarge>
@@ -30,7 +33,7 @@ const renderBalances = theme => {
         </Balance>
       </BalanceItem>
       <BalanceItem>
-        <CurrencyIcon src='/images/snx-icon.svg' />
+        <CurrencyIcon src="/images/snx-icon.svg" />
         <Balance>
           <div>
             <DataHeaderLarge color={theme.colorStyles.body}>
@@ -45,7 +48,7 @@ const renderBalances = theme => {
         </Balance>
       </BalanceItem>
       <BalanceItem>
-        <CurrencyIcon src='/images/eth-icon.svg' />
+        <CurrencyIcon src="/images/eth-icon.svg" />
         <Balance>
           <div>
             <DataHeaderLarge color={theme.colorStyles.body}>
@@ -65,7 +68,7 @@ const renderBalances = theme => {
 
 const renderCollRatios = () => {
   return (
-    <Row margin='0 0 22px 0'>
+    <Row margin="0 0 22px 0">
       <Box>
         <Figure>700%</Figure>
         <DataLarge>Current collateralization ratio</DataLarge>
@@ -81,10 +84,10 @@ const renderCollRatios = () => {
 const renderPieChart = theme => {
   return (
     <Box full={true}>
-      <Row padding='32px 16px'>
+      <Row padding="32px 16px">
         <PieChart data={[]} />
         <PieChartLegend>
-          <DataHeaderLarge margin='0px 0px 24px 0px'>
+          <DataHeaderLarge margin="0px 0px 24px 0px">
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
@@ -104,7 +107,7 @@ const renderPieChart = theme => {
 
 const renderTable = () => {
   return (
-    <Row margin='22px 0 0 0'>
+    <Row margin="22px 0 0 0">
       <Table
         header={[
           { key: 'rowLegend', value: '' },
@@ -139,9 +142,12 @@ const renderTable = () => {
 
 const Dashboard = () => {
   const theme = useContext(ThemeContext);
+  const {
+    state: { wallet },
+  } = useContext(Store);
   return (
     <DashboardWrapper>
-      <Header />
+      <Header currentWallet={wallet.currentWallet} />
       <Content>
         <Container>
           <ContainerHeader>
@@ -150,7 +156,7 @@ const Dashboard = () => {
           {renderBalances(theme)}
         </Container>
         <Container curved={true}>
-          <Row padding='0px 8px'>
+          <Row padding="0px 8px">
             <DataLarge>
               <Highlighted>2 days</Highlighted> left to claim rewards
             </DataLarge>
@@ -161,7 +167,7 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Wallet Details:</H5>
             <DataHeaderLarge
-              margin='0px 0px 22px 0px'
+              margin="0px 0px 22px 0px"
               color={theme.colorStyles.body}
             >
               USER ID: #100000000
@@ -170,7 +176,7 @@ const Dashboard = () => {
           {renderCollRatios()}
           {renderPieChart(theme)}
           {renderTable()}
-          <Row margin='18px 0 0 0 '>
+          <Row margin="18px 0 0 0 ">
             <Button>
               <ButtonTertiaryLabel>
                 Go to Synthetix.Exchange
