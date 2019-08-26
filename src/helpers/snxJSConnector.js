@@ -8,6 +8,7 @@ let snxJSConnector = {
     this.snxJS = new SynthetixJs(contractSettings);
     this.signer = this.snxJS.contractSettings.signer;
     this.provider = this.snxJS.contractSettings.provider;
+    this.utils = this.snxJS.utils;
     this.initialized = true;
   },
 };

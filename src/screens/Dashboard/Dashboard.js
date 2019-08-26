@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
+/* eslint-disable */
+import React, { useContext, useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-
+import snxJSConnector from '../../helpers/snxJSConnector';
 import { Store } from '../../store';
 
+import { formatCurrency } from '../../helpers/formatters';
 import Header from '../../components/Header';
 import PieChart from '../../components/PieChart';
 import Table from '../../components/Table';
@@ -16,52 +18,60 @@ import {
 } from '../../components/Typography';
 import { Info } from '../../components/Icons';
 
-const renderBalances = theme => {
+const bigNumberFormatter = value =>
+  Number(snxJSConnector.utils.formatEther(value)).toFixed(2);
+
+const getPrices = (prices, setPrices) => {
+  useEffect(() => {
+    const fetchPrices = async () => {
+      const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
+      const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+      const ETHBytes = snxJSConnector.utils.toUtf8Bytes4('ETH');
+      const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
+        [SNXBytes, sUSDBytes, ETHBytes]
+      );
+      const [snx, sUSD, eth] = result.map(bigNumberFormatter);
+      setPrices({ snx, sUSD, eth });
+    };
+    fetchPrices();
+  }, []);
+  return true;
+};
+
+const getBalances = (wallet, balances, setBalances) => {
+  useEffect(() => {
+    const fetchBalances = async () => {
+      const result = await Promise.all([
+        snxJSConnector.snxJS.Synthetix.collateral(wallet),
+        snxJSConnector.snxJS.sUSD.balanceOf(wallet),
+        snxJSConnector.provider.getBalance(wallet),
+      ]);
+      const [snx, sUSD, eth] = result.map(bigNumberFormatter);
+      setBalances({ snx, sUSD, eth });
+    };
+    fetchBalances();
+  }, []);
+  return true;
+};
+
+const renderBalances = (balances, prices, theme) => {
   return (
     <BalanceRow>
-      <BalanceItem>
-        <CurrencyIcon src="/images/snx-icon.svg" />
-        <Balance>
-          <div>
-            <DataHeaderLarge>0.89 SNX</DataHeaderLarge>
-          </div>
-          <div>
-            <DataHeaderLarge color={theme.colorStyles.heading}>
-              $1.00 USD
-            </DataHeaderLarge>
-          </div>
-        </Balance>
-      </BalanceItem>
-      <BalanceItem>
-        <CurrencyIcon src="/images/snx-icon.svg" />
-        <Balance>
-          <div>
-            <DataHeaderLarge color={theme.colorStyles.body}>
-              0.89 sUSD
-            </DataHeaderLarge>
-          </div>
-          <div>
-            <DataHeaderLarge color={theme.colorStyles.heading}>
-              $1.00 USD
-            </DataHeaderLarge>
-          </div>
-        </Balance>
-      </BalanceItem>
-      <BalanceItem>
-        <CurrencyIcon src="/images/eth-icon.svg" />
-        <Balance>
-          <div>
-            <DataHeaderLarge color={theme.colorStyles.body}>
-              1.00 ETH
-            </DataHeaderLarge>
-          </div>
-          <div>
-            <DataHeaderLarge color={theme.colorStyles.heading}>
-              $1.00 USD
-            </DataHeaderLarge>
-          </div>
-        </Balance>
-      </BalanceItem>
+      {['snx', 'sUSD', 'eth'].map(currency => {
+        return (
+          <BalanceItem key={currency}>
+            <CurrencyIcon src={`/images/${currency}-icon.svg`} />
+            <Balance>
+              <DataHeaderLarge>
+                {formatCurrency(balances[currency]) || '--'} SNX
+              </DataHeaderLarge>
+              <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
+                ${prices[currency] || '--'} USD
+              </DataHeaderLarge>
+            </Balance>
+          </BalanceItem>
+        );
+      })}
     </BalanceRow>
   );
 };
@@ -142,9 +152,15 @@ const renderTable = () => {
 
 const Dashboard = () => {
   const theme = useContext(ThemeContext);
+  const [balances, setBalances] = useState({});
+  const [prices, setPrices] = useState({});
   const {
     state: { wallet },
   } = useContext(Store);
+
+  getBalances(wallet.currentWallet, balances, setBalances);
+  getPrices(prices, setPrices);
+
   return (
     <DashboardWrapper>
       <Header currentWallet={wallet.currentWallet} />
@@ -153,7 +169,7 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Current Prices:</H5>
           </ContainerHeader>
-          {renderBalances(theme)}
+          {renderBalances(balances, prices, theme)}
         </Container>
         <Container curved={true}>
           <Row padding="0px 8px">
@@ -239,6 +255,8 @@ const CurrencyIcon = styled.img`
 const Balance = styled.div`
   font-family: 'apercu-medium';
   margin-left: 12px;
+  display: flex;
+  flex-direction: column;
   & :first-child {
     margin-bottom: 8px;
   }

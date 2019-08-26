@@ -2,8 +2,8 @@
   "dashboard": {
     "header": {
       "support": "Support",
-      "onLabel": "On",
-      "offLabel": "Off"
+      "onLabel": "Dark",
+      "offLabel": "Light"
     }
   },
   "mainContent": {
