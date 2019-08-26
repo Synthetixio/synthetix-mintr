@@ -33,6 +33,8 @@ export default {
   paginatorButtonBackgroundHover: COLORS.light5,
   paginatorButtonBackgroundActive: COLORS.light2,
 
+  brandRed: COLORS.brandRed,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
   themeToggleFontColor: COLORS.light3,

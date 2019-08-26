@@ -1,10 +1,13 @@
 /* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components';
+import { addSeconds, formatDistanceToNow } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
+
 import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
+
 import Header from '../../components/Header';
 import PieChart from '../../components/PieChart';
 import Table from '../../components/Table';
@@ -19,7 +22,7 @@ import {
 import { Info } from '../../components/Icons';
 
 const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value)).toFixed(2);
+  Number(snxJSConnector.utils.formatEther(value));
 
 const getPrices = (prices, setPrices) => {
   useEffect(() => {
@@ -35,7 +38,6 @@ const getPrices = (prices, setPrices) => {
     };
     fetchPrices();
   }, []);
-  return true;
 };
 
 const getBalances = (wallet, balances, setBalances) => {
@@ -51,22 +53,75 @@ const getBalances = (wallet, balances, setBalances) => {
     };
     fetchBalances();
   }, []);
-  return true;
+};
+
+const getRewards = (walletAddress, rewards, setRewards) => {
+  useEffect(() => {
+    const fetchRewards = async () => {
+      const [
+        feesAreClaimable,
+        currentFeePeriod,
+        feePeriodDuration,
+      ] = await Promise.all([
+        snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+        snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
+        snxJSConnector.snxJS.FeePool.feePeriodDuration(),
+      ]);
+
+      const currentPeriodStart =
+        currentFeePeriod && currentFeePeriod.startTime
+          ? new Date(parseInt(currentFeePeriod.startTime * 1000))
+          : null;
+      const currentPeriodEnd =
+        currentPeriodStart && feePeriodDuration
+          ? addSeconds(currentPeriodStart, feePeriodDuration)
+          : null;
+
+      setRewards({ feesAreClaimable, currentPeriodEnd });
+    };
+    fetchRewards();
+  }, []);
+};
+
+const getCRatios = (walletAddress, cRatio, setCRatio) => {
+  useEffect(() => {
+    const fetchCRatios = async () => {
+      const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+      const result = await Promise.all([
+        snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+        snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
+        snxJSConnector.snxJS.Synthetix.transferableSynthetix(walletAddress),
+        snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
+      ]);
+      const [target, current, transferable, debt] = result.map(
+        bigNumberFormatter
+      );
+      setCRatio({
+        target: 100 / target,
+        current: 100 / current,
+        transferable,
+        debt,
+      });
+    };
+    fetchCRatios();
+  }, []);
 };
 
 const renderBalances = (balances, prices, theme) => {
   return (
     <BalanceRow>
       {['snx', 'sUSD', 'eth'].map(currency => {
+        const currencyUnit =
+          currency === 'sUSD' ? currency : currency.toUpperCase();
         return (
           <BalanceItem key={currency}>
             <CurrencyIcon src={`/images/${currency}-icon.svg`} />
             <Balance>
               <DataHeaderLarge>
-                {formatCurrency(balances[currency]) || '--'} SNX
+                {formatCurrency(balances[currency]) || '--'} {currencyUnit}
               </DataHeaderLarge>
               <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
-                ${prices[currency] || '--'} USD
+                ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
               </DataHeaderLarge>
             </Balance>
           </BalanceItem>
@@ -76,38 +131,81 @@ const renderBalances = (balances, prices, theme) => {
   );
 };
 
-const renderCollRatios = () => {
+const renderRewardInfo = (rewards, theme) => {
+  let content = <div />;
+  if (rewards) {
+    content = rewards.feesAreClaimable ? (
+      <DataLarge>
+        <Highlighted>
+          {rewards.currentPeriodEnd
+            ? formatDistanceToNow(rewards.currentPeriodEnd)
+            : '--'}{' '}
+        </Highlighted>{' '}
+        left to claim rewards
+      </DataLarge>
+    ) : (
+      <DataLarge>
+        Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      </DataLarge>
+    );
+  }
+  return (
+    <Row padding="0px 8px">
+      {content}
+      <Info theme={theme} />
+    </Row>
+  );
+};
+
+const renderCollRatios = cRatio => {
   return (
     <Row margin="0 0 22px 0">
       <Box>
-        <Figure>700%</Figure>
+        <Figure>{cRatio.current ? Math.round(cRatio.current) : '--'}%</Figure>
         <DataLarge>Current collateralization ratio</DataLarge>
       </Box>
       <Box>
-        <Figure>750%</Figure>
+        <Figure>{cRatio.target ? Math.round(cRatio.target) : '--'}%</Figure>
         <DataLarge>Target collateralization ratio</DataLarge>
       </Box>
     </Row>
   );
 };
 
-const renderPieChart = theme => {
+const renderPieChart = (balances, cRatio, theme) => {
+  const snxLocked =
+    balances.snx &&
+    cRatio.current &&
+    balances.snx * Math.min(1, cRatio.current / cRatio.target);
   return (
     <Box full={true}>
       <Row padding="32px 16px">
-        <PieChart data={[]} />
+        <PieChart
+          data={[
+            {
+              name: 'staking',
+              value: snxLocked,
+              color: theme.colorStyles.accentLight,
+            },
+            {
+              name: 'transferable',
+              value: cRatio.transferable,
+              color: theme.colorStyles.accentDark,
+            },
+          ]}
+        />
         <PieChartLegend>
           <DataHeaderLarge margin="0px 0px 24px 0px">
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
-            <DataLarge>10,000.00 SNX</DataLarge>
+            <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
             <DataSmall>STAKING</DataSmall>
           </LegendRow>
 
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentDark }}>
-            <DataLarge>5,000.00 SNX</DataLarge>
-            <DataSmall>TRANSFERRABLE</DataSmall>
+            <DataLarge>{cRatio.transferable} SNX</DataLarge>
+            <DataSmall>TRANSFERABLE</DataSmall>
           </LegendRow>
         </PieChartLegend>
       </Row>
@@ -115,7 +213,7 @@ const renderPieChart = theme => {
   );
 };
 
-const renderTable = () => {
+const renderTable = (balances, prices, cRatio) => {
   return (
     <Row margin="22px 0 0 0">
       <Table
@@ -130,19 +228,29 @@ const renderTable = () => {
         data={[
           {
             rowLegend: 'balance',
-            snx: '10,000.00',
-            sUSD: '1,500.00',
-            eth: '0.10',
-            synths: '0.24 sUSD',
-            debt: '0.29 sUSD',
+            snx: balances.snx ? formatCurrency(balances.snx) : '--',
+            sUSD: balances.sUSD ? formatCurrency(balances.sUSD) : '--',
+            eth: balances.eth ? formatCurrency(balances.eth) : '--',
+            synths: balances.snx ? formatCurrency(balances.snx) + 'sUSD' : '--',
+            debt: cRatio.debt ? formatCurrency(cRatio.debt) + 'sUSD' : '--',
           },
           {
             rowLegend: '$ USD',
-            snx: '1,000.00',
-            sUSD: '1,500.00',
-            eth: '0.10',
-            synths: '0.24 sUSD',
-            debt: '0.29 sUSD',
+            snx: balances.snx
+              ? formatCurrency(balances.snx * prices.snx)
+              : '--',
+            sUSD: balances.sUSD
+              ? formatCurrency(balances.sUSD * prices.sUSD)
+              : '--',
+            eth: balances.eth
+              ? formatCurrency(balances.eth * prices.eth)
+              : '--',
+            synths: balances.snx
+              ? formatCurrency(balances.snx * prices.sUSD)
+              : '--',
+            debt: cRatio.debt
+              ? formatCurrency(cRatio.debt * prices.sUSD)
+              : '--',
           },
         ]}
       />
@@ -152,33 +260,34 @@ const renderTable = () => {
 
 const Dashboard = () => {
   const theme = useContext(ThemeContext);
+
   const [balances, setBalances] = useState({});
   const [prices, setPrices] = useState({});
+  const [rewards, setRewards] = useState(null);
+  const [cRatio, setCRatio] = useState({});
+
   const {
-    state: { wallet },
+    state: {
+      wallet: { currentWallet },
+    },
   } = useContext(Store);
 
-  getBalances(wallet.currentWallet, balances, setBalances);
+  getBalances(currentWallet, balances, setBalances);
   getPrices(prices, setPrices);
+  getRewards(currentWallet, rewards, setRewards);
+  getCRatios(currentWallet, cRatio, setCRatio);
 
   return (
     <DashboardWrapper>
-      <Header currentWallet={wallet.currentWallet} />
+      <Header currentWallet={currentWallet} />
       <Content>
         <Container>
           <ContainerHeader>
-            <H5>Current Prices:</H5>
+            <H5>Current Balances & Prices:</H5>
           </ContainerHeader>
           {renderBalances(balances, prices, theme)}
         </Container>
-        <Container curved={true}>
-          <Row padding="0px 8px">
-            <DataLarge>
-              <Highlighted>2 days</Highlighted> left to claim rewards
-            </DataLarge>
-            <Info theme={theme} />
-          </Row>
-        </Container>
+        <Container curved={true}>{renderRewardInfo(rewards, theme)}</Container>
         <Container>
           <ContainerHeader>
             <H5>Wallet Details:</H5>
@@ -186,12 +295,12 @@ const Dashboard = () => {
               margin="0px 0px 22px 0px"
               color={theme.colorStyles.body}
             >
-              USER ID: #100000000
+              {/* USER ID: #100000000 */}
             </DataHeaderLarge>
           </ContainerHeader>
-          {renderCollRatios()}
-          {renderPieChart(theme)}
-          {renderTable()}
+          {renderCollRatios(cRatio)}
+          {renderPieChart(balances, cRatio, theme)}
+          {renderTable(balances, prices, cRatio)}
           <Row margin="18px 0 0 0 ">
             <Button>
               <ButtonTertiaryLabel>
@@ -279,7 +388,10 @@ const Row = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
-  color: ${props => props.theme.colorStyles.hyperlink};
+  color: ${props =>
+    props.red
+      ? props.theme.colorStyles.brandRed
+      : props.theme.colorStyles.hyperlink};
 `;
 
 const Box = styled.div`
