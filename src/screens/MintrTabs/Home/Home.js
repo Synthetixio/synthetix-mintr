@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
+
 import {
   PageTitle,
   PLarge,
@@ -7,6 +8,8 @@ import {
   H2,
   PMega,
 } from '../../../components/Typography';
+import PageContainer from '../../../components/PageContainer';
+
 import { Mint } from '../../MintrActions';
 
 const initialScenario = null;
@@ -65,26 +68,12 @@ const renderHomeButtons = setCurrentScenario => {
 const Home = () => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
   return (
-    <HomeWrapper>
-      <Container>
-        {renderScenario(currentScenario, setCurrentScenario)}
-        {renderHomeButtons(setCurrentScenario)}
-      </Container>
-    </HomeWrapper>
+    <PageContainer>
+      {renderScenario(currentScenario, setCurrentScenario)}
+      {renderHomeButtons(setCurrentScenario)}
+    </PageContainer>
   );
 };
-
-const HomeWrapper = styled.div`
-  padding: 40px 48px 0 48px;
-`;
-
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
-  overflow: hidden;
-`;
 
 const Button = styled.button`
   flex: 1;
