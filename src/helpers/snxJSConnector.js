@@ -6,6 +6,7 @@ let snxJSConnector = {
   signers: SynthetixJs.signers,
   setContractSettings: function(contractSettings) {
     this.snxJS = new SynthetixJs(contractSettings);
+    this.synths = this.snxJS.contractSettings.synths;
     this.signer = this.snxJS.contractSettings.signer;
     this.provider = this.snxJS.contractSettings.provider;
     this.utils = this.snxJS.utils;
