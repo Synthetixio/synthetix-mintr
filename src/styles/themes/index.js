@@ -97,6 +97,15 @@ const theme = mode => {
       color: colorStyles.subtext,
       letterSpacing: 0.5,
     },
+    dataMega: {
+      as: 'span',
+      fontSize: [10, 12, 24],
+      lineHeight: ['12px', '14px', '16px'],
+      fontWeight: 400,
+      fontFamily: fontFamilies.medium,
+      color: colorStyles.heading,
+      letterSpacing: 0.2,
+    },
     dataLarge: {
       as: 'span',
       fontSize: [10, 12, 14],
@@ -134,7 +143,7 @@ const theme = mode => {
       letterSpacing: 1,
     },
     tableHeaderMedium: {
-      as: 'th',
+      as: 'span',
       fontSize: [12, 14],
       fontFamily: fontFamilies.bold,
       fontWeight: 700,

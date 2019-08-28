@@ -110,6 +110,15 @@ export const Figure = props => {
   );
 };
 
+export const DataMega = props => {
+  const { dataMega } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...dataMega} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
 export const DataLarge = props => {
   const { dataLarge } = useContext(ThemeContext).textStyles;
   return (

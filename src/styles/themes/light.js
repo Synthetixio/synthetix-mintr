@@ -34,6 +34,8 @@ export default {
   paginatorButtonBackgroundActive: COLORS.light2,
 
   brandRed: COLORS.brandRed,
+  escrowTableBackground: COLORS.light5,
+  escrowNumberBig: COLORS.buttonLight,
 
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
