@@ -1,10 +1,7 @@
 /*eslint-disable */
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import snxJSConnector from '../../../helpers/snxJSConnector';
-import { SlidePage } from '../../../components/Slider';
-import { createTransaction } from '../../../ducks/transactions';
-
+import { SlidePage, SliderContext } from '../../../components/Slider';
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -19,8 +16,8 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onMint }) => {
-  const [amount, setAmount] = useState(null);
+const Action = ({ onDestroy }) => {
+  const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
       <Container>
@@ -29,24 +26,23 @@ const Action = ({ onDestroy, onMint }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/mint.svg" big />
-            <H1>MINT</H1>
+            <ActionImage src='/images/actions/burn.svg' big />
+            <H1>BURN</H1>
             <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
+              Burning sUSD will lock your SNX, increasing your collateralization
               ratio, and will allow you to begin earning fees if you choose to
               sell your sUSD.
             </PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
-              onChange={e => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/sUSD-icon.svg"
-                    height="24px"
+                    src='/images/sUSD-icon.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -57,11 +53,11 @@ const Action = ({ onDestroy, onMint }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
+          <Subtext marginBottom='32px'>
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onMint(amount)} margin="auto">
-            MINT NOW
+          <ButtonPrimary onClick={handleNext} margin='auto'>
+            BURN NOW
           </ButtonPrimary>
         </Bottom>
       </Container>

@@ -29,11 +29,11 @@ const Confirmation = () => {
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>MINTING:</DataHeaderLarge>
+              <DataHeaderLarge>TRADING:</DataHeaderLarge>
               <Amount>5,000.00 sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>BY BURNING:</DataHeaderLarge>
+              <DataHeaderLarge>RECEIVING:</DataHeaderLarge>
               <Amount>5,000.00 SNX</Amount>
             </Box>
           </Details>

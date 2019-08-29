@@ -1,52 +1,46 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { SlidePage, SliderContext } from '../../../components/Slider';
-import { ButtonTertiary } from '../../../components/Button';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,
   PageTitle,
   DataHeaderLarge,
-  Subtext,
 } from '../../../components/Typography';
-import Spinner from '../../../components/Spinner';
 
-const Confirmation = () => {
-  const { handlePrev } = useContext(SliderContext);
+const Complete = () => {
   const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
       <Container>
-        <Navigation>
-          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
-        </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/wallets/ledger.svg' big />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <ActionImage src='/images/success.svg' big />
+            <PageTitle>Burning in progress!</PageTitle>
             <PLarge>
-              To continue, follow the prompts on your Ledger Wallet.
+              Sent to the Ethereum network and will be available in your wallet
+              shortly. You may close this window as the transaction completes in
+              the background.
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>MINTING:</DataHeaderLarge>
+              <DataHeaderLarge>BURNED:</DataHeaderLarge>
               <Amount>5,000.00 sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>BY BURNING:</DataHeaderLarge>
+              <DataHeaderLarge>BY LOCKING:</DataHeaderLarge>
               <Amount>5,000.00 SNX</Amount>
             </Box>
           </Details>
         </Top>
-        <Loading>
-          <Spinner margin='auto' />
-          <Subtext onClick={handleNext}>Waiting for user response...</Subtext>
-        </Loading>
         <Bottom>
-          <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
-          </Fees>
+          <Buttons>
+            <ButtonSecondary>VIEW ON ETHERSCAN</ButtonSecondary>
+            <ButtonPrimary onClick={handleNext}>
+              FINISH & RETURN HOME
+            </ButtonPrimary>
+          </Buttons>
         </Bottom>
       </Container>
     </SlidePage>
@@ -64,42 +58,29 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 48px 64px;
+  padding: 40px 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: space-between;
-`;
-
-const Navigation = styled.div`
-  width: 100%;
-  display: flex;
-  text-align: left;
-`;
-
-const Top = styled.div`
-  height: auto;
-`;
-
-const Bottom = styled.div`
-  height: auto;
-  margin-bottom: 48px;
+  justify-content: space-around;
 `;
 
 const Intro = styled.div`
-  max-width: 400px;
-  margin: 0px auto 48px auto;
+  max-width: 530px;
+  margin-top: 24px;
+  margin-bottom: 48px;
 `;
 
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const Details = styled.div`
   display: flex;
+  margin-bottom: 48px;
 `;
 
 const Box = styled.div`
@@ -120,12 +101,20 @@ const Amount = styled.span`
   margin: 16px 0px 0px 0px;
 `;
 
-const Fees = styled.div`
+const Buttons = styled.div`
+  height: auto;
+  & :first-child {
+    margin-bottom: 24px;
+  }
+`;
+
+const Top = styled.div`
   height: auto;
 `;
 
-const Loading = styled.div`
-  align-items: center;
+const Bottom = styled.div`
+  height: auto;
+  margin-bottom: 32px;
 `;
 
-export default Confirmation;
+export default Complete;

@@ -15,19 +15,6 @@ import MintrAction from '../../MintrActions';
 
 const initialScenario = null;
 
-// const renderScenario = (currentScenario, setCurrentScenario) => {
-//   if (!currentScenario) return;
-//   let ScenarioComponent = null;
-//   switch (currentScenario) {
-//     case 'mint':
-//       ScenarioComponent = Mint;
-//       break;
-//     default:
-//       ScenarioComponent = null;
-//   }
-//   return <ScenarioComponent onDestroy={() => setCurrentScenario(null)} />;
-// };
-
 const renderHomeButtons = setCurrentScenario => {
   return (
     <Fragment>
@@ -52,7 +39,7 @@ const renderHomeButtons = setCurrentScenario => {
       <ButtonRow margin="0 0 40px 0">
         {['claim', 'trade', 'send'].map(action => {
           return (
-            <Button key={action}>
+            <Button key={action} onClick={() => setCurrentScenario(action)}>
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
