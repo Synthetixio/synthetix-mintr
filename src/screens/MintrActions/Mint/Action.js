@@ -1,7 +1,10 @@
 /*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import snxJSConnector from '../../../helpers/snxJSConnector';
+import { SlidePage } from '../../../components/Slider';
+import { createTransaction } from '../../../ducks/transactions';
+
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -16,8 +19,8 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
-  const { handleNext } = useContext(SliderContext);
+const Action = ({ onDestroy, onMint }) => {
+  const [amount, setAmount] = useState(null);
   return (
     <SlidePage>
       <Container>
@@ -26,7 +29,7 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/mint.svg' big />
+            <ActionImage src="/images/actions/mint.svg" big />
             <H1>MINT</H1>
             <PLarge>
               Minting sUSD will lock your SNX, increasing your collateralization
@@ -37,17 +40,18 @@ const Action = ({ onDestroy }) => {
           <Form>
             <PLarge>Confirm or enter amount to mint:</PLarge>
             <Input
-              placeholder='0.00'
+              onChange={e => setAmount(e.target.value)}
+              placeholder="0.00"
               leftComponent={<div>sUSD</div>}
               rightComponent={<ButtonMax />}
             />
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
+          <Subtext marginBottom="32px">
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary onClick={() => onMint(amount)} margin="auto">
             MINT NOW
           </ButtonPrimary>
         </Bottom>

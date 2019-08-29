@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Input = ({ placeholder, leftComponent, rightComponent }) => {
+const Input = ({ placeholder, leftComponent, rightComponent, onChange }) => {
   return (
     <InputWrapper>
       <LeftComponentWrapper>{leftComponent}</LeftComponentWrapper>
-      <InputElement placeholder={placeholder} type='text' />
+      <InputElement onChange={onChange} placeholder={placeholder} type="text" />
       <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
     </InputWrapper>
   );

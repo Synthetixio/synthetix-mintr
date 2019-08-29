@@ -1,5 +1,6 @@
 import UIReducer from './ui';
 import WalletReducer from './wallet';
+import TransactionsReducer from './transactions';
 
 const combineReducers = reducers => (state, action) => {
   let hasChanged;
@@ -14,4 +15,5 @@ const combineReducers = reducers => (state, action) => {
 export default combineReducers({
   ui: UIReducer,
   wallet: WalletReducer,
+  transactions: TransactionsReducer,
 });

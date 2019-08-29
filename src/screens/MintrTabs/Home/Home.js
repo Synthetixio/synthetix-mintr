@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 
@@ -10,22 +11,22 @@ import {
 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 
-import { Mint } from '../../MintrActions';
+import MintrAction from '../../MintrActions';
 
 const initialScenario = null;
 
-const renderScenario = (currentScenario, setCurrentScenario) => {
-  if (!currentScenario) return;
-  let ScenarioComponent = null;
-  switch (currentScenario) {
-    case 'mint':
-      ScenarioComponent = Mint;
-      break;
-    default:
-      ScenarioComponent = null;
-  }
-  return <ScenarioComponent onDestroy={() => setCurrentScenario(null)} />;
-};
+// const renderScenario = (currentScenario, setCurrentScenario) => {
+//   if (!currentScenario) return;
+//   let ScenarioComponent = null;
+//   switch (currentScenario) {
+//     case 'mint':
+//       ScenarioComponent = Mint;
+//       break;
+//     default:
+//       ScenarioComponent = null;
+//   }
+//   return <ScenarioComponent onDestroy={() => setCurrentScenario(null)} />;
+// };
 
 const renderHomeButtons = setCurrentScenario => {
   return (
@@ -69,7 +70,10 @@ const Home = () => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
   return (
     <PageContainer>
-      {renderScenario(currentScenario, setCurrentScenario)}
+      <MintrAction
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+      />
       {renderHomeButtons(setCurrentScenario)}
     </PageContainer>
   );
