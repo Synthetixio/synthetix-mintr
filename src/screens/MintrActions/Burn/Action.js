@@ -26,16 +26,16 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/mint.svg' big />
-            <H1>MINT</H1>
+            <ActionImage src='/images/actions/burn.svg' big />
+            <H1>BURN</H1>
             <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
+              Burning sUSD will lock your SNX, increasing your collateralization
               ratio, and will allow you to begin earning fees if you choose to
               sell your sUSD.
             </PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
               placeholder='0.00'
               leftComponent={
@@ -57,7 +57,7 @@ const Action = ({ onDestroy }) => {
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
           <ButtonPrimary onClick={handleNext} margin='auto'>
-            MINT NOW
+            BURN NOW
           </ButtonPrimary>
         </Bottom>
       </Container>

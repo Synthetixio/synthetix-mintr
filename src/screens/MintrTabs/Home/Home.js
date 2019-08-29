@@ -10,7 +10,7 @@ import {
 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 
-import { Mint } from '../../MintrActions';
+import { Burn } from '../../MintrActions';
 
 const initialScenario = null;
 
@@ -18,8 +18,8 @@ const renderScenario = (currentScenario, setCurrentScenario) => {
   if (!currentScenario) return;
   let ScenarioComponent = null;
   switch (currentScenario) {
-    case 'mint':
-      ScenarioComponent = Mint;
+    case 'burn':
+      ScenarioComponent = Burn;
       break;
     default:
       ScenarioComponent = null;
@@ -35,7 +35,7 @@ const renderHomeButtons = setCurrentScenario => {
         Click any button below to view more info, confirm or change the amount
         before submitting.
       </PLarge>
-      <ButtonRow margin="30px 0 40px 0">
+      <ButtonRow margin='30px 0 40px 0'>
         {['mint', 'burn'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)} big>
@@ -48,10 +48,10 @@ const renderHomeButtons = setCurrentScenario => {
           );
         })}
       </ButtonRow>
-      <ButtonRow margin="0 0 40px 0">
+      <ButtonRow margin='0 0 40px 0'>
         {['claim', 'trade', 'send'].map(action => {
           return (
-            <Button key={action}>
+            <Button key={action} onClick={() => setCurrentScenario(action)}>
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>

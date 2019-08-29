@@ -11,8 +11,8 @@ export const ButtonSecondary = ({ children, onClick }) => {
 };
 
 const Button = styled.button`
-  width: ${props => (props.width ? props.width + 'px' : '320px')};
-  height: 64px;
+  width: ${props => (props.width ? props.width + 'px' : '400px')};
+  height: 72px;
   border-radius: 5px;
   text-transform: uppercase;
   border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg};

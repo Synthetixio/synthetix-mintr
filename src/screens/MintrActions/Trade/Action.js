@@ -23,19 +23,33 @@ const Action = ({ onDestroy }) => {
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary>Open in sX ↗</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/mint.svg' big />
-            <H1>MINT</H1>
+            <ActionImage src='/images/actions/trade.svg' big />
+            <H1>TRADE</H1>
             <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
-              ratio, and will allow you to begin earning fees if you choose to
-              sell your sUSD.
+              Trade your sUSD and Synths on the Synthetix.Exchange. Use this
+              window for a quick transfer, or click the ‘Open in sX ↗’ button
+              above for more detail.
             </PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <Input
+              placeholder='0.00'
+              leftComponent={
+                <Type>
+                  <img
+                    src='/images/sUSD-icon.svg'
+                    height='24px'
+                    style={{ marginRight: '8px' }}
+                  />
+                  <PLarge>sUSD</PLarge>
+                </Type>
+              }
+              rightComponent={<ButtonMax />}
+            />
             <Input
               placeholder='0.00'
               leftComponent={
@@ -53,11 +67,15 @@ const Action = ({ onDestroy }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-          </Subtext>
+          <Fees>
+            <Subtext>TRADING FEE: 0.3%</Subtext>
+            <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext>
+            <Subtext>
+              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+            </Subtext>
+          </Fees>
           <ButtonPrimary onClick={handleNext} margin='auto'>
-            MINT NOW
+            TRADE NOW
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -90,18 +108,18 @@ const Top = styled.div`
 
 const Bottom = styled.div`
   height: auto;
-  margin-bottom: 64px;
+  margin-bottom: 32px;
 `;
 
 const Navigation = styled.div`
   width: 100%;
   display: flex;
-  text-align: left;
+  justify-content: space-between;
 `;
 
 const Intro = styled.div`
-  max-width: 380px;
-  margin-bottom: 64px;
+  max-width: 530px;
+  margin-bottom: 48px;
 `;
 
 const ActionImage = styled.img`
@@ -111,7 +129,10 @@ const ActionImage = styled.img`
 `;
 
 const Form = styled.div`
-  margin: 0px 0px 80px 0px;
+  margin: 0px 0px 24px 0px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Type = styled.div`
@@ -125,6 +146,10 @@ const Type = styled.div`
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
   color: ${props => props.theme.colorStyles.hyperlink};
+`;
+
+const Fees = styled.div`
+  margin-bottom: 32px;
 `;
 
 export default Action;

@@ -135,7 +135,7 @@ const WalletConnectionH2 = styled(H2)`
 
 const WalletConnectionPMega = styled(PMega)`
   font-size: 22px;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   text-align: center;
   line-height: 32px;
 `;
@@ -143,8 +143,8 @@ const WalletConnectionPMega = styled(PMega)`
 const Wallet = styled.div`
   background-color: ${props => props.theme.colorStyles.panels};
   display: flex;
-  width: 340px;
-  height: 340px;
+  width: 400px;
+  height: 400px;
   flex-direction: column;
   align-items: center;
   justify-content: center;

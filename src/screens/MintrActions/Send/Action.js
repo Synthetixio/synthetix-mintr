@@ -13,6 +13,7 @@ import {
   ButtonPrimaryLabel,
   Subtext,
   InputTextLarge,
+  DataHeaderLarge,
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
@@ -26,17 +27,20 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/mint.svg' big />
-            <H1>MINT</H1>
-            <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
-              ratio, and will allow you to begin earning fees if you choose to
-              sell your sUSD.
-            </PLarge>
+            <ActionImage src='/images/actions/send.svg' big />
+            <H1>SEND</H1>
+            <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
           </Intro>
+          <Details>
+            <Box>
+              <DataHeaderLarge>TRANSFERRABLE AMOUNT:</DataHeaderLarge>
+              <Amount>500,000.00 SNX</Amount>
+            </Box>
+          </Details>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <PLarge>Enter amount or select max available:</PLarge>
             <Input
+              marginBottom='24px'
               placeholder='0.00'
               leftComponent={
                 <Type>
@@ -50,6 +54,8 @@ const Action = ({ onDestroy }) => {
               }
               rightComponent={<ButtonMax />}
             />
+            <PLarge>Enter wallet address to send funds to:</PLarge>
+            <Input placeholder='e.g. 0x3b18a4...' />
           </Form>
         </Top>
         <Bottom>
@@ -57,7 +63,7 @@ const Action = ({ onDestroy }) => {
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
           <ButtonPrimary onClick={handleNext} margin='auto'>
-            MINT NOW
+            SEND NOW
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -90,18 +96,18 @@ const Top = styled.div`
 
 const Bottom = styled.div`
   height: auto;
-  margin-bottom: 64px;
+  margin-bottom: 32px;
 `;
 
 const Navigation = styled.div`
   width: 100%;
   display: flex;
-  text-align: left;
+  justify-content: space-between;
 `;
 
 const Intro = styled.div`
-  max-width: 380px;
-  margin-bottom: 64px;
+  max-width: 530px;
+  margin-bottom: 24px;
 `;
 
 const ActionImage = styled.img`
@@ -110,8 +116,34 @@ const ActionImage = styled.img`
   margin-bottom: 8px;
 `;
 
+const Details = styled.div`
+  display: flex;
+`;
+
+const Box = styled.div`
+  height: auto;
+  width: auto;
+  padding: 16px 40px;
+  margin: 0px auto 16px auto;
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Amount = styled.span`
+  color: ${props => props.theme.colorStyles.hyperlink};
+  font-family: 'apercu-medium';
+  font-size: 16px;
+  margin-left: 16px;
+`;
+
 const Form = styled.div`
-  margin: 0px 0px 80px 0px;
+  margin: 0px 0px 24px 0px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Type = styled.div`
