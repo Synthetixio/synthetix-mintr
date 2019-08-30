@@ -92,6 +92,7 @@ const theme = mode => {
     subtext: {
       as: 'p',
       fontSize: [10, 12, 14],
+      lineHeight: ['18px'],
       fontWeight: 400,
       fontFamily: fontFamilies.regular,
       color: colorStyles.subtext,
