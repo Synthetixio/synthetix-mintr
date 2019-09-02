@@ -19,7 +19,7 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onMint }) => {
+const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
   const [amount, setAmount] = useState(null);
   return (
     <SlidePage>
@@ -41,6 +41,7 @@ const Action = ({ onDestroy, onMint }) => {
             <PLarge>Confirm or enter amount to mint:</PLarge>
             <Input
               onChange={e => setAmount(e.target.value)}
+              value={amount}
               placeholder="0.00"
               leftComponent={
                 <Type>
@@ -52,7 +53,13 @@ const Action = ({ onDestroy, onMint }) => {
                   <PLarge>sUSD</PLarge>
                 </Type>
               }
-              rightComponent={<ButtonMax />}
+              rightComponent={
+                <ButtonMax
+                  onClick={() => {
+                    setAmount(maxIssuableSynths);
+                  }}
+                />
+              }
             />
           </Form>
         </Top>
