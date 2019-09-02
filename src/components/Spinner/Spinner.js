@@ -17,7 +17,7 @@ const Spinner = () => {
 const Wrapper = styled.div`
   width: 60px;
   height: 60px;
-  margin: 40px 0;
+  margin: 40px auto;
   transition: all 0.3s ease-out;
   z-index: 3;
 `;

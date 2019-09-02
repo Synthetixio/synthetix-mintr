@@ -19,8 +19,8 @@ export const ButtonPrimaryMedium = ({ children, onClick, disabled }) => {
 };
 
 const Button = styled.button`
-  width: ${props => (props.width ? props.width + 'px' : '320px')};
-  height: 64px;
+  width: ${props => (props.width ? props.width + 'px' : '400px')};
+  height: 72px;
   border-radius: 5px;
   text-transform: uppercase;
   border: none;
@@ -34,7 +34,7 @@ const Button = styled.button`
 
 const ButtonMedium = styled(Button)`
   width: 162px;
-  height: 40px;
+  height: 48px;
   :disabled {
     opacity: 0.4;
     pointer-events: none;

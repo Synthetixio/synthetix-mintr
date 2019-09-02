@@ -1,11 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Input = ({ placeholder, leftComponent, rightComponent }) => {
+const Input = ({
+  placeholder,
+  leftComponent,
+  rightComponent,
+  onChange,
+  value,
+}) => {
   return (
     <InputWrapper>
       <LeftComponentWrapper>{leftComponent}</LeftComponentWrapper>
-      <InputElement placeholder={placeholder} type='text' />
+      <InputElement
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        type="text"
+      />
       <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
     </InputWrapper>
   );
@@ -16,7 +27,7 @@ const InputWrapper = styled.div`
   height: 50px;
   border-radius: 5px;
   height: 64px;
-  width: 320px;
+  width: 400px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   background-color: ${props => props.theme.colorStyles.panelButton};
   inner-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
@@ -28,8 +39,10 @@ const InputWrapper = styled.div`
 const LeftComponentWrapper = styled.div`
   height: 100%;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
+  background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   margin: auto;
   padding: 16px 24px;
@@ -49,6 +62,10 @@ const InputElement = styled.input`
   padding: 16px;
   border: none;
   background-color: ${props => props.theme.colorStyles.panelButton};
+  outline: none;
+
+  font-size: 24px;
+  color: ${props => props.theme.colorStyles.heading};
 `;
 
 export default Input;

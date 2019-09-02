@@ -37,6 +37,7 @@ const connectToMetamask = async (networkId, name, signer) => {
         walletType: 'Metamask',
         unlocked: true,
         networkId,
+        networkName: name.toLowerCase(),
       };
     } else {
       return {

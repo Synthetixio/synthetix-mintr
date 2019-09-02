@@ -40,7 +40,7 @@ const SliderWrapper = styled.div`
   position: absolute;
   animation: ${fadeIn} 0.25s linear both;
   height: 100%;
-  left: 0;
+  left: 100%;
   width: 100%;
   display: flex;
   z-index: 100;

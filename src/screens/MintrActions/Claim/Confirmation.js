@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-
-import { formatCurrency } from '../../../helpers/formatters';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage, SliderContext } from '../../../components/Slider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -12,43 +10,37 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, mintAmount, issuanceRatio }) => {
+const Confirmation = () => {
+  const { handlePrev } = useContext(SliderContext);
+  const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage
-              src={`/images/wallets/${walletType.toLowerCase()}.svg`}
-              big
-            />
+            <ActionImage src='/images/wallets/ledger.svg' big />
             <PageTitle>Please confirm transaction</PageTitle>
             <PLarge>
-              {`To continue, follow the prompts on your ${walletType} Wallet.`}
+              To continue, follow the prompts on your Ledger Wallet.
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>MINTING:</DataHeaderLarge>
-              <Amount>{formatCurrency(mintAmount)} sUSD</Amount>
+              <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
+              <Amount>5,000.00 sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>BY BURNING:</DataHeaderLarge>
-              <Amount>
-                {issuanceRatio
-                  ? formatCurrency(mintAmount / issuanceRatio)
-                  : '--'}{' '}
-                SNX
-              </Amount>
+              <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
+              <Amount>5,000.00 SNX</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin="auto" />
-          <Subtext>Waiting for user response...</Subtext>
+          <Spinner margin='auto' />
+          <Subtext onClick={handleNext}>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
           <Fees>

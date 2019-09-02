@@ -6,7 +6,7 @@ const useSizeElement = () => {
 
   useLayoutEffect(() => {
     setWidth(elementRef.current.clientWidth);
-  }, [elementRef.current]);
+  }, []);
 
   return { width, elementRef };
 };

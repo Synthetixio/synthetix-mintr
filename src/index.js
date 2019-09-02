@@ -14,6 +14,7 @@ const initialState = {
   wallet: {
     unlocked: false,
   },
+  transactions: {},
 };
 
 ReactDOM.render(

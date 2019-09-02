@@ -19,7 +19,7 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
+const Action = ({ onDestroy, onBurn }) => {
   const [amount, setAmount] = useState(null);
   return (
     <SlidePage>
@@ -29,46 +29,39 @@ const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/mint.svg" big />
-            <H1>MINT</H1>
+            <ActionImage src='/images/actions/burn.svg' big />
+            <H1>BURN</H1>
             <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
+              Burning sUSD will lock your SNX, increasing your collateralization
               ratio, and will allow you to begin earning fees if you choose to
               sell your sUSD.
             </PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
               onChange={e => setAmount(e.target.value)}
-              value={amount}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/sUSD-icon.svg"
-                    height="24px"
+                    src='/images/sUSD-icon.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
                 </Type>
               }
-              rightComponent={
-                <ButtonMax
-                  onClick={() => {
-                    setAmount(maxIssuableSynths);
-                  }}
-                />
-              }
+              rightComponent={<ButtonMax />}
             />
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
+          <Subtext marginBottom='32px'>
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onMint(amount)} margin="auto">
-            MINT NOW
+          <ButtonPrimary onClick={() => onBurn(amount)} margin='auto'>
+            BURN NOW
           </ButtonPrimary>
         </Bottom>
       </Container>
