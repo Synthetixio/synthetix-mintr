@@ -50,6 +50,7 @@ const Action = ({ onDestroy }) => {
               }
               rightComponent={<ButtonMax />}
             />
+            <PLarge>↓</PLarge>
             <Input
               placeholder='0.00'
               leftComponent={
@@ -130,7 +131,7 @@ const ActionImage = styled.img`
 
 const Form = styled.div`
   margin: 0px 0px 24px 0px;
-  height: 160px;
+  height: auto;
   display: flex;
   flex-direction: column;
 `;
@@ -145,6 +146,7 @@ const Type = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
+  margin-left: 8px;
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 

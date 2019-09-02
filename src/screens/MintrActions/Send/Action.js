@@ -37,10 +37,11 @@ const Action = ({ onDestroy }) => {
               <Amount>500,000.00 SNX</Amount>
             </Box>
           </Details>
+        </Top>
+        <Middle>
           <Form>
             <PLarge>Enter amount or select max available:</PLarge>
             <Input
-              marginBottom='24px'
               placeholder='0.00'
               leftComponent={
                 <Type>
@@ -54,10 +55,12 @@ const Action = ({ onDestroy }) => {
               }
               rightComponent={<ButtonMax />}
             />
-            <PLarge>Enter wallet address to send funds to:</PLarge>
+            <PLarge marginTop='32px'>
+              Enter wallet address to send funds to:
+            </PLarge>
             <Input placeholder='e.g. 0x3b18a4...' />
           </Form>
-        </Top>
+        </Middle>
         <Bottom>
           <Subtext marginBottom='32px'>
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
@@ -92,6 +95,12 @@ const Container = styled.div`
 
 const Top = styled.div`
   height: auto;
+  margin-bottom: -16px;
+`;
+
+const Middle = styled.div`
+  height: auto;
+  margin: 0px auto 16px auto;
 `;
 
 const Bottom = styled.div`
@@ -113,20 +122,20 @@ const Intro = styled.div`
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-  margin-bottom: 8px;
 `;
 
 const Details = styled.div`
   display: flex;
+  margin-bottom: 32px;
 `;
 
 const Box = styled.div`
   height: auto;
   width: auto;
-  padding: 16px 40px;
-  margin: 0px auto 16px auto;
+  padding: 16px 24px;
+  margin: auto;
   border: 1px solid ${props => props.theme.colorStyles.borders};
-  border-radius: 50px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -156,6 +165,7 @@ const Type = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
+  margin-left: 8px;
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 

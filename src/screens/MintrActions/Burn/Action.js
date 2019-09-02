@@ -128,6 +128,7 @@ const Type = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
+  margin-left: 8px;
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
