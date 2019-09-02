@@ -1,6 +1,7 @@
 import React from 'react';
 import Mint from './Mint';
 import Burn from './Burn';
+import Claim from './Claim';
 import Trade from './Trade';
 import Send from './Send';
 import Slider from '../../components/Slider';
@@ -11,6 +12,8 @@ const getActionComponent = action => {
       return Mint;
     case 'burn':
       return Burn;
+    case 'claim':
+      return Claim;
     case 'trade':
       return Trade;
     case 'send':
@@ -25,7 +28,7 @@ const MintrAction = ({ action, onDestroy }) => {
   const ActionComponent = getActionComponent(action);
   return (
     <Slider>
-      <ActionComponent onDestroy={onDestroy}></ActionComponent>
+      <ActionComponent onDestroy={onDestroy} />
     </Slider>
   );
 };

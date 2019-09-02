@@ -1,7 +1,10 @@
 /*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import snxJSConnector from '../../../helpers/snxJSConnector';
+import { SlidePage } from '../../../components/Slider';
+import { createTransaction } from '../../../ducks/transactions';
+
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -16,8 +19,8 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
-  const { handleNext } = useContext(SliderContext);
+const Action = ({ onDestroy, onBurn }) => {
+  const [amount, setAmount] = useState(null);
   return (
     <SlidePage>
       <Container>
@@ -37,6 +40,7 @@ const Action = ({ onDestroy }) => {
           <Form>
             <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
+              onChange={e => setAmount(e.target.value)}
               placeholder='0.00'
               leftComponent={
                 <Type>
@@ -56,7 +60,7 @@ const Action = ({ onDestroy }) => {
           <Subtext marginBottom='32px'>
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary onClick={() => onBurn(amount)} margin='auto'>
             BURN NOW
           </ButtonPrimary>
         </Bottom>
