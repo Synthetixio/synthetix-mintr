@@ -20,7 +20,7 @@ import {
 import Input from '../../../components/Input';
 
 const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState('');
   return (
     <SlidePage>
       <Container>
