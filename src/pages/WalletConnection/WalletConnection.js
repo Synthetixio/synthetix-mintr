@@ -1,8 +1,7 @@
-/* eslint-disable */
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
+import { connectToWallet } from '../../helpers/snxJSConnector';
 import { hasWeb3, SUPPORTED_WALLETS } from '../../helpers/networkHelper';
 
 import { Store } from '../../store';
@@ -46,7 +45,6 @@ const renderWalletButtons = dispatch => {
 
 const WalletConnection = () => {
   const { state, dispatch } = useContext(Store);
-  console.log(state);
   return (
     <Wrapper>
       <Header>

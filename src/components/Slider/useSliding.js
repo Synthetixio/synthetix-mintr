@@ -9,7 +9,7 @@ const useSliding = () => {
     const containerWidth = containerRef.current.clientWidth;
     setContainerWidth(containerWidth);
     setDistance(-containerWidth);
-  }, [containerRef.current]);
+  }, []);
 
   const handlePrev = count => {
     setDistance(distance + count * containerWidth);

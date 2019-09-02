@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57 (83077) - https://sketch.com -->
+    <title>atoms / icon / 64px / result / error</title>
+    <desc>Created with Sketch.</desc>
+    <g id="atoms-/-icon-/-64px-/-result-/-error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="atoms-/-spacing-/-boundingBox">
+            <rect id="boundingBox" x="0" y="0" width="64" height="64"></rect>
+        </g>
+        <circle id="Oval" fill="#D94454" cx="32" cy="32" r="32"></circle>
+        <path d="M40.660513,21 L43,23.0073918 L34.117,32.408 L43,41.8080551 L40.660513,43.8154469 L32,34.649 L23.339487,43.8154469 L21,41.8080551 L29.882,32.408 L21,23.0073918 L23.339487,21 L32,30.166 L40.660513,21 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+    </g>
+</svg>
