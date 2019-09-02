@@ -1,49 +1,24 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { TableDataMedium, TableHeaderMedium } from '../Typography';
 
-const List = ({ onClick }) => {
-  return (
-    <Table cellSpacing={0}>
-      <THead>
-        <TR>
-          <TH>Address</TH>
-          <TH>SNX Balance</TH>
-          <TH>sUSD Balance</TH>
-          <TH>ETH Balance</TH>
-        </TR>
-      </THead>
-      <TBody>
-        {[1, 2, 3, 4, 5, 6].map(i => {
-          return (
-            <TR key={i} onClick={onClick}>
-              <TD>blah</TD>
-              <TD>blah</TD>
-              <TD>blah</TD>
-              <TD>blah</TD>
-            </TR>
-          );
-        })}
-      </TBody>
-    </Table>
-  );
-};
-
-const Table = styled.table`
+export const List = styled.table`
   width: 100%;
   color: white;
   border-collapse: separate;
   border-spacing: 0 8px;
 `;
 
-const THead = styled.thead`
+export const THead = styled.thead`
   tr {
     height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 `;
 
-const TBody = styled.tbody`
+export const TBody = styled.tbody`
   tr {
     background-color: ${props => props.theme.colorStyles.panels};
   }
@@ -55,7 +30,7 @@ const TBody = styled.tbody`
   }
 `;
 
-const TR = styled.tr`
+export const TR = styled.tr`
   transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
   text-align: right;
   cursor: pointer;
@@ -71,16 +46,15 @@ const TR = styled.tr`
   }
 `;
 
-const TH = styled(TableHeaderMedium)`
+export const TH = styled(TableHeaderMedium)`
   text-transform: uppercase;
   padding: 0 20px;
 `;
 
-const TD = styled(TableDataMedium)`
+export const TD = styled(TableDataMedium)`
   padding: 0 20px;
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
   border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
   height: 56px;
+  width: auto;
 `;
-
-export default List;

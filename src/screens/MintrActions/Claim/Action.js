@@ -1,6 +1,6 @@
 /*eslint-disable */
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { SlidePage, SliderContext } from '../../../components/Slider';
 import {
   ButtonPrimary,
@@ -9,6 +9,7 @@ import {
 } from '../../../components/Button';
 import {
   PLarge,
+  PMedium,
   H1,
   H5,
   ButtonPrimaryLabel,
@@ -17,8 +18,10 @@ import {
   DataHeaderLarge,
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
+import { Info } from '../../../components/Icons';
 
 const Action = ({ onDestroy }) => {
+  const theme = useContext(ThemeContext);
   const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
@@ -37,26 +40,34 @@ const Action = ({ onDestroy }) => {
               trading rewards generated on Synthetix.Exchange (sX).
             </PLarge>
           </Intro>
-          <Middle>
-            <Table>
-              <H5>Claimable periods:</H5>
-            </Table>
-            <Details>
-              <Box>
-                <DataHeaderLarge>
-                  Your available sUSD trading rewards:
-                </DataHeaderLarge>
-                <Amount>5,000.00 sUSD</Amount>
-              </Box>
-              <Box>
-                <DataHeaderLarge>
-                  Your available SNX staking rewards:
-                </DataHeaderLarge>
-                <Amount>5,000.00 SNX</Amount>
-              </Box>
-            </Details>
-          </Middle>
         </Top>
+        <Middle>
+          <Schedule>
+            <H5>Claimable periods:</H5>
+            <Table />
+            <Status>
+              <PMedium width='100%'>Fee Claim Status:</PMedium>
+              <State>
+                <Highlighted marginRight='8px'>OPEN</Highlighted>
+                <Info theme={theme} width='4px' />
+              </State>
+            </Status>
+          </Schedule>
+          <Details>
+            <Box>
+              <DataHeaderLarge>
+                Your available sUSD trading rewards:
+              </DataHeaderLarge>
+              <Amount>5,000.00 sUSD</Amount>
+            </Box>
+            <Box>
+              <DataHeaderLarge>
+                Your available SNX staking rewards:
+              </DataHeaderLarge>
+              <Amount>5,000.00 SNX</Amount>
+            </Box>
+          </Details>
+        </Middle>
         <Bottom>
           <Fees>
             <Subtext>
@@ -89,7 +100,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 48px 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,11 +111,12 @@ const Container = styled.div`
 const Top = styled.div`
   height: auto;
   margin: auto;
+  width: 100%;
 `;
 
 const Middle = styled.div`
   height: auto;
-  margin: auto;
+  margin: 0px auto 16px auto;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -113,7 +125,6 @@ const Middle = styled.div`
 
 const Bottom = styled.div`
   height: auto;
-  margin-bottom: 32px;
 `;
 
 const Navigation = styled.div`
@@ -131,27 +142,46 @@ const Intro = styled.div`
 const ActionImage = styled.img`
   height: ${props => (props.big ? '64px' : '48px')};
   width: ${props => (props.big ? '64px' : '48px')};
-  margin-bottom: 8px;
+`;
+
+const Schedule = styled.div`
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  height: auto;
+  width: 60%;
+  margin: 8px 16px 8px 0px;
+  padding: 24px 32px;
+  text-align: left;
 `;
 
 const Table = styled.div`
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-  height: auto;
-  width: 55%;
-  margin: 8px 16px;
-  padding: 16px;
+  background-color: ${props => props.theme.colorStyles.borders};
+  height: 60%;
+`;
+
+const Status = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+`;
+
+const State = styled.div`
+  display: flex;
+  text-align: right;
+  align-items: center;
 `;
 
 const Details = styled.div`
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 40%;
 `;
 
 const Box = styled.div`
   height: auto;
   width: auto;
-  padding: 24px 16px;
+  padding: 24px 32px;
   margin: 8px 0px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 2px;
@@ -163,11 +193,12 @@ const Amount = styled.span`
   color: ${props => props.theme.colorStyles.hyperlink};
   font-family: 'apercu-medium';
   font-size: 24px;
-  margin: 16px 0px 0px 0px;
+  margin: 12px 0px 0px 0px;
 `;
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
+  margin: 0px 8px;
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 

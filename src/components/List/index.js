@@ -1,1 +1,1 @@
-export { default } from './List';
+export { List, THead, TBody, TR, TH, TD } from './List';

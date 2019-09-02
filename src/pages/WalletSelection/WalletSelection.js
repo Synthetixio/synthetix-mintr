@@ -6,7 +6,7 @@ import { updateCurrentPage } from '../../ducks/ui';
 
 import { ButtonTertiary } from '../../components/Button';
 import Spinner from '../../components/Spinner';
-import List from '../../components/List';
+import { List } from '../../components/List';
 import Paginator from '../../components/Paginator';
 
 import { H1, PMega } from '../../components/Typography';

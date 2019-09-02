@@ -5,7 +5,7 @@ const Input = ({ placeholder, leftComponent, rightComponent, onChange }) => {
   return (
     <InputWrapper>
       <LeftComponentWrapper>{leftComponent}</LeftComponentWrapper>
-      <InputElement onChange={onChange} placeholder={placeholder} type="text" />
+      <InputElement onChange={onChange} placeholder={placeholder} type='text' />
       <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
     </InputWrapper>
   );
@@ -34,7 +34,7 @@ const LeftComponentWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  padding: 16px 24px;
+  padding: 16px;
 `;
 
 const RightComponentWrapper = styled.div`
