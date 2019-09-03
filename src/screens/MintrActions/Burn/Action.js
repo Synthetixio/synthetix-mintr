@@ -1,26 +1,17 @@
-/*eslint-disable */
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SlidePage } from '../../../components/Slider';
-import { createTransaction } from '../../../ducks/transactions';
 
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onBurn }) => {
-  const [amount, setAmount] = useState(null);
+const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
+  const [amount, setAmount] = useState('');
   return (
     <SlidePage>
       <Container>
@@ -29,7 +20,7 @@ const Action = ({ onDestroy, onBurn }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/burn.svg' big />
+            <ActionImage src="/images/actions/burn.svg" big />
             <H1>BURN</H1>
             <PLarge>
               Burning sUSD will lock your SNX, increasing your collateralization
@@ -41,26 +32,33 @@ const Action = ({ onDestroy, onBurn }) => {
             <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
               onChange={e => setAmount(e.target.value)}
-              placeholder='0.00'
+              value={amount}
+              placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
+                    src="/images/sUSD-icon.svg"
+                    height="24px"
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
                 </Type>
               }
-              rightComponent={<ButtonMax />}
+              rightComponent={
+                <ButtonMax
+                  onClick={() => {
+                    setAmount(maxBurnAmount);
+                  }}
+                />
+              }
             />
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
+          <Subtext marginBottom="32px">
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onBurn(amount)} margin='auto'>
+          <ButtonPrimary onClick={() => onBurn(amount)} margin="auto">
             BURN NOW
           </ButtonPrimary>
         </Bottom>
