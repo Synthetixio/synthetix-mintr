@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+
+import { formatCurrency } from '../../../helpers/formatters';
+import { SlidePage } from '../../../components/Slider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -10,37 +12,43 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = () => {
-  const { handlePrev } = useContext(SliderContext);
-  const { handleNext } = useContext(SliderContext);
+const Confirmation = ({ goBack, walletType, burnAmount, issuanceRatio }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/wallets/ledger.svg' big />
+            <ActionImage
+              src={`/images/wallets/${walletType.toLowerCase()}.svg`}
+              big
+            />
             <PageTitle>Please confirm transaction</PageTitle>
             <PLarge>
-              To continue, follow the prompts on your Ledger Wallet.
+              {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
               <DataHeaderLarge>BURNING:</DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
+              <Amount>{formatCurrency(burnAmount)} sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>BY LOCKING:</DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
+              <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
+              <Amount>
+                {issuanceRatio
+                  ? formatCurrency(burnAmount / issuanceRatio)
+                  : '--'}{' '}
+                SNX
+              </Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
-          <Subtext onClick={handleNext}>Waiting for user response...</Subtext>
+          <Spinner margin="auto" />
+          <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
           <Fees>

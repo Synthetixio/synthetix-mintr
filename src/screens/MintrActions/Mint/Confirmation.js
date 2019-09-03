@@ -36,7 +36,7 @@ const Confirmation = ({ goBack, walletType, mintAmount, issuanceRatio }) => {
               <Amount>{formatCurrency(mintAmount)} sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>BY BURNING:</DataHeaderLarge>
+              <DataHeaderLarge>BY LOCKING:</DataHeaderLarge>
               <Amount>
                 {issuanceRatio
                   ? formatCurrency(mintAmount / issuanceRatio)

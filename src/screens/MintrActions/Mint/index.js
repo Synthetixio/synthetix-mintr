@@ -1,6 +1,4 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
-import Slider from '../../../components/Slider';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -33,7 +31,7 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
       }
     };
     getIssuanceData();
-  }, [walletAddress]);
+  }, [walletAddress, sUSDBytes]);
   return data;
 };
 
@@ -52,7 +50,7 @@ const Mint = ({ onDestroy }) => {
     currentWallet,
     sUSDBytes
   );
-  let transactionError = null;
+
   const onMint = async amount => {
     try {
       setMintAmount(amount);
