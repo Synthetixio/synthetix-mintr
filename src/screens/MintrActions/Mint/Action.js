@@ -1,22 +1,13 @@
-/*eslint-disable */
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SlidePage } from '../../../components/Slider';
-import { createTransaction } from '../../../ducks/transactions';
 
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
 const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {

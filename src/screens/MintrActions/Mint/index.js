@@ -1,6 +1,4 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
-import Slider from '../../../components/Slider';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -14,6 +12,7 @@ const bigNumberFormatter = value =>
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
+  const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
   useEffect(() => {
     const getIssuanceData = async () => {
       try {
@@ -23,11 +22,12 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
             sUSDBytes
           ),
           snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+          snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
         ]);
-        const [maxIssuableSynths, issuanceRatio] = results.map(
+        const [maxIssuableSynths, issuanceRatio, SNXPrice] = results.map(
           bigNumberFormatter
         );
-        setData({ maxIssuableSynths, issuanceRatio });
+        setData({ maxIssuableSynths, issuanceRatio, SNXPrice });
       } catch (e) {
         console.log(e);
       }
@@ -48,11 +48,11 @@ const Mint = ({ onDestroy }) => {
   } = useContext(Store);
 
   const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
-  const { maxIssuableSynths, issuanceRatio } = useGetIssuanceData(
+  const { maxIssuableSynths, issuanceRatio, SNXPrice } = useGetIssuanceData(
     currentWallet,
     sUSDBytes
   );
-  let transactionError = null;
+
   const onMint = async amount => {
     try {
       setMintAmount(amount);
@@ -88,6 +88,7 @@ const Mint = ({ onDestroy }) => {
     networkName,
     mintAmount,
     issuanceRatio,
+    SNXPrice,
     ...transactionInfo,
   };
 
