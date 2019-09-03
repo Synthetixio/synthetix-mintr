@@ -19,7 +19,7 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onDeposit, maxIssuableSynths }) => {
+const Action = ({ onDestroy, onDeposit, maxDepositAmount }) => {
   const [amount, setAmount] = useState('');
   return (
     <SlidePage>
@@ -32,7 +32,7 @@ const Action = ({ onDestroy, onDeposit, maxIssuableSynths }) => {
             <ActionImage src='/images/actions/deposit.svg' />
             <H1>DEPOSIT</H1>
             <PLarge>Amount available:</PLarge>
-            <Amount>4,000.00 sUSD</Amount>
+            <Amount>{maxDepositAmount}</Amount>
           </Intro>
           <Form>
             <PLarge>Enter deposit amount or select max available:</PLarge>

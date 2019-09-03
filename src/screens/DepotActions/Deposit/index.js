@@ -1,6 +1,4 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
-import Slider from '../../../components/Slider';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -12,34 +10,27 @@ import { Store } from '../../../store';
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
-const useGetIssuanceData = (walletAddress, sUSDBytes) => {
+const useGetDepotData = walletAddress => {
   const [data, setData] = useState({});
   useEffect(() => {
-    const getIssuanceData = async () => {
+    const getDepotData = async () => {
       try {
-        const results = await Promise.all([
-          snxJSConnector.snxJS.Synthetix.maxIssuableSynths(
-            walletAddress,
-            sUSDBytes
-          ),
-          snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
-        ]);
-        const [maxIssuableSynths, issuanceRatio] = results.map(
-          bigNumberFormatter
-        );
-        setData({ maxIssuableSynths, issuanceRatio });
+        const result = await snxJSConnector.snxJS.Depot.totalSellableDeposits();
+        setData({
+          totalSellableDeposits: bigNumberFormatter(result),
+        });
       } catch (e) {
         console.log(e);
       }
     };
-    getIssuanceData();
+    getDepotData();
   }, [walletAddress]);
   return data;
 };
 
 const Deposit = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const [depositAmount, setDepositAmount] = useState(null);
+  // const [depositSynths, setDepositAmount] = useState(null);
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
@@ -47,31 +38,11 @@ const Deposit = ({ onDestroy }) => {
     },
   } = useContext(Store);
 
-  const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
-  const { maxIssuableSynths, issuanceRatio } = useGetIssuanceData(
-    currentWallet,
-    sUSDBytes
-  );
-  let transactionError = null;
+  const { totalSellableDeposits } = useGetDepotData(currentWallet);
+  console.log(totalSellableDeposits);
   const onDeposit = async amount => {
     try {
-      setDepositAmount(amount);
-      handleNext(1);
-      let transaction;
-      if (amount === maxIssuableSynths) {
-        transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
-          sUSDBytes
-        );
-      } else {
-        transaction = await snxJSConnector.snxJS.Synthetix.issueSynths(
-          sUSDBytes,
-          snxJSConnector.utils.parseEther(amount.toString())
-        );
-      }
-      if (transaction) {
-        setTransactionInfo({ transactionHash: transaction.hash });
-        handleNext(2);
-      }
+      console.log(amount);
     } catch (e) {
       setTransactionInfo({ ...transactionInfo, transactionError: e });
       handleNext(2);
@@ -82,13 +53,12 @@ const Deposit = ({ onDestroy }) => {
   const props = {
     onDestroy,
     onDeposit,
-    maxIssuableSynths,
     goBack: handlePrev,
+    totalSellableDeposits,
+    ...transactionInfo,
+    // depositSynths,
     walletType,
     networkName,
-    depositAmount,
-    issuanceRatio,
-    ...transactionInfo,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (
