@@ -1,7 +1,8 @@
-/*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+
+import { formatCurrency } from '../../../helpers/formatters';
+import { SlidePage } from '../../../components/Slider';
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -10,15 +11,14 @@ import {
 import {
   PLarge,
   H1,
-  ButtonPrimaryLabel,
   Subtext,
-  InputTextLarge,
   DataHeaderLarge,
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
-  const { handleNext } = useContext(SliderContext);
+const Action = ({ onDestroy, onSend, transferableSNX }) => {
+  const [amount, setAmount] = useState('');
+  const [destinationWallet, setDestinationWallet] = useState('');
   return (
     <SlidePage>
       <Container>
@@ -27,14 +27,14 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/send.svg' big />
+            <ActionImage src="/images/actions/send.svg" big />
             <H1>SEND</H1>
             <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>TRANSFERRABLE AMOUNT:</DataHeaderLarge>
-              <Amount>500,000.00 SNX</Amount>
+              <DataHeaderLarge>TRANSFERABLE AMOUNT:</DataHeaderLarge>
+              <Amount>{formatCurrency(transferableSNX)} SNX</Amount>
             </Box>
           </Details>
         </Top>
@@ -42,30 +42,42 @@ const Action = ({ onDestroy }) => {
           <Form>
             <PLarge>Enter amount or select max available:</PLarge>
             <Input
-              placeholder='0.00'
+              onChange={e => setAmount(e.target.value)}
+              value={amount}
+              placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
+                    src="/images/sUSD-icon.svg"
+                    height="24px"
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
                 </Type>
               }
-              rightComponent={<ButtonMax />}
+              rightComponent={
+                <ButtonMax onClick={() => setAmount(transferableSNX)} />
+              }
             />
-            <PLarge marginTop='32px'>
+            <PLarge marginTop="32px">
               Enter wallet address to send funds to:
             </PLarge>
-            <Input placeholder='e.g. 0x3b18a4...' />
+            <Input
+              onChange={e => setDestinationWallet(e.target.value)}
+              value={destinationWallet}
+              placeholder="e.g. 0x3b18a4..."
+            />
           </Form>
         </Middle>
         <Bottom>
-          <Subtext marginBottom='32px'>
+          <Subtext marginBottom="32px">
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary
+            disabled={!destinationWallet || !amount}
+            onClick={() => onSend(amount, destinationWallet)}
+            margin="auto"
+          >
             SEND NOW
           </ButtonPrimary>
         </Bottom>

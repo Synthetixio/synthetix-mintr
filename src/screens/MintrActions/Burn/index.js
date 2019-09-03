@@ -63,7 +63,7 @@ const Burn = ({ onDestroy }) => {
       setBurnAmount(amount);
       handleNext(1);
       const amountToBurn =
-        amount === maxBurnAmount ? maxBurnAmount + 100 : amount;
+        amount === maxBurnAmount ? Number(maxBurnAmount) + 10 : amount;
       const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(
         sUSDBytes,
         snxJSConnector.utils.parseEther(amountToBurn.toString())

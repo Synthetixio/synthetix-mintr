@@ -10,12 +10,14 @@ const Input = ({
 }) => {
   return (
     <InputWrapper>
-      <LeftComponentWrapper>{leftComponent}</LeftComponentWrapper>
+      {leftComponent ? (
+        <LeftComponentWrapper>{leftComponent}</LeftComponentWrapper>
+      ) : null}
       <InputElement
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        type='text'
+        type="text"
       />
       <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
     </InputWrapper>

@@ -10,6 +10,7 @@ let snxJSConnector = {
     this.signer = this.snxJS.contractSettings.signer;
     this.provider = this.snxJS.contractSettings.provider;
     this.utils = this.snxJS.utils;
+    this.ethersUtils = SynthetixJs.utils;
     this.initialized = true;
   },
 };

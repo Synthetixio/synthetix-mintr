@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
+import { shortenAddress } from '../../helpers/formatters';
 import { Store } from '../../store';
 import { ThemeContext } from 'styled-components';
 
@@ -10,11 +11,6 @@ import { HeaderButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
 import { Globe } from '../Icons';
-
-const shortenAddress = address => {
-  if (!address) return null;
-  return address.slice(0, 6) + '...' + address.slice(-4, address.length);
-};
 
 const Header = ({ t, currentWallet }) => {
   const theme = useContext(ThemeContext);
