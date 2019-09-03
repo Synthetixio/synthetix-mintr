@@ -1,7 +1,10 @@
 /*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import snxJSConnector from '../../../helpers/snxJSConnector';
+import { SlidePage } from '../../../components/Slider';
+import { createTransaction } from '../../../ducks/transactions';
+
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -16,27 +19,26 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
-  const { handleNext } = useContext(SliderContext);
+const Action = ({ onDestroy, onDeposit, maxIssuableSynths }) => {
+  const [amount, setAmount] = useState('');
   return (
     <SlidePage>
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
-          <ButtonTertiary>Open in sX ↗</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/trade.svg' big />
-            <H1>TRADE</H1>
-            <PLarge>
-              Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
-              this window for a quick transfer, or click the ‘Open in sX ↗’
-              button above for more detail.
-            </PLarge>
+            <ActionImage src='/images/actions/deposit.svg' />
+            <H1>DEPOSIT</H1>
+            <PLarge>Amount available:</PLarge>
+            <Amount>4,000.00 sUSD</Amount>
           </Intro>
           <Form>
+            <PLarge>Enter deposit amount or select max available:</PLarge>
             <Input
+              onChange={e => setAmount(e.target.value)}
+              value={amount}
               placeholder='0.00'
               leftComponent={
                 <Type>
@@ -48,35 +50,22 @@ const Action = ({ onDestroy }) => {
                   <PLarge>sUSD</PLarge>
                 </Type>
               }
-              rightComponent={<ButtonMax />}
-            />
-            <PLarge>↓</PLarge>
-            <Input
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
+              rightComponent={
+                <ButtonMax
+                  onClick={() => {
+                    setAmount(maxIssuableSynths);
+                  }}
+                />
               }
-              rightComponent={<ButtonMax />}
             />
           </Form>
         </Top>
         <Bottom>
-          <Fees>
-            <Subtext>TRADING FEE: 0.3%</Subtext>
-            <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext>
-            <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-            </Subtext>
-          </Fees>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
-            TRADE NOW
+          <Subtext marginBottom='32px'>
+            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+          </Subtext>
+          <ButtonPrimary onClick={() => onDeposit(amount)} margin='auto'>
+            DEPOSIT NOW
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -109,31 +98,35 @@ const Top = styled.div`
 
 const Bottom = styled.div`
   height: auto;
-  margin-bottom: 32px;
+  margin-bottom: 64px;
 `;
 
 const Navigation = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  text-align: left;
 `;
 
 const Intro = styled.div`
-  max-width: 530px;
-  margin-bottom: 48px;
+  max-width: 380px;
+  margin-bottom: 64px;
 `;
 
 const ActionImage = styled.img`
-  height: ${props => (props.big ? '64px' : '48px')};
-  width: ${props => (props.big ? '64px' : '48px')};
+  height: 64px;
+  width: 64px;
   margin-bottom: 8px;
 `;
 
+const Amount = styled.span`
+  color: ${props => props.theme.colorStyles.body};
+  font-family: 'apercu-medium';
+  font-size: 24px;
+  margin: 8px 0px 0px 0px;
+`;
+
 const Form = styled.div`
-  margin: 0px 0px 24px 0px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
+  margin: 0px 0px 80px 0px;
 `;
 
 const Type = styled.div`
@@ -146,12 +139,7 @@ const Type = styled.div`
 
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
-  margin-left: 8px;
   color: ${props => props.theme.colorStyles.hyperlink};
-`;
-
-const Fees = styled.div`
-  margin-bottom: 32px;
 `;
 
 export default Action;

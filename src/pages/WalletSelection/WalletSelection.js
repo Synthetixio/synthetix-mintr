@@ -37,7 +37,7 @@ const WalletConnection = () => {
               state.ui.themeIsDark ? 'light' : 'dark'
             }.svg`}
           />
-          <ButtonTertiary>Mainnet</ButtonTertiary>
+          <ButtonTertiary>MAINNET</ButtonTertiary>
         </HeaderBlock>
         <HeaderBlock>
           <ButtonTertiary>What is Synthetix?</ButtonTertiary>
