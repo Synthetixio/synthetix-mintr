@@ -15,6 +15,7 @@ const Success = ({
   onDestroy,
   networkName,
   transactionHash,
+  SNXPrice,
 }) => {
   return (
     <Fragment>
@@ -37,7 +38,7 @@ const Success = ({
             <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
             <Amount>
               {issuanceRatio
-                ? formatCurrency(burnAmount / issuanceRatio)
+                ? formatCurrency(burnAmount / issuanceRatio / SNXPrice)
                 : '--'}{' '}
               SNX
             </Amount>

@@ -12,7 +12,13 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, mintAmount, issuanceRatio }) => {
+const Confirmation = ({
+  goBack,
+  walletType,
+  mintAmount,
+  issuanceRatio,
+  SNXPrice,
+}) => {
   return (
     <SlidePage>
       <Container>
@@ -39,7 +45,7 @@ const Confirmation = ({ goBack, walletType, mintAmount, issuanceRatio }) => {
               <DataHeaderLarge>BY LOCKING:</DataHeaderLarge>
               <Amount>
                 {issuanceRatio
-                  ? formatCurrency(mintAmount / issuanceRatio)
+                  ? formatCurrency(mintAmount / issuanceRatio / SNXPrice)
                   : '--'}{' '}
                 SNX
               </Amount>

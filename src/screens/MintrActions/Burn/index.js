@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useContext, useState, useEffect } from 'react';
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -13,6 +12,7 @@ const bigNumberFormatter = value =>
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
+  const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
   useEffect(() => {
     const getDebtData = async () => {
       try {
@@ -23,13 +23,15 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
           ),
           snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
           snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+          snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
         ]);
-        const [debt, sUSDBalance, issuanceRatio] = results.map(
+        const [debt, sUSDBalance, issuanceRatio, SNXPrice] = results.map(
           bigNumberFormatter
         );
         setData({
           issuanceRatio,
           maxBurnAmount: Math.min(debt, sUSDBalance),
+          SNXPrice,
         });
       } catch (e) {
         console.log(e);
@@ -51,7 +53,7 @@ const Burn = ({ onDestroy }) => {
   } = useContext(Store);
 
   const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
-  const { maxBurnAmount, issuanceRatio } = useGetDebtData(
+  const { maxBurnAmount, issuanceRatio, SNXPrice } = useGetDebtData(
     currentWallet,
     sUSDBytes
   );
@@ -64,7 +66,7 @@ const Burn = ({ onDestroy }) => {
         amount === maxBurnAmount ? maxBurnAmount + 100 : amount;
       const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(
         sUSDBytes,
-        snxJSConnector.utils.parseEther(amount.toString())
+        snxJSConnector.utils.parseEther(amountToBurn.toString())
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
@@ -80,12 +82,14 @@ const Burn = ({ onDestroy }) => {
   const props = {
     onDestroy,
     onBurn,
+    goBack: handlePrev,
     maxBurnAmount,
     issuanceRatio,
     ...transactionInfo,
     burnAmount,
     walletType,
     networkName,
+    SNXPrice,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (
