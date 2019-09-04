@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
+
+import { Store } from '../../store';
+import { updateCurrentTab } from '../../ducks/ui';
+
 import { Home, Depot, Transactions, Escrow } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 
-const defaultScreen = 'home';
-
-const renderButtons = (t, currentScreen, setScreen) => {
-  return ['home', 'depot', 'transactionsHistory', 'escrow'].map(page => {
+const TabRow = ({ state }) => {
+  const { t } = state;
+  const {
+    state: {
+      ui: { currentTab },
+    },
+    dispatch,
+  } = useContext(Store);
+  return ['home', 'depot', 'transactionsHistory', 'escrow'].map(tab => {
     return (
       <TabButton
-        key={page}
-        isSelected={page === currentScreen}
-        onClick={() => setScreen(page)}
+        key={tab}
+        isSelected={tab === currentTab}
+        onClick={() => updateCurrentTab(tab, dispatch)}
       >
         {/* i18next-extract-disable-next-line */}
-        {t(`mainContent.header.buttons.${page}`)}
+        {t(`mainContent.header.buttons.${tab}`)}
       </TabButton>
     );
   });
@@ -36,12 +45,18 @@ const renderScreen = screen => {
 };
 
 const MainContainer = ({ t }) => {
-  const [currentScreen, setScreen] = useState(defaultScreen);
+  const {
+    state: {
+      ui: { currentTab },
+    },
+  } = useContext(Store);
 
   return (
     <MainContainerWrapper>
-      <Header>{renderButtons(t, currentScreen, setScreen)}</Header>
-      {renderScreen(currentScreen)}
+      <Header>
+        <TabRow state={{ t }} />
+      </Header>
+      {renderScreen(currentTab)}
     </MainContainerWrapper>
   );
 };

@@ -1,6 +1,7 @@
-import React from 'react';
-
-const Info = ({ theme }) => {
+import React, { useContext } from 'react';
+import { ThemeContext } from 'styled-components';
+const Info = () => {
+  const theme = useContext(ThemeContext);
   return (
     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" fillRule="evenodd">

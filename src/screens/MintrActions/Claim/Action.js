@@ -1,38 +1,99 @@
-/*eslint-disable */
-import React, { useContext } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
-import {
-  ButtonPrimary,
-  ButtonTertiary,
-  ButtonMax,
-} from '../../../components/Button';
+/* eslint-disable */
+import React from 'react';
+import styled from 'styled-components';
+
+import snxJSConnector from '../../../helpers/snxJSConnector';
+
+import { formatCurrency } from '../../../helpers/formatters';
+
+import { SlidePage } from '../../../components/Slider';
+import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
   PMedium,
   H1,
   H5,
-  ButtonPrimaryLabel,
   Subtext,
-  InputTextLarge,
   DataHeaderLarge,
+  DataLarge,
+  TableHeaderMedium,
 } from '../../../components/Typography';
-import Input from '../../../components/Input';
+import {
+  TableWrapper,
+  Table,
+  THead,
+  TBody,
+  TH,
+  TR,
+  TD,
+} from '../../../components/ScheduleTable';
 import { Info } from '../../../components/Icons';
 
-const Action = ({ onDestroy }) => {
-  const theme = useContext(ThemeContext);
-  const { handleNext } = useContext(SliderContext);
+const bigNumberFormatter = value =>
+  Number(snxJSConnector.utils.formatEther(value));
+
+const Periods = ({ state = {} }) => {
+  const { feesByPeriod = [] } = state;
+  return (
+    <div>
+      <TableWrapper height="auto">
+        <Table cellSpacing="0">
+          <THead>
+            <TR>
+              <TH padding={'0 20px 10px 20px'}>
+                <TableHeaderMedium>sUSD</TableHeaderMedium>
+              </TH>
+              <TH padding={'0 20px 10px 20px'}>
+                <TableHeaderMedium>SNX</TableHeaderMedium>
+              </TH>
+              <TH padding={'0 20px 10px 20px'}>
+                <TableHeaderMedium>PERIOD</TableHeaderMedium>
+              </TH>
+            </TR>
+          </THead>
+          <TBody>
+            {feesByPeriod.map(({ fee, reward, closeIn }, i) => {
+              return (
+                <TR key={i}>
+                  <TD padding={'0 20px'}>
+                    <DataLarge>{formatCurrency(fee, 3)}</DataLarge>
+                  </TD>
+                  <TD padding={'0 20px'}>
+                    <DataLarge>{formatCurrency(reward, 3)}</DataLarge>
+                  </TD>
+                  <TD padding={'0 20px'}>
+                    <DataLarge>{closeIn}</DataLarge>
+                  </TD>
+                </TR>
+              );
+            })}
+          </TBody>
+        </Table>
+      </TableWrapper>
+    </div>
+  );
+};
+
+const Action = ({
+  onDestroy,
+  onClaim,
+  onClaimHistory,
+  feesByPeriod,
+  feesAreClaimable,
+  feesAvailable,
+}) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
-          <ButtonTertiary>Claim History ↗</ButtonTertiary>
+          <ButtonTertiary onClick={onClaimHistory}>
+            Claim History ↗
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/claim.svg' big />
+            <ActionImage src="/images/actions/claim.svg" big />
             <H1>CLAIM</H1>
             <PLarge>
               If you have locked your SNX and minted sUSD, you are eligible to
@@ -44,12 +105,14 @@ const Action = ({ onDestroy }) => {
         <Middle>
           <Schedule>
             <H5>Claimable periods:</H5>
-            <Table />
+            <Periods state={{ feesByPeriod }} />
             <Status>
-              <PMedium width='100%'>Fee Claim Status:</PMedium>
+              <PMedium width="100%">Fee Claim Status:</PMedium>
               <State>
-                <Highlighted marginRight='8px'>OPEN</Highlighted>
-                <Info theme={theme} width='4px' />
+                <Highlighted red={!feesAreClaimable} marginRight="8px">
+                  {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
+                </Highlighted>
+                <Info width="4px" />
               </State>
             </Status>
           </Schedule>
@@ -58,13 +121,23 @@ const Action = ({ onDestroy }) => {
               <DataHeaderLarge>
                 Your available sUSD trading rewards:
               </DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[0]
+                  ? formatCurrency(feesAvailable[0])
+                  : 0}{' '}
+                sUSD
+              </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>
                 Your available SNX staking rewards:
               </DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[1]
+                  ? formatCurrency(feesAvailable[1])
+                  : 0}{' '}
+                SNX
+              </Amount>
             </Box>
           </Details>
         </Middle>
@@ -74,7 +147,11 @@ const Action = ({ onDestroy }) => {
               GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
             </Subtext>
           </Fees>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary
+            disabled={!feesAreClaimable}
+            onClick={onClaim}
+            margin="auto"
+          >
             CLAIM NOW
           </ButtonPrimary>
           <Note>
@@ -149,13 +226,8 @@ const Schedule = styled.div`
   height: auto;
   width: 60%;
   margin: 8px 16px 8px 0px;
-  padding: 24px 32px;
+  padding: 20px;
   text-align: left;
-`;
-
-const Table = styled.div`
-  background-color: ${props => props.theme.colorStyles.borders};
-  height: 60%;
 `;
 
 const Status = styled.div`
@@ -163,7 +235,6 @@ const Status = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
 `;
 
 const State = styled.div`
@@ -199,7 +270,10 @@ const Amount = styled.span`
 const Highlighted = styled.span`
   font-family: 'apercu-bold';
   margin: 0px 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
+  color: ${props =>
+    props.red
+      ? props.theme.colorStyles.brandRed
+      : props.theme.colorStyles.hyperlink};
 `;
 
 const Fees = styled.div`

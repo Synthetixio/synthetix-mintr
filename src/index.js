@@ -10,6 +10,7 @@ const initialState = {
   ui: {
     themeIsDark: localStorage.getItem('dark') === 'true' || false,
     currentPage: 'walletConnection',
+    currentTab: 'home',
   },
   wallet: {
     unlocked: false,

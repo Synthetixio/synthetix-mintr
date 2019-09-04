@@ -1,6 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+
+import { formatCurrency } from '../../../helpers/formatters';
+
+import { SlidePage } from '../../../components/Slider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -10,37 +13,48 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = () => {
-  const { handlePrev } = useContext(SliderContext);
-  const { handleNext } = useContext(SliderContext);
+const Confirmation = ({ goBack, walletType, feesAvailable }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/wallets/ledger.svg' big />
+            <ActionImage
+              src={`/images/wallets/${walletType.toLowerCase()}.svg`}
+              big
+            />
             <PageTitle>Please confirm transaction</PageTitle>
             <PLarge>
-              To continue, follow the prompts on your Ledger Wallet.
+              {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
               <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[0]
+                  ? formatCurrency(feesAvailable[0])
+                  : 0}{' '}
+                sUSD
+              </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[1]
+                  ? formatCurrency(feesAvailable[1])
+                  : 0}{' '}
+                SNX
+              </Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
-          <Subtext onClick={handleNext}>Waiting for user response...</Subtext>
+          <Spinner margin="auto" />
+          <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
           <Fees>

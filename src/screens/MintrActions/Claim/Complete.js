@@ -1,6 +1,9 @@
-import React, { useContext } from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+
+import { formatCurrency } from '../../../helpers/formatters';
+
+import { SlidePage } from '../../../components/Slider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,
@@ -8,15 +11,14 @@ import {
   DataHeaderLarge,
 } from '../../../components/Typography';
 
-const Complete = () => {
-  const { handleNext } = useContext(SliderContext);
+const Success = ({ onDestroy, feesAvailable }) => {
   return (
     <SlidePage>
       <Container>
         <Top>
           <Intro>
-            <ActionImage src='/images/success.svg' big />
-            <PageTitle>Trading in progress!</PageTitle>
+            <ActionImage src="/images/success.svg" big />
+            <PageTitle>Claiming in progress!</PageTitle>
             <PLarge>
               Sent to the Ethereum network and will be available in your wallet
               shortly. You may close this window as the transaction completes in
@@ -26,22 +28,68 @@ const Complete = () => {
           <Details>
             <Box>
               <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[0]
+                  ? formatCurrency(feesAvailable[0])
+                  : 0}{' '}
+                sUSD
+              </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
+              <Amount>
+                {feesAvailable && feesAvailable[1]
+                  ? formatCurrency(feesAvailable[1])
+                  : 0}{' '}
+                SNX
+              </Amount>
             </Box>
           </Details>
         </Top>
         <Bottom>
           <Buttons>
             <ButtonSecondary>VIEW ON ETHERSCAN</ButtonSecondary>
-            <ButtonPrimary onClick={handleNext}>
+            <ButtonPrimary onClick={onDestroy}>
               FINISH & RETURN HOME
             </ButtonPrimary>
           </Buttons>
         </Bottom>
+      </Container>
+    </SlidePage>
+  );
+};
+
+const Failure = ({ transactionError, onDestroy }) => {
+  return (
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/failure.svg" big />
+          <PageTitle>Something went wrong...</PageTitle>
+          {transactionError.code ? (
+            <PLarge>Code: {transactionError.code}</PLarge>
+          ) : null}
+          <PLarge>{transactionError.message}</PLarge>
+        </Intro>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
+  );
+};
+
+const Complete = props => {
+  return (
+    <SlidePage>
+      <Container>
+        {props && props.transactionError ? (
+          <Failure {...props} />
+        ) : (
+          <Success {...props} />
+        )}
       </Container>
     </SlidePage>
   );
@@ -103,8 +151,8 @@ const Amount = styled.span`
 
 const Buttons = styled.div`
   height: auto;
-  & :first-child {
-    margin-bottom: 24px;
+  & > :last-child {
+    margin-top: 24px;
   }
 `;
 
