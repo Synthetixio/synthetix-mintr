@@ -18,7 +18,7 @@ const Landing = () => {
               state.ui.themeIsDark ? 'light' : 'dark'
             }.svg`}
           />
-          <ButtonTertiary>Mainnet</ButtonTertiary>
+          <ButtonTertiary>MAINNET</ButtonTertiary>
         </HeaderBlock>
         <HeaderBlock>
           <ButtonTertiary>What is Synthetix?</ButtonTertiary>
@@ -35,17 +35,17 @@ const Landing = () => {
         <BodyContent>
           <Functionalities>
             <Functionality>
-              <Icon src="images/actions/mint.svg" />
+              <Icon src='images/actions/mint.svg' />
               <LandingH2>Mint Synths</LandingH2>
               <LandingPLarge>By locking up SNX collateral</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src="images/actions/burn.svg" />
+              <Icon src='images/actions/burn.svg' />
               <LandingH2>Burn Synths</LandingH2>
               <LandingPLarge>To unlock SNX</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src="images/actions/claim.svg" />
+              <Icon src='images/actions/claim.svg' />
               <LandingH2>Claim Fees</LandingH2>
               <LandingPLarge>From the Synthetix Network</LandingPLarge>
             </Functionality>

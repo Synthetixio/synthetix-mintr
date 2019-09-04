@@ -99,7 +99,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataMega: {
-      as: 'span',
+      as: 'td',
       fontSize: [10, 12, 24],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -108,7 +108,7 @@ const theme = mode => {
       letterSpacing: 0.2,
     },
     dataLarge: {
-      as: 'span',
+      as: 'td',
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -117,7 +117,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataSmall: {
-      as: 'span',
+      as: 'td',
       fontSize: [10, 12],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -126,7 +126,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataHeaderLarge: {
-      as: 'span',
+      as: 'th',
       fontSize: [12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -135,7 +135,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataHeaderSmall: {
-      as: 'span',
+      as: 'th',
       fontSize: [10, 12],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 600,
@@ -144,7 +144,7 @@ const theme = mode => {
       letterSpacing: 1,
     },
     tableHeaderMedium: {
-      as: 'span',
+      as: 'th',
       fontSize: [12, 14],
       fontFamily: fontFamilies.bold,
       fontWeight: 700,
@@ -209,7 +209,7 @@ const theme = mode => {
       fontWeight: 500,
       fontFamily: fontFamilies.regular,
       color: colorStyles.buttonTertiaryText,
-      letterSpacing: 1,
+      letterSpacing: 0.6,
     },
     inputTextLarge: {
       as: 'span',

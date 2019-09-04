@@ -20,7 +20,6 @@ const Button = styled.button`
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  text-transform: uppercase;
   transition: all ease-in 0.1s;
   &:hover,
   &:focus {

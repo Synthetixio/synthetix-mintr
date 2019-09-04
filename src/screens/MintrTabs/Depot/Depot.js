@@ -1,16 +1,20 @@
 /* eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, useState, Fragment } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { PageTitle, PLarge, H2, H5 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 import { ButtonTertiary } from '../../../components/Button';
 import { List, THead, TBody, TR, TH, TD } from '../../../components/List';
-import { Info } from '../../../components/Icons';
+import { Plus } from '../../../components/Icons';
 
-const Depot = () => {
+import DepotAction from '../../DepotActions';
+
+const initialScenario = null;
+
+const renderDepotButtons = setCurrentScenario => {
   const theme = useContext(ThemeContext);
   return (
-    <PageContainer>
+    <Fragment>
       <PageTitle>The Depot: $206,292.25 sUSD</PageTitle>
       <PLarge>
         Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap,
@@ -19,26 +23,22 @@ const Depot = () => {
         your wallet at any time. Note: minimum deposit is 50 sUSD.
       </PLarge>
       <ButtonRow>
-        <Button>
-          <ButtonContainer>
-            <ActionImage src='/images/actions/deposit.svg' />
-            <H2>DEPOSIT</H2>
-            <PLarge>Amount available:</PLarge>
-            <Amount>4,000.00 sUSD</Amount>
-          </ButtonContainer>
-        </Button>
-        <Button>
-          <ButtonContainer>
-            <ActionImage src='/images/actions/withdraw.svg' />
-            <H2>WITHDRAW</H2>
-            <PLarge>Amount available:</PLarge>
-            <Amount>4,000.00 sUSD</Amount>
-          </ButtonContainer>
-        </Button>
+        {['deposit', 'withdraw'].map(action => {
+          return (
+            <Button key={action} onClick={() => setCurrentScenario(action)}>
+              <ButtonContainer>
+                <ActionImage src={`/images/actions/${action}.svg`} />
+                <H2>{action}</H2>
+                <PLarge>Amount available:</PLarge>
+                <Amount>4,000.00 sUSD</Amount>
+              </ButtonContainer>
+            </Button>
+          );
+        })}
       </ButtonRow>
       <Activity>
         <ActivityHeader>
-          <H5>Recent Activity:</H5>
+          <H5 marginTop='10px'>Recent Activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -61,7 +61,7 @@ const Depot = () => {
               <TD>500.00 sUSD</TD>
               <TD>14:00 | 4 Oct 2019</TD>
               <TD>
-                <Info theme={theme} />
+                <Plus theme={theme} />
               </TD>
             </TR>
             <TR>
@@ -70,7 +70,7 @@ const Depot = () => {
               <TD>500.00 sUSD</TD>
               <TD>14:00 | 4 Oct 2019</TD>
               <TD>
-                <Info theme={theme} />
+                <Plus theme={theme} />
               </TD>
             </TR>
             <TR>
@@ -79,12 +79,25 @@ const Depot = () => {
               <TD>500.00 sUSD</TD>
               <TD>14:00 | 4 Oct 2019</TD>
               <TD>
-                <Info theme={theme} />
+                <Plus theme={theme} />
               </TD>
             </TR>
           </TBody>
         </List>
       </Activity>
+    </Fragment>
+  );
+};
+
+const Depot = () => {
+  const [currentScenario, setCurrentScenario] = useState(initialScenario);
+  return (
+    <PageContainer>
+      <DepotAction
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+      />
+      {renderDepotButtons(setCurrentScenario)}
     </PageContainer>
   );
 };

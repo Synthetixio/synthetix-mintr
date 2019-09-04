@@ -71,7 +71,7 @@ const RewardInfo = ({ state }) => {
     );
   }
   return (
-    <Row padding="0px 8px">
+    <Row padding='0px 8px'>
       {content}
       <Info theme={theme} />
     </Row>
@@ -81,7 +81,7 @@ const RewardInfo = ({ state }) => {
 const CollRatios = ({ state }) => {
   const { debtData } = state;
   return (
-    <Row margin="0 0 22px 0">
+    <Row margin='0 0 22px 0'>
       <Box>
         <Figure>
           {debtData.currentCRatio
@@ -113,7 +113,7 @@ const Pie = ({ state }) => {
     balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
   return (
     <Box full={true}>
-      <Row padding="32px 16px">
+      <Row padding='32px 16px'>
         <PieChart
           data={[
             {
@@ -129,7 +129,7 @@ const Pie = ({ state }) => {
           ]}
         />
         <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">
+          <DataHeaderLarge margin='0px 0px 24px 0px'>
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
@@ -178,7 +178,7 @@ const processTableData = state => {
 const BalanceTable = ({ state }) => {
   const data = processTableData(state);
   return (
-    <Row margin="22px 0 0 0">
+    <Row margin='22px 0 0 0'>
       <Table
         header={[
           { key: 'rowLegend', value: '' },
@@ -216,28 +216,26 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Current Balances & Prices:</H5>
           </ContainerHeader>
-          <Balances state={{ balances, prices, theme }}></Balances>
+          <Balances state={{ balances, prices, theme }} />
         </Container>
         <Container curved={true}>
-          <RewardInfo state={{ rewardData, theme }}></RewardInfo>
+          <RewardInfo state={{ rewardData, theme }} />
         </Container>
         <Container>
           <ContainerHeader>
             <H5>Wallet Details:</H5>
             <DataHeaderLarge
-              margin="0px 0px 22px 0px"
+              margin='0px 0px 22px 0px'
               color={theme.colorStyles.body}
             >
               {/* USER ID: #100000000 */}
             </DataHeaderLarge>
           </ContainerHeader>
-          <CollRatios state={{ debtData }}></CollRatios>
-          <Pie state={{ balances, debtData, theme }}></Pie>
-          <BalanceTable
-            state={{ balances, synthData, debtData, prices }}
-          ></BalanceTable>
-          <Row margin="18px 0 0 0 ">
-            <Link href="https://synthetix.exchange" target="_blank">
+          <CollRatios state={{ debtData }} />
+          <Pie state={{ balances, debtData, theme }} />
+          <BalanceTable state={{ balances, synthData, debtData, prices }} />
+          <Row margin='18px 0 0 0 '>
+            <Link href='https://synthetix.exchange' target='_blank'>
               <ButtonTertiaryLabel>
                 Go to Synthetix.Exchange
               </ButtonTertiaryLabel>
@@ -360,7 +358,7 @@ const Link = styled.a`
   text-decoration: none;
   cursor: pointer;
   height: 48px;
-  padding: 16px;
+  padding: 16px 20px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 2px;
 `;
