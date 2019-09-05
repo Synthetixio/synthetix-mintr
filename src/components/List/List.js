@@ -1,60 +1,55 @@
 import styled from 'styled-components';
 
-import { TableDataMedium, TableHeaderMedium } from '../Typography';
-
-export const List = styled.table`
+export const List = styled.div`
   width: 100%;
-  color: white;
-  border-collapse: separate;
-  border-spacing: 0 8px;
 `;
 
-export const THead = styled.thead`
-  tr {
-    height: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+export const HeaderRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+  & > :last-child {
+    text-align: right;
   }
 `;
 
-export const TBody = styled.tbody`
-  tr {
-    background-color: ${props => props.theme.colorStyles.panels};
-  }
-  & tr:hover {
-    background-color: ${props => props.theme.colorStyles.listBackgroundFocus};
-    transform: scale(1.02);
-    border-collapse: collapse;
-    border-spacing: 0 8px;
-  }
-`;
-
-export const TR = styled.tr`
-  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  text-align: right;
-  cursor: pointer;
-  & > td:first-child {
+export const BodyRow = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: ${props => (props.expanded ? '200px' : 'auto')};
+  background-color: ${props => props.theme.colorStyles.panels};
+  & > :first-child {
     border-left: 1px solid ${props => props.theme.colorStyles.borders};
   }
-  & > td:last-child {
+  & > :last-child {
     border-right: 1px solid ${props => props.theme.colorStyles.borders};
+    justify-content: flex-end;
   }
-  & > th:first-child,
-  td:first-child {
-    text-align: left;
-  }
-`;
-
-export const TH = styled(TableHeaderMedium)`
-  text-transform: uppercase;
-  padding: 0 20px;
-`;
-
-export const TD = styled(TableDataMedium)`
-  padding: 0 20px;
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
   border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
+`;
+
+export const HeaderCell = styled.div`
+  padding: 0 20px;
+  flex: 1;
+`;
+
+export const ExpandableRow = styled.div`
+  height: ${props => (props.expanded ? '255px' : '78px')};
+  overflow: hidden;
+  transition: height 0.2s ease-in-out;
+`;
+
+export const Cell = styled.div`
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
   height: 56px;
-  width: auto;
+  text-align: left;
+  white-space: nowrap;
+  flex: 1;
 `;

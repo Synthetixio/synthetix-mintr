@@ -4,11 +4,25 @@ import styled from 'styled-components';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency } from '../../../helpers/formatters';
 
-import { PageTitle, PLarge, H2, H5 } from '../../../components/Typography';
+import {
+  PageTitle,
+  PLarge,
+  H2,
+  H5,
+  TableDataMedium,
+  TableHeaderMedium,
+} from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 import { ButtonTertiary } from '../../../components/Button';
-import { List, THead, TBody, TR, TH, TD } from '../../../components/List';
-import { Plus } from '../../../components/Icons';
+import {
+  List,
+  HeaderRow,
+  BodyRow,
+  Cell,
+  HeaderCell,
+  ExpandableRow,
+} from '../../../components/List';
+import { Plus, Minus } from '../../../components/Icons';
 
 import DepotAction from '../../DepotActions';
 
@@ -17,7 +31,84 @@ const bigNumberFormatter = value =>
 
 const initialScenario = null;
 
-const renderTable = () => {
+const renderHiddenContent = () => {
+  const data = [
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+  ];
+  return (
+    <HiddenContent>
+      <HeaderRow>
+        {['Type', 'Amount', 'Rate', 'Date | Time', 'View'].map(
+          headerElement => {
+            return (
+              <HeaderCell key={headerElement}>
+                <TableHeaderMedium>{headerElement}</TableHeaderMedium>
+              </HeaderCell>
+            );
+          }
+        )}
+      </HeaderRow>
+      <table style={{ width: '100%' }}>
+        <tbody>
+          {data.map((dataElement, i) => {
+            return (
+              <tr key={i}>
+                <td>
+                  <TypeImage src="/images/actions/deposit.svg" />
+                  <TableDataMedium>Deposit</TableDataMedium>
+                </td>
+                <td>
+                  <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
+                </td>
+                <td>
+                  <TableDataMedium>{dataElement.rate} sUSD</TableDataMedium>
+                </td>
+                <td>
+                  <TableDataMedium>{dataElement.date}</TableDataMedium>
+                </td>
+                <td>VIEW</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </HiddenContent>
+  );
+};
+
+const ExpandableTable = () => {
+  const data = [
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+    {
+      amount: '2,000.00',
+      remaining: '500.00',
+      date: '14:00 | 4 Oct 2019',
+    },
+  ];
+  const [expandedElements, setExpanded] = useState([]);
   return (
     <Fragment>
       <Activity>
@@ -29,44 +120,54 @@ const renderTable = () => {
           </MoreButtons>
         </ActivityHeader>
         <List>
-          <THead>
-            <TH>Type</TH>
-            <TH>Amount</TH>
-            <TH>Remaining</TH>
-            <TH>Date | Time</TH>
-            <TH>Details</TH>
-          </THead>
-          <TBody>
-            <TR>
-              <TD>
-                <TypeImage src="/images/actions/deposit.svg" /> Deposit
-              </TD>
-              <TD>2,000.00 sUSD</TD>
-              <TD>500.00 sUSD</TD>
-              <TD>14:00 | 4 Oct 2019</TD>
-              <TD>
-                <Plus />
-              </TD>
-            </TR>
-            <TR>
-              <TD>Deposit</TD>
-              <TD>2,000.00 sUSD</TD>
-              <TD>500.00 sUSD</TD>
-              <TD>14:00 | 4 Oct 2019</TD>
-              <TD>
-                <Plus />
-              </TD>
-            </TR>
-            <TR>
-              <TD>Deposit</TD>
-              <TD>2,000.00 sUSD</TD>
-              <TD>500.00 sUSD</TD>
-              <TD>14:00 | 4 Oct 2019</TD>
-              <TD>
-                <Plus />
-              </TD>
-            </TR>
-          </TBody>
+          <HeaderRow>
+            {['Type', 'Amount', 'Remaining', 'Date | Time', 'Details'].map(
+              headerElement => {
+                return (
+                  <HeaderCell key={headerElement}>
+                    <TableHeaderMedium>{headerElement}</TableHeaderMedium>
+                  </HeaderCell>
+                );
+              }
+            )}
+          </HeaderRow>
+          {data.map((dataElement, i) => {
+            const isExpanded = expandedElements.includes(i);
+            return (
+              <ExpandableRow key={i} expanded={isExpanded}>
+                <BodyRow
+                  key={i}
+                  onClick={() =>
+                    setExpanded(currentExpandedState => {
+                      if (currentExpandedState.includes(i)) {
+                        return currentExpandedState.filter(
+                          state => state !== i
+                        );
+                      } else return [...currentExpandedState, i];
+                    })
+                  }
+                >
+                  <Cell>
+                    <TypeImage src="/images/actions/deposit.svg" />
+                    <TableDataMedium>Deposit</TableDataMedium>
+                  </Cell>
+                  <Cell>
+                    <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
+                  </Cell>
+                  <Cell>
+                    <TableDataMedium>
+                      {dataElement.remaining} sUSD
+                    </TableDataMedium>
+                  </Cell>
+                  <Cell>
+                    <TableDataMedium>{dataElement.date}</TableDataMedium>
+                  </Cell>
+                  <Cell>{isExpanded ? <Minus> </Minus> : <Plus />}</Cell>
+                </BodyRow>
+                {renderHiddenContent()}
+              </ExpandableRow>
+            );
+          })}
         </List>
       </Activity>
     </Fragment>
@@ -126,7 +227,7 @@ const Depot = () => {
           );
         })}
       </ButtonRow>
-      {renderTable()}
+      <ExpandableTable></ExpandableTable>
     </PageContainer>
   );
 };
@@ -190,8 +291,16 @@ const MoreButtons = styled.span`
   }
 `;
 
-const TypeImage = styled.div`
-  width: 8px;
+const TypeImage = styled.img`
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+`;
+
+const HiddenContent = styled.div`
+  padding: 25px;
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  border-top-width: 0;
 `;
 
 export default Depot;
