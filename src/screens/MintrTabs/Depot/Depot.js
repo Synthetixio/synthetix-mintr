@@ -188,7 +188,7 @@ const useGetDepotData = walletAddress => {
         const [totalSellableDeposits, sUSDBalance] = results.map(
           bigNumberFormatter
         );
-        console.log('here', sUSDBalance);
+
         setData({
           totalSellableDeposits,
           sUSDBalance,
@@ -210,13 +210,13 @@ const Depot = () => {
     },
   } = useContext(Store);
   const { totalSellableDeposits, sUSDBalance } = useGetDepotData(currentWallet);
-  console.log(sUSDBalance);
+  const props = {
+    onDestroy: () => setCurrentScenario(null),
+    sUSDBalance,
+  };
   return (
     <PageContainer>
-      <DepotAction
-        action={currentScenario}
-        onDestroy={() => setCurrentScenario(null)}
-      />
+      <DepotAction action={currentScenario} {...props} />
       <PageTitle>
         The Depot: ${formatCurrency(totalSellableDeposits)} sUSD
       </PageTitle>

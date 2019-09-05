@@ -6,42 +6,15 @@ import Complete from './Complete';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
 
-import Depot from '../../MintrTabs/Depot';
-
-// import snxJSConnector from '../../../helpers/snxJSConnector';
-
-// const bigNumberFormatter = value =>
-//   Number(snxJSConnector.utils.formatEther(value));
-
-// const useGetDepotData = walletAddress => {
-//   const [data, setData] = useState({});
-//   useEffect(() => {
-//     const getDepotData = async () => {
-//       try {
-//         const result = await snxJSConnector.snxJS.Depot.totalSellableDeposits();
-//         setData({
-//           totalSellableDeposits: bigNumberFormatter(result),
-//         });
-//       } catch (e) {
-//         console.log(e);
-//       }
-//     };
-//     getDepotData();
-//   }, [walletAddress]);
-//   return data;
-// };
-
-const Deposit = ({ onDestroy }) => {
+const Deposit = ({ onDestroy, sUSDBalance }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const [depositSynths, setDepositAmount] = useState(null);
+  const [depositAmount, setDepositAmount] = useState(null);
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
-      wallet: { currentWallet, walletType, networkName },
+      wallet: { walletType, networkName },
     },
   } = useContext(Store);
-
-  const { totalSellableDeposits } = Depot(currentWallet);
 
   const onDeposit = async amount => {
     try {
@@ -58,10 +31,9 @@ const Deposit = ({ onDestroy }) => {
     onDestroy,
     onDeposit,
     goBack: handlePrev,
-    totalSellableDeposits,
+    sUSDBalance,
     ...transactionInfo,
-    depositSynths,
-    setDepositAmount,
+    depositAmount,
     walletType,
     networkName,
   };

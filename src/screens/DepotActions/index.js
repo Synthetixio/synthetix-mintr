@@ -15,12 +15,12 @@ const getActionComponent = action => {
   }
 };
 
-const DepotAction = ({ action, onDestroy }) => {
-  if (!action) return null;
-  const ActionComponent = getActionComponent(action);
+const DepotAction = props => {
+  if (!props.action) return null;
+  const ActionComponent = getActionComponent(props.action);
   return (
     <Slider>
-      <ActionComponent onDestroy={onDestroy} />
+      <ActionComponent {...props} />
     </Slider>
   );
 };

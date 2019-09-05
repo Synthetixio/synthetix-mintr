@@ -1,9 +1,6 @@
-/*eslint-disable */
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SlidePage } from '../../../components/Slider';
-import { createTransaction } from '../../../ducks/transactions';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import {
@@ -11,13 +8,7 @@ import {
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
 const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
@@ -30,7 +21,7 @@ const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/deposit.svg' />
+            <ActionImage src="/images/actions/deposit.svg" />
             <H1>DEPOSIT</H1>
             <PLarge>Amount available:</PLarge>
             <Amount>${formatCurrency(sUSDBalance)}</Amount>
@@ -40,12 +31,12 @@ const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
             <Input
               onChange={e => setAmount(e.target.value)}
               value={amount}
-              placeholder='0.00'
+              placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
+                    src="/images/sUSD-icon.svg"
+                    height="24px"
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -62,10 +53,10 @@ const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
+          <Subtext marginBottom="32px">
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onDeposit(amount)} margin='auto'>
+          <ButtonPrimary onClick={() => onDeposit(amount)} margin="auto">
             DEPOSIT NOW
           </ButtonPrimary>
         </Bottom>
