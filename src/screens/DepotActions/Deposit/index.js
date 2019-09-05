@@ -1,36 +1,39 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
 
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import Depot from '../../MintrTabs/Depot';
 
-const useGetDepotData = walletAddress => {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    const getDepotData = async () => {
-      try {
-        const result = await snxJSConnector.snxJS.Depot.totalSellableDeposits();
-        setData({
-          totalSellableDeposits: bigNumberFormatter(result),
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getDepotData();
-  }, [walletAddress]);
-  return data;
-};
+// import snxJSConnector from '../../../helpers/snxJSConnector';
+
+// const bigNumberFormatter = value =>
+//   Number(snxJSConnector.utils.formatEther(value));
+
+// const useGetDepotData = walletAddress => {
+//   const [data, setData] = useState({});
+//   useEffect(() => {
+//     const getDepotData = async () => {
+//       try {
+//         const result = await snxJSConnector.snxJS.Depot.totalSellableDeposits();
+//         setData({
+//           totalSellableDeposits: bigNumberFormatter(result),
+//         });
+//       } catch (e) {
+//         console.log(e);
+//       }
+//     };
+//     getDepotData();
+//   }, [walletAddress]);
+//   return data;
+// };
 
 const Deposit = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  // const [depositSynths, setDepositAmount] = useState(null);
+  const [depositSynths, setDepositAmount] = useState(null);
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
@@ -38,11 +41,12 @@ const Deposit = ({ onDestroy }) => {
     },
   } = useContext(Store);
 
-  const { totalSellableDeposits } = useGetDepotData(currentWallet);
-  console.log(totalSellableDeposits);
+  const { totalSellableDeposits } = Depot(currentWallet);
+
   const onDeposit = async amount => {
     try {
-      console.log(amount);
+      setDepositAmount(amount);
+      handleNext(1);
     } catch (e) {
       setTransactionInfo({ ...transactionInfo, transactionError: e });
       handleNext(2);
@@ -56,7 +60,8 @@ const Deposit = ({ onDestroy }) => {
     goBack: handlePrev,
     totalSellableDeposits,
     ...transactionInfo,
-    // depositSynths,
+    depositSynths,
+    setDepositAmount,
     walletType,
     networkName,
   };

@@ -23,7 +23,7 @@ const Confirmation = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
@@ -53,7 +53,7 @@ const Confirmation = ({
           </Details>
         </Top>
         <Loading>
-          <Spinner margin="auto" />
+          <Spinner margin='auto' />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SlidePage } from '../../../components/Slider';
 import { createTransaction } from '../../../ducks/transactions';
+import { formatCurrency } from '../../../helpers/formatters';
 
 import {
   ButtonPrimary,
@@ -19,7 +20,7 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onDeposit, maxDepositAmount }) => {
+const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
   const [amount, setAmount] = useState('');
   return (
     <SlidePage>
@@ -32,7 +33,7 @@ const Action = ({ onDestroy, onDeposit, maxDepositAmount }) => {
             <ActionImage src='/images/actions/deposit.svg' />
             <H1>DEPOSIT</H1>
             <PLarge>Amount available:</PLarge>
-            <Amount>{maxDepositAmount}</Amount>
+            <Amount>${formatCurrency(sUSDBalance)}</Amount>
           </Intro>
           <Form>
             <PLarge>Enter deposit amount or select max available:</PLarge>
@@ -53,7 +54,7 @@ const Action = ({ onDestroy, onDeposit, maxDepositAmount }) => {
               rightComponent={
                 <ButtonMax
                   onClick={() => {
-                    setAmount(maxIssuableSynths);
+                    setAmount(sUSDBalance);
                   }}
                 />
               }

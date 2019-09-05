@@ -17,7 +17,7 @@ const Confirmation = ({ goBack, walletType, depositAmount }) => {
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
