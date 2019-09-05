@@ -1,6 +1,9 @@
-/* eslint-disable */
-import React, { useContext, useState, Fragment } from 'react';
-import styled, { ThemeContext } from 'styled-components';
+import React, { useEffect, useState, Fragment } from 'react';
+import styled from 'styled-components';
+
+import snxJSConnector from '../../../helpers/snxJSConnector';
+import { formatCurrency } from '../../../helpers/formatters';
+
 import { PageTitle, PLarge, H2, H5 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 import { ButtonTertiary } from '../../../components/Button';
@@ -9,36 +12,10 @@ import { Plus } from '../../../components/Icons';
 
 import DepotAction from '../../DepotActions';
 
-const initialScenario = null;
+const bigNumberFormatter = value =>
+  Number(snxJSConnector.utils.formatEther(value));
 
-const renderDepotButtons = setCurrentScenario => {
-  const theme = useContext(ThemeContext);
-  return (
-    <Fragment>
-      <PageTitle>The Depot: $206,292.25 sUSD</PageTitle>
-      <PLarge>
-        Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap,
-        and you’ll receive the proceeds of all sales in ETH. While your sUSD is
-        in the queue waiting to be sold, you can withdraw your sUSD back into
-        your wallet at any time. Note: minimum deposit is 50 sUSD.
-      </PLarge>
-      <ButtonRow>
-        {['deposit', 'withdraw'].map(action => {
-          return (
-            <Button key={action} onClick={() => setCurrentScenario(action)}>
-              <ButtonContainer>
-                <ActionImage src={`/images/actions/${action}.svg`} />
-                <H2>{action}</H2>
-                <PLarge>Amount available:</PLarge>
-                <Amount>4,000.00 sUSD</Amount>
-              </ButtonContainer>
-            </Button>
-          );
-        })}
-      </ButtonRow>
-    </Fragment>
-  );
-};
+const initialScenario = null;
 
 const renderTable = () => {
   return (
@@ -96,15 +73,59 @@ const renderTable = () => {
   );
 };
 
+const useGetDepotData = () => {
+  const [data, setData] = useState({});
+  useEffect(() => {
+    const getDepotData = async () => {
+      try {
+        const [totalSellableDeposits] = await Promise.all([
+          snxJSConnector.snxJS.Depot.totalSellableDeposits(),
+        ]);
+        setData({
+          totalSellableDeposits: bigNumberFormatter(totalSellableDeposits),
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getDepotData();
+  }, []);
+  return data;
+};
+
 const Depot = () => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
+  const { totalSellableDeposits } = useGetDepotData();
+
   return (
     <PageContainer>
       <DepotAction
         action={currentScenario}
         onDestroy={() => setCurrentScenario(null)}
       />
-      {renderDepotButtons(setCurrentScenario)}
+      <PageTitle>
+        The Depot: ${formatCurrency(totalSellableDeposits)} sUSD
+      </PageTitle>
+      <PLarge>
+        Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap,
+        and you’ll receive the proceeds of all sales in ETH. While your sUSD is
+        in the queue waiting to be sold, you can withdraw your sUSD back into
+        your wallet at any time. Note: minimum deposit is 50 sUSD.
+      </PLarge>
+      <ButtonRow>
+        {['deposit', 'withdraw'].map(action => {
+          return (
+            <Button key={action} onClick={() => setCurrentScenario(action)}>
+              <ButtonContainer>
+                <ActionImage src={`/images/actions/${action}.svg`} />
+                <H2>{action}</H2>
+                <PLarge>Amount available:</PLarge>
+                <Amount>4,000.00 sUSD</Amount>
+              </ButtonContainer>
+            </Button>
+          );
+        })}
+      </ButtonRow>
       {renderTable()}
     </PageContainer>
   );
