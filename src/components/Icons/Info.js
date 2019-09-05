@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
+
 const Info = () => {
   const theme = useContext(ThemeContext);
   return (

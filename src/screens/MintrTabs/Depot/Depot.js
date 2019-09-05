@@ -36,9 +36,16 @@ const renderDepotButtons = setCurrentScenario => {
           );
         })}
       </ButtonRow>
+    </Fragment>
+  );
+};
+
+const renderTable = () => {
+  return (
+    <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop='10px'>Recent Activity:</H5>
+          <H5 marginTop="10px">Recent Activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -55,22 +62,13 @@ const renderDepotButtons = setCurrentScenario => {
           <TBody>
             <TR>
               <TD>
-                <TypeImage src='/images/actions/deposit.svg' /> Deposit
+                <TypeImage src="/images/actions/deposit.svg" /> Deposit
               </TD>
               <TD>2,000.00 sUSD</TD>
               <TD>500.00 sUSD</TD>
               <TD>14:00 | 4 Oct 2019</TD>
               <TD>
-                <Plus theme={theme} />
-              </TD>
-            </TR>
-            <TR>
-              <TD>Deposit</TD>
-              <TD>2,000.00 sUSD</TD>
-              <TD>500.00 sUSD</TD>
-              <TD>14:00 | 4 Oct 2019</TD>
-              <TD>
-                <Plus theme={theme} />
+                <Plus />
               </TD>
             </TR>
             <TR>
@@ -79,7 +77,16 @@ const renderDepotButtons = setCurrentScenario => {
               <TD>500.00 sUSD</TD>
               <TD>14:00 | 4 Oct 2019</TD>
               <TD>
-                <Plus theme={theme} />
+                <Plus />
+              </TD>
+            </TR>
+            <TR>
+              <TD>Deposit</TD>
+              <TD>2,000.00 sUSD</TD>
+              <TD>500.00 sUSD</TD>
+              <TD>14:00 | 4 Oct 2019</TD>
+              <TD>
+                <Plus />
               </TD>
             </TR>
           </TBody>
@@ -98,6 +105,7 @@ const Depot = () => {
         onDestroy={() => setCurrentScenario(null)}
       />
       {renderDepotButtons(setCurrentScenario)}
+      {renderTable()}
     </PageContainer>
   );
 };
