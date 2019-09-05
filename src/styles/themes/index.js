@@ -99,7 +99,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataMega: {
-      as: 'td',
+      as: 'span',
       fontSize: [10, 12, 24],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -108,7 +108,7 @@ const theme = mode => {
       letterSpacing: 0.2,
     },
     dataLarge: {
-      as: 'td',
+      as: 'span',
       fontSize: [10, 12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -117,7 +117,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataSmall: {
-      as: 'td',
+      as: 'span',
       fontSize: [10, 12],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -126,7 +126,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataHeaderLarge: {
-      as: 'th',
+      as: 'span',
       fontSize: [12, 14],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 400,
@@ -135,7 +135,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
     dataHeaderSmall: {
-      as: 'th',
+      as: 'span',
       fontSize: [10, 12],
       lineHeight: ['12px', '14px', '16px'],
       fontWeight: 600,
@@ -144,7 +144,7 @@ const theme = mode => {
       letterSpacing: 1,
     },
     tableHeaderMedium: {
-      as: 'th',
+      as: 'span',
       fontSize: [12, 14],
       fontFamily: fontFamilies.bold,
       fontWeight: 700,
@@ -152,7 +152,7 @@ const theme = mode => {
       color: colorStyles.tableHeading,
     },
     tableDataMedium: {
-      as: 'td',
+      as: 'span',
       fontSize: [12, 14],
       fontFamily: fontFamilies.regular,
       fontWeight: 400,

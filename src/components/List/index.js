@@ -1,1 +1,8 @@
-export { List, THead, TBody, TR, TH, TD } from './List';
+export {
+  ExpandableRow,
+  List,
+  HeaderRow,
+  BodyRow,
+  Cell,
+  HeaderCell,
+} from './List';
