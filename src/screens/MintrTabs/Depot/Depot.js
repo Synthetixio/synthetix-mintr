@@ -1,5 +1,6 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
+import { Store } from '../../../store';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency } from '../../../helpers/formatters';
@@ -22,7 +23,7 @@ const renderTable = () => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop="10px">Recent Activity:</H5>
+          <H5 marginTop='10px'>Recent Activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -39,7 +40,7 @@ const renderTable = () => {
           <TBody>
             <TR>
               <TD>
-                <TypeImage src="/images/actions/deposit.svg" /> Deposit
+                <TypeImage src='/images/actions/deposit.svg' /> Deposit
               </TD>
               <TD>2,000.00 sUSD</TD>
               <TD>500.00 sUSD</TD>
@@ -73,30 +74,42 @@ const renderTable = () => {
   );
 };
 
-const useGetDepotData = () => {
+const useGetDepotData = walletAddress => {
   const [data, setData] = useState({});
   useEffect(() => {
     const getDepotData = async () => {
       try {
-        const [totalSellableDeposits] = await Promise.all([
+        const results = await Promise.all([
           snxJSConnector.snxJS.Depot.totalSellableDeposits(),
+          snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
         ]);
+
+        const [totalSellableDeposits, sUSDBalance] = results.map(
+          bigNumberFormatter
+        );
+        console.log('here', sUSDBalance);
         setData({
-          totalSellableDeposits: bigNumberFormatter(totalSellableDeposits),
+          totalSellableDeposits,
+          sUSDBalance,
         });
       } catch (e) {
         console.log(e);
       }
     };
     getDepotData();
-  }, []);
+  }, [walletAddress]);
   return data;
 };
 
 const Depot = () => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
-  const { totalSellableDeposits } = useGetDepotData();
-
+  const {
+    state: {
+      wallet: { currentWallet },
+    },
+  } = useContext(Store);
+  const { totalSellableDeposits, sUSDBalance } = useGetDepotData(currentWallet);
+  console.log(sUSDBalance);
   return (
     <PageContainer>
       <DepotAction
@@ -120,7 +133,7 @@ const Depot = () => {
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
                 <PLarge>Amount available:</PLarge>
-                <Amount>4,000.00 sUSD</Amount>
+                <Amount>${formatCurrency(sUSDBalance)} sUSD</Amount>
               </ButtonContainer>
             </Button>
           );
