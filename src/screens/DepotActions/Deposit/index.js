@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
+
+import snxJSConnector from '../../../helpers/snxJSConnector';
+import { Store } from '../../../store';
+import { SliderContext } from '../../../components/Slider';
+
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
-
-import { SliderContext } from '../../../components/Slider';
-import { Store } from '../../../store';
 
 const Deposit = ({ onDestroy, sUSDBalance }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
@@ -20,6 +22,15 @@ const Deposit = ({ onDestroy, sUSDBalance }) => {
     try {
       setDepositAmount(amount);
       handleNext(1);
+      const depotAddress = snxJSConnector.snxJS.Depot.contract.address;
+      const transaction = await snxJSConnector.snxJS.sUSD.contract.transfer(
+        depotAddress,
+        snxJSConnector.utils.parseEther(amount.toString())
+      );
+      if (transaction) {
+        setTransactionInfo({ transactionHash: transaction.hash });
+        handleNext(2);
+      }
     } catch (e) {
       setTransactionInfo({ ...transactionInfo, transactionError: e });
       handleNext(2);

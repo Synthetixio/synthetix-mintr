@@ -12,7 +12,7 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, withdrawAmount }) => {
+const Confirmation = ({ goBack, walletType, amountAvailable }) => {
   return (
     <SlidePage>
       <Container>
@@ -32,12 +32,12 @@ const Confirmation = ({ goBack, walletType, withdrawAmount }) => {
           <Details>
             <Box>
               <DataHeaderLarge>WITHDRAWING:</DataHeaderLarge>
-              <Amount>{formatCurrency(withdrawAmount)} sUSD</Amount>
+              <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
+          <Spinner margin="auto" />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
