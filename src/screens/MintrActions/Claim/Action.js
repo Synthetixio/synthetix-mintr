@@ -36,17 +36,17 @@ const Periods = ({ state = {} }) => {
   const { feesByPeriod = [] } = state;
   return (
     <div>
-      <TableWrapper height="auto">
-        <Table cellSpacing="0">
+      <TableWrapper height='auto'>
+        <Table cellSpacing='0'>
           <THead>
             <TR>
-              <TH padding={'0 20px 10px 20px'}>
+              <TH padding={'10px 20px'}>
                 <TableHeaderMedium>sUSD</TableHeaderMedium>
               </TH>
-              <TH padding={'0 20px 10px 20px'}>
+              <TH padding={'10px 20px'}>
                 <TableHeaderMedium>SNX</TableHeaderMedium>
               </TH>
-              <TH padding={'0 20px 10px 20px'}>
+              <TH padding={'10px 20px'}>
                 <TableHeaderMedium>PERIOD</TableHeaderMedium>
               </TH>
             </TR>
@@ -93,7 +93,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/claim.svg" big />
+            <ActionImage src='/images/actions/claim.svg' big />
             <H1>CLAIM</H1>
             <PLarge>
               If you have locked your SNX and minted sUSD, you are eligible to
@@ -107,12 +107,12 @@ const Action = ({
             <H5>Claimable periods:</H5>
             <Periods state={{ feesByPeriod }} />
             <Status>
-              <PMedium width="100%">Fee Claim Status:</PMedium>
+              <PMedium width='100%'>Fee Claim Status:</PMedium>
               <State>
-                <Highlighted red={!feesAreClaimable} marginRight="8px">
+                <Highlighted red={!feesAreClaimable} marginRight='8px'>
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
                 </Highlighted>
-                <Info width="4px" />
+                <Info width='4px' />
               </State>
             </Status>
           </Schedule>
@@ -150,7 +150,7 @@ const Action = ({
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
-            margin="auto"
+            margin='auto'
           >
             CLAIM NOW
           </ButtonPrimary>
@@ -226,7 +226,7 @@ const Schedule = styled.div`
   height: auto;
   width: 60%;
   margin: 8px 16px 8px 0px;
-  padding: 20px;
+  padding: 24px 16px 0 16px;
   text-align: left;
 `;
 

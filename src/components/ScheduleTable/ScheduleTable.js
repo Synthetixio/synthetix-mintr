@@ -10,7 +10,7 @@ export const TableHeader = styled.div`
 
 export const TableWrapper = styled.div`
   width: 100%;
-  margin: 20px 0;
+  margin: 16px 0;
   height: ${props => (props.height ? props.height : '300px')};
   overflow-y: scroll;
 `;
@@ -19,13 +19,11 @@ export const Table = styled.table`
   width: 100%;
 `;
 
-export const THead = styled.thead``;
-
-export const TBody = styled.tbody`
-  & > tr:nth-child(odd) {
-    background-color: ${props => props.theme.colorStyles.escrowTableBackground};
-  }
+export const THead = styled.thead`
+  background-color: ${props => props.theme.colorStyles.borders};
 `;
+
+export const TBody = styled.tbody``;
 
 export const TR = styled.tr`
   & > th,
@@ -47,6 +45,7 @@ export const TH = styled.th`
 `;
 
 export const TD = styled.td`
-  height: 48px;
+  height: 40px;
   padding: ${props => (props.padding ? props.padding : '20px')};
+  border-top: 1px solid ${props => props.theme.colorStyles.borders};
 `;
