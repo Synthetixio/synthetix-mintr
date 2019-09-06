@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
@@ -12,6 +13,7 @@ import {
   H5,
   TableDataMedium,
   TableHeaderMedium,
+  HyperlinkSmall,
 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 import { ButtonTertiary } from '../../../components/Button';
@@ -52,37 +54,41 @@ const renderHiddenContent = () => {
   ];
   return (
     <HiddenContent>
-      <HeaderRow>
-        {['Type', 'Amount', 'Rate', 'Date | Time', 'View'].map(
-          headerElement => {
-            return (
-              <HeaderCell key={headerElement}>
-                <TableHeaderMedium>{headerElement}</TableHeaderMedium>
-              </HeaderCell>
-            );
-          }
-        )}
-      </HeaderRow>
       <table style={{ width: '100%' }}>
+        <thead style={{ marginBottom: '16px' }}>
+          <TRHead style={{ marginBottom: '16px' }}>
+            {['Activity', 'Amount', 'Rate', 'Date | Time', 'View'].map(
+              headerElement => {
+                return (
+                  <TH key={headerElement}>
+                    <TableHeaderMedium>{headerElement}</TableHeaderMedium>
+                  </TH>
+                );
+              }
+            )}
+          </TRHead>
+        </thead>
         <tbody>
           {data.map((dataElement, i) => {
             return (
-              <tr key={i}>
-                <td>
-                  <TypeImage src="/images/actions/deposit.svg" />
-                  <TableDataMedium>Deposit</TableDataMedium>
-                </td>
-                <td>
+              <TRBody key={i}>
+                <TD style={{ display: 'flex' }}>
+                  <TypeImage src='/images/actions/tiny-sold.svg' />
+                  <TableDataMedium>Sold by Depot</TableDataMedium>
+                </TD>
+                <TD>
                   <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
-                </td>
-                <td>
+                </TD>
+                <TD>
                   <TableDataMedium>{dataElement.rate} sUSD</TableDataMedium>
-                </td>
-                <td>
+                </TD>
+                <TD>
                   <TableDataMedium>{dataElement.date}</TableDataMedium>
-                </td>
-                <td>VIEW</td>
-              </tr>
+                </TD>
+                <TD>
+                  <HyperlinkSmall>VIEW</HyperlinkSmall>
+                </TD>
+              </TRBody>
             );
           })}
         </tbody>
@@ -114,7 +120,7 @@ const ExpandableTable = () => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop="10px">Recent Activity:</H5>
+          <H5 marginTop='10px'>Recent Activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -149,7 +155,7 @@ const ExpandableTable = () => {
                   }
                 >
                   <Cell>
-                    <TypeImage src="/images/actions/deposit.svg" />
+                    <TypeImage src='/images/actions/tiny-deposit.svg' />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>
@@ -240,7 +246,7 @@ const Depot = () => {
           );
         })}
       </ButtonRow>
-      <ExpandableTable></ExpandableTable>
+      <ExpandableTable />
     </PageContainer>
   );
 };
@@ -305,15 +311,45 @@ const MoreButtons = styled.span`
 `;
 
 const TypeImage = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 10px;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 `;
 
 const HiddenContent = styled.div`
-  padding: 25px;
+  padding: 24px 16px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-top-width: 0;
+`;
+
+const TH = styled.th`
+  text-transform: uppercase;
+  text-align: left;
+  & :last-child {
+    text-align: right;
+  }
+`;
+
+const TRHead = styled.tr`
+  & :last-child,
+  & :nth-last-child(2) {
+    text-align: right;
+  }
+`;
+
+const TRBody = styled.tr`
+  & :last-child,
+  & :nth-last-child(2) {
+    text-align: right;
+  }
+`;
+
+const TD = styled.td`
+  text-align: left;
+  align-items: center;
+  & :last-child {
+    text-align: right;
+  }
 `;
 
 export default Depot;

@@ -9,12 +9,14 @@ export const HeaderRow = styled.div`
   display: flex;
   justify-content: space-between;
   text-transform: uppercase;
-  & > :last-child {
+  & > :last-child,
+  & :nth-last-child(2) {
     text-align: right;
   }
 `;
 
 export const BodyRow = styled.div`
+  cursor: pointer;
   margin-top: 20px;
   width: 100%;
   display: flex;
@@ -31,6 +33,9 @@ export const BodyRow = styled.div`
   }
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
   border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
+  & :nth-last-child(2) {
+    justify-content: flex-end;
+  }
 `;
 
 export const HeaderCell = styled.div`

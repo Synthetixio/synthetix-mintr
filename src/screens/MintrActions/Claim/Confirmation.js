@@ -18,7 +18,7 @@ const Confirmation = ({ goBack, walletType, feesAvailable }) => {
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
@@ -53,7 +53,7 @@ const Confirmation = ({ goBack, walletType, feesAvailable }) => {
           </Details>
         </Top>
         <Loading>
-          <Spinner margin="auto" />
+          <Spinner margin='auto' />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
@@ -102,7 +102,7 @@ const Bottom = styled.div`
 `;
 
 const Intro = styled.div`
-  max-width: 400px;
+  max-width: 450px;
   margin: 0px auto 48px auto;
 `;
 
