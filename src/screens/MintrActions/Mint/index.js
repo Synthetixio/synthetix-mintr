@@ -6,13 +6,14 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
+import { bytesFormatter } from '../../../helpers/formatters';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
-  const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
+  const SNXBytes = bytesFormatter('SNX');
   useEffect(() => {
     const getIssuanceData = async () => {
       try {
@@ -47,7 +48,7 @@ const Mint = ({ onDestroy }) => {
     },
   } = useContext(Store);
 
-  const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+  const sUSDBytes = bytesFormatter('sUSD');
   const { maxIssuableSynths, issuanceRatio, SNXPrice } = useGetIssuanceData(
     currentWallet,
     sUSDBytes

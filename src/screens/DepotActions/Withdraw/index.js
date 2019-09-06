@@ -8,6 +8,7 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
+import { bytesFormatter } from '../../../helpers/formatters';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
@@ -47,7 +48,7 @@ const Withdraw = ({ onDestroy }) => {
     },
   } = useContext(Store);
 
-  const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+  const sUSDBytes = bytesFormatter('sUSD');
   const { maxIssuableSynths, issuanceRatio } = useGetIssuanceData(
     currentWallet,
     sUSDBytes

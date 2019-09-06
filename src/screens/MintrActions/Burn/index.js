@@ -6,13 +6,14 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
+import { bytesFormatter } from '../../../helpers/formatters';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
-  const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
+  const SNXBytes = bytesFormatter('SNX');
   useEffect(() => {
     const getDebtData = async () => {
       try {
@@ -52,7 +53,7 @@ const Burn = ({ onDestroy }) => {
     },
   } = useContext(Store);
 
-  const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+  const sUSDBytes = bytesFormatter('sUSD');
   const { maxBurnAmount, issuanceRatio, SNXPrice } = useGetDebtData(
     currentWallet,
     sUSDBytes

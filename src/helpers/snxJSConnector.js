@@ -5,13 +5,13 @@ let snxJSConnector = {
   initialized: false,
   signers: SynthetixJs.signers,
   setContractSettings: function(contractSettings) {
+    this.initialized = true;
     this.snxJS = new SynthetixJs(contractSettings);
     this.synths = this.snxJS.contractSettings.synths;
     this.signer = this.snxJS.contractSettings.signer;
     this.provider = this.snxJS.contractSettings.provider;
     this.utils = this.snxJS.utils;
-    this.ethersUtils = SynthetixJs.utils;
-    this.initialized = true;
+    this.ethersUtils = this.snxJS.ethers.utils;
   },
 };
 

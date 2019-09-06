@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
+import { bytesFormatter } from '../../helpers/formatters';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
@@ -26,9 +27,9 @@ export const useGetPrices = () => {
   const [data, setData] = useState({});
   useEffect(() => {
     const fetchPrices = async () => {
-      const SNXBytes = snxJSConnector.utils.toUtf8Bytes4('SNX');
-      const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
-      const ETHBytes = snxJSConnector.utils.toUtf8Bytes4('ETH');
+      const SNXBytes = bytesFormatter('SNX');
+      const sUSDBytes = bytesFormatter('sUSD');
+      const ETHBytes = bytesFormatter('ETH');
       const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
         [SNXBytes, sUSDBytes, ETHBytes]
       );
@@ -73,7 +74,7 @@ export const useGetDebtData = walletAddress => {
   const [data, setData] = useState({});
   useEffect(() => {
     const fetchCRatios = async () => {
-      const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+      const sUSDBytes = bytesFormatter('sUSD');
       const result = await Promise.all([
         snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
         snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
@@ -113,9 +114,9 @@ export const useGetSynthData = walletAddress => {
       const balances = await Promise.all(
         result.map((balance, i) => {
           return snxJSConnector.snxJS.Synthetix.effectiveValue(
-            snxJSConnector.utils.toUtf8Bytes4(synths[i]),
+            bytesFormatter(synths[i]),
             balance,
-            snxJSConnector.utils.toUtf8Bytes4('sUSD')
+            bytesFormatter('sUSD')
           );
         })
       );
