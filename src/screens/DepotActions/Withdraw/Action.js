@@ -1,26 +1,13 @@
-/*eslint-disable */
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import snxJSConnector from '../../../helpers/snxJSConnector';
+
+import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/Slider';
-import { createTransaction } from '../../../ducks/transactions';
 
-import {
-  ButtonPrimary,
-  ButtonTertiary,
-  ButtonMax,
-} from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
-import Input from '../../../components/Input';
+import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 
-const Action = ({ onDestroy, onWithdraw, maxIssuableSynths }) => {
-  const [amount, setAmount] = useState('');
+const Action = ({ onDestroy, onWithdraw, amountAvailable }) => {
   return (
     <SlidePage>
       <Container>
@@ -29,42 +16,17 @@ const Action = ({ onDestroy, onWithdraw, maxIssuableSynths }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/withdraw.svg' />
+            <ActionImage src="/images/actions/withdraw.svg" />
             <H1>WITHDRAW</H1>
             <PLarge>Amount available:</PLarge>
-            <Amount>4,000.00 sUSD</Amount>
+            <Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
           </Intro>
-          <Form>
-            <PLarge>Enter withdrawal amount or select max available:</PLarge>
-            <Input
-              onChange={e => setAmount(e.target.value)}
-              value={amount}
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
-              rightComponent={
-                <ButtonMax
-                  onClick={() => {
-                    setAmount(maxIssuableSynths);
-                  }}
-                />
-              }
-            />
-          </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
+          <Subtext marginBottom="32px">
             GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onWithdraw(amount)} margin='auto'>
+          <ButtonPrimary onClick={() => onWithdraw()} margin="auto">
             WITHDRAW NOW
           </ButtonPrimary>
         </Bottom>
@@ -123,18 +85,6 @@ const Amount = styled.span`
   font-family: 'apercu-medium';
   font-size: 24px;
   margin: 8px 0px 0px 0px;
-`;
-
-const Form = styled.div`
-  margin: 0px 0px 80px 0px;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 const Highlighted = styled.span`

@@ -32,6 +32,12 @@ import DepotAction from '../../DepotActions';
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
+const sumBy = (collection, key) => {
+  return collection.reduce((acc, curr) => {
+    return acc + curr[key];
+  }, 0);
+};
+
 const initialScenario = null;
 
 const renderHiddenContent = () => {
@@ -181,6 +187,58 @@ const ExpandableTable = () => {
   );
 };
 
+const getApiUrl = networkName =>
+  `https://${
+    networkName === 'mainnet' ? '' : networkName + '.'
+  }api.synthetix.io/api`;
+
+const useGetDepotEvents = (walletAddress, networkName) => {
+  const [data, setData] = useState({});
+  useEffect(() => {
+    const getDepotEvents = async () => {
+      try {
+        const results = await Promise.all([
+          fetch(
+            `${getApiUrl(
+              networkName
+            )}/blockchainEventsFiltered?fromAddress=${walletAddress}&eventName=SynthDeposit`
+          ),
+          fetch(
+            `${getApiUrl(
+              networkName
+            )}/blockchainEventsFiltered?toAddress=${walletAddress}&eventName=ClearedDeposit`
+          ),
+          fetch(
+            `${getApiUrl(
+              networkName
+            )}/blockchainEventsFiltered?fromAddress=${walletAddress}&eventName=SynthDepositRemoved`
+          ),
+        ]);
+
+        const [
+          depositsMade,
+          depositsCleared,
+          depositsRemoved,
+        ] = await Promise.all(results.map(response => response.json()));
+
+        const totalDepositsMade = sumBy(depositsMade, 'value');
+        const totalDepositsCleared = sumBy(depositsCleared, 'toAmount');
+        const totalDepositsRemoved = sumBy(depositsRemoved, 'value');
+
+        setData({
+          amountAvailable: Math.max(
+            0,
+            totalDepositsMade - totalDepositsCleared - totalDepositsRemoved
+          ),
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getDepotEvents();
+  }, [walletAddress, networkName]);
+  return data;
+};
 const useGetDepotData = walletAddress => {
   const [data, setData] = useState({});
   useEffect(() => {
@@ -188,13 +246,14 @@ const useGetDepotData = walletAddress => {
       try {
         const results = await Promise.all([
           snxJSConnector.snxJS.Depot.totalSellableDeposits(),
+          snxJSConnector.snxJS.Depot.minimumDepositAmount(),
           snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
         ]);
-
-        const [totalSellableDeposits, sUSDBalance] = results.map(
-          bigNumberFormatter
-        );
-
+        const [
+          totalSellableDeposits,
+          minimumDepositAmount,
+          sUSDBalance,
+        ] = results.map(bigNumberFormatter);
         setData({
           totalSellableDeposits,
           sUSDBalance,
@@ -212,14 +271,18 @@ const Depot = () => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
   const {
     state: {
-      wallet: { currentWallet },
+      wallet: { currentWallet, networkName },
     },
   } = useContext(Store);
   const { totalSellableDeposits, sUSDBalance } = useGetDepotData(currentWallet);
+  const { amountAvailable } = useGetDepotEvents(currentWallet, networkName);
+
   const props = {
     onDestroy: () => setCurrentScenario(null),
     sUSDBalance,
+    amountAvailable,
   };
+
   return (
     <PageContainer>
       <DepotAction action={currentScenario} {...props} />
@@ -240,7 +303,13 @@ const Depot = () => {
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
                 <PLarge>Amount available:</PLarge>
-                <Amount>${formatCurrency(sUSDBalance)} sUSD</Amount>
+                <Amount>
+                  $
+                  {action === 'deposit'
+                    ? formatCurrency(sUSDBalance)
+                    : formatCurrency(amountAvailable)}{' '}
+                  sUSD
+                </Amount>
               </ButtonContainer>
             </Button>
           );

@@ -10,7 +10,7 @@ import {
 import { formatCurrency } from '../../../helpers/formatters';
 
 const Success = ({
-  withdrawAmount,
+  amountAvailable,
   onDestroy,
   networkName,
   transactionHash,
@@ -19,7 +19,7 @@ const Success = ({
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/success.svg' big />
+          <ActionImage src="/images/success.svg" big />
           <PageTitle>Withdrawal in progress!</PageTitle>
           <PLarge>
             Sent to the Ethereum network and will be available in your wallet
@@ -30,7 +30,7 @@ const Success = ({
         <Details>
           <Box>
             <DataHeaderLarge>WITHDRAWING:</DataHeaderLarge>
-            <Amount>{formatCurrency(withdrawAmount)} sUSD</Amount>
+            <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
           </Box>
         </Details>
       </Top>
@@ -40,8 +40,8 @@ const Success = ({
             href={`https://${
               networkName === 'mainnet' ? '' : networkName + '.'
             }etherscan.io/tx/${transactionHash}`}
-            as='a'
-            target='_blank'
+            as="a"
+            target="_blank"
           >
             VIEW ON ETHERSCAN
           </ButtonSecondary>
@@ -59,7 +59,7 @@ const Failure = ({ transactionError, onDestroy }) => {
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/failure.svg' big />
+          <ActionImage src="/images/failure.svg" big />
           <PageTitle>Something went wrong...</PageTitle>
           {transactionError.code ? (
             <PLarge>Code: {transactionError.code}</PLarge>

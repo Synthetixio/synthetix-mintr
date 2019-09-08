@@ -1,4 +1,5 @@
 import numbro from 'numbro';
+import snxJSConnector from '../helpers/snxJSConnector';
 
 export const formatCurrency = (value: number, decimals = 2) => {
   if (!value) return 0;
@@ -8,4 +9,10 @@ export const formatCurrency = (value: number, decimals = 2) => {
 export const shortenAddress = address => {
   if (!address) return null;
   return address.slice(0, 6) + '...' + address.slice(-4, address.length);
+};
+
+export const bytesFormatter = input => {
+  return snxJSConnector.snxJS.network === 'kovan'
+    ? snxJSConnector.ethersUtils.formatBytes32String(input)
+    : snxJSConnector.utils.toUtf8Bytes4(input);
 };

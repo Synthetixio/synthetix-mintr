@@ -9,6 +9,7 @@ import { updateCurrentTab } from '../../../ducks/ui';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
+import { bytesFormatter } from '../../../helpers/formatters';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
@@ -35,8 +36,8 @@ const useGetFeeData = walletAddress => {
   const [data, setData] = useState({});
   useEffect(() => {
     const getFeeData = async () => {
-      const xdrBytes = snxJSConnector.utils.toUtf8Bytes4('XDR');
-      const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+      const xdrBytes = bytesFormatter('XDR');
+      const sUSDBytes = bytesFormatter('sUSD');
       try {
         const [
           feesByPeriod,
@@ -87,7 +88,7 @@ const useGetFeeData = walletAddress => {
 
 const Claim = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const sUSDBytes = snxJSConnector.utils.toUtf8Bytes4('sUSD');
+  const sUSDBytes = bytesFormatter('sUSD');
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
