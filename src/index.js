@@ -15,7 +15,9 @@ const initialState = {
   wallet: {
     unlocked: false,
   },
-  transactions: {},
+  transactions: {
+    currentTransactions: [],
+  },
 };
 
 ReactDOM.render(

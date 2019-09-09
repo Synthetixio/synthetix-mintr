@@ -34,6 +34,7 @@ export default {
   paginatorButtonBackgroundActive: COLORS.light2,
 
   brandRed: COLORS.brandRed,
+  brandBlue: COLORS.brandBlue,
   escrowTableBackground: COLORS.light5,
   escrowNumberBig: COLORS.buttonLight,
 

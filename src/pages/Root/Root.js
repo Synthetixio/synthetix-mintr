@@ -9,6 +9,8 @@ import WalletConnection from '../WalletConnection';
 import WalletSelection from '../WalletSelection';
 import Main from '../Main';
 
+import NotificationCenter from '../../components/NotificationCenter';
+
 const renderCurrentPage = currentPage => {
   switch (currentPage) {
     case 'landing':
@@ -30,13 +32,17 @@ const Root = () => {
     },
   } = useContext(Store);
   return (
-    <Suspense fallback='loading'>
-      <RootWrapper>{renderCurrentPage(currentPage)}</RootWrapper>
+    <Suspense fallback="loading">
+      <RootWrapper>
+        {renderCurrentPage(currentPage)}
+        <NotificationCenter></NotificationCenter>
+      </RootWrapper>
     </Suspense>
   );
 };
 
 const RootWrapper = styled('div')`
+  position: relative;
   background: ${props => props.theme.colorStyles.background};
   width: 100%;
   height: 100vh;

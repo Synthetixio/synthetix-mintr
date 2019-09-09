@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { bytesFormatter } from '../../helpers/formatters';
+// import transactions from '../../ducks/transactions';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
 export const useGetBalances = walletAddress => {
   const [data, setData] = useState({});
+  // const status = selectTransactionStatusOfFIrstCompleted(state);
   useEffect(() => {
     const fetchBalances = async () => {
+      // if (!noData || status) {
       const result = await Promise.all([
         snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
         snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
@@ -19,7 +22,8 @@ export const useGetBalances = walletAddress => {
       setData({ snx, sUSD, eth });
     };
     fetchBalances();
-  }, [walletAddress]);
+    // };
+  }, [walletAddress, status]);
   return data;
 };
 

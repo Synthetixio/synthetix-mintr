@@ -8,6 +8,8 @@ import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
 import { bytesFormatter } from '../../../helpers/formatters';
 
+import { createTransaction } from '../../../ducks/transactions';
+
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
@@ -46,6 +48,7 @@ const Mint = ({ onDestroy }) => {
     state: {
       wallet: { currentWallet, walletType, networkName },
     },
+    dispatch,
   } = useContext(Store);
 
   const sUSDBytes = bytesFormatter('sUSD');
@@ -71,6 +74,15 @@ const Mint = ({ onDestroy }) => {
       }
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
+        createTransaction(
+          {
+            hash: transaction.hash,
+            status: 'pending',
+            info: `Minting ${amount} sUSD`,
+            hasNotification: true,
+          },
+          dispatch
+        );
         handleNext(2);
       }
     } catch (e) {

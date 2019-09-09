@@ -220,7 +220,7 @@ const theme = mode => {
       letterSpacing: 0.5,
     },
   };
-  return { textStyles, colorStyles };
+  return { textStyles, colorStyles, fontFamilies };
 };
 
 export default theme;

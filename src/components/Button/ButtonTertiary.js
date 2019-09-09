@@ -2,9 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonTertiaryLabel } from '../Typography';
 
-const ButtonTertiary = ({ children, onClick }) => {
+const ButtonTertiary = ({
+  children,
+  onClick,
+  as = 'button',
+  href = undefined,
+  target = undefined,
+}) => {
   return (
-    <Button onClick={onClick}>
+    <Button n target={target} href={href} as={as} onClick={onClick}>
       <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
     </Button>
   );
@@ -26,6 +32,7 @@ const Button = styled.button`
     background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
   }
   cursor: pointer;
+  text-decoration: none;
 `;
 
 export default ButtonTertiary;
