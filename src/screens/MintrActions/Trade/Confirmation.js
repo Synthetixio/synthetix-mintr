@@ -17,7 +17,7 @@ const Confirmation = () => {
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={handlePrev}>Go Back</ButtonTertiary>
+          <ButtonTertiary onClick={handlePrev}>Go back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
@@ -88,7 +88,7 @@ const Bottom = styled.div`
 `;
 
 const Intro = styled.div`
-  max-width: 400px;
+  max-width: 450px;
   margin: 0px auto 48px auto;
 `;
 

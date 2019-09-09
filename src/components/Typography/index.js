@@ -226,3 +226,12 @@ export const TableHeaderMedium = props => {
     </DynamicComponent>
   );
 };
+
+export const HyperlinkSmall = props => {
+  const { hyperlinkSmall } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...hyperlinkSmall} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};

@@ -102,7 +102,7 @@ const Bottom = styled.div`
 `;
 
 const Intro = styled.div`
-  max-width: 400px;
+  max-width: 450px;
   margin: 0px auto 48px auto;
 `;
 

@@ -219,6 +219,14 @@ const theme = mode => {
       color: colorStyles.heading,
       letterSpacing: 0.5,
     },
+    hyperlinkSmall: {
+      as: 'span',
+      fontSize: [14],
+      fontWeight: 500,
+      fontFamily: fontFamilies.medium,
+      color: colorStyles.hyperlink,
+      letterSpacing: 0.5,
+    },
   };
   return { textStyles, colorStyles, fontFamilies };
 };
