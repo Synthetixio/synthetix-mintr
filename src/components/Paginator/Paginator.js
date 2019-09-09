@@ -14,11 +14,11 @@ const Paginator = () => {
   return (
     <Wrapper>
       <Button>
-        <Arrow direction="left" />
+        <Arrow direction='left' />
       </Button>
       {renderPageNumberButtons()}
       <Button>
-        <Arrow direction="right" />
+        <Arrow direction='right' />
       </Button>
     </Wrapper>
   );
@@ -26,7 +26,7 @@ const Paginator = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  margin: 40px 0;
+  margin: 24px 0;
   display: flex;
   justify-content: center;
   & > :first-child,
@@ -53,11 +53,13 @@ const Button = styled.button`
   font-size: 14px;
   line-height: 25px;
   font-weight: 500;
+  transition: all 0.1s ease;
   color: ${props =>
     props.active
-      ? props.theme.colorStyles.buttonPrimaryText
-      : props.theme.colorStyles.tableHeading};
+      ? props.theme.colorStyles.heading
+      : props.theme.colorStyles.subtext};
   :hover {
+    color: ${props => props.theme.colorStyles.heading};
     background-color: ${props =>
       props.theme.colorStyles.paginatorButtonBackgroundHover};
   }
