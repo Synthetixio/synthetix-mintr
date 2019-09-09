@@ -8,7 +8,6 @@ import Landing from '../Landing';
 import WalletConnection from '../WalletConnection';
 import WalletSelection from '../WalletSelection';
 import Main from '../Main';
-import Multisig from '../Multisig';
 
 const renderCurrentPage = currentPage => {
   switch (currentPage) {
@@ -21,8 +20,8 @@ const renderCurrentPage = currentPage => {
       return <WalletSelection />;
     case 'main':
       return <Main />;
-    case 'multisig':
-      return <Multisig></Multisig>;
+    case 'sethpool':
+      return <Main />;
   }
 };
 
