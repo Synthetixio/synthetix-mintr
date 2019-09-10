@@ -38,6 +38,9 @@ export default {
   escrowTableBackground: COLORS.light5,
   escrowNumberBig: COLORS.buttonLight,
 
+  skeletonLight: COLORS.light5,
+  skeletonDark: COLORS.light6,
+
   //To remove or replace (for test only)
   themeToggleBackgroundColor: COLORS.light6,
   themeToggleFontColor: COLORS.light3,

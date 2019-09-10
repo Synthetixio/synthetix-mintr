@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import isEqual from 'lodash/isEqual';
 
-const Chart = ({ data }) => {
+const Chart = memo(({ data }) => {
   return (
     <PieChart width={160} height={160}>
       <Pie
@@ -17,6 +18,6 @@ const Chart = ({ data }) => {
       </Pie>
     </PieChart>
   );
-};
+}, isEqual);
 
 export default Chart;

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Fragment } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -25,9 +25,10 @@ import {
   ButtonTertiaryLabel,
 } from '../../components/Typography';
 import { Info } from '../../components/Icons';
+import Skeleton from '../../components/Skeleton';
 
 const Balances = ({ state }) => {
-  const { balances, prices, theme } = state;
+  const { balances, prices, theme, isLoading = true } = state;
   return (
     <BalanceRow>
       {['snx', 'sUSD', 'eth'].map(currency => {
@@ -37,12 +38,21 @@ const Balances = ({ state }) => {
           <BalanceItem key={currency}>
             <CurrencyIcon src={`/images/${currency}-icon.svg`} />
             <Balance>
-              <DataHeaderLarge>
-                {formatCurrency(balances[currency]) || '--'} {currencyUnit}
-              </DataHeaderLarge>
-              <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
-                ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
-              </DataHeaderLarge>
+              {!isLoading ? (
+                <DataHeaderLarge>
+                  {formatCurrency(balances[currency]) || '--'}
+                  {currencyUnit}
+                </DataHeaderLarge>
+              ) : (
+                <Skeleton />
+              )}
+              {!isLoading ? (
+                <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
+                  ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
+                </DataHeaderLarge>
+              ) : (
+                <Skeleton />
+              )}
             </Balance>
           </BalanceItem>
         );
@@ -52,8 +62,9 @@ const Balances = ({ state }) => {
 };
 
 const RewardInfo = ({ state }) => {
-  const { rewardData, theme } = state;
+  const { rewardData, theme, isLoading = true } = state;
   let content = <div />;
+  if (isLoading) return <Skeleton />;
   if (rewardData.feesAreClaimable) {
     content = rewardData.feesAreClaimable ? (
       <DataLarge>
@@ -71,7 +82,7 @@ const RewardInfo = ({ state }) => {
     );
   }
   return (
-    <Row padding='0px 8px'>
+    <Row padding="0px 8px">
       {content}
       <Info theme={theme} />
     </Row>
@@ -79,25 +90,33 @@ const RewardInfo = ({ state }) => {
 };
 
 const CollRatios = ({ state }) => {
-  const { debtData } = state;
+  const { debtData, isLoading = true } = state;
   return (
-    <Row margin='0 0 22px 0'>
+    <Row margin="0 0 22px 0">
       <Box>
-        <Figure>
-          {debtData.currentCRatio
-            ? Math.round(100 / debtData.currentCRatio)
-            : '--'}
-          %
-        </Figure>
+        {isLoading ? (
+          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+        ) : (
+          <Figure>
+            {debtData.currentCRatio
+              ? Math.round(100 / debtData.currentCRatio)
+              : '--'}
+            %
+          </Figure>
+        )}
         <DataLarge>Current collateralization ratio</DataLarge>
       </Box>
       <Box>
-        <Figure>
-          {debtData.targetCRatio
-            ? Math.round(100 / debtData.targetCRatio)
-            : '--'}
-          %
-        </Figure>
+        {isLoading ? (
+          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+        ) : (
+          <Figure>
+            {debtData.targetCRatio
+              ? Math.round(100 / debtData.targetCRatio)
+              : '--'}
+            %
+          </Figure>
+        )}
         <DataLarge>Target collateralization ratio</DataLarge>
       </Box>
     </Row>
@@ -105,41 +124,60 @@ const CollRatios = ({ state }) => {
 };
 
 const Pie = ({ state }) => {
-  const { balances, debtData, theme } = state;
+  const { balances, debtData, theme, isLoading = true } = state;
   const snxLocked =
     balances.snx &&
     debtData.currentCRatio &&
     debtData.targetCRatio &&
     balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
+
+  const hasAllPieValues = snxLocked && debtData.transferable;
+
   return (
     <Box full={true}>
-      <Row padding='32px 16px'>
-        <PieChart
-          data={[
-            {
-              name: 'staking',
-              value: snxLocked || 0,
-              color: theme.colorStyles.accentLight,
-            },
-            {
-              name: 'transferable',
-              value: debtData.transferable,
-              color: theme.colorStyles.accentDark,
-            },
-          ]}
-        />
+      <Row padding="32px 16px">
+        {isLoading ? (
+          <Skeleton width={'160px'} height={'160px'} curved={true} />
+        ) : (
+          <PieChart
+            data={[
+              {
+                name: 'staking',
+                value: hasAllPieValues ? snxLocked : 0,
+                color: theme.colorStyles.accentLight,
+              },
+              {
+                name: 'transferable',
+                value: hasAllPieValues ? debtData.transferable : 0,
+                color: theme.colorStyles.accentDark,
+              },
+            ]}
+          />
+        )}
         <PieChartLegend>
-          <DataHeaderLarge margin='0px 0px 24px 0px'>
+          <DataHeaderLarge margin="0px 0px 24px 0px">
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
-            <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-            <DataSmall>STAKING</DataSmall>
+            {isLoading ? (
+              <Skeleton width={'100%'} height={'45px'} />
+            ) : (
+              <Fragment>
+                <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
+                <DataSmall>STAKING</DataSmall>
+              </Fragment>
+            )}
           </LegendRow>
 
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentDark }}>
-            <DataLarge>{debtData.transferable} SNX</DataLarge>
-            <DataSmall>TRANSFERABLE</DataSmall>
+            {isLoading ? (
+              <Skeleton width={'100%'} height={'45px'} />
+            ) : (
+              <Fragment>
+                <DataLarge>{debtData.transferable} SNX</DataLarge>
+                <DataSmall>TRANSFERABLE</DataSmall>
+              </Fragment>
+            )}
           </LegendRow>
         </PieChartLegend>
       </Row>
@@ -176,20 +214,25 @@ const processTableData = state => {
 };
 
 const BalanceTable = ({ state }) => {
+  const { isLoading = true } = state;
   const data = processTableData(state);
   return (
-    <Row margin='22px 0 0 0'>
-      <Table
-        header={[
-          { key: 'rowLegend', value: '' },
-          { key: 'snx', value: 'snx' },
-          { key: 'sUSD', value: 'susd' },
-          { key: 'eth', value: 'eth' },
-          { key: 'synths', value: 'synths' },
-          { key: 'debt', value: 'debt' },
-        ]}
-        data={data}
-      />
+    <Row margin="22px 0 0 0">
+      {isLoading ? (
+        <Skeleton width={'100%'} height={'130px'} />
+      ) : (
+        <Table
+          header={[
+            { key: 'rowLegend', value: '' },
+            { key: 'snx', value: 'snx' },
+            { key: 'sUSD', value: 'susd' },
+            { key: 'eth', value: 'eth' },
+            { key: 'synths', value: 'synths' },
+            { key: 'debt', value: 'debt' },
+          ]}
+          data={data}
+        />
+      )}
     </Row>
   );
 };
@@ -225,17 +268,15 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Wallet Details:</H5>
             <DataHeaderLarge
-              margin='0px 0px 22px 0px'
+              margin="0px 0px 22px 0px"
               color={theme.colorStyles.body}
-            >
-              {/* USER ID: #100000000 */}
-            </DataHeaderLarge>
+            ></DataHeaderLarge>
           </ContainerHeader>
           <CollRatios state={{ debtData }} />
           <Pie state={{ balances, debtData, theme }} />
           <BalanceTable state={{ balances, synthData, debtData, prices }} />
-          <Row margin='18px 0 0 0 '>
-            <Link href='https://synthetix.exchange' target='_blank'>
+          <Row margin="18px 0 0 0 ">
+            <Link href="https://synthetix.exchange" target="_blank">
               <ButtonTertiaryLabel>
                 Go to Synthetix.Exchange
               </ButtonTertiaryLabel>
@@ -275,7 +316,7 @@ const Content = styled('div')`
 const Container = styled.div`
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: ${props => (props.curved ? '40px' : '5px')};
-  padding: ${props => (props.curved ? '10px' : '32px 24px')};
+  padding: ${props => (props.curved ? '15px' : '32px 24px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
 
@@ -345,7 +386,7 @@ const PieChartLegend = styled.div`
 
 const LegendRow = styled.div`
   margin-top: 16px;
-  padding: 14px;
+  height: 45px;
   display: flex;
   align-items: center;
   border-radius: 2px;
