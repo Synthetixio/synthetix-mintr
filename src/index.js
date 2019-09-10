@@ -11,12 +11,15 @@ const initialState = {
     themeIsDark: localStorage.getItem('dark') === 'true' || false,
     currentPage: 'walletConnection',
     currentTab: 'home',
+    dashboardIsLoading: false,
   },
   wallet: {
     unlocked: false,
   },
   transactions: {
     currentTransactions: [],
+    dataFetchers: {},
+    successQueue: [],
   },
 };
 

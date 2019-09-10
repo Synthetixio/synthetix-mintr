@@ -1,146 +1,154 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
+
+import { Store } from '../../store';
+
 import { bytesFormatter } from '../../helpers/formatters';
-// import transactions from '../../ducks/transactions';
+import { toggleDashboardIsLoading } from '../../ducks/ui';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
-export const useGetBalances = walletAddress => {
-  const [data, setData] = useState({});
-  // const status = selectTransactionStatusOfFIrstCompleted(state);
-  useEffect(() => {
-    const fetchBalances = async () => {
-      // if (!noData || status) {
-      const result = await Promise.all([
-        snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
-        snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
-        snxJSConnector.provider.getBalance(walletAddress),
-      ]);
-      const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-      setData({ snx, sUSD, eth });
-    };
-    fetchBalances();
-    // };
-  }, [walletAddress, status]);
-  return data;
+const getBalances = async walletAddress => {
+  try {
+    const result = await Promise.all([
+      snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
+      snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
+      snxJSConnector.provider.getBalance(walletAddress),
+    ]);
+    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
+    return { snx, sUSD, eth };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const useGetPrices = () => {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    const fetchPrices = async () => {
-      const SNXBytes = bytesFormatter('SNX');
-      const sUSDBytes = bytesFormatter('sUSD');
-      const ETHBytes = bytesFormatter('ETH');
-      const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
-        [SNXBytes, sUSDBytes, ETHBytes]
-      );
-      const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-      setData({ snx, sUSD, eth });
-    };
-    fetchPrices();
-  }, []);
-  return data;
+const getPrices = async () => {
+  try {
+    const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
+      ['SNX', 'sUSD', 'ETH'].map(bytesFormatter)
+    );
+    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
+    return { snx, sUSD, eth };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const useGetRewardData = walletAddress => {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    const fetchRewards = async () => {
-      const [
-        feesAreClaimable,
-        currentFeePeriod,
-        feePeriodDuration,
-      ] = await Promise.all([
-        snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
-        snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
-        snxJSConnector.snxJS.FeePool.feePeriodDuration(),
-      ]);
+const getRewards = async walletAddress => {
+  try {
+    const [
+      feesAreClaimable,
+      currentFeePeriod,
+      feePeriodDuration,
+    ] = await Promise.all([
+      snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+      snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
+      snxJSConnector.snxJS.FeePool.feePeriodDuration(),
+    ]);
 
-      const currentPeriodStart =
-        currentFeePeriod && currentFeePeriod.startTime
-          ? new Date(parseInt(currentFeePeriod.startTime * 1000))
-          : null;
-      const currentPeriodEnd =
-        currentPeriodStart && feePeriodDuration
-          ? addSeconds(currentPeriodStart, feePeriodDuration)
-          : null;
-      setData({ feesAreClaimable, currentPeriodEnd });
-    };
-    fetchRewards();
-  }, [walletAddress]);
-  return data;
+    const currentPeriodStart =
+      currentFeePeriod && currentFeePeriod.startTime
+        ? new Date(parseInt(currentFeePeriod.startTime * 1000))
+        : null;
+    const currentPeriodEnd =
+      currentPeriodStart && feePeriodDuration
+        ? addSeconds(currentPeriodStart, feePeriodDuration)
+        : null;
+    return { feesAreClaimable, currentPeriodEnd };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const useGetDebtData = walletAddress => {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    const fetchCRatios = async () => {
-      const sUSDBytes = bytesFormatter('sUSD');
-      const result = await Promise.all([
-        snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
-        snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
-        snxJSConnector.snxJS.Synthetix.transferableSynthetix(walletAddress),
-        snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
-      ]);
-      const [
-        targetCRatio,
-        currentCRatio,
-        transferable,
-        debtBalance,
-      ] = result.map(bigNumberFormatter);
-      setData({
-        targetCRatio,
-        currentCRatio,
-        transferable,
-        debtBalance,
-      });
+const getDebt = async walletAddress => {
+  try {
+    const result = await Promise.all([
+      snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+      snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
+      snxJSConnector.snxJS.Synthetix.transferableSynthetix(walletAddress),
+      snxJSConnector.snxJS.Synthetix.debtBalanceOf(
+        walletAddress,
+        bytesFormatter('sUSD')
+      ),
+    ]);
+    const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(
+      bigNumberFormatter
+    );
+    return {
+      targetCRatio,
+      currentCRatio,
+      transferable,
+      debtBalance,
     };
-    fetchCRatios();
-  }, [walletAddress]);
-  return data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const useGetSynthData = walletAddress => {
-  const [data, setData] = useState({});
-  useEffect(() => {
-    const fetchSynthBalances = async () => {
-      const synths = snxJSConnector.synths
-        .filter(({ asset }) => asset)
-        .map(({ name }) => name);
-      const result = await Promise.all(
-        synths.map(synth =>
-          snxJSConnector.snxJS[synth].balanceOf(walletAddress)
-        )
-      );
-      const balances = await Promise.all(
-        result.map((balance, i) => {
-          return snxJSConnector.snxJS.Synthetix.effectiveValue(
-            bytesFormatter(synths[i]),
-            balance,
-            bytesFormatter('sUSD')
-          );
-        })
-      );
-
-      let totalBalance = 0;
-      const formattedBalances = balances.map((balance, i) => {
-        const formattedBalance = bigNumberFormatter(balance);
-        totalBalance += formattedBalance;
-        return {
-          synth: synths[i],
-          balance: formattedBalance,
-        };
-      });
-
-      setData({
-        balances: formattedBalances,
-        total: totalBalance,
-      });
+const getSynths = async walletAddress => {
+  try {
+    const synths = snxJSConnector.synths
+      .filter(({ asset }) => asset)
+      .map(({ name }) => name);
+    const result = await Promise.all(
+      synths.map(synth => snxJSConnector.snxJS[synth].balanceOf(walletAddress))
+    );
+    const balances = await Promise.all(
+      result.map((balance, i) => {
+        return snxJSConnector.snxJS.Synthetix.effectiveValue(
+          bytesFormatter(synths[i]),
+          balance,
+          bytesFormatter('sUSD')
+        );
+      })
+    );
+    let totalBalance = 0;
+    const formattedBalances = balances.map((balance, i) => {
+      const formattedBalance = bigNumberFormatter(balance);
+      totalBalance += formattedBalance;
+      return {
+        synth: synths[i],
+        balance: formattedBalance,
+      };
+    });
+    return {
+      balances: formattedBalances,
+      total: totalBalance,
     };
-    fetchSynthBalances();
-  }, [walletAddress]);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const useFetchData = (walletAddress, successQueue) => {
+  const [data, setData] = useState({});
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    try {
+      toggleDashboardIsLoading(true, dispatch);
+      const fetchData = async () => {
+        const [
+          balances,
+          prices,
+          rewardData,
+          debtData,
+          synthData,
+        ] = await Promise.all([
+          getBalances(walletAddress),
+          getPrices(),
+          getRewards(walletAddress),
+          getDebt(walletAddress),
+          getSynths(walletAddress),
+        ]);
+        setData({ balances, prices, rewardData, debtData, synthData });
+        toggleDashboardIsLoading(false, dispatch);
+      };
+      fetchData();
+    } catch (e) {
+      console.log(e);
+    }
+  }, [walletAddress, successQueue.length]);
   return data;
 };

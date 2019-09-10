@@ -1,6 +1,7 @@
 const TOGGLE_THEME = 'UI/TOGGLE_THEME';
 const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
 const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
+const TOGGLE_DASHBOARD_IS_LOADING = 'UI/TOGGLE_DASHBOARD_IS_LOADING';
 
 // Reducer
 export default (state, action) => {
@@ -16,6 +17,9 @@ export default (state, action) => {
     case UPDATE_CURRENT_TAB: {
       return { ...state, currentTab: action.payload };
     }
+    case TOGGLE_DASHBOARD_IS_LOADING: {
+      return { ...state, dashboardIsLoading: action.payload };
+    }
     default:
       return state;
   }
@@ -28,15 +32,24 @@ export const toggleTheme = (themeIsDark, dispatch) => {
     payload: themeIsDark,
   });
 };
+
 export const updateCurrentPage = (page, dispatch) => {
   return dispatch({
     type: UPDATE_CURRENT_PAGE,
     payload: page,
   });
 };
+
 export const updateCurrentTab = (tab, dispatch) => {
   return dispatch({
     type: UPDATE_CURRENT_TAB,
     payload: tab,
+  });
+};
+
+export const toggleDashboardIsLoading = (isLoading, dispatch) => {
+  return dispatch({
+    type: TOGGLE_DASHBOARD_IS_LOADING,
+    payload: isLoading,
   });
 };

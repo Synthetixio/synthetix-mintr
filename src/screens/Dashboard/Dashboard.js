@@ -5,13 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
-import {
-  useGetBalances,
-  useGetPrices,
-  useGetRewardData,
-  useGetDebtData,
-  useGetSynthData,
-} from './fetchData';
+import { useFetchData } from './fetchData';
 
 import Header from '../../components/Header';
 import PieChart from '../../components/PieChart';
@@ -28,7 +22,7 @@ import { Info } from '../../components/Icons';
 import Skeleton from '../../components/Skeleton';
 
 const Balances = ({ state }) => {
-  const { balances, prices, theme, isLoading = true } = state;
+  const { balances, prices, theme, dashboardIsLoading } = state;
   return (
     <BalanceRow>
       {['snx', 'sUSD', 'eth'].map(currency => {
@@ -38,7 +32,7 @@ const Balances = ({ state }) => {
           <BalanceItem key={currency}>
             <CurrencyIcon src={`/images/${currency}-icon.svg`} />
             <Balance>
-              {!isLoading ? (
+              {!dashboardIsLoading ? (
                 <DataHeaderLarge>
                   {formatCurrency(balances[currency]) || '--'}
                   {currencyUnit}
@@ -46,7 +40,7 @@ const Balances = ({ state }) => {
               ) : (
                 <Skeleton />
               )}
-              {!isLoading ? (
+              {!dashboardIsLoading ? (
                 <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
                   ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
                 </DataHeaderLarge>
@@ -62,9 +56,9 @@ const Balances = ({ state }) => {
 };
 
 const RewardInfo = ({ state }) => {
-  const { rewardData, theme, isLoading = true } = state;
+  const { rewardData, theme, dashboardIsLoading } = state;
   let content = <div />;
-  if (isLoading) return <Skeleton />;
+  if (dashboardIsLoading) return <Skeleton />;
   if (rewardData.feesAreClaimable) {
     content = rewardData.feesAreClaimable ? (
       <DataLarge>
@@ -90,11 +84,11 @@ const RewardInfo = ({ state }) => {
 };
 
 const CollRatios = ({ state }) => {
-  const { debtData, isLoading = true } = state;
+  const { debtData, dashboardIsLoading } = state;
   return (
     <Row margin="0 0 22px 0">
       <Box>
-        {isLoading ? (
+        {dashboardIsLoading ? (
           <Skeleton style={{ marginBottom: '8px' }} height="25px" />
         ) : (
           <Figure>
@@ -107,7 +101,7 @@ const CollRatios = ({ state }) => {
         <DataLarge>Current collateralization ratio</DataLarge>
       </Box>
       <Box>
-        {isLoading ? (
+        {dashboardIsLoading ? (
           <Skeleton style={{ marginBottom: '8px' }} height="25px" />
         ) : (
           <Figure>
@@ -124,7 +118,7 @@ const CollRatios = ({ state }) => {
 };
 
 const Pie = ({ state }) => {
-  const { balances, debtData, theme, isLoading = true } = state;
+  const { balances, debtData, theme, dashboardIsLoading } = state;
   const snxLocked =
     balances.snx &&
     debtData.currentCRatio &&
@@ -136,7 +130,7 @@ const Pie = ({ state }) => {
   return (
     <Box full={true}>
       <Row padding="32px 16px">
-        {isLoading ? (
+        {dashboardIsLoading ? (
           <Skeleton width={'160px'} height={'160px'} curved={true} />
         ) : (
           <PieChart
@@ -159,7 +153,7 @@ const Pie = ({ state }) => {
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
-            {isLoading ? (
+            {dashboardIsLoading ? (
               <Skeleton width={'100%'} height={'45px'} />
             ) : (
               <Fragment>
@@ -170,7 +164,7 @@ const Pie = ({ state }) => {
           </LegendRow>
 
           <LegendRow style={{ backgroundColor: theme.colorStyles.accentDark }}>
-            {isLoading ? (
+            {dashboardIsLoading ? (
               <Skeleton width={'100%'} height={'45px'} />
             ) : (
               <Fragment>
@@ -214,11 +208,11 @@ const processTableData = state => {
 };
 
 const BalanceTable = ({ state }) => {
-  const { isLoading = true } = state;
+  const { dashboardIsLoading } = state;
   const data = processTableData(state);
   return (
     <Row margin="22px 0 0 0">
-      {isLoading ? (
+      {dashboardIsLoading ? (
         <Skeleton width={'100%'} height={'130px'} />
       ) : (
         <Table
@@ -242,14 +236,18 @@ const Dashboard = () => {
   const {
     state: {
       wallet: { currentWallet },
+      ui: { dashboardIsLoading },
+      transactions: { successQueue },
     },
   } = useContext(Store);
 
-  const balances = useGetBalances(currentWallet);
-  const prices = useGetPrices();
-  const rewardData = useGetRewardData(currentWallet);
-  const debtData = useGetDebtData(currentWallet);
-  const synthData = useGetSynthData(currentWallet);
+  const {
+    balances = {},
+    prices = {},
+    rewardData = {},
+    debtData = {},
+    synthData = {},
+  } = useFetchData(currentWallet, successQueue);
 
   return (
     <DashboardWrapper>
@@ -259,7 +257,7 @@ const Dashboard = () => {
           <ContainerHeader>
             <H5>Current Balances & Prices:</H5>
           </ContainerHeader>
-          <Balances state={{ balances, prices, theme }} />
+          <Balances state={{ balances, prices, theme, dashboardIsLoading }} />
         </Container>
         <Container curved={true}>
           <RewardInfo state={{ rewardData, theme }} />
@@ -272,9 +270,17 @@ const Dashboard = () => {
               color={theme.colorStyles.body}
             ></DataHeaderLarge>
           </ContainerHeader>
-          <CollRatios state={{ debtData }} />
-          <Pie state={{ balances, debtData, theme }} />
-          <BalanceTable state={{ balances, synthData, debtData, prices }} />
+          <CollRatios state={{ debtData, dashboardIsLoading }} />
+          <Pie state={{ balances, debtData, theme, dashboardIsLoading }} />
+          <BalanceTable
+            state={{
+              balances,
+              synthData,
+              debtData,
+              prices,
+              dashboardIsLoading,
+            }}
+          />
           <Row margin="18px 0 0 0 ">
             <Link href="https://synthetix.exchange" target="_blank">
               <ButtonTertiaryLabel>
@@ -387,6 +393,7 @@ const PieChartLegend = styled.div`
 const LegendRow = styled.div`
   margin-top: 16px;
   height: 45px;
+  padding: 0 15px
   display: flex;
   align-items: center;
   border-radius: 2px;

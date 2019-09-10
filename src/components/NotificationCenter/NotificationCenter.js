@@ -9,15 +9,7 @@ import { ButtonTertiary } from '../Button';
 import { NotificationSpinner } from '../Spinner';
 import { PMedium } from '../Typography';
 
-// //get all the tx
-// // display them
-// // do the pulling with every tx hash
-
-// const Transaction = transaction => {
-//   // Pull the data from here and display its hash and state
-//   // call an action to set transactionStatus to complete when it's done
-//   //
-// };
+import { pushToSuccessQueue } from '../../ducks/transactions';
 
 const StatusImage = ({ status }) => {
   if (status === 'pending') {
@@ -42,12 +34,18 @@ const getStatusSentence = status => {
 
 const useGetTransactionTicket = transaction => {
   const [data, setData] = useState(transaction.status);
+  const { dispatch } = useContext(Store);
   useEffect(() => {
     const getTransactionTicket = async () => {
       const status = await snxJSConnector.utils.waitForTransaction(
         transaction.hash
       );
       setData(status ? 'success' : 'error');
+      if (status) {
+        setTimeout(() => {
+          pushToSuccessQueue(transaction.hash, dispatch);
+        }, 8000);
+      }
       return () => setData(null);
     };
     getTransactionTicket();
@@ -59,10 +57,11 @@ const Notification = ({ transaction }) => {
   const {
     state: {
       wallet: { networkName },
+      transactions: { successQueue },
     },
     dispatch,
   } = useContext(Store);
-  const status = useGetTransactionTicket(transaction);
+  const status = useGetTransactionTicket(transaction, successQueue);
   return (
     <NotificationWrapper>
       <StatusImage status={status}></StatusImage>
