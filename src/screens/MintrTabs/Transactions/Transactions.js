@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -17,73 +16,49 @@ import {
   ButtonTertiaryLabel,
 } from '../../../components/Typography';
 
+import { Store } from '../../../store';
+
 import PageContainer from '../../../components/PageContainer';
 import Paginator from '../../../components/Paginator';
 import { ButtonTertiary } from '../../../components/Button';
 
-const TransactionsTable = () => {
-  const data = [
-    {
-      type: 'Minted',
-      amount: '1,000.00 sUSD',
-      details: 'Locked SNX',
-      date: '14:00 | 12 Oct `19',
-    },
-    {
-      type: 'Burned',
-      amount: '2,000.00 SNX',
-      details: 'Unlocked SNX',
-      date: '08:00 | 4 Oct `19',
-    },
-    {
-      type: 'Claimed',
-      amount: '500.00 SNX',
-      details: 'Claimed fees',
-      date: '19:00 | 2 Oct `19',
-    },
-    {
-      type: 'Minted',
-      amount: '1,000.00 sUSD',
-      details: 'Locked SNX',
-      date: '14:00 | 12 Oct `19',
-    },
-    {
-      type: 'Burned',
-      amount: '2,000.00 SNX',
-      details: 'Unlocked SNX',
-      date: '08:00 | 4 Oct `19',
-    },
-    {
-      type: 'Claimed',
-      amount: '500.00 SNX',
-      details: 'Claimed fees',
-      date: '19:00 | 2 Oct `19',
-    },
-    {
-      type: 'Minted',
-      amount: '1,000.00 sUSD',
-      details: 'Locked SNX',
-      date: '14:00 | 12 Oct `19',
-    },
-    {
-      type: 'Burned',
-      amount: '2,000.00 SNX',
-      details: 'Unlocked SNX',
-      date: '08:00 | 4 Oct `19',
-    },
-    {
-      type: 'Claimed',
-      amount: '500.00 SNX',
-      details: 'Claimed fees',
-      date: '19:00 | 2 Oct `19',
-    },
-    {
-      type: 'Burned',
-      amount: '2,000.00 SNX',
-      details: 'Unlocked SNX',
-      date: '08:00 | 4 Oct `19',
-    },
-  ];
+const stringifyQuery = query => {
+  return (query = Object.keys(query).reduce((acc, next, index) => {
+    if (index > 0) {
+      acc += '&';
+    }
+    acc += `${next}=${query[next]}`;
+    return acc;
+  }, '?'));
+};
+
+const getApiUrl = networkName =>
+  `https://${
+    networkName === 'mainnet' ? '' : networkName + '.'
+  }api.synthetix.io/api/`;
+
+const useGetTransactions = (walletAddress, networkName) => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getTransaction = async () => {
+      const query = {
+        fromAddress: walletAddress,
+      };
+
+      const response = await fetch(
+        `${getApiUrl(networkName)}blockchainEventsFiltered${stringifyQuery(
+          query
+        )}`
+      );
+      const transactions = await response.json();
+      setData(transactions);
+    };
+    getTransaction();
+  }, [walletAddress]);
+  return data;
+};
+
+const TransactionsTable = ({ data }) => {
   return (
     <TransactionsWrapper>
       <TableHeader>
@@ -98,13 +73,13 @@ const TransactionsTable = () => {
         )}
       </TableHeader>
       <TableWrapper style={{ height: 'auto' }}>
-        <Table cellSpacing='0'>
+        <Table cellSpacing="0">
           <TBody>
             {data.map((dataElement, i) => {
               return (
                 <TR key={i}>
                   <TD style={{ display: 'flex' }}>
-                    <TypeImage src='/images/actions/tiny-deposit.svg' />
+                    <TypeImage src="/images/actions/tiny-deposit.svg" />
                     <DataLarge>{dataElement.type}</DataLarge>
                   </TD>
                   <TD>
@@ -130,6 +105,13 @@ const TransactionsTable = () => {
 };
 
 const Transactions = () => {
+  const {
+    state: {
+      wallet: { currentWallet, networkName },
+    },
+  } = useContext(Store);
+  const transactions = useGetTransactions(currentWallet, networkName);
+  console.log(transactions);
   return (
     <PageContainer>
       <Fragment>
@@ -137,21 +119,21 @@ const Transactions = () => {
           <Inputs>
             <Selector>
               <ButtonTertiaryLabel>TYPE</ButtonTertiaryLabel>
-              <img src='/images/caret-down.svg' />
+              <img src="/images/caret-down.svg" />
             </Selector>
             <Selector>
               <ButtonTertiaryLabel>DATES</ButtonTertiaryLabel>
-              <img src='/images/caret-down.svg' />
+              <img src="/images/caret-down.svg" />
             </Selector>
             <Selector>
               <ButtonTertiaryLabel>AMOUNT</ButtonTertiaryLabel>
-              <img src='/images/caret-down.svg' />
+              <img src="/images/caret-down.svg" />
             </Selector>
             <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
           </Inputs>
         </Filters>
         <TransactionsPanel>
-          <TransactionsTable />
+          <TransactionsTable data={transactions} />
           <Paginator />
         </TransactionsPanel>
       </Fragment>
