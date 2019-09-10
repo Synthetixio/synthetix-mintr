@@ -1,5 +1,7 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { format } from 'date-fns';
+import { formatCurrency } from '../../../helpers/formatters';
 
 import {
   TableHeader,
@@ -58,11 +60,53 @@ const useGetTransactions = (walletAddress, networkName) => {
   return data;
 };
 
+const getEventInfo = event => {
+  switch (event) {
+    case 'Issued':
+      return {
+        type: 'Minted',
+        details: 'Locked SNX',
+      };
+    case 'Burned':
+      return {
+        type: 'Burned',
+        details: 'Unlocked SNX',
+      };
+    case 'FeesClaimed':
+      return {
+        type: 'Claimed',
+        details: 'Claimed Fees',
+      };
+    case 'Exchange':
+      return {
+        type: 'Traded',
+        details: 'Exchanged Tokens',
+      };
+    case 'Sent':
+      return {
+        type: 'Sent',
+        details: 'To another wallet',
+      };
+    case 'SynthDeposit':
+      return {
+        type: 'Deposited',
+        details: 'To Depot',
+      };
+    case 'SynthWithdrawal':
+      return {
+        type: 'Withdrawn',
+        details: 'From Depot',
+      };
+    default:
+      return {};
+  }
+};
+
 const TransactionsTable = ({ data }) => {
   return (
     <TransactionsWrapper>
       <TableHeader>
-        {['Type', 'Amount', 'Details', 'Date | Time', 'View'].map(
+        {['Type', 'Amount', 'Details', 'Time | Date', 'View'].map(
           headerElement => {
             return (
               <TH key={headerElement}>
@@ -73,23 +117,31 @@ const TransactionsTable = ({ data }) => {
         )}
       </TableHeader>
       <TableWrapper style={{ height: 'auto' }}>
-        <Table cellSpacing="0">
+        <Table cellSpacing='0'>
           <TBody>
-            {data.map((dataElement, i) => {
+            {data.map((dataElement, i, event) => {
+              const { type, details } = getEventInfo(dataElement.event);
               return (
-                <TR key={i}>
+                <TR key={(i, event)}>
                   <TD style={{ display: 'flex' }}>
-                    <TypeImage src="/images/actions/tiny-deposit.svg" />
-                    <DataLarge>{dataElement.type}</DataLarge>
+                    <TypeImage img src='/images/images/tiny-mint.svg' />
+                    <DataLarge>{type}</DataLarge>
                   </TD>
                   <TD>
-                    <DataLarge>{dataElement.amount}</DataLarge>
+                    <DataLarge>
+                      {formatCurrency(dataElement.value)} {dataElement.token}
+                    </DataLarge>
                   </TD>
                   <TD>
-                    <DataLarge>{dataElement.details}</DataLarge>
+                    <DataLarge>{details}</DataLarge>
                   </TD>
                   <TD style={{ textAlign: 'right' }}>
-                    <DataLarge>{dataElement.date}</DataLarge>
+                    <DataLarge>
+                      {format(
+                        new Date(dataElement.createdAt),
+                        'hh:mm | d MMM yy'
+                      )}
+                    </DataLarge>
                   </TD>
                   <TD style={{ textAlign: 'right' }}>
                     <HyperlinkSmall>VIEW</HyperlinkSmall>
@@ -119,15 +171,15 @@ const Transactions = () => {
           <Inputs>
             <Selector>
               <ButtonTertiaryLabel>TYPE</ButtonTertiaryLabel>
-              <img src="/images/caret-down.svg" />
+              <img src='/images/caret-down.svg' />
             </Selector>
             <Selector>
               <ButtonTertiaryLabel>DATES</ButtonTertiaryLabel>
-              <img src="/images/caret-down.svg" />
+              <img src='/images/caret-down.svg' />
             </Selector>
             <Selector>
               <ButtonTertiaryLabel>AMOUNT</ButtonTertiaryLabel>
-              <img src="/images/caret-down.svg" />
+              <img src='/images/caret-down.svg' />
             </Selector>
             <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
           </Inputs>
@@ -180,7 +232,7 @@ const Inputs = styled.div`
 const TransactionsPanel = styled.div`
   width: 100%;
   height: 800px;
-  padding: 32px 24px;
+  padding: 32px;
   background-color: ${props => props.theme.colorStyles.panels};
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 2px;
@@ -189,12 +241,12 @@ const TransactionsPanel = styled.div`
 
 const TransactionsWrapper = styled.div`
   height: auto;
-  width: auto;
+  width: 100%;
 `;
 
 const TypeImage = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
 `;
 
@@ -212,7 +264,6 @@ const TD = styled.td`
   height: 64px;
   padding: 0px;
   align-items: center;
-  padding: 0 20px;
 `;
 
 export default Transactions;

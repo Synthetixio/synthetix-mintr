@@ -63,7 +63,7 @@ const renderHiddenContent = () => {
       <table style={{ width: '100%' }}>
         <thead>
           <TRHead padding={'0 0 16px 0'}>
-            {['Activity', 'Amount', 'Rate', 'Date | Time', 'View'].map(
+            {['Activity', 'Amount', 'Rate', 'Time | Date', 'View'].map(
               headerElement => {
                 return (
                   <TH key={headerElement}>
@@ -134,7 +134,7 @@ const ExpandableTable = () => {
         </ActivityHeader>
         <List>
           <HeaderRow>
-            {['Type', 'Amount', 'Remaining', 'Date | Time', 'Details'].map(
+            {['Type', 'Amount', 'Remaining', 'Time | Date', 'Details'].map(
               headerElement => {
                 return (
                   <HeaderCell key={headerElement}>
@@ -380,8 +380,8 @@ const MoreButtons = styled.span`
 `;
 
 const TypeImage = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
 `;
 
