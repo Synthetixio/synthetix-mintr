@@ -30,7 +30,7 @@ const Balances = ({ state }) => {
           currency === 'sUSD' ? currency : currency.toUpperCase();
         return (
           <BalanceItem key={currency}>
-            <CurrencyIcon src={`/images/${currency}-icon.svg`} />
+            <CurrencyIcon src={`/images/currencies/${currency}.svg`} />
             <Balance>
               {!dashboardIsLoading ? (
                 <DataHeaderLarge>

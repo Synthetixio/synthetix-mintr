@@ -16,7 +16,13 @@ import {
 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
+const Action = ({
+  onDestroy,
+  synths,
+  baseSynth,
+  onBaseSynthChange,
+  onTrade,
+}) => {
   const { handleNext } = useContext(SliderContext);
   return (
     <SlidePage>
@@ -27,7 +33,7 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/trade.svg' big />
+            <ActionImage src="/images/actions/trade.svg" big />
             <H1>TRADE</H1>
             <PLarge>
               Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
@@ -37,32 +43,17 @@ const Action = ({ onDestroy }) => {
           </Intro>
           <Form>
             <Input
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
+              synths={synths}
+              onSynthChange={onBaseSynthChange}
+              placeholder="0.00"
+              currentSynth={baseSynth}
               rightComponent={<ButtonMax />}
             />
             <PLarge>↓</PLarge>
             <Input
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
+              singleSynth={true}
+              currentSynth={'sUSD'}
+              placeholder="0.00"
               rightComponent={<ButtonMax />}
             />
           </Form>
@@ -75,7 +66,7 @@ const Action = ({ onDestroy }) => {
               GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
             </Subtext>
           </Fees>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary onClick={() => onTrade()} margin="auto">
             TRADE NOW
           </ButtonPrimary>
         </Bottom>

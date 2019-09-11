@@ -37,7 +37,7 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
               leftComponent={
                 <Type>
                   <img
-                    src="/images/sUSD-icon.svg"
+                    src="/images/currencies/sUSD.svg"
                     height="24px"
                     style={{ marginRight: '8px' }}
                   />
