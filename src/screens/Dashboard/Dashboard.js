@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -152,27 +152,34 @@ const Pie = ({ state }) => {
           <DataHeaderLarge margin="0px 0px 24px 0px">
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
-          <LegendRow style={{ backgroundColor: theme.colorStyles.accentLight }}>
-            {dashboardIsLoading ? (
-              <Skeleton width={'100%'} height={'45px'} />
-            ) : (
-              <Fragment>
-                <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-                <DataSmall>STAKING</DataSmall>
-              </Fragment>
-            )}
-          </LegendRow>
-
-          <LegendRow style={{ backgroundColor: theme.colorStyles.accentDark }}>
-            {dashboardIsLoading ? (
-              <Skeleton width={'100%'} height={'45px'} />
-            ) : (
-              <Fragment>
-                <DataLarge>{debtData.transferable} SNX</DataLarge>
-                <DataSmall>TRANSFERABLE</DataSmall>
-              </Fragment>
-            )}
-          </LegendRow>
+          {dashboardIsLoading ? (
+            <Skeleton
+              style={{ marginTop: '16px' }}
+              width={'100%'}
+              height={'45px'}
+            />
+          ) : (
+            <LegendRow
+              style={{ backgroundColor: theme.colorStyles.accentLight }}
+            >
+              <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
+              <DataSmall>STAKING</DataSmall>
+            </LegendRow>
+          )}
+          {dashboardIsLoading ? (
+            <Skeleton
+              style={{ marginTop: '16px' }}
+              width={'100%'}
+              height={'45px'}
+            />
+          ) : (
+            <LegendRow
+              style={{ backgroundColor: theme.colorStyles.accentDark }}
+            >
+              <DataLarge>{formatCurrency(debtData.transferable)} SNX</DataLarge>
+              <DataSmall>TRANSFERABLE</DataSmall>
+            </LegendRow>
+          )}
         </PieChartLegend>
       </Row>
     </Box>

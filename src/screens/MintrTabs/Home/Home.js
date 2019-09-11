@@ -15,6 +15,14 @@ import MintrAction from '../../MintrActions';
 
 const initialScenario = null;
 
+const actionMapper = {
+  mint: 'Mint sUSD by locking SNX',
+  burn: 'Burn sUSD and unlock SNX',
+  claim: 'sUSD and SNX staking rewards',
+  trade: 'Trade any synth to sUSD',
+  send: 'Send any synth and SNX',
+};
+
 const renderHomeButtons = setCurrentScenario => {
   return (
     <Fragment>
@@ -30,7 +38,7 @@ const renderHomeButtons = setCurrentScenario => {
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} big />
                 <H1>{action}</H1>
-                <PMega>lock SNX to mint sUSD</PMega>
+                <PMega>{actionMapper[action]}</PMega>
               </ButtonContainer>
             </Button>
           );
@@ -43,7 +51,7 @@ const renderHomeButtons = setCurrentScenario => {
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
-                <PLarge>sUSD and SNX staking rewards</PLarge>
+                <PLarge>{actionMapper[action]}</PLarge>
               </ButtonContainer>
             </Button>
           );
