@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -6,10 +7,12 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
-import { bytesFormatter } from '../../../helpers/formatters';
+import {
+  bytesFormatter,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { createTransaction } from '../../../ducks/transactions';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
@@ -51,6 +54,7 @@ const Burn = ({ onDestroy }) => {
     state: {
       wallet: { currentWallet, walletType, networkName },
     },
+    dispatch,
   } = useContext(Store);
 
   const sUSDBytes = bytesFormatter('sUSD');
@@ -71,6 +75,15 @@ const Burn = ({ onDestroy }) => {
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
+        createTransaction(
+          {
+            hash: transaction.hash,
+            status: 'pending',
+            info: `Burning ${amountToBurn} sUSD`,
+            hasNotification: true,
+          },
+          dispatch
+        );
         handleNext(2);
       }
     } catch (e) {

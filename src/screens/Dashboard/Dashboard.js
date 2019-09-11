@@ -125,8 +125,6 @@ const Pie = ({ state }) => {
     debtData.targetCRatio &&
     balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
 
-  const hasAllPieValues = snxLocked && debtData.transferable;
-
   return (
     <Box full={true}>
       <Row padding="32px 16px">
@@ -137,12 +135,12 @@ const Pie = ({ state }) => {
             data={[
               {
                 name: 'staking',
-                value: hasAllPieValues ? snxLocked : 0,
+                value: snxLocked,
                 color: theme.colorStyles.accentLight,
               },
               {
                 name: 'transferable',
-                value: hasAllPieValues ? debtData.transferable : 0,
+                value: debtData.transferable,
                 color: theme.colorStyles.accentDark,
               },
             ]}

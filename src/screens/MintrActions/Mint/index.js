@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -6,12 +7,12 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/Slider';
 import { Store } from '../../../store';
-import { bytesFormatter } from '../../../helpers/formatters';
+import {
+  bytesFormatter,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import { createTransaction } from '../../../ducks/transactions';
-
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});

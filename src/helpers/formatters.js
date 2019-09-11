@@ -16,3 +16,6 @@ export const bytesFormatter = input => {
     ? snxJSConnector.ethersUtils.formatBytes32String(input)
     : snxJSConnector.utils.toUtf8Bytes4(input);
 };
+
+export const bigNumberFormatter = value =>
+  Number(snxJSConnector.utils.formatEther(value));
