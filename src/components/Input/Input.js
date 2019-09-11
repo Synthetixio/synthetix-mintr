@@ -59,22 +59,23 @@ const Input = ({
               />
             </ListInputWrapper>
             <SynthList>
-              {synthList.map(synth => {
-                return (
-                  <SynthListElement
-                    key={synth}
-                    onClick={() => {
-                      onSynthChange(synth);
-                      toggleList(false);
-                    }}
-                  >
-                    <CurrencyIcon
-                      src={`/images/currencies/${synth}.svg`}
-                    ></CurrencyIcon>
-                    <PLarge>{synth}</PLarge>
-                  </SynthListElement>
-                );
-              })}
+              {synthList &&
+                synthList.map(synth => {
+                  return (
+                    <SynthListElement
+                      key={synth}
+                      onClick={() => {
+                        onSynthChange(synth);
+                        toggleList(false);
+                      }}
+                    >
+                      <CurrencyIcon
+                        src={`/images/currencies/${synth}.svg`}
+                      ></CurrencyIcon>
+                      <PLarge>{synth}</PLarge>
+                    </SynthListElement>
+                  );
+                })}
             </SynthList>
           </List>
         ) : null}
