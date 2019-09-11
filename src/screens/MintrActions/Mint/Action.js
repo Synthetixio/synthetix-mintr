@@ -10,7 +10,7 @@ import {
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
+const Action = ({ onDestroy, onMint, issuableSynths }) => {
   const [amount, setAmount] = useState('');
   return (
     <SlidePage>
@@ -47,7 +47,7 @@ const Action = ({ onDestroy, onMint, maxIssuableSynths }) => {
               rightComponent={
                 <ButtonMax
                   onClick={() => {
-                    setAmount(maxIssuableSynths);
+                    setAmount(issuableSynths);
                   }}
                 />
               }

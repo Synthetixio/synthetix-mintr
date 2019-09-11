@@ -25,13 +25,21 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
             walletAddress,
             sUSDBytes
           ),
+          snxJSConnector.snxJS.Synthetix.debtBalanceOf(
+            walletAddress,
+            sUSDBytes
+          ),
           snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
           snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
         ]);
-        const [maxIssuableSynths, issuanceRatio, SNXPrice] = results.map(
-          bigNumberFormatter
-        );
-        setData({ maxIssuableSynths, issuanceRatio, SNXPrice });
+        const [
+          maxIssuableSynths,
+          debtBalance,
+          issuanceRatio,
+          SNXPrice,
+        ] = results.map(bigNumberFormatter);
+        const issuableSynths = Math.max(0, maxIssuableSynths - debtBalance);
+        setData({ issuableSynths, debtBalance, issuanceRatio, SNXPrice });
       } catch (e) {
         console.log(e);
       }
@@ -53,7 +61,7 @@ const Mint = ({ onDestroy }) => {
   } = useContext(Store);
 
   const sUSDBytes = bytesFormatter('sUSD');
-  const { maxIssuableSynths, issuanceRatio, SNXPrice } = useGetIssuanceData(
+  const { issuableSynths, issuanceRatio, SNXPrice } = useGetIssuanceData(
     currentWallet,
     sUSDBytes
   );
@@ -63,7 +71,7 @@ const Mint = ({ onDestroy }) => {
       setMintAmount(amount);
       handleNext(1);
       let transaction;
-      if (amount === maxIssuableSynths) {
+      if (amount === issuableSynths) {
         transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
           sUSDBytes
         );
@@ -96,7 +104,7 @@ const Mint = ({ onDestroy }) => {
   const props = {
     onDestroy,
     onMint,
-    maxIssuableSynths,
+    issuableSynths,
     goBack: handlePrev,
     walletType,
     networkName,

@@ -18,6 +18,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
+  padding: 0 5px;
   overflow: hidden;
 `;
 
