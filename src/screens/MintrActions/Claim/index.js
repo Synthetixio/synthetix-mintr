@@ -11,6 +11,8 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 import { bytesFormatter } from '../../../helpers/formatters';
 
+import { createTransaction } from '../../../ducks/transactions';
+
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
@@ -39,6 +41,7 @@ const useGetFeeData = walletAddress => {
       const xdrBytes = bytesFormatter('XDR');
       const sUSDBytes = bytesFormatter('sUSD');
       try {
+        setData({ ...data, dataIsLoading: true });
         const [
           feesByPeriod,
           feePeriodDuration,
@@ -76,6 +79,7 @@ const useGetFeeData = walletAddress => {
           feesByPeriod: formattedFeesByPeriod,
           feesAreClaimable,
           feesAvailable: feesAvailable.map(bigNumberFormatter),
+          dataIsLoading: false,
         });
       } catch (e) {
         console.log(e);
@@ -96,9 +100,12 @@ const Claim = ({ onDestroy }) => {
     },
     dispatch,
   } = useContext(Store);
-  const { feesByPeriod, feesAreClaimable, feesAvailable } = useGetFeeData(
-    currentWallet
-  );
+  const {
+    feesByPeriod,
+    feesAreClaimable,
+    feesAvailable,
+    dataIsLoading,
+  } = useGetFeeData(currentWallet);
 
   const onClaim = async () => {
     try {
@@ -108,6 +115,15 @@ const Claim = ({ onDestroy }) => {
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
+        createTransaction(
+          {
+            hash: transaction.hash,
+            status: 'pending',
+            info: 'Claiming rewards',
+            hasNotification: true,
+          },
+          dispatch
+        );
         handleNext(2);
       }
     } catch (e) {
@@ -130,6 +146,7 @@ const Claim = ({ onDestroy }) => {
     feesAreClaimable,
     feesAvailable,
     walletType,
+    dataIsLoading,
     ...transactionInfo,
   };
   return [Action, Confirmation, Complete].map((SlideContent, i) => (

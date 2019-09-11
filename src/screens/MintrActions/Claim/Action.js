@@ -27,48 +27,53 @@ import {
   TR,
   TD,
 } from '../../../components/ScheduleTable';
+import Skeleton from '../../../components/Skeleton';
 import { Info } from '../../../components/Icons';
 
 const bigNumberFormatter = value =>
   Number(snxJSConnector.utils.formatEther(value));
 
 const Periods = ({ state = {} }) => {
-  const { feesByPeriod = [] } = state;
+  const { feesByPeriod = [], dataIsLoading } = state;
   return (
     <div>
-      <TableWrapper height='auto'>
-        <Table cellSpacing='0'>
-          <THead>
-            <TR>
-              <TH padding={'10px 20px'}>
-                <TableHeaderMedium>sUSD</TableHeaderMedium>
-              </TH>
-              <TH padding={'10px 20px'}>
-                <TableHeaderMedium>SNX</TableHeaderMedium>
-              </TH>
-              <TH padding={'10px 20px'}>
-                <TableHeaderMedium>PERIOD</TableHeaderMedium>
-              </TH>
-            </TR>
-          </THead>
-          <TBody>
-            {feesByPeriod.map(({ fee, reward, closeIn }, i) => {
-              return (
-                <TR key={i}>
-                  <TD padding={'0 20px'}>
-                    <DataLarge>{formatCurrency(fee, 3)}</DataLarge>
-                  </TD>
-                  <TD padding={'0 20px'}>
-                    <DataLarge>{formatCurrency(reward, 3)}</DataLarge>
-                  </TD>
-                  <TD padding={'0 20px'}>
-                    <DataLarge>{closeIn}</DataLarge>
-                  </TD>
-                </TR>
-              );
-            })}
-          </TBody>
-        </Table>
+      <TableWrapper height="auto">
+        {dataIsLoading ? (
+          <Skeleton width={'100%'} height={'110px'} />
+        ) : (
+          <Table cellSpacing="0">
+            <THead>
+              <TR>
+                <TH padding={'10px 20px'}>
+                  <TableHeaderMedium>sUSD</TableHeaderMedium>
+                </TH>
+                <TH padding={'10px 20px'}>
+                  <TableHeaderMedium>SNX</TableHeaderMedium>
+                </TH>
+                <TH padding={'10px 20px'}>
+                  <TableHeaderMedium>PERIOD</TableHeaderMedium>
+                </TH>
+              </TR>
+            </THead>
+            <TBody>
+              {feesByPeriod.map(({ fee, reward, closeIn }, i) => {
+                return (
+                  <TR key={i}>
+                    <TD padding={'0 20px'}>
+                      <DataLarge>{formatCurrency(fee, 3)}</DataLarge>
+                    </TD>
+                    <TD padding={'0 20px'}>
+                      <DataLarge>{formatCurrency(reward, 3)}</DataLarge>
+                    </TD>
+                    <TD style={{ whiteSpace: 'nowrap' }} padding={'0 20px'}>
+                      <DataLarge>{closeIn}</DataLarge>
+                    </TD>
+                  </TR>
+                );
+              })}
+            </TBody>
+          </Table>
+        )}
       </TableWrapper>
     </div>
   );
@@ -81,6 +86,7 @@ const Action = ({
   feesByPeriod,
   feesAreClaimable,
   feesAvailable,
+  dataIsLoading,
 }) => {
   return (
     <SlidePage>
@@ -93,7 +99,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/claim.svg' big />
+            <ActionImage src="/images/actions/claim.svg" big />
             <H1>CLAIM</H1>
             <PLarge>
               If you have locked your SNX and minted sUSD, you are eligible to
@@ -105,14 +111,14 @@ const Action = ({
         <Middle>
           <Schedule>
             <H5>Claimable periods:</H5>
-            <Periods state={{ feesByPeriod }} />
+            <Periods state={{ feesByPeriod, dataIsLoading }} />
             <Status>
-              <PMedium width='100%'>Fee Claim Status:</PMedium>
+              <PMedium width="100%">Fee Claim Status:</PMedium>
               <State>
-                <Highlighted red={!feesAreClaimable} marginRight='8px'>
+                <Highlighted red={!feesAreClaimable} marginRight="8px">
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
                 </Highlighted>
-                <Info width='4px' />
+                <Info width="4px" />
               </State>
             </Status>
           </Schedule>
@@ -150,7 +156,7 @@ const Action = ({
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
-            margin='auto'
+            margin="auto"
           >
             CLAIM NOW
           </ButtonPrimary>
