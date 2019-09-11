@@ -57,24 +57,22 @@ const Balances = ({ state }) => {
 
 const RewardInfo = ({ state }) => {
   const { rewardData, theme, dashboardIsLoading } = state;
-  let content = <div />;
   if (dashboardIsLoading) return <Skeleton />;
-  if (rewardData.feesAreClaimable) {
-    content = rewardData.feesAreClaimable ? (
-      <DataLarge>
-        <Highlighted>
-          {rewardData.currentPeriodEnd
-            ? formatDistanceToNow(rewardData.currentPeriodEnd)
-            : '--'}{' '}
-        </Highlighted>{' '}
-        left to claim rewards
-      </DataLarge>
-    ) : (
-      <DataLarge>
-        Claiming rewards <Highlighted red={true}>blocked</Highlighted>
-      </DataLarge>
-    );
-  }
+  const content = rewardData.feesAreClaimable ? (
+    <DataLarge>
+      <Highlighted>
+        {rewardData.currentPeriodEnd
+          ? formatDistanceToNow(rewardData.currentPeriodEnd)
+          : '--'}{' '}
+      </Highlighted>{' '}
+      left to claim rewards
+    </DataLarge>
+  ) : (
+    <DataLarge>
+      Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+    </DataLarge>
+  );
+
   return (
     <Row padding="0px 8px">
       {content}
@@ -265,7 +263,7 @@ const Dashboard = () => {
           <Balances state={{ balances, prices, theme, dashboardIsLoading }} />
         </Container>
         <Container curved={true}>
-          <RewardInfo state={{ rewardData, theme }} />
+          <RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
         </Container>
         <Container>
           <ContainerHeader>
