@@ -31,6 +31,7 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
           <Form>
             <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
+              singleSynth={'sUSD'}
               onChange={e => setAmount(e.target.value)}
               value={amount}
               placeholder="0.00"
