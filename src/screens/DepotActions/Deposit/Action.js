@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import {
@@ -35,7 +35,7 @@ const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
               leftComponent={
                 <Type>
                   <img
-                    src="/images/sUSD-icon.svg"
+                    src="/images/currencies/sUSD.svg"
                     height="24px"
                     style={{ marginRight: '8px' }}
                   />

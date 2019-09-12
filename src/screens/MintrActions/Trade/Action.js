@@ -1,23 +1,34 @@
-/*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy }) => {
-  const { handleNext } = useContext(SliderContext);
+const Action = ({
+  onDestroy,
+  synthBalances,
+  baseSynth,
+  onTrade,
+  onBaseSynthChange,
+}) => {
+  const [baseAmount, setBaseAmount] = useState('');
+  const [quoteAmount, setQuoteAmount] = useState('');
+
+  const onBaseAmountChange = amount => {
+    setBaseAmount(amount);
+    setQuoteAmount(amount ? Number(amount) * Number(baseSynth.rate) : '');
+  };
+
+  const onQuoteAmountChange = amount => {
+    setQuoteAmount(amount);
+    setBaseAmount(amount ? Number(amount) / Number(baseSynth.rate) : '');
+  };
+
   return (
     <SlidePage>
       <Container>
@@ -27,7 +38,7 @@ const Action = ({ onDestroy }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/trade.svg' big />
+            <ActionImage src="/images/actions/trade.svg" big />
             <H1>TRADE</H1>
             <PLarge>
               Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
@@ -37,33 +48,26 @@ const Action = ({ onDestroy }) => {
           </Intro>
           <Form>
             <Input
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
+              isDisabled={!synthBalances}
+              synths={synthBalances}
+              onSynthChange={onBaseSynthChange}
+              value={baseAmount}
+              onChange={e => onBaseAmountChange(e.target.value)}
+              placeholder="0.00"
+              currentSynth={baseSynth}
+              rightComponent={
+                <ButtonMax
+                  onClick={() => onBaseAmountChange(baseSynth.balance)}
+                />
               }
-              rightComponent={<ButtonMax />}
             />
             <PLarge>↓</PLarge>
             <Input
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/sUSD-icon.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
-              rightComponent={<ButtonMax />}
+              isDisabled={!synthBalances}
+              singleSynth={'sUSD'}
+              placeholder="0.00"
+              value={quoteAmount}
+              onChange={e => onQuoteAmountChange(e.target.value)}
             />
           </Form>
         </Top>
@@ -75,7 +79,10 @@ const Action = ({ onDestroy }) => {
               GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
             </Subtext>
           </Fees>
-          <ButtonPrimary onClick={handleNext} margin='auto'>
+          <ButtonPrimary
+            onClick={() => onTrade(baseAmount, quoteAmount)}
+            margin="auto"
+          >
             TRADE NOW
           </ButtonPrimary>
         </Bottom>
@@ -134,14 +141,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 const Highlighted = styled.span`

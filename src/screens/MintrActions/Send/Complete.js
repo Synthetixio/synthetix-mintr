@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,
@@ -16,6 +16,7 @@ const Success = ({
   onDestroy,
   networkName,
   transactionHash,
+  currentCurrency,
 }) => {
   return (
     <Fragment>
@@ -32,7 +33,10 @@ const Success = ({
         <Details>
           <Box>
             <DataHeaderLarge>SENDING:</DataHeaderLarge>
-            <Amount>{formatCurrency(sendAmount)} SNX</Amount>
+            <Amount>
+              {formatCurrency(sendAmount)}{' '}
+              {currentCurrency && currentCurrency.name}
+            </Amount>
           </Box>
           <Box>
             <DataHeaderLarge>TO WALLET:</DataHeaderLarge>

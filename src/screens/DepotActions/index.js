@@ -2,7 +2,7 @@ import React from 'react';
 import Deposit from './Deposit';
 import Withdraw from './Withdraw';
 
-import Slider from '../../components/Slider';
+import Slider from '../../components/ScreenSlider';
 
 const getActionComponent = action => {
   switch (action) {

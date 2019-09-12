@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { formatCurrency, shortenAddress } from '../../../helpers/formatters';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -12,7 +12,13 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, sendAmount, sendDestination }) => {
+const Confirmation = ({
+  goBack,
+  walletType,
+  sendAmount,
+  sendDestination,
+  currentCurrency,
+}) => {
   return (
     <SlidePage>
       <Container>
@@ -33,7 +39,10 @@ const Confirmation = ({ goBack, walletType, sendAmount, sendDestination }) => {
           <Details>
             <Box>
               <DataHeaderLarge>SENDING:</DataHeaderLarge>
-              <Amount>{formatCurrency(sendAmount)} SNX</Amount>
+              <Amount>
+                {formatCurrency(sendAmount)}{' '}
+                {currentCurrency && currentCurrency.name}
+              </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>TO WALLET:</DataHeaderLarge>
@@ -42,7 +51,7 @@ const Confirmation = ({ goBack, walletType, sendAmount, sendDestination }) => {
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
+          <Spinner margin="auto" />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>

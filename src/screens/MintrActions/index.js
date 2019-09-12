@@ -4,7 +4,7 @@ import Burn from './Burn';
 import Claim from './Claim';
 import Trade from './Trade';
 import Send from './Send';
-import Slider from '../../components/Slider';
+import Slider from '../../components/ScreenSlider';
 
 const getActionComponent = action => {
   switch (action) {

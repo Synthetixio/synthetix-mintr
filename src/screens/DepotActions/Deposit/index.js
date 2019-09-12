@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
-import { SliderContext } from '../../../components/Slider';
+import { SliderContext } from '../../../components/ScreenSlider';
 
 import Action from './Action';
 import Confirmation from './Confirmation';

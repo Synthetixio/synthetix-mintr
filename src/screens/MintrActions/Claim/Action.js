@@ -1,12 +1,9 @@
-/* eslint-disable */
 import React from 'react';
 import styled from 'styled-components';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
-
 import { formatCurrency } from '../../../helpers/formatters';
 
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -29,9 +26,6 @@ import {
 } from '../../../components/ScheduleTable';
 import Skeleton from '../../../components/Skeleton';
 import { Info } from '../../../components/Icons';
-
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
 
 const Periods = ({ state = {} }) => {
   const { feesByPeriod = [], dataIsLoading } = state;

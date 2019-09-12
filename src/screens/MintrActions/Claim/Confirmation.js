@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { formatCurrency } from '../../../helpers/formatters';
 
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,

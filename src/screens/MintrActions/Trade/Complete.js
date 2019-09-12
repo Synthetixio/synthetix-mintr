@@ -1,47 +1,100 @@
-import React, { useContext } from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,
   PageTitle,
   DataHeaderLarge,
 } from '../../../components/Typography';
+import { formatCurrency } from '../../../helpers/formatters';
 
-const Complete = () => {
-  const { handleNext } = useContext(SliderContext);
+const Success = ({
+  tradeAmount,
+  onDestroy,
+  networkName,
+  transactionHash,
+  baseSynth,
+}) => {
+  return (
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/success.svg" big />
+          <PageTitle>Minting in progress!</PageTitle>
+          <PLarge>
+            Sent to the Ethereum network and will be available in your wallet
+            shortly. You may close this window as the transaction completes in
+            the background.
+          </PLarge>
+        </Intro>
+        <Details>
+          <Box>
+            <DataHeaderLarge>TRADING:</DataHeaderLarge>
+            <Amount>
+              {formatCurrency(tradeAmount ? tradeAmount.base : 0)}{' '}
+              {baseSynth && baseSynth.name}
+            </Amount>
+          </Box>
+          <Box>
+            <DataHeaderLarge>RECEIVING:</DataHeaderLarge>
+            <Amount>
+              {formatCurrency(tradeAmount ? tradeAmount.quote : 0)} sUSD
+            </Amount>
+          </Box>
+        </Details>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonSecondary
+            href={`https://${
+              networkName === 'mainnet' ? '' : networkName + '.'
+            }etherscan.io/tx/${transactionHash}`}
+            as="a"
+            target="_blank"
+          >
+            VIEW ON ETHERSCAN
+          </ButtonSecondary>
+          <ButtonPrimary onClick={onDestroy}>
+            FINISH & RETURN HOME
+          </ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
+  );
+};
+
+const Failure = ({ transactionError, onDestroy }) => {
+  return (
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/failure.svg" big />
+          <PageTitle>Something went wrong...</PageTitle>
+          {transactionError.code ? (
+            <PLarge>Code: {transactionError.code}</PLarge>
+          ) : null}
+          <PLarge>{transactionError.message}</PLarge>
+        </Intro>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
+  );
+};
+
+const Complete = props => {
   return (
     <SlidePage>
       <Container>
-        <Top>
-          <Intro>
-            <ActionImage src='/images/success.svg' big />
-            <PageTitle>Trading in progress!</PageTitle>
-            <PLarge>
-              Sent to the Ethereum network and will be available in your wallet
-              shortly. You may close this window as the transaction completes in
-              the background.
-            </PLarge>
-          </Intro>
-          <Details>
-            <Box>
-              <DataHeaderLarge>TRADED:</DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
-            </Box>
-            <Box>
-              <DataHeaderLarge>RECEIVED:</DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
-            </Box>
-          </Details>
-        </Top>
-        <Bottom>
-          <Buttons>
-            <ButtonSecondary>VIEW ON ETHERSCAN</ButtonSecondary>
-            <ButtonPrimary onClick={handleNext}>
-              FINISH & RETURN HOME
-            </ButtonPrimary>
-          </Buttons>
-        </Bottom>
+        {props && props.transactionError ? (
+          <Failure {...props}></Failure>
+        ) : (
+          <Success {...props}></Success>
+        )}
       </Container>
     </SlidePage>
   );
@@ -103,8 +156,8 @@ const Amount = styled.span`
 
 const Buttons = styled.div`
   height: auto;
-  & :first-child {
-    margin-bottom: 24px;
+  & > :last-child {
+    margin-top: 24px;
   }
 `;
 

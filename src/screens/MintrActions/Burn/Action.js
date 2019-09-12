@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 
 import {
   ButtonPrimary,
@@ -31,13 +31,14 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
           <Form>
             <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
+              singleSynth={'sUSD'}
               onChange={e => setAmount(e.target.value)}
               value={amount}
               placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src="/images/sUSD-icon.svg"
+                    src="/images/currencies/sUSD.svg"
                     height="24px"
                     style={{ marginRight: '8px' }}
                   />

@@ -82,7 +82,7 @@ const Notification = ({ transaction }) => {
         <ButtonTertiary
           onClick={() => hideTransaction(transaction.hash, dispatch)}
         >
-          Close this window
+          Close
         </ButtonTertiary>
       </ButtonBlock>
     </NotificationWrapper>
