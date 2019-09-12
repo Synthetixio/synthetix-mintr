@@ -16,6 +16,7 @@ const Success = ({
   onDestroy,
   networkName,
   transactionHash,
+  currentCurrency,
 }) => {
   return (
     <Fragment>
@@ -32,7 +33,10 @@ const Success = ({
         <Details>
           <Box>
             <DataHeaderLarge>SENDING:</DataHeaderLarge>
-            <Amount>{formatCurrency(sendAmount)} SNX</Amount>
+            <Amount>
+              {formatCurrency(sendAmount)}{' '}
+              {currentCurrency && currentCurrency.name}
+            </Amount>
           </Box>
           <Box>
             <DataHeaderLarge>TO WALLET:</DataHeaderLarge>

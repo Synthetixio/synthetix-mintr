@@ -110,7 +110,6 @@ const Trade = ({ onDestroy }) => {
       setTransactionInfo({ ...transactionInfo, transactionError: e });
       handleNext(2);
       console.log(e);
-      console.log(e);
     }
   };
   const props = {

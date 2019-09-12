@@ -14,9 +14,15 @@ import {
   Subtext,
   DataHeaderLarge,
 } from '../../../components/Typography';
-import Input from '../../../components/Input';
+import Input, { SimpleInput } from '../../../components/Input';
 
-const Action = ({ onDestroy, onSend, transferableSNX }) => {
+const Action = ({
+  onDestroy,
+  onSend,
+  balances,
+  currentCurrency,
+  onCurrentCurrencyChange,
+}) => {
   const [amount, setAmount] = useState('');
   const [destinationWallet, setDestinationWallet] = useState('');
   return (
@@ -34,7 +40,11 @@ const Action = ({ onDestroy, onSend, transferableSNX }) => {
           <Details>
             <Box>
               <DataHeaderLarge>TRANSFERABLE AMOUNT:</DataHeaderLarge>
-              <Amount>{formatCurrency(transferableSNX)} SNX</Amount>
+              <Amount>
+                {formatCurrency(currentCurrency && currentCurrency.balance) ||
+                  0}{' '}
+                {currentCurrency && currentCurrency.name}
+              </Amount>
             </Box>
           </Details>
         </Top>
@@ -42,7 +52,11 @@ const Action = ({ onDestroy, onSend, transferableSNX }) => {
           <Form>
             <PLarge>Enter amount or select max available:</PLarge>
             <Input
+              disabled={!currentCurrency}
               onChange={e => setAmount(e.target.value)}
+              onSynthChange={onCurrentCurrencyChange}
+              synths={balances}
+              currentSynth={currentCurrency}
               value={amount}
               placeholder="0.00"
               leftComponent={
@@ -56,13 +70,17 @@ const Action = ({ onDestroy, onSend, transferableSNX }) => {
                 </Type>
               }
               rightComponent={
-                <ButtonMax onClick={() => setAmount(transferableSNX)} />
+                <ButtonMax
+                  onClick={() =>
+                    setAmount((currentCurrency && currentCurrency.balance) || 0)
+                  }
+                />
               }
             />
             <PLarge marginTop="32px">
               Enter wallet address to send funds to:
             </PLarge>
-            <Input
+            <SimpleInput
               onChange={e => setDestinationWallet(e.target.value)}
               value={destinationWallet}
               placeholder="e.g. 0x3b18a4..."

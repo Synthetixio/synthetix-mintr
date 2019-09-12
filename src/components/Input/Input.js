@@ -100,6 +100,21 @@ const Dropdown = ({ onClick, synth, singleSynth }) => {
   );
 };
 
+export const SimpleInput = ({ value, onChange, placeholder }) => {
+  return (
+    <InputWrapper>
+      <InputInner>
+        <InputElement
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          type="text"
+        />
+      </InputInner>
+    </InputWrapper>
+  );
+};
+
 const Button = styled.button`
   cursor: pointer;
   max-width: 120px;
