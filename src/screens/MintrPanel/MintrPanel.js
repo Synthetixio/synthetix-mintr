@@ -7,6 +7,7 @@ import { updateCurrentTab } from '../../ducks/ui';
 
 import { Home, Depot, Transactions, Escrow } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
+import { TransactionSettingsPopup } from '../../components/Popup';
 
 const TabRow = ({ state }) => {
   const { t } = state;
@@ -57,6 +58,7 @@ const MainContainer = ({ t }) => {
         <TabRow state={{ t }} />
       </Header>
       {renderScreen(currentTab)}
+      <TransactionSettingsPopup>dflkjgdflkgjdlkf</TransactionSettingsPopup>
     </MainContainerWrapper>
   );
 };
@@ -64,6 +66,7 @@ const MainContainer = ({ t }) => {
 const MainContainerWrapper = styled('div')`
   width: 100%;
   background-color: ${props => props.theme.colorStyles.background};
+  position: relative;
 `;
 
 const Header = styled('div')`
