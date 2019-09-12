@@ -1,29 +1,34 @@
-/*eslint-disable */
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import { SlidePage } from '../../../components/Slider';
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  ButtonPrimaryLabel,
-  Subtext,
-  InputTextLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
 const Action = ({
   onDestroy,
-  synths,
+  synthBalances,
   baseSynth,
-  onBaseSynthChange,
   onTrade,
+  onBaseSynthChange,
 }) => {
-  const { handleNext } = useContext(SliderContext);
+  const [baseAmount, setBaseAmount] = useState('');
+  const [quoteAmount, setQuoteAmount] = useState('');
+
+  const onBaseAmountChange = amount => {
+    setBaseAmount(amount);
+    setQuoteAmount(amount ? Number(amount) * Number(baseSynth.rate) : '');
+  };
+
+  const onQuoteAmountChange = amount => {
+    setQuoteAmount(amount);
+    setBaseAmount(amount ? Number(amount) / Number(baseSynth.rate) : '');
+  };
+
   return (
     <SlidePage>
       <Container>
@@ -43,18 +48,26 @@ const Action = ({
           </Intro>
           <Form>
             <Input
-              synths={synths}
+              isDisabled={!synthBalances}
+              synths={synthBalances}
               onSynthChange={onBaseSynthChange}
+              value={baseAmount}
+              onChange={e => onBaseAmountChange(e.target.value)}
               placeholder="0.00"
               currentSynth={baseSynth}
-              rightComponent={<ButtonMax />}
+              rightComponent={
+                <ButtonMax
+                  onClick={() => onBaseAmountChange(baseSynth.balance)}
+                />
+              }
             />
             <PLarge>↓</PLarge>
             <Input
-              singleSynth={true}
-              currentSynth={'sUSD'}
+              isDisabled={!synthBalances}
+              singleSynth={'sUSD'}
               placeholder="0.00"
-              rightComponent={<ButtonMax />}
+              value={quoteAmount}
+              onChange={e => onQuoteAmountChange(e.target.value)}
             />
           </Form>
         </Top>
@@ -66,7 +79,10 @@ const Action = ({
               GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
             </Subtext>
           </Fees>
-          <ButtonPrimary onClick={() => onTrade()} margin="auto">
+          <ButtonPrimary
+            onClick={() => onTrade(baseAmount, quoteAmount)}
+            margin="auto"
+          >
             TRADE NOW
           </ButtonPrimary>
         </Bottom>
@@ -125,14 +141,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 const Highlighted = styled.span`

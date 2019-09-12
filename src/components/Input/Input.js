@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled, { keyframes } from 'styled-components';
@@ -7,7 +8,7 @@ import { PLarge } from '../Typography';
 const getSynthList = (synths, search) => {
   if (!search) return synths;
   return synths.filter(synth =>
-    synth.toLowerCase().includes(search.toLowerCase())
+    synth.name.toLowerCase().includes(search.toLowerCase())
   );
 };
 
@@ -20,6 +21,7 @@ const Input = ({
   synths,
   singleSynth = false,
   onSynthChange,
+  isDisabled = false,
 }) => {
   const [listIsOpen, toggleList] = useState(false);
   const [currentSearch, updateCurrentSearch] = useState('');
@@ -27,11 +29,11 @@ const Input = ({
 
   return (
     <OutsideClickHandler onOutsideClick={() => toggleList(false)}>
-      <InputWrapper>
+      <InputWrapper disabled={isDisabled}>
         <InputInner>
           <Dropdown
             singleSynth={singleSynth}
-            synth={currentSynth}
+            synth={currentSynth && currentSynth.name}
             onClick={() => toggleList(!listIsOpen)}
           />
           <InputElement
@@ -63,16 +65,16 @@ const Input = ({
                 synthList.map(synth => {
                   return (
                     <SynthListElement
-                      key={synth}
+                      key={synth.name}
                       onClick={() => {
                         onSynthChange(synth);
                         toggleList(false);
                       }}
                     >
                       <CurrencyIcon
-                        src={`/images/currencies/${synth}.svg`}
+                        src={`/images/currencies/${synth.name}.svg`}
                       ></CurrencyIcon>
-                      <PLarge>{synth}</PLarge>
+                      <PLarge>{synth.name}</PLarge>
                     </SynthListElement>
                   );
                 })}
@@ -85,10 +87,11 @@ const Input = ({
 };
 
 const Dropdown = ({ onClick, synth, singleSynth }) => {
+  const synthName = singleSynth || synth || 'sUSD';
   return (
     <Button disabled={singleSynth} onClick={onClick}>
-      <CurrencyIcon src={`/images/currencies/${synth}.svg`}></CurrencyIcon>
-      <PLarge>{synth}</PLarge>
+      <CurrencyIcon src={`/images/currencies/${synthName}.svg`}></CurrencyIcon>
+      <PLarge>{synthName}</PLarge>
       <CaretDownIcon
         isHidden={singleSynth}
         src="/images/caret-down.svg"
@@ -129,6 +132,7 @@ const InputWrapper = styled.div`
   position: relative;
   width: 400px;
   margin: 0 auto;
+  opacity: ${props => (props.disabled ? '0.6' : 1)};
 `;
 
 const InputInner = styled.div`

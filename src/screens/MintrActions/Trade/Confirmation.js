@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
+import { SlidePage } from '../../../components/Slider';
 import { ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -8,39 +8,43 @@ import {
   DataHeaderLarge,
   Subtext,
 } from '../../../components/Typography';
+import { formatCurrency } from '../../../helpers/formatters';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = () => {
-  const { handlePrev } = useContext(SliderContext);
-  const { handleNext } = useContext(SliderContext);
+const Confirmation = ({ goBack, walletType, tradeAmount, baseSynth }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={handlePrev}>Go back</ButtonTertiary>
+          <ButtonTertiary onClick={goBack}>Go back</ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/wallets/ledger.svg' big />
+            <ActionImage src={`/images/wallets/${walletType}.svg`} big />
             <PageTitle>Please confirm transaction</PageTitle>
             <PLarge>
-              To continue, follow the prompts on your Ledger Wallet.
+              {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
               <DataHeaderLarge>TRADING:</DataHeaderLarge>
-              <Amount>5,000.00 sUSD</Amount>
+              <Amount>
+                {formatCurrency(tradeAmount ? tradeAmount.base : 0)}{' '}
+                {baseSynth && baseSynth.name}
+              </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>RECEIVING:</DataHeaderLarge>
-              <Amount>5,000.00 SNX</Amount>
+              <Amount>
+                {formatCurrency(tradeAmount ? tradeAmount.quote : 0)} sUSD
+              </Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
-          <Subtext onClick={handleNext}>Waiting for user response...</Subtext>
+          <Spinner margin="auto" />
+          <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
           <Fees>

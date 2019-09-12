@@ -2,39 +2,60 @@ import React, { useContext, useState, useEffect } from 'react';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
+import { SliderContext } from '../../../components/Slider';
+import { createTransaction } from '../../../ducks/transactions';
+
 import {
-  // bytesFormatter,
   bigNumberFormatter,
+  bytesFormatter,
 } from '../../../helpers/formatters';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
-const useGetWalletSynths = walletAddress => {
+const useGetWalletSynths = (walletAddress, setBaseSynth) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     const getWalletSynths = async () => {
       try {
         let walletSynths = [];
+
         const synthList = snxJSConnector.synths
           .filter(({ name, asset }) => {
             return name !== 'sUSD' && asset;
           })
           .map(({ name }) => name);
 
-        const result = await Promise.all(
+        const balanceResults = await Promise.all(
           synthList.map(synth =>
             snxJSConnector.snxJS[synth].balanceOf(walletAddress)
           )
         );
 
-        result.forEach((synthBalance, index) => {
+        balanceResults.forEach((synthBalance, index) => {
           const balance = bigNumberFormatter(synthBalance);
           if (balance && balance > 0)
-            walletSynths.push({ name: synthList[index], balance });
+            walletSynths.push({
+              name: synthList[index],
+              rawBalance: synthBalance,
+              balance,
+            });
         });
+
+        const exchangeRatesResults = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
+          walletSynths.map(({ name }) => bytesFormatter(name))
+        );
+
+        walletSynths = walletSynths.map((synth, i) => {
+          return {
+            ...synth,
+            rate: bigNumberFormatter(exchangeRatesResults[i]),
+          };
+        });
+
         setData(walletSynths);
+        setBaseSynth(walletSynths.length > 0 && walletSynths[0]);
       } catch (e) {
         console.log(e);
       }
@@ -45,25 +66,64 @@ const useGetWalletSynths = walletAddress => {
 };
 
 const Trade = ({ onDestroy }) => {
-  const [baseSynth, setBaseSynth] = useState('sUSD');
+  const { handleNext, handlePrev } = useContext(SliderContext);
+  const [baseSynth, setBaseSynth] = useState(null);
+  const [tradeAmount, setTradeAmount] = useState(null);
+  const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
-      wallet: { currentWallet },
+      wallet: { currentWallet, walletType, networkName },
     },
+    dispatch,
   } = useContext(Store);
-  const synths = useGetWalletSynths(currentWallet);
-  const onTrade = () => {
+  const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
+  const onTrade = async (baseAmount, quoteAmount) => {
     try {
-      console.log(baseSynth, synths.find(synth => synth.name === baseSynth));
+      setTradeAmount({ base: baseAmount, quote: quoteAmount });
+      const amountToExchange =
+        baseAmount === baseSynth.balance
+          ? baseSynth.rawBalance
+          : snxJSConnector.utils.parseEther(baseAmount.toString());
+      handleNext(1);
+      const transaction = await snxJSConnector.snxJS.Synthetix.exchange(
+        bytesFormatter(baseSynth.name),
+        amountToExchange,
+        bytesFormatter('sUSD'),
+        currentWallet
+      );
+      if (transaction) {
+        setTransactionInfo({ transactionHash: transaction.hash });
+        createTransaction(
+          {
+            hash: transaction.hash,
+            status: 'pending',
+            info: `Exchanging ${Math.round(baseAmount, 3)} ${
+              baseSynth.name
+            } to ${Math.round(quoteAmount, 3)} sUSD`,
+            hasNotification: true,
+          },
+          dispatch
+        );
+        handleNext(2);
+      }
     } catch (e) {
+      setTransactionInfo({ ...transactionInfo, transactionError: e });
+      handleNext(2);
+      console.log(e);
       console.log(e);
     }
   };
   const props = {
     onDestroy,
-    synths: synths && synths.map(({ name }) => name),
+    synthBalances,
     baseSynth,
     onTrade,
+    tradeAmount,
+    walletType,
+    networkName,
+    goBack: handlePrev,
+    ...transactionInfo,
+
     onBaseSynthChange: synth => setBaseSynth(synth),
   };
 
