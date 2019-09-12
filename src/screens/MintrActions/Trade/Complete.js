@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
   PLarge,

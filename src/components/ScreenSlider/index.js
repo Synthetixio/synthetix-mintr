@@ -1,4 +1,4 @@
-import Slider from './Slider';
+import Slider from './ScreenSlider';
 import SlidePage from './SlidePage';
 import SliderContext from './Context';
 

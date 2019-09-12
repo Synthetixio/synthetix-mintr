@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/Slider';
+import { SlidePage } from '../../../components/ScreenSlider';
 import {
   ButtonPrimary,
   ButtonTertiary,

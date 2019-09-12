@@ -4,7 +4,7 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { SliderContext } from '../../../components/Slider';
+import { SliderContext } from '../../../components/ScreenSlider';
 import { Store } from '../../../store';
 import { createTransaction } from '../../../ducks/transactions';
 import {

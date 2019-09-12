@@ -3,7 +3,7 @@ import { addSeconds, formatDistanceToNow } from 'date-fns';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import { Store } from '../../../store';
-import { SliderContext } from '../../../components/Slider';
+import { SliderContext } from '../../../components/ScreenSlider';
 import { updateCurrentTab } from '../../../ducks/ui';
 
 import Action from './Action';
