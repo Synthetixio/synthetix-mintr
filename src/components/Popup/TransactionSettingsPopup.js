@@ -1,43 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+
+import { Store } from '../../store';
+import { formatCurrency } from '../../helpers/formatters';
+import { getTransactionPrice } from '../../helpers/networkHelper';
+
 import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
 import { ButtonPrimary } from '../Button';
 import Slider from '../Slider';
 
-const RatesData = () => {
-  const data = [
-    {
-      speed: 'SLOW',
-      eth: '0.063',
-      gwei: '0',
-      mins: '19.51',
-    },
-    {
-      speed: 'MEDIUM',
-      eth: '0.063',
-      gwei: '25',
-      mins: '10.37',
-    },
-    {
-      speed: 'FAST',
-      eth: '0.063',
-      gwei: '50',
-      mins: '0.63',
-    },
-  ];
+const RatesData = ({ gasInfo }) => {
   return (
     <RatesDataWrapper>
       <Range>
-        {data.map((dataElement, i) => {
+        {gasInfo.map((gas, i) => {
           return (
             <Rates key={i}>
-              <DataHeaderLarge marginBottom='8px'>
-                {dataElement.speed}
+              <DataHeaderLarge
+                marginBottom="8px"
+                style={{ textTransform: 'capitalize' }}
+              >
+                {gas.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom='4px'>{dataElement.eth} ETH</DataLarge>
-              <DataLarge marginBottom='4px'>{dataElement.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom='4px'>{dataElement.mins} mins</DataLarge>
+              <DataLarge marginBottom="4px">
+                ${formatCurrency(gas.price)}
+              </DataLarge>
+              <DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom="4px">{gas.time} mins</DataLarge>
             </Rates>
           );
         })}
@@ -46,9 +36,35 @@ const RatesData = () => {
   );
 };
 
-const TransactionSettingsPopup = () => {
+const renderTooltipContent = (gasPrice, gasLimit, ethPrice) => {
   return (
-    <PopupContainer margin='auto'>
+    <TooltipInner>
+      <TooltipValue>{gasPrice} GWEI</TooltipValue>
+      <TooltipValue>
+        ${formatCurrency(getTransactionPrice(gasPrice, gasLimit, ethPrice))}
+      </TooltipValue>
+    </TooltipInner>
+  );
+};
+
+const TransactionSettingsPopup = () => {
+  const {
+    state: {
+      network: { gasStation, ethPrice },
+      transactions: { gasEstimate = 200000 },
+    },
+  } = useContext(Store);
+  const gasInfo = gasStation
+    ? Object.keys(gasStation).map(speed => {
+        return {
+          ...gasStation[speed],
+          speed,
+          price: gasStation[speed].getPrice(gasEstimate, ethPrice),
+        };
+      })
+    : [];
+  return (
+    <PopupContainer margin="auto">
       <Wrapper>
         <Intro>
           <PageTitle>Set transaction speed and gas</PageTitle>
@@ -62,9 +78,11 @@ const TransactionSettingsPopup = () => {
             min={0}
             max={50}
             defaultValue={3}
-            tipFormatter={value => `$${value}`}
+            tooltipRenderer={value =>
+              renderTooltipContent(value, gasEstimate, ethPrice)
+            }
           />
-          <RatesData />
+          {gasStation ? <RatesData gasInfo={gasInfo} /> : null}
         </SliderWrapper>
         <ButtonWrapper>
           <ButtonPrimary>SUBMIT</ButtonPrimary>
@@ -119,6 +137,13 @@ const Rates = styled.div`
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
+`;
+
+const TooltipInner = styled.div`
+  padding: 8px 12px;
+`;
+const TooltipValue = styled.div`
+  margin-bottom: 4px;
 `;
 
 export default TransactionSettingsPopup;

@@ -22,6 +22,7 @@ const initialState = {
     dataFetchers: {},
     successQueue: [],
   },
+  network: {},
 };
 
 ReactDOM.render(

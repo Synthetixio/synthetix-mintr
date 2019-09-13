@@ -31,23 +31,27 @@ export const getNetworkInfo = async () => {
   const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
   const networkInfo = await result.json();
   return {
-    fast: {
-      gwei: networkInfo.fast / 10,
-      time: networkInfo.fastWait,
-      getPrice: (ethPrice, gasPrice) =>
-        ((networkInfo.fast / 10) * ethPrice * gasPrice) / GWEI_UNIT,
+    slow: {
+      gwei: networkInfo.safeLow / 10,
+      time: networkInfo.safeLowWait,
+      getPrice: (ethPrice, gasLimit) =>
+        ((networkInfo.safeLow / 10) * ethPrice * gasLimit) / GWEI_UNIT,
     },
     average: {
       gwei: networkInfo.average / 10,
       time: networkInfo.avgWait,
-      getPrice: (ethPrice, gasPrice) =>
-        ((networkInfo.average / 10) * ethPrice * gasPrice) / GWEI_UNIT,
+      getPrice: (ethPrice, gasLimit) =>
+        ((networkInfo.average / 10) * ethPrice * gasLimit) / GWEI_UNIT,
     },
-    slow: {
-      gwei: networkInfo.safeLow / 10,
-      time: networkInfo.safeLowWait,
-      getPrice: (ethPrice, gasPrice) =>
-        ((networkInfo.safeLow / 10) * ethPrice * gasPrice) / GWEI_UNIT,
+    fast: {
+      gwei: networkInfo.fast / 10,
+      time: networkInfo.fastWait,
+      getPrice: (ethPrice, gasLimit) =>
+        ((networkInfo.fast / 10) * ethPrice * gasLimit) / GWEI_UNIT,
     },
   };
+};
+
+export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
+  return (gasPrice * ethPrice * gasLimit) / GWEI_UNIT;
 };
