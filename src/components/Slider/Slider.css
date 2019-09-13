@@ -29,6 +29,10 @@
   box-shadow: 0px 0px 12px 5px rgba(0, 0, 0, 0.52);
 }
 
+.rc-slider-tooltip {
+  z-index: 101;
+}
+
 .rc-slider-tooltip-inner {
   background: white;
   color: black;
@@ -36,4 +40,5 @@
 
 .rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
   border-top-color: white;
+  color: black;
 }
