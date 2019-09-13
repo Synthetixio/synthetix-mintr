@@ -2,6 +2,8 @@ const TOGGLE_THEME = 'UI/TOGGLE_THEME';
 const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
 const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
 const TOGGLE_DASHBOARD_IS_LOADING = 'UI/TOGGLE_DASHBOARD_IS_LOADING';
+const TOGGLE_TRANSACTION_SETTINGS_POPUP =
+  'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
 
 // Reducer
 export default (state, action) => {
@@ -19,6 +21,9 @@ export default (state, action) => {
     }
     case TOGGLE_DASHBOARD_IS_LOADING: {
       return { ...state, dashboardIsLoading: action.payload };
+    }
+    case TOGGLE_TRANSACTION_SETTINGS_POPUP: {
+      return { ...state, transactionSettingsPopupIsVisible: action.payload };
     }
     default:
       return state;
@@ -51,5 +56,12 @@ export const toggleDashboardIsLoading = (isLoading, dispatch) => {
   return dispatch({
     type: TOGGLE_DASHBOARD_IS_LOADING,
     payload: isLoading,
+  });
+};
+
+export const toggleTransactionSettingPopup = (isVisible, dispatch) => {
+  return dispatch({
+    type: TOGGLE_TRANSACTION_SETTINGS_POPUP,
+    payload: isVisible,
   });
 };

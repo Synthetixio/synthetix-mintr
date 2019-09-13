@@ -3,27 +3,7 @@ import styled from 'styled-components';
 import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
 import { ButtonPrimary } from '../Button';
-
-import Slider from 'rc-slider';
-import Tooltip from 'rc-tooltip';
-import 'rc-slider/assets/index.css';
-import 'rc-tooltip/assets/bootstrap.css';
-
-const Handle = Slider.Handle;
-
-const handle = ({ value, dragging, index, ...restProps }) => {
-  return (
-    <Tooltip
-      prefixCls='rc-slider-tooltip'
-      overlay={value}
-      visible={dragging}
-      placement='top'
-      key={index}
-    >
-      <Handle value={value} {...restProps} />
-    </Tooltip>
-  );
-};
+import Slider from '../Slider';
 
 const RatesData = () => {
   const data = [
@@ -52,12 +32,12 @@ const RatesData = () => {
         {data.map((dataElement, i) => {
           return (
             <Rates key={i}>
-              <DataHeaderLarge marginBottom='8px'>
+              <DataHeaderLarge marginBottom="8px">
                 {dataElement.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom='4px'>{dataElement.eth} ETH</DataLarge>
-              <DataLarge marginBottom='4px'>{dataElement.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom='4px'>{dataElement.mins} mins</DataLarge>
+              <DataLarge marginBottom="4px">{dataElement.eth} ETH</DataLarge>
+              <DataLarge marginBottom="4px">{dataElement.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom="4px">{dataElement.mins} mins</DataLarge>
             </Rates>
           );
         })}
@@ -68,7 +48,7 @@ const RatesData = () => {
 
 const TransactionSettingsPopup = () => {
   return (
-    <PopupContainer margin='auto'>
+    <PopupContainer margin="auto">
       <Wrapper>
         <Intro>
           <PageTitle>Set transaction speed and gas</PageTitle>
@@ -78,7 +58,7 @@ const TransactionSettingsPopup = () => {
           </PLarge>
         </Intro>
         <SliderWrapper>
-          <Slider min={0} max={20} defaultValue={3} handle={handle} />
+          <Slider min={0} max={20} defaultValue={3} />
           <RatesData />
         </SliderWrapper>
         <ButtonWrapper>

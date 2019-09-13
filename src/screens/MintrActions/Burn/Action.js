@@ -6,6 +6,7 @@ import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
+  ButtonTransactionEdit,
 } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
@@ -57,7 +58,7 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
         </Top>
         <Bottom>
           <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+            GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
           </Subtext>
           <ButtonPrimary onClick={() => onBurn(amount)} margin="auto">
             BURN NOW
@@ -123,12 +124,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

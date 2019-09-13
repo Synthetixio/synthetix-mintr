@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/ScreenSlider';
 
+import { SlidePage } from '../../../components/ScreenSlider';
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
+  ButtonTransactionEdit,
 } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
@@ -57,7 +58,8 @@ const Action = ({ onDestroy, onMint, issuableSynths }) => {
         </Top>
         <Bottom>
           <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+            GAS: $0.083 / SPEED: ~5:24 mins{' '}
+            <ButtonTransactionEdit></ButtonTransactionEdit>
           </Subtext>
           <ButtonPrimary onClick={() => onMint(amount)} margin="auto">
             MINT NOW
@@ -123,11 +125,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

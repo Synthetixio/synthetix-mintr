@@ -48,7 +48,7 @@ const renderScreen = screen => {
 const MainContainer = ({ t }) => {
   const {
     state: {
-      ui: { currentTab },
+      ui: { currentTab, transactionSettingsPopupIsVisible },
     },
   } = useContext(Store);
 
@@ -58,7 +58,9 @@ const MainContainer = ({ t }) => {
         <TabRow state={{ t }} />
       </Header>
       {renderScreen(currentTab)}
-      <TransactionSettingsPopup>dflkjgdflkgjdlkf</TransactionSettingsPopup>
+      {transactionSettingsPopupIsVisible ? (
+        <TransactionSettingsPopup></TransactionSettingsPopup>
+      ) : null}
     </MainContainerWrapper>
   );
 };

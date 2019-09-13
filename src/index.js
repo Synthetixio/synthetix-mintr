@@ -12,6 +12,7 @@ const initialState = {
     currentPage: 'walletConnection',
     currentTab: 'home',
     dashboardIsLoading: false,
+    transactionSettingsPopupIsVisible: true,
   },
   wallet: {
     unlocked: false,
