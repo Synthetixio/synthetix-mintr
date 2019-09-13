@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import { SlidePage } from '../../../components/ScreenSlider';
-import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
+import {
+  ButtonPrimary,
+  ButtonTertiary,
+  ButtonTransactionEdit,
+} from '../../../components/Button';
 import {
   PLarge,
   PMedium,
@@ -31,11 +35,11 @@ const Periods = ({ state = {} }) => {
   const { feesByPeriod = [], dataIsLoading } = state;
   return (
     <div>
-      <TableWrapper height="auto">
+      <TableWrapper height='auto'>
         {dataIsLoading ? (
           <Skeleton width={'100%'} height={'110px'} />
         ) : (
-          <Table cellSpacing="0">
+          <Table cellSpacing='0'>
             <THead>
               <TR>
                 <TH padding={'10px 20px'}>
@@ -93,7 +97,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/claim.svg" big />
+            <ActionImage src='/images/actions/claim.svg' big />
             <H1>CLAIM</H1>
             <PLarge>
               If you have locked your SNX and minted sUSD, you are eligible to
@@ -107,12 +111,12 @@ const Action = ({
             <H5>Claimable periods:</H5>
             <Periods state={{ feesByPeriod, dataIsLoading }} />
             <Status>
-              <PMedium width="100%">Fee Claim Status:</PMedium>
+              <PMedium width='100%'>Fee Claim Status:</PMedium>
               <State>
-                <Highlighted red={!feesAreClaimable} marginRight="8px">
+                <Highlighted red={!feesAreClaimable} marginRight='8px'>
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
                 </Highlighted>
-                <Info width="4px" />
+                <Info width='4px' />
               </State>
             </Status>
           </Schedule>
@@ -144,13 +148,13 @@ const Action = ({
         <Bottom>
           <Fees>
             <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+              GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
             </Subtext>
           </Fees>
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
-            margin="auto"
+            margin='auto'
           >
             CLAIM NOW
           </ButtonPrimary>

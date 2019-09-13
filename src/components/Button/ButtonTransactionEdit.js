@@ -18,6 +18,7 @@ const Button = () => {
 const ButtonWrapper = styled.button`
   font-family: 'apercu-bold';
   border: none;
+  background-color: transparent;
   font-size: 14px;
   cursor: pointer;
   color: ${props => props.theme.colorStyles.hyperlink};

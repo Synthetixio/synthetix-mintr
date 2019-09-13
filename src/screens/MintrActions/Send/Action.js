@@ -7,6 +7,7 @@ import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
+  ButtonTransactionEdit,
 } from '../../../components/Button';
 import {
   PLarge,
@@ -33,7 +34,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/send.svg" big />
+            <ActionImage src='/images/actions/send.svg' big />
             <H1>SEND</H1>
             <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
           </Intro>
@@ -58,12 +59,12 @@ const Action = ({
               synths={balances}
               currentSynth={currentCurrency}
               value={amount}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
+                    src='/images/currencies/sUSD.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -77,24 +78,24 @@ const Action = ({
                 />
               }
             />
-            <PLarge marginTop="32px">
+            <PLarge marginTop='32px'>
               Enter wallet address to send funds to:
             </PLarge>
             <SimpleInput
               onChange={e => setDestinationWallet(e.target.value)}
               value={destinationWallet}
-              placeholder="e.g. 0x3b18a4..."
+              placeholder='e.g. 0x3b18a4...'
             />
           </Form>
         </Middle>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+          <Subtext marginBottom='32px'>
+            GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
           </Subtext>
           <ButtonPrimary
             disabled={!destinationWallet || !amount}
             onClick={() => onSend(amount, destinationWallet)}
-            margin="auto"
+            margin='auto'
           >
             SEND NOW
           </ButtonPrimary>
@@ -191,12 +192,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

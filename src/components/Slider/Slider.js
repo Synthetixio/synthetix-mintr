@@ -22,8 +22,15 @@ export const handle = ({ value, dragging, index, ...restProps }) => {
   );
 };
 
-const TooltipContent = () => {
-  return <TooltipInner>this is the tooltip content</TooltipInner>;
+const TooltipContent = value => {
+  console.log(value);
+  return (
+    <TooltipInner>
+      <TooltipValue>{value} ETH</TooltipValue>
+      <TooltipValue>{value} GWEI</TooltipValue>
+      <TooltipValue>{value} mins</TooltipValue>
+    </TooltipInner>
+  );
 };
 
 const SliderComponent = ({ min, max, defaultValue }) => {
@@ -38,5 +45,11 @@ const SliderComponent = ({ min, max, defaultValue }) => {
   );
 };
 
-const TooltipInner = styled.div``;
+const TooltipInner = styled.div`
+  padding: 8px 12px;
+`;
+const TooltipValue = styled.div`
+  margin-bottom: 4px;
+`;
+
 export default SliderComponent;
