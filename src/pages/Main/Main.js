@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
+
+import snxJSConnector from '../../helpers/snxJSConnector';
+import { getNetworkInfo } from '../../helpers/networkHelper';
+import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
+import { updateEthPrice, updateGasStation } from '../../ducks/network';
+import { Store } from '../../store';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
 
 const Main = () => {
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    const fetchLoop = setInterval(() => {
+      const fetchNetworkInfo = async () => {
+        try {
+          const [networkInfo, ethPrice] = await Promise.all([
+            getNetworkInfo(),
+            snxJSConnector.snxJS.ExchangeRates.rateForCurrency(
+              bytesFormatter('ETH')
+            ),
+          ]);
+          updateEthPrice(bigNumberFormatter(ethPrice), dispatch);
+          updateGasStation(networkInfo, dispatch);
+        } catch (e) {
+          console.log('Error while trying to fetch network data', e);
+        }
+      };
+      fetchNetworkInfo();
+    }, 5 * 60 * 1000);
+    return () => clearInterval(fetchLoop);
+  }, []);
+
   return (
     <MainWrapper>
       <Dashboard />

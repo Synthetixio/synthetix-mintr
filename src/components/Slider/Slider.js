@@ -1,9 +1,12 @@
 import React from 'react';
-import Slider, { Handle } from 'rc-slider';
+import styled from 'styled-components';
+import Slider, { Handle, createSliderWithTooltip } from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 import './Slider.css';
+
+const CustomSlider = createSliderWithTooltip(Slider);
 
 export const handle = ({ value, dragging, index, ...restProps }) => {
   return (
@@ -19,10 +22,21 @@ export const handle = ({ value, dragging, index, ...restProps }) => {
   );
 };
 
+const TooltipContent = () => {
+  return <TooltipInner>this is the tooltip content</TooltipInner>;
+};
+
 const SliderComponent = ({ min, max, defaultValue }) => {
   return (
-    <Slider min={min} max={max} defaultValue={defaultValue} handle={handle} />
+    <CustomSlider
+      min={min}
+      max={max}
+      defaultValue={defaultValue}
+      handle={handle}
+      tipFormatter={TooltipContent}
+    />
   );
 };
 
+const TooltipInner = styled.div``;
 export default SliderComponent;

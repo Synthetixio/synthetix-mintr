@@ -72,6 +72,11 @@ const Mint = ({ onDestroy }) => {
       handleNext(1);
       let transaction;
       if (amount === issuableSynths) {
+        const gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
+          sUSDBytes
+        );
+
+        console.log('estimate', gasEstimate, gasEstimate.toString());
         transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
           sUSDBytes
         );
