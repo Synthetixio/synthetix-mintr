@@ -10,20 +10,20 @@ const RatesData = () => {
     {
       speed: 'SLOW',
       eth: '0.063',
-      gwei: '0.063',
-      mins: '0.063',
+      gwei: '0',
+      mins: '19.51',
     },
     {
       speed: 'MEDIUM',
       eth: '0.063',
-      gwei: '0.063',
-      mins: '0.063',
+      gwei: '25',
+      mins: '10.37',
     },
     {
       speed: 'FAST',
       eth: '0.063',
-      gwei: '0.063',
-      mins: '0.063',
+      gwei: '50',
+      mins: '0.63',
     },
   ];
   return (
@@ -32,12 +32,12 @@ const RatesData = () => {
         {data.map((dataElement, i) => {
           return (
             <Rates key={i}>
-              <DataHeaderLarge marginBottom="8px">
+              <DataHeaderLarge marginBottom='8px'>
                 {dataElement.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom="4px">{dataElement.eth} ETH</DataLarge>
-              <DataLarge marginBottom="4px">{dataElement.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom="4px">{dataElement.mins} mins</DataLarge>
+              <DataLarge marginBottom='4px'>{dataElement.eth} ETH</DataLarge>
+              <DataLarge marginBottom='4px'>{dataElement.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom='4px'>{dataElement.mins} mins</DataLarge>
             </Rates>
           );
         })}
@@ -48,7 +48,7 @@ const RatesData = () => {
 
 const TransactionSettingsPopup = () => {
   return (
-    <PopupContainer margin="auto">
+    <PopupContainer margin='auto'>
       <Wrapper>
         <Intro>
           <PageTitle>Set transaction speed and gas</PageTitle>
@@ -58,7 +58,12 @@ const TransactionSettingsPopup = () => {
           </PLarge>
         </Intro>
         <SliderWrapper>
-          <Slider min={0} max={20} defaultValue={3} />
+          <Slider
+            min={0}
+            max={50}
+            defaultValue={3}
+            tipFormatter={value => `$${value}`}
+          />
           <RatesData />
         </SliderWrapper>
         <ButtonWrapper>
@@ -87,16 +92,16 @@ const Wrapper = styled.div`
 const Intro = styled.div`
   width: 400px;
   text-align: center;
-  margin-bottom: 72px;
+  margin-bottom: 88px;
 `;
 
 const SliderWrapper = styled.div`
   width: 480px;
-  margin: 0 auto 40px auto;
+  margin: 8px auto 32px auto;
 `;
 
 const ButtonWrapper = styled.div`
-  margin: 24px auto 32px auto;
+  margin: 16px auto 32px auto;
 `;
 
 const Range = styled.div`

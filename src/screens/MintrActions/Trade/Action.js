@@ -5,6 +5,7 @@ import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
+  ButtonTransactionEdit,
 } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
@@ -38,7 +39,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/trade.svg" big />
+            <ActionImage src='/images/actions/trade.svg' big />
             <H1>TRADE</H1>
             <PLarge>
               Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
@@ -53,7 +54,7 @@ const Action = ({
               onSynthChange={onBaseSynthChange}
               value={baseAmount}
               onChange={e => onBaseAmountChange(e.target.value)}
-              placeholder="0.00"
+              placeholder='0.00'
               currentSynth={baseSynth}
               rightComponent={
                 <ButtonMax
@@ -65,7 +66,7 @@ const Action = ({
             <Input
               isDisabled={!synthBalances}
               singleSynth={'sUSD'}
-              placeholder="0.00"
+              placeholder='0.00'
               value={quoteAmount}
               onChange={e => onQuoteAmountChange(e.target.value)}
             />
@@ -76,12 +77,12 @@ const Action = ({
             <Subtext>TRADING FEE: 0.3%</Subtext>
             <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext>
             <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+              GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
             </Subtext>
           </Fees>
           <ButtonPrimary
             onClick={() => onTrade(baseAmount, quoteAmount)}
-            margin="auto"
+            margin='auto'
           >
             TRADE NOW
           </ButtonPrimary>
@@ -141,12 +142,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 const Fees = styled.div`
