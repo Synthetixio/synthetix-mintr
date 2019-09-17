@@ -14,13 +14,13 @@ const CancelButton = ({ children, onClick }) => {
   );
 };
 
-const MainContainer = ({ cancel, onCreate }) => {
+const MainContainer = ({ goHome, onCreate }) => {
   const [recipientsData, setRecipientsData] = useState([]);
   return (
     <SlidePage>
       <MainContainerWrapper>
         <Column>
-          <CancelButton onClick={cancel}>Cancel</CancelButton>
+          <CancelButton onClick={goHome}>Cancel</CancelButton>
           <CsvLoader onDataLoaded={setRecipientsData} />
           <ButtonPrimaryMedium onClick={() => onCreate(recipientsData)}>
             submit transaction

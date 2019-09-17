@@ -22,7 +22,7 @@ const SETHPoolRewardDistribution = () => {
     const PageComponent = getComponent(page);
     slider =
       <Slider>
-        <PageComponent cancel={() => setPage(null)} />
+        <PageComponent goHome={() => setPage(null)} />
       </Slider>;
   }
   return (

@@ -1,24 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ethers } from 'ethers';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 
 import { SliderContext } from '../../../components/Slider';
 import Action from './Action';
+import Confirmation from './Confirmation';
+import Complete from './Complete';
 
 import { getMultisig, getAirdropper } from '../hooks';
 
 import addresses from '../contracts/addresses.json';
 
-const MainContainer = ({ cancel }) => {
+const MainContainer = ({ goHome }) => {
   const { handleNext } = useContext(SliderContext);
-  const props = useContext(SliderContext);
-  
-  const {
-    state: { wallet },
-  } = useContext(Store);
-  console.log(wallet);
+  const [transaction, setTransaction] = useState(null);
 
   const onCreate = async recipientsData => {
     try {
@@ -35,8 +31,9 @@ const MainContainer = ({ cancel }) => {
       });
       
       const transactionData = airdropper.functions.multisend.encode([addresses.token, recipientsAddresses, recipientsShares]);
-      const transaction = await multisig.submitTransaction(addresses.airdropper, 0, transactionData);
-      if (transaction) {
+      const tx = await multisig.submitTransaction(addresses.airdropper, 0, transactionData);
+      if (tx) {
+        setTransaction(tx);
         handleNext(2);
       }
     } catch (e) {
@@ -44,8 +41,14 @@ const MainContainer = ({ cancel }) => {
     }
   };
 
-  return [Action].map((SlideContent, i) => (
-    <SlideContent key={i} onCreate={onCreate} cancel={cancel} {...props} />
+  const props = {
+    onCreate,
+    goHome,
+    transaction,
+  }
+
+  return [Action, Confirmation, Complete].map((SlideContent, i) => (
+    <SlideContent key={i} {...props} />
   ));
 };
 
