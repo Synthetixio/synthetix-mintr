@@ -8,12 +8,12 @@ import MultisigABI from './contracts/ABIs/multisig.json';
 import AirdropperABI from './contracts/ABIs/airdropper.json';
 import addresses from './contracts/addresses.json';
 
-function getMultisig() {
+export function getMultisig() {
   return new ethers.Contract(addresses.multisig, MultisigABI, snxJSConnector.provider);
 }
 
-function getAirdropper() { // eslint-disable-line
-  return new ethers.Contract(addresses.airdropper, AirdropperABI, snxJSConnector.provider);
+export function getAirdropper() {
+  return new ethers.utils.Interface(AirdropperABI);
 }
 
 export const useOwners = () => {
