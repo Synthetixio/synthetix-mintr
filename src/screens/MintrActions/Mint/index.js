@@ -13,6 +13,7 @@ import {
 } from '../../../helpers/formatters';
 
 import { createTransaction } from '../../../ducks/transactions';
+import { updateGasLimit } from '../../../ducks/network';
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
@@ -49,9 +50,36 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   return data;
 };
 
+const useGetGasEstimate = (mintAmount, issuableSynths) => {
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    if (mintAmount <= 0) return;
+    const sUSDBytes = bytesFormatter('sUSD');
+    const getGasEstimate = async () => {
+      let gasEstimate;
+      try {
+        if (mintAmount === issuableSynths) {
+          gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
+            sUSDBytes
+          );
+        } else {
+          gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueSynths(
+            sUSDBytes,
+            snxJSConnector.utils.parseEther(mintAmount.toString())
+          );
+        }
+        updateGasLimit(Number(gasEstimate), dispatch);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getGasEstimate();
+  }, [mintAmount]);
+};
+
 const Mint = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const [mintAmount, setMintAmount] = useState(null);
+  const [mintAmount, setMintAmount] = useState('');
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
@@ -66,24 +94,20 @@ const Mint = ({ onDestroy }) => {
     sUSDBytes
   );
 
-  const onMint = async amount => {
+  useGetGasEstimate(mintAmount, issuableSynths);
+
+  const onMint = async () => {
     try {
-      setMintAmount(amount);
       handleNext(1);
       let transaction;
-      if (amount === issuableSynths) {
-        const gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
-          sUSDBytes
-        );
-
-        console.log('estimate', gasEstimate, gasEstimate.toString());
+      if (mintAmount === issuableSynths) {
         transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
           sUSDBytes
         );
       } else {
         transaction = await snxJSConnector.snxJS.Synthetix.issueSynths(
           sUSDBytes,
-          snxJSConnector.utils.parseEther(amount.toString())
+          snxJSConnector.utils.parseEther(mintAmount.toString())
         );
       }
       if (transaction) {
@@ -92,7 +116,7 @@ const Mint = ({ onDestroy }) => {
           {
             hash: transaction.hash,
             status: 'pending',
-            info: `Minting ${amount} sUSD`,
+            info: `Minting ${mintAmount} sUSD`,
             hasNotification: true,
           },
           dispatch
@@ -114,6 +138,7 @@ const Mint = ({ onDestroy }) => {
     walletType,
     networkName,
     mintAmount,
+    setMintAmount,
     issuanceRatio,
     SNXPrice,
     ...transactionInfo,

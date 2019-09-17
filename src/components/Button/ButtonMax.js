@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonPrimaryLabelSmall } from '../Typography';
+import { withTranslation } from 'react-i18next';
 
-const ButtonMax = ({ onClick }) => {
+const ButtonMax = ({ onClick, t }) => {
   return (
     <Button onClick={onClick}>
-      <ButtonPrimaryLabelSmall>MAX</ButtonPrimaryLabelSmall>
+      <ButtonPrimaryLabelSmall>{t('button.max')}</ButtonPrimaryLabelSmall>
     </Button>
   );
 };
@@ -23,9 +24,10 @@ const Button = styled.button`
   border-radius: 3px;
   cursor: pointer;
   transition: all ease-in 0.1s;
+  text-transform: uppercase;
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }
 `;
 
-export default ButtonMax;
+export default withTranslation()(ButtonMax);

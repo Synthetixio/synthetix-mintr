@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import { Store } from '../../store';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
+
+import { updateGasPrice } from '../../ducks/network';
+import { toggleTransactionSettingPopup } from '../../ducks/ui';
 
 import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
@@ -36,13 +39,11 @@ const RatesData = ({ gasInfo }) => {
   );
 };
 
-const renderTooltipContent = (gasPrice, gasLimit, ethPrice) => {
+const renderTooltipContent = ({ gasPrice, usdPrice }) => {
   return (
     <TooltipInner>
       <TooltipValue>{gasPrice} GWEI</TooltipValue>
-      <TooltipValue>
-        ${formatCurrency(getTransactionPrice(gasPrice, gasLimit, ethPrice))}
-      </TooltipValue>
+      <TooltipValue>${formatCurrency(usdPrice)}</TooltipValue>
     </TooltipInner>
   );
 };
@@ -50,16 +51,26 @@ const renderTooltipContent = (gasPrice, gasLimit, ethPrice) => {
 const TransactionSettingsPopup = () => {
   const {
     state: {
-      network: { gasStation, ethPrice },
-      transactions: { gasEstimate = 200000 },
+      network: {
+        gasStation,
+        ethPrice,
+        settings: { gasPrice, gasLimit },
+      },
     },
+    dispatch,
   } = useContext(Store);
+
+  const [currentTransactionSettings, setTransactionSettings] = useState({
+    gasPrice,
+    usdPrice: getTransactionPrice(gasPrice, gasLimit, ethPrice),
+  });
+
   const gasInfo = gasStation
     ? Object.keys(gasStation).map(speed => {
         return {
           ...gasStation[speed],
           speed,
-          price: gasStation[speed].getPrice(gasEstimate, ethPrice),
+          price: gasStation[speed].getPrice(gasLimit, ethPrice),
         };
       })
     : [];
@@ -77,15 +88,28 @@ const TransactionSettingsPopup = () => {
           <Slider
             min={0}
             max={50}
-            defaultValue={3}
-            tooltipRenderer={value =>
-              renderTooltipContent(value, gasEstimate, ethPrice)
+            defaultValue={currentTransactionSettings.gasPrice}
+            tooltipRenderer={() =>
+              renderTooltipContent(currentTransactionSettings)
+            }
+            onChange={newPrice =>
+              setTransactionSettings({
+                gasPrice: newPrice,
+                usdPrice: getTransactionPrice(newPrice, gasLimit, ethPrice),
+              })
             }
           />
           {gasStation ? <RatesData gasInfo={gasInfo} /> : null}
         </SliderWrapper>
         <ButtonWrapper>
-          <ButtonPrimary>SUBMIT</ButtonPrimary>
+          <ButtonPrimary
+            onClick={() => {
+              updateGasPrice(currentTransactionSettings.gasPrice, dispatch);
+              toggleTransactionSettingPopup(false, dispatch);
+            }}
+          >
+            SUBMIT
+          </ButtonPrimary>
         </ButtonWrapper>
       </Wrapper>
     </PopupContainer>

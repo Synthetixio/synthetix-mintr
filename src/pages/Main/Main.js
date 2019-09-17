@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getNetworkInfo } from '../../helpers/networkHelper';
 import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
-import { updateEthPrice, updateGasStation } from '../../ducks/network';
+import { updateNetworkInfo } from '../../ducks/network';
 import { Store } from '../../store';
 
 import Dashboard from '../../screens/Dashboard';
@@ -21,8 +21,7 @@ const Main = () => {
             bytesFormatter('ETH')
           ),
         ]);
-        updateEthPrice(bigNumberFormatter(ethPrice), dispatch);
-        updateGasStation(networkInfo, dispatch);
+        updateNetworkInfo(networkInfo, bigNumberFormatter(ethPrice), dispatch);
       } catch (e) {
         console.log('Error while trying to fetch network data', e);
       }

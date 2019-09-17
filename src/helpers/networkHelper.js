@@ -35,23 +35,24 @@ export const getNetworkInfo = async () => {
       gwei: networkInfo.safeLow / 10,
       time: networkInfo.safeLowWait,
       getPrice: (ethPrice, gasLimit) =>
-        ((networkInfo.safeLow / 10) * ethPrice * gasLimit) / GWEI_UNIT,
+        getTransactionPrice(networkInfo.safeLow / 10, gasLimit, ethPrice),
     },
     average: {
       gwei: networkInfo.average / 10,
       time: networkInfo.avgWait,
       getPrice: (ethPrice, gasLimit) =>
-        ((networkInfo.average / 10) * ethPrice * gasLimit) / GWEI_UNIT,
+        getTransactionPrice(networkInfo.average / 10, gasLimit, ethPrice),
     },
     fast: {
       gwei: networkInfo.fast / 10,
       time: networkInfo.fastWait,
       getPrice: (ethPrice, gasLimit) =>
-        ((networkInfo.fast / 10) * ethPrice * gasLimit) / GWEI_UNIT,
+        getTransactionPrice(networkInfo.fast / 10, gasLimit, ethPrice),
     },
   };
 };
 
 export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
+  if (!gasPrice || !gasLimit) return 0;
   return (gasPrice * ethPrice * gasLimit) / GWEI_UNIT;
 };

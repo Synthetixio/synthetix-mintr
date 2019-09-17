@@ -1,5 +1,4 @@
 import React from 'react';
-// import styled from 'styled-components';
 import Slider, { Handle, createSliderWithTooltip } from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 
@@ -23,17 +22,13 @@ export const handle = ({ value, dragging, index, ...restProps }) => {
   );
 };
 
-// const TooltipContent = value => {
-//   return (
-//     <TooltipInner>
-//       <TooltipValue>{value} ETH</TooltipValue>
-//       <TooltipValue>{value} GWEI</TooltipValue>
-//       <TooltipValue>{value} mins</TooltipValue>
-//     </TooltipInner>
-//   );
-// };
-
-const SliderComponent = ({ min, max, defaultValue, tooltipRenderer }) => {
+const SliderComponent = ({
+  min,
+  max,
+  defaultValue,
+  tooltipRenderer,
+  onChange,
+}) => {
   return (
     <CustomSlider
       min={min}
@@ -41,15 +36,9 @@ const SliderComponent = ({ min, max, defaultValue, tooltipRenderer }) => {
       defaultValue={defaultValue}
       handle={handle}
       tipFormatter={tooltipRenderer}
+      onChange={onChange}
     />
   );
 };
-
-// const TooltipInner = styled.div`
-//   padding: 8px 12px;
-// `;
-// const TooltipValue = styled.div`
-//   margin-bottom: 4px;
-// `;
 
 export default SliderComponent;

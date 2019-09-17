@@ -12,7 +12,7 @@ const initialState = {
     currentPage: 'walletConnection',
     currentTab: 'home',
     dashboardIsLoading: false,
-    transactionSettingsPopupIsVisible: true,
+    transactionSettingsPopupIsVisible: false,
   },
   wallet: {
     unlocked: false,
@@ -22,7 +22,9 @@ const initialState = {
     dataFetchers: {},
     successQueue: [],
   },
-  network: {},
+  network: {
+    settings: {},
+  },
 };
 
 ReactDOM.render(

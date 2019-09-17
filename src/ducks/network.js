@@ -1,14 +1,75 @@
+import { getTransactionPrice } from '../helpers/networkHelper';
+
 const UPDATE_ETH_PRICE = 'NETWORK/UPDATE_ETH_PRICE';
-const UPDATE_GAS_STATION = 'NETWORK/UPDATE_GAS_STATION';
+const UPDATE_INFO = 'NETWORK/UPDATE_INFO';
+const UPDATE_GAS_LIMIT = 'NETWORK/UPDATE_GAS_LIMIT';
+const UPDATE_GAS_PRICE = 'NETWORK/UPDATE_GAS_PRICE';
 
 // Reducer
 export default (state, action) => {
   switch (action.type) {
     case UPDATE_ETH_PRICE: {
-      return { ...state, ethPrice: action.payload };
+      const { gasPrice, gasLimit } = state.settings;
+      const ethPrice = action.payload;
+      const transactionUsdPrice = getTransactionPrice(
+        gasPrice,
+        gasLimit,
+        ethPrice
+      );
+      return {
+        ...state,
+        ethPrice,
+        settings: { ...state.settings, transactionUsdPrice },
+      };
     }
-    case UPDATE_GAS_STATION: {
-      return { ...state, gasStation: action.payload };
+    case UPDATE_INFO: {
+      const { gasStation, ethPrice } = action.payload;
+      return {
+        ...state,
+        gasStation,
+        ethPrice,
+        settings: { gasPrice: gasStation['slow'].gwei },
+      };
+    }
+    case UPDATE_GAS_LIMIT: {
+      const {
+        ethPrice,
+        settings: { gasPrice },
+      } = state;
+      const gasLimit = action.payload;
+      const transactionUsdPrice = getTransactionPrice(
+        gasPrice,
+        gasLimit,
+        ethPrice
+      );
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          gasLimit: action.payload,
+          transactionUsdPrice,
+        },
+      };
+    }
+    case UPDATE_GAS_PRICE: {
+      const {
+        ethPrice,
+        settings: { gasLimit },
+      } = state;
+      const gasPrice = action.payload;
+      const transactionUsdPrice = getTransactionPrice(
+        gasPrice,
+        gasLimit,
+        ethPrice
+      );
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          gasPrice: action.payload,
+          transactionUsdPrice,
+        },
+      };
     }
     default:
       return state;
@@ -23,9 +84,23 @@ export const updateEthPrice = (price, dispatch) => {
   });
 };
 
-export const updateGasStation = (gasStation, dispatch) => {
+export const updateNetworkInfo = (gasStation, ethPrice, dispatch) => {
   return dispatch({
-    type: UPDATE_GAS_STATION,
-    payload: gasStation,
+    type: UPDATE_INFO,
+    payload: { gasStation, ethPrice },
+  });
+};
+
+export const updateGasLimit = (gasLimit, dispatch) => {
+  return dispatch({
+    type: UPDATE_GAS_LIMIT,
+    payload: gasLimit,
+  });
+};
+
+export const updateGasPrice = (gasPrice, dispatch) => {
+  return dispatch({
+    type: UPDATE_GAS_PRICE,
+    payload: gasPrice,
   });
 };

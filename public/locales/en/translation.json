@@ -16,5 +16,8 @@
         "support": "Support"
       }
     }
+  },
+  "button": {
+    "max": "Max"
   }
 }
