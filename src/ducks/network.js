@@ -5,6 +5,8 @@ const UPDATE_INFO = 'NETWORK/UPDATE_INFO';
 const UPDATE_GAS_LIMIT = 'NETWORK/UPDATE_GAS_LIMIT';
 const UPDATE_GAS_PRICE = 'NETWORK/UPDATE_GAS_PRICE';
 
+const GAS_LIMIT_BUFFER = 5000;
+
 // Reducer
 export default (state, action) => {
   switch (action.type) {
@@ -36,7 +38,7 @@ export default (state, action) => {
         ethPrice,
         settings: { gasPrice },
       } = state;
-      const gasLimit = action.payload;
+      const gasLimit = action.payload + GAS_LIMIT_BUFFER;
       const transactionUsdPrice = getTransactionPrice(
         gasPrice,
         gasLimit,
