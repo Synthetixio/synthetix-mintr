@@ -79,7 +79,7 @@ const renderHiddenContent = () => {
             return (
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
-                  <TypeImage src='/images/actions/tiny-sold.svg' />
+                  <TypeImage src="/images/actions/tiny-sold.svg" />
                   <TableDataMedium>Sold by Depot</TableDataMedium>
                 </TD>
                 <TD>
@@ -126,7 +126,7 @@ const ExpandableTable = () => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop='10px'>Recent Activity:</H5>
+          <H5 marginTop="10px">Recent Activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -161,7 +161,7 @@ const ExpandableTable = () => {
                   }
                 >
                   <Cell>
-                    <TypeImage src='/images/actions/tiny-deposit.svg' />
+                    <TypeImage src="/images/actions/tiny-deposit.svg" />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>

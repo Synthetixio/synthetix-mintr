@@ -46,6 +46,7 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
       }
     };
     getIssuanceData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
 };
@@ -74,6 +75,7 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
       }
     };
     getGasEstimate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintAmount]);
 };
 

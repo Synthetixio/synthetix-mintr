@@ -29,6 +29,7 @@ const Main = () => {
     const fetchLoop = setInterval(fetchNetworkInfo, 5 * 60 * 1000);
     fetchNetworkInfo();
     return () => clearInterval(fetchLoop);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';

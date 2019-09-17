@@ -61,6 +61,7 @@ const useGetWalletSynths = (walletAddress, setBaseSynth) => {
       }
     };
     getWalletSynths();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
 };

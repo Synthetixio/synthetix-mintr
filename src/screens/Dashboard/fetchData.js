@@ -149,6 +149,7 @@ export const useFetchData = (walletAddress, successQueue) => {
     } catch (e) {
       console.log(e);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress, successQueue.length]);
   return data;
 };

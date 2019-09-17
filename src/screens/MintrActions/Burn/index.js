@@ -42,6 +42,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
       }
     };
     getDebtData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
 };

@@ -60,6 +60,7 @@ const useGetBalances = (walletAddress, setCurrentCurrency) => {
       }
     };
     getBalances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
 };

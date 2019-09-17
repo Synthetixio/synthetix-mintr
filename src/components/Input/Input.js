@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import styled, { keyframes } from 'styled-components';
