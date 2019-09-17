@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
-  ButtonTransactionEdit,
 } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
@@ -16,10 +16,11 @@ const Action = ({
   baseSynth,
   onTrade,
   onBaseSynthChange,
+  baseAmount,
+  quoteAmount,
+  setBaseAmount,
+  setQuoteAmount,
 }) => {
-  const [baseAmount, setBaseAmount] = useState('');
-  const [quoteAmount, setQuoteAmount] = useState('');
-
   const onBaseAmountChange = amount => {
     setBaseAmount(amount);
     setQuoteAmount(amount ? Number(amount) * Number(baseSynth.rate) : '');
@@ -39,7 +40,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/trade.svg' big />
+            <ActionImage src="/images/actions/trade.svg" big />
             <H1>TRADE</H1>
             <PLarge>
               Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
@@ -54,7 +55,7 @@ const Action = ({
               onSynthChange={onBaseSynthChange}
               value={baseAmount}
               onChange={e => onBaseAmountChange(e.target.value)}
-              placeholder='0.00'
+              placeholder="0.00"
               currentSynth={baseSynth}
               rightComponent={
                 <ButtonMax
@@ -66,23 +67,19 @@ const Action = ({
             <Input
               isDisabled={!synthBalances}
               singleSynth={'sUSD'}
-              placeholder='0.00'
+              placeholder="0.00"
               value={quoteAmount}
               onChange={e => onQuoteAmountChange(e.target.value)}
             />
           </Form>
         </Top>
         <Bottom>
-          <Fees>
-            <Subtext>TRADING FEE: 0.3%</Subtext>
-            <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext>
-            <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
-            </Subtext>
-          </Fees>
+          <Subtext>TRADING FEE: 0.3%</Subtext>
+          {/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
+          <TransactionPriceIndicator />
           <ButtonPrimary
             onClick={() => onTrade(baseAmount, quoteAmount)}
-            margin='auto'
+            margin="auto"
           >
             TRADE NOW
           </ButtonPrimary>
@@ -142,10 +139,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Fees = styled.div`
-  margin-bottom: 32px;
 `;
 
 export default Action;
