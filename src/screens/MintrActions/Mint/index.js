@@ -15,6 +15,8 @@ import {
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit } from '../../../ducks/network';
 
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
+
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
   const SNXBytes = bytesFormatter('SNX');
@@ -86,6 +88,9 @@ const Mint = ({ onDestroy }) => {
   const {
     state: {
       wallet: { currentWallet, walletType, networkName },
+      network: {
+        settings: { gasPrice, gasLimit },
+      },
     },
     dispatch,
   } = useContext(Store);
@@ -99,17 +104,23 @@ const Mint = ({ onDestroy }) => {
   useGetGasEstimate(mintAmount, issuableSynths);
 
   const onMint = async () => {
+    const transactionSettings = {
+      gasPrice: gasPrice * GWEI_UNIT,
+      gasLimit,
+    };
     try {
       handleNext(1);
       let transaction;
       if (mintAmount === issuableSynths) {
         transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
-          sUSDBytes
+          sUSDBytes,
+          transactionSettings
         );
       } else {
         transaction = await snxJSConnector.snxJS.Synthetix.issueSynths(
           sUSDBytes,
-          snxJSConnector.utils.parseEther(mintAmount.toString())
+          snxJSConnector.utils.parseEther(mintAmount.toString()),
+          transactionSettings
         );
       }
       if (transaction) {

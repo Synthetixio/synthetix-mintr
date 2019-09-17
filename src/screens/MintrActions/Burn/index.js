@@ -11,8 +11,10 @@ import {
   bytesFormatter,
   bigNumberFormatter,
 } from '../../../helpers/formatters';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 
 import { createTransaction } from '../../../ducks/transactions';
+import { updateGasLimit } from '../../../ducks/network';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
@@ -47,13 +49,41 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
   return data;
 };
 
+const useGetGasEstimate = (burnAmount, maxBurnAmount) => {
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    if (burnAmount <= 0) return;
+    const sUSDBytes = bytesFormatter('sUSD');
+    const getGasEstimate = async () => {
+      try {
+        const amountToBurn =
+          burnAmount === maxBurnAmount
+            ? Number(maxBurnAmount) + 10
+            : burnAmount;
+        const gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
+          sUSDBytes,
+          snxJSConnector.utils.parseEther(amountToBurn.toString())
+        );
+        updateGasLimit(Number(gasEstimate), dispatch);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getGasEstimate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [burnAmount]);
+};
+
 const Burn = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const [burnAmount, setBurnAmount] = useState(null);
+  const [burnAmount, setBurnAmount] = useState('');
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
       wallet: { currentWallet, walletType, networkName },
+      network: {
+        settings: { gasPrice, gasLimit },
+      },
     },
     dispatch,
   } = useContext(Store);
@@ -64,15 +94,20 @@ const Burn = ({ onDestroy }) => {
     sUSDBytes
   );
 
-  const onBurn = async amount => {
+  useGetGasEstimate(burnAmount, maxBurnAmount);
+
+  const onBurn = async () => {
     try {
-      setBurnAmount(amount);
       handleNext(1);
       const amountToBurn =
-        amount === maxBurnAmount ? Number(maxBurnAmount) + 10 : amount;
+        burnAmount === maxBurnAmount ? Number(maxBurnAmount) + 10 : burnAmount;
       const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(
         sUSDBytes,
-        snxJSConnector.utils.parseEther(amountToBurn.toString())
+        snxJSConnector.utils.parseEther(amountToBurn.toString()),
+        {
+          gasPrice: gasPrice * GWEI_UNIT,
+          gasLimit,
+        }
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
@@ -102,6 +137,7 @@ const Burn = ({ onDestroy }) => {
     issuanceRatio,
     ...transactionInfo,
     burnAmount,
+    setBurnAmount,
     walletType,
     networkName,
     SNXPrice,

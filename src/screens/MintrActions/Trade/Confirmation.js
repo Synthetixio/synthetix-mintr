@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   PLarge,
   PageTitle,
@@ -47,10 +48,7 @@ const Confirmation = ({ goBack, walletType, tradeAmount, baseSynth }) => {
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
-          <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
-          </Fees>
+          <TransactionPriceIndicator />
         </Bottom>
       </Container>
     </SlidePage>
@@ -122,10 +120,6 @@ const Amount = styled.span`
   font-family: 'apercu-medium';
   font-size: 24px;
   margin: 16px 0px 0px 0px;
-`;
-
-const Fees = styled.div`
-  height: auto;
 `;
 
 const Loading = styled.div`

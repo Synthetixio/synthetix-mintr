@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { formatCurrency } from '../../../helpers/formatters';
@@ -7,15 +7,10 @@ import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
-  ButtonTransactionEdit,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  Subtext,
-  DataHeaderLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, DataHeaderLarge } from '../../../components/Typography';
 import Input, { SimpleInput } from '../../../components/Input';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
 const Action = ({
   onDestroy,
@@ -23,9 +18,11 @@ const Action = ({
   balances,
   currentCurrency,
   onCurrentCurrencyChange,
+  sendAmount,
+  sendDestination,
+  setSendAmount,
+  setSendDestination,
 }) => {
-  const [amount, setAmount] = useState('');
-  const [destinationWallet, setDestinationWallet] = useState('');
   return (
     <SlidePage>
       <Container>
@@ -34,7 +31,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/send.svg' big />
+            <ActionImage src="/images/actions/send.svg" big />
             <H1>SEND</H1>
             <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
           </Intro>
@@ -54,17 +51,17 @@ const Action = ({
             <PLarge>Enter amount or select max available:</PLarge>
             <Input
               disabled={!currentCurrency}
-              onChange={e => setAmount(e.target.value)}
+              onChange={e => setSendAmount(e.target.value)}
               onSynthChange={onCurrentCurrencyChange}
               synths={balances}
               currentSynth={currentCurrency}
-              value={amount}
-              placeholder='0.00'
+              value={sendAmount}
+              placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src='/images/currencies/sUSD.svg'
-                    height='24px'
+                    src="/images/currencies/sUSD.svg"
+                    height="24px"
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -73,29 +70,29 @@ const Action = ({
               rightComponent={
                 <ButtonMax
                   onClick={() =>
-                    setAmount((currentCurrency && currentCurrency.balance) || 0)
+                    setSendAmount(
+                      (currentCurrency && currentCurrency.balance) || 0
+                    )
                   }
                 />
               }
             />
-            <PLarge marginTop='32px'>
+            <PLarge marginTop="32px">
               Enter wallet address to send funds to:
             </PLarge>
             <SimpleInput
-              onChange={e => setDestinationWallet(e.target.value)}
-              value={destinationWallet}
-              placeholder='e.g. 0x3b18a4...'
+              onChange={e => setSendDestination(e.target.value)}
+              value={sendDestination}
+              placeholder="e.g. 0x3b18a4..."
             />
           </Form>
         </Middle>
         <Bottom>
-          <Subtext marginBottom='32px'>
-            GAS: $0.083 / SPEED: ~5:24 mins <ButtonTransactionEdit />
-          </Subtext>
+          <TransactionPriceIndicator />
           <ButtonPrimary
-            disabled={!destinationWallet || !amount}
-            onClick={() => onSend(amount, destinationWallet)}
-            margin='auto'
+            disabled={!sendDestination || !sendAmount}
+            onClick={onSend}
+            margin="auto"
           >
             SEND NOW
           </ButtonPrimary>

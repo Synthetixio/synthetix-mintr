@@ -1,4 +1,4 @@
-const GWEI_UNIT = 1000000000;
+export const GWEI_UNIT = 1000000000;
 
 export const SUPPORTED_NETWORKS = {
   1: 'MAINNET',

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   PLarge,
   PageTitle,
@@ -53,14 +54,11 @@ const Confirmation = ({
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
+          <Spinner margin="auto" />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
         <Bottom>
-          <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
-          </Fees>
+          <TransactionPriceIndicator canEdit={false} />
         </Bottom>
       </Container>
     </SlidePage>
@@ -132,10 +130,6 @@ const Amount = styled.span`
   font-family: 'apercu-medium';
   font-size: 24px;
   margin: 16px 0px 0px 0px;
-`;
-
-const Fees = styled.div`
-  height: auto;
 `;
 
 const Loading = styled.div`
