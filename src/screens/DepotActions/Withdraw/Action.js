@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -7,27 +8,29 @@ import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 
-const Action = ({ onDestroy, onWithdraw, amountAvailable }) => {
+const Action = ({ t, onDestroy, onWithdraw, amountAvailable }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('withdraw.action.buttons.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/withdraw.svg" />
-            <H1>WITHDRAW</H1>
-            <PLarge>Amount available:</PLarge>
+            <ActionImage src='/images/actions/withdraw.svg' />
+            <H1>{t('withdraw.action.intro.h')}</H1>
+            <PLarge>{t('withdraw.action.intro.p')}</PLarge>
             <Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
           </Intro>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+          <Subtext marginBottom='32px'>
+            {t('withdraw.action.fees.p')} <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onWithdraw()} margin="auto">
-            WITHDRAW NOW
+          <ButtonPrimary onClick={() => onWithdraw()} margin='auto'>
+            {t('withdraw.action.buttons.withdraw')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -56,11 +59,12 @@ const Container = styled.div`
 
 const Top = styled.div`
   height: auto;
+  margin-bottom: 80px;
 `;
 
 const Bottom = styled.div`
   height: auto;
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 `;
 
 const Navigation = styled.div`
@@ -92,4 +96,4 @@ const Highlighted = styled.span`
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
-export default Action;
+export default withTranslation()(Action);

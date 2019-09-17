@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
+
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import {
@@ -10,6 +12,7 @@ import {
 import { formatCurrency } from '../../../helpers/formatters';
 
 const Success = ({
+  t,
   depositAmount,
   onDestroy,
   networkName,
@@ -20,16 +23,12 @@ const Success = ({
       <Top>
         <Intro>
           <ActionImage src='/images/success.svg' big />
-          <PageTitle>Deposit in progress!</PageTitle>
-          <PLarge>
-            Sent to the Ethereum network and will be available in your wallet
-            shortly. You may close this window as the transaction completes in
-            the background.
-          </PLarge>
+          <PageTitle>{t('deposit.complete.intro.h')}</PageTitle>
+          <PLarge>{t('deposit.complete.intro.p')}</PLarge>
         </Intro>
         <Details>
           <Box>
-            <DataHeaderLarge>DEPOSITING:</DataHeaderLarge>
+            <DataHeaderLarge>{t('deposit.complete.details.h')}</DataHeaderLarge>
             <Amount>{formatCurrency(depositAmount)} sUSD</Amount>
           </Box>
         </Details>
@@ -43,10 +42,10 @@ const Success = ({
             as='a'
             target='_blank'
           >
-            VIEW ON ETHERSCAN
+            {t('deposit.complete.buttons.etherscan')}
           </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            FINISH & RETURN HOME
+            {t('deposit.complete.buttons.finish')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -54,22 +53,26 @@ const Success = ({
   );
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
           <ActionImage src='/images/failure.svg' big />
-          <PageTitle>Something went wrong...</PageTitle>
+          <PageTitle>{t('deposit.complete.error.h')}</PageTitle>
           {transactionError.code ? (
-            <PLarge>Code: {transactionError.code}</PLarge>
+            <PLarge>
+              {t('deposit.complete.error.p')} {transactionError.code}
+            </PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
         </Intro>
       </Top>
       <Bottom>
         <Buttons>
-          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+          <ButtonPrimary onClick={onDestroy}>
+            {t('deposit.complete.error.ok')}
+          </ButtonPrimary>
         </Buttons>
       </Bottom>
     </Fragment>
@@ -161,4 +164,4 @@ const Bottom = styled.div`
   margin-bottom: 32px;
 `;
 
-export default Complete;
+export default withTranslation()(Complete);

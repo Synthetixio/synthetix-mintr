@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { connectToWallet } from '../../helpers/snxJSConnector';
 import { hasWeb3, SUPPORTED_WALLETS } from '../../helpers/networkHelper';
@@ -43,7 +44,7 @@ const renderWalletButtons = dispatch => {
   });
 };
 
-const WalletConnection = () => {
+const WalletConnection = ({ t }) => {
   const { state, dispatch } = useContext(Store);
   return (
     <Wrapper>
@@ -54,17 +55,23 @@ const WalletConnection = () => {
               state.ui.themeIsDark ? 'light' : 'dark'
             }.svg`}
           />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
+          <ButtonTertiary>
+            {t('walletConnection.buttons.mainnet')}
+          </ButtonTertiary>
         </HeaderBlock>
         <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
+          <ButtonTertiary>
+            {t('walletConnection.buttons.synthetix')}
+          </ButtonTertiary>
         </HeaderBlock>
       </Header>
       <Content>
         <HeadingContent>
-          <WalletConnectionH1>Connect Wallet</WalletConnectionH1>
+          <WalletConnectionH1>
+            {t('walletConnection.intro.h')}
+          </WalletConnectionH1>
           <WalletConnectionPMega>
-            Please connect a wallet with your SNX holdings to continue.
+            {t('walletConnection.intro.p')}
           </WalletConnectionPMega>
         </HeadingContent>
         <BodyContent>{renderWalletButtons(dispatch)}</BodyContent>
@@ -161,4 +168,4 @@ const WalletTitle = styled.div`
   height: 120px;
 `;
 
-export default WalletConnection;
+export default withTranslation()(WalletConnection);

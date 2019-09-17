@@ -1,5 +1,6 @@
 import React, { useContext, Fragment } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
@@ -26,7 +27,7 @@ const renderBodyContent = (state, dispatch) => {
   );
 };
 
-const WalletConnection = () => {
+const WalletConnection = ({ t }) => {
   const { state, dispatch } = useContext(Store);
   return (
     <Wrapper>
@@ -37,22 +38,30 @@ const WalletConnection = () => {
               state.ui.themeIsDark ? 'light' : 'dark'
             }.svg`}
           />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
+          <ButtonTertiary>
+            {t('walletSelection.buttons.mainnet')}
+          </ButtonTertiary>
         </HeaderBlock>
         <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
+          <ButtonTertiary>
+            {t('walletSelection.buttons.synthetix')}
+          </ButtonTertiary>
         </HeaderBlock>
       </Header>
       <Content>
         <HeadingContent>
-          <WalletConnectionH1>Connect via Ledger</WalletConnectionH1>
+          <WalletConnectionH1>
+            {t('walletSelection.intro.h')}
+          </WalletConnectionH1>
           <WalletConnectionPMega>
-            Please Connect and Unlock your Trezor.
+            {t('walletSelection.intro.p')}
           </WalletConnectionPMega>
         </HeadingContent>
         {renderBodyContent(true, dispatch)}
         <Footer>
-          <ButtonTertiary>Having trouble?</ButtonTertiary>
+          <ButtonTertiary>
+            {t('walletSelection.buttons.trouble')}
+          </ButtonTertiary>
         </Footer>
       </Content>
     </Wrapper>
@@ -123,4 +132,4 @@ const WalletConnectionPMega = styled(PMega)`
   line-height: 32px;
 `;
 
-export default WalletConnection;
+export default withTranslation()(WalletConnection);

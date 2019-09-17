@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
+import { withTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency } from '../../../helpers/formatters';
@@ -126,7 +127,7 @@ const ExpandableTable = () => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop='10px'>Recent Activity:</H5>
+          <H5 marginTop='10px'>Recent activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -267,7 +268,7 @@ const useGetDepotData = walletAddress => {
   return data;
 };
 
-const Depot = () => {
+const Depot = ({ t }) => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
   const {
     state: {
@@ -287,14 +288,9 @@ const Depot = () => {
     <PageContainer>
       <DepotAction action={currentScenario} {...props} />
       <PageTitle>
-        The Depot: ${formatCurrency(totalSellableDeposits)} sUSD
+        {t('depot.intro.h')}${formatCurrency(totalSellableDeposits)} sUSD
       </PageTitle>
-      <PLarge>
-        Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap,
-        and you’ll receive the proceeds of all sales in ETH. While your sUSD is
-        in the queue waiting to be sold, you can withdraw your sUSD back into
-        your wallet at any time. Note: minimum deposit is 50 sUSD.
-      </PLarge>
+      <PLarge>{t('depot.intro.p')}</PLarge>
       <ButtonRow>
         {['deposit', 'withdraw'].map(action => {
           return (
@@ -302,7 +298,7 @@ const Depot = () => {
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
-                <PLarge>Amount available:</PLarge>
+                <PLarge>{t('depot.buttons.p')}</PLarge>
                 <Amount>
                   $
                   {action === 'deposit'
@@ -421,4 +417,4 @@ const TD = styled.td`
   }
 `;
 
-export default Depot;
+export default withTranslation()(Depot);
