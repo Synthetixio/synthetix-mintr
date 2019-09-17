@@ -4,7 +4,7 @@ import { ButtonTransactionEdit } from '../Button';
 import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 
-const TransactionPriceIndicator = () => {
+const TransactionPriceIndicator = ({ canEdit = true }) => {
   const {
     state: {
       network: {
@@ -14,10 +14,10 @@ const TransactionPriceIndicator = () => {
   } = useContext(Store);
   return (
     <Subtext marginBottom="32px">
-      {`NETWORK PRICE: $${formatCurrency(
+      {`Ethereum Network Fees: $${formatCurrency(
         transactionUsdPrice
       )} (${gasPrice} GWEI)`}
-      <ButtonTransactionEdit></ButtonTransactionEdit>
+      {canEdit ? <ButtonTransactionEdit></ButtonTransactionEdit> : null}
     </Subtext>
   );
 };

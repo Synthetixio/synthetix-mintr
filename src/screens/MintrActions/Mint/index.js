@@ -104,21 +104,23 @@ const Mint = ({ onDestroy }) => {
   useGetGasEstimate(mintAmount, issuableSynths);
 
   const onMint = async () => {
+    const transactionSettings = {
+      gasPrice: gasPrice * GWEI_UNIT,
+      gasLimit,
+    };
     try {
       handleNext(1);
       let transaction;
       if (mintAmount === issuableSynths) {
         transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
           sUSDBytes,
-          {
-            gasPrice: gasPrice * GWEI_UNIT,
-            gasLimit,
-          }
+          transactionSettings
         );
       } else {
         transaction = await snxJSConnector.snxJS.Synthetix.issueSynths(
           sUSDBytes,
-          snxJSConnector.utils.parseEther(mintAmount.toString())
+          snxJSConnector.utils.parseEther(mintAmount.toString()),
+          transactionSettings
         );
       }
       if (transaction) {
