@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ContentHeaderButton = ({ children, isSelected, onClick }) => {
+const ContentHeaderButton = ({ children, isSelected, onClick, disabled }) => {
   return (
-    <Button onClick={onClick} isSelected={isSelected}>
+    <Button onClick={onClick} isSelected={isSelected} disabled={disabled}>
       {children}
     </Button>
   );
@@ -31,14 +31,17 @@ const Button = styled.button`
         ? props.theme.colorStyles.accentDark
         : props.theme.colorStyles.menu};
   color: ${props => props.theme.colorStyles.subtext};
-  &:hover,
-  &:focus {
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
     background-color: ${props => props.theme.colorStyles.borders};
     border-bottom: 8px solid
       ${props =>
         props.isSelected
           ? props.theme.colorStyles.accentDark
           : props.theme.colorStyles.borders};
+  }
+  &:disabled {
+    opacity: 0.3;
   }
 `;
 
