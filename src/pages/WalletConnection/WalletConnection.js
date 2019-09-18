@@ -25,7 +25,6 @@ const onWalletClick = (wallet, dispatch) => {
 const renderWalletButtons = dispatch => {
   return SUPPORTED_WALLETS.map(wallet => {
     const noMetamask = wallet === 'metamask' && !hasWeb3();
-    const disabled = noMetamask || wallet === 'Trezor' || wallet === 'Ledger';
     return (
       <Wallet disabled={noMetamask} key={wallet}>
         <Icon src={`images/wallets/${wallet}.svg`} />
@@ -34,7 +33,7 @@ const renderWalletButtons = dispatch => {
           <PLarge mt={0}>{noMetamask ? '(not installed)' : ''}</PLarge>
         </WalletTitle>
         <ButtonPrimaryMedium
-          disabled={disabled}
+          disabled={noMetamask}
           onClick={onWalletClick(wallet, dispatch)}
         >
           Connect

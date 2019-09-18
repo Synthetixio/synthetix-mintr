@@ -60,7 +60,10 @@ const connectToMetamask = async (networkId, name, signer) => {
 };
 
 const connectToHardwareWallet = type => {
-  console.log(type);
+  return {
+    walletType: type,
+    unlocked: true,
+  };
 };
 
 export const connectToWallet = async type => {
@@ -77,16 +80,16 @@ export const connectToWallet = async type => {
   const signer = new snxJSConnector.signers[type]();
   snxJSConnector.setContractSettings({
     networkId,
+    signer,
   });
   switch (type) {
     case 'Metamask':
       return connectToMetamask(networkId, name, signer);
     case 'Trezor':
-      return connectToHardwareWallet(type);
     case 'Ledger':
       return connectToHardwareWallet(type);
     default:
-      console.log('null');
+      return null;
   }
 };
 

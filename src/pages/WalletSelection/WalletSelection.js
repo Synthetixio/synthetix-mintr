@@ -1,41 +1,154 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext, Fragment, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import snxJSConnector from '../../helpers/snxJSConnector';
+
+import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
+import { updateWalletStatus } from '../../ducks/wallet';
 
 import { ButtonTertiary } from '../../components/Button';
 import Spinner from '../../components/Spinner';
-import { List } from '../../components/List';
+import {
+  List,
+  ListHead,
+  ListBody,
+  ListHeaderRow,
+  ListBodyRow,
+  ListCell,
+  ListHeaderCell,
+} from '../../components/List';
 import Paginator from '../../components/Paginator';
 
-import { H1, PMega } from '../../components/Typography';
+import { H1, PMega, TableHeaderMedium } from '../../components/Typography';
 
-const renderBodyContent = (state, dispatch) => {
+const WALLET_PAGE_SIZE = 5;
+
+const Wallets = ({ wallets }) => {
+  const { dispatch } = useContext(Store);
+  if (!wallets) return <Spinner />;
   return (
-    <BodyContent>
-      {state ? (
-        <Spinner />
-      ) : (
-        <Fragment>
-          <List onClick={() => updateCurrentPage('main', dispatch)} />
-          <Paginator />
-        </Fragment>
-      )}
-    </BodyContent>
+    <Fragment>
+      <List cellSpacing={0}>
+        <ListHead>
+          <ListHeaderRow>
+            {['Address', 'SNX', 'sUSD', 'ETH'].map((headerElement, i) => {
+              return (
+                <ListHeaderCell
+                  style={{ textAlign: i > 0 ? 'right' : 'left' }}
+                  key={headerElement}
+                >
+                  <TableHeaderMedium>{headerElement}</TableHeaderMedium>
+                </ListHeaderCell>
+              );
+            })}
+          </ListHeaderRow>
+        </ListHead>
+        <ListBody>
+          {wallets.map(wallet => {
+            return (
+              <ListBodyRow
+                key={wallet.address}
+                onClick={() => {
+                  updateWalletStatus(
+                    {
+                      currentWallet: wallet.address,
+                    },
+                    dispatch
+                  );
+                  updateCurrentPage('main', dispatch);
+                }}
+              >
+                <ListCell>{wallet.address}</ListCell>
+                <ListCell style={{ textAlign: 'right' }}>
+                  {formatCurrency(wallet.balances.snxBalance) || 0}
+                </ListCell>
+                <ListCell style={{ textAlign: 'right' }}>
+                  {formatCurrency(wallet.balances.sUSDBalance) || 0}
+                </ListCell>
+                <ListCell style={{ textAlign: 'right' }}>
+                  {formatCurrency(wallet.balances.ethBalance) || 0}
+                </ListCell>
+              </ListBodyRow>
+            );
+          })}
+        </ListBody>
+      </List>
+      <Paginator />
+    </Fragment>
   );
 };
 
+const useGetWallets = () => {
+  const { dispatch } = useContext(Store);
+  const [wallets, setWallets] = useState(null);
+  useEffect(() => {
+    try {
+      const getWallets = async () => {
+        const results = await snxJSConnector.signer.getNextAddresses(
+          0,
+          WALLET_PAGE_SIZE
+        );
+        const availableWallets = results.map(address => {
+          return {
+            address,
+            balances: [],
+          };
+        });
+        updateWalletStatus({ unlocked: true }, dispatch);
+        setWallets(availableWallets);
+        const balances = await Promise.all(
+          availableWallets.map(async wallet => {
+            return {
+              snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(
+                wallet.address
+              ),
+              sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(
+                wallet.address
+              ),
+              ethBalance: await snxJSConnector.provider.getBalance(
+                wallet.address
+              ),
+            };
+          })
+        );
+        availableWallets.forEach((wallet, index) => {
+          wallet.balances = {
+            snxBalance: bigNumberFormatter(balances[index].snxBalance),
+            sUSDBalance: bigNumberFormatter(balances[index].sUSDBalance),
+            ethBalance: bigNumberFormatter(balances[index].ethBalance),
+          };
+        });
+
+        setWallets(availableWallets.slice());
+      };
+      getWallets();
+    } catch (e) {
+      updateWalletStatus({
+        unlocked: false,
+        unlockReason: 'ErrorWhileConnectingToHardwareWallet',
+        unlockMessage: e,
+      });
+    }
+  }, []);
+  return wallets;
+};
+
 const WalletConnection = () => {
-  const { state, dispatch } = useContext(Store);
+  const {
+    state: {
+      ui: { themeIsDark },
+    },
+  } = useContext(Store);
+  const wallets = useGetWallets();
+
   return (
     <Wrapper>
       <Header>
         <HeaderBlock>
           <Logo
-            src={`/images/mintr-logo-${
-              state.ui.themeIsDark ? 'light' : 'dark'
-            }.svg`}
+            src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`}
           />
           <ButtonTertiary>MAINNET</ButtonTertiary>
         </HeaderBlock>
@@ -50,7 +163,9 @@ const WalletConnection = () => {
             Please Connect and Unlock your Trezor.
           </WalletConnectionPMega>
         </HeadingContent>
-        {renderBodyContent(true, dispatch)}
+        <BodyContent>
+          <Wallets wallets={wallets} />
+        </BodyContent>
         <Footer>
           <ButtonTertiary>Having trouble?</ButtonTertiary>
         </Footer>
@@ -99,12 +214,12 @@ const BodyContent = styled.div`
 `;
 
 const Content = styled.div`
-  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
 `;
 
 const Footer = styled.div`

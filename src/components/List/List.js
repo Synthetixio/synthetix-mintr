@@ -1,7 +1,27 @@
 import styled from 'styled-components';
 
-export const List = styled.div`
+export const List = styled.table`
   width: 100%;
+  border-spacing: 0 10px;
+`;
+export const ListHead = styled.thead``;
+export const ListBody = styled.tbody``;
+
+export const ListHeaderRow = styled.tr`
+  text-transform: uppercase;
+  & > :last-child,
+  & :nth-last-child(2) {
+    text-align: right;
+  }
+`;
+
+export const ListBodyRow = styled.tr`
+  cursor: pointer;
+  background-color: ${props => props.theme.colorStyles.panels};
+  transition: transform 0.2s ease-in;
+  :hover {
+    transform: scale(1.05);
+  }
 `;
 
 export const HeaderRow = styled.div`
@@ -14,6 +34,28 @@ export const HeaderRow = styled.div`
     text-align: right;
   }
 `;
+
+export const ListHeaderCell = styled.th`
+  padding: 10px 20px;
+`;
+
+export const ListCell = styled.td`
+  padding: 0 20px;
+  height: 45px;
+  white-space: nowrap;
+  border-top: 1px solid ${props => props.theme.colorStyles.borders};
+  border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
+  :first-child {
+    border-left: 1px solid ${props => props.theme.colorStyles.borders};
+  }
+  :last-child {
+    border-right: 1px solid ${props => props.theme.colorStyles.borders};
+  }
+`;
+
+// export const List = styled.div`
+//   width: 100%;
+// `;
 
 export const BodyRow = styled.div`
   cursor: pointer;
