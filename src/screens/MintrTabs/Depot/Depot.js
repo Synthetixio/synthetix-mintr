@@ -41,26 +41,9 @@ const sumBy = (collection, key) => {
 
 const initialScenario = null;
 
-const renderHiddenContent = () => {
-  const data = [
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-  ];
+const HiddenContent = ({ t, data }) => {
   return (
-    <HiddenContent>
+    <HiddenContentWrapper>
       <table style={{ width: '100%' }}>
         <thead style={{ marginBottom: '16px' }}>
           <TRHead style={{ marginBottom: '16px' }}>
@@ -81,7 +64,7 @@ const renderHiddenContent = () => {
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
                   <TypeImage src='/images/actions/tiny-sold.svg' />
-                  <TableDataMedium>Sold by Depot</TableDataMedium>
+                  <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
                 </TD>
                 <TD>
                   <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
@@ -100,11 +83,11 @@ const renderHiddenContent = () => {
           })}
         </tbody>
       </table>
-    </HiddenContent>
+    </HiddenContentWrapper>
   );
 };
 
-const ExpandableTable = () => {
+const ExpandableTable = withTranslation(({ t }) => {
   const data = [
     {
       amount: '2,000.00',
@@ -178,7 +161,25 @@ const ExpandableTable = () => {
                   </Cell>
                   <Cell>{isExpanded ? <Minus> </Minus> : <Plus />}</Cell>
                 </BodyRow>
-                {renderHiddenContent()}
+                <HiddenContent
+                  data={[
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                  ]}
+                />
               </ExpandableRow>
             );
           })}
@@ -186,7 +187,7 @@ const ExpandableTable = () => {
       </Activity>
     </Fragment>
   );
-};
+});
 
 const getApiUrl = networkName =>
   `https://${
@@ -381,7 +382,7 @@ const TypeImage = styled.img`
   margin-right: 8px;
 `;
 
-const HiddenContent = styled.div`
+const HiddenContentWrapper = styled.div`
   padding: 24px 16px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-top-width: 0;

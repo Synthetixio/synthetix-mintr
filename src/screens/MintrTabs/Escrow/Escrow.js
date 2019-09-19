@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 // import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import RewardEscrow from './RewardEscrow';
@@ -9,7 +10,7 @@ import PageContainer from '../../../components/PageContainer';
 
 const SHOW_TOKEN_SALE = false;
 
-const Escrow = () => {
+const Escrow = ({ t }) => {
   const [showTokenSale, setPage] = useState(SHOW_TOKEN_SALE);
   const EscrowPage = showTokenSale ? TokenSaleEscrow : RewardEscrow;
   return (
@@ -19,7 +20,7 @@ const Escrow = () => {
         <ButtonSecondary onClick={() => setPage(!showTokenSale)}>
           VIEW {showTokenSale ? 'STAKING' : 'TOKEN SALE'} ESCROW
         </ButtonSecondary>
-        <ButtonPrimary>VEST NOW</ButtonPrimary>
+        <ButtonPrimary>{t('escrow.buttons.vest')}</ButtonPrimary>
       </ButtonRow>
     </PageContainer>
   );
@@ -31,4 +32,4 @@ const ButtonRow = styled.div`
   justify-content: space-between;
 `;
 
-export default Escrow;
+export default withTranslation()(Escrow);

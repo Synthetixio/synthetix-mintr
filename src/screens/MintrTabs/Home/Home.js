@@ -31,7 +31,7 @@ const renderHomeButtons = setCurrentScenario => {
         Click any button below to view more info, confirm or change the amount
         before submitting.
       </PLarge>
-      <ButtonRow margin="30px 0 40px 0">
+      <ButtonRow margin='30px 0 40px 0'>
         {['mint', 'burn'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)} big>
@@ -44,7 +44,7 @@ const renderHomeButtons = setCurrentScenario => {
           );
         })}
       </ButtonRow>
-      <ButtonRow margin="0 0 40px 0">
+      <ButtonRow margin='0 0 40px 0'>
         {['claim', 'trade', 'send'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)}>
