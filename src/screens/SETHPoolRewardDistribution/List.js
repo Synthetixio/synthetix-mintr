@@ -32,13 +32,16 @@ const List = ({ setPage, openDetails }) => {
                 { key: 'youConfirmed', value: 'you confirmed' },
                 { key: 'confirm', value: 'confirm' },
               ]}
-              data={transactions.map(item => ({
-                id: item.id,
-                committed: new Date().toString(),
-                signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
-                confirm: <ConfirmButton onClick={() => openDetails(item)}>Confirm</ConfirmButton>,
-                youConfirmed: item.youConfirmed ? 'Yes' : 'No',
-              }))}
+              data={transactions.map(item => {
+                const showButton = !item.youConfirmed && item.confirmationCount < requiredConfirmationCount;
+                return {
+                  id: item.id,
+                  committed: new Date().toString(),
+                  signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
+                  confirm: showButton ? <ConfirmButton onClick={() => openDetails(item)}>Confirm</ConfirmButton> : null,
+                  youConfirmed: item.youConfirmed ? 'Yes' : 'No',
+                };
+              })}
             />
           </Column>
         )
