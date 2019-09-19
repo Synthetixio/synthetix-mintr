@@ -16,7 +16,7 @@ const MainContainer = ({ goHome }) => {
   const { handleNext } = useContext(SliderContext);
   const [transaction, setTransaction] = useState(null);
 
-  const onCreate = async recipientsData => {
+  const onDataLoaded = async recipientsData => {
     try {
       handleNext(1);
       let multisig = getMultisig();
@@ -42,7 +42,7 @@ const MainContainer = ({ goHome }) => {
   };
 
   const props = {
-    onCreate,
+    onDataLoaded,
     goHome,
     transaction,
   }

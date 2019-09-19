@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
 import Table from '../../components/Table';
-import { ButtonPrimaryMedium } from '../../components/Button';
+import { ButtonPrimary } from '../../components/Button';
 
 import {
   useOwners,
@@ -21,9 +21,10 @@ const List = ({ setPage, openDetails }) => {
         ? <div>Loading...</div>
         : (
           <Column>
-            <ButtonPrimaryMedium onClick={() => setPage('create')}>
+            <ButtonPrimary onClick={() => setPage('create')}>
               submit a new transaction
-            </ButtonPrimaryMedium>
+            </ButtonPrimary>
+            <br />
             <Table
               header={[
                 { key: 'id', value: 'ID' },

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { SlidePage } from '../../../components/Slider';
 import { ButtonTertiaryLabel } from '../../../components/Typography';
-import { ButtonPrimaryMedium } from '../../../components/Button';
 import CsvLoader from '../CsvLoader';
 
 const CancelButton = ({ children, onClick }) => {
@@ -14,17 +13,13 @@ const CancelButton = ({ children, onClick }) => {
   );
 };
 
-const MainContainer = ({ goHome, onCreate }) => {
-  const [recipientsData, setRecipientsData] = useState([]);
+const MainContainer = ({ goHome, onDataLoaded }) => {
   return (
     <SlidePage>
       <MainContainerWrapper>
         <Column>
           <CancelButton onClick={goHome}>Cancel</CancelButton>
-          <CsvLoader onDataLoaded={setRecipientsData} />
-          <ButtonPrimaryMedium onClick={() => onCreate(recipientsData)}>
-            submit transaction
-          </ButtonPrimaryMedium>
+          <CsvLoader onDataLoaded={onDataLoaded} />
         </Column>
       </MainContainerWrapper>
     </SlidePage>

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { ethers } from 'ethers';
 
 import { SlidePage } from '../../../components/Slider';
-import { ButtonTertiaryLabel } from '../../../components/Typography';
-import { ButtonPrimaryMedium } from '../../../components/Button';
+import { ButtonTertiaryLabel, PLarge } from '../../../components/Typography';
+import { ButtonPrimary } from '../../../components/Button';
 import CsvLoader from '../CsvLoader';
 
 import { getAirdropper } from '../hooks';
@@ -20,7 +20,7 @@ const CancelButton = ({ children, onClick }) => {
 };
 
 const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
-  const [match, setMatch] = useState(false);
+  const [match, setMatch] = useState(null);
   const onDataLoaded = recipientsData => {
     const airdropper = getAirdropper();
     const recipientsAddresses = [];
@@ -30,6 +30,9 @@ const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
       recipientsShares.push(ethers.utils.parseEther(Number(item[1]).toFixed(6)).toString());
     });
     const transactionData = airdropper.functions.multisend.encode([addresses.token, recipientsAddresses, recipientsShares]);
+    if (transactionData === multisendTx.data) {
+      onConfirm();
+    }
     setMatch(transactionData === multisendTx.data);
   }
   return (
@@ -38,10 +41,11 @@ const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
         <Column>
           <CancelButton onClick={goHome}>Cancel</CancelButton>
           <CsvLoader onDataLoaded={onDataLoaded} />
-          <p>Match: {match ? 'Yes' : 'No'}</p>
-          <ButtonPrimaryMedium onClick={() => onConfirm()}>
-            submit transaction
-          </ButtonPrimaryMedium>
+          {match === false && <PLarge>Not match</PLarge>}
+          <br />
+          <ButtonPrimary onClick={() => onConfirm()}>
+            or sign without uploading
+          </ButtonPrimary>
         </Column>
       </MainContainerWrapper>
     </SlidePage>
