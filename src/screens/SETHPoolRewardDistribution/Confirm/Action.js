@@ -3,21 +3,13 @@ import styled from 'styled-components';
 import { ethers } from 'ethers';
 
 import { SlidePage } from '../../../components/Slider';
-import { ButtonTertiaryLabel, PLarge } from '../../../components/Typography';
-import { ButtonPrimary } from '../../../components/Button';
+import { PLarge, PageTitle } from '../../../components/Typography';
+import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import CsvLoader from '../CsvLoader';
 
 import { getAirdropper } from '../hooks';
 
 import addresses from '../contracts/addresses.json';
-
-const CancelButton = ({ children, onClick }) => {
-  return (
-    <Button onClick={onClick}>
-      <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
-    </Button>
-  );
-};
 
 const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
   const [match, setMatch] = useState(null);
@@ -37,50 +29,53 @@ const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
   }
   return (
     <SlidePage>
-      <MainContainerWrapper>
-        <Column>
-          <CancelButton onClick={goHome}>Cancel</CancelButton>
+      <Container>
+        <Navigation>
+          <ButtonTertiary onClick={goHome}>Cancel</ButtonTertiary>
+        </Navigation>
+        <PageTitle fontSize={32} marginTop={50}>
+          How do you like to confirm?
+        </PageTitle>
+        <ButtonContainer>
           <CsvLoader onDataLoaded={onDataLoaded} />
           {match === false && <PLarge>Not match</PLarge>}
-          <br />
-          <ButtonPrimary onClick={() => onConfirm()}>
-            or sign without uploading
-          </ButtonPrimary>
-        </Column>
-      </MainContainerWrapper>
+        </ButtonContainer>
+        <ButtonPrimary onClick={() => onConfirm()}>
+          or sign without uploading
+        </ButtonPrimary>
+      </Container>
     </SlidePage>
   );
 };
 
-const MainContainerWrapper = styled('div')`
+const Container = styled.div`
   width: 100%;
-  background-color: ${props => props.theme.colorStyles.background};
-  padding: 40px;
-`;
-
-const Column = styled('div')`
+  height: 850px;
+  max-width: 720px;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: ${props => props.theme.colorStyles.panels};
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
+  margin-bottom: 20px;
+  padding: 40px 64px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-start;
 `;
 
-const Button = styled.button`
-  background-color: transparent;
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-  height: 32px;
-  width: 100px;
-  padding: 2px 5px;
-  border-radius: 16px;
+const Navigation = styled.div`
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: all ease-in 0.1s;
-  &:hover,
-  &:focus {
-    background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
-  }
-  cursor: pointer;
-  margin-bottom: 40px;
+  text-align: left;
+`;
+
+const ButtonContainer = styled('div')`
+  margin-top: 40px;
+  margin-bottom: 20px;
 `;
 
 export default MainContainer;

@@ -30,6 +30,12 @@ const Confirmation = () => {
           <Spinner margin='auto' />
           <Subtext>Waiting for user response...</Subtext>
         </Loading>
+        <Bottom>
+          <Fees>
+            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
+            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
+          </Fees>
+        </Bottom>
       </Container>
     </SlidePage>
   );
@@ -77,6 +83,15 @@ const ActionImage = styled.img`
 
 const Loading = styled.div`
   align-items: center;
+`;
+
+const Bottom = styled.div`
+  height: auto;
+  margin-bottom: 48px;
+`;
+
+const Fees = styled.div`
+  height: auto;
 `;
 
 export default Confirmation;

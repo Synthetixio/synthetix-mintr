@@ -5,6 +5,7 @@ import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import {
   PLarge,
   PageTitle,
+  Subtext,
 } from '../../components/Typography';
 
 const Complete = ({ goHome, transaction }) => {
@@ -14,18 +15,20 @@ const Complete = ({ goHome, transaction }) => {
         <Top>
           <Intro>
             <ActionImage src='/images/success.svg' big />
-            <PageTitle>Trading in progress!</PageTitle>
+            <PageTitle>Success!</PageTitle>
             <PLarge>
-              Sent to the Ethereum network and will be available in your wallet
-              shortly. You may close this window as the transaction completes in
-              the background.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
             </PLarge>
           </Intro>
         </Top>
+        <Fees>
+          <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
+          <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
+        </Fees>
         <Bottom>
           <Buttons>
             <ButtonSecondary onClick={() => window.open(`https://kovan.etherscan.io/tx/${transaction.hash}`, '_blank')}>
-              VIEW ON ETHERSCAN
+              VERIFY TRANSACTION
             </ButtonSecondary>
             <ButtonPrimary onClick={goHome}>
               FINISH & RETURN HOME
@@ -82,6 +85,10 @@ const Top = styled.div`
 const Bottom = styled.div`
   height: auto;
   margin-bottom: 32px;
+`;
+
+const Fees = styled.div`
+  height: auto;
 `;
 
 export default Complete;
