@@ -20,7 +20,7 @@ export const ListBodyRow = styled.tr`
   background-color: ${props => props.theme.colorStyles.panels};
   transition: transform 0.2s ease-in;
   :hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 `;
 
@@ -46,9 +46,11 @@ export const ListCell = styled.td`
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
   border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
   :first-child {
+    border-radius: 4px;
     border-left: 1px solid ${props => props.theme.colorStyles.borders};
   }
   :last-child {
+    border-radius: 4px;
     border-right: 1px solid ${props => props.theme.colorStyles.borders};
   }
 `;

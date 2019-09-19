@@ -4,26 +4,14 @@ import styled from 'styled-components';
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 
-import { ButtonPrimary, ButtonTertiary } from '../../components/Button';
+import { ButtonPrimary } from '../../components/Button';
 import { H1, H2, PMega, PLarge } from '../../components/Typography';
+import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 const Landing = () => {
-  const { state, dispatch } = useContext(Store);
+  const { dispatch } = useContext(Store);
   return (
-    <LandingWrapper>
-      <Header>
-        <HeaderBlock>
-          <Logo
-            src={`/images/mintr-logo-${
-              state.ui.themeIsDark ? 'light' : 'dark'
-            }.svg`}
-          />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
-        </HeaderBlock>
-        <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
-        </HeaderBlock>
-      </Header>
+    <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
           <LandingH1>Mint, Burn, Claim</LandingH1>
@@ -35,17 +23,17 @@ const Landing = () => {
         <BodyContent>
           <Functionalities>
             <Functionality>
-              <Icon src='images/actions/mint.svg' />
+              <Icon src="images/actions/mint.svg" />
               <LandingH2>Mint Synths</LandingH2>
               <LandingPLarge>By locking up SNX collateral</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/burn.svg' />
+              <Icon src="images/actions/burn.svg" />
               <LandingH2>Burn Synths</LandingH2>
               <LandingPLarge>To unlock SNX</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/claim.svg' />
+              <Icon src="images/actions/claim.svg" />
               <LandingH2>Claim Fees</LandingH2>
               <LandingPLarge>From the Synthetix Network</LandingPLarge>
             </Functionality>
@@ -57,28 +45,9 @@ const Landing = () => {
           </ButtonPrimary>
         </BodyContent>
       </Content>
-    </LandingWrapper>
+    </OnBoardingPageContainer>
   );
 };
-
-const LandingWrapper = styled.div`
-  padding: 42px;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeaderBlock = styled.div`
-  display: flex;
-`;
-
-const Logo = styled.img`
-  width: 104px;
-  margin-right: 18px;
-`;
 
 const HeadingContent = styled.div`
   width: 50%;

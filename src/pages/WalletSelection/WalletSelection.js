@@ -1,5 +1,5 @@
-import React, { useContext, Fragment, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useContext, useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
@@ -8,7 +8,6 @@ import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus } from '../../ducks/wallet';
 
-import { ButtonTertiary } from '../../components/Button';
 import Spinner from '../../components/Spinner';
 import {
   List,
@@ -20,76 +19,29 @@ import {
   ListHeaderCell,
 } from '../../components/List';
 import Paginator from '../../components/Paginator';
+import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import { H1, PMega, TableHeaderMedium } from '../../components/Typography';
+import { ButtonPrimaryMedium } from '../../components/Button';
 
 const WALLET_PAGE_SIZE = 5;
 
-const Wallets = ({ wallets }) => {
+const useGetWallets = currentPage => {
   const { dispatch } = useContext(Store);
-  if (!wallets) return <Spinner />;
-  return (
-    <Fragment>
-      <List cellSpacing={0}>
-        <ListHead>
-          <ListHeaderRow>
-            {['Address', 'SNX', 'sUSD', 'ETH'].map((headerElement, i) => {
-              return (
-                <ListHeaderCell
-                  style={{ textAlign: i > 0 ? 'right' : 'left' }}
-                  key={headerElement}
-                >
-                  <TableHeaderMedium>{headerElement}</TableHeaderMedium>
-                </ListHeaderCell>
-              );
-            })}
-          </ListHeaderRow>
-        </ListHead>
-        <ListBody>
-          {wallets.map(wallet => {
-            return (
-              <ListBodyRow
-                key={wallet.address}
-                onClick={() => {
-                  updateWalletStatus(
-                    {
-                      currentWallet: wallet.address,
-                    },
-                    dispatch
-                  );
-                  updateCurrentPage('main', dispatch);
-                }}
-              >
-                <ListCell>{wallet.address}</ListCell>
-                <ListCell style={{ textAlign: 'right' }}>
-                  {formatCurrency(wallet.balances.snxBalance) || 0}
-                </ListCell>
-                <ListCell style={{ textAlign: 'right' }}>
-                  {formatCurrency(wallet.balances.sUSDBalance) || 0}
-                </ListCell>
-                <ListCell style={{ textAlign: 'right' }}>
-                  {formatCurrency(wallet.balances.ethBalance) || 0}
-                </ListCell>
-              </ListBodyRow>
-            );
-          })}
-        </ListBody>
-      </List>
-      <Paginator />
-    </Fragment>
-  );
-};
-
-const useGetWallets = () => {
-  const { dispatch } = useContext(Store);
-  const [wallets, setWallets] = useState(null);
+  const [wallets, setWallets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    try {
-      const getWallets = async () => {
+    const walletIndex = currentPage * WALLET_PAGE_SIZE;
+    if (wallets[walletIndex]) return;
+    setIsLoading(true);
+    const getWallets = async () => {
+      try {
         const results = await snxJSConnector.signer.getNextAddresses(
-          0,
+          walletIndex,
           WALLET_PAGE_SIZE
         );
+
         const availableWallets = results.map(address => {
           return {
             address,
@@ -97,7 +49,8 @@ const useGetWallets = () => {
           };
         });
         updateWalletStatus({ unlocked: true }, dispatch);
-        setWallets(availableWallets);
+        setIsLoading(false);
+        setWallets([...wallets, ...availableWallets]);
         const balances = await Promise.all(
           availableWallets.map(async wallet => {
             return {
@@ -121,77 +74,157 @@ const useGetWallets = () => {
           };
         });
 
-        setWallets(availableWallets.slice());
-      };
-      getWallets();
-    } catch (e) {
-      updateWalletStatus({
-        unlocked: false,
-        unlockReason: 'ErrorWhileConnectingToHardwareWallet',
-        unlockMessage: e,
-      });
-    }
-  }, []);
-  return wallets;
+        setWallets([...wallets, ...availableWallets]);
+      } catch (e) {
+        setError('Please check your wallet is not in stand-by mode and retry.');
+        updateWalletStatus(
+          {
+            unlocked: false,
+            unlockReason: 'ErrorWhileConnectingToHardwareWallet',
+            unlockMessage: e,
+          },
+          dispatch
+        );
+      }
+    };
+    getWallets();
+  }, [currentPage]);
+  return { wallets, isLoading, error };
+};
+
+const renderHeading = (hasLoaded, walletType, error) => {
+  if (error) {
+    return (
+      <HeadingContent>
+        <ErrorHeading>
+          <ErrorImg src="/images/failure.svg" />
+          <WalletConnectionH1>Error</WalletConnectionH1>
+        </ErrorHeading>
+        <WalletConnectionPMega>
+          Mintr couldn't access your wallet
+        </WalletConnectionPMega>
+      </HeadingContent>
+    );
+  } else
+    return hasLoaded ? (
+      <HeadingContent>
+        <WalletConnectionH1>Select Wallet</WalletConnectionH1>
+        <WalletConnectionPMega>
+          Please select the wallet you would like to use with Mintr
+        </WalletConnectionPMega>
+      </HeadingContent>
+    ) : (
+      <HeadingContent>
+        <WalletConnectionH1>{`Connect via ${walletType}`}</WalletConnectionH1>
+        <WalletConnectionPMega>
+          Please follow the prompts on your device to unlock your wallet.
+        </WalletConnectionPMega>
+      </HeadingContent>
+    );
 };
 
 const WalletConnection = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const { wallets, isLoading, error } = useGetWallets(currentPage);
   const {
     state: {
-      ui: { themeIsDark },
+      wallet: { walletType },
     },
+    dispatch,
   } = useContext(Store);
-  const wallets = useGetWallets();
-
   return (
-    <Wrapper>
-      <Header>
-        <HeaderBlock>
-          <Logo
-            src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`}
-          />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
-        </HeaderBlock>
-        <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
-        </HeaderBlock>
-      </Header>
+    <OnBoardingPageContainer>
       <Content>
-        <HeadingContent>
-          <WalletConnectionH1>Connect via Ledger</WalletConnectionH1>
-          <WalletConnectionPMega>
-            Please Connect and Unlock your Trezor.
-          </WalletConnectionPMega>
-        </HeadingContent>
-        <BodyContent>
-          <Wallets wallets={wallets} />
-        </BodyContent>
-        <Footer>
-          <ButtonTertiary>Having trouble?</ButtonTertiary>
-        </Footer>
+        {renderHeading(wallets.length > 0, walletType, error)}
+        {error ? (
+          <ErrorContainer>
+            <PMega>{error}</PMega>
+            <ButtonPrimaryMedium
+              onClick={() => updateCurrentPage('walletConnection', dispatch)}
+            >
+              Retry
+            </ButtonPrimaryMedium>
+          </ErrorContainer>
+        ) : (
+          <BodyContent>
+            <ListContainer>
+              {!isLoading ? (
+                <ListInner>
+                  <List cellSpacing={0}>
+                    <ListHead>
+                      <ListHeaderRow>
+                        {['Address', 'SNX', 'sUSD', 'ETH'].map(
+                          (headerElement, i) => {
+                            return (
+                              <ListHeaderCell
+                                style={{ textAlign: i > 0 ? 'right' : 'left' }}
+                                key={headerElement}
+                              >
+                                <TableHeaderMedium>
+                                  {headerElement}
+                                </TableHeaderMedium>
+                              </ListHeaderCell>
+                            );
+                          }
+                        )}
+                      </ListHeaderRow>
+                    </ListHead>
+                    <ListBody>
+                      {wallets
+                        .slice(
+                          currentPage * WALLET_PAGE_SIZE,
+                          currentPage * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
+                        )
+                        .map(wallet => {
+                          return (
+                            <ListBodyRow
+                              key={wallet.address}
+                              onClick={() => {
+                                updateWalletStatus(
+                                  {
+                                    currentWallet: wallet.address,
+                                  },
+                                  dispatch
+                                );
+                                updateCurrentPage('main', dispatch);
+                              }}
+                            >
+                              <ListCell>{wallet.address}</ListCell>
+                              <ListCell style={{ textAlign: 'right' }}>
+                                {formatCurrency(wallet.balances.snxBalance) ||
+                                  0}
+                              </ListCell>
+                              <ListCell style={{ textAlign: 'right' }}>
+                                {formatCurrency(wallet.balances.sUSDBalance) ||
+                                  0}
+                              </ListCell>
+                              <ListCell style={{ textAlign: 'right' }}>
+                                {formatCurrency(wallet.balances.ethBalance) ||
+                                  0}
+                              </ListCell>
+                            </ListBodyRow>
+                          );
+                        })}
+                    </ListBody>
+                  </List>
+                </ListInner>
+              ) : (
+                <Spinner />
+              )}
+            </ListContainer>
+            {wallets.length > 0 ? (
+              <Paginator
+                disabled={isLoading}
+                currentPage={currentPage}
+                onPageChange={page => setCurrentPage(page)}
+              />
+            ) : null}
+          </BodyContent>
+        )}
       </Content>
-    </Wrapper>
+    </OnBoardingPageContainer>
   );
 };
-
-const Wrapper = styled.div`
-  padding: 42px;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeaderBlock = styled.div`
-  display: flex;
-`;
-
-const Logo = styled.img`
-  width: 104px;
-  margin-right: 18px;
-`;
 
 const HeadingContent = styled.div`
   width: 50%;
@@ -213,6 +246,22 @@ const BodyContent = styled.div`
   align-items: center;
 `;
 
+const ErrorContainer = styled.div`
+  height: 350px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+
+const ErrorImg = styled.img`
+  margin-right: 20px;
+`;
+
+const ErrorHeading = styled.div`
+  display: flex;
+`;
+
 const Content = styled.div`
   width: 100%;
   display: flex;
@@ -220,10 +269,6 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 50px;
-`;
-
-const Footer = styled.div`
-  bottom: 40px;
 `;
 
 const WalletConnectionH1 = styled(H1)`
@@ -236,6 +281,27 @@ const WalletConnectionPMega = styled(PMega)`
   font-family: 'apercu-medium';
   text-align: center;
   line-height: 32px;
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const ListContainer = styled.div`
+  height: 350px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const ListInner = styled.div`
+  animation: ${fadeIn} 0.2s linear both;
+  width: 100%;
 `;
 
 export default WalletConnection;
