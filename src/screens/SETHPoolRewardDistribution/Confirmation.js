@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { SlidePage, SliderContext } from '../../../components/Slider';
-import { ButtonTertiary } from '../../../components/Button';
+import { SlidePage, SliderContext } from '../../components/Slider';
+import { ButtonTertiary } from '../../components/Button';
 import {
   PLarge,
   PageTitle,
   Subtext,
-} from '../../../components/Typography';
-import Spinner from '../../../components/Spinner';
+} from '../../components/Typography';
+import Spinner from '../../components/Spinner';
 
 const Confirmation = () => {
   const { handlePrev } = useContext(SliderContext);

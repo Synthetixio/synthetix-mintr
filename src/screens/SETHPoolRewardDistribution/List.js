@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-import Table from '../../../components/Table';
-import { ButtonPrimaryMedium } from '../../../components/Button';
+import Table from '../../components/Table';
+import { ButtonPrimaryMedium } from '../../components/Button';
 
 import {
   useOwners,
   useRequiredConfirmationCount,
   useTransactions,
-} from '../hooks';
+} from './hooks';
 
-const List = ({ setPage }) => {
+const List = ({ setPage, openDetails }) => {
   const owners = useOwners(); // eslint-disable-line
   const requiredConfirmationCount = useRequiredConfirmationCount();
   const { loading, transactions } = useTransactions();
@@ -36,7 +36,7 @@ const List = ({ setPage }) => {
                 id: item.id,
                 committed: new Date().toString(),
                 signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
-                confirm: 'Confirm',
+                confirm: <ConfirmButton onClick={() => openDetails(item)}>Confirm</ConfirmButton>,
                 youConfirmed: item.youConfirmed ? 'Yes' : 'No',
               }))}
             />
@@ -50,6 +50,16 @@ const List = ({ setPage }) => {
 const Column = styled('div')`
   display: flex;
   flex-direction: column;
+`;
+
+const ConfirmButton = styled('a')`
+  cursor: pointer;
+  color: #727CFF;
+  underline: none;
+  text-transform: uppercase;
+  &:hover {
+    color: #5A66F8;
+  }
 `;
 
 export default List;

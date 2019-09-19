@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/Slider';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { SlidePage } from '../../components/Slider';
+import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import {
   PLarge,
   PageTitle,
-} from '../../../components/Typography';
+} from '../../components/Typography';
 
 const Complete = ({ goHome, transaction }) => {
   return (

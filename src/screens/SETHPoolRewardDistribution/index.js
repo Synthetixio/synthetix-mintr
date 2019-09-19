@@ -4,12 +4,15 @@ import styled from 'styled-components';
 import PageContainer from '../../components/PageContainer';
 import Slider from '../../components/Slider';
 import Create from './Create';
+import Confirm from './Confirm';
 import List from './List';
 
 const getComponent = page => {
   switch (page) {
     case 'create':
       return Create;
+    case 'confirm':
+      return Confirm;
     default:
       return null;
   }
@@ -17,19 +20,24 @@ const getComponent = page => {
 
 const SETHPoolRewardDistribution = () => {
   const [page, setPage] = useState(null);
+  const [multisendTx, setMultisendTx] = useState(null);
   let slider = null;
   if (page) {
     const PageComponent = getComponent(page);
     slider =
       <Slider>
-        <PageComponent goHome={() => setPage(null)} />
+        <PageComponent goHome={() => setPage(null)} multisendTx={multisendTx} />
       </Slider>;
+  }
+  const openDetails = id => {
+    setMultisendTx(id);
+    setPage('confirm');
   }
   return (
     <MainContainerWrapper>
       <PageContainer>
         {slider}
-        <List setPage={setPage} />
+        <List setPage={setPage} openDetails={openDetails} />
       </PageContainer>
     </MainContainerWrapper>
   );
