@@ -70,7 +70,7 @@ const ActionImage = styled.img`
 
 const Buttons = styled.div`
   height: auto;
-  & :first-child {
+  &>:first-child {
     margin-bottom: 24px;
   }
 `;
