@@ -19,9 +19,9 @@ const connectToMetamask = async (networkId, name, signer) => {
   try {
     // Otherwise we enable ethereum if needed (modern browsers)
     if (window.ethereum) {
+      window.ethereum.autoRefreshOnNetworkChange = true;
       await window.ethereum.enable();
     }
-
     // And we set the connector with the latest details
     snxJSConnector.setContractSettings({
       networkId,

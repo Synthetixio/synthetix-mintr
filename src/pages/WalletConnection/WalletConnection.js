@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { connectToWallet } from '../../helpers/snxJSConnector';
-import { hasWeb3, SUPPORTED_WALLETS } from '../../helpers/networkHelper';
+import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
+import {
+  hasWeb3,
+  SUPPORTED_WALLETS,
+  onMetamaskAccountChange,
+} from '../../helpers/networkHelper';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
@@ -18,6 +22,14 @@ const onWalletClick = (wallet, dispatch) => {
 
     updateWalletStatus(walletStatus, dispatch);
     if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
+      if (walletStatus.walletType === 'Metamask') {
+        onMetamaskAccountChange(async () => {
+          const address = await snxJSConnector.signer.getNextAddresses();
+          if (address && address[0]) {
+            updateWalletStatus({ currentWallet: address[0] }, dispatch);
+          }
+        });
+      }
       updateCurrentPage('main', dispatch);
     } else updateCurrentPage('walletSelection', dispatch);
   };

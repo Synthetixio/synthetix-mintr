@@ -1,3 +1,4 @@
+import throttle from 'lodash/throttle';
 export const GWEI_UNIT = 1000000000;
 
 export const SUPPORTED_NETWORKS = {
@@ -56,3 +57,15 @@ export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
   if (!gasPrice || !gasLimit) return 0;
   return (gasPrice * ethPrice * gasLimit) / GWEI_UNIT;
 };
+
+export function onMetamaskAccountChange(cb) {
+  if (!window.ethereum) return;
+  const listener = throttle(cb, 1000);
+  window.ethereum.on('accountsChanged', listener);
+}
+
+export function onMetamaskNetworkChange(cb) {
+  if (!window.ethereum) return;
+  const listener = throttle(cb, 1000);
+  window.ethereum.on('networkChanged', listener);
+}

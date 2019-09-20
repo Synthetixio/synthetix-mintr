@@ -63,7 +63,7 @@
     "style-loader": "0.23.1",
     "styled-components": "^4.3.2",
     "styled-system": "^5.1.0",
-    "synthetix-js": "^2.9.2",
+    "synthetix-js": "^2.10.2-beta",
     "terser-webpack-plugin": "1.2.3",
     "ts-pnp": "1.1.2",
     "url-loader": "1.1.2",
