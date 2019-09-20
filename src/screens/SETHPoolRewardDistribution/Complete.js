@@ -26,7 +26,7 @@ const Success = ({ goHome, transaction }) => {
       </Fees>
       <Bottom>
         <Buttons>
-          <ButtonSecondary onClick={() => window.open(`https://kovan.etherscan.io/tx/${transaction.hash}`, '_blank')}>
+          <ButtonSecondary onClick={() => window.open(`https://etherscan.io/tx/${transaction.hash}`, '_blank')}>
             VERIFY TRANSACTION
           </ButtonSecondary>
           <ButtonPrimary onClick={goHome}>
