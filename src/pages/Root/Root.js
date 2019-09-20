@@ -22,6 +22,8 @@ const renderCurrentPage = currentPage => {
       return <WalletSelection />;
     case 'main':
       return <Main />;
+    case 'sethpool':
+      return <Main />;
   }
 };
 
