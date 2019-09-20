@@ -1,5 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import styled from 'styled-components';
+
+import { Store } from '../../store';
 
 import Table from '../../components/Table';
 import { PageTitle, ButtonPrimaryLabel, PLarge, H5 } from '../../components/Typography';
@@ -11,9 +13,16 @@ import {
 } from './hooks';
 
 const List = ({ setPage, openDetails }) => {
-  const owners = useOwners(); // eslint-disable-line
+  const {
+    state: {
+      wallet: { currentWallet },
+    },
+  } = useContext(Store);
+  const owners = useOwners();
   const requiredConfirmationCount = useRequiredConfirmationCount();
   const { loading, transactions } = useTransactions();
+
+  const isOwner = owners.includes(currentWallet.toLowerCase());
 
   return (
     <Fragment>
@@ -29,9 +38,11 @@ const List = ({ setPage, openDetails }) => {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
               </PLarge>
             </SubtitleContainer>
-            <Button onClick={() => setPage('create')}>
-              <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
-            </Button>
+            {isOwner && (
+              <Button onClick={() => setPage('create')}>
+                <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
+              </Button>
+            )}
             <LabelContainer>
               <H5>Transactions:</H5>
             </LabelContainer>
@@ -40,8 +51,8 @@ const List = ({ setPage, openDetails }) => {
                 { key: 'id', value: 'ID' },
                 { key: 'committed', value: 'committed' },
                 { key: 'signers', value: 'signers' },
-                { key: 'youConfirmed', value: 'you confirmed' },
-                { key: 'confirm', value: 'confirm' },
+                isOwner && { key: 'youConfirmed', value: 'you confirmed' },
+                isOwner && { key: 'confirm', value: 'confirm' },
               ]}
               data={transactions.map(item => {
                 const showButton = !item.youConfirmed && item.confirmationCount < requiredConfirmationCount;
