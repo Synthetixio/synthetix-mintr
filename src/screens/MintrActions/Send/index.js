@@ -72,23 +72,24 @@ const useGetGasEstimate = (currency, amount, destination) => {
   useEffect(() => {
     if (!currency || !currency.name || !amount || !destination)
       return updateGasLimit(0, dispatch);
+    const amountBN = snxJSConnector.utils.parseEther(amount.toString());
     const getGasEstimate = async () => {
       try {
         let gasEstimate;
         if (currency.name === 'SNX') {
           gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
             destination,
-            snxJSConnector.utils.parseEther(amount.toString())
+            amountBN
           );
         } else if (currency.name === 'ETH') {
           gasEstimate = await snxJSConnector.provider.estimateGas({
-            value: amount,
+            value: amountBN,
             to: destination,
           });
         } else {
           gasEstimate = await snxJSConnector.snxJS[
             currency.name
-          ].contract.estimate.transfer(destination, amount);
+          ].contract.estimate.transfer(destination, amountBN);
         }
         updateGasLimit(Number(gasEstimate), dispatch);
       } catch (e) {
