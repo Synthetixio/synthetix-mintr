@@ -4,16 +4,16 @@ import { withTranslation } from 'react-i18next';
 
 import { shortenAddress } from '../../helpers/formatters';
 import { Store } from '../../store';
-import { ThemeContext } from 'styled-components';
+// import { ThemeContext } from 'styled-components';
 
 import { WalletStatusButton } from '../Button';
 import { HeaderButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
-import { Globe } from '../Icons';
+// import { Globe } from '../Icons';
 
 const Header = ({ t, currentWallet }) => {
-  const theme = useContext(ThemeContext);
+  // const theme = useContext(ThemeContext);
   const { state } = useContext(Store);
   return (
     <HeaderWrapper>
@@ -24,9 +24,9 @@ const Header = ({ t, currentWallet }) => {
       />
       <WalletStatusButton>{shortenAddress(currentWallet)}</WalletStatusButton>
       <HeaderButton>{t('dashboard.header.support')}</HeaderButton>
-      <GlobeButton>
+      {/* <GlobeButton>
         <Globe theme={theme} />
-      </GlobeButton>
+      </GlobeButton> */}
       <ThemeSwitcher
         onLabel={t('dashboard.header.onLabel')}
         offLabel={t('dashboard.header.offLabel')}
@@ -48,14 +48,14 @@ const Logo = styled.img`
   margin-right: 18px;
 `;
 
-const GlobeButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 30px;
-  height: 40px;
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-  background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
-`;
+// const GlobeButton = styled.button`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   border-radius: 30px;
+//   height: 40px;
+//   border: 1px solid ${props => props.theme.colorStyles.borders};
+//   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+// `;
 
 export default withTranslation()(Header);
