@@ -7,6 +7,7 @@ import { updateCurrentTab } from '../../ducks/ui';
 
 import { Home, Depot, Transactions, Escrow } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
+import { TransactionSettingsPopup } from '../../components/Popup';
 
 const TabRow = ({ state }) => {
   const { t } = state;
@@ -21,6 +22,7 @@ const TabRow = ({ state }) => {
       <TabButton
         key={tab}
         isSelected={tab === currentTab}
+        disabled={['depot', 'transactionsHistory', 'escrow'].includes(tab)}
         onClick={() => updateCurrentTab(tab, dispatch)}
       >
         {/* i18next-extract-disable-next-line */}
@@ -47,7 +49,7 @@ const renderScreen = screen => {
 const MainContainer = ({ t }) => {
   const {
     state: {
-      ui: { currentTab },
+      ui: { currentTab, transactionSettingsPopupIsVisible },
     },
   } = useContext(Store);
 
@@ -57,6 +59,9 @@ const MainContainer = ({ t }) => {
         <TabRow state={{ t }} />
       </Header>
       {renderScreen(currentTab)}
+      {transactionSettingsPopupIsVisible ? (
+        <TransactionSettingsPopup></TransactionSettingsPopup>
+      ) : null}
     </MainContainerWrapper>
   );
 };
@@ -64,6 +69,7 @@ const MainContainer = ({ t }) => {
 const MainContainerWrapper = styled('div')`
   width: 100%;
   background-color: ${props => props.theme.colorStyles.background};
+  position: relative;
 `;
 
 const Header = styled('div')`

@@ -1,23 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Arrow } from '../Icons';
 
-const renderPageNumberButtons = () => {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(index => (
-    <Button key={index} active={index === 1}>
-      {index}
-    </Button>
-  ));
+const RANGE_SIZE = 10;
+
+const getRange = currentIndex => {
+  return [...Array(RANGE_SIZE).keys()].map(i => i + currentIndex);
 };
-const Paginator = () => {
+
+const Paginator = ({ currentPage, onPageChange, disabled }) => {
+  const [startIndex, setStartIndex] = useState(currentPage);
   return (
-    <Wrapper>
-      <Button>
+    <Wrapper disabled={disabled}>
+      <Button
+        onClick={() => {
+          if (startIndex > 0) {
+            setStartIndex(startIndex - 1);
+          }
+        }}
+      >
         <Arrow direction="left" />
       </Button>
-      {renderPageNumberButtons()}
-      <Button>
+      {getRange(startIndex).map(index => (
+        <Button
+          key={index + 1}
+          active={index === currentPage}
+          onClick={() => onPageChange(index)}
+        >
+          {index + 1}
+        </Button>
+      ))}
+      <Button
+        onClick={() => {
+          setStartIndex(startIndex + 1);
+        }}
+      >
         <Arrow direction="right" />
       </Button>
     </Wrapper>
@@ -26,13 +44,16 @@ const Paginator = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  margin: 40px 0;
+  margin: 30px 0;
   display: flex;
   justify-content: center;
   & > :first-child,
   & > :last-child {
     margin: 0 20px;
   }
+  transition: opacity 0.1s ease-out;
+  opacity: ${props => (props.disabled ? 0.6 : 1)};
+  pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 
 const Button = styled.button`
@@ -59,7 +80,9 @@ const Button = styled.button`
       : props.theme.colorStyles.tableHeading};
   :hover {
     background-color: ${props =>
-      props.theme.colorStyles.paginatorButtonBackgroundHover};
+      props.active
+        ? props.theme.colorStyles.paginatorButtonBackgroundActive
+        : props.theme.colorStyles.paginatorButtonBackgroundHover};
   }
 `;
 

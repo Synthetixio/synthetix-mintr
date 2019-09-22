@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { formatCurrency } from '../../../helpers/formatters';
@@ -8,13 +8,9 @@ import {
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import {
-  PLarge,
-  H1,
-  Subtext,
-  DataHeaderLarge,
-} from '../../../components/Typography';
+import { PLarge, H1, DataHeaderLarge } from '../../../components/Typography';
 import Input, { SimpleInput } from '../../../components/Input';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
 const Action = ({
   onDestroy,
@@ -22,9 +18,11 @@ const Action = ({
   balances,
   currentCurrency,
   onCurrentCurrencyChange,
+  sendAmount,
+  sendDestination,
+  setSendAmount,
+  setSendDestination,
 }) => {
-  const [amount, setAmount] = useState('');
-  const [destinationWallet, setDestinationWallet] = useState('');
   return (
     <SlidePage>
       <Container>
@@ -53,11 +51,11 @@ const Action = ({
             <PLarge>Enter amount or select max available:</PLarge>
             <Input
               disabled={!currentCurrency}
-              onChange={e => setAmount(e.target.value)}
+              onChange={e => setSendAmount(e.target.value)}
               onSynthChange={onCurrentCurrencyChange}
               synths={balances}
               currentSynth={currentCurrency}
-              value={amount}
+              value={sendAmount}
               placeholder="0.00"
               leftComponent={
                 <Type>
@@ -72,7 +70,9 @@ const Action = ({
               rightComponent={
                 <ButtonMax
                   onClick={() =>
-                    setAmount((currentCurrency && currentCurrency.balance) || 0)
+                    setSendAmount(
+                      (currentCurrency && currentCurrency.balance) || 0
+                    )
                   }
                 />
               }
@@ -81,19 +81,17 @@ const Action = ({
               Enter wallet address to send funds to:
             </PLarge>
             <SimpleInput
-              onChange={e => setDestinationWallet(e.target.value)}
-              value={destinationWallet}
+              onChange={e => setSendDestination(e.target.value)}
+              value={sendDestination}
               placeholder="e.g. 0x3b18a4..."
             />
           </Form>
         </Middle>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-          </Subtext>
+          <TransactionPriceIndicator />
           <ButtonPrimary
-            disabled={!destinationWallet || !amount}
-            onClick={() => onSend(amount, destinationWallet)}
+            disabled={!sendDestination || !sendAmount}
+            onClick={onSend}
             margin="auto"
           >
             SEND NOW
@@ -191,12 +189,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

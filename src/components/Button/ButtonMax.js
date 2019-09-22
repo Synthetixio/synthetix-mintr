@@ -25,6 +25,7 @@ const Button = styled.button`
   border-radius: 3px;
   cursor: pointer;
   transition: all ease-in 0.1s;
+  text-transform: uppercase;
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }

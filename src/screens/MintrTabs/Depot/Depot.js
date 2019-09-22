@@ -63,7 +63,7 @@ const HiddenContent = ({ t, data }) => {
             return (
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
-                  <TypeImage src='/images/actions/tiny-sold.svg' />
+                  <TypeImage src="/images/actions/tiny-sold.svg" />
                   <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
                 </TD>
                 <TD>
@@ -110,7 +110,7 @@ const ExpandableTable = withTranslation(({ t }) => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop='10px'>Recent activity:</H5>
+          <H5 marginTop="10px">Recent activity:</H5>
           <MoreButtons>
             <ButtonTertiary>View More</ButtonTertiary>
             <ButtonTertiary>View Contract</ButtonTertiary>
@@ -145,7 +145,7 @@ const ExpandableTable = withTranslation(({ t }) => {
                   }
                 >
                   <Cell>
-                    <TypeImage src='/images/actions/tiny-deposit.svg' />
+                    <TypeImage src="/images/actions/tiny-deposit.svg" />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>

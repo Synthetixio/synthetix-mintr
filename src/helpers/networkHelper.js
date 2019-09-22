@@ -1,3 +1,6 @@
+import throttle from 'lodash/throttle';
+export const GWEI_UNIT = 1000000000;
+
 export const SUPPORTED_NETWORKS = {
   1: 'MAINNET',
   3: 'ROPSTEN',
@@ -23,4 +26,46 @@ export async function getEthereumNetwork() {
       }
     });
   });
+}
+
+export const getNetworkInfo = async () => {
+  const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+  const networkInfo = await result.json();
+  return {
+    slow: {
+      gwei: networkInfo.safeLow / 10,
+      time: networkInfo.safeLowWait,
+      getPrice: (ethPrice, gasLimit) =>
+        getTransactionPrice(networkInfo.safeLow / 10, gasLimit, ethPrice),
+    },
+    average: {
+      gwei: networkInfo.average / 10,
+      time: networkInfo.avgWait,
+      getPrice: (ethPrice, gasLimit) =>
+        getTransactionPrice(networkInfo.average / 10, gasLimit, ethPrice),
+    },
+    fast: {
+      gwei: networkInfo.fast / 10,
+      time: networkInfo.fastWait,
+      getPrice: (ethPrice, gasLimit) =>
+        getTransactionPrice(networkInfo.fast / 10, gasLimit, ethPrice),
+    },
+  };
+};
+
+export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
+  if (!gasPrice || !gasLimit) return 0;
+  return (gasPrice * ethPrice * gasLimit) / GWEI_UNIT;
+};
+
+export function onMetamaskAccountChange(cb) {
+  if (!window.ethereum) return;
+  const listener = throttle(cb, 1000);
+  window.ethereum.on('accountsChanged', listener);
+}
+
+export function onMetamaskNetworkChange(cb) {
+  if (!window.ethereum) return;
+  const listener = throttle(cb, 1000);
+  window.ethereum.on('networkChanged', listener);
 }

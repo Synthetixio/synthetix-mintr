@@ -12,6 +12,7 @@ const initialState = {
     currentPage: 'walletConnection',
     currentTab: 'home',
     dashboardIsLoading: false,
+    transactionSettingsPopupIsVisible: false,
   },
   wallet: {
     unlocked: false,
@@ -20,6 +21,9 @@ const initialState = {
     currentTransactions: [],
     dataFetchers: {},
     successQueue: [],
+  },
+  network: {
+    settings: {},
   },
 };
 

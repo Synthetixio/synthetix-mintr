@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../../components/ScreenSlider';
 
+import { SlidePage } from '../../../components/ScreenSlider';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   ButtonPrimary,
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import { PLarge, H1, Subtext } from '../../../components/Typography';
+import { PLarge, H1 } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onMint, issuableSynths }) => {
-  const [amount, setAmount] = useState('');
+const Action = ({
+  onDestroy,
+  onMint,
+  issuableSynths,
+  mintAmount,
+  setMintAmount,
+}) => {
   return (
     <SlidePage>
       <Container>
@@ -32,8 +38,8 @@ const Action = ({ onDestroy, onMint, issuableSynths }) => {
             <PLarge>Confirm or enter amount to mint:</PLarge>
             <Input
               singleSynth={'sUSD'}
-              onChange={e => setAmount(e.target.value)}
-              value={amount}
+              onChange={e => setMintAmount(e.target.value)}
+              value={mintAmount}
               placeholder="0.00"
               leftComponent={
                 <Type>
@@ -48,7 +54,7 @@ const Action = ({ onDestroy, onMint, issuableSynths }) => {
               rightComponent={
                 <ButtonMax
                   onClick={() => {
-                    setAmount(issuableSynths);
+                    setMintAmount(issuableSynths);
                   }}
                 />
               }
@@ -56,10 +62,8 @@ const Action = ({ onDestroy, onMint, issuableSynths }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-          </Subtext>
-          <ButtonPrimary onClick={() => onMint(amount)} margin="auto">
+          <TransactionPriceIndicator />
+          <ButtonPrimary onClick={onMint} margin="auto">
             MINT NOW
           </ButtonPrimary>
         </Bottom>
@@ -123,11 +127,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

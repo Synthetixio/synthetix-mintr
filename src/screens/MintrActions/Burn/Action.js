@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
 
@@ -7,11 +7,17 @@ import {
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import { PLarge, H1, Subtext } from '../../../components/Typography';
+import { PLarge, H1 } from '../../../components/Typography';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
-  const [amount, setAmount] = useState('');
+const Action = ({
+  onDestroy,
+  onBurn,
+  maxBurnAmount,
+  burnAmount,
+  setBurnAmount,
+}) => {
   return (
     <SlidePage>
       <Container>
@@ -32,8 +38,8 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
             <PLarge>Confirm or enter amount to burn:</PLarge>
             <Input
               singleSynth={'sUSD'}
-              onChange={e => setAmount(e.target.value)}
-              value={amount}
+              onChange={e => setBurnAmount(e.target.value)}
+              value={burnAmount}
               placeholder="0.00"
               leftComponent={
                 <Type>
@@ -48,7 +54,7 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
               rightComponent={
                 <ButtonMax
                   onClick={() => {
-                    setAmount(maxBurnAmount);
+                    setBurnAmount(maxBurnAmount);
                   }}
                 />
               }
@@ -56,10 +62,8 @@ const Action = ({ onDestroy, onBurn, maxBurnAmount }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-          </Subtext>
-          <ButtonPrimary onClick={() => onBurn(amount)} margin="auto">
+          <TransactionPriceIndicator />
+          <ButtonPrimary onClick={onBurn} margin="auto">
             BURN NOW
           </ButtonPrimary>
         </Bottom>
@@ -123,12 +127,6 @@ const Type = styled.div`
   text-align: center;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default Action;

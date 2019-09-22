@@ -5,26 +5,14 @@ import { withTranslation } from 'react-i18next';
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 
-import { ButtonPrimary, ButtonTertiary } from '../../components/Button';
+import { ButtonPrimary } from '../../components/Button';
 import { H1, H2, PMega, PLarge } from '../../components/Typography';
+import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 const Landing = ({ t }) => {
-  const { state, dispatch } = useContext(Store);
+  const { dispatch } = useContext(Store);
   return (
-    <LandingWrapper>
-      <Header>
-        <HeaderBlock>
-          <Logo
-            src={`/images/mintr-logo-${
-              state.ui.themeIsDark ? 'light' : 'dark'
-            }.svg`}
-          />
-          <ButtonTertiary>{t('landing.buttons.mainnet')}</ButtonTertiary>
-        </HeaderBlock>
-        <HeaderBlock>
-          <ButtonTertiary>{t('landing.buttons.synthetix')}</ButtonTertiary>
-        </HeaderBlock>
-      </Header>
+    <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
           <LandingH1>{t('landing.intro.h')}</LandingH1>
@@ -33,17 +21,17 @@ const Landing = ({ t }) => {
         <BodyContent>
           <Functionalities>
             <Functionality>
-              <Icon src='images/actions/mint.svg' />
+              <Icon src="images/actions/mint.svg" />
               <LandingH2>{t('landing.functionality.mintH')}</LandingH2>
               <LandingPLarge>{t('landing.functionality.mintP')}</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/burn.svg' />
+              <Icon src="images/actions/burn.svg" />
               <LandingH2>{t('landing.functionality.burnH')}</LandingH2>
               <LandingPLarge>{t('landing.functionality.burnP')}</LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/claim.svg' />
+              <Icon src="images/actions/claim.svg" />
               <LandingH2>{t('landing.functionality.claimH')}</LandingH2>
               <LandingPLarge>{t('landing.functionality.claimP')}</LandingPLarge>
             </Functionality>
@@ -55,28 +43,9 @@ const Landing = ({ t }) => {
           </ButtonPrimary>
         </BodyContent>
       </Content>
-    </LandingWrapper>
+    </OnBoardingPageContainer>
   );
 };
-
-const LandingWrapper = styled.div`
-  padding: 42px;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeaderBlock = styled.div`
-  display: flex;
-`;
-
-const Logo = styled.img`
-  width: 104px;
-  margin-right: 18px;
-`;
 
 const HeadingContent = styled.div`
   width: 50%;

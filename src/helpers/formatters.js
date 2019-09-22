@@ -1,7 +1,7 @@
 import numbro from 'numbro';
 import snxJSConnector from '../helpers/snxJSConnector';
 
-export const formatCurrency = (value: number, decimals = 2) => {
+export const formatCurrency = (value, decimals = 2) => {
   if (!value) return 0;
   return numbro(value).format('0,0.' + '0'.repeat(decimals));
 };

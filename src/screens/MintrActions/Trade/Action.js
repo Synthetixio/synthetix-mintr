@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   ButtonPrimary,
   ButtonTertiary,
@@ -15,10 +16,11 @@ const Action = ({
   baseSynth,
   onTrade,
   onBaseSynthChange,
+  baseAmount,
+  quoteAmount,
+  setBaseAmount,
+  setQuoteAmount,
 }) => {
-  const [baseAmount, setBaseAmount] = useState('');
-  const [quoteAmount, setQuoteAmount] = useState('');
-
   const onBaseAmountChange = amount => {
     setBaseAmount(amount);
     setQuoteAmount(amount ? Number(amount) * Number(baseSynth.rate) : '');
@@ -72,13 +74,9 @@ const Action = ({
           </Form>
         </Top>
         <Bottom>
-          <Fees>
-            <Subtext>TRADING FEE: 0.3%</Subtext>
-            <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext>
-            <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-            </Subtext>
-          </Fees>
+          <Subtext>TRADING FEE: 0.3%</Subtext>
+          {/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
+          <TransactionPriceIndicator />
           <ButtonPrimary
             onClick={() => onTrade(baseAmount, quoteAmount)}
             margin="auto"
@@ -141,16 +139,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  margin-left: 8px;
-  color: ${props => props.theme.colorStyles.hyperlink};
-`;
-
-const Fees = styled.div`
-  margin-bottom: 32px;
 `;
 
 export default Action;

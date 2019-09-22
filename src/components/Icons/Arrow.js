@@ -9,9 +9,9 @@ const Arrow = ({ direction = 'up' }) => {
           d="M0 5l5-4 5 4"
           stroke="#6F6E98"
           fill="none"
-          fill-rule="evenodd"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          fillRule="evenodd"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </Wrapper>

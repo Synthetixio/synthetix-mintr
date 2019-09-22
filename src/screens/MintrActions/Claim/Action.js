@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import { SlidePage } from '../../../components/ScreenSlider';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import {
   PLarge,
@@ -142,11 +143,7 @@ const Action = ({
           </Details>
         </Middle>
         <Bottom>
-          <Fees>
-            <Subtext>
-              GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
-            </Subtext>
-          </Fees>
+          <TransactionPriceIndicator />
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
@@ -274,10 +271,6 @@ const Highlighted = styled.span`
     props.red
       ? props.theme.colorStyles.brandRed
       : props.theme.colorStyles.hyperlink};
-`;
-
-const Fees = styled.div`
-  margin-bottom: 32px;
 `;
 
 const Note = styled.div`

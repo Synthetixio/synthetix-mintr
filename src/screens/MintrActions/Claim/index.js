@@ -9,12 +9,15 @@ import { updateCurrentTab } from '../../../ducks/ui';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
-import { bytesFormatter } from '../../../helpers/formatters';
+import {
+  bytesFormatter,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import { createTransaction } from '../../../ducks/transactions';
+import { updateGasLimit } from '../../../ducks/network';
 
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 
 const getFeePeriodCountdown = (
   periodIndex,
@@ -86,8 +89,28 @@ const useGetFeeData = walletAddress => {
       }
     };
     getFeeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
+};
+
+const useGetGasEstimate = () => {
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    const sUSDBytes = bytesFormatter('sUSD');
+    const getGasEstimate = async () => {
+      try {
+        const gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees(
+          sUSDBytes
+        );
+        updateGasLimit(Number(gasEstimate), dispatch);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getGasEstimate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 
 const Claim = ({ onDestroy }) => {
@@ -97,6 +120,9 @@ const Claim = ({ onDestroy }) => {
   const {
     state: {
       wallet: { currentWallet, walletType },
+      network: {
+        settings: { gasPrice, gasLimit },
+      },
     },
     dispatch,
   } = useContext(Store);
@@ -106,12 +132,17 @@ const Claim = ({ onDestroy }) => {
     feesAvailable,
     dataIsLoading,
   } = useGetFeeData(currentWallet);
+  useGetGasEstimate();
 
   const onClaim = async () => {
     try {
       handleNext(1);
       const transaction = await snxJSConnector.snxJS.FeePool.claimFees(
-        sUSDBytes
+        sUSDBytes,
+        {
+          gasPrice: gasPrice * GWEI_UNIT,
+          gasLimit,
+        }
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });

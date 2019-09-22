@@ -7,10 +7,12 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { Store } from '../../../store';
 import { createTransaction } from '../../../ducks/transactions';
+import { updateGasLimit } from '../../../ducks/network';
 import {
   bigNumberFormatter,
   shortenAddress,
 } from '../../../helpers/formatters';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 
 const useGetBalances = (walletAddress, setCurrentCurrency) => {
   const [data, setData] = useState([]);
@@ -60,51 +62,98 @@ const useGetBalances = (walletAddress, setCurrentCurrency) => {
       }
     };
     getBalances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
   return data;
 };
 
-const sendTransaction = (currency, amount, destination) => {
+const useGetGasEstimate = (currency, amount, destination) => {
+  const { dispatch } = useContext(Store);
+  useEffect(() => {
+    if (!currency || !currency.name || !amount || !destination)
+      return updateGasLimit(0, dispatch);
+    const amountBN = snxJSConnector.utils.parseEther(amount.toString());
+    const getGasEstimate = async () => {
+      try {
+        let gasEstimate;
+        if (currency.name === 'SNX') {
+          gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
+            destination,
+            amountBN
+          );
+        } else if (currency.name === 'ETH') {
+          gasEstimate = await snxJSConnector.provider.estimateGas({
+            value: amountBN,
+            to: destination,
+          });
+        } else {
+          gasEstimate = await snxJSConnector.snxJS[
+            currency.name
+          ].contract.estimate.transfer(destination, amountBN);
+        }
+        updateGasLimit(Number(gasEstimate), dispatch);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getGasEstimate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [amount, currency, destination]);
+};
+
+const sendTransaction = (currency, amount, destination, settings) => {
   if (!currency) return null;
   if (currency === 'SNX') {
     return snxJSConnector.snxJS.Synthetix.contract.transfer(
+      destination,
       amount,
-      destination
+      settings
     );
   } else if (currency === 'ETH') {
     return snxJSConnector.signer.sendTransaction({
       value: amount,
       to: destination,
+      ...settings,
     });
-  } else return snxJSConnector.snxJS[currency].contract(amount, destination);
+  } else
+    return snxJSConnector.snxJS[currency].contract.transfer(
+      amount,
+      destination,
+      settings
+    );
 };
 
 const Send = ({ onDestroy }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
-  const [sendOptions, setSendOptions] = useState(null);
+  const [sendAmount, setSendAmount] = useState('');
+  const [sendDestination, setSendDestination] = useState('');
   const [currentCurrency, setCurrentCurrency] = useState(null);
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
       wallet: { currentWallet, walletType, networkName },
+      network: {
+        settings: { gasPrice, gasLimit },
+      },
     },
     dispatch,
   } = useContext(Store);
 
   const balances = useGetBalances(currentWallet, setCurrentCurrency);
+  useGetGasEstimate(currentCurrency, sendAmount, sendDestination);
 
-  const onSend = async (sendAmount, sendDestination) => {
+  const onSend = async () => {
     try {
       const realSendAmount =
         sendAmount === currentCurrency.balance
           ? currentCurrency.rawBalance
           : snxJSConnector.utils.parseEther(sendAmount.toString());
-      setSendOptions({ sendAmount, sendDestination });
       handleNext(1);
       const transaction = await sendTransaction(
         currentCurrency.name,
         realSendAmount,
-        sendDestination
+        sendDestination,
+        { gasPrice: gasPrice * GWEI_UNIT, gasLimit }
       );
       if (transaction) {
         setTransactionInfo({ transactionHash: transaction.hash });
@@ -131,7 +180,10 @@ const Send = ({ onDestroy }) => {
   const props = {
     onDestroy,
     onSend,
-    ...sendOptions,
+    sendAmount,
+    sendDestination,
+    setSendAmount,
+    setSendDestination,
     ...transactionInfo,
     goBack: handlePrev,
     balances,

@@ -2,15 +2,20 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
-import { connectToWallet } from '../../helpers/snxJSConnector';
-import { hasWeb3, SUPPORTED_WALLETS } from '../../helpers/networkHelper';
+import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
+import {
+  hasWeb3,
+  SUPPORTED_WALLETS,
+  onMetamaskAccountChange,
+} from '../../helpers/networkHelper';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus } from '../../ducks/wallet';
 
-import { ButtonPrimaryMedium, ButtonTertiary } from '../../components/Button';
+import { ButtonPrimaryMedium } from '../../components/Button';
 import { H1, H2, PMega, PLarge } from '../../components/Typography';
+import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 const onWalletClick = (wallet, dispatch) => {
   return async () => {
@@ -18,6 +23,14 @@ const onWalletClick = (wallet, dispatch) => {
 
     updateWalletStatus(walletStatus, dispatch);
     if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
+      if (walletStatus.walletType === 'Metamask') {
+        onMetamaskAccountChange(async () => {
+          const address = await snxJSConnector.signer.getNextAddresses();
+          if (address && address[0]) {
+            updateWalletStatus({ currentWallet: address[0] }, dispatch);
+          }
+        });
+      }
       updateCurrentPage('main', dispatch);
     } else updateCurrentPage('walletSelection', dispatch);
   };
@@ -45,26 +58,9 @@ const renderWalletButtons = dispatch => {
 };
 
 const WalletConnection = ({ t }) => {
-  const { state, dispatch } = useContext(Store);
+  const { dispatch } = useContext(Store);
   return (
-    <Wrapper>
-      <Header>
-        <HeaderBlock>
-          <Logo
-            src={`/images/mintr-logo-${
-              state.ui.themeIsDark ? 'light' : 'dark'
-            }.svg`}
-          />
-          <ButtonTertiary>
-            {t('walletConnection.buttons.mainnet')}
-          </ButtonTertiary>
-        </HeaderBlock>
-        <HeaderBlock>
-          <ButtonTertiary>
-            {t('walletConnection.buttons.synthetix')}
-          </ButtonTertiary>
-        </HeaderBlock>
-      </Header>
+    <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
           <WalletConnectionH1>
@@ -76,28 +72,9 @@ const WalletConnection = ({ t }) => {
         </HeadingContent>
         <BodyContent>{renderWalletButtons(dispatch)}</BodyContent>
       </Content>
-    </Wrapper>
+    </OnBoardingPageContainer>
   );
 };
-
-const Wrapper = styled.div`
-  padding: 42px;
-  height: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeaderBlock = styled.div`
-  display: flex;
-`;
-
-const Logo = styled.img`
-  width: 104px;
-  margin-right: 18px;
-`;
 
 const HeadingContent = styled.div`
   width: 50%;
@@ -111,7 +88,7 @@ const HeadingContent = styled.div`
 
 const BodyContent = styled.div`
   width: 100%;
-  margin: 100px auto 0 auto;
+  margin: 100px auto 100px auto;
   max-width: 1400px;
   text-align: center;
   display: flex;

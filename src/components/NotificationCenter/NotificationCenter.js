@@ -47,6 +47,7 @@ const useGetTransactionTicket = transaction => {
       return () => setData(null);
     };
     getTransactionTicket();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return data;
 };
