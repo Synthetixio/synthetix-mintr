@@ -1,42 +1,74 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { PLarge, PageTitle, Subtext } from '../../components/Typography';
 
-const Complete = ({ goHome, transaction }) => {
+const Success = ({ goHome, transaction }) => {
+  return (
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/success.svg" big />
+          <PageTitle>Success!</PageTitle>
+          <PLarge>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </PLarge>
+        </Intro>
+      </Top>
+      <Fees>
+        <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
+        <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
+      </Fees>
+      <Bottom>
+        <Buttons>
+          <ButtonSecondary
+            onClick={() =>
+              window.open(
+                `https://etherscan.io/tx/${transaction.hash}`,
+                '_blank'
+              )
+            }
+          >
+            VERIFY TRANSACTION
+          </ButtonSecondary>
+          <ButtonPrimary onClick={goHome}>FINISH & RETURN HOME</ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
+  );
+};
+
+const Failure = ({ error, goHome }) => {
+  return (
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/failure.svg" big />
+          <PageTitle>Something went wrong...</PageTitle>
+          {error.code ? <PLarge>Code: {error.code}</PLarge> : null}
+          <PLarge>{error.message}</PLarge>
+        </Intro>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonPrimary onClick={goHome}>OK</ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
+  );
+};
+
+const Complete = props => {
   return (
     <SlidePage>
       <Container>
-        <Top>
-          <Intro>
-            <ActionImage src="/images/success.svg" big />
-            <PageTitle>Success!</PageTitle>
-            <PLarge>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </PLarge>
-          </Intro>
-        </Top>
-        <Fees>
-          <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-          <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
-        </Fees>
-        <Bottom>
-          <Buttons>
-            <ButtonSecondary
-              onClick={() =>
-                window.open(
-                  `https://kovan.etherscan.io/tx/${transaction.hash}`,
-                  '_blank'
-                )
-              }
-            >
-              VERIFY TRANSACTION
-            </ButtonSecondary>
-            <ButtonPrimary onClick={goHome}>FINISH & RETURN HOME</ButtonPrimary>
-          </Buttons>
-        </Bottom>
+        {props && props.error ? (
+          <Failure {...props}></Failure>
+        ) : (
+          <Success {...props}></Success>
+        )}
       </Container>
     </SlidePage>
   );

@@ -21,7 +21,7 @@ export default ({ onDataLoaded }) => {
   return (
     <div>
       <Input type="file" name="file" accept=".csv" onChange={onFileChange} id="file" />
-      <Label for="file"><ButtonSecondaryLabel>browse files</ButtonSecondaryLabel></Label>
+      <Label htmlFor="file"><ButtonSecondaryLabel>browse files</ButtonSecondaryLabel></Label>
     </div>
   );
 }

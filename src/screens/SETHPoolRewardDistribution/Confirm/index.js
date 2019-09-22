@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-// import { ethers } from 'ethers';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
@@ -14,7 +13,8 @@ import addresses from '../contracts/addresses.json';
 
 const MainContainer = ({ goHome, multisendTx }) => {
   const { handleNext } = useContext(SliderContext);
-  const [transaction, setTransaction] = useState(null); // eslint-disable-line
+  const [transaction, setTransaction] = useState(null);
+  const [error, setError] = useState(null);
 
   const onConfirm = async () => {
     try {
@@ -44,6 +44,8 @@ const MainContainer = ({ goHome, multisendTx }) => {
       }
     } catch (e) {
       console.log(e);
+      setError(e);
+      handleNext(2);
     }
   };
 
@@ -52,6 +54,7 @@ const MainContainer = ({ goHome, multisendTx }) => {
     goHome,
     transaction,
     multisendTx,
+    error,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (

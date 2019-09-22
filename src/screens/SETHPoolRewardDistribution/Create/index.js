@@ -15,6 +15,7 @@ import addresses from '../contracts/addresses.json';
 const MainContainer = ({ goHome }) => {
   const { handleNext } = useContext(SliderContext);
   const [transaction, setTransaction] = useState(null);
+  const [error, setError] = useState(null);
 
   const onDataLoaded = async recipientsData => {
     try {
@@ -48,6 +49,8 @@ const MainContainer = ({ goHome }) => {
       }
     } catch (e) {
       console.log(e);
+      setError(e);
+      handleNext(2);
     }
   };
 
@@ -55,6 +58,7 @@ const MainContainer = ({ goHome }) => {
     onDataLoaded,
     goHome,
     transaction,
+    error,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (

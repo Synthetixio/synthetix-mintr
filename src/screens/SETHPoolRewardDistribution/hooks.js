@@ -17,11 +17,12 @@ export function getAirdropper() {
 }
 
 export const useOwners = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   useEffect(() => {
     async function getOwners() {
       const multisig = getMultisig();
-      const owners = await multisig.getOwners();
+      let owners = await multisig.getOwners();
+      owners = owners.map(item => item.toLowerCase());
       setData(owners);
     }
     getOwners();
