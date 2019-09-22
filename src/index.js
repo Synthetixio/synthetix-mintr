@@ -9,7 +9,7 @@ import './i18n';
 const initialState = {
   ui: {
     themeIsDark: localStorage.getItem('dark') === 'true' || false,
-    currentPage: 'walletConnection',
+    currentPage: 'landing',
     currentTab: 'home',
     dashboardIsLoading: false,
     transactionSettingsPopupIsVisible: false,
