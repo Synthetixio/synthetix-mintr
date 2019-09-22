@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
+import { withTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -74,7 +75,7 @@ const RewardInfo = ({ state }) => {
   );
 
   return (
-    <Row padding="0px 8px">
+    <Row padding='0px 8px'>
       {content}
       <Info theme={theme} />
     </Row>
@@ -84,10 +85,10 @@ const RewardInfo = ({ state }) => {
 const CollRatios = ({ state }) => {
   const { debtData, dashboardIsLoading } = state;
   return (
-    <Row margin="0 0 22px 0">
+    <Row margin='0 0 22px 0'>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.currentCRatio
@@ -100,7 +101,7 @@ const CollRatios = ({ state }) => {
       </Box>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.targetCRatio
@@ -125,7 +126,7 @@ const Pie = ({ state }) => {
 
   return (
     <Box full={true}>
-      <Row padding="32px 16px">
+      <Row padding='32px 16px'>
         {dashboardIsLoading ? (
           <Skeleton width={'160px'} height={'160px'} curved={true} />
         ) : (
@@ -145,7 +146,7 @@ const Pie = ({ state }) => {
           />
         )}
         <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">
+          <DataHeaderLarge margin='0px 0px 24px 0px'>
             YOUR SNX HOLDINGS:
           </DataHeaderLarge>
           {dashboardIsLoading ? (
@@ -214,7 +215,7 @@ const BalanceTable = ({ state }) => {
   const { dashboardIsLoading } = state;
   const data = processTableData(state);
   return (
-    <Row margin="22px 0 0 0">
+    <Row margin='22px 0 0 0'>
       {dashboardIsLoading ? (
         <Skeleton width={'100%'} height={'130px'} />
       ) : (
@@ -234,7 +235,7 @@ const BalanceTable = ({ state }) => {
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({ t }) => {
   const theme = useContext(ThemeContext);
   const {
     state: {
@@ -258,7 +259,7 @@ const Dashboard = () => {
       <Content>
         <Container>
           <ContainerHeader>
-            <H5>Current Balances & Prices:</H5>
+            <H5>{t('dashboard.sections.prices')}</H5>
           </ContainerHeader>
           <Balances state={{ balances, prices, theme, dashboardIsLoading }} />
         </Container>
@@ -267,11 +268,11 @@ const Dashboard = () => {
         </Container>
         <Container>
           <ContainerHeader>
-            <H5>Wallet Details:</H5>
+            <H5>{t('dashboard.sections.wallet')}</H5>
             <DataHeaderLarge
-              margin="0px 0px 22px 0px"
+              margin='0px 0px 22px 0px'
               color={theme.colorStyles.body}
-            ></DataHeaderLarge>
+            />
           </ContainerHeader>
           <CollRatios state={{ debtData, dashboardIsLoading }} />
           <Pie state={{ balances, debtData, theme, dashboardIsLoading }} />
@@ -284,15 +285,15 @@ const Dashboard = () => {
               dashboardIsLoading,
             }}
           />
-          <Row margin="18px 0 0 0 ">
-            <Link href="https://synthetix.exchange" target="_blank">
+          <Row margin='18px 0 0 0 '>
+            <Link href='https://synthetix.exchange' target='_blank'>
               <ButtonTertiaryLabel>
-                Go to Synthetix.Exchange
+                {t('dashboard.buttons.exchange')}
               </ButtonTertiaryLabel>
             </Link>
             <Link>
               <ButtonTertiaryLabel>
-                View your Synths balance
+                {t('dashboard.buttons.synths')}
               </ButtonTertiaryLabel>
             </Link>
           </Row>
@@ -414,4 +415,4 @@ const Link = styled.a`
   border-radius: 2px;
 `;
 
-export default Dashboard;
+export default withTranslation()(Dashboard);

@@ -1,9 +1,66 @@
 {
+  "landing": {
+    "buttons": {
+      "mainnet": "Mainnet",
+      "synthetix": "What is Synthetix?",
+      "connect": "Connect to wallet"
+    },
+    "intro": {
+      "h": "Mint, Burn, Claim",
+      "p": "Mintr is a dApp for SNX holders to mint synthetic assets (Synths) and participate in the Synthetix Network."
+    },
+    "functionality": {
+      "mintH": "Mint Synths",
+      "mintP": "By locking up SNX collateral",
+      "burnH": "Burn Synths",
+      "burnP": "To unlock SNX",
+      "claimH": "Claim fees",
+      "claimP": "From the Synthetix Network"
+    }
+  },
+  "walletConnection": {
+    "buttons": {
+      "mainnet": "Mainnet",
+      "synthetix": "What is Synthetix?",
+      "connect": "Connect to wallet"
+    },
+    "intro": {
+      "h": "Connect wallet",
+      "p": "Please connect a wallet with your SNX holdings to continue."
+    }
+  },
+  "walletSelection": {
+    "buttons": {
+      "mainnet": "Mainnet",
+      "synthetix": "What is Synthetix?",
+      "trouble": "Having trouble?"
+    },
+    "intro": {
+      "h": "Connect via Ledger",
+      "p": "Please Connect and Unlock your Trezor."
+    }
+  },
   "dashboard": {
     "header": {
       "support": "Support",
       "onLabel": "Dark",
       "offLabel": "Light"
+    },
+    "sections": {
+      "prices": "Current Balances & Prices:",
+      "wallet": "Wallet details:"
+    },
+    "rewards": {
+      "claimable": "left to claim rewards",
+      "blocked": "Claiming rewards is blocked"
+    },
+    "ratio": {
+      "current": "Current collateralization ratio",
+      "target": "Target collateralization ratio"
+    },
+    "buttons": {
+      "exchange": "Go to Synthetix.Exchange",
+      "synths": "View your Synths balance"
     }
   },
   "mainContent": {
@@ -17,7 +74,163 @@
       }
     }
   },
+  "home": {
+    "title": "What would you like to do?",
+    "p": "Click any button below to view more info, confirm or change the amount before submitting."
+  },
+  "depot": {
+    "intro": {
+      "h": "The Depot: ",
+      "p": "Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
+    },
+    "table": {
+      "h": "Recent activity:"
+    },
+    "buttons": {
+      "p": "Amount available:",
+      "more": "View more",
+      "contract": "View contract"
+    },
+    "deposit": {
+      "action": {
+        "buttons": {
+          "cancel": "Cancel",
+          "deposit": "Deposit now"
+        },
+        "intro": {
+          "h": "Deposit",
+          "p": "Amount available:"
+        },
+        "instruction": {
+          "p": "Enter deposit amount or select max available:"
+        },
+        "fees": {
+          "p": "GAS: $0.083 / SPEED: ~5:24 mins"
+        }
+      }
+    },
+    "confirmation": {
+      "buttons": {
+        "back": "Go back"
+      },
+      "intro": {
+        "h": "Please confirm transaction"
+      },
+      "details": {
+        "h": "Depositing:"
+      },
+      "loading": {
+        "subtext": "Waiting for user response..."
+      },
+      "fees": {
+        "gas": "Ethereum network fees (Gas): $0.083",
+        "speed": "Estimated transaction speed: ~5.24 mins"
+      }
+    },
+    "complete": {
+      "intro": {
+        "h": "Deposit in progress!",
+        "p": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background."
+      },
+      "details": {
+        "h": "Depositing:"
+      },
+      "buttons": {
+        "etherscan": "View on Etherscan",
+        "finish": "Finish & return home"
+      },
+      "error": {
+        "h": "Something went wrong...",
+        "p": "Code:",
+        "ok": "OK"
+      }
+    }
+  },
+  "withdraw": {
+    "action": {
+      "buttons": {
+        "cancel": "Cancel",
+        "withdraw": "Withdraw now"
+      },
+      "intro": {
+        "h": "Withdraw",
+        "p": "Amount available:"
+      },
+      "fees": {
+        "p": "GAS: $0.083 / SPEED: ~5:24 mins"
+      }
+    },
+    "confirmation": {
+      "buttons": {
+        "back": "Go back"
+      },
+      "intro": {
+        "h": "Please confirm transaction"
+      },
+      "details": {
+        "h": "Withdrawing:"
+      },
+      "loading": {
+        "subtext": "Waiting for user response..."
+      },
+      "fees": {
+        "gas": "Ethereum network fees (Gas): $0.083",
+        "speed": "Estimated transaction speed: ~5.24 mins"
+      }
+    },
+    "complete": {
+      "intro": {
+        "h": "Deposit in progress!",
+        "p": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background."
+      },
+      "details": {
+        "h": "Depositing:"
+      },
+      "buttons": {
+        "etherscan": "View on Etherscan",
+        "finish": "Finish & return home"
+      },
+      "error": {
+        "h": "Something went wrong...",
+        "p": "Code:",
+        "ok": "OK"
+      }
+    }
+  },
+  "escrow": {
+    "type": {
+      "staking": "Staking",
+      "token": "Token sale"
+    },
+    "buttons": {
+      "vest": "Vest now"
+    },
+    "staking": {
+      "title": "Vest your SNX staking rewards in escrow",
+      "p": "If you have locked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here. All SNX staking rewards are escrowed for 12 months."
+    },
+    "tokenSale": {
+      "title": "Vest your token sale SNX in escrow",
+      "p": "If you have locked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here. All SNX staking rewards are escrowed for 12 months."
+    }
+  },
   "button": {
     "max": "Max"
+  },
+  "input": {
+    "list": {
+      "placeholder": "Search a synth..."
+    }
+  },
+  "notification": {
+    "status": {
+      "pending": "Transaction in progress",
+      "success": "Transaction complete!",
+      "error": "An error occurred..."
+    },
+    "wrapper": {
+      "verify": "Verify",
+      "close": "Close"
+    }
   }
 }

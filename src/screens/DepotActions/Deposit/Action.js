@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
+
 import { SlidePage } from '../../../components/ScreenSlider';
 import { formatCurrency } from '../../../helpers/formatters';
 
@@ -11,32 +13,34 @@ import {
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
-const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
+const Action = ({ t, onDestroy, onDeposit, sUSDBalance }) => {
   const [amount, setAmount] = useState('');
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('deposit.action.buttons.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/deposit.svg" />
-            <H1>DEPOSIT</H1>
-            <PLarge>Amount available:</PLarge>
+            <ActionImage src='/images/actions/deposit.svg' />
+            <H1>{t('deposit.action.intro.h')}</H1>
+            <PLarge>{t('deposit.action.intro.p')}</PLarge>
             <Amount>${formatCurrency(sUSDBalance)}</Amount>
           </Intro>
           <Form>
-            <PLarge>Enter deposit amount or select max available:</PLarge>
+            <PLarge>{t('deposit.action.instruction.p')}</PLarge>
             <Input
               onChange={e => setAmount(e.target.value)}
               value={amount}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
+                    src='/images/currencies/sUSD.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -53,11 +57,11 @@ const Action = ({ onDestroy, onDeposit, sUSDBalance }) => {
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom="32px">
-            GAS: $0.083 / SPEED: ~5:24 mins <Highlighted>EDIT</Highlighted>
+          <Subtext marginBottom='32px'>
+            {t('deposit.action.fees.p')} <Highlighted>EDIT</Highlighted>
           </Subtext>
-          <ButtonPrimary onClick={() => onDeposit(amount)} margin="auto">
-            DEPOSIT NOW
+          <ButtonPrimary onClick={() => onDeposit(amount)} margin='auto'>
+            {t('deposit.action.buttons.deposit')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -134,4 +138,4 @@ const Highlighted = styled.span`
   color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
-export default Action;
+export default withTranslation()(Action);

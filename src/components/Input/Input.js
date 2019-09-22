@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components';
 
 import { PLarge } from '../Typography';
 
+import { withTranslation } from 'react-i18next';
+
 const getSynthList = (synths, search) => {
   if (!search) return synths;
   return synths.filter(synth =>
@@ -12,6 +14,7 @@ const getSynthList = (synths, search) => {
 };
 
 const Input = ({
+  t,
   placeholder,
   rightComponent,
   onChange,
@@ -39,24 +42,24 @@ const Input = ({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            type="text"
+            type='text'
           />
           <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
         </InputInner>
         {listIsOpen ? (
           <List>
             <ListInputWrapper>
-              <ListInputIcon src="/images/search.svg" />
+              <ListInputIcon src='/images/search.svg' />
               <ListInput
                 value={currentSearch}
                 onChange={e => updateCurrentSearch(e.target.value)}
-                placeholder="Search a synth..."
-                type="text"
+                placeholder={t('input.list.placeholder')}
+                type='text'
               />
               <ListInputIcon
                 onClick={() => updateCurrentSearch('')}
                 style={{ cursor: 'pointer' }}
-                src="/images/close.svg"
+                src='/images/close.svg'
               />
             </ListInputWrapper>
             <SynthList>
@@ -72,7 +75,7 @@ const Input = ({
                     >
                       <CurrencyIcon
                         src={`/images/currencies/${synth.name}.svg`}
-                      ></CurrencyIcon>
+                      />
                       <PLarge>{synth.name}</PLarge>
                     </SynthListElement>
                   );
@@ -89,12 +92,9 @@ const Dropdown = ({ onClick, synth, singleSynth }) => {
   const synthName = singleSynth || synth || 'sUSD';
   return (
     <Button disabled={singleSynth} onClick={onClick}>
-      <CurrencyIcon src={`/images/currencies/${synthName}.svg`}></CurrencyIcon>
+      <CurrencyIcon src={`/images/currencies/${synthName}.svg`} />
       <PLarge>{synthName}</PLarge>
-      <CaretDownIcon
-        isHidden={singleSynth}
-        src="/images/caret-down.svg"
-      ></CaretDownIcon>
+      <CaretDownIcon isHidden={singleSynth} src='/images/caret-down.svg' />
     </Button>
   );
 };
@@ -107,7 +107,7 @@ export const SimpleInput = ({ value, onChange, placeholder }) => {
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          type="text"
+          type='text'
         />
       </InputInner>
     </InputWrapper>
@@ -256,4 +256,4 @@ const SynthListElement = styled.li`
   }
 `;
 
-export default Input;
+export default withTranslation()(Input);

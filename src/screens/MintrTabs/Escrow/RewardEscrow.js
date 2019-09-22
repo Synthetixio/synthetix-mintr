@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
+import { withTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
@@ -73,17 +74,17 @@ const VestingTable = () => {
     );
   }
   if (!vestingData.schedule) {
-    return <div>No Schedule</div>;
+    return <div>No schedule</div>;
   }
   return (
     <ScheduleWrapper>
-      <H5>Vesting Schedule</H5>
+      <H5>Vesting schedule</H5>
       <TableHeader>
         <TableHeaderMedium>Vesting Date</TableHeaderMedium>
         <TableHeaderMedium>SNX Quantity</TableHeaderMedium>
       </TableHeader>
       <TableWrapper>
-        <Table cellSpacing="0">
+        <Table cellSpacing='0'>
           <TBody>
             {vestingData && vestingData.schedule
               ? vestingData.schedule.map(row => {
@@ -121,15 +122,11 @@ const VestingTable = () => {
   );
 };
 
-const RewardEscrow = () => {
+const RewardEscrow = ({ t }) => {
   return (
     <Fragment>
-      <PageTitle>Vest your SNX staking rewards in escrow</PageTitle>
-      <PLarge>
-        If you have locked your SNX and minted sUSD, you are eligible to receive
-        SNX staking rewards, which you can vest here. All SNX staking rewards
-        are escrowed for 12 months.
-      </PLarge>
+      <PageTitle>{t('escrow.staking.title')}</PageTitle>
+      <PLarge>{t('escrow.staking.p')}</PLarge>
       <VestingTable />
     </Fragment>
   );
@@ -170,4 +167,4 @@ const DataMegaEscrow = styled(DataMega)`
   color: ${props => props.theme.colorStyles.escrowNumberBig};
 `;
 
-export default RewardEscrow;
+export default withTranslation()(RewardEscrow);

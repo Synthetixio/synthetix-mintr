@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { Store } from '../../store';
@@ -13,11 +14,8 @@ import { pushToSuccessQueue } from '../../ducks/transactions';
 
 const StatusImage = ({ status }) => {
   if (status === 'pending') {
-    return <NotificationSpinner isSmall={true}></NotificationSpinner>;
-  } else
-    return (
-      <StatusImageWrapper src={'/images/success.svg'}></StatusImageWrapper>
-    );
+    return <NotificationSpinner isSmall={true} />;
+  } else return <StatusImageWrapper src={'/images/success.svg'} />;
 };
 
 const getStatusSentence = status => {
@@ -54,7 +52,7 @@ const useGetTransactionTicket = transaction => {
   return data;
 };
 
-const Notification = ({ transaction }) => {
+const Notification = ({ t, transaction }) => {
   const {
     state: {
       wallet: { networkName },
@@ -65,7 +63,7 @@ const Notification = ({ transaction }) => {
   const status = useGetTransactionTicket(transaction, successQueue);
   return (
     <NotificationWrapper>
-      <StatusImage status={status}></StatusImage>
+      <StatusImage status={status} />
       <InfoBlock>
         <NotificationStatus>{getStatusSentence(status)}</NotificationStatus>
         <NotificationInfo>{transaction.info}</NotificationInfo>
@@ -75,15 +73,15 @@ const Notification = ({ transaction }) => {
           href={`https://${
             networkName === 'mainnet' ? '' : networkName + '.'
           }etherscan.io/tx/${transaction.hash}`}
-          as="a"
-          target="_blank"
+          as='a'
+          target='_blank'
         >
-          Verify
+          {t('notification.wrapper.verify')}
         </ButtonTertiary>
         <ButtonTertiary
           onClick={() => hideTransaction(transaction.hash, dispatch)}
         >
-          Close
+          {t('notification.wrapper.close')}
         </ButtonTertiary>
       </ButtonBlock>
     </NotificationWrapper>
@@ -102,10 +100,7 @@ const NotificationCenter = () => {
       {currentTransactions.reverse().map(transaction => {
         if (transaction.hasNotification) {
           return (
-            <Notification
-              key={transaction.hash}
-              transaction={transaction}
-            ></Notification>
+            <Notification key={transaction.hash} transaction={transaction} />
           );
         }
         return null;
@@ -179,4 +174,4 @@ const ButtonBlock = styled.div`
   }
 `;
 
-export default NotificationCenter;
+export default withTranslation()(NotificationCenter);

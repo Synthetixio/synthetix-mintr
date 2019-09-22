@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -12,38 +13,42 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, depositAmount }) => {
+const Confirmation = ({ t, goBack, walletType, depositAmount }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>
+            {t('deposit.confirmation.buttons.back')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <PageTitle>{t('deposit.confirmation.intro.h')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>DEPOSITING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('deposit.confirmation.details.h')}
+              </DataHeaderLarge>
               <Amount>{formatCurrency(depositAmount)} sUSD</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
           <Spinner margin='auto' />
-          <Subtext>Waiting for user response...</Subtext>
+          <Subtext>{t('deposit.confirmation.loading.subtext')}</Subtext>
         </Loading>
         <Bottom>
           <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
+            <Subtext>{t('deposit.confirmation.fees.gas')}</Subtext>
+            <Subtext>{t('deposit.confirmation.fees.speed')}</Subtext>
           </Fees>
         </Bottom>
       </Container>
@@ -127,4 +132,4 @@ const Loading = styled.div`
   align-items: center;
 `;
 
-export default Confirmation;
+export default withTranslation()(Confirmation);
