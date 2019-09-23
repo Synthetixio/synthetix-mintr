@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ButtonTertiary } from '../../components/Button';
 import { Store } from '../../store';
+import { withTranslation } from 'react-i18next';
 
-const OnBoardingPageContainer = ({ children }) => {
+const OnBoardingPageContainer = ({ t, children }) => {
   const {
     state: {
       ui: { themeIsDark },
@@ -16,15 +17,15 @@ const OnBoardingPageContainer = ({ children }) => {
           <Logo
             src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`}
           />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
+          <ButtonTertiary>{t('onboarding.buttons.mainnet')}</ButtonTertiary>
         </HeaderBlock>
         <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
+          <ButtonTertiary>{t('onboarding.buttons.synthetix')}</ButtonTertiary>
         </HeaderBlock>
       </Header>
       {children}
       <Footer>
-        <ButtonTertiary>Having trouble?</ButtonTertiary>
+        <ButtonTertiary>{t('onboarding.buttons.support')}</ButtonTertiary>
       </Footer>
     </PageContainer>
   );
@@ -57,4 +58,4 @@ const Footer = styled.div`
   bottom: 40px;
 `;
 
-export default OnBoardingPageContainer;
+export default withTranslation()(OnBoardingPageContainer);

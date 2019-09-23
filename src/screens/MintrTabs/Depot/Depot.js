@@ -63,7 +63,7 @@ const HiddenContent = ({ t, data }) => {
             return (
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
-                  <TypeImage src="/images/actions/tiny-sold.svg" />
+                  <TypeImage src='/images/actions/tiny-sold.svg' />
                   <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
                 </TD>
                 <TD>
@@ -110,10 +110,10 @@ const ExpandableTable = withTranslation(({ t }) => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop="10px">Recent activity:</H5>
+          <H5 marginTop='10px'>{t('depot.table.title')}</H5>
           <MoreButtons>
-            <ButtonTertiary>View More</ButtonTertiary>
-            <ButtonTertiary>View Contract</ButtonTertiary>
+            <ButtonTertiary>{t('depot.buttons.more')}</ButtonTertiary>
+            <ButtonTertiary>{t('depot.buttons.contract')}</ButtonTertiary>
           </MoreButtons>
         </ActivityHeader>
         <List>
@@ -145,7 +145,7 @@ const ExpandableTable = withTranslation(({ t }) => {
                   }
                 >
                   <Cell>
-                    <TypeImage src="/images/actions/tiny-deposit.svg" />
+                    <TypeImage src='/images/actions/tiny-deposit.svg' />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>
@@ -289,9 +289,10 @@ const Depot = ({ t }) => {
     <PageContainer>
       <DepotAction action={currentScenario} {...props} />
       <PageTitle>
-        {t('depot.intro.h')}${formatCurrency(totalSellableDeposits)} sUSD
+        {t('depot.intro.pageTitle')}${formatCurrency(totalSellableDeposits)}{' '}
+        sUSD
       </PageTitle>
-      <PLarge>{t('depot.intro.p')}</PLarge>
+      <PLarge>{t('depot.intro.pageSubtitle')}</PLarge>
       <ButtonRow>
         {['deposit', 'withdraw'].map(action => {
           return (
@@ -299,7 +300,7 @@ const Depot = ({ t }) => {
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
-                <PLarge>{t('depot.buttons.p')}</PLarge>
+                <PLarge>{t('depot.buttons.available')}</PLarge>
                 <Amount>
                   $
                   {action === 'deposit'

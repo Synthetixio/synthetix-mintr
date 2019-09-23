@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -57,6 +57,7 @@ const Balances = ({ state }) => {
 };
 
 const RewardInfo = ({ state }) => {
+  const { t } = useTranslation();
   const { rewardData, theme, dashboardIsLoading } = state;
   if (dashboardIsLoading) return <Skeleton />;
   const content = rewardData.feesAreClaimable ? (
@@ -66,11 +67,14 @@ const RewardInfo = ({ state }) => {
           ? formatDistanceToNow(rewardData.currentPeriodEnd)
           : '--'}{' '}
       </Highlighted>{' '}
-      left to claim rewards
+      {t('dashboard.rewards.open')}
     </DataLarge>
   ) : (
     <DataLarge>
-      Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      {t('dashboard.rewards.blocked')}{' '}
+      <Highlighted red={true}>
+        {t('dashboard.rewards.BlockedHighlighted')}
+      </Highlighted>
     </DataLarge>
   );
 
@@ -83,6 +87,7 @@ const RewardInfo = ({ state }) => {
 };
 
 const CollRatios = ({ state }) => {
+  const { t } = useTranslation();
   const { debtData, dashboardIsLoading } = state;
   return (
     <Row margin='0 0 22px 0'>
@@ -97,7 +102,7 @@ const CollRatios = ({ state }) => {
             %
           </Figure>
         )}
-        <DataLarge>Current collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.current')}</DataLarge>
       </Box>
       <Box>
         {dashboardIsLoading ? (
@@ -110,13 +115,14 @@ const CollRatios = ({ state }) => {
             %
           </Figure>
         )}
-        <DataLarge>Target collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.target')}</DataLarge>
       </Box>
     </Row>
   );
 };
 
 const Pie = ({ state }) => {
+  const { t } = useTranslation();
   const { balances, debtData, theme, dashboardIsLoading } = state;
   const snxLocked =
     balances.snx &&
@@ -147,7 +153,7 @@ const Pie = ({ state }) => {
         )}
         <PieChartLegend>
           <DataHeaderLarge margin='0px 0px 24px 0px'>
-            YOUR SNX HOLDINGS:
+            {t('dashboard.chart.title')}
           </DataHeaderLarge>
           {dashboardIsLoading ? (
             <Skeleton
@@ -160,7 +166,7 @@ const Pie = ({ state }) => {
               style={{ backgroundColor: theme.colorStyles.accentLight }}
             >
               <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-              <DataSmall>STAKING</DataSmall>
+              <DataSmall>{t('dashboard.chart.staking')}</DataSmall>
             </LegendRow>
           )}
           {dashboardIsLoading ? (
@@ -174,7 +180,7 @@ const Pie = ({ state }) => {
               style={{ backgroundColor: theme.colorStyles.accentDark }}
             >
               <DataLarge>{formatCurrency(debtData.transferable)} SNX</DataLarge>
-              <DataSmall>TRANSFERABLE</DataSmall>
+              <DataSmall>{t('dashboard.chart.transferrable')}</DataSmall>
             </LegendRow>
           )}
         </PieChartLegend>

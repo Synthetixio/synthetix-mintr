@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
+import { withTranslation } from 'react-i18next';
 
 import {
   ButtonPrimary,
@@ -12,6 +13,7 @@ import TransactionPriceIndicator from '../../../components/TransactionPriceIndic
 import Input from '../../../components/Input';
 
 const Action = ({
+  t,
   onDestroy,
   onBurn,
   maxBurnAmount,
@@ -22,30 +24,28 @@ const Action = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/burn.svg" big />
-            <H1>BURN</H1>
-            <PLarge>
-              Burning sUSD will lock your SNX, increasing your collateralization
-              ratio, and will allow you to begin earning fees if you choose to
-              sell your sUSD.
-            </PLarge>
+            <ActionImage src='/images/actions/burn.svg' big />
+            <H1>{t('mintrActions.burn.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.burn.action.pageSubtitle')}</PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to burn:</PLarge>
+            <PLarge>{t('mintrActions.burn.action.instruction')}</PLarge>
             <Input
               singleSynth={'sUSD'}
               onChange={e => setBurnAmount(e.target.value)}
               value={burnAmount}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
+                    src='/images/currencies/sUSD.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -63,8 +63,8 @@ const Action = ({
         </Top>
         <Bottom>
           <TransactionPriceIndicator />
-          <ButtonPrimary onClick={onBurn} margin="auto">
-            BURN NOW
+          <ButtonPrimary onClick={onBurn} margin='auto'>
+            {t('mintrActions.burn.action.buttons.burn')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -129,4 +129,4 @@ const Type = styled.div`
   justify-content: space-between;
 `;
 
-export default Action;
+export default withTranslation()(Action);

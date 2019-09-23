@@ -15,25 +15,31 @@ const Landing = ({ t }) => {
     <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
-          <LandingH1>{t('landing.intro.h')}</LandingH1>
-          <LandingPMega>{t('landing.intro.p')}</LandingPMega>
+          <LandingH1>{t('landing.intro.pageTitle')}</LandingH1>
+          <LandingPMega>{t('landing.intro.pageSubtitle')}</LandingPMega>
         </HeadingContent>
         <BodyContent>
           <Functionalities>
             <Functionality>
-              <Icon src="images/actions/mint.svg" />
-              <LandingH2>{t('landing.functionality.mintH')}</LandingH2>
-              <LandingPLarge>{t('landing.functionality.mintP')}</LandingPLarge>
+              <Icon src='images/actions/mint.svg' />
+              <LandingH2>{t('landing.functionality.mintTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.mintDescription')}
+              </LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src="images/actions/burn.svg" />
-              <LandingH2>{t('landing.functionality.burnH')}</LandingH2>
-              <LandingPLarge>{t('landing.functionality.burnP')}</LandingPLarge>
+              <Icon src='images/actions/burn.svg' />
+              <LandingH2>{t('landing.functionality.burnTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.burnDescription')}
+              </LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src="images/actions/claim.svg" />
-              <LandingH2>{t('landing.functionality.claimH')}</LandingH2>
-              <LandingPLarge>{t('landing.functionality.claimP')}</LandingPLarge>
+              <Icon src='images/actions/claim.svg' />
+              <LandingH2>{t('landing.functionality.claimTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.claimDescription')}
+              </LandingPLarge>
             </Functionality>
           </Functionalities>
           <ButtonPrimary
@@ -81,18 +87,19 @@ const LandingH1 = styled(H1)`
 const LandingH2 = styled(H2)`
   text-transform: capitalize;
   font-size: 22px;
+  margin: 30px 0px 16px 0px;
 `;
 
 const LandingPMega = styled(PMega)`
   font-size: 22px;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   text-align: center;
   line-height: 32px;
 `;
 
 const LandingPLarge = styled(PLarge)`
   font-size: 18px;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   margin-top: 0;
 `;
 

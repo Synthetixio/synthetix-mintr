@@ -19,7 +19,7 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
       <Container>
         <Navigation>
           <ButtonTertiary onClick={() => goBack(1)}>
-            {t('withdraw.confirmation.buttons.back')}
+            {t('button.navigation.back')}
           </ButtonTertiary>
         </Navigation>
         <Top>
@@ -27,7 +27,7 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>{t('withdraw.confirmation.intro.h')}</PageTitle>
+            <PageTitle>{t('withdraw.confirmation.pageTitle')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
@@ -35,7 +35,7 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
           <Details>
             <Box>
               <DataHeaderLarge>
-                {t('withdraw.confirmation.details.h')}:
+                {t('withdraw.confirmation.actionDescription')}
               </DataHeaderLarge>
               <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
             </Box>
@@ -43,12 +43,12 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
         </Top>
         <Loading>
           <Spinner margin='auto' />
-          <Subtext>{t('withdraw.confirmation.loading.subtext')}</Subtext>
+          <Subtext>{t('withdraw.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <Fees>
-            <Subtext>{t('withdraw.confirmation.fees.gas')}</Subtext>
-            <Subtext>{t('withdraw.confirmation.fees.speed')}</Subtext>
+            <Subtext>{t('network.gas')}</Subtext>
+            <Subtext>{t('network.speed')}</Subtext>
           </Fees>
         </Bottom>
       </Container>

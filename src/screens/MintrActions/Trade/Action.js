@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
+
 import { SlidePage } from '../../../components/ScreenSlider';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
@@ -11,6 +13,7 @@ import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 
 const Action = ({
+  t,
   onDestroy,
   synthBalances,
   baseSynth,
@@ -35,18 +38,18 @@ const Action = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
-          <ButtonTertiary>Open in sX ↗</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
+          <ButtonTertiary>
+            {t('mintrActions.trade.action.buttons.exchange')}↗
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/trade.svg" big />
-            <H1>TRADE</H1>
-            <PLarge>
-              Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use
-              this window for a quick transfer, or click the ‘Open in sX ↗’
-              button above for more detail.
-            </PLarge>
+            <ActionImage src='/images/actions/trade.svg' big />
+            <H1>{t('mintrActions.trade.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.trade.action.pageSubtitle')}</PLarge>
           </Intro>
           <Form>
             <Input
@@ -55,7 +58,7 @@ const Action = ({
               onSynthChange={onBaseSynthChange}
               value={baseAmount}
               onChange={e => onBaseAmountChange(e.target.value)}
-              placeholder="0.00"
+              placeholder='0.00'
               currentSynth={baseSynth}
               rightComponent={
                 <ButtonMax
@@ -67,21 +70,21 @@ const Action = ({
             <Input
               isDisabled={!synthBalances}
               singleSynth={'sUSD'}
-              placeholder="0.00"
+              placeholder='0.00'
               value={quoteAmount}
               onChange={e => onQuoteAmountChange(e.target.value)}
             />
           </Form>
         </Top>
         <Bottom>
-          <Subtext>TRADING FEE: 0.3%</Subtext>
+          <Subtext>{t('network.tradingFee')} 0.3%</Subtext>
           {/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
           <TransactionPriceIndicator />
           <ButtonPrimary
             onClick={() => onTrade(baseAmount, quoteAmount)}
-            margin="auto"
+            margin='auto'
           >
-            TRADE NOW
+            {t('mintrActions.trade.action.buttons.trade')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -141,4 +144,4 @@ const Form = styled.div`
   flex-direction: column;
 `;
 
-export default Action;
+export default withTranslation()(Action);

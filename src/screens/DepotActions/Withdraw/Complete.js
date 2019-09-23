@@ -23,13 +23,13 @@ const Success = ({
       <Top>
         <Intro>
           <ActionImage src='/images/success.svg' big />
-          <PageTitle>{t('withdraw.complete.intro.h')}</PageTitle>
-          <PLarge>{t('withdraw.complete.intro.p')}</PLarge>
+          <PageTitle>{t('withdraw.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('withdraw.complete.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
             <DataHeaderLarge>
-              {t('withdraw.complete.details.h')}
+              {t('withdraw.complete.actionDescription')}
             </DataHeaderLarge>
             <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
           </Box>
@@ -44,10 +44,10 @@ const Success = ({
             as='a'
             target='_blank'
           >
-            {t('withdraw.complete.buttons.etherscan')}
+            {t('button.navigation.etherscan')}
           </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            {t('withdraw.complete.buttons.finish')}
+            {t('button.navigation.finish')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -61,10 +61,10 @@ const Failure = ({ t, transactionError, onDestroy }) => {
       <Top>
         <Intro>
           <ActionImage src='/images/failure.svg' big />
-          <PageTitle>{t('withdraw.complete.error.h')}</PageTitle>
+          <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
             <PLarge>
-              {t('withdraw.complete.error.p')} {transactionError.code}
+              {t('error.pageSubtitle')} {transactionError.code}
             </PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
@@ -73,7 +73,7 @@ const Failure = ({ t, transactionError, onDestroy }) => {
       <Bottom>
         <Buttons>
           <ButtonPrimary onClick={onDestroy}>
-            {t('withdraw.complete.error.ok')}
+            {t('button.navigation.ok')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>

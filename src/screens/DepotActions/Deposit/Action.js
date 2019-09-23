@@ -20,18 +20,18 @@ const Action = ({ t, onDestroy, onDeposit, sUSDBalance }) => {
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>
-            {t('deposit.action.buttons.cancel')}
+            {t('button.navigation.back')}
           </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage src='/images/actions/deposit.svg' />
-            <H1>{t('deposit.action.intro.h')}</H1>
-            <PLarge>{t('deposit.action.intro.p')}</PLarge>
+            <H1>{t('deposit.action.intro.pageTitle')}</H1>
+            <PLarge>{t('deposit.action.intro.amountSubtitle')}</PLarge>
             <Amount>${formatCurrency(sUSDBalance)}</Amount>
           </Intro>
           <Form>
-            <PLarge>{t('deposit.action.instruction.p')}</PLarge>
+            <PLarge>{t('deposit.action.instruction')}</PLarge>
             <Input
               onChange={e => setAmount(e.target.value)}
               value={amount}
@@ -58,7 +58,7 @@ const Action = ({ t, onDestroy, onDeposit, sUSDBalance }) => {
         </Top>
         <Bottom>
           <Subtext marginBottom='32px'>
-            {t('deposit.action.fees.p')} <Highlighted>EDIT</Highlighted>
+            {t('network.gas')} <Highlighted>EDIT</Highlighted>
           </Subtext>
           <ButtonPrimary onClick={() => onDeposit(amount)} margin='auto'>
             {t('deposit.action.buttons.deposit')}

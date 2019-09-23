@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -13,6 +14,7 @@ import Input, { SimpleInput } from '../../../components/Input';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
 const Action = ({
+  t,
   onDestroy,
   onSend,
   balances,
@@ -27,17 +29,21 @@ const Action = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/send.svg" big />
-            <H1>SEND</H1>
-            <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
+            <ActionImage src='/images/actions/send.svg' big />
+            <H1>{t('mintrActions.send.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.send.action.pageSubtitle')}</PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>TRANSFERABLE AMOUNT:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.send.action.amount')}
+              </DataHeaderLarge>
               <Amount>
                 {formatCurrency(currentCurrency && currentCurrency.balance) ||
                   0}{' '}
@@ -48,7 +54,7 @@ const Action = ({
         </Top>
         <Middle>
           <Form>
-            <PLarge>Enter amount or select max available:</PLarge>
+            <PLarge>{t('mintrActions.send.action.amountInstruction')}</PLarge>
             <Input
               disabled={!currentCurrency}
               onChange={e => setSendAmount(e.target.value)}
@@ -56,12 +62,12 @@ const Action = ({
               synths={balances}
               currentSynth={currentCurrency}
               value={sendAmount}
-              placeholder="0.00"
+              placeholder='0.00'
               leftComponent={
                 <Type>
                   <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
+                    src='/images/currencies/sUSD.svg'
+                    height='24px'
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -77,13 +83,13 @@ const Action = ({
                 />
               }
             />
-            <PLarge marginTop="32px">
-              Enter wallet address to send funds to:
+            <PLarge marginTop='32px'>
+              {t('mintrActions.send.action.walletInstruction')}
             </PLarge>
             <SimpleInput
               onChange={e => setSendDestination(e.target.value)}
               value={sendDestination}
-              placeholder="e.g. 0x3b18a4..."
+              placeholder='e.g. 0x3b18a4...'
             />
           </Form>
         </Middle>
@@ -92,9 +98,9 @@ const Action = ({
           <ButtonPrimary
             disabled={!sendDestination || !sendAmount}
             onClick={onSend}
-            margin="auto"
+            margin='auto'
           >
-            SEND NOW
+            {t('mintrActions.send.action.buttons.send')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -191,4 +197,4 @@ const Type = styled.div`
   justify-content: space-between;
 `;
 
-export default Action;
+export default withTranslation()(Action);

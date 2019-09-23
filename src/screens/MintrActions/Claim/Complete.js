@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 
@@ -11,23 +12,21 @@ import {
   DataHeaderLarge,
 } from '../../../components/Typography';
 
-const Success = ({ onDestroy, feesAvailable }) => {
+const Success = ({ t, onDestroy, feesAvailable }) => {
   return (
     <SlidePage>
       <Container>
         <Top>
           <Intro>
-            <ActionImage src="/images/success.svg" big />
-            <PageTitle>Claiming in progress!</PageTitle>
-            <PLarge>
-              Sent to the Ethereum network and will be available in your wallet
-              shortly. You may close this window as the transaction completes in
-              the background.
-            </PLarge>
+            <ActionImage src='/images/success.svg' big />
+            <PageTitle>{t('mintrActions.claim.complete.pageTitle')}</PageTitle>
+            <PLarge>{t('mintrActions.complete.pageSubtitle')}</PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.claim.confirmation.actionDescription')}
+              </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[0]
                   ? formatCurrency(feesAvailable[0])
@@ -36,7 +35,9 @@ const Success = ({ onDestroy, feesAvailable }) => {
               </Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>CLAIMING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.claim.confirmation.actionDescription')}
+              </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[1]
                   ? formatCurrency(feesAvailable[1])
@@ -48,9 +49,11 @@ const Success = ({ onDestroy, feesAvailable }) => {
         </Top>
         <Bottom>
           <Buttons>
-            <ButtonSecondary>VIEW ON ETHERSCAN</ButtonSecondary>
+            <ButtonSecondary>
+              {t('button.navigation.etherscan')}
+            </ButtonSecondary>
             <ButtonPrimary onClick={onDestroy}>
-              FINISH & RETURN HOME
+              {t('button.navigation.finish')}
             </ButtonPrimary>
           </Buttons>
         </Bottom>
@@ -64,7 +67,7 @@ const Failure = ({ transactionError, onDestroy }) => {
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src="/images/failure.svg" big />
+          <ActionImage src='/images/failure.svg' big />
           <PageTitle>Something went wrong...</PageTitle>
           {transactionError.code ? (
             <PLarge>Code: {transactionError.code}</PLarge>
@@ -165,4 +168,4 @@ const Bottom = styled.div`
   margin-bottom: 32px;
 `;
 
-export default Complete;
+export default withTranslation()(Complete);

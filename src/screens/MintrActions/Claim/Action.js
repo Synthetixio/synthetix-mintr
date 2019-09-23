@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 
@@ -29,14 +30,15 @@ import Skeleton from '../../../components/Skeleton';
 import { Info } from '../../../components/Icons';
 
 const Periods = ({ state = {} }) => {
+  const { t } = useTranslation();
   const { feesByPeriod = [], dataIsLoading } = state;
   return (
     <div>
-      <TableWrapper height="auto">
+      <TableWrapper height='auto'>
         {dataIsLoading ? (
           <Skeleton width={'100%'} height={'110px'} />
         ) : (
-          <Table cellSpacing="0">
+          <Table cellSpacing='0'>
             <THead>
               <TR>
                 <TH padding={'10px 20px'}>
@@ -46,7 +48,9 @@ const Periods = ({ state = {} }) => {
                   <TableHeaderMedium>SNX</TableHeaderMedium>
                 </TH>
                 <TH padding={'10px 20px'}>
-                  <TableHeaderMedium>PERIOD</TableHeaderMedium>
+                  <TableHeaderMedium>
+                    {t('mintrActions.claim.table.period')}
+                  </TableHeaderMedium>
                 </TH>
               </TR>
             </THead>
@@ -75,6 +79,7 @@ const Periods = ({ state = {} }) => {
 };
 
 const Action = ({
+  t,
   onDestroy,
   onClaim,
   onClaimHistory,
@@ -87,40 +92,40 @@ const Action = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
           <ButtonTertiary onClick={onClaimHistory}>
-            Claim History ↗
+            {t('mintrActions.claim.action.buttons.history')} ↗
           </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/claim.svg" big />
-            <H1>CLAIM</H1>
-            <PLarge>
-              If you have locked your SNX and minted sUSD, you are eligible to
-              collect two kinds of rewards: SNX staking rewards, and sUSD
-              trading rewards generated on Synthetix.Exchange (sX).
-            </PLarge>
+            <ActionImage src='/images/actions/claim.svg' big />
+            <H1>{t('mintrActions.claim.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
           </Intro>
         </Top>
         <Middle>
           <Schedule>
-            <H5>Claimable periods:</H5>
+            <H5>{t('mintrActions.claim.action.table.title')}</H5>
             <Periods state={{ feesByPeriod, dataIsLoading }} />
             <Status>
-              <PMedium width="100%">Fee Claim Status:</PMedium>
+              <PMedium width='100%'>
+                {t('mintrActions.claim.action.table.status')}
+              </PMedium>
               <State>
-                <Highlighted red={!feesAreClaimable} marginRight="8px">
+                <Highlighted red={!feesAreClaimable} marginRight='8px'>
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
                 </Highlighted>
-                <Info width="4px" />
+                <Info width='4px' />
               </State>
             </Status>
           </Schedule>
           <Details>
             <Box>
               <DataHeaderLarge>
-                Your available sUSD trading rewards:
+                {t('mintrActions.claim.action.tradingRewards')}
               </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[0]
@@ -131,7 +136,7 @@ const Action = ({
             </Box>
             <Box>
               <DataHeaderLarge>
-                Your available SNX staking rewards:
+                {t('mintrActions.claim.action.stakingRewards')}
               </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[1]
@@ -147,15 +152,12 @@ const Action = ({
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
-            margin="auto"
+            margin='auto'
           >
-            CLAIM NOW
+            {t('mintrActions.claim.action.buttons.claim')}
           </ButtonPrimary>
           <Note>
-            <Subtext>
-              Note: if not collected in the current period it will be forfeited
-              and rolled over into the fee pool for the next fee period.
-            </Subtext>
+            <Subtext>{t('mintrActions.claim.action.note')}</Subtext>
           </Note>
         </Bottom>
       </Container>
@@ -278,4 +280,4 @@ const Note = styled.div`
   max-width: 420px;
 `;
 
-export default Action;
+export default withTranslation()(Action);

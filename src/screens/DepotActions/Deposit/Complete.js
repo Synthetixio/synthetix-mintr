@@ -23,12 +23,14 @@ const Success = ({
       <Top>
         <Intro>
           <ActionImage src='/images/success.svg' big />
-          <PageTitle>{t('deposit.complete.intro.h')}</PageTitle>
-          <PLarge>{t('deposit.complete.intro.p')}</PLarge>
+          <PageTitle>{t('deposit.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('deposit.complete.intro.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
-            <DataHeaderLarge>{t('deposit.complete.details.h')}</DataHeaderLarge>
+            <DataHeaderLarge>
+              {t('deposit.complete.actionDescription')}
+            </DataHeaderLarge>
             <Amount>{formatCurrency(depositAmount)} sUSD</Amount>
           </Box>
         </Details>
@@ -42,10 +44,10 @@ const Success = ({
             as='a'
             target='_blank'
           >
-            {t('deposit.complete.buttons.etherscan')}
+            {t('button.navigation.etherscan')}
           </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            {t('deposit.complete.buttons.finish')}
+            {t('button.navigation.finish')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -59,10 +61,10 @@ const Failure = ({ t, transactionError, onDestroy }) => {
       <Top>
         <Intro>
           <ActionImage src='/images/failure.svg' big />
-          <PageTitle>{t('deposit.complete.error.h')}</PageTitle>
+          <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
             <PLarge>
-              {t('deposit.complete.error.p')} {transactionError.code}
+              {t('error.pageSubtitle')} {transactionError.code}
             </PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
@@ -71,7 +73,7 @@ const Failure = ({ t, transactionError, onDestroy }) => {
       <Bottom>
         <Buttons>
           <ButtonPrimary onClick={onDestroy}>
-            {t('deposit.complete.error.ok')}
+            {t('button.navigation.ok')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
