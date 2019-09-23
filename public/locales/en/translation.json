@@ -48,11 +48,12 @@
     },
     "sections": {
       "prices": "Current Balances & Prices:",
-      "wallet": "Wallet details:"
+      "wallet": "Wallet details:",
+      "holdings": "Your SNX holdings:"
     },
     "rewards": {
       "claimable": "left to claim rewards",
-      "blocked": "Claiming rewards is blocked"
+      "blocked": "Claiming rewards is <1>blocked</1>"
     },
     "ratio": {
       "current": "Current collateralization ratio",
@@ -61,6 +62,15 @@
     "buttons": {
       "exchange": "Go to Synthetix.Exchange",
       "synths": "View your Synths balance"
+    },
+    "holdings": {
+      "staked": "Staked",
+      "transferable": "Transferable"
+    },
+    "table": {
+      "debt": "Debt",
+      "synths": "Synths",
+      "balance": "Balance"
     }
   },
   "mainContent": {
