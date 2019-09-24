@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation, Trans } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -58,24 +58,27 @@ const Balances = ({ state }) => {
 
 const RewardInfo = ({ state }) => {
   const { rewardData, theme, dashboardIsLoading } = state;
+  const { t } = useTranslation();
   if (dashboardIsLoading) return <Skeleton />;
   const content = rewardData.feesAreClaimable ? (
     <DataLarge>
       <Highlighted>
         {rewardData.currentPeriodEnd
           ? formatDistanceToNow(rewardData.currentPeriodEnd)
-          : '--'}{' '}
+          : '--'}
       </Highlighted>{' '}
-      left to claim rewards
+      {t('dashboard.rewards.claimable')}
     </DataLarge>
   ) : (
     <DataLarge>
-      Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      <Trans i18nKey="dashboard.rewards.blocked">
+        Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      </Trans>
     </DataLarge>
   );
 
   return (
-    <Row padding='0px 8px'>
+    <Row padding="0px 8px">
       {content}
       <Info theme={theme} />
     </Row>
@@ -84,11 +87,12 @@ const RewardInfo = ({ state }) => {
 
 const CollRatios = ({ state }) => {
   const { debtData, dashboardIsLoading } = state;
+  const { t } = useTranslation();
   return (
-    <Row margin='0 0 22px 0'>
+    <Row margin="0 0 22px 0">
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
+          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
         ) : (
           <Figure>
             {debtData.currentCRatio
@@ -97,11 +101,11 @@ const CollRatios = ({ state }) => {
             %
           </Figure>
         )}
-        <DataLarge>Current collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.current')}</DataLarge>
       </Box>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
+          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
         ) : (
           <Figure>
             {debtData.targetCRatio
@@ -110,13 +114,14 @@ const CollRatios = ({ state }) => {
             %
           </Figure>
         )}
-        <DataLarge>Target collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.target')}</DataLarge>
       </Box>
     </Row>
   );
 };
 
 const Pie = ({ state }) => {
+  const { t } = useTranslation();
   const { balances, debtData, theme, dashboardIsLoading } = state;
   const snxLocked =
     balances.snx &&
@@ -126,19 +131,19 @@ const Pie = ({ state }) => {
 
   return (
     <Box full={true}>
-      <Row padding='32px 16px'>
+      <Row padding="32px 16px">
         {dashboardIsLoading ? (
           <Skeleton width={'160px'} height={'160px'} curved={true} />
         ) : (
           <PieChart
             data={[
               {
-                name: 'staking',
+                name: t('dashboard.holdings.staked'),
                 value: snxLocked,
                 color: theme.colorStyles.accentLight,
               },
               {
-                name: 'transferable',
+                name: t('dashboard.holdings.transferable'),
                 value: debtData.transferable,
                 color: theme.colorStyles.accentDark,
               },
@@ -146,8 +151,8 @@ const Pie = ({ state }) => {
           />
         )}
         <PieChartLegend>
-          <DataHeaderLarge margin='0px 0px 24px 0px'>
-            YOUR SNX HOLDINGS:
+          <DataHeaderLarge margin="0px 0px 24px 0px">
+            {t('dashboard.sections.holdings')}
           </DataHeaderLarge>
           {dashboardIsLoading ? (
             <Skeleton
@@ -160,7 +165,9 @@ const Pie = ({ state }) => {
               style={{ backgroundColor: theme.colorStyles.accentLight }}
             >
               <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-              <DataSmall>STAKING</DataSmall>
+              <DataSmall style={{ textTransform: 'uppercase' }}>
+                {t('dashboard.holdings.staked')}
+              </DataSmall>
             </LegendRow>
           )}
           {dashboardIsLoading ? (
@@ -174,7 +181,9 @@ const Pie = ({ state }) => {
               style={{ backgroundColor: theme.colorStyles.accentDark }}
             >
               <DataLarge>{formatCurrency(debtData.transferable)} SNX</DataLarge>
-              <DataSmall>TRANSFERABLE</DataSmall>
+              <DataSmall style={{ textTransform: 'uppercase' }}>
+                {t('dashboard.holdings.transferable')}
+              </DataSmall>
             </LegendRow>
           )}
         </PieChartLegend>
@@ -183,11 +192,11 @@ const Pie = ({ state }) => {
   );
 };
 
-const processTableData = state => {
+const processTableData = (state, t) => {
   const { balances, prices, debtData, synthData } = state;
   return [
     {
-      rowLegend: 'balance',
+      rowLegend: t('dashboard.table.balance'),
       snx: balances.snx ? formatCurrency(balances.snx) : '--',
       sUSD: balances.sUSD ? formatCurrency(balances.sUSD) : '--',
       eth: balances.eth ? formatCurrency(balances.eth) : '--',
@@ -212,10 +221,11 @@ const processTableData = state => {
 };
 
 const BalanceTable = ({ state }) => {
+  const { t } = useTranslation();
   const { dashboardIsLoading } = state;
-  const data = processTableData(state);
+  const data = processTableData(state, t);
   return (
-    <Row margin='22px 0 0 0'>
+    <Row margin="22px 0 0 0">
       {dashboardIsLoading ? (
         <Skeleton width={'100%'} height={'130px'} />
       ) : (
@@ -225,8 +235,8 @@ const BalanceTable = ({ state }) => {
             { key: 'snx', value: 'snx' },
             { key: 'sUSD', value: 'susd' },
             { key: 'eth', value: 'eth' },
-            { key: 'synths', value: 'synths' },
-            { key: 'debt', value: 'debt' },
+            { key: 'synths', value: t('dashboard.table.synths') },
+            { key: 'debt', value: t('dashboard.table.debt') },
           ]}
           data={data}
         />
@@ -270,7 +280,7 @@ const Dashboard = ({ t }) => {
           <ContainerHeader>
             <H5>{t('dashboard.sections.wallet')}</H5>
             <DataHeaderLarge
-              margin='0px 0px 22px 0px'
+              margin="0px 0px 22px 0px"
               color={theme.colorStyles.body}
             />
           </ContainerHeader>
@@ -285,8 +295,8 @@ const Dashboard = ({ t }) => {
               dashboardIsLoading,
             }}
           />
-          <Row margin='18px 0 0 0 '>
-            <Link href='https://synthetix.exchange' target='_blank'>
+          <Row margin="18px 0 0 0 ">
+            <Link href="https://synthetix.exchange" target="_blank">
               <ButtonTertiaryLabel>
                 {t('dashboard.buttons.exchange')}
               </ButtonTertiaryLabel>

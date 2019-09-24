@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { Store } from '../../store';
@@ -52,7 +52,8 @@ const useGetTransactionTicket = transaction => {
   return data;
 };
 
-const Notification = ({ t, transaction }) => {
+const Notification = ({ transaction }) => {
+  const { t } = useTranslation();
   const {
     state: {
       wallet: { networkName },
@@ -73,8 +74,8 @@ const Notification = ({ t, transaction }) => {
           href={`https://${
             networkName === 'mainnet' ? '' : networkName + '.'
           }etherscan.io/tx/${transaction.hash}`}
-          as='a'
-          target='_blank'
+          as="a"
+          target="_blank"
         >
           {t('notification.wrapper.verify')}
         </ButtonTertiary>
@@ -174,4 +175,4 @@ const ButtonBlock = styled.div`
   }
 `;
 
-export default withTranslation()(NotificationCenter);
+export default NotificationCenter;
