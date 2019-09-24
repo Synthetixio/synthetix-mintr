@@ -42,24 +42,24 @@ const Input = ({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
-            type='text'
+            type="text"
           />
           <RightComponentWrapper>{rightComponent}</RightComponentWrapper>
         </InputInner>
         {listIsOpen ? (
           <List>
             <ListInputWrapper>
-              <ListInputIcon src='/images/search.svg' />
+              <ListInputIcon src="/images/search.svg" />
               <ListInput
                 value={currentSearch}
                 onChange={e => updateCurrentSearch(e.target.value)}
                 placeholder={t('input.list.placeholder')}
-                type='text'
+                type="text"
               />
               <ListInputIcon
                 onClick={() => updateCurrentSearch('')}
                 style={{ cursor: 'pointer' }}
-                src='/images/close.svg'
+                src="/images/close.svg"
               />
             </ListInputWrapper>
             <SynthList>
@@ -94,7 +94,7 @@ const Dropdown = ({ onClick, synth, singleSynth }) => {
     <Button disabled={singleSynth} onClick={onClick}>
       <CurrencyIcon src={`/images/currencies/${synthName}.svg`} />
       <PLarge>{synthName}</PLarge>
-      <CaretDownIcon isHidden={singleSynth} src='/images/caret-down.svg' />
+      <CaretDownIcon isHidden={singleSynth} src="/images/caret-down.svg" />
     </Button>
   );
 };
@@ -107,7 +107,7 @@ export const SimpleInput = ({ value, onChange, placeholder }) => {
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          type='text'
+          type="text"
         />
       </InputInner>
     </InputWrapper>

@@ -12,11 +12,10 @@ import { formatCurrency } from '../../../helpers/formatters';
 
 const Success = ({
   burnAmount,
-  issuanceRatio,
   onDestroy,
   networkName,
   transactionHash,
-  SNXPrice,
+  transferableAmount,
 }) => {
   return (
     <Fragment>
@@ -37,12 +36,7 @@ const Success = ({
           </Box>
           <Box>
             <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
-            <Amount>
-              {issuanceRatio
-                ? formatCurrency(burnAmount / issuanceRatio / SNXPrice)
-                : '--'}{' '}
-              SNX
-            </Amount>
+            <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
           </Box>
         </Details>
       </Top>

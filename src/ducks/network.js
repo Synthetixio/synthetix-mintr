@@ -4,8 +4,9 @@ const UPDATE_ETH_PRICE = 'NETWORK/UPDATE_ETH_PRICE';
 const UPDATE_INFO = 'NETWORK/UPDATE_INFO';
 const UPDATE_GAS_LIMIT = 'NETWORK/UPDATE_GAS_LIMIT';
 const UPDATE_GAS_PRICE = 'NETWORK/UPDATE_GAS_PRICE';
+const FETCHING_GAS_LIMIT = 'NETWORK/FETCHING_GAS_LIMIT';
 
-const GAS_LIMIT_BUFFER = 5000;
+const GAS_LIMIT_BUFFER = 10000;
 
 // Reducer
 export default (state, action) => {
@@ -33,6 +34,17 @@ export default (state, action) => {
         settings: { gasPrice: gasStation['slow'].gwei },
       };
     }
+    case FETCHING_GAS_LIMIT: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          isFetchingGasLimit: true,
+          transactionUsdPrice: null,
+          gasLimit: null,
+        },
+      };
+    }
     case UPDATE_GAS_LIMIT: {
       const {
         ethPrice,
@@ -50,6 +62,7 @@ export default (state, action) => {
           ...state.settings,
           gasLimit: action.payload,
           transactionUsdPrice,
+          isFetchingGasLimit: false,
         },
       };
     }
@@ -104,5 +117,11 @@ export const updateGasPrice = (gasPrice, dispatch) => {
   return dispatch({
     type: UPDATE_GAS_PRICE,
     payload: gasPrice,
+  });
+};
+
+export const fetchingGasLimit = dispatch => {
+  return dispatch({
+    type: FETCHING_GAS_LIMIT,
   });
 };

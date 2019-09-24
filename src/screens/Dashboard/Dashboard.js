@@ -60,7 +60,7 @@ const RewardInfo = ({ state }) => {
   const { rewardData, theme, dashboardIsLoading } = state;
   const { t } = useTranslation();
   if (dashboardIsLoading) return <Skeleton />;
-  const content = !rewardData.feesAreClaimable ? (
+  const content = rewardData.feesAreClaimable ? (
     <DataLarge>
       <Highlighted>
         {rewardData.currentPeriodEnd

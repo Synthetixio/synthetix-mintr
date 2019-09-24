@@ -17,8 +17,7 @@ const Confirmation = ({
   goBack,
   walletType,
   burnAmount,
-  issuanceRatio,
-  SNXPrice,
+  transferableAmount,
 }) => {
   return (
     <SlidePage>
@@ -44,12 +43,7 @@ const Confirmation = ({
             </Box>
             <Box>
               <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
-              <Amount>
-                {issuanceRatio
-                  ? formatCurrency(burnAmount / issuanceRatio / SNXPrice)
-                  : '--'}{' '}
-                SNX
-              </Amount>
+              <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
             </Box>
           </Details>
         </Top>

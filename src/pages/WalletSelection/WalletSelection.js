@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
+// import errorMapper from '../../helpers/errorMapper';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
@@ -76,6 +77,7 @@ const useGetWallets = currentPage => {
 
         setWallets([...wallets, ...availableWallets]);
       } catch (e) {
+        console.log(e);
         setError('Please check your wallet is not in stand-by mode and retry.');
         updateWalletStatus(
           {
