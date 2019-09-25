@@ -64,8 +64,12 @@
       "synths": "View your Synths balance"
     },
     "holdings": {
-      "staked": "Staked",
-      "transferable": "Transferable"
+      "locked": "Locked",
+      "transferable": "Transferable",
+      "staking": "Staking",
+      "nonStaking": "Non-staking",
+      "escrowed": "Escrowed",
+      "nonEscrowed": "Non-escrowed"
     },
     "table": {
       "debt": "Debt",

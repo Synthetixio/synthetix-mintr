@@ -9,13 +9,13 @@ import { formatCurrency } from '../../helpers/formatters';
 import { useFetchData } from './fetchData';
 
 import Header from '../../components/Header';
-import PieChart from '../../components/PieChart';
+import BarChart from '../../components/BarChart';
 import Table from '../../components/Table';
 import {
   DataLarge,
-  DataSmall,
   DataHeaderLarge,
   H5,
+  H6,
   Figure,
   ButtonTertiaryLabel,
 } from '../../components/Typography';
@@ -120,74 +120,60 @@ const CollRatios = ({ state }) => {
   );
 };
 
-const Pie = ({ state }) => {
+const Charts = ({ state }) => {
   const { t } = useTranslation();
-  const { balances, debtData, theme, dashboardIsLoading } = state;
+  const { balances, debtData, escrowData } = state;
   const snxLocked =
     balances.snx &&
     debtData.currentCRatio &&
     debtData.targetCRatio &&
     balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
 
+  const totalEscrow = escrowData.reward + escrowData.tokenSale;
+
+  const chartData = [
+    [
+      {
+        label: t('dashboard.holdings.locked'),
+        value: balances.snx,
+      },
+      {
+        label: t('dashboard.holdings.transferable'),
+        value: debtData.transferable,
+      },
+    ],
+    [
+      {
+        label: t('dashboard.holdings.staking'),
+        value: snxLocked,
+      },
+      {
+        label: t('dashboard.holdings.nonStaking'),
+        value: balances.snx - snxLocked,
+      },
+    ],
+    [
+      {
+        label: t('dashboard.holdings.escrowed'),
+        value: totalEscrow,
+      },
+      {
+        label: t('dashboard.holdings.nonEscrowed'),
+        value: balances.snx - totalEscrow,
+      },
+    ],
+  ];
+
   return (
     <Box full={true}>
-      <Row padding="32px 16px">
-        {dashboardIsLoading ? (
-          <Skeleton width={'160px'} height={'160px'} curved={true} />
-        ) : (
-          <PieChart
-            data={[
-              {
-                name: t('dashboard.holdings.staked'),
-                value: snxLocked,
-                color: theme.colorStyles.accentLight,
-              },
-              {
-                name: t('dashboard.holdings.transferable'),
-                value: debtData.transferable,
-                color: theme.colorStyles.accentDark,
-              },
-            ]}
-          />
-        )}
-        <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">
-            {t('dashboard.sections.holdings')}
-          </DataHeaderLarge>
-          {dashboardIsLoading ? (
-            <Skeleton
-              style={{ marginTop: '16px' }}
-              width={'100%'}
-              height={'45px'}
-            />
-          ) : (
-            <LegendRow
-              style={{ backgroundColor: theme.colorStyles.accentLight }}
-            >
-              <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-              <DataSmall style={{ textTransform: 'uppercase' }}>
-                {t('dashboard.holdings.staked')}
-              </DataSmall>
-            </LegendRow>
-          )}
-          {dashboardIsLoading ? (
-            <Skeleton
-              style={{ marginTop: '16px' }}
-              width={'100%'}
-              height={'45px'}
-            />
-          ) : (
-            <LegendRow
-              style={{ backgroundColor: theme.colorStyles.accentDark }}
-            >
-              <DataLarge>{formatCurrency(debtData.transferable)} SNX</DataLarge>
-              <DataSmall style={{ textTransform: 'uppercase' }}>
-                {t('dashboard.holdings.transferable')}
-              </DataSmall>
-            </LegendRow>
-          )}
-        </PieChartLegend>
-      </Row>
+      <BoxInner>
+        <H6 style={{ textTransform: 'uppercase' }}>
+          {t('dashboard.sections.holdings')}
+        </H6>
+        {chartData.map((data, i) => {
+          return <BarChart key={i} data={data} />;
+        })}
+      </BoxInner>
     </Box>
   );
 };
@@ -261,6 +247,7 @@ const Dashboard = ({ t }) => {
     rewardData = {},
     debtData = {},
     synthData = {},
+    escrowData = {},
   } = useFetchData(currentWallet, successQueue);
 
   return (
@@ -285,7 +272,15 @@ const Dashboard = ({ t }) => {
             />
           </ContainerHeader>
           <CollRatios state={{ debtData, dashboardIsLoading }} />
-          <Pie state={{ balances, debtData, theme, dashboardIsLoading }} />
+          <Charts
+            state={{
+              balances,
+              debtData,
+              theme,
+              dashboardIsLoading,
+              escrowData,
+            }}
+          />
           <BalanceTable
             state={{
               balances,
@@ -399,19 +394,9 @@ const Box = styled.div`
   align-items: center;
 `;
 
-const PieChartLegend = styled.div`
-  flex: 1;
-  margin-left: 18px;
-`;
-
-const LegendRow = styled.div`
-  margin-top: 16px;
-  height: 45px;
-  padding: 0 15px
-  display: flex;
-  align-items: center;
-  border-radius: 2px;
-  justify-content: space-between;
+const BoxInner = styled.div`
+  padding: 24px;
+  width: 100%;
 `;
 
 const Link = styled.a`

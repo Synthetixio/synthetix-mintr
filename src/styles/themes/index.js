@@ -49,6 +49,15 @@ const theme = mode => {
       color: colorStyles.heading,
       m: '0px 0px 24px 0px',
     },
+    h6: {
+      as: 'h6',
+      fontSize: [14],
+      letterSpacing: 0.3,
+      fontWeight: 500,
+      fontFamily: fontFamilies.medium,
+      color: colorStyles.heading,
+      m: '0px 0px 24px 0px',
+    },
     pMega: {
       as: 'p',
       fontSize: [20],
