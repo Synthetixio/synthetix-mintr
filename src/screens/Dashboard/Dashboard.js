@@ -296,11 +296,11 @@ const Dashboard = ({ t }) => {
                 {t('dashboard.buttons.exchange')}
               </ButtonTertiaryLabel>
             </Link>
-            <Link>
+            {/* <Link>
               <ButtonTertiaryLabel>
                 {t('dashboard.buttons.synths')}
               </ButtonTertiaryLabel>
-            </Link>
+            </Link> */}
           </Row>
         </Container>
       </Content>

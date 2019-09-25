@@ -173,7 +173,7 @@
         "pageTitle": "Trade",
         "pageSubtitle": "Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use this window for a quick transfer, or click the ‘Open in sX ↗’ button above for more detail.",
         "buttons": {
-          "burn": "Trade now",
+          "trade": "Trade now",
           "exchange": "Open in sX"
         }
       },
@@ -193,7 +193,7 @@
         "amountInstruction": "Enter amount or select max available:",
         "walletInstruction": "Enter wallet address to send funds to:",
         "buttons": {
-          "burn": "Send now"
+          "send": "Send now"
         }
       },
       "confirmation": {
@@ -219,6 +219,17 @@
     "minutes": "mins",
     "button": {
       "submit": "Submit"
+    }
+  },
+  "button": {
+    "max": "Max",
+    "edit": "Edit",
+    "navigation": {
+      "cancel": "Cancel",
+      "back": "Go back",
+      "etherscan": "View on Etherscan",
+      "finish": "Finish & return home",
+      "ok": "OK"
     }
   },
   "depot": {
@@ -308,41 +319,30 @@
         }
       }
     },
-    "button": {
-      "max": "Max",
-      "edit": "Edit",
-      "navigation": {
-        "cancel": "Cancel",
-        "back": "Go back",
-        "etherscan": "View on Etherscan",
-        "finish": "Finish & return home",
-        "ok": "OK"
-      }
-    },
     "input": {
       "list": {
         "placeholder": "Search a synth..."
       }
+    }
+  },
+  "network": {
+    "gas": "Ethereum Network Fees (Gas):",
+    "tradingFee": "Trading fee:",
+    "speed": "Estimated transaction speed:"
+  },
+  "error": {
+    "pageTitle": "Something went wrong...",
+    "pageSubtitle": "Code:"
+  },
+  "notification": {
+    "status": {
+      "pending": "Transaction in progress",
+      "success": "Transaction complete!",
+      "error": "An error occurred..."
     },
-    "network": {
-      "gas": "Ethereum Network Fees (Gas):",
-      "tradingFee": "Trading fee:",
-      "speed": "Estimated transaction speed:"
-    },
-    "error": {
-      "pageTitle": "Something went wrong...",
-      "pageSubtitle": "Code:"
-    },
-    "notification": {
-      "status": {
-        "pending": "Transaction in progress",
-        "success": "Transaction complete!",
-        "error": "An error occurred..."
-      },
-      "wrapper": {
-        "verify": "Verify",
-        "close": "Close"
-      }
+    "wrapper": {
+      "verify": "Verify",
+      "close": "Close"
     }
   }
 }

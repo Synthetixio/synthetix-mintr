@@ -35,14 +35,14 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/send.svg' big />
+            <ActionImage src="/images/actions/send.svg" big />
             <H1>{t('mintrActions.send.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.send.action.pageSubtitle')}</PLarge>
           </Intro>
           <Details>
             <Box>
               <DataHeaderLarge>
-                {t('mintrActions.send.action.amount')}
+                {t('mintrActions.send.action.available')}
               </DataHeaderLarge>
               <Amount>
                 {formatCurrency(currentCurrency && currentCurrency.balance) ||
@@ -62,12 +62,12 @@ const Action = ({
               synths={balances}
               currentSynth={currentCurrency}
               value={sendAmount}
-              placeholder='0.00'
+              placeholder="0.00"
               leftComponent={
                 <Type>
                   <img
-                    src='/images/currencies/sUSD.svg'
-                    height='24px'
+                    src="/images/currencies/sUSD.svg"
+                    height="24px"
                     style={{ marginRight: '8px' }}
                   />
                   <PLarge>sUSD</PLarge>
@@ -83,13 +83,13 @@ const Action = ({
                 />
               }
             />
-            <PLarge marginTop='32px'>
+            <PLarge marginTop="32px">
               {t('mintrActions.send.action.walletInstruction')}
             </PLarge>
             <SimpleInput
               onChange={e => setSendDestination(e.target.value)}
               value={sendDestination}
-              placeholder='e.g. 0x3b18a4...'
+              placeholder="e.g. 0x3b18a4..."
             />
           </Form>
         </Middle>
@@ -98,7 +98,7 @@ const Action = ({
           <ButtonPrimary
             disabled={!sendDestination || !sendAmount}
             onClick={onSend}
-            margin='auto'
+            margin="auto"
           >
             {t('mintrActions.send.action.buttons.send')}
           </ButtonPrimary>

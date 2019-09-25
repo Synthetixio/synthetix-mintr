@@ -34,11 +34,11 @@ const Periods = ({ state = {} }) => {
   const { feesByPeriod = [], dataIsLoading } = state;
   return (
     <div>
-      <TableWrapper height='auto'>
+      <TableWrapper height="auto">
         {dataIsLoading ? (
           <Skeleton width={'100%'} height={'110px'} />
         ) : (
-          <Table cellSpacing='0'>
+          <Table cellSpacing="0">
             <THead>
               <TR>
                 <TH padding={'10px 20px'}>
@@ -49,7 +49,7 @@ const Periods = ({ state = {} }) => {
                 </TH>
                 <TH padding={'10px 20px'}>
                   <TableHeaderMedium>
-                    {t('mintrActions.claim.table.period')}
+                    {t('mintrActions.claim.action.table.period')}
                   </TableHeaderMedium>
                 </TH>
               </TR>
@@ -101,7 +101,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/claim.svg' big />
+            <ActionImage src="/images/actions/claim.svg" big />
             <H1>{t('mintrActions.claim.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
           </Intro>
@@ -111,14 +111,14 @@ const Action = ({
             <H5>{t('mintrActions.claim.action.table.title')}</H5>
             <Periods state={{ feesByPeriod, dataIsLoading }} />
             <Status>
-              <PMedium width='100%'>
+              <PMedium width="100%">
                 {t('mintrActions.claim.action.table.status')}
               </PMedium>
               <State>
-                <Highlighted red={!feesAreClaimable} marginRight='8px'>
+                <Highlighted red={!feesAreClaimable} marginRight="8px">
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
                 </Highlighted>
-                <Info width='4px' />
+                <Info width="4px" />
               </State>
             </Status>
           </Schedule>
@@ -152,7 +152,7 @@ const Action = ({
           <ButtonPrimary
             disabled={!feesAreClaimable}
             onClick={onClaim}
-            margin='auto'
+            margin="auto"
           >
             {t('mintrActions.claim.action.buttons.claim')}
           </ButtonPrimary>

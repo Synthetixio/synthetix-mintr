@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 // import errorMapper from '../../helpers/errorMapper';
@@ -95,12 +95,18 @@ const useGetWallets = currentPage => {
   return { wallets, isLoading, error };
 };
 
-const renderHeading = (t, hasLoaded, walletType, error) => {
+const Heading = ({ hasLoaded, error }) => {
+  const {
+    state: {
+      wallet: { walletType },
+    },
+  } = useContext(Store);
+  const { t } = useTranslation();
   if (error) {
     return (
       <HeadingContent>
         <ErrorHeading>
-          <ErrorImg src='/images/failure.svg' />
+          <ErrorImg src="/images/failure.svg" />
           <WalletConnectionH1>
             {t('walletSelection.error.pageTitle')}
           </WalletConnectionH1>
@@ -133,16 +139,11 @@ const renderHeading = (t, hasLoaded, walletType, error) => {
 const WalletConnection = ({ t }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { wallets, isLoading, error } = useGetWallets(currentPage);
-  const {
-    state: {
-      wallet: { walletType },
-    },
-    dispatch,
-  } = useContext(Store);
+  const { dispatch } = useContext(Store);
   return (
     <OnBoardingPageContainer>
       <Content>
-        {renderHeading(wallets.length > 0, walletType, error)}
+        <Heading hasLoaded={wallets.length > 0} error={error}></Heading>
         {error ? (
           <ErrorContainer>
             <PMega>{error}</PMega>
