@@ -14,20 +14,20 @@ const Action = ({ t, onDestroy, onWithdraw, amountAvailable }) => {
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>
-            {t('withdraw.action.buttons.cancel')}
+            {t('button.navigation.cancel')}
           </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage src='/images/actions/withdraw.svg' />
-            <H1>{t('withdraw.action.intro.h')}</H1>
-            <PLarge>{t('withdraw.action.intro.p')}</PLarge>
+            <H1>{t('withdraw.action.pageTitle')}</H1>
+            <PLarge>{t('withdraw.action.amountSubtitle')}</PLarge>
             <Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
           </Intro>
         </Top>
         <Bottom>
           <Subtext marginBottom='32px'>
-            {t('withdraw.action.fees.p')} <Highlighted>EDIT</Highlighted>
+            {t('network.gas')} <Highlighted>EDIT</Highlighted>
           </Subtext>
           <ButtonPrimary onClick={() => onWithdraw()} margin='auto'>
             {t('withdraw.action.buttons.withdraw')}

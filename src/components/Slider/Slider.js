@@ -11,10 +11,10 @@ const CustomSlider = createSliderWithTooltip(Slider);
 export const handle = ({ value, dragging, index, ...restProps }) => {
   return (
     <Tooltip
-      prefixCls="rc-slider-tooltip"
+      prefixCls='rc-slider-tooltip'
       overlay={value}
       visible={dragging}
-      placement="top"
+      placement='top'
       key={index}
     >
       <Handle value={value} {...restProps} />

@@ -1,5 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import {
   PageTitle,
@@ -22,14 +23,16 @@ const actionMapper = {
   send: 'Send any synth and SNX',
 };
 
-const renderHomeButtons = setCurrentScenario => {
+const Home = ({ t }) => {
+  const [currentScenario, setCurrentScenario] = useState(initialScenario);
   return (
-    <Fragment>
-      <PageTitle>What would you like to do?</PageTitle>
-      <PLarge>
-        Click any button below to view more info, confirm or change the amount
-        before submitting.
-      </PLarge>
+    <PageContainer>
+      <MintrAction
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+      />
+      <PageTitle>{t('home.pageTitle')}</PageTitle>
+      <PLarge>{t('home.pageSubtitle')}</PLarge>
       <ButtonRow margin='30px 0 40px 0'>
         {['mint', 'burn'].map(action => {
           return (
@@ -56,19 +59,6 @@ const renderHomeButtons = setCurrentScenario => {
           );
         })}
       </ButtonRow>
-    </Fragment>
-  );
-};
-
-const Home = () => {
-  const [currentScenario, setCurrentScenario] = useState(initialScenario);
-  return (
-    <PageContainer>
-      <MintrAction
-        action={currentScenario}
-        onDestroy={() => setCurrentScenario(null)}
-      />
-      {renderHomeButtons(setCurrentScenario)}
     </PageContainer>
   );
 };
@@ -106,4 +96,4 @@ const ActionImage = styled.img`
   width: ${props => (props.big ? '64px' : '48px')};
 `;
 
-export default Home;
+export default withTranslation()(Home);

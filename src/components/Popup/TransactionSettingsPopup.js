@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 import { formatCurrency } from '../../helpers/formatters';
@@ -14,6 +15,7 @@ import { ButtonPrimary } from '../Button';
 import Slider from '../Slider';
 
 const RatesData = ({ gasInfo }) => {
+  const { t } = useTranslation();
   return (
     <RatesDataWrapper>
       <Range>
@@ -21,16 +23,18 @@ const RatesData = ({ gasInfo }) => {
           return (
             <Rates key={i}>
               <DataHeaderLarge
-                marginBottom="8px"
+                marginBottom='8px'
                 style={{ textTransform: 'capitalize' }}
               >
                 {gas.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom="4px">
+              <DataLarge marginBottom='4px'>
                 ${formatCurrency(gas.price)}
               </DataLarge>
-              <DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom="4px">{gas.time} mins</DataLarge>
+              <DataLarge marginBottom='4px'>{gas.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom='4px'>
+                {gas.time} {t('transactionSettings.minutes')}
+              </DataLarge>
             </Rates>
           );
         })}
@@ -48,7 +52,7 @@ const renderTooltipContent = ({ gasPrice, usdPrice }) => {
   );
 };
 
-const TransactionSettingsPopup = () => {
+const TransactionSettingsPopup = ({ t }) => {
   const {
     state: {
       network: {
@@ -75,14 +79,11 @@ const TransactionSettingsPopup = () => {
       })
     : [];
   return (
-    <PopupContainer margin="auto">
+    <PopupContainer margin='auto'>
       <Wrapper>
         <Intro>
-          <PageTitle>Set transaction speed and gas</PageTitle>
-          <PLarge>
-            Adjust the slider below to set the transaction speed and Ethereum
-            Network Fees (Gas) before proceeding.
-          </PLarge>
+          <PageTitle>{t('transactionSettings.pageTitle')}</PageTitle>
+          <PLarge>{t('transactionSettings.pageSubtitle')}</PLarge>
         </Intro>
         <SliderWrapper>
           <Slider
@@ -108,7 +109,7 @@ const TransactionSettingsPopup = () => {
               toggleTransactionSettingPopup(false, dispatch);
             }}
           >
-            SUBMIT
+            {t('transactionSettings.button.submit')}
           </ButtonPrimary>
         </ButtonWrapper>
       </Wrapper>
@@ -170,4 +171,4 @@ const TooltipValue = styled.div`
   margin-bottom: 4px;
 `;
 
-export default TransactionSettingsPopup;
+export default withTranslation()(TransactionSettingsPopup);

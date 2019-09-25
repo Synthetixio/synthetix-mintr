@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
@@ -60,6 +60,7 @@ const useGetVestingData = walletAddress => {
 };
 
 const VestingTable = () => {
+  const { t } = useTranslation();
   const {
     state: {
       wallet: { currentWallet },
@@ -74,14 +75,16 @@ const VestingTable = () => {
     );
   }
   if (!vestingData.schedule) {
-    return <div>No schedule</div>;
+    return <div>{t('escrow.staking.table.none')}</div>;
   }
   return (
     <ScheduleWrapper>
-      <H5>Vesting schedule</H5>
+      <H5>{t('escrow.staking.table.title')}</H5>
       <TableHeader>
-        <TableHeaderMedium>Vesting Date</TableHeaderMedium>
-        <TableHeaderMedium>SNX Quantity</TableHeaderMedium>
+        <TableHeaderMedium>{t('escrow.staking.table.date')}</TableHeaderMedium>
+        <TableHeaderMedium>
+          SNX {t('escrow.staking.table.quantity')}
+        </TableHeaderMedium>
       </TableHeader>
       <TableWrapper>
         <Table cellSpacing='0'>
@@ -108,7 +111,7 @@ const VestingTable = () => {
       <RightBlock>
         <DataBlock>
           <DataHeaderLarge style={{ textTransform: 'uppercase' }}>
-            Total Vesting:
+            {t('escrow.staking.total')}
           </DataHeaderLarge>
           <DataMegaEscrow>
             {vestingData && vestingData.total
@@ -125,8 +128,8 @@ const VestingTable = () => {
 const RewardEscrow = ({ t }) => {
   return (
     <Fragment>
-      <PageTitle>{t('escrow.staking.title')}</PageTitle>
-      <PLarge>{t('escrow.staking.p')}</PLarge>
+      <PageTitle>{t('escrow.staking.pageTitle')}</PageTitle>
+      <PLarge>{t('escrow.staking.pageSubtitle')}</PLarge>
       <VestingTable />
     </Fragment>
   );

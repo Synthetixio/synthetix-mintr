@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
+import { withTranslation } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 // import errorMapper from '../../helpers/errorMapper';
@@ -94,38 +95,42 @@ const useGetWallets = currentPage => {
   return { wallets, isLoading, error };
 };
 
-const renderHeading = (hasLoaded, walletType, error) => {
+const renderHeading = (t, hasLoaded, walletType, error) => {
   if (error) {
     return (
       <HeadingContent>
         <ErrorHeading>
-          <ErrorImg src="/images/failure.svg" />
-          <WalletConnectionH1>Error</WalletConnectionH1>
+          <ErrorImg src='/images/failure.svg' />
+          <WalletConnectionH1>
+            {t('walletSelection.error.pageTitle')}
+          </WalletConnectionH1>
         </ErrorHeading>
         <WalletConnectionPMega>
-          Mintr couldn't access your wallet
+          {t('walletSelection.error.pageSubtitle')}
         </WalletConnectionPMega>
       </HeadingContent>
     );
   } else
     return hasLoaded ? (
       <HeadingContent>
-        <WalletConnectionH1>Select Wallet</WalletConnectionH1>
+        <WalletConnectionH1>
+          {t('walletSelection.success.pageTitle')}
+        </WalletConnectionH1>
         <WalletConnectionPMega>
-          Please select the wallet you would like to use with Mintr
+          {t('walletSelection.success.pageSubtitle')}
         </WalletConnectionPMega>
       </HeadingContent>
     ) : (
       <HeadingContent>
         <WalletConnectionH1>{`Connect via ${walletType}`}</WalletConnectionH1>
         <WalletConnectionPMega>
-          Please follow the prompts on your device to unlock your wallet.
+          {t('walletSelection.success.connectInstructions')}
         </WalletConnectionPMega>
       </HeadingContent>
     );
 };
 
-const WalletConnection = () => {
+const WalletConnection = ({ t }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { wallets, isLoading, error } = useGetWallets(currentPage);
   const {
@@ -144,7 +149,7 @@ const WalletConnection = () => {
             <ButtonPrimaryMedium
               onClick={() => updateCurrentPage('walletConnection', dispatch)}
             >
-              Retry
+              {t('walletSelection.error.retry')}
             </ButtonPrimaryMedium>
           </ErrorContainer>
         ) : (
@@ -306,4 +311,4 @@ const ListInner = styled.div`
   width: 100%;
 `;
 
-export default WalletConnection;
+export default withTranslation()(WalletConnection);

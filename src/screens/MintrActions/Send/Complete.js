@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
@@ -11,6 +12,7 @@ import {
 import { formatCurrency, shortenAddress } from '../../../helpers/formatters';
 
 const Success = ({
+  t,
   sendAmount,
   sendDestination,
   onDestroy,
@@ -22,24 +24,24 @@ const Success = ({
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src="/images/success.svg" big />
-          <PageTitle>Sending in progress!</PageTitle>
-          <PLarge>
-            Sent to the Ethereum network and will be available in your wallet
-            shortly. You may close this window as the transaction completes in
-            the background.
-          </PLarge>
+          <ActionImage src='/images/success.svg' big />
+          <PageTitle>{t('mintrActions.send.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('mintrActions.complete.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
-            <DataHeaderLarge>SENDING:</DataHeaderLarge>
+            <DataHeaderLarge>
+              {t('mintrActions.send.confirmation.actionDescription')}
+            </DataHeaderLarge>
             <Amount>
               {formatCurrency(sendAmount)}{' '}
               {currentCurrency && currentCurrency.name}
             </Amount>
           </Box>
           <Box>
-            <DataHeaderLarge>TO WALLET:</DataHeaderLarge>
+            <DataHeaderLarge>
+              {t('mintrActions.send.confirmation.subActionDescription')}
+            </DataHeaderLarge>
             <Amount>{shortenAddress(sendDestination)}</Amount>
           </Box>
         </Details>
@@ -50,13 +52,13 @@ const Success = ({
             href={`https://${
               networkName === 'mainnet' ? '' : networkName + '.'
             }etherscan.io/tx/${transactionHash}`}
-            as="a"
-            target="_blank"
+            as='a'
+            target='_blank'
           >
-            VIEW ON ETHERSCAN
+            {t('button.navigation.etherscan')}
           </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            FINISH & RETURN HOME
+            {t('button.navigation.finish')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -64,22 +66,26 @@ const Success = ({
   );
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src="/images/failure.svg" big />
-          <PageTitle>Something went wrong...</PageTitle>
+          <ActionImage src='/images/failure.svg' big />
+          <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
-            <PLarge>Code: {transactionError.code}</PLarge>
+            <PLarge>
+              {t('error.pageSubtitle')} {transactionError.code}
+            </PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
         </Intro>
       </Top>
       <Bottom>
         <Buttons>
-          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+          <ButtonPrimary onClick={onDestroy}>
+            {t('button.navigation.ok')}
+          </ButtonPrimary>
         </Buttons>
       </Bottom>
     </Fragment>
@@ -91,9 +97,9 @@ const Complete = props => {
     <SlidePage>
       <Container>
         {props && props.transactionError ? (
-          <Failure {...props}></Failure>
+          <Failure {...props} />
         ) : (
-          <Success {...props}></Success>
+          <Success {...props} />
         )}
       </Container>
     </SlidePage>
@@ -169,4 +175,4 @@ const Bottom = styled.div`
   margin-bottom: 32px;
 `;
 
-export default Complete;
+export default withTranslation()(Complete);

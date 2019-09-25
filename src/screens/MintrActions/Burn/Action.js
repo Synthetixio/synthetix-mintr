@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
+import { withTranslation } from 'react-i18next';
 
 import {
   ButtonPrimary,
@@ -13,6 +14,7 @@ import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
+  t,
   onDestroy,
   onBurn,
   maxBurnAmount,
@@ -28,20 +30,18 @@ const Action = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage src="/images/actions/burn.svg" big />
-            <H1>BURN</H1>
-            <PLarge>
-              Burning sUSD will lock your SNX, increasing your collateralization
-              ratio, and will allow you to begin earning fees if you choose to
-              sell your sUSD.
-            </PLarge>
+            <H1>{t('mintrActions.burn.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.burn.action.pageSubtitle')}</PLarge>
           </Intro>
           <Form>
-            <PLarge>Enter amount to burn:</PLarge>
+            <PLarge>{t('mintrActions.burn.action.instruction')}</PLarge>
             <Input
               singleSynth={'sUSD'}
               onChange={e => setBurnAmount(e.target.value)}
@@ -80,7 +80,7 @@ const Action = ({
             onClick={onBurn}
             margin="auto"
           >
-            BURN NOW
+            {t('mintrActions.burn.action.buttons.burn')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -143,4 +143,4 @@ const ButtonToggleInput = styled.button`
   background-color: transparent;
 `;
 
-export default Action;
+export default withTranslation()(Action);

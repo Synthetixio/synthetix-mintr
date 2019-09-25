@@ -64,10 +64,10 @@ const WalletConnection = ({ t }) => {
       <Content>
         <HeadingContent>
           <WalletConnectionH1>
-            {t('walletConnection.intro.h')}
+            {t('walletConnection.intro.pageTitle')}
           </WalletConnectionH1>
           <WalletConnectionPMega>
-            {t('walletConnection.intro.p')}
+            {t('walletConnection.intro.pageSubtitle')}
           </WalletConnectionPMega>
         </HeadingContent>
         <BodyContent>{renderWalletButtons(dispatch)}</BodyContent>

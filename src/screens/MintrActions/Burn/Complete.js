@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
@@ -11,6 +12,7 @@ import {
 import { formatCurrency } from '../../../helpers/formatters';
 
 const Success = ({
+  t,
   burnAmount,
   onDestroy,
   networkName,
@@ -22,20 +24,20 @@ const Success = ({
       <Top>
         <Intro>
           <ActionImage src="/images/success.svg" big />
-          <PageTitle>Burning in progress!</PageTitle>
-          <PLarge>
-            Sent to the Ethereum network and will be available in your wallet
-            shortly. You may close this window as the transaction completes in
-            the background.
-          </PLarge>
+          <PageTitle>{t('mintrActions.burn.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('mintrActions.complete.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
-            <DataHeaderLarge>BURNING:</DataHeaderLarge>
+            <DataHeaderLarge>
+              {t('mintrActions.burn.confirmation.actionDescription')}
+            </DataHeaderLarge>
             <Amount>{formatCurrency(burnAmount)} sUSD</Amount>
           </Box>
           <Box>
-            <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
+            <DataHeaderLarge>
+              {t('mintrActions.burn.confirmation.subActionDescription')}
+            </DataHeaderLarge>
             <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
           </Box>
         </Details>
@@ -49,10 +51,10 @@ const Success = ({
             as="a"
             target="_blank"
           >
-            VIEW ON ETHERSCAN
+            {t('button.navigation.etherscan')}
           </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            FINISH & RETURN HOME
+            {t('button.navigation.finish')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -60,22 +62,26 @@ const Success = ({
   );
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
           <ActionImage src="/images/failure.svg" big />
-          <PageTitle>Something went wrong...</PageTitle>
+          <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
-            <PLarge>Code: {transactionError.code}</PLarge>
+            <PLarge>
+              {t('error.pageSubtitle')} {transactionError.code}
+            </PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
         </Intro>
       </Top>
       <Bottom>
         <Buttons>
-          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+          <ButtonPrimary onClick={onDestroy}>
+            {t('button.navigation.ok')}
+          </ButtonPrimary>
         </Buttons>
       </Bottom>
     </Fragment>
@@ -87,9 +93,9 @@ const Complete = props => {
     <SlidePage>
       <Container>
         {props && props.transactionError ? (
-          <Failure {...props}></Failure>
+          <Failure {...props} />
         ) : (
-          <Success {...props}></Success>
+          <Success {...props} />
         )}
       </Container>
     </SlidePage>
@@ -166,4 +172,4 @@ const Bottom = styled.div`
   margin-bottom: 32px;
 `;
 
-export default Complete;
+export default withTranslation()(Complete);

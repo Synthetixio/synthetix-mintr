@@ -57,8 +57,8 @@ const Balances = ({ state }) => {
 };
 
 const RewardInfo = ({ state }) => {
-  const { rewardData, theme, dashboardIsLoading } = state;
   const { t } = useTranslation();
+  const { rewardData, theme, dashboardIsLoading } = state;
   if (dashboardIsLoading) return <Skeleton />;
   const content = rewardData.feesAreClaimable ? (
     <DataLarge>
@@ -67,7 +67,7 @@ const RewardInfo = ({ state }) => {
           ? formatDistanceToNow(rewardData.currentPeriodEnd)
           : '--'}
       </Highlighted>{' '}
-      {t('dashboard.rewards.claimable')}
+      {t('dashboard.rewards.open')}
     </DataLarge>
   ) : (
     <DataLarge>
@@ -86,8 +86,8 @@ const RewardInfo = ({ state }) => {
 };
 
 const CollRatios = ({ state }) => {
-  const { debtData, dashboardIsLoading } = state;
   const { t } = useTranslation();
+  const { debtData, dashboardIsLoading } = state;
   return (
     <Row margin="0 0 22px 0">
       <Box>
@@ -168,7 +168,7 @@ const Charts = ({ state }) => {
     <Box full={true}>
       <BoxInner>
         <H6 style={{ textTransform: 'uppercase' }}>
-          {t('dashboard.sections.holdings')}
+          {t('dashboard.chart.title')}
         </H6>
         {chartData.map((data, i) => {
           return <BarChart key={i} data={data} />;

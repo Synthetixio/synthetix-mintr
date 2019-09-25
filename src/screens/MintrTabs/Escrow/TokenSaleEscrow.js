@@ -2,7 +2,7 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
@@ -110,24 +110,35 @@ const useGetVestingData = walletAddress => {
 };
 
 const VestingInfo = ({ state }) => {
+  const { t } = useTranslation();
   const { escrowPeriod, releaseIntervalMonths, totalPeriod } = state;
   return (
     <ScheduleWrapper>
-      <H5>Vesting Schedule</H5>
+      <H5>{t('escrow.tokenSale.table.title')}</H5>
       <TableHeader>
-        <TableHeaderMedium>Vesting Period</TableHeaderMedium>
-        <TableHeaderMedium>Interval</TableHeaderMedium>
-        <TableHeaderMedium>No. Of Intervals</TableHeaderMedium>
+        <TableHeaderMedium>
+          {t('escrow.tokenSale.table.period')}
+        </TableHeaderMedium>
+        <TableHeaderMedium>
+          {t('escrow.tokenSale.table.interval')}
+        </TableHeaderMedium>
+        <TableHeaderMedium>
+          {t('escrow.tokenSale.table.number')}
+        </TableHeaderMedium>
       </TableHeader>
       <TableWrapper style={{ height: 'auto' }}>
         <Table cellSpacing='0'>
           <TBody>
             <TR>
               <TD>
-                <DataLarge>{escrowPeriod} months</DataLarge>
+                <DataLarge>
+                  {escrowPeriod} {t('escrow.tokenSale.table.months')}
+                </DataLarge>
               </TD>
               <TD>
-                <DataLarge>{releaseIntervalMonths} months</DataLarge>
+                <DataLarge>
+                  {releaseIntervalMonths} {t('escrow.tokenSale.table.months')}
+                </DataLarge>
               </TD>
               <TD>
                 <DataLarge>{totalPeriod}</DataLarge>
@@ -141,6 +152,7 @@ const VestingInfo = ({ state }) => {
 };
 
 const VestingSchedule = ({ state }) => {
+  const { t } = useTranslation();
   const { data, totalVesting } = state;
   const tableContent = data
     ? data.map((period, i) => {
@@ -151,7 +163,7 @@ const VestingSchedule = ({ state }) => {
                 <DataLarge>-</DataLarge>
               </TD>
               <TD>
-                <DataLarge>VESTED</DataLarge>
+                <DataLarge>{t('escrow.tokenSale.table.vested')}</DataLarge>
               </TD>
             </TR>
           );
@@ -171,10 +183,14 @@ const VestingSchedule = ({ state }) => {
     : null;
   return (
     <ScheduleWrapper>
-      <H5>Vesting Schedule</H5>
+      <H5>{t('escrow.tokenSale.table.title')}</H5>
       <TableHeader>
-        <TableHeaderMedium>Vesting Date</TableHeaderMedium>
-        <TableHeaderMedium>SNX Quantity</TableHeaderMedium>
+        <TableHeaderMedium>
+          {t('escrow.tokenSale.table.date')}
+        </TableHeaderMedium>
+        <TableHeaderMedium>
+          SNX {t('escrow.tokenSale.table.quantity')}
+        </TableHeaderMedium>
       </TableHeader>
       <TableWrapper>
         <Table cellSpacing='0'>
@@ -184,7 +200,7 @@ const VestingSchedule = ({ state }) => {
       <RightBlock>
         <DataBlock>
           <DataHeaderLarge style={{ textTransform: 'uppercase' }}>
-            Total Vesting:
+            {t('escrow.tokenSale.total')}
           </DataHeaderLarge>
           <DataMegaEscrow>
             {totalVesting ? formatCurrency(totalVesting) : '--'} SNX
@@ -211,8 +227,8 @@ const TokenSaleEscrow = ({ t }) => {
   } = useGetVestingData(currentWallet);
   return (
     <Fragment>
-      <PageTitle>{t('escrow.tokenSale.title')}</PageTitle>
-      <PLarge>{t('escrow.tokenSale.p')}</PLarge>
+      <PageTitle>{t('escrow.tokenSale.pageTitle')}</PageTitle>
+      <PLarge>{t('escrow.tokenSale.pageSubtitle')}</PLarge>
       <VestingInfo
         state={{ escrowPeriod, releaseIntervalMonths, totalPeriod }}
       />

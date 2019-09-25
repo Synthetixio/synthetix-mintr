@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -14,6 +15,7 @@ import {
 import Spinner from '../../../components/Spinner';
 
 const Confirmation = ({
+  t,
   goBack,
   walletType,
   burnAmount,
@@ -23,7 +25,9 @@ const Confirmation = ({
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>
+            {t('button.navigation.back')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
@@ -31,25 +35,29 @@ const Confirmation = ({
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
               big
             />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <PageTitle>{t('mintrActions.confirmation.pageTitle')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>BURNING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.burn.confirmation.actionDescription')}
+              </DataHeaderLarge>
               <Amount>{formatCurrency(burnAmount)} sUSD</Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>AND UNLOCKING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.burn.confirmation.subActionDescription')}
+              </DataHeaderLarge>
               <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
           <Spinner margin="auto" />
-          <Subtext>Waiting for user response...</Subtext>
+          <Subtext>{t('mintrActions.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <TransactionPriceIndicator canEdit={false} />
@@ -130,4 +138,4 @@ const Loading = styled.div`
   align-items: center;
 `;
 
-export default Confirmation;
+export default withTranslation()(Confirmation);
