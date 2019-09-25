@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { withTranslation } from 'react-i18next';
@@ -8,9 +8,10 @@ import {
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import { PLarge, H1 } from '../../../components/Typography';
+import { PLarge, H1, HyperlinkSmall } from '../../../components/Typography';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Input from '../../../components/Input';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
   t,
@@ -19,7 +20,12 @@ const Action = ({
   maxBurnAmount,
   burnAmount,
   setBurnAmount,
+  transferableAmount,
+  setTransferableAmount,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
+  const [snxInputIsVisible, toggleSnxInput] = useState(false);
   return (
     <SlidePage>
       <Container>
@@ -30,7 +36,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/burn.svg' big />
+            <ActionImage src="/images/actions/burn.svg" big />
             <H1>{t('mintrActions.burn.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.burn.action.pageSubtitle')}</PLarge>
           </Intro>
@@ -40,17 +46,7 @@ const Action = ({
               singleSynth={'sUSD'}
               onChange={e => setBurnAmount(e.target.value)}
               value={burnAmount}
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/currencies/sUSD.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
+              placeholder="0.00"
               rightComponent={
                 <ButtonMax
                   onClick={() => {
@@ -59,11 +55,31 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
+            {snxInputIsVisible ? (
+              <Fragment>
+                <PLarge>Transferrable SNX being unlocked:</PLarge>
+                <Input
+                  singleSynth={'SNX'}
+                  onChange={e => setTransferableAmount(e.target.value)}
+                  value={transferableAmount}
+                  placeholder="0.00"
+                />
+              </Fragment>
+            ) : (
+              <ButtonToggleInput onClick={() => toggleSnxInput(true)}>
+                <HyperlinkSmall>View transferrable SNX +</HyperlinkSmall>
+              </ButtonToggleInput>
+            )}
           </Form>
         </Top>
         <Bottom>
           <TransactionPriceIndicator />
-          <ButtonPrimary onClick={onBurn} margin='auto'>
+          <ButtonPrimary
+            disabled={isFetchingGasLimit || gasEstimateError}
+            onClick={onBurn}
+            margin="auto"
+          >
             {t('mintrActions.burn.action.buttons.burn')}
           </ButtonPrimary>
         </Bottom>
@@ -83,12 +99,12 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const Top = styled.div`
@@ -104,11 +120,12 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   text-align: left;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
   max-width: 380px;
-  margin-bottom: 64px;
+  margin-bottom: 50px;
 `;
 
 const ActionImage = styled.img`
@@ -117,16 +134,13 @@ const ActionImage = styled.img`
   margin-bottom: 8px;
 `;
 
-const Form = styled.div`
-  margin: 0px 0px 80px 0px;
-`;
+const Form = styled.div``;
 
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
+const ButtonToggleInput = styled.button`
+  border: none;
+  margin: 30px 0;
+  cursor: pointer;
+  background-color: transparent;
 `;
 
 export default withTranslation()(Action);

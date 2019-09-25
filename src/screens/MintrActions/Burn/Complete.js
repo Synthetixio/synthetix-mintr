@@ -14,17 +14,16 @@ import { formatCurrency } from '../../../helpers/formatters';
 const Success = ({
   t,
   burnAmount,
-  issuanceRatio,
   onDestroy,
   networkName,
   transactionHash,
-  SNXPrice,
+  transferableAmount,
 }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/success.svg' big />
+          <ActionImage src="/images/success.svg" big />
           <PageTitle>{t('mintrActions.burn.complete.pageTitle')}</PageTitle>
           <PLarge>{t('mintrActions.complete.pageSubtitle')}</PLarge>
         </Intro>
@@ -39,12 +38,7 @@ const Success = ({
             <DataHeaderLarge>
               {t('mintrActions.burn.confirmation.subActionDescription')}
             </DataHeaderLarge>
-            <Amount>
-              {issuanceRatio
-                ? formatCurrency(burnAmount / issuanceRatio / SNXPrice)
-                : '--'}{' '}
-              SNX
-            </Amount>
+            <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
           </Box>
         </Details>
       </Top>
@@ -54,8 +48,8 @@ const Success = ({
             href={`https://${
               networkName === 'mainnet' ? '' : networkName + '.'
             }etherscan.io/tx/${transactionHash}`}
-            as='a'
-            target='_blank'
+            as="a"
+            target="_blank"
           >
             {t('button.navigation.etherscan')}
           </ButtonSecondary>
@@ -73,7 +67,7 @@ const Failure = ({ t, transactionError, onDestroy }) => {
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/failure.svg' big />
+          <ActionImage src="/images/failure.svg" big />
           <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
             <PLarge>

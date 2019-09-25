@@ -47,6 +47,15 @@ export const H5 = props => {
   );
 };
 
+export const H6 = props => {
+  const { h6 } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...h6} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
 export const PMega = props => {
   const { pMega } = useContext(ThemeContext).textStyles;
   return (

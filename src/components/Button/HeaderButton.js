@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonTertiaryLabel } from '../Typography';
 
-const DashboardHeaderButton = ({ children }) => {
+const DashboardHeaderButton = ({ children, onClick }) => {
   return (
-    <Button>
+    <Button onClick={onClick}>
       <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
     </Button>
   );
@@ -21,6 +21,7 @@ const Button = styled.button`
   justify-content: space-between;
   font-size: 14px;
   text-transform: uppercase;
+  cursor: pointer;
 `;
 
 export default DashboardHeaderButton;

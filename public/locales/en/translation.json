@@ -53,8 +53,7 @@
     },
     "rewards": {
       "open": "left to claim rewards",
-      "blocked": "Claiming rewards is",
-      "blockedHighlighted": "blocked"
+      "blocked": "Claiming rewards is <1>blocked</1>"
     },
     "ratio": {
       "current": "Current collateralization ratio",
@@ -68,6 +67,19 @@
     "buttons": {
       "exchange": "Go to Synthetix.Exchange",
       "synths": "View your Synths balance"
+    },
+    "holdings": {
+      "locked": "Locked",
+      "transferable": "Transferable",
+      "staking": "Staking",
+      "nonStaking": "Non-staking",
+      "escrowed": "Escrowed",
+      "nonEscrowed": "Non-escrowed"
+    },
+    "table": {
+      "debt": "Debt",
+      "synths": "Synths",
+      "balance": "Balance"
     }
   },
   "mainContent": {

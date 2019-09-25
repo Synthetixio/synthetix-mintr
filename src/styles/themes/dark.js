@@ -45,4 +45,7 @@ export default {
   themeToggleBackgroundColor: COLORS.dark3,
   themeToggleFontColor: COLORS.dark5,
   themeToggleHandleColor: COLORS.dark5,
+
+  errorMessageBackground: COLORS.dark9,
+  errorMessageColor: COLORS.white,
 };

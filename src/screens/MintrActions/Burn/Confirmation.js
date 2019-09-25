@@ -19,8 +19,7 @@ const Confirmation = ({
   goBack,
   walletType,
   burnAmount,
-  issuanceRatio,
-  SNXPrice,
+  transferableAmount,
 }) => {
   return (
     <SlidePage>
@@ -52,17 +51,12 @@ const Confirmation = ({
               <DataHeaderLarge>
                 {t('mintrActions.burn.confirmation.subActionDescription')}
               </DataHeaderLarge>
-              <Amount>
-                {issuanceRatio
-                  ? formatCurrency(burnAmount / issuanceRatio / SNXPrice)
-                  : '--'}{' '}
-                SNX
-              </Amount>
+              <Amount>{formatCurrency(transferableAmount)} SNX</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
+          <Spinner margin="auto" />
           <Subtext>{t('mintrActions.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
