@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { HeaderButton } from '../Button';
 import COLORS from '../../styles/colors';
 
-const WalletStatusButton = ({ children }) => {
+const WalletStatusButton = ({ children, onClick }) => {
   return (
-    <HeaderButton>
+    <HeaderButton onClick={onClick}>
       <ButtonInner>
         <GreenDot />
         {children}

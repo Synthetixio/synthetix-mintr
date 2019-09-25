@@ -10,19 +10,26 @@ import { WalletStatusButton } from '../Button';
 import { HeaderButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
+import { updateCurrentPage } from '../../ducks/ui';
 // import { Globe } from '../Icons';
 
 const Header = ({ t, currentWallet }) => {
   // const theme = useContext(ThemeContext);
-  const { state } = useContext(Store);
+
+  const {
+    state: {
+      ui: { themeIsDark },
+    },
+    dispatch,
+  } = useContext(Store);
   return (
     <HeaderWrapper>
-      <Logo
-        src={`/images/mintr-logo-${
-          state.ui.themeIsDark ? 'light' : 'dark'
-        }.svg`}
-      />
-      <WalletStatusButton>{shortenAddress(currentWallet)}</WalletStatusButton>
+      <Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+      <WalletStatusButton
+        onClick={() => updateCurrentPage('walletSelection', dispatch)}
+      >
+        {shortenAddress(currentWallet)}
+      </WalletStatusButton>
       <HeaderButton>{t('dashboard.header.support')}</HeaderButton>
       {/* <GlobeButton>
         <Globe theme={theme} />
