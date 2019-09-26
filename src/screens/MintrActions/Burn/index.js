@@ -10,6 +10,7 @@ import { Store } from '../../../store';
 import {
   bytesFormatter,
   bigNumberFormatter,
+  formatCurrency,
 } from '../../../helpers/formatters';
 import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
@@ -34,6 +35,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
             walletAddress
           ),
           snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
+          snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
         ]);
         const [
           debt,
@@ -42,6 +44,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
           SNXPrice,
           totalRewardEscrow,
           totalTokenSaleEscrow,
+          cRatio,
         ] = results.map(bigNumberFormatter);
 
         let maxBurnAmount, maxBurnAmountBN;
@@ -59,6 +62,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
           maxBurnAmountBN,
           SNXPrice,
           escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
+          cRatio,
         });
       } catch (e) {
         console.log(e);
@@ -135,7 +139,7 @@ const Burn = ({ onDestroy }) => {
     issuanceRatio,
     SNXPrice,
     escrowBalance,
-    // sUSDBalanceBN,
+    cRatio,
   } = useGetDebtData(currentWallet, sUSDBytes);
   const gasEstimateError = useGetGasEstimate(
     burnAmount,
@@ -164,7 +168,7 @@ const Burn = ({ onDestroy }) => {
           {
             hash: transaction.hash,
             status: 'pending',
-            info: `Burning ${burnAmount} sUSD`,
+            info: `Burning ${formatCurrency(burnAmount)} sUSD`,
             hasNotification: true,
           },
           dispatch
@@ -195,7 +199,7 @@ const Burn = ({ onDestroy }) => {
       const amountNB = Number(amount);
       setBurnAmount(amountNB);
       setTransferableAmount(
-        Math.max(amountNB / issuanceRatio / SNXPrice - escrowBalance, 0) || ''
+        Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) || ''
       );
     },
     transferableAmount,

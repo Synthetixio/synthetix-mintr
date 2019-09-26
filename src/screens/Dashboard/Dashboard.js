@@ -135,7 +135,7 @@ const Charts = ({ state }) => {
     [
       {
         label: t('dashboard.holdings.locked'),
-        value: balances.snx,
+        value: balances.snx - debtData.transferable,
       },
       {
         label: t('dashboard.holdings.transferable'),

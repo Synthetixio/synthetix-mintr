@@ -340,8 +340,8 @@
       "success": "Transaction complete!",
       "error": "An error occurred..."
     },
-    "wrapper": {
-      "verify": "Verify",
+    "buttons": {
+      "view": "View",
       "close": "Close"
     }
   }

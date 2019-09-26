@@ -64,11 +64,13 @@ const Notification = ({ transaction }) => {
   const status = useGetTransactionTicket(transaction, successQueue);
   return (
     <NotificationWrapper>
-      <StatusImage status={status} />
-      <InfoBlock>
-        <NotificationStatus>{getStatusSentence(status)}</NotificationStatus>
-        <NotificationInfo>{transaction.info}</NotificationInfo>
-      </InfoBlock>
+      <LeftBlock>
+        <StatusImage status={status} />
+        <InfoBlock>
+          <NotificationStatus>{getStatusSentence(status)}</NotificationStatus>
+          <NotificationInfo>{transaction.info}</NotificationInfo>
+        </InfoBlock>
+      </LeftBlock>
       <ButtonBlock>
         <ButtonTertiary
           href={`https://${
@@ -77,12 +79,12 @@ const Notification = ({ transaction }) => {
           as="a"
           target="_blank"
         >
-          {t('notification.wrapper.verify')}
+          {t('notification.buttons.view')}
         </ButtonTertiary>
         <ButtonTertiary
           onClick={() => hideTransaction(transaction.hash, dispatch)}
         >
-          {t('notification.wrapper.close')}
+          {t('notification.buttons.close')}
         </ButtonTertiary>
       </ButtonBlock>
     </NotificationWrapper>
@@ -146,6 +148,12 @@ const NotificationWrapper = styled.div`
 const StatusImageWrapper = styled.img`
   width: 40px;
   height: 40px;
+  margin-right: 10px;
+`;
+
+const LeftBlock = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const InfoBlock = styled.div`

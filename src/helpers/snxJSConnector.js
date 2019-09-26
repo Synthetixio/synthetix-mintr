@@ -63,6 +63,8 @@ const connectToHardwareWallet = type => {
   return {
     walletType: type,
     unlocked: true,
+    networkId: 1,
+    networkName: 'mainnet',
   };
 };
 
