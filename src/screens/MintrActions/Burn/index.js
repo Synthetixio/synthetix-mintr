@@ -43,9 +43,20 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
           totalRewardEscrow,
           totalTokenSaleEscrow,
         ] = results.map(bigNumberFormatter);
+
+        let maxBurnAmount, maxBurnAmountBN;
+        if (debt > sUSDBalance) {
+          maxBurnAmount = sUSDBalance;
+          maxBurnAmountBN = results[1];
+        } else {
+          maxBurnAmount = debt;
+          maxBurnAmountBN = results[0];
+        }
+
         setData({
           issuanceRatio,
-          maxBurnAmount: Math.min(debt, sUSDBalance),
+          maxBurnAmount,
+          maxBurnAmountBN,
           SNXPrice,
           escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
         });
@@ -59,7 +70,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
   return data;
 };
 
-const useGetGasEstimate = maxBurnAmount => {
+const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
   const { dispatch } = useContext(Store);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -70,9 +81,18 @@ const useGetGasEstimate = maxBurnAmount => {
       try {
         if (maxBurnAmount === 0) throw new Error();
         fetchingGasLimit(dispatch);
+
+        let amountToBurn;
+        if (burnAmount && maxBurnAmount) {
+          amountToBurn =
+            burnAmount === maxBurnAmount
+              ? maxBurnAmountBN
+              : snxJSConnector.utils.parseEther(burnAmount.toString());
+        } else amountToBurn = 0;
+
         gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
           sUSDBytes,
-          0
+          amountToBurn
         );
       } catch (e) {
         console.log(e);
@@ -89,7 +109,7 @@ const useGetGasEstimate = maxBurnAmount => {
     };
     getGasEstimate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxBurnAmount]);
+  }, [burnAmount, maxBurnAmount]);
   return error;
 };
 
@@ -111,21 +131,28 @@ const Burn = ({ onDestroy }) => {
   const sUSDBytes = bytesFormatter('sUSD');
   const {
     maxBurnAmount,
+    maxBurnAmountBN,
     issuanceRatio,
     SNXPrice,
     escrowBalance,
+    // sUSDBalanceBN,
   } = useGetDebtData(currentWallet, sUSDBytes);
-  const gasEstimateError = useGetGasEstimate(maxBurnAmount);
+  const gasEstimateError = useGetGasEstimate(
+    burnAmount,
+    maxBurnAmount,
+    maxBurnAmountBN
+  );
+
   const onBurn = async () => {
     try {
       handleNext(1);
       const amountToBurn =
         burnAmount === maxBurnAmount
-          ? Number(maxBurnAmount) + 10
-          : Number(burnAmount);
+          ? maxBurnAmountBN
+          : snxJSConnector.utils.parseEther(burnAmount.toString());
       const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(
         sUSDBytes,
-        snxJSConnector.utils.parseEther(amountToBurn.toString()),
+        amountToBurn,
         {
           gasPrice: gasPrice * GWEI_UNIT,
           gasLimit,
@@ -137,7 +164,7 @@ const Burn = ({ onDestroy }) => {
           {
             hash: transaction.hash,
             status: 'pending',
-            info: `Burning ${amountToBurn} sUSD`,
+            info: `Burning ${burnAmount} sUSD`,
             hasNotification: true,
           },
           dispatch
