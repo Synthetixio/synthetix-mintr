@@ -22,40 +22,6 @@ import {
 import { Info } from '../../components/Icons';
 import Skeleton from '../../components/Skeleton';
 
-const Balances = ({ state }) => {
-  const { balances, prices, theme, dashboardIsLoading } = state;
-  return (
-    <BalanceRow>
-      {['snx', 'sUSD', 'eth'].map(currency => {
-        const currencyUnit =
-          currency === 'sUSD' ? currency : currency.toUpperCase();
-        return (
-          <BalanceItem key={currency}>
-            <CurrencyIcon src={`/images/currencies/${currency}.svg`} />
-            <Balance>
-              {!dashboardIsLoading ? (
-                <DataHeaderLarge>
-                  {formatCurrency(balances[currency]) || '--'}
-                  {currencyUnit}
-                </DataHeaderLarge>
-              ) : (
-                <Skeleton />
-              )}
-              {!dashboardIsLoading ? (
-                <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
-                  ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
-                </DataHeaderLarge>
-              ) : (
-                <Skeleton />
-              )}
-            </Balance>
-          </BalanceItem>
-        );
-      })}
-    </BalanceRow>
-  );
-};
-
 const RewardInfo = ({ state }) => {
   const { t } = useTranslation();
   const { rewardData, theme, dashboardIsLoading } = state;
@@ -97,7 +63,7 @@ const CollRatios = ({ state }) => {
           <Figure>
             {debtData.currentCRatio
               ? Math.round(100 / debtData.currentCRatio)
-              : '--'}
+              : 0}
             %
           </Figure>
         )}
@@ -110,7 +76,7 @@ const CollRatios = ({ state }) => {
           <Figure>
             {debtData.targetCRatio
               ? Math.round(100 / debtData.targetCRatio)
-              : '--'}
+              : 0}
             %
           </Figure>
         )}
@@ -167,9 +133,12 @@ const Charts = ({ state }) => {
   return (
     <Box full={true}>
       <BoxInner>
-        <H6 style={{ textTransform: 'uppercase' }}>
-          {t('dashboard.chart.title')}
-        </H6>
+        <BoxHeading>
+          <H6 style={{ textTransform: 'uppercase' }}>
+            {t('dashboard.chart.title')}
+          </H6>
+          <H6>{formatCurrency(balances.snx) || 0} SNX</H6>
+        </BoxHeading>
         {chartData.map((data, i) => {
           return <BarChart key={i} data={data} />;
         })}
@@ -178,32 +147,53 @@ const Charts = ({ state }) => {
   );
 };
 
+const getBalancePerAsset = (
+  asset,
+  { balances, prices, debtData, synthData }
+) => {
+  let balance,
+    usdValue = 0;
+  switch (asset) {
+    case 'SNX':
+    case 'sUSD':
+    case 'ETH':
+      balance = balances[asset.toLowerCase()];
+      usdValue = balances[asset.toLowerCase()] * prices[asset.toLowerCase()];
+      break;
+    case 'Synths':
+      balance = synthData.total;
+      usdValue = synthData.total * prices.susd;
+      break;
+    case 'Debt':
+      balance = debtData.debtBalance;
+      usdValue = debtData.debtBalance * prices.susd;
+      break;
+    default:
+      break;
+  }
+  return { balance, usdValue };
+};
+
 const processTableData = (state, t) => {
-  const { balances, prices, debtData, synthData } = state;
-  return [
-    {
-      rowLegend: t('dashboard.table.balance'),
-      snx: balances.snx ? formatCurrency(balances.snx) : '--',
-      sUSD: balances.sUSD ? formatCurrency(balances.sUSD) : '--',
-      eth: balances.eth ? formatCurrency(balances.eth) : '--',
-      synths: synthData.total ? formatCurrency(synthData.total) + 'sUSD' : '--',
-      debt: debtData.debtBalance
-        ? formatCurrency(debtData.debtBalance) + 'sUSD'
-        : '--',
-    },
-    {
-      rowLegend: '$ USD',
-      snx: balances.snx ? formatCurrency(balances.snx * prices.snx) : '--',
-      sUSD: balances.sUSD ? formatCurrency(balances.sUSD * prices.sUSD) : '--',
-      eth: balances.eth ? formatCurrency(balances.eth * prices.eth) : '--',
-      synths: synthData.total
-        ? formatCurrency(synthData.total * prices.sUSD)
-        : '--',
-      debt: debtData.debtBalance
-        ? formatCurrency(debtData.debtBalance * prices.sUSD)
-        : '--',
-    },
-  ];
+  return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
+    const iconName = ['Synths', 'Debt'].includes(dataType)
+      ? 'snx'
+      : dataType.toLowerCase();
+    const assetName = ['Synths', 'Debt'].includes(dataType)
+      ? t(`dashboard.table.${dataType.toLowerCase()}`)
+      : dataType;
+    const { balance, usdValue } = getBalancePerAsset(dataType, state);
+    return {
+      rowLegend: (
+        <TableIconCell>
+          <CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
+          {assetName}
+        </TableIconCell>
+      ),
+      balance: balance ? formatCurrency(balance) : 0,
+      usdValue: `$${usdValue ? formatCurrency(usdValue) : 0}`,
+    };
+  });
 };
 
 const BalanceTable = ({ state }) => {
@@ -211,23 +201,22 @@ const BalanceTable = ({ state }) => {
   const { dashboardIsLoading } = state;
   const data = processTableData(state, t);
   return (
-    <Row margin="22px 0 0 0">
-      {dashboardIsLoading ? (
-        <Skeleton width={'100%'} height={'130px'} />
-      ) : (
-        <Table
-          header={[
-            { key: 'rowLegend', value: '' },
-            { key: 'snx', value: 'snx' },
-            { key: 'sUSD', value: 'susd' },
-            { key: 'eth', value: 'eth' },
-            { key: 'synths', value: t('dashboard.table.synths') },
-            { key: 'debt', value: t('dashboard.table.debt') },
-          ]}
-          data={data}
-        />
-      )}
-    </Row>
+    <Box style={{ marginTop: '16px' }} full={true}>
+      <BoxInner>
+        {dashboardIsLoading ? (
+          <Skeleton width={'100%'} height={'242px'} />
+        ) : (
+          <Table
+            header={[
+              { key: 'rowLegend', value: '' },
+              { key: 'balance', value: 'balance' },
+              { key: 'usdValue', value: '$ usd' },
+            ]}
+            data={data}
+          />
+        )}
+      </BoxInner>
+    </Box>
   );
 };
 
@@ -256,15 +245,6 @@ const Dashboard = ({ t }) => {
       <Content>
         <Container>
           <ContainerHeader>
-            <H5>{t('dashboard.sections.prices')}</H5>
-          </ContainerHeader>
-          <Balances state={{ balances, prices, theme, dashboardIsLoading }} />
-        </Container>
-        <Container curved={true}>
-          <RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
-        </Container>
-        <Container>
-          <ContainerHeader>
             <H5>{t('dashboard.sections.wallet')}</H5>
             <DataHeaderLarge
               margin="0px 0px 22px 0px"
@@ -272,6 +252,9 @@ const Dashboard = ({ t }) => {
             />
           </ContainerHeader>
           <CollRatios state={{ debtData, dashboardIsLoading }} />
+          <Container curved={true}>
+            <RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
+          </Container>
           <Charts
             state={{
               balances,
@@ -335,31 +318,6 @@ const Container = styled.div`
   margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
 
-const BalanceRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BalanceItem = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const CurrencyIcon = styled.img`
-  width: 40px;
-  height: 40px;
-`;
-
-const Balance = styled.div`
-  font-family: 'apercu-medium';
-  margin-left: 12px;
-  display: flex;
-  flex-direction: column;
-  & :first-child {
-    margin-bottom: 8px;
-  }
-`;
-
 const ContainerHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -399,6 +357,13 @@ const BoxInner = styled.div`
   width: 100%;
 `;
 
+const BoxHeading = styled.div`
+  witdh: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
+`;
+
 const Link = styled.a`
   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
   text-transform: uppercase;
@@ -408,6 +373,17 @@ const Link = styled.a`
   padding: 16px 20px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 2px;
+`;
+
+const CurrencyIcon = styled.img`
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+`;
+
+const TableIconCell = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default withTranslation()(Dashboard);

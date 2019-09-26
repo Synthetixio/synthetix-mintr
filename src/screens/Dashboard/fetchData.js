@@ -17,8 +17,8 @@ const getBalances = async walletAddress => {
       snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
       snxJSConnector.provider.getBalance(walletAddress),
     ]);
-    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-    return { snx, sUSD, eth };
+    const [snx, susd, eth] = result.map(bigNumberFormatter);
+    return { snx, susd, eth };
   } catch (e) {
     console.log(e);
   }
@@ -29,8 +29,8 @@ const getPrices = async () => {
     const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
       ['SNX', 'sUSD', 'ETH'].map(bytesFormatter)
     );
-    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-    return { snx, sUSD, eth };
+    const [snx, susd, eth] = result.map(bigNumberFormatter);
+    return { snx, susd, eth };
   } catch (e) {
     console.log(e);
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DataHeaderSmall, DataSmall } from '../Typography';
+import { DataHeaderLarge, DataLarge } from '../Typography';
 
 const Table = ({ data, header }) => {
   return (
@@ -9,7 +9,7 @@ const Table = ({ data, header }) => {
         <Tr>
           {header.map((h, i) => (
             <Th key={i} alignRight={i >= header.length - 2}>
-              <DataHeaderSmall>{h.value}</DataHeaderSmall>
+              <DataHeaderLarge>{h.value}</DataHeaderLarge>
             </Th>
           ))}
         </Tr>
@@ -19,14 +19,9 @@ const Table = ({ data, header }) => {
           return (
             <Tr key={i}>
               {header.map((h, i) => {
-                const DataLabelType = i === 0 ? DataHeaderSmall : DataSmall;
                 return (
                   <Td key={i} alignRight={i >= header.length - 2}>
-                    <DataLabelType
-                      style={{ textTransform: i === 0 ? 'uppercase' : 'none' }}
-                    >
-                      {d[h.key]}
-                    </DataLabelType>
+                    <DataLarge>{d[h.key]}</DataLarge>
                   </Td>
                 );
               })}
@@ -43,7 +38,6 @@ const TableElement = styled.table`
 `;
 
 const Thead = styled.thead`
-  background-color: ${props => props.theme.colorStyles.borders};
   color: ${props => props.theme.colorStyles.body};
   font-size: 12px;
   text-transform: uppercase;
@@ -51,18 +45,31 @@ const Thead = styled.thead`
 `;
 
 const Tbody = styled.tbody`
-  color: ${props => props.theme.colorStyles.heading};
+  color: ${props => props.theme.colorStyles.body};
+  & > :nth-child(odd) {
+    background-color: ${props => props.theme.colorStyles.accentLight};
+  }
 `;
 
 const Th = styled.th`
-  padding: 13px;
+  padding: 0 13px 13px 13px;
   text-align: ${props => (props.alignRight ? 'right' : 'left')};
 `;
 
-const Tr = styled.tr``;
+const Tr = styled.tr`
+  & > :first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
+  & > :last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+`;
 
 const Td = styled.td`
-  padding: 13px;
+  padding: 0 15px;
+  height: 40px;
   font-size: 12px;
   font-family: 'apercu-medium';
   border-top: 1px solid ${props => props.theme.colorStyles.borders};

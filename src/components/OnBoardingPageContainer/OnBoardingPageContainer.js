@@ -8,6 +8,7 @@ const OnBoardingPageContainer = ({ t, children }) => {
   const {
     state: {
       ui: { themeIsDark },
+      // wallet: { networkName },
     },
   } = useContext(Store);
   return (
@@ -17,7 +18,7 @@ const OnBoardingPageContainer = ({ t, children }) => {
           <Logo
             src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`}
           />
-          <ButtonTertiary>{t('onboarding.buttons.mainnet')}</ButtonTertiary>
+          {/* <Network>{networkName}</Network> */}
         </HeaderBlock>
         <HeaderBlock>
           <ButtonTertiary>{t('onboarding.buttons.synthetix')}</ButtonTertiary>
@@ -57,5 +58,16 @@ const Footer = styled.div`
   justify-content: center;
   bottom: 40px;
 `;
+
+// const Network = styled.div`
+//   margin-top: 4px;
+//   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+//   display: flex;
+//   align-items: center;
+//   text-transform: uppercase;
+//   color: ${props => props.theme.colorStyles.themeToggleFontColor};
+//   padding: 5px 10px;
+//   font-size: 14px;
+// `;
 
 export default withTranslation()(OnBoardingPageContainer);
