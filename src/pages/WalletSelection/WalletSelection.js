@@ -23,7 +23,12 @@ import {
 import Paginator from '../../components/Paginator';
 import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
-import { H1, PMega, TableHeaderMedium } from '../../components/Typography';
+import {
+  H1,
+  PMega,
+  TableHeaderMedium,
+  TableDataMedium,
+} from '../../components/Typography';
 import { ButtonPrimaryMedium } from '../../components/Button';
 
 const WALLET_PAGE_SIZE = 5;
@@ -197,18 +202,29 @@ const WalletConnection = ({ t }) => {
                                 updateCurrentPage('main', dispatch);
                               }}
                             >
-                              <ListCell>{wallet.address}</ListCell>
-                              <ListCell style={{ textAlign: 'right' }}>
-                                {formatCurrency(wallet.balances.snxBalance) ||
-                                  0}
+                              <ListCell>
+                                <TableDataMedium>
+                                  {wallet.address}
+                                </TableDataMedium>
                               </ListCell>
                               <ListCell style={{ textAlign: 'right' }}>
-                                {formatCurrency(wallet.balances.sUSDBalance) ||
-                                  0}
+                                <TableDataMedium>
+                                  {formatCurrency(wallet.balances.snxBalance) ||
+                                    0}
+                                </TableDataMedium>
                               </ListCell>
                               <ListCell style={{ textAlign: 'right' }}>
-                                {formatCurrency(wallet.balances.ethBalance) ||
-                                  0}
+                                <TableDataMedium>
+                                  {formatCurrency(
+                                    wallet.balances.sUSDBalance
+                                  ) || 0}
+                                </TableDataMedium>
+                              </ListCell>
+                              <ListCell style={{ textAlign: 'right' }}>
+                                <TableDataMedium>
+                                  {formatCurrency(wallet.balances.ethBalance) ||
+                                    0}
+                                </TableDataMedium>
                               </ListCell>
                             </ListBodyRow>
                           );
