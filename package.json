@@ -51,6 +51,7 @@
     "react-app-polyfill": "^1.0.1",
     "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
+    "react-dropzone": "^10.1.9",
     "react-i18next": "^10.11.2",
     "react-select": "^3.0.4",
     "react-switch": "^5.0.1",
