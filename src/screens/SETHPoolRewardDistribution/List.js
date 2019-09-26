@@ -38,11 +38,9 @@ const List = ({ setPage, openDetails }) => {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
               </PLarge>
             </SubtitleContainer>
-            {isOwner && (
-              <Button onClick={() => setPage('create')}>
-                <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
-              </Button>
-            )}
+            <Button onClick={() => setPage('create')} disabled={!isOwner}>
+              <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
+            </Button>
             <LabelContainer>
               <H5>Transactions:</H5>
             </LabelContainer>
@@ -52,15 +50,17 @@ const List = ({ setPage, openDetails }) => {
                 { key: 'committed', value: 'committed' },
                 { key: 'signers', value: 'signers' },
                 isOwner && { key: 'youConfirmed', value: 'you confirmed' },
-                isOwner && { key: 'confirm', value: 'confirm' },
+                { key: 'confirm', value: 'confirm' },
               ]}
               data={transactions.map(item => {
-                const showButton = !item.youConfirmed && item.confirmationCount < requiredConfirmationCount;
+                const disabled = !isOwner || item.youConfirmed || item.confirmationCount >= requiredConfirmationCount;
                 return {
                   id: item.id,
                   committed: new Date().toString(),
                   signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
-                  confirm: showButton ? <ConfirmButton onClick={() => openDetails(item)}>Confirm</ConfirmButton> : null,
+                  confirm: (
+                    <ConfirmButton onClick={() => openDetails(item)} disabled={disabled}>Confirm</ConfirmButton>
+                  ),
                   youConfirmed: item.youConfirmed ? 'Yes' : 'No',
                 };
               })}
@@ -95,15 +95,26 @@ const Button = styled.button`
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }
   margin-bottom: 50px;
+  &:disabled {
+    background-color: ${props => props.theme.colorStyles.buttonPrimaryBgDisabled};
+    cursor: default;
+  }
 `;
 
-const ConfirmButton = styled('a')`
+const ConfirmButton = styled('button')`
   cursor: pointer;
   color: #727CFF;
   underline: none;
   text-transform: uppercase;
+  padding: 0;
+  border: none;
+  font-size: 12px;
   &:hover {
     color: #5A66F8;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
   }
 `;
 

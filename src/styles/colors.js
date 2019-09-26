@@ -10,6 +10,8 @@ export default {
   buttonDark: '#5A66F8',
   buttonLight: '#727CFF',
 
+  buttonLightDisabled: 'rgba(114, 124, 255, 0.3)',
+
   // lightMode
   // fonts:
   light1: '#28275A',
