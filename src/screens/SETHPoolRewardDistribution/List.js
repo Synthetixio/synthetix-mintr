@@ -49,7 +49,6 @@ const List = ({ setPage, openDetails }) => {
                 { key: 'id', value: 'ID' },
                 { key: 'committed', value: 'committed' },
                 { key: 'signers', value: 'signers' },
-                isOwner && { key: 'youConfirmed', value: 'you confirmed' },
                 { key: 'confirm', value: 'confirm' },
               ]}
               data={transactions.map(item => {
@@ -61,7 +60,6 @@ const List = ({ setPage, openDetails }) => {
                   confirm: (
                     <ConfirmButton onClick={() => openDetails(item)} disabled={disabled}>Confirm</ConfirmButton>
                   ),
-                  youConfirmed: item.youConfirmed ? 'Yes' : 'No',
                 };
               })}
             />
