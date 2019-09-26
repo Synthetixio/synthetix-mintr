@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { Store } from '../../store';
 
 import Table from '../../components/Table';
-import { PageTitle, ButtonPrimaryLabel, PLarge, H5 } from '../../components/Typography';
+import { PageTitle, ButtonPrimaryLabel, PLarge, H5, PSmall } from '../../components/Typography';
+
+import COLORS from '../../styles/colors';
 
 import {
   useOwners,
@@ -41,6 +43,11 @@ const List = ({ setPage, openDetails }) => {
             <Button onClick={() => setPage('create')} disabled={!isOwner}>
               <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
             </Button>
+            {!isOwner && (
+              <PSmall color={COLORS.light3}>
+                Owner of the multisig but unable to submit or confirm a transaction? Please switch wallets.
+              </PSmall>
+            )}
             <LabelContainer>
               <H5>Transactions:</H5>
             </LabelContainer>
@@ -92,7 +99,7 @@ const Button = styled.button`
   &:hover {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
   }
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   &:disabled {
     background-color: ${props => props.theme.colorStyles.buttonPrimaryBgDisabled};
     cursor: default;
@@ -101,14 +108,14 @@ const Button = styled.button`
 
 const ConfirmButton = styled('button')`
   cursor: pointer;
-  color: #727CFF;
+  color: ${COLORS.buttonLight};
   underline: none;
   text-transform: uppercase;
   padding: 0;
   border: none;
   font-size: 12px;
   &:hover {
-    color: #5A66F8;
+    color: ${COLORS.buttonDark};
   }
   &:disabled {
     opacity: 0.5;
@@ -124,6 +131,7 @@ const SubtitleContainer = styled.div`
 
 const LabelContainer = styled.div`
   width: 100%;
+  margin-top: 30px;
 `;
 
 export default List;
