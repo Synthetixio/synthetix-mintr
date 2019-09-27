@@ -318,11 +318,6 @@
           "quantity": "Quantity"
         }
       }
-    },
-    "input": {
-      "list": {
-        "placeholder": "Search a synth..."
-      }
     }
   },
   "network": {
@@ -343,6 +338,11 @@
     "buttons": {
       "view": "View",
       "close": "Close"
+    }
+  },
+  "input": {
+    "list": {
+      "placeholder": "Search a synth..."
     }
   }
 }

@@ -12,6 +12,7 @@ import {
 import { PLarge, H1, DataHeaderLarge } from '../../../components/Typography';
 import Input, { SimpleInput } from '../../../components/Input';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
   t,
@@ -24,6 +25,8 @@ const Action = ({
   sendDestination,
   setSendAmount,
   setSendDestination,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
@@ -63,16 +66,6 @@ const Action = ({
               currentSynth={currentCurrency}
               value={sendAmount}
               placeholder="0.00"
-              leftComponent={
-                <Type>
-                  <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
               rightComponent={
                 <ButtonMax
                   onClick={() =>
@@ -83,6 +76,7 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
             <PLarge marginTop="32px">
               {t('mintrActions.send.action.walletInstruction')}
             </PLarge>
@@ -96,7 +90,12 @@ const Action = ({
         <Bottom>
           <TransactionPriceIndicator />
           <ButtonPrimary
-            disabled={!sendDestination || !sendAmount}
+            disabled={
+              !sendDestination ||
+              !sendAmount ||
+              gasEstimateError ||
+              isFetchingGasLimit
+            }
             onClick={onSend}
             margin="auto"
           >
@@ -119,7 +118,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -146,6 +145,7 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
@@ -187,14 +187,6 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 export default withTranslation()(Action);

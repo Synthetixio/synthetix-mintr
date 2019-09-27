@@ -6,13 +6,15 @@ import Complete from './Complete';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { Store } from '../../../store';
+
+import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit } from '../../../ducks/network';
+import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 import {
   bigNumberFormatter,
   shortenAddress,
 } from '../../../helpers/formatters';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
 
 const useGetBalances = (walletAddress, setCurrentCurrency) => {
   const [data, setData] = useState([]);
@@ -69,19 +71,25 @@ const useGetBalances = (walletAddress, setCurrentCurrency) => {
 
 const useGetGasEstimate = (currency, amount, destination) => {
   const { dispatch } = useContext(Store);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    if (!currency || !currency.name || !amount || !destination)
-      return updateGasLimit(0, dispatch);
+    if (!currency || !currency.name || !amount || !destination) return;
     const amountBN = snxJSConnector.utils.parseEther(amount.toString());
     const getGasEstimate = async () => {
+      setError(null);
+      let gasEstimate;
       try {
-        let gasEstimate;
+        if (amount > currency.balance)
+          throw new Error(`You don't have enough ${currency.name} to send`);
+        fetchingGasLimit(dispatch);
         if (currency.name === 'SNX') {
           gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
             destination,
             amountBN
           );
         } else if (currency.name === 'ETH') {
+          if (amount === currency.balance)
+            throw new Error(`You don't have enough ${currency.name} to send`);
           gasEstimate = await snxJSConnector.provider.estimateGas({
             value: amountBN,
             to: destination,
@@ -91,14 +99,24 @@ const useGetGasEstimate = (currency, amount, destination) => {
             currency.name
           ].contract.estimate.transfer(destination, amountBN);
         }
-        updateGasLimit(Number(gasEstimate), dispatch);
       } catch (e) {
         console.log(e);
+        const errorMessage =
+          (e && e.message) || 'Error while getting gas estimate';
+        setError(errorMessage);
+        gasEstimate =
+          currency.name === 'SNX'
+            ? DEFAULT_GAS_LIMIT['sendSNX']
+            : currency.name === 'ETH'
+            ? DEFAULT_GAS_LIMIT['sendEth']
+            : DEFAULT_GAS_LIMIT['sendSynth'];
       }
+      updateGasLimit(Number(gasEstimate), dispatch);
     };
     getGasEstimate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, currency, destination]);
+  return error;
 };
 
 const sendTransaction = (currency, amount, destination, settings) => {
@@ -117,8 +135,8 @@ const sendTransaction = (currency, amount, destination, settings) => {
     });
   } else
     return snxJSConnector.snxJS[currency].contract.transfer(
-      amount,
       destination,
+      amount,
       settings
     );
 };
@@ -133,14 +151,18 @@ const Send = ({ onDestroy }) => {
     state: {
       wallet: { currentWallet, walletType, networkName },
       network: {
-        settings: { gasPrice, gasLimit },
+        settings: { gasPrice, gasLimit, isFetchingGasLimit },
       },
     },
     dispatch,
   } = useContext(Store);
 
   const balances = useGetBalances(currentWallet, setCurrentCurrency);
-  useGetGasEstimate(currentCurrency, sendAmount, sendDestination);
+  const gasEstimateError = useGetGasEstimate(
+    currentCurrency,
+    sendAmount,
+    sendDestination
+  );
 
   const onSend = async () => {
     try {
@@ -171,9 +193,14 @@ const Send = ({ onDestroy }) => {
         handleNext(2);
       }
     } catch (e) {
-      setTransactionInfo({ ...transactionInfo, transactionError: e });
-      handleNext(2);
       console.log(e);
+      const errorMessage = errorMapper(e, walletType);
+      console.log(errorMessage);
+      setTransactionInfo({
+        ...transactionInfo,
+        transactionError: errorMessage,
+      });
+      handleNext(2);
     }
   };
 
@@ -191,6 +218,8 @@ const Send = ({ onDestroy }) => {
     onCurrentCurrencyChange: synth => setCurrentCurrency(synth),
     walletType,
     networkName,
+    gasEstimateError,
+    isFetchingGasLimit,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (
