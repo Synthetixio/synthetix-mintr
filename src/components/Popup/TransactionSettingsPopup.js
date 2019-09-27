@@ -23,16 +23,16 @@ const RatesData = ({ gasInfo }) => {
           return (
             <Rates key={i}>
               <DataHeaderLarge
-                marginBottom="8px"
+                marginBottom='8px'
                 style={{ textTransform: 'capitalize' }}
               >
                 {gas.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom="4px">
+              <DataLarge marginBottom='4px'>
                 ${formatCurrency(gas.price)}
               </DataLarge>
-              <DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom="4px">
+              <DataLarge marginBottom='4px'>{gas.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom='4px'>
                 {gas.time} {t('transactionSettings.minutes')}
               </DataLarge>
             </Rates>
@@ -79,7 +79,7 @@ const TransactionSettingsPopup = ({ t }) => {
       })
     : [];
   return (
-    <PopupContainer margin="auto">
+    <PopupContainer margin='auto'>
       <Wrapper>
         <Intro>
           <PageTitle>{t('transactionSettings.pageTitle')}</PageTitle>

@@ -4,6 +4,7 @@ const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
 const TOGGLE_DASHBOARD_IS_LOADING = 'UI/TOGGLE_DASHBOARD_IS_LOADING';
 const TOGGLE_TRANSACTION_SETTINGS_POPUP =
   'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
+const TOGGLE_LANGUAGE_POPUP = 'UI/TOGGLE_LANGUAGE_POPUP';
 
 // Reducer
 export default (state, action) => {
@@ -24,6 +25,9 @@ export default (state, action) => {
     }
     case TOGGLE_TRANSACTION_SETTINGS_POPUP: {
       return { ...state, transactionSettingsPopupIsVisible: action.payload };
+    }
+    case TOGGLE_LANGUAGE_POPUP: {
+      return { ...state, languagePopupIsVisible: action.payload };
     }
     default:
       return state;
@@ -62,6 +66,13 @@ export const toggleDashboardIsLoading = (isLoading, dispatch) => {
 export const toggleTransactionSettingPopup = (isVisible, dispatch) => {
   return dispatch({
     type: TOGGLE_TRANSACTION_SETTINGS_POPUP,
+    payload: isVisible,
+  });
+};
+
+export const toggleLanguagePopup = (isVisible, dispatch) => {
+  return dispatch({
+    type: TOGGLE_LANGUAGE_POPUP,
     payload: isVisible,
   });
 };

@@ -1,2 +1,4 @@
 import TransactionSettingsPopup from './TransactionSettingsPopup';
-export { TransactionSettingsPopup };
+import LanguagePopup from './LanguagePopup';
+
+export { TransactionSettingsPopup, LanguagePopup };
