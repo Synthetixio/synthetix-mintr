@@ -21,20 +21,18 @@ const OnBoardingPageContainer = ({ t, children }) => {
           {/* <Network>{networkName}</Network> */}
         </HeaderBlock>
         <HeaderBlock>
+          <ButtonTertiary>{t('onboarding.buttons.support')}</ButtonTertiary>
           <ButtonTertiary>{t('onboarding.buttons.synthetix')}</ButtonTertiary>
         </HeaderBlock>
       </Header>
       {children}
-      <Footer>
-        <ButtonTertiary>{t('onboarding.buttons.support')}</ButtonTertiary>
-      </Footer>
     </PageContainer>
   );
 };
 
 const PageContainer = styled.div`
   padding: 42px;
-  height: 100%;
+  height: 100vh;
 `;
 
 const Header = styled.div`
@@ -44,19 +42,14 @@ const Header = styled.div`
 
 const HeaderBlock = styled.div`
   display: flex;
+  & :first-child:not(:last-child) {
+    margin-right: 10px;
+  }
 `;
 
 const Logo = styled.img`
   width: 104px;
   margin-right: 18px;
-`;
-
-const Footer = styled.div`
-  width: 100%;
-  display: flex;
-  margin-top: 50px;
-  justify-content: center;
-  bottom: 40px;
 `;
 
 // const Network = styled.div`
