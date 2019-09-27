@@ -11,6 +11,7 @@ import {
 } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
   t,
@@ -23,6 +24,8 @@ const Action = ({
   quoteAmount,
   setBaseAmount,
   setQuoteAmount,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   const onBaseAmountChange = amount => {
     setBaseAmount(amount);
@@ -47,7 +50,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/trade.svg' big />
+            <ActionImage src="/images/actions/trade.svg" big />
             <H1>{t('mintrActions.trade.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.trade.action.pageSubtitle')}</PLarge>
           </Intro>
@@ -58,7 +61,7 @@ const Action = ({
               onSynthChange={onBaseSynthChange}
               value={baseAmount}
               onChange={e => onBaseAmountChange(e.target.value)}
-              placeholder='0.00'
+              placeholder="0.00"
               currentSynth={baseSynth}
               rightComponent={
                 <ButtonMax
@@ -66,23 +69,25 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
             <PLarge>↓</PLarge>
             <Input
               isDisabled={!synthBalances}
               singleSynth={'sUSD'}
-              placeholder='0.00'
+              placeholder="0.00"
               value={quoteAmount}
               onChange={e => onQuoteAmountChange(e.target.value)}
             />
           </Form>
         </Top>
         <Bottom>
-          <Subtext>{t('network.tradingFee')} 0.3%</Subtext>
+          <Subtext>{t('network.tradingFee')} 0.5%</Subtext>
           {/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
           <TransactionPriceIndicator />
           <ButtonPrimary
+            disabled={isFetchingGasLimit || gasEstimateError}
             onClick={() => onTrade(baseAmount, quoteAmount)}
-            margin='auto'
+            margin="auto"
           >
             {t('mintrActions.trade.action.buttons.trade')}
           </ButtonPrimary>
@@ -103,7 +108,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,6 +129,7 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
@@ -142,6 +148,7 @@ const Form = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 export default withTranslation()(Action);
