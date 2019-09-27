@@ -6,7 +6,7 @@ const UPDATE_GAS_LIMIT = 'NETWORK/UPDATE_GAS_LIMIT';
 const UPDATE_GAS_PRICE = 'NETWORK/UPDATE_GAS_PRICE';
 const FETCHING_GAS_LIMIT = 'NETWORK/FETCHING_GAS_LIMIT';
 
-const GAS_LIMIT_BUFFER = 15000;
+const GAS_LIMIT_BUFFER = 5000;
 
 // Reducer
 export default (state, action) => {
@@ -60,7 +60,7 @@ export default (state, action) => {
         ...state,
         settings: {
           ...state.settings,
-          gasLimit: action.payload,
+          gasLimit,
           transactionUsdPrice,
           isFetchingGasLimit: false,
         },

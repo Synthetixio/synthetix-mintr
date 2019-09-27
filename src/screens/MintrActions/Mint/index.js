@@ -10,12 +10,14 @@ import { Store } from '../../../store';
 import {
   bytesFormatter,
   bigNumberFormatter,
+  formatCurrency,
 } from '../../../helpers/formatters';
 
+import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit } from '../../../ducks/network';
+import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
   const [data, setData] = useState({});
@@ -55,12 +57,16 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 
 const useGetGasEstimate = (mintAmount, issuableSynths) => {
   const { dispatch } = useContext(Store);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    if (mintAmount <= 0) return;
     const sUSDBytes = bytesFormatter('sUSD');
+    if (!mintAmount) return;
     const getGasEstimate = async () => {
+      setError(null);
+      fetchingGasLimit(dispatch);
       let gasEstimate;
       try {
+        if (mintAmount <= 0 || mintAmount > issuableSynths) throw new Error();
         if (mintAmount === issuableSynths) {
           gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
             sUSDBytes
@@ -74,11 +80,21 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
         updateGasLimit(Number(gasEstimate), dispatch);
       } catch (e) {
         console.log(e);
+        let errorMessage;
+        if (issuableSynths <= 0 || mintAmount > issuableSynths) {
+          errorMessage = 'You have no or not enough sUSD left to mint.';
+        } else {
+          errorMessage = (e && e.message) || 'Error while getting gas estimate';
+        }
+        setError(errorMessage);
+        gasEstimate = DEFAULT_GAS_LIMIT['burn'];
       }
+      updateGasLimit(Number(gasEstimate), dispatch);
     };
     getGasEstimate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintAmount]);
+  return error;
 };
 
 const Mint = ({ onDestroy }) => {
@@ -89,7 +105,7 @@ const Mint = ({ onDestroy }) => {
     state: {
       wallet: { currentWallet, walletType, networkName },
       network: {
-        settings: { gasPrice, gasLimit },
+        settings: { gasPrice, gasLimit, isFetchingGasLimit },
       },
     },
     dispatch,
@@ -101,7 +117,7 @@ const Mint = ({ onDestroy }) => {
     sUSDBytes
   );
 
-  useGetGasEstimate(mintAmount, issuableSynths);
+  const gasEstimateError = useGetGasEstimate(mintAmount, issuableSynths);
 
   const onMint = async () => {
     const transactionSettings = {
@@ -129,7 +145,7 @@ const Mint = ({ onDestroy }) => {
           {
             hash: transaction.hash,
             status: 'pending',
-            info: `Minting ${mintAmount} sUSD`,
+            info: `Minting ${formatCurrency(mintAmount)} sUSD`,
             hasNotification: true,
           },
           dispatch
@@ -137,9 +153,14 @@ const Mint = ({ onDestroy }) => {
         handleNext(2);
       }
     } catch (e) {
-      setTransactionInfo({ ...transactionInfo, transactionError: e });
-      handleNext(2);
       console.log(e);
+      const errorMessage = errorMapper(e, walletType);
+      console.log(errorMessage);
+      setTransactionInfo({
+        ...transactionInfo,
+        transactionError: errorMessage,
+      });
+      handleNext(2);
     }
   };
 
@@ -155,6 +176,8 @@ const Mint = ({ onDestroy }) => {
     issuanceRatio,
     SNXPrice,
     ...transactionInfo,
+    isFetchingGasLimit,
+    gasEstimateError,
   };
 
   return [Action, Confirmation, Complete].map((SlideContent, i) => (

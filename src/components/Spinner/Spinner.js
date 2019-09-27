@@ -40,6 +40,7 @@ export const NotificationSpinner = () => {
 const NotificationSpinnerWrapper = styled.div`
   width: 40px;
   height: 40px;
+  margin-right: 10px;
   transition: all 0.3s ease-out;
   z-index: 3;
   background-color: ${props => props.theme.colorStyles.brandBlue};

@@ -11,6 +11,7 @@ import {
 } from '../../../components/Button';
 import { PLarge, H1 } from '../../../components/Typography';
 import Input from '../../../components/Input';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
   t,
@@ -19,6 +20,8 @@ const Action = ({
   issuableSynths,
   mintAmount,
   setMintAmount,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
@@ -30,7 +33,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/mint.svg' big />
+            <ActionImage src="/images/actions/mint.svg" big />
             <H1>{t('mintrActions.mint.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.mint.action.pageSubtitle')}</PLarge>
           </Intro>
@@ -40,17 +43,7 @@ const Action = ({
               singleSynth={'sUSD'}
               onChange={e => setMintAmount(e.target.value)}
               value={mintAmount}
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/currencies/sUSD.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
+              placeholder="0.00"
               rightComponent={
                 <ButtonMax
                   onClick={() => {
@@ -59,11 +52,16 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
           </Form>
         </Top>
         <Bottom>
           <TransactionPriceIndicator />
-          <ButtonPrimary onClick={onMint} margin='auto'>
+          <ButtonPrimary
+            disabled={isFetchingGasLimit || gasEstimateError}
+            onClick={onMint}
+            margin="auto"
+          >
             {t('mintrActions.mint.action.buttons.mint')}
           </ButtonPrimary>
         </Bottom>
@@ -119,14 +117,6 @@ const ActionImage = styled.img`
 
 const Form = styled.div`
   margin: 0px 0px 80px 0px;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
 `;
 
 export default withTranslation()(Action);
