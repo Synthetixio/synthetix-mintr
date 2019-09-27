@@ -105,15 +105,15 @@
       "claimDescription": "sUSD and SNX staking rewards",
       "tradeTitle": "Trade",
       "tradeDescription": "Trade any Synth to sUSD",
-      "sendTitle": "Send",
-      "sendDescription": "Send Synths or SNX to another wallet"
+      "sendTitle": "Transfer",
+      "sendDescription": "Transfer SNX, Synths or ETH to another wallet"
     }
   },
   "mintrActions": {
     "mint": {
       "action": {
         "pageTitle": "Mint",
-        "pageSubtitle": "Minting sUSD will lock your SNX, increasing your collateralization ratio, and will allow you to begin earning fees if you choose to sell your sUSD.",
+        "pageSubtitle": "Mint sUSD by staking and locking your SNX. This gives you a collateralisation ratio and a debt, allowing you to earn staking rewards.",
         "instruction": "Confirm or enter amount to mint:",
         "buttons": {
           "mint": "Mint now"
@@ -130,7 +130,7 @@
     "burn": {
       "action": {
         "pageTitle": "Burn",
-        "pageSubtitle": "Burning sUSD will lock your SNX, increasing your collateralization ratio, and will allow you to begin earning fees if you choose to sell your sUSD.",
+        "pageSubtitle": "Burn sUSD to unlock your staked Synths. This reduces your collateralisation ratio and eliminates your debt, allowing you to transfer your SNX.",
         "instruction": "Confirm or enter amount to burn:",
         "buttons": {
           "burn": "Burn now"
@@ -171,7 +171,7 @@
     "trade": {
       "action": {
         "pageTitle": "Trade",
-        "pageSubtitle": "Trade your sUSD and Synths on the Synthetix.Exchange (sX). Use this window for a quick transfer, or click the ‘Open in sX ↗’ button above for more detail.",
+        "pageSubtitle": "Trade your Synths for sUSD. For a more detailed interface that allows you to trade between any Synths, use our Synthetix.Exchange dApp.",
         "buttons": {
           "trade": "Trade now",
           "exchange": "Open in sX"
@@ -187,7 +187,7 @@
     },
     "send": {
       "action": {
-        "pageTitle": "Send",
+        "pageTitle": "Transfer",
         "pageSubtitle": "Transfer your ETH, SNX or Synths to another wallet.",
         "available": "Transferrable amount:",
         "amountInstruction": "Enter amount or select max available:",

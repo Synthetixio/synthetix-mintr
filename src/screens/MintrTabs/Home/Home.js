@@ -16,11 +16,11 @@ import MintrAction from '../../MintrActions';
 const initialScenario = null;
 
 const actionMapper = {
-  mint: 'Mint sUSD by locking SNX',
-  burn: 'Burn sUSD and unlock SNX',
+  mint: 'Mint sUSD by staking your SNX',
+  burn: 'Burn sUSD to unlock your staked Synths',
   claim: 'sUSD and SNX staking rewards',
-  trade: 'Trade any synth to sUSD',
-  send: 'Send any synth and SNX',
+  trade: 'Trade your Synths for sUSD',
+  transfer: 'Transfer SNX, Synths and ETH',
 };
 
 const Home = ({ t }) => {
@@ -32,8 +32,8 @@ const Home = ({ t }) => {
         onDestroy={() => setCurrentScenario(null)}
       />
       <PageTitle>{t('home.pageTitle')}</PageTitle>
-      <PLarge>{t('home.pageSubtitle')}</PLarge>
-      <ButtonRow margin='30px 0 40px 0'>
+      {/* <PLarge>{t('home.pageSubtitle')}</PLarge> */}
+      <ButtonRow margin="30px 0 40px 0">
         {['mint', 'burn'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)} big>
@@ -46,8 +46,8 @@ const Home = ({ t }) => {
           );
         })}
       </ButtonRow>
-      <ButtonRow margin='0 0 40px 0'>
-        {['claim', 'trade', 'send'].map(action => {
+      <ButtonRow margin="0 0 40px 0">
+        {['claim', 'trade', 'transfer'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)}>
               <ButtonContainer>

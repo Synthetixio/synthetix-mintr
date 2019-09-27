@@ -38,7 +38,7 @@ const Action = ({
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/send.svg" big />
+            <ActionImage src="/images/actions/transfer.svg" big />
             <H1>{t('mintrActions.send.action.pageTitle')}</H1>
             <PLarge>{t('mintrActions.send.action.pageSubtitle')}</PLarge>
           </Intro>
