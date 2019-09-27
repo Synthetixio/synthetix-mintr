@@ -23,16 +23,16 @@ const RatesData = ({ gasInfo }) => {
           return (
             <Rates key={i}>
               <DataHeaderLarge
-                marginBottom='8px'
+                marginBottom="8px"
                 style={{ textTransform: 'capitalize' }}
               >
                 {gas.speed}
               </DataHeaderLarge>
-              <DataLarge marginBottom='4px'>
+              <DataLarge marginBottom="4px">
                 ${formatCurrency(gas.price)}
               </DataLarge>
-              <DataLarge marginBottom='4px'>{gas.gwei} GWEI</DataLarge>
-              <DataLarge marginBottom='4px'>
+              <DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
+              <DataLarge marginBottom="4px">
                 {gas.time} {t('transactionSettings.minutes')}
               </DataLarge>
             </Rates>
@@ -79,7 +79,7 @@ const TransactionSettingsPopup = ({ t }) => {
       })
     : [];
   return (
-    <PopupContainer margin='auto'>
+    <PopupContainer margin="auto">
       <Wrapper>
         <Intro>
           <PageTitle>{t('transactionSettings.pageTitle')}</PageTitle>
@@ -125,7 +125,6 @@ const Wrapper = styled.div`
   background-color: ${props => props.theme.colorStyles.panels};
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 5px;
-  box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
