@@ -87,6 +87,8 @@ const Action = ({
   feesAreClaimable,
   feesAvailable,
   dataIsLoading,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
@@ -95,17 +97,15 @@ const Action = ({
           <ButtonTertiary onClick={onDestroy}>
             {t('button.navigation.cancel')}
           </ButtonTertiary>
-          <ButtonTertiary onClick={onClaimHistory}>
+          <ButtonTertiary disabled={true} onClick={onClaimHistory}>
             {t('mintrActions.claim.action.buttons.history')} ↗
           </ButtonTertiary>
         </Navigation>
-        <Top>
-          <Intro>
-            <ActionImage src="/images/actions/claim.svg" big />
-            <H1>{t('mintrActions.claim.action.pageTitle')}</H1>
-            <PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
-          </Intro>
-        </Top>
+        <Intro>
+          <ActionImage src="/images/actions/claim.svg" big />
+          <H1 m={'10px 0'}>{t('mintrActions.claim.action.pageTitle')}</H1>
+          <PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
+        </Intro>
         <Middle>
           <Schedule>
             <H5>{t('mintrActions.claim.action.table.title')}</H5>
@@ -130,8 +130,7 @@ const Action = ({
               <Amount>
                 {feesAvailable && feesAvailable[0]
                   ? formatCurrency(feesAvailable[0])
-                  : 0}{' '}
-                sUSD
+                  : 0}
               </Amount>
             </Box>
             <Box>
@@ -141,16 +140,17 @@ const Action = ({
               <Amount>
                 {feesAvailable && feesAvailable[1]
                   ? formatCurrency(feesAvailable[1])
-                  : 0}{' '}
-                SNX
+                  : 0}
               </Amount>
             </Box>
           </Details>
         </Middle>
         <Bottom>
-          <TransactionPriceIndicator />
+          <TransactionPriceIndicator style={{ margin: '10px 0' }} />
           <ButtonPrimary
-            disabled={!feesAreClaimable}
+            disabled={
+              !feesAreClaimable || isFetchingGasLimit || gasEstimateError
+            }
             onClick={onClaim}
             margin="auto"
           >
@@ -176,7 +176,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 48px 56px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -184,15 +184,9 @@ const Container = styled.div`
   justify-content: space-around;
 `;
 
-const Top = styled.div`
-  height: auto;
-  margin: auto;
-  width: 100%;
-`;
-
 const Middle = styled.div`
   height: auto;
-  margin: 0px auto 16px auto;
+  margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -207,12 +201,12 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
-  max-width: 480px;
-  margin-bottom: 48px;
-  margin: 0px auto 24px auto;
+  width: 100%;
+  margin: 0px auto;
 `;
 
 const ActionImage = styled.img`

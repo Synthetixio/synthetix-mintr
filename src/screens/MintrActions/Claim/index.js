@@ -15,9 +15,10 @@ import {
 } from '../../../helpers/formatters';
 
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit } from '../../../ducks/network';
+import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import errorMapper from '../../../helpers/errorMapper';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
 
 const getFeePeriodCountdown = (
   periodIndex,
@@ -96,21 +97,30 @@ const useGetFeeData = walletAddress => {
 
 const useGetGasEstimate = () => {
   const { dispatch } = useContext(Store);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const sUSDBytes = bytesFormatter('sUSD');
     const getGasEstimate = async () => {
+      setError(null);
+      let gasEstimate;
       try {
-        const gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees(
+        fetchingGasLimit(dispatch);
+        gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees(
           sUSDBytes
         );
-        updateGasLimit(Number(gasEstimate), dispatch);
       } catch (e) {
         console.log(e);
+        const errorMessage =
+          (e && e.message) || 'Error while getting gas estimate';
+        setError(errorMessage);
+        gasEstimate = DEFAULT_GAS_LIMIT['burn'];
       }
+      updateGasLimit(Number(gasEstimate), dispatch);
     };
     getGasEstimate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  return error;
 };
 
 const Claim = ({ onDestroy }) => {
@@ -121,7 +131,7 @@ const Claim = ({ onDestroy }) => {
     state: {
       wallet: { currentWallet, walletType },
       network: {
-        settings: { gasPrice, gasLimit },
+        settings: { gasPrice, gasLimit, isFetchingGasLimit },
       },
     },
     dispatch,
@@ -132,7 +142,7 @@ const Claim = ({ onDestroy }) => {
     feesAvailable,
     dataIsLoading,
   } = useGetFeeData(currentWallet);
-  useGetGasEstimate();
+  const gasEstimateError = useGetGasEstimate();
 
   const onClaim = async () => {
     try {
@@ -158,9 +168,14 @@ const Claim = ({ onDestroy }) => {
         handleNext(2);
       }
     } catch (e) {
-      setTransactionInfo({ ...transactionInfo, transactionError: e });
-      handleNext(2);
       console.log(e);
+      const errorMessage = errorMapper(e, walletType);
+      console.log(errorMessage);
+      setTransactionInfo({
+        ...transactionInfo,
+        transactionError: errorMessage,
+      });
+      handleNext(2);
     }
   };
 
@@ -179,6 +194,8 @@ const Claim = ({ onDestroy }) => {
     walletType,
     dataIsLoading,
     ...transactionInfo,
+    gasEstimateError,
+    isFetchingGasLimit,
   };
   return [Action, Confirmation, Complete].map((SlideContent, i) => (
     <SlideContent key={i} {...props} />

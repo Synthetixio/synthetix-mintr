@@ -81,7 +81,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,6 +102,7 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   text-align: left;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`

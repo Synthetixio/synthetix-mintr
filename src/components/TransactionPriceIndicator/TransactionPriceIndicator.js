@@ -6,7 +6,7 @@ import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
 
-const TransactionPriceIndicator = ({ canEdit = true }) => {
+const TransactionPriceIndicator = ({ canEdit = true, ...style }) => {
   const {
     state: {
       network: {
@@ -15,7 +15,7 @@ const TransactionPriceIndicator = ({ canEdit = true }) => {
     },
   } = useContext(Store);
   return (
-    <Container>
+    <Container {...style}>
       <Block>
         <Subtext mr={'10px'}>Ethereum Network Fees:</Subtext>
       </Block>
@@ -39,7 +39,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 25px 0;
+  margin: ${props => (props.margin ? props.margin : '25px 0')};
 `;
 
 const Block = styled.div`
