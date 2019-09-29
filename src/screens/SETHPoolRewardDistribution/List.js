@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns'
 
@@ -6,6 +6,7 @@ import { Store } from '../../store';
 
 import Table from '../../components/Table';
 import { PageTitle, ButtonPrimaryLabel, PLarge, H5, PSmall } from '../../components/Typography';
+import { ButtonTertiary } from '../../components/Button';
 
 import COLORS from '../../styles/colors';
 
@@ -15,6 +16,76 @@ import {
   useTransactions,
 } from './hooks';
 
+const ExpandableList = ({ label, transactions, ...props }) => {
+  const [showAll, setShowAll] = useState(false);
+  const toggleShowAll = () => setShowAll(!showAll);
+  return (
+    <TableContainer>
+      <LabelContainer>
+        <H5 margin={0}>{label}</H5>
+        <ButtonTertiary onClick={toggleShowAll}>{showAll ? 'See Less' : 'See More'}</ButtonTertiary>
+      </LabelContainer>
+      {React.cloneElement(
+        props.children,
+        {
+          transactions: showAll ? transactions : transactions.slice(0, 3),
+          ...props,
+        }
+      )}
+    </TableContainer>
+  );
+}
+
+const PendingList = ({ transactions, openDetails, isOwner }) => {
+  const requiredConfirmationCount = useRequiredConfirmationCount();
+  return (
+    <Table
+      header={[
+        { key: 'id', value: 'ID' },
+        { key: 'committed', value: 'committed' },
+        { key: 'signers', value: 'signers' },
+        { key: 'confirm', value: 'confirm' },
+      ]}
+      data={transactions.map(item => {
+        const disabled = !isOwner || item.youConfirmed || item.confirmationCount >= requiredConfirmationCount;
+        return {
+          id: item.id,
+          committed: format(item.date, 'd-M-yy | HH:mm'),
+          signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
+          confirm: (
+            <Link onClick={() => openDetails(item)} disabled={disabled}>Confirm</Link>
+          ),
+        };
+      })}
+    />
+  );
+}
+
+const CompletedList = ({ transactions, networkName }) => (
+  <Table
+    header={[
+      { key: 'id', value: 'ID' },
+      { key: 'completed', value: 'completed' },
+      { key: 'view', value: 'view on etherscan' },
+    ]}
+    data={transactions.map(item => {
+      return {
+        id: item.id,
+        completed: format(item.date, 'd-M-yy | HH:mm'),
+        view: (
+          <Link
+            href={`https://${
+              networkName === 'mainnet' ? '' : networkName + '.'
+            }etherscan.io/tx/${item.transactionHash}`}
+            as="a"
+            target="_blank"
+          >View</Link>
+        ),
+      };
+    })}
+  />
+);
+
 const List = ({ setPage, openDetails }) => {
   const {
     state: {
@@ -22,7 +93,6 @@ const List = ({ setPage, openDetails }) => {
     },
   } = useContext(Store);
   const owners = useOwners();
-  const requiredConfirmationCount = useRequiredConfirmationCount();
   const { loading, pendingTransactions, completedTransactions } = useTransactions();
 
   const isOwner = owners.includes(currentWallet.toLowerCase());
@@ -32,7 +102,7 @@ const List = ({ setPage, openDetails }) => {
       {loading
         ? <div>Loading...</div>
         : (
-          <Column>
+          <PageContainer>
             <PageTitle fontSize={32} marginBottom={0} marginTop={20}>
               sETH Pool Reward Distribution
             </PageTitle>
@@ -49,61 +119,20 @@ const List = ({ setPage, openDetails }) => {
                 Owner of the multisig but unable to submit or confirm a transaction? Please switch wallets.
               </PSmall>
             )}
-            <LabelContainer>
-              <H5>Pending transactions:</H5>
-            </LabelContainer>
-            <Table
-              header={[
-                { key: 'id', value: 'ID' },
-                { key: 'committed', value: 'committed' },
-                { key: 'signers', value: 'signers' },
-                { key: 'confirm', value: 'confirm' },
-              ]}
-              data={pendingTransactions.map(item => {
-                const disabled = !isOwner || item.youConfirmed || item.confirmationCount >= requiredConfirmationCount;
-                return {
-                  id: item.id,
-                  committed: format(item.date, 'd-M-yy | HH:mm'),
-                  signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
-                  confirm: (
-                    <Link onClick={() => openDetails(item)} disabled={disabled}>Confirm</Link>
-                  ),
-                };
-              })}
-            />
-            <LabelContainer>
-              <H5>Completed transactions:</H5>
-            </LabelContainer>
-            <Table
-              header={[
-                { key: 'id', value: 'ID' },
-                { key: 'completed', value: 'completed' },
-                { key: 'view', value: 'view on etherscan' },
-              ]}
-              data={completedTransactions.map(item => {
-                return {
-                  id: item.id,
-                  completed: format(item.date, 'd-M-yy | HH:mm'),
-                  view: (
-                    <Link
-                      href={`https://${
-                        networkName === 'mainnet' ? '' : networkName + '.'
-                      }etherscan.io/tx/${item.transactionHash}`}
-                      as="a"
-                      target="_blank"
-                    >View</Link>
-                  ),
-                };
-              })}
-            />
-          </Column>
+            <ExpandableList transactions={pendingTransactions} openDetails={openDetails} isOwner={isOwner}>
+              <PendingList />
+            </ExpandableList>
+            <ExpandableList transactions={completedTransactions} networkName={networkName}>
+              <CompletedList />
+            </ExpandableList>
+          </PageContainer>
         )
       }
     </Fragment>
   );
 };
 
-const Column = styled('div')`
+const PageContainer = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,6 +140,12 @@ const Column = styled('div')`
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: ${props => (props.curved ? '40px' : '5px')};
   padding: 50px;
+`;
+
+const TableContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 const Button = styled.button`
@@ -159,6 +194,11 @@ const SubtitleContainer = styled.div`
 const LabelContainer = styled.div`
   width: 100%;
   margin-top: 30px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export default List;
