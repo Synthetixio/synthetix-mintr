@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import styled from 'styled-components';
 import { SlidePage } from '../../components/Slider';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
@@ -7,8 +7,14 @@ import {
   PageTitle,
   Subtext,
 } from '../../components/Typography';
+import { Store } from '../../store';
 
 const Success = ({ goHome, transaction }) => {
+  const {
+    state: {
+      wallet: { networkName },
+    },
+  } = useContext(Store);
   return (
     <Fragment>
       <Top>
@@ -26,9 +32,13 @@ const Success = ({ goHome, transaction }) => {
       </Fees>
       <Bottom>
         <Buttons>
-          <ButtonSecondary onClick={() => window.open(`https://etherscan.io/tx/${transaction.hash}`, '_blank')}>
-            VERIFY TRANSACTION
-          </ButtonSecondary>
+          <ButtonSecondary
+            href={transaction && `https://${
+              networkName === 'mainnet' ? '' : networkName + '.'
+            }etherscan.io/tx/${transaction.hash}`}
+            as="a"
+            target="_blank"
+          >VERIFY TRANSACTION</ButtonSecondary>
           <ButtonPrimary onClick={goHome}>
             FINISH & RETURN HOME
           </ButtonPrimary>

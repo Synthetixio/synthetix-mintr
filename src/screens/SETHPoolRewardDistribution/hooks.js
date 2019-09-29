@@ -44,7 +44,8 @@ export const useRequiredConfirmationCount = () => {
 }
 
 export const useTransactions = () => {
-  const [transactions, setTransactions] = useState([]);
+  const [pendingTransactions, setPendingTransactions] = useState([]);
+  const [completedTransactions, setCompletedTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const { state } = useContext(Store);
   useEffect(() => {
@@ -70,11 +71,41 @@ export const useTransactions = () => {
       transactions = transactions.filter(item =>
         item.destination.toLowerCase() === addresses.airdropper.toLowerCase()
       ).sort((a, b) => b.id - a.id);
-      setTransactions(transactions);
+
+      async function addTransactionsData(transactions, eventType) {
+        let events = await snxJSConnector.provider.getLogs({
+          fromBlock: 0,
+          toBlock: 'latest',
+          address: multisig.address,
+          topics: [multisig.interface.events[eventType].topic],
+        });
+        events = await Promise.all(events.map(async item => {
+          const block = await snxJSConnector.provider.getBlock(item.blockNumber)
+          return {
+            ...item,
+            multisigTransactionId: multisig.interface.parseLog(item).values.transactionId.toNumber(),
+            date: new Date(block.timestamp * 1000),
+          };
+        }));
+        return transactions.map(item => {
+          const event = events.find(e => e.multisigTransactionId === item.id);
+          return {
+            ...item,
+            transactionHash: event.transactionHash,
+            date: event.date,
+          }
+        })
+      }
+
+      const pending = await addTransactionsData(transactions.filter(item => !item.executed), 'Submission');
+      const completed = await addTransactionsData(transactions.filter(item => item.executed), 'Execution');
+
+      setPendingTransactions(pending);
+      setCompletedTransactions(completed);
       setLoading(false);
     }
     getTransactions();
   }, [state.wallet.currentWallet]);
-  return { loading, transactions };
+  return { loading, pendingTransactions, completedTransactions };
 }
 

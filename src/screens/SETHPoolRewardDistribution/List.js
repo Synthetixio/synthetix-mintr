@@ -1,5 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import styled from 'styled-components';
+import { format } from 'date-fns'
 
 import { Store } from '../../store';
 
@@ -17,12 +18,12 @@ import {
 const List = ({ setPage, openDetails }) => {
   const {
     state: {
-      wallet: { currentWallet },
+      wallet: { currentWallet, networkName },
     },
   } = useContext(Store);
   const owners = useOwners();
   const requiredConfirmationCount = useRequiredConfirmationCount();
-  const { loading, transactions } = useTransactions();
+  const { loading, pendingTransactions, completedTransactions } = useTransactions();
 
   const isOwner = owners.includes(currentWallet.toLowerCase());
 
@@ -49,7 +50,7 @@ const List = ({ setPage, openDetails }) => {
               </PSmall>
             )}
             <LabelContainer>
-              <H5>Transactions:</H5>
+              <H5>Pending transactions:</H5>
             </LabelContainer>
             <Table
               header={[
@@ -58,14 +59,39 @@ const List = ({ setPage, openDetails }) => {
                 { key: 'signers', value: 'signers' },
                 { key: 'confirm', value: 'confirm' },
               ]}
-              data={transactions.map(item => {
+              data={pendingTransactions.map(item => {
                 const disabled = !isOwner || item.youConfirmed || item.confirmationCount >= requiredConfirmationCount;
                 return {
                   id: item.id,
-                  committed: new Date().toString(),
+                  committed: format(item.date, 'd-M-yy | HH:mm'),
                   signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
                   confirm: (
-                    <ConfirmButton onClick={() => openDetails(item)} disabled={disabled}>Confirm</ConfirmButton>
+                    <Link onClick={() => openDetails(item)} disabled={disabled}>Confirm</Link>
+                  ),
+                };
+              })}
+            />
+            <LabelContainer>
+              <H5>Completed transactions:</H5>
+            </LabelContainer>
+            <Table
+              header={[
+                { key: 'id', value: 'ID' },
+                { key: 'completed', value: 'completed' },
+                { key: 'view', value: 'view on etherscan' },
+              ]}
+              data={completedTransactions.map(item => {
+                return {
+                  id: item.id,
+                  completed: format(item.date, 'd-M-yy | HH:mm'),
+                  view: (
+                    <Link
+                      href={`https://${
+                        networkName === 'mainnet' ? '' : networkName + '.'
+                      }etherscan.io/tx/${item.transactionHash}`}
+                      as="a"
+                      target="_blank"
+                    >View</Link>
                   ),
                 };
               })}
@@ -106,7 +132,7 @@ const Button = styled.button`
   }
 `;
 
-const ConfirmButton = styled('button')`
+const Link = styled('button')`
   cursor: pointer;
   color: ${COLORS.buttonLight};
   underline: none;
@@ -114,6 +140,7 @@ const ConfirmButton = styled('button')`
   padding: 0;
   border: none;
   font-size: 12px;
+  text-decoration: none;
   &:hover {
     color: ${COLORS.buttonDark};
   }
