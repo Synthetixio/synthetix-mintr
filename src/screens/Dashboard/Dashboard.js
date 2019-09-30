@@ -305,6 +305,7 @@ const DashboardWrapper = styled('div')`
   // transition: all ease-out 0.5s;
   flex-shrink: 0;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
+  padding-bottom: 40px;
 `;
 
 const Content = styled('div')`
