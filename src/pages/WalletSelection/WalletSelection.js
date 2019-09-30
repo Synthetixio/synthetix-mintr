@@ -262,7 +262,7 @@ const HeadingContent = styled.div`
 
 const BodyContent = styled.div`
   width: 100%;
-  margin: 50px 0;
+  margin-top: 50px;
   max-width: 1400px;
   display: flex;
   justify-content: center;
