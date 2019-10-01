@@ -16,9 +16,9 @@ const MainContainer = ({ goHome, onDataLoaded }) => {
         <PageTitle fontSize={32} marginTop={50}>
           Submit a new transaction
         </PageTitle>
-        <ButtonContainer>
+        <CsvLoaderContainer>
           <CsvLoader onDataLoaded={onDataLoaded} />
-        </ButtonContainer>
+        </CsvLoaderContainer>
       </Container>
     </SlidePage>
   );
@@ -49,8 +49,9 @@ const Navigation = styled.div`
   text-align: left;
 `;
 
-const ButtonContainer = styled('div')`
+const CsvLoaderContainer = styled('div')`
   margin-top: 40px;
+  width: 100%;
 `;
 
 export default MainContainer;

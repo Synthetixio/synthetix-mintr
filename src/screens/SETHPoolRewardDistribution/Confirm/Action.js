@@ -42,13 +42,15 @@ const MainContainer = ({ goHome, onConfirm, multisendTx }) => {
         <PageTitle fontSize={32} marginTop={50}>
           How do you like to confirm?
         </PageTitle>
-        <ButtonContainer>
+        <CsvLoaderContainer>
           <CsvLoader onDataLoaded={onDataLoaded} />
           {match === false && <PLarge>Not match</PLarge>}
-        </ButtonContainer>
-        <ButtonPrimary onClick={() => onConfirm()}>
-          or sign without uploading
-        </ButtonPrimary>
+        </CsvLoaderContainer>
+        <ConfirmButtonContainer>
+          <ButtonPrimary onClick={() => onConfirm()}>
+            or sign without uploading
+          </ButtonPrimary>
+        </ConfirmButtonContainer>
       </Container>
     </SlidePage>
   );
@@ -79,9 +81,15 @@ const Navigation = styled.div`
   text-align: left;
 `;
 
-const ButtonContainer = styled('div')`
+const CsvLoaderContainer = styled('div')`
   margin-top: 40px;
   margin-bottom: 20px;
+  width: 100%;
+`;
+
+const ConfirmButtonContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: 80px;
 `;
 
 export default MainContainer;
