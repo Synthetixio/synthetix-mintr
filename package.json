@@ -65,6 +65,7 @@
     "ts-pnp": "1.1.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "1.1.2",
+    "walletlink": "^1.0.0",
     "webpack": "4.29.6",
     "webpack-dev-server": "3.2.1",
     "webpack-manifest-plugin": "2.0.4",

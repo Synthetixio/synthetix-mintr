@@ -18,7 +18,7 @@ export const DEFAULT_GAS_LIMIT = {
   sendSynth: 150000,
 };
 
-export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger'];
+export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger', 'Coinbase'];
 
 export const hasWeb3 = () => {
   return window.web3;

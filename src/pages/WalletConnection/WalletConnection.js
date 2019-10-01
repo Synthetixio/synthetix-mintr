@@ -125,7 +125,7 @@ const WalletConnectionPMega = styled(PMega)`
 const Wallet = styled.div`
   background-color: ${props => props.theme.colorStyles.panels};
   display: flex;
-  width: 400px;
+  width: 300px;
   height: 400px;
   flex-direction: column;
   align-items: center;
