@@ -306,6 +306,7 @@ const DashboardWrapper = styled('div')`
   flex-shrink: 0;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
   padding-bottom: 40px;
+  min-height: 100vh;
 `;
 
 const Content = styled('div')`

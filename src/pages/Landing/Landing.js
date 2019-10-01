@@ -21,21 +21,21 @@ const Landing = ({ t }) => {
         <BodyContent>
           <Functionalities>
             <Functionality>
-              <Icon src='images/actions/mint.svg' />
+              <Icon src="images/actions/mint.svg" />
               <LandingH2>{t('landing.functionality.mintTitle')}</LandingH2>
               <LandingPLarge>
                 {t('landing.functionality.mintDescription')}
               </LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/burn.svg' />
+              <Icon src="images/actions/burn.svg" />
               <LandingH2>{t('landing.functionality.burnTitle')}</LandingH2>
               <LandingPLarge>
                 {t('landing.functionality.burnDescription')}
               </LandingPLarge>
             </Functionality>
             <Functionality>
-              <Icon src='images/actions/claim.svg' />
+              <Icon src="images/actions/claim.svg" />
               <LandingH2>{t('landing.functionality.claimTitle')}</LandingH2>
               <LandingPLarge>
                 {t('landing.functionality.claimDescription')}
@@ -106,7 +106,7 @@ const LandingPLarge = styled(PLarge)`
 const Functionalities = styled.div`
   display: flex;
   width: 100%;
-  margin: 80px auto 140px auto;
+  margin: 80px auto 100px auto;
   justify-content: space-between;
   color: white;
 `;
