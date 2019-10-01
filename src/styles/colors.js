@@ -38,5 +38,5 @@ export default {
   dark8: '#6865A3',
   dark9: '#E47C87',
   // shadows:
-  darkShadow1: 'rgba(36, 35, 78, 0)',
+  darkShadow1: 'rgba(18, 18, 43, 0.3)',
 };

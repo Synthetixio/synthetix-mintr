@@ -43,10 +43,14 @@ const Header = ({ t, currentWallet }) => {
         >
           <SupportBubble />
         </RoundButton>
-        <RoundButton
-          onClick={() => toggleLanguagePopup(!languagePopupIsVisible, dispatch)}
-        >
-          <Globe />
+        <LanguageButtonWrapper>
+          <RoundButton
+            onClick={() =>
+              toggleLanguagePopup(!languagePopupIsVisible, dispatch)
+            }
+          >
+            <Globe />
+          </RoundButton>
           {languagePopupIsVisible ? (
             <OutsideClickHandler
               onOutsideClick={() => toggleLanguagePopup(false, dispatch)}
@@ -54,7 +58,7 @@ const Header = ({ t, currentWallet }) => {
               <LanguagePopup />
             </OutsideClickHandler>
           ) : null}
-        </RoundButton>
+        </LanguageButtonWrapper>
         <ThemeSwitcher
           onLabel={t('dashboard.header.onLabel')}
           offLabel={t('dashboard.header.offLabel')}
@@ -82,7 +86,6 @@ const Logo = styled.img`
 `;
 
 const RoundButton = styled.button`
-  position: relative;
   margin: 0 5px;
   cursor: pointer;
   display: flex;
@@ -94,6 +97,10 @@ const RoundButton = styled.button`
   width: 40px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+`;
+
+const LanguageButtonWrapper = styled.div`
+  position: relative;
 `;
 
 const Network = styled.div`

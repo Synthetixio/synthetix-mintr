@@ -37,14 +37,14 @@ const RewardInfo = ({ state }) => {
     </DataLarge>
   ) : (
     <DataLarge>
-      <Trans i18nKey="dashboard.rewards.blocked">
+      <Trans i18nKey='dashboard.rewards.blocked'>
         Claiming rewards <Highlighted red={true}>blocked</Highlighted>
       </Trans>
     </DataLarge>
   );
 
   return (
-    <Row padding="0px 8px">
+    <Row padding='0px 8px'>
       {content}
       <Info theme={theme} />
     </Row>
@@ -55,10 +55,10 @@ const CollRatios = ({ state }) => {
   const { t } = useTranslation();
   const { debtData, dashboardIsLoading } = state;
   return (
-    <Row margin="0 0 22px 0">
+    <Row margin='0 0 22px 0'>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.currentCRatio
@@ -71,7 +71,7 @@ const CollRatios = ({ state }) => {
       </Box>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.targetCRatio
@@ -247,7 +247,7 @@ const Dashboard = ({ t }) => {
           <ContainerHeader>
             <H5>{t('dashboard.sections.wallet')}</H5>
             <DataHeaderLarge
-              margin="0px 0px 22px 0px"
+              margin='0px 0px 22px 0px'
               color={theme.colorStyles.body}
             />
           </ContainerHeader>
@@ -273,8 +273,8 @@ const Dashboard = ({ t }) => {
               dashboardIsLoading,
             }}
           />
-          <Row margin="18px 0 0 0 ">
-            <Link href="https://synthetix.exchange" target="_blank">
+          <Row margin='18px 0 0 0 '>
+            <Link href='https://synthetix.exchange' target='_blank'>
               <ButtonTertiaryLabel>
                 {t('dashboard.buttons.exchange')}
               </ButtonTertiaryLabel>
