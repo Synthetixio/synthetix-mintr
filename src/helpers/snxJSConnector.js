@@ -63,6 +63,8 @@ const connectToHardwareWallet = type => {
   return {
     walletType: type,
     unlocked: true,
+    networkId: 1,
+    networkName: 'mainnet',
   };
 };
 
@@ -77,7 +79,7 @@ export const connectToWallet = async type => {
       unlockReason: 'NetworkNotSupported',
     };
   }
-  const signer = new snxJSConnector.signers[type]();
+  const signer = new snxJSConnector.signers[type]({});
   snxJSConnector.setContractSettings({
     networkId,
     signer,

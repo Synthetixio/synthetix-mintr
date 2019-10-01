@@ -8,6 +8,16 @@ export const SUPPORTED_NETWORKS = {
   42: 'KOVAN',
 };
 
+export const DEFAULT_GAS_LIMIT = {
+  mint: 2200000,
+  burn: 2200000,
+  claim: 1400000,
+  exchange: 220000,
+  sendSNX: 120000,
+  sendEth: 21000,
+  sendSynth: 150000,
+};
+
 export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger'];
 
 export const hasWeb3 = () => {

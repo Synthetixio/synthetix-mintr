@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
+import { withTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency } from '../../../helpers/formatters';
@@ -40,26 +41,9 @@ const sumBy = (collection, key) => {
 
 const initialScenario = null;
 
-const renderHiddenContent = () => {
-  const data = [
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-  ];
+const HiddenContent = ({ t, data }) => {
   return (
-    <HiddenContent>
+    <HiddenContentWrapper>
       <table style={{ width: '100%' }}>
         <thead style={{ marginBottom: '16px' }}>
           <TRHead style={{ marginBottom: '16px' }}>
@@ -79,8 +63,8 @@ const renderHiddenContent = () => {
             return (
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
-                  <TypeImage src="/images/actions/tiny-sold.svg" />
-                  <TableDataMedium>Sold by Depot</TableDataMedium>
+                  <TypeImage src='/images/actions/tiny-sold.svg' />
+                  <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
                 </TD>
                 <TD>
                   <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
@@ -99,11 +83,11 @@ const renderHiddenContent = () => {
           })}
         </tbody>
       </table>
-    </HiddenContent>
+    </HiddenContentWrapper>
   );
 };
 
-const ExpandableTable = () => {
+const ExpandableTable = withTranslation(({ t }) => {
   const data = [
     {
       amount: '2,000.00',
@@ -126,10 +110,10 @@ const ExpandableTable = () => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop="10px">Recent Activity:</H5>
+          <H5 marginTop='10px'>{t('depot.table.title')}</H5>
           <MoreButtons>
-            <ButtonTertiary>View More</ButtonTertiary>
-            <ButtonTertiary>View Contract</ButtonTertiary>
+            <ButtonTertiary>{t('depot.buttons.more')}</ButtonTertiary>
+            <ButtonTertiary>{t('depot.buttons.contract')}</ButtonTertiary>
           </MoreButtons>
         </ActivityHeader>
         <List>
@@ -161,7 +145,7 @@ const ExpandableTable = () => {
                   }
                 >
                   <Cell>
-                    <TypeImage src="/images/actions/tiny-deposit.svg" />
+                    <TypeImage src='/images/actions/tiny-deposit.svg' />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>
@@ -177,7 +161,25 @@ const ExpandableTable = () => {
                   </Cell>
                   <Cell>{isExpanded ? <Minus> </Minus> : <Plus />}</Cell>
                 </BodyRow>
-                {renderHiddenContent()}
+                <HiddenContent
+                  data={[
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                    {
+                      amount: '2,000.00',
+                      remaining: '500.00',
+                      date: '14:00 | 4 Oct 2019',
+                    },
+                  ]}
+                />
               </ExpandableRow>
             );
           })}
@@ -185,7 +187,7 @@ const ExpandableTable = () => {
       </Activity>
     </Fragment>
   );
-};
+});
 
 const getApiUrl = networkName =>
   `https://${
@@ -267,7 +269,7 @@ const useGetDepotData = walletAddress => {
   return data;
 };
 
-const Depot = () => {
+const Depot = ({ t }) => {
   const [currentScenario, setCurrentScenario] = useState(initialScenario);
   const {
     state: {
@@ -287,14 +289,10 @@ const Depot = () => {
     <PageContainer>
       <DepotAction action={currentScenario} {...props} />
       <PageTitle>
-        The Depot: ${formatCurrency(totalSellableDeposits)} sUSD
+        {t('depot.intro.pageTitle')}${formatCurrency(totalSellableDeposits)}{' '}
+        sUSD
       </PageTitle>
-      <PLarge>
-        Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap,
-        and you’ll receive the proceeds of all sales in ETH. While your sUSD is
-        in the queue waiting to be sold, you can withdraw your sUSD back into
-        your wallet at any time. Note: minimum deposit is 50 sUSD.
-      </PLarge>
+      <PLarge>{t('depot.intro.pageSubtitle')}</PLarge>
       <ButtonRow>
         {['deposit', 'withdraw'].map(action => {
           return (
@@ -302,7 +300,7 @@ const Depot = () => {
               <ButtonContainer>
                 <ActionImage src={`/images/actions/${action}.svg`} />
                 <H2>{action}</H2>
-                <PLarge>Amount available:</PLarge>
+                <PLarge>{t('depot.buttons.available')}</PLarge>
                 <Amount>
                   $
                   {action === 'deposit'
@@ -385,7 +383,7 @@ const TypeImage = styled.img`
   margin-right: 8px;
 `;
 
-const HiddenContent = styled.div`
+const HiddenContentWrapper = styled.div`
   padding: 24px 16px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-top-width: 0;
@@ -421,4 +419,4 @@ const TD = styled.td`
   }
 `;
 
-export default Depot;
+export default withTranslation()(Depot);

@@ -17,8 +17,8 @@ const getBalances = async walletAddress => {
       snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
       snxJSConnector.provider.getBalance(walletAddress),
     ]);
-    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-    return { snx, sUSD, eth };
+    const [snx, susd, eth] = result.map(bigNumberFormatter);
+    return { snx, susd, eth };
   } catch (e) {
     console.log(e);
   }
@@ -29,8 +29,8 @@ const getPrices = async () => {
     const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
       ['SNX', 'sUSD', 'ETH'].map(bytesFormatter)
     );
-    const [snx, sUSD, eth] = result.map(bigNumberFormatter);
-    return { snx, sUSD, eth };
+    const [snx, susd, eth] = result.map(bigNumberFormatter);
+    return { snx, susd, eth };
   } catch (e) {
     console.log(e);
   }
@@ -87,6 +87,24 @@ const getDebt = async walletAddress => {
   }
 };
 
+const getEscrow = async walletAddress => {
+  try {
+    const results = await Promise.all([
+      snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(
+        walletAddress
+      ),
+      snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
+    ]);
+    const [reward, tokenSale] = results.map(bigNumberFormatter);
+    return {
+      reward,
+      tokenSale,
+    };
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const getSynths = async walletAddress => {
   try {
     const synths = snxJSConnector.synths
@@ -134,15 +152,24 @@ export const useFetchData = (walletAddress, successQueue) => {
           prices,
           rewardData,
           debtData,
+          escrowData,
           synthData,
         ] = await Promise.all([
           getBalances(walletAddress),
           getPrices(),
           getRewards(walletAddress),
           getDebt(walletAddress),
+          getEscrow(walletAddress),
           getSynths(walletAddress),
         ]);
-        setData({ balances, prices, rewardData, debtData, synthData });
+        setData({
+          balances,
+          prices,
+          rewardData,
+          debtData,
+          escrowData,
+          synthData,
+        });
         toggleDashboardIsLoading(false, dispatch);
       };
       fetchData();

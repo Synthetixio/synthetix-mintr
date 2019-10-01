@@ -1,1 +1,1 @@
-export { default, NotificationSpinner } from './Spinner';
+export { default, NotificationSpinner, MicroSpinner } from './Spinner';

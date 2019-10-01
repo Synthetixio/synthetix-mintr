@@ -1,5 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import {
   PageTitle,
@@ -15,21 +16,23 @@ import MintrAction from '../../MintrActions';
 const initialScenario = null;
 
 const actionMapper = {
-  mint: 'Mint sUSD by locking SNX',
-  burn: 'Burn sUSD and unlock SNX',
+  mint: 'Mint sUSD by staking your SNX',
+  burn: 'Burn sUSD to unlock your staked Synths',
   claim: 'sUSD and SNX staking rewards',
-  trade: 'Trade any synth to sUSD',
-  send: 'Send any synth and SNX',
+  trade: 'Trade your Synths for sUSD',
+  transfer: 'Transfer SNX, Synths and ETH',
 };
 
-const renderHomeButtons = setCurrentScenario => {
+const Home = ({ t }) => {
+  const [currentScenario, setCurrentScenario] = useState(initialScenario);
   return (
-    <Fragment>
-      <PageTitle>What would you like to do?</PageTitle>
-      <PLarge>
-        Click any button below to view more info, confirm or change the amount
-        before submitting.
-      </PLarge>
+    <PageContainer>
+      <MintrAction
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+      />
+      <PageTitle>{t('home.pageTitle')}</PageTitle>
+      {/* <PLarge>{t('home.pageSubtitle')}</PLarge> */}
       <ButtonRow margin="30px 0 40px 0">
         {['mint', 'burn'].map(action => {
           return (
@@ -44,7 +47,7 @@ const renderHomeButtons = setCurrentScenario => {
         })}
       </ButtonRow>
       <ButtonRow margin="0 0 40px 0">
-        {['claim', 'trade', 'send'].map(action => {
+        {['claim', 'trade', 'transfer'].map(action => {
           return (
             <Button key={action} onClick={() => setCurrentScenario(action)}>
               <ButtonContainer>
@@ -56,19 +59,6 @@ const renderHomeButtons = setCurrentScenario => {
           );
         })}
       </ButtonRow>
-    </Fragment>
-  );
-};
-
-const Home = () => {
-  const [currentScenario, setCurrentScenario] = useState(initialScenario);
-  return (
-    <PageContainer>
-      <MintrAction
-        action={currentScenario}
-        onDestroy={() => setCurrentScenario(null)}
-      />
-      {renderHomeButtons(setCurrentScenario)}
     </PageContainer>
   );
 };
@@ -106,4 +96,4 @@ const ActionImage = styled.img`
   width: ${props => (props.big ? '64px' : '48px')};
 `;
 
-export default Home;
+export default withTranslation()(Home);

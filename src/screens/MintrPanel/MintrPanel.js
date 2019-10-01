@@ -55,6 +55,7 @@ const MainContainer = ({ t }) => {
 
   return (
     <MainContainerWrapper>
+      <Overlay isVisible={transactionSettingsPopupIsVisible}></Overlay>
       <Header>
         <TabRow state={{ t }} />
       </Header>
@@ -77,6 +78,17 @@ const Header = styled('div')`
   justify-content: space-between;
   height: 80px;
   background-color: ${props => props.theme.colorStyles.menu};
+`;
+
+const Overlay = styled.div`
+  visibility: ${props => (props.isVisible ? 'visible' : 'hidden')};
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0, 0.7);
+  z-index: 1000;
 `;
 
 export default withTranslation()(MainContainer);

@@ -8,9 +8,16 @@ const ButtonTertiary = ({
   as = 'button',
   href = undefined,
   target = undefined,
+  disabled,
 }) => {
   return (
-    <Button n target={target} href={href} as={as} onClick={onClick}>
+    <Button
+      disabled={disabled}
+      target={target}
+      href={href}
+      as={as}
+      onClick={onClick}
+    >
       <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
     </Button>
   );
@@ -33,6 +40,10 @@ const Button = styled.button`
   }
   cursor: pointer;
   text-decoration: none;
+  &:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
 `;
 
 export default ButtonTertiary;

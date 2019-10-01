@@ -1,4 +1,3 @@
 {
-  "presets": ["react-app"],
-  // "plugins": [["i18next-extract", { "discardOldKeys": "true" }]]
+  "presets": ["react-app"]
 }

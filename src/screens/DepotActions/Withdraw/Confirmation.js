@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -12,38 +13,42 @@ import {
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, amountAvailable }) => {
+const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>Go back</ButtonTertiary>
+          <ButtonTertiary onClick={() => goBack(1)}>
+            {t('button.navigation.back')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <PageTitle>{t('withdraw.confirmation.pageTitle')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>WITHDRAWING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('withdraw.confirmation.actionDescription')}
+              </DataHeaderLarge>
               <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin="auto" />
-          <Subtext>Waiting for user response...</Subtext>
+          <Spinner margin='auto' />
+          <Subtext>{t('withdraw.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <Fees>
-            <Subtext>Ethereum network fees (Gas): $0.083 </Subtext>
-            <Subtext>Estimated transaction speed: ~5.24 mins</Subtext>
+            <Subtext>{t('network.gas')}</Subtext>
+            <Subtext>{t('network.speed')}</Subtext>
           </Fees>
         </Bottom>
       </Container>
@@ -127,4 +132,4 @@ const Loading = styled.div`
   align-items: center;
 `;
 
-export default Confirmation;
+export default withTranslation()(Confirmation);

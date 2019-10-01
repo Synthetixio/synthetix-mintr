@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
+
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
@@ -12,31 +14,37 @@ import {
 import { formatCurrency } from '../../../helpers/formatters';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ goBack, walletType, tradeAmount, baseSynth }) => {
+const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={goBack}>Go back</ButtonTertiary>
+          <ButtonTertiary onClick={goBack}>
+            {t('button.navigation.back')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage src={`/images/wallets/${walletType}.svg`} big />
-            <PageTitle>Please confirm transaction</PageTitle>
+            <PageTitle>{t('mintrActions.confirmation.pageTitle')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>TRADING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.trade.confirmation.actionDescription')}
+              </DataHeaderLarge>
               <Amount>
                 {formatCurrency(tradeAmount ? tradeAmount.base : 0)}{' '}
                 {baseSynth && baseSynth.name}
               </Amount>
             </Box>
             <Box>
-              <DataHeaderLarge>RECEIVING:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.trade.confirmation.subActionDescription')}
+              </DataHeaderLarge>
               <Amount>
                 {formatCurrency(tradeAmount ? tradeAmount.quote : 0)} sUSD
               </Amount>
@@ -44,8 +52,8 @@ const Confirmation = ({ goBack, walletType, tradeAmount, baseSynth }) => {
           </Details>
         </Top>
         <Loading>
-          <Spinner margin="auto" />
-          <Subtext>Waiting for user response...</Subtext>
+          <Spinner margin='auto' />
+          <Subtext>{t('mintrActions.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <TransactionPriceIndicator />
@@ -126,4 +134,4 @@ const Loading = styled.div`
   align-items: center;
 `;
 
-export default Confirmation;
+export default withTranslation()(Confirmation);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Cross } from '../Icons';
 import { Store } from '../../store';
 
-import { toggleTransactionSettingPopup } from '../../ducks/ui';
+import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 
 const Popup = ({ children }) => {
   const { dispatch } = useContext(Store);
@@ -11,7 +11,7 @@ const Popup = ({ children }) => {
     <PopupWrapper>
       <Nav>
         <ButtonClose
-          onClick={() => toggleTransactionSettingPopup(false, dispatch)}
+          onClick={() => toggleTransactionSettingsPopup(false, dispatch)}
         >
           <Cross />
         </ButtonClose>
@@ -21,24 +21,12 @@ const Popup = ({ children }) => {
   );
 };
 
-// const Background = styled.div`
-//   height: 100%;
-//   width: 100%;
-//   background-color: #000;
-//   filter: blur(8px);
-//   position: absolute;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%);
-//   z-index: 100;
-// `;
-
 const PopupWrapper = styled.div`
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 101;
+  z-index: 1001;
 `;
 
 const Nav = styled.div`

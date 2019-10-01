@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 
@@ -29,6 +30,7 @@ import Skeleton from '../../../components/Skeleton';
 import { Info } from '../../../components/Icons';
 
 const Periods = ({ state = {} }) => {
+  const { t } = useTranslation();
   const { feesByPeriod = [], dataIsLoading } = state;
   return (
     <div>
@@ -46,7 +48,9 @@ const Periods = ({ state = {} }) => {
                   <TableHeaderMedium>SNX</TableHeaderMedium>
                 </TH>
                 <TH padding={'10px 20px'}>
-                  <TableHeaderMedium>PERIOD</TableHeaderMedium>
+                  <TableHeaderMedium>
+                    {t('mintrActions.claim.action.table.period')}
+                  </TableHeaderMedium>
                 </TH>
               </TR>
             </THead>
@@ -75,6 +79,7 @@ const Periods = ({ state = {} }) => {
 };
 
 const Action = ({
+  t,
   onDestroy,
   onClaim,
   onClaimHistory,
@@ -82,33 +87,33 @@ const Action = ({
   feesAreClaimable,
   feesAvailable,
   dataIsLoading,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
-          <ButtonTertiary onClick={onClaimHistory}>
-            Claim History ↗
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
+          <ButtonTertiary disabled={true} onClick={onClaimHistory}>
+            {t('mintrActions.claim.action.buttons.history')} ↗
           </ButtonTertiary>
         </Navigation>
-        <Top>
-          <Intro>
-            <ActionImage src="/images/actions/claim.svg" big />
-            <H1>CLAIM</H1>
-            <PLarge>
-              If you have locked your SNX and minted sUSD, you are eligible to
-              collect two kinds of rewards: SNX staking rewards, and sUSD
-              trading rewards generated on Synthetix.Exchange (sX).
-            </PLarge>
-          </Intro>
-        </Top>
+        <Intro>
+          <ActionImage src="/images/actions/claim.svg" big />
+          <H1 m={'10px 0'}>{t('mintrActions.claim.action.pageTitle')}</H1>
+          <PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
+        </Intro>
         <Middle>
           <Schedule>
-            <H5>Claimable periods:</H5>
+            <H5>{t('mintrActions.claim.action.table.title')}</H5>
             <Periods state={{ feesByPeriod, dataIsLoading }} />
             <Status>
-              <PMedium width="100%">Fee Claim Status:</PMedium>
+              <PMedium width="100%">
+                {t('mintrActions.claim.action.table.status')}
+              </PMedium>
               <State>
                 <Highlighted red={!feesAreClaimable} marginRight="8px">
                   {feesAreClaimable ? 'OPEN' : 'BLOCKED'}
@@ -120,42 +125,39 @@ const Action = ({
           <Details>
             <Box>
               <DataHeaderLarge>
-                Your available sUSD trading rewards:
+                {t('mintrActions.claim.action.tradingRewards')}
               </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[0]
                   ? formatCurrency(feesAvailable[0])
-                  : 0}{' '}
-                sUSD
+                  : 0}
               </Amount>
             </Box>
             <Box>
               <DataHeaderLarge>
-                Your available SNX staking rewards:
+                {t('mintrActions.claim.action.stakingRewards')}
               </DataHeaderLarge>
               <Amount>
                 {feesAvailable && feesAvailable[1]
                   ? formatCurrency(feesAvailable[1])
-                  : 0}{' '}
-                SNX
+                  : 0}
               </Amount>
             </Box>
           </Details>
         </Middle>
         <Bottom>
-          <TransactionPriceIndicator />
+          <TransactionPriceIndicator style={{ margin: '10px 0' }} />
           <ButtonPrimary
-            disabled={!feesAreClaimable}
+            disabled={
+              !feesAreClaimable || isFetchingGasLimit || gasEstimateError
+            }
             onClick={onClaim}
             margin="auto"
           >
-            CLAIM NOW
+            {t('mintrActions.claim.action.buttons.claim')}
           </ButtonPrimary>
           <Note>
-            <Subtext>
-              Note: if not collected in the current period it will be forfeited
-              and rolled over into the fee pool for the next fee period.
-            </Subtext>
+            <Subtext>{t('mintrActions.claim.action.note')}</Subtext>
           </Note>
         </Bottom>
       </Container>
@@ -174,7 +176,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 48px 56px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -182,15 +184,9 @@ const Container = styled.div`
   justify-content: space-around;
 `;
 
-const Top = styled.div`
-  height: auto;
-  margin: auto;
-  width: 100%;
-`;
-
 const Middle = styled.div`
   height: auto;
-  margin: 0px auto 16px auto;
+  margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -205,12 +201,12 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
-  max-width: 480px;
-  margin-bottom: 48px;
-  margin: 0px auto 24px auto;
+  width: 100%;
+  margin: 0px auto;
 `;
 
 const ActionImage = styled.img`
@@ -278,4 +274,4 @@ const Note = styled.div`
   max-width: 420px;
 `;
 
-export default Action;
+export default withTranslation()(Action);

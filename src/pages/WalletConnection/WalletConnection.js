@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 import {
@@ -56,15 +57,17 @@ const renderWalletButtons = dispatch => {
   });
 };
 
-const WalletConnection = () => {
+const WalletConnection = ({ t }) => {
   const { dispatch } = useContext(Store);
   return (
     <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
-          <WalletConnectionH1>Connect Wallet</WalletConnectionH1>
+          <WalletConnectionH1>
+            {t('walletConnection.intro.pageTitle')}
+          </WalletConnectionH1>
           <WalletConnectionPMega>
-            Please connect a wallet with your SNX holdings to continue.
+            {t('walletConnection.intro.pageSubtitle')}
           </WalletConnectionPMega>
         </HeadingContent>
         <BodyContent>{renderWalletButtons(dispatch)}</BodyContent>
@@ -142,4 +145,4 @@ const WalletTitle = styled.div`
   height: 120px;
 `;
 
-export default WalletConnection;
+export default withTranslation()(WalletConnection);

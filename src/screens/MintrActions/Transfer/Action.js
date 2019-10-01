@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
@@ -11,8 +12,10 @@ import {
 import { PLarge, H1, DataHeaderLarge } from '../../../components/Typography';
 import Input, { SimpleInput } from '../../../components/Input';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
+  t,
   onDestroy,
   onSend,
   balances,
@@ -22,22 +25,28 @@ const Action = ({
   sendDestination,
   setSendAmount,
   setSendDestination,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src="/images/actions/send.svg" big />
-            <H1>SEND</H1>
-            <PLarge>Transfer your ETH, SNX or Synths to another wallet.</PLarge>
+            <ActionImage src="/images/actions/transfer.svg" big />
+            <H1>{t('mintrActions.send.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.send.action.pageSubtitle')}</PLarge>
           </Intro>
           <Details>
             <Box>
-              <DataHeaderLarge>TRANSFERABLE AMOUNT:</DataHeaderLarge>
+              <DataHeaderLarge>
+                {t('mintrActions.send.action.available')}
+              </DataHeaderLarge>
               <Amount>
                 {formatCurrency(currentCurrency && currentCurrency.balance) ||
                   0}{' '}
@@ -48,7 +57,7 @@ const Action = ({
         </Top>
         <Middle>
           <Form>
-            <PLarge>Enter amount or select max available:</PLarge>
+            <PLarge>{t('mintrActions.send.action.amountInstruction')}</PLarge>
             <Input
               disabled={!currentCurrency}
               onChange={e => setSendAmount(e.target.value)}
@@ -57,16 +66,6 @@ const Action = ({
               currentSynth={currentCurrency}
               value={sendAmount}
               placeholder="0.00"
-              leftComponent={
-                <Type>
-                  <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
               rightComponent={
                 <ButtonMax
                   onClick={() =>
@@ -77,8 +76,9 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
             <PLarge marginTop="32px">
-              Enter wallet address to send funds to:
+              {t('mintrActions.send.action.walletInstruction')}
             </PLarge>
             <SimpleInput
               onChange={e => setSendDestination(e.target.value)}
@@ -90,11 +90,16 @@ const Action = ({
         <Bottom>
           <TransactionPriceIndicator />
           <ButtonPrimary
-            disabled={!sendDestination || !sendAmount}
+            disabled={
+              !sendDestination ||
+              !sendAmount ||
+              gasEstimateError ||
+              isFetchingGasLimit
+            }
             onClick={onSend}
             margin="auto"
           >
-            SEND NOW
+            {t('mintrActions.send.action.buttons.send')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -113,7 +118,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,6 +145,7 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
@@ -183,12 +189,4 @@ const Form = styled.div`
   flex-direction: column;
 `;
 
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-export default Action;
+export default withTranslation()(Action);

@@ -3,7 +3,7 @@ import Mint from './Mint';
 import Burn from './Burn';
 import Claim from './Claim';
 import Trade from './Trade';
-import Send from './Send';
+import Send from './Transfer';
 import Slider from '../../components/ScreenSlider';
 
 const getActionComponent = action => {
@@ -16,7 +16,7 @@ const getActionComponent = action => {
       return Claim;
     case 'trade':
       return Trade;
-    case 'send':
+    case 'transfer':
       return Send;
     default:
       return;

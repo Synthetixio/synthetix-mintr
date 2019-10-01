@@ -55,10 +55,6 @@ export const ListCell = styled.td`
   }
 `;
 
-// export const List = styled.div`
-//   width: 100%;
-// `;
-
 export const BodyRow = styled.div`
   cursor: pointer;
   margin-top: 20px;

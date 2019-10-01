@@ -34,7 +34,7 @@ const Root = () => {
     },
   } = useContext(Store);
   return (
-    <Suspense fallback="loading">
+    <Suspense fallback={<div></div>}>
       <RootWrapper>
         {renderCurrentPage(currentPage)}
         <NotificationCenter></NotificationCenter>
@@ -47,11 +47,6 @@ const RootWrapper = styled('div')`
   position: relative;
   background: ${props => props.theme.colorStyles.background};
   width: 100%;
-  // & > * {
-  //   transition-property: background, border, color;
-  //   transition-duration: 0.3s;
-  //   transition-timing-function: ease-out;
-  // }
 `;
 
 export default hot(Root);

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { formatDistanceToNow } from 'date-fns';
+import { withTranslation, useTranslation, Trans } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -8,54 +9,21 @@ import { formatCurrency } from '../../helpers/formatters';
 import { useFetchData } from './fetchData';
 
 import Header from '../../components/Header';
-import PieChart from '../../components/PieChart';
+import BarChart from '../../components/BarChart';
 import Table from '../../components/Table';
 import {
   DataLarge,
-  DataSmall,
   DataHeaderLarge,
   H5,
+  H6,
   Figure,
   ButtonTertiaryLabel,
 } from '../../components/Typography';
 import { Info } from '../../components/Icons';
 import Skeleton from '../../components/Skeleton';
 
-const Balances = ({ state }) => {
-  const { balances, prices, theme, dashboardIsLoading } = state;
-  return (
-    <BalanceRow>
-      {['snx', 'sUSD', 'eth'].map(currency => {
-        const currencyUnit =
-          currency === 'sUSD' ? currency : currency.toUpperCase();
-        return (
-          <BalanceItem key={currency}>
-            <CurrencyIcon src={`/images/currencies/${currency}.svg`} />
-            <Balance>
-              {!dashboardIsLoading ? (
-                <DataHeaderLarge>
-                  {formatCurrency(balances[currency]) || '--'}
-                  {currencyUnit}
-                </DataHeaderLarge>
-              ) : (
-                <Skeleton />
-              )}
-              {!dashboardIsLoading ? (
-                <DataHeaderLarge color={theme.colorStyles.buttonTertiaryText}>
-                  ${formatCurrency(prices[currency]) || '--'} {currencyUnit}
-                </DataHeaderLarge>
-              ) : (
-                <Skeleton />
-              )}
-            </Balance>
-          </BalanceItem>
-        );
-      })}
-    </BalanceRow>
-  );
-};
-
 const RewardInfo = ({ state }) => {
+  const { t } = useTranslation();
   const { rewardData, theme, dashboardIsLoading } = state;
   if (dashboardIsLoading) return <Skeleton />;
   const content = rewardData.feesAreClaimable ? (
@@ -63,18 +31,20 @@ const RewardInfo = ({ state }) => {
       <Highlighted>
         {rewardData.currentPeriodEnd
           ? formatDistanceToNow(rewardData.currentPeriodEnd)
-          : '--'}{' '}
+          : '--'}
       </Highlighted>{' '}
-      left to claim rewards
+      {t('dashboard.rewards.open')}
     </DataLarge>
   ) : (
     <DataLarge>
-      Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      <Trans i18nKey='dashboard.rewards.blocked'>
+        Claiming rewards <Highlighted red={true}>blocked</Highlighted>
+      </Trans>
     </DataLarge>
   );
 
   return (
-    <Row padding="0px 8px">
+    <Row padding='0px 8px'>
       {content}
       <Info theme={theme} />
     </Row>
@@ -82,159 +52,175 @@ const RewardInfo = ({ state }) => {
 };
 
 const CollRatios = ({ state }) => {
+  const { t } = useTranslation();
   const { debtData, dashboardIsLoading } = state;
   return (
-    <Row margin="0 0 22px 0">
+    <Row margin='0 0 22px 0'>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.currentCRatio
               ? Math.round(100 / debtData.currentCRatio)
-              : '--'}
+              : 0}
             %
           </Figure>
         )}
-        <DataLarge>Current collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.current')}</DataLarge>
       </Box>
       <Box>
         {dashboardIsLoading ? (
-          <Skeleton style={{ marginBottom: '8px' }} height="25px" />
+          <Skeleton style={{ marginBottom: '8px' }} height='25px' />
         ) : (
           <Figure>
             {debtData.targetCRatio
               ? Math.round(100 / debtData.targetCRatio)
-              : '--'}
+              : 0}
             %
           </Figure>
         )}
-        <DataLarge>Target collateralization ratio</DataLarge>
+        <DataLarge>{t('dashboard.ratio.target')}</DataLarge>
       </Box>
     </Row>
   );
 };
 
-const Pie = ({ state }) => {
-  const { balances, debtData, theme, dashboardIsLoading } = state;
+const Charts = ({ state }) => {
+  const { t } = useTranslation();
+  const { balances, debtData, escrowData } = state;
   const snxLocked =
     balances.snx &&
     debtData.currentCRatio &&
     debtData.targetCRatio &&
     balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
 
+  const totalEscrow = escrowData.reward + escrowData.tokenSale;
+
+  const chartData = [
+    [
+      {
+        label: t('dashboard.holdings.locked'),
+        value: balances.snx - debtData.transferable,
+      },
+      {
+        label: t('dashboard.holdings.transferable'),
+        value: debtData.transferable,
+      },
+    ],
+    [
+      {
+        label: t('dashboard.holdings.staking'),
+        value: snxLocked,
+      },
+      {
+        label: t('dashboard.holdings.nonStaking'),
+        value: balances.snx - snxLocked,
+      },
+    ],
+    [
+      {
+        label: t('dashboard.holdings.escrowed'),
+        value: totalEscrow,
+      },
+      {
+        label: t('dashboard.holdings.nonEscrowed'),
+        value: balances.snx - totalEscrow,
+      },
+    ],
+  ];
+
   return (
     <Box full={true}>
-      <Row padding="32px 16px">
-        {dashboardIsLoading ? (
-          <Skeleton width={'160px'} height={'160px'} curved={true} />
-        ) : (
-          <PieChart
-            data={[
-              {
-                name: 'staking',
-                value: snxLocked,
-                color: theme.colorStyles.accentLight,
-              },
-              {
-                name: 'transferable',
-                value: debtData.transferable,
-                color: theme.colorStyles.accentDark,
-              },
-            ]}
-          />
-        )}
-        <PieChartLegend>
-          <DataHeaderLarge margin="0px 0px 24px 0px">
-            YOUR SNX HOLDINGS:
-          </DataHeaderLarge>
-          {dashboardIsLoading ? (
-            <Skeleton
-              style={{ marginTop: '16px' }}
-              width={'100%'}
-              height={'45px'}
-            />
-          ) : (
-            <LegendRow
-              style={{ backgroundColor: theme.colorStyles.accentLight }}
-            >
-              <DataLarge>{formatCurrency(snxLocked)} SNX</DataLarge>
-              <DataSmall>STAKING</DataSmall>
-            </LegendRow>
-          )}
-          {dashboardIsLoading ? (
-            <Skeleton
-              style={{ marginTop: '16px' }}
-              width={'100%'}
-              height={'45px'}
-            />
-          ) : (
-            <LegendRow
-              style={{ backgroundColor: theme.colorStyles.accentDark }}
-            >
-              <DataLarge>{formatCurrency(debtData.transferable)} SNX</DataLarge>
-              <DataSmall>TRANSFERABLE</DataSmall>
-            </LegendRow>
-          )}
-        </PieChartLegend>
-      </Row>
+      <BoxInner>
+        <BoxHeading>
+          <H6 style={{ textTransform: 'uppercase' }}>
+            {t('dashboard.chart.title')}
+          </H6>
+          <H6>{formatCurrency(balances.snx) || 0} SNX</H6>
+        </BoxHeading>
+        {chartData.map((data, i) => {
+          return <BarChart key={i} data={data} />;
+        })}
+      </BoxInner>
     </Box>
   );
 };
 
-const processTableData = state => {
-  const { balances, prices, debtData, synthData } = state;
-  return [
-    {
-      rowLegend: 'balance',
-      snx: balances.snx ? formatCurrency(balances.snx) : '--',
-      sUSD: balances.sUSD ? formatCurrency(balances.sUSD) : '--',
-      eth: balances.eth ? formatCurrency(balances.eth) : '--',
-      synths: synthData.total ? formatCurrency(synthData.total) + 'sUSD' : '--',
-      debt: debtData.debtBalance
-        ? formatCurrency(debtData.debtBalance) + 'sUSD'
-        : '--',
-    },
-    {
-      rowLegend: '$ USD',
-      snx: balances.snx ? formatCurrency(balances.snx * prices.snx) : '--',
-      sUSD: balances.sUSD ? formatCurrency(balances.sUSD * prices.sUSD) : '--',
-      eth: balances.eth ? formatCurrency(balances.eth * prices.eth) : '--',
-      synths: synthData.total
-        ? formatCurrency(synthData.total * prices.sUSD)
-        : '--',
-      debt: debtData.debtBalance
-        ? formatCurrency(debtData.debtBalance * prices.sUSD)
-        : '--',
-    },
-  ];
+const getBalancePerAsset = (
+  asset,
+  { balances, prices, debtData, synthData }
+) => {
+  let balance,
+    usdValue = 0;
+  switch (asset) {
+    case 'SNX':
+    case 'sUSD':
+    case 'ETH':
+      balance = balances[asset.toLowerCase()];
+      usdValue = balances[asset.toLowerCase()] * prices[asset.toLowerCase()];
+      break;
+    case 'Synths':
+      balance = synthData.total;
+      usdValue = synthData.total * prices.susd;
+      break;
+    case 'Debt':
+      balance = debtData.debtBalance;
+      usdValue = debtData.debtBalance * prices.susd;
+      break;
+    default:
+      break;
+  }
+  return { balance, usdValue };
+};
+
+const processTableData = (state, t) => {
+  return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
+    const iconName = ['Synths', 'Debt'].includes(dataType)
+      ? 'snx'
+      : dataType.toLowerCase();
+    const assetName = ['Synths', 'Debt'].includes(dataType)
+      ? t(`dashboard.table.${dataType.toLowerCase()}`)
+      : dataType;
+    const { balance, usdValue } = getBalancePerAsset(dataType, state);
+    return {
+      rowLegend: (
+        <TableIconCell>
+          <CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
+          {assetName}
+        </TableIconCell>
+      ),
+      balance: balance ? formatCurrency(balance) : 0,
+      usdValue: `$${usdValue ? formatCurrency(usdValue) : 0}`,
+    };
+  });
 };
 
 const BalanceTable = ({ state }) => {
+  const { t } = useTranslation();
   const { dashboardIsLoading } = state;
-  const data = processTableData(state);
+  const data = processTableData(state, t);
   return (
-    <Row margin="22px 0 0 0">
-      {dashboardIsLoading ? (
-        <Skeleton width={'100%'} height={'130px'} />
-      ) : (
-        <Table
-          header={[
-            { key: 'rowLegend', value: '' },
-            { key: 'snx', value: 'snx' },
-            { key: 'sUSD', value: 'susd' },
-            { key: 'eth', value: 'eth' },
-            { key: 'synths', value: 'synths' },
-            { key: 'debt', value: 'debt' },
-          ]}
-          data={data}
-        />
-      )}
-    </Row>
+    <Box style={{ marginTop: '16px' }} full={true}>
+      <BoxInner>
+        {dashboardIsLoading ? (
+          <Skeleton width={'100%'} height={'242px'} />
+        ) : (
+          <Table
+            header={[
+              { key: 'rowLegend', value: '' },
+              { key: 'balance', value: 'balance' },
+              { key: 'usdValue', value: '$ usd' },
+            ]}
+            data={data}
+          />
+        )}
+      </BoxInner>
+    </Box>
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({ t }) => {
   const theme = useContext(ThemeContext);
   const {
     state: {
@@ -250,6 +236,7 @@ const Dashboard = () => {
     rewardData = {},
     debtData = {},
     synthData = {},
+    escrowData = {},
   } = useFetchData(currentWallet, successQueue);
 
   return (
@@ -258,23 +245,25 @@ const Dashboard = () => {
       <Content>
         <Container>
           <ContainerHeader>
-            <H5>Current Balances & Prices:</H5>
-          </ContainerHeader>
-          <Balances state={{ balances, prices, theme, dashboardIsLoading }} />
-        </Container>
-        <Container curved={true}>
-          <RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
-        </Container>
-        <Container>
-          <ContainerHeader>
-            <H5>Wallet Details:</H5>
+            <H5>{t('dashboard.sections.wallet')}</H5>
             <DataHeaderLarge
-              margin="0px 0px 22px 0px"
+              margin='0px 0px 22px 0px'
               color={theme.colorStyles.body}
-            ></DataHeaderLarge>
+            />
           </ContainerHeader>
           <CollRatios state={{ debtData, dashboardIsLoading }} />
-          <Pie state={{ balances, debtData, theme, dashboardIsLoading }} />
+          <Container curved={true}>
+            <RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
+          </Container>
+          <Charts
+            state={{
+              balances,
+              debtData,
+              theme,
+              dashboardIsLoading,
+              escrowData,
+            }}
+          />
           <BalanceTable
             state={{
               balances,
@@ -284,17 +273,17 @@ const Dashboard = () => {
               dashboardIsLoading,
             }}
           />
-          <Row margin="18px 0 0 0 ">
-            <Link href="https://synthetix.exchange" target="_blank">
+          <Row margin='18px 0 0 0 '>
+            <Link href='https://synthetix.exchange' target='_blank'>
               <ButtonTertiaryLabel>
-                Go to Synthetix.Exchange
+                {t('dashboard.buttons.exchange')}
               </ButtonTertiaryLabel>
             </Link>
-            <Link>
+            {/* <Link>
               <ButtonTertiaryLabel>
-                View your Synths balance
+                {t('dashboard.buttons.synths')}
               </ButtonTertiaryLabel>
-            </Link>
+            </Link> */}
           </Row>
         </Container>
       </Content>
@@ -316,6 +305,8 @@ const DashboardWrapper = styled('div')`
   // transition: all ease-out 0.5s;
   flex-shrink: 0;
   border-right: 1px solid ${props => props.theme.colorStyles.borders};
+  padding-bottom: 40px;
+  min-height: 100vh;
 `;
 
 const Content = styled('div')`
@@ -327,31 +318,6 @@ const Container = styled.div`
   border-radius: ${props => (props.curved ? '40px' : '5px')};
   padding: ${props => (props.curved ? '15px' : '32px 24px')};
   margin: ${props => (props.curved ? '16px 0' : '0')};
-`;
-
-const BalanceRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BalanceItem = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const CurrencyIcon = styled.img`
-  width: 40px;
-  height: 40px;
-`;
-
-const Balance = styled.div`
-  font-family: 'apercu-medium';
-  margin-left: 12px;
-  display: flex;
-  flex-direction: column;
-  & :first-child {
-    margin-bottom: 8px;
-  }
 `;
 
 const ContainerHeader = styled.div`
@@ -388,19 +354,16 @@ const Box = styled.div`
   align-items: center;
 `;
 
-const PieChartLegend = styled.div`
-  flex: 1;
-  margin-left: 18px;
+const BoxInner = styled.div`
+  padding: 24px;
+  width: 100%;
 `;
 
-const LegendRow = styled.div`
-  margin-top: 16px;
-  height: 45px;
-  padding: 0 15px
+const BoxHeading = styled.div`
+  witdh: 100%;
   display: flex;
-  align-items: center;
-  border-radius: 2px;
   justify-content: space-between;
+  border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
 const Link = styled.a`
@@ -414,4 +377,15 @@ const Link = styled.a`
   border-radius: 2px;
 `;
 
-export default Dashboard;
+const CurrencyIcon = styled.img`
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+`;
+
+const TableIconCell = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export default withTranslation()(Dashboard);

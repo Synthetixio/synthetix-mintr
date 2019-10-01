@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
@@ -10,47 +11,39 @@ import {
 } from '../../../components/Button';
 import { PLarge, H1 } from '../../../components/Typography';
 import Input from '../../../components/Input';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 const Action = ({
+  t,
   onDestroy,
   onMint,
   issuableSynths,
   mintAmount,
   setMintAmount,
+  isFetchingGasLimit,
+  gasEstimateError,
 }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={onDestroy}>Cancel</ButtonTertiary>
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
+          </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
             <ActionImage src="/images/actions/mint.svg" big />
-            <H1>MINT</H1>
-            <PLarge>
-              Minting sUSD will lock your SNX, increasing your collateralization
-              ratio, and will allow you to begin earning fees if you choose to
-              sell your sUSD.
-            </PLarge>
+            <H1>{t('mintrActions.mint.action.pageTitle')}</H1>
+            <PLarge>{t('mintrActions.mint.action.pageSubtitle')}</PLarge>
           </Intro>
           <Form>
-            <PLarge>Confirm or enter amount to mint:</PLarge>
+            <PLarge>{t('mintrActions.mint.action.instruction')}</PLarge>
             <Input
               singleSynth={'sUSD'}
               onChange={e => setMintAmount(e.target.value)}
               value={mintAmount}
               placeholder="0.00"
-              leftComponent={
-                <Type>
-                  <img
-                    src="/images/currencies/sUSD.svg"
-                    height="24px"
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
               rightComponent={
                 <ButtonMax
                   onClick={() => {
@@ -59,12 +52,17 @@ const Action = ({
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
           </Form>
         </Top>
         <Bottom>
           <TransactionPriceIndicator />
-          <ButtonPrimary onClick={onMint} margin="auto">
-            MINT NOW
+          <ButtonPrimary
+            disabled={isFetchingGasLimit || gasEstimateError}
+            onClick={onMint}
+            margin="auto"
+          >
+            {t('mintrActions.mint.action.buttons.mint')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -83,7 +81,7 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 0 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -104,6 +102,7 @@ const Navigation = styled.div`
   width: 100%;
   display: flex;
   text-align: left;
+  padding: 20px 0;
 `;
 
 const Intro = styled.div`
@@ -121,12 +120,4 @@ const Form = styled.div`
   margin: 0px 0px 80px 0px;
 `;
 
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-export default Action;
+export default withTranslation()(Action);

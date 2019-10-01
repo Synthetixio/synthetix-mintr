@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
@@ -8,40 +9,43 @@ import { ButtonPrimary } from '../../components/Button';
 import { H1, H2, PMega, PLarge } from '../../components/Typography';
 import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
-const Landing = () => {
+const Landing = ({ t }) => {
   const { dispatch } = useContext(Store);
   return (
     <OnBoardingPageContainer>
       <Content>
         <HeadingContent>
-          <LandingH1>Mint, Burn, Claim</LandingH1>
-          <LandingPMega>
-            Mintr is a dApp for SNX holders to mint synthetic assets (Synths)
-            and participate in the Synthetix Network.
-          </LandingPMega>
+          <LandingH1>{t('landing.intro.pageTitle')}</LandingH1>
+          <LandingPMega>{t('landing.intro.pageSubtitle')}</LandingPMega>
         </HeadingContent>
         <BodyContent>
           <Functionalities>
             <Functionality>
               <Icon src="images/actions/mint.svg" />
-              <LandingH2>Mint Synths</LandingH2>
-              <LandingPLarge>By locking up SNX collateral</LandingPLarge>
+              <LandingH2>{t('landing.functionality.mintTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.mintDescription')}
+              </LandingPLarge>
             </Functionality>
             <Functionality>
               <Icon src="images/actions/burn.svg" />
-              <LandingH2>Burn Synths</LandingH2>
-              <LandingPLarge>To unlock SNX</LandingPLarge>
+              <LandingH2>{t('landing.functionality.burnTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.burnDescription')}
+              </LandingPLarge>
             </Functionality>
             <Functionality>
               <Icon src="images/actions/claim.svg" />
-              <LandingH2>Claim Fees</LandingH2>
-              <LandingPLarge>From the Synthetix Network</LandingPLarge>
+              <LandingH2>{t('landing.functionality.claimTitle')}</LandingH2>
+              <LandingPLarge>
+                {t('landing.functionality.claimDescription')}
+              </LandingPLarge>
             </Functionality>
           </Functionalities>
           <ButtonPrimary
             onClick={() => updateCurrentPage('walletConnection', dispatch)}
           >
-            connect to wallet
+            {t('landing.buttons.connect')}
           </ButtonPrimary>
         </BodyContent>
       </Content>
@@ -83,25 +87,26 @@ const LandingH1 = styled(H1)`
 const LandingH2 = styled(H2)`
   text-transform: capitalize;
   font-size: 22px;
+  margin: 30px 0px 16px 0px;
 `;
 
 const LandingPMega = styled(PMega)`
   font-size: 22px;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   text-align: center;
   line-height: 32px;
 `;
 
 const LandingPLarge = styled(PLarge)`
   font-size: 18px;
-  font-family: 'apercu-medium';
+  font-family: 'apercu-regular';
   margin-top: 0;
 `;
 
 const Functionalities = styled.div`
   display: flex;
   width: 100%;
-  margin: 80px auto 140px auto;
+  margin: 80px auto 100px auto;
   justify-content: space-between;
   color: white;
 `;
@@ -119,4 +124,4 @@ const Icon = styled.img`
   height: 64px;
 `;
 
-export default Landing;
+export default withTranslation()(Landing);

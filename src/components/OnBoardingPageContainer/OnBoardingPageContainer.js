@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ButtonTertiary } from '../../components/Button';
 import { Store } from '../../store';
+import { withTranslation } from 'react-i18next';
 
-const OnBoardingPageContainer = ({ children }) => {
+const OnBoardingPageContainer = ({ t, children }) => {
   const {
     state: {
       ui: { themeIsDark },
+      // wallet: { networkName },
     },
   } = useContext(Store);
   return (
@@ -16,23 +18,21 @@ const OnBoardingPageContainer = ({ children }) => {
           <Logo
             src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`}
           />
-          <ButtonTertiary>MAINNET</ButtonTertiary>
+          {/* <Network>{networkName}</Network> */}
         </HeaderBlock>
         <HeaderBlock>
-          <ButtonTertiary>What is Synthetix?</ButtonTertiary>
+          <ButtonTertiary>{t('onboarding.buttons.support')}</ButtonTertiary>
+          <ButtonTertiary>{t('onboarding.buttons.synthetix')}</ButtonTertiary>
         </HeaderBlock>
       </Header>
       {children}
-      <Footer>
-        <ButtonTertiary>Having trouble?</ButtonTertiary>
-      </Footer>
     </PageContainer>
   );
 };
 
 const PageContainer = styled.div`
   padding: 42px;
-  height: 100%;
+  height: 100vh;
 `;
 
 const Header = styled.div`
@@ -42,6 +42,9 @@ const Header = styled.div`
 
 const HeaderBlock = styled.div`
   display: flex;
+  & :first-child:not(:last-child) {
+    margin-right: 10px;
+  }
 `;
 
 const Logo = styled.img`
@@ -49,12 +52,15 @@ const Logo = styled.img`
   margin-right: 18px;
 `;
 
-const Footer = styled.div`
-  width: 100%;
-  display: flex;
-  margin-top: 50px;
-  justify-content: center;
-  bottom: 40px;
-`;
+// const Network = styled.div`
+//   margin-top: 4px;
+//   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+//   display: flex;
+//   align-items: center;
+//   text-transform: uppercase;
+//   color: ${props => props.theme.colorStyles.themeToggleFontColor};
+//   padding: 5px 10px;
+//   font-size: 14px;
+// `;
 
-export default OnBoardingPageContainer;
+export default withTranslation()(OnBoardingPageContainer);
