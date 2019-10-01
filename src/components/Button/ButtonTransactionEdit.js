@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { toggleTransactionSettingPopup } from '../../ducks/ui';
+import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 import { Store } from '../../store';
 
 const Button = () => {
   const { dispatch } = useContext(Store);
   return (
     <ButtonWrapper
-      onClick={() => toggleTransactionSettingPopup(true, dispatch)}
+      onClick={() => toggleTransactionSettingsPopup(true, dispatch)}
     >
       EDIT
     </ButtonWrapper>

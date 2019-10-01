@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import OutsideClickHandler from 'react-outside-click-handler';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
@@ -8,13 +9,15 @@ import { Store } from '../../store';
 import { WalletStatusButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
-import { updateCurrentPage } from '../../ducks/ui';
+import { updateCurrentPage, toggleLanguageDropdown } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
+
+import { LanguageDropdown } from '../../components/Dropdown';
 
 const Header = ({ t, currentWallet }) => {
   const {
     state: {
-      ui: { themeIsDark },
+      ui: { themeIsDark, languageDropdownIsVisible },
       wallet: { networkName },
     },
     dispatch,
@@ -34,15 +37,28 @@ const Header = ({ t, currentWallet }) => {
           {shortenAddress(currentWallet)}
         </WalletStatusButton>
         <RoundButton
-          as="a"
-          href="https://help.synthetix.io/hc/en-us/categories/360001538994-Mintr"
-          target="_blank"
+          as='a'
+          href='https://help.synthetix.io/hc/en-us/categories/360001538994-Mintr'
+          target='_blank'
         >
           <SupportBubble />
         </RoundButton>
-        <RoundButton>
-          <Globe />
-        </RoundButton>
+        <LanguageButtonWrapper>
+          <RoundButton
+            onClick={() =>
+              toggleLanguageDropdown(!languageDropdownIsVisible, dispatch)
+            }
+          >
+            <Globe />
+          </RoundButton>
+          {languageDropdownIsVisible ? (
+            <OutsideClickHandler
+              onOutsideClick={() => toggleLanguageDropdown(false, dispatch)}
+            >
+              <LanguageDropdown />
+            </OutsideClickHandler>
+          ) : null}
+        </LanguageButtonWrapper>
         <ThemeSwitcher
           onLabel={t('dashboard.header.onLabel')}
           offLabel={t('dashboard.header.offLabel')}
@@ -81,6 +97,10 @@ const RoundButton = styled.button`
   width: 40px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+`;
+
+const LanguageButtonWrapper = styled.div`
+  position: relative;
 `;
 
 const Network = styled.div`

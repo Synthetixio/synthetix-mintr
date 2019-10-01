@@ -4,7 +4,7 @@ import { DataHeaderLarge, DataLarge } from '../Typography';
 
 const Table = ({ data, header }) => {
   return (
-    <TableElement cellSpacing="0">
+    <TableElement cellSpacing='0'>
       <Thead>
         <Tr>
           {header.map((h, i) => (
@@ -47,7 +47,7 @@ const Thead = styled.thead`
 const Tbody = styled.tbody`
   color: ${props => props.theme.colorStyles.body};
   & > :nth-child(odd) {
-    background-color: ${props => props.theme.colorStyles.accentLight};
+    background-color: ${props => props.theme.colorStyles.listBackgroundFocus};
   }
 `;
 
@@ -72,7 +72,6 @@ const Td = styled.td`
   height: 40px;
   font-size: 12px;
   font-family: 'apercu-medium';
-  border-top: 1px solid ${props => props.theme.colorStyles.borders};
   text-align: ${props => (props.alignRight ? 'right' : 'left')};
   & :first-child {
     border-top: none;
