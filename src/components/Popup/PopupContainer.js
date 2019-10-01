@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Cross } from '../Icons';
 import { Store } from '../../store';
 
-import { toggleTransactionSettingPopup } from '../../ducks/ui';
+import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 
 const Popup = ({ children }) => {
   const { dispatch } = useContext(Store);
@@ -11,7 +11,7 @@ const Popup = ({ children }) => {
     <PopupWrapper>
       <Nav>
         <ButtonClose
-          onClick={() => toggleTransactionSettingPopup(false, dispatch)}
+          onClick={() => toggleTransactionSettingsPopup(false, dispatch)}
         >
           <Cross />
         </ButtonClose>

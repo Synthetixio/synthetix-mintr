@@ -3,18 +3,21 @@ import styled from 'styled-components';
 
 import { PLarge } from '../Typography';
 
-const LanguagePopup = () => {
+const LanguageDropdown = () => {
   return (
     <Wrapper>
       <Languages>
         {['English', 'French'].map(language => {
           return (
-            <Option key={language} onClick={() => console.log(language)}>
+            <LanguageElement
+              key={language}
+              onClick={() => console.log(language)}
+            >
               <LanguageImage
                 src={`/images/languages/${language}.svg`}
               ></LanguageImage>
               <PLarge>{language}</PLarge>
-            </Option>
+            </LanguageElement>
           );
         })}
       </Languages>
@@ -25,8 +28,6 @@ const LanguagePopup = () => {
 const Wrapper = styled.div`
   margin-top: 16px;
   padding: 16px;
-  height: auto;
-  width: auto;
   background-color: ${props => props.theme.colorStyles.panels};
   border: 1px solid ${props => props.theme.colorStyles.borders};
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
@@ -40,20 +41,18 @@ const Wrapper = styled.div`
 `;
 
 const Languages = styled.ul`
-  height: auto;
   padding: 0;
   margin: 0;
 `;
 
-const Option = styled.li`
+const LanguageElement = styled.li`
   padding: 16px;
   display: flex;
   align-items: center;
   border-radius: 2px;
   cursor: pointer;
   &:hover {
-    background-color: ${props =>
-      props.theme.colorStyles.paginatorButtonBackgroundHover};
+    background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
     color: ${props => props.theme.colorStyles.buttonPrimaryText};
   }
 `;
@@ -63,4 +62,4 @@ const LanguageImage = styled.img`
   margin-right: 16px;
 `;
 
-export default LanguagePopup;
+export default LanguageDropdown;

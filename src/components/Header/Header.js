@@ -9,15 +9,15 @@ import { Store } from '../../store';
 import { WalletStatusButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
-import { updateCurrentPage, toggleLanguagePopup } from '../../ducks/ui';
+import { updateCurrentPage, toggleLanguageDropdown } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
 
-import { LanguagePopup } from '../../components/Popup';
+import { LanguageDropdown } from '../../components/Dropdown';
 
 const Header = ({ t, currentWallet }) => {
   const {
     state: {
-      ui: { themeIsDark, languagePopupIsVisible },
+      ui: { themeIsDark, languageDropdownIsVisible },
       wallet: { networkName },
     },
     dispatch,
@@ -46,16 +46,16 @@ const Header = ({ t, currentWallet }) => {
         <LanguageButtonWrapper>
           <RoundButton
             onClick={() =>
-              toggleLanguagePopup(!languagePopupIsVisible, dispatch)
+              toggleLanguageDropdown(!languageDropdownIsVisible, dispatch)
             }
           >
             <Globe />
           </RoundButton>
-          {languagePopupIsVisible ? (
+          {languageDropdownIsVisible ? (
             <OutsideClickHandler
-              onOutsideClick={() => toggleLanguagePopup(false, dispatch)}
+              onOutsideClick={() => toggleLanguageDropdown(false, dispatch)}
             >
-              <LanguagePopup />
+              <LanguageDropdown />
             </OutsideClickHandler>
           ) : null}
         </LanguageButtonWrapper>

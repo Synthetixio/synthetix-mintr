@@ -7,7 +7,7 @@ import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
 import { updateGasPrice } from '../../ducks/network';
-import { toggleTransactionSettingPopup } from '../../ducks/ui';
+import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 
 import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
@@ -106,7 +106,7 @@ const TransactionSettingsPopup = ({ t }) => {
           <ButtonPrimary
             onClick={() => {
               updateGasPrice(currentTransactionSettings.gasPrice, dispatch);
-              toggleTransactionSettingPopup(false, dispatch);
+              toggleTransactionSettingsPopup(false, dispatch);
             }}
           >
             {t('transactionSettings.button.submit')}
