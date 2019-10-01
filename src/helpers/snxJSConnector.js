@@ -79,7 +79,7 @@ export const connectToWallet = async type => {
       unlockReason: 'NetworkNotSupported',
     };
   }
-  const signer = new snxJSConnector.signers[type]();
+  const signer = new snxJSConnector.signers[type]({});
   snxJSConnector.setContractSettings({
     networkId,
     signer,

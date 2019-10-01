@@ -61,7 +61,7 @@
     "style-loader": "0.23.1",
     "styled-components": "^4.3.2",
     "styled-system": "^5.1.0",
-    "synthetix-js": "^2.10.5",
+    "synthetix-js": "^2.10.5-2",
     "ts-pnp": "1.1.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "1.1.2",
