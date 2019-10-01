@@ -1,12 +1,8 @@
 import React, { Fragment, useContext } from 'react';
 import styled from 'styled-components';
-import { SlidePage } from '../../components/Slider';
+import { SlidePage } from '../../components/ScreenSlider';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
-import {
-  PLarge,
-  PageTitle,
-  Subtext,
-} from '../../components/Typography';
+import { PLarge, PageTitle, Subtext } from '../../components/Typography';
 import { Store } from '../../store';
 
 const Success = ({ goHome, transaction }) => {
@@ -19,10 +15,11 @@ const Success = ({ goHome, transaction }) => {
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/success.svg' big />
+          <ActionImage src="/images/success.svg" big />
           <PageTitle>Success!</PageTitle>
           <PLarge>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </PLarge>
         </Intro>
       </Top>
@@ -33,15 +30,18 @@ const Success = ({ goHome, transaction }) => {
       <Bottom>
         <Buttons>
           <ButtonSecondary
-            href={transaction && `https://${
-              networkName === 'mainnet' ? '' : networkName + '.'
-            }etherscan.io/tx/${transaction.hash}`}
+            href={
+              transaction &&
+              `https://${
+                networkName === 'mainnet' ? '' : networkName + '.'
+              }etherscan.io/tx/${transaction.hash}`
+            }
             as="a"
             target="_blank"
-          >VERIFY TRANSACTION</ButtonSecondary>
-          <ButtonPrimary onClick={goHome}>
-            FINISH & RETURN HOME
-          </ButtonPrimary>
+          >
+            VERIFY TRANSACTION
+          </ButtonSecondary>
+          <ButtonPrimary onClick={goHome}>FINISH & RETURN HOME</ButtonPrimary>
         </Buttons>
       </Bottom>
     </Fragment>
@@ -55,9 +55,7 @@ const Failure = ({ error, goHome }) => {
         <Intro>
           <ActionImage src="/images/failure.svg" big />
           <PageTitle>Something went wrong...</PageTitle>
-          {error.code ? (
-            <PLarge>Code: {error.code}</PLarge>
-          ) : null}
+          {error.code ? <PLarge>Code: {error.code}</PLarge> : null}
           <PLarge>{error.message}</PLarge>
         </Intro>
       </Top>
@@ -117,7 +115,7 @@ const ActionImage = styled.img`
 
 const Buttons = styled.div`
   height: auto;
-  &>:first-child {
+  & > :first-child {
     margin-bottom: 24px;
   }
 `;
