@@ -1,7 +1,6 @@
 import { SynthetixJs } from 'synthetix-js';
 import { getEthereumNetwork } from './networkHelper';
-import WalletLink from 'walletlink';
-
+/* eslint-disable */
 let snxJSConnector = {
   initialized: false,
   signers: SynthetixJs.signers,
@@ -60,7 +59,45 @@ const connectToMetamask = async (networkId, name, signer) => {
   }
 };
 
-const connectToHardwareWallet = type => {
+const connectToCoinbase = async (networkId, type, signer) => {
+  try {
+    snxJSConnector.setContractSettings({
+      networkId,
+      provider: snxJSConnector.snxJS.ethers.getDefaultProvider(
+        name && name.toLowerCase()
+      ),
+      signer: signer,
+    });
+    const accounts = await snxJSConnector.signer.getNextAddresses();
+    if (accounts && accounts.length > 0) {
+      return {
+        currentWallet: accounts[0],
+        availableWallets: accounts,
+        walletType: 'Coinbase',
+        unlocked: true,
+        networkId,
+        networkName: name.toLowerCase(),
+      };
+    } else {
+      return {
+        walletType: 'Metamask',
+        unlocked: false,
+        unlockReason: 'MetamaskNoAccounts',
+      };
+    }
+    // We updateWalletStatus with all the infos
+  } catch (e) {
+    console.log(e);
+    return {
+      walletType: 'Metamask',
+      unlocked: false,
+      unlockReason: 'ErrorWhileConnectingToMetamask',
+      unlockMessage: e,
+    };
+  }
+};
+
+const connectToHardwareWallet = (networkId, type) => {
   return {
     walletType: type,
     unlocked: true,
@@ -80,34 +117,29 @@ export const connectToWallet = async type => {
       unlockReason: 'NetworkNotSupported',
     };
   }
-  // const signer = new snxJSConnector.signers[type]({});
 
-  // const signer = new snxJSConnector.signers[type]({});
+  const signerConfig =
+    type === 'Coinbase'
+      ? {
+          appName: 'Mintr',
+          appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
+        }
+      : {};
 
-  const walletLink = new WalletLink({
-    appName: 'Mintr',
-    appLogoUrl: '/images/mintr-logo-dark.svg',
-  });
-
-  const eth = walletLink.makeWeb3Provider(
-    'https://mainnet.infura.io/v3/5d18f48c9ee0457e9ac5d487d67bc84c',
-    1
-  );
-
-  eth.enable().then(accounts => {
-    console.log(`User's address is ${accounts[0]}`);
-  });
-
+  const signer = new snxJSConnector.signers[type](signerConfig);
   snxJSConnector.setContractSettings({
     networkId,
-    // signer,
+    signer,
   });
+
   switch (type) {
     case 'Metamask':
-      return connectToMetamask(networkId, name);
+      return connectToMetamask(networkId, name, signer);
+    case 'Coinbase':
+      return connectToCoinbase(networkId, type);
     case 'Trezor':
     case 'Ledger':
-      return connectToHardwareWallet(type);
+      return connectToHardwareWallet(networkId, type);
     default:
       return {};
   }
