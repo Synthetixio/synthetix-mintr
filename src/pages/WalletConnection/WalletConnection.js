@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
@@ -20,17 +22,21 @@ import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 const onWalletClick = (wallet, dispatch) => {
   return async () => {
     const walletStatus = await connectToWallet(wallet);
-
+    console.log(wallet, walletStatus);
     updateWalletStatus(walletStatus, dispatch);
     if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
-      if (walletStatus.walletType === 'Metamask') {
-        onMetamaskAccountChange(async () => {
-          const address = await snxJSConnector.signer.getNextAddresses();
-          if (address && address[0]) {
-            updateWalletStatus({ currentWallet: address[0] }, dispatch);
-          }
-        });
+      if (
+        walletStatus.walletType === 'Metamask' ||
+        walletStatus.walletType === 'Coinbase'
+      ) {
+        // onMetamaskAccountChange(async () => {
+        //   const address = await snxJSConnector.signer.getNextAddresses();
+        //   if (address && address[0]) {
+        //     updateWalletStatus({ currentWallet: address[0] }, dispatch);
+        //   }
+        // });
       }
+
       updateCurrentPage('main', dispatch);
     } else updateCurrentPage('walletSelection', dispatch);
   };

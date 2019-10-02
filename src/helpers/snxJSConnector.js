@@ -1,5 +1,6 @@
 import { SynthetixJs } from 'synthetix-js';
 import { getEthereumNetwork } from './networkHelper';
+import WalletLink from 'walletlink';
 
 let snxJSConnector = {
   initialized: false,
@@ -79,19 +80,36 @@ export const connectToWallet = async type => {
       unlockReason: 'NetworkNotSupported',
     };
   }
-  const signer = new snxJSConnector.signers[type]({});
+  // const signer = new snxJSConnector.signers[type]({});
+
+  // const signer = new snxJSConnector.signers[type]({});
+
+  const walletLink = new WalletLink({
+    appName: 'Mintr',
+    appLogoUrl: '/images/mintr-logo-dark.svg',
+  });
+
+  const eth = walletLink.makeWeb3Provider(
+    'https://mainnet.infura.io/v3/5d18f48c9ee0457e9ac5d487d67bc84c',
+    1
+  );
+
+  eth.enable().then(accounts => {
+    console.log(`User's address is ${accounts[0]}`);
+  });
+
   snxJSConnector.setContractSettings({
     networkId,
-    signer,
+    // signer,
   });
   switch (type) {
     case 'Metamask':
-      return connectToMetamask(networkId, name, signer);
+      return connectToMetamask(networkId, name);
     case 'Trezor':
     case 'Ledger':
       return connectToHardwareWallet(type);
     default:
-      return null;
+      return {};
   }
 };
 
