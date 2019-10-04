@@ -8,6 +8,7 @@ import Landing from '../Landing';
 import WalletConnection from '../WalletConnection';
 import WalletSelection from '../WalletSelection';
 import Main from '../Main';
+import MaintenanceMessage from '../MaintenanceMessage';
 
 import NotificationCenter from '../../components/NotificationCenter';
 
@@ -22,6 +23,8 @@ const renderCurrentPage = currentPage => {
       return <WalletSelection />;
     case 'main':
       return <Main />;
+    case 'maintenance':
+      return <MaintenanceMessage />;
   }
 };
 
