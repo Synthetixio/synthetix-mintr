@@ -87,12 +87,12 @@ const VestingTable = () => {
         </TableHeaderMedium>
       </TableHeader>
       <TableWrapper>
-        <Table cellSpacing='0'>
+        <Table cellSpacing="0">
           <TBody>
             {vestingData && vestingData.schedule
-              ? vestingData.schedule.map(row => {
+              ? vestingData.schedule.map((row, i) => {
                   return (
-                    <TR>
+                    <TR key={i}>
                       <TD>
                         <DataLarge>
                           {format(row.date, 'dd MMMM yyyy')}

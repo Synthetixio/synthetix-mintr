@@ -17,10 +17,10 @@ const Escrow = ({ t }) => {
     <PageContainer>
       <EscrowPage />
       <ButtonRow>
-        <ButtonSecondary onClick={() => setPage(!showTokenSale)}>
+        <ButtonSecondary width='48%' onClick={() => setPage(!showTokenSale)}>
           VIEW {showTokenSale ? 'STAKING' : 'TOKEN SALE'} ESCROW
         </ButtonSecondary>
-        <ButtonPrimary>{t('escrow.buttons.vest')}</ButtonPrimary>
+        <ButtonPrimary width='48%'>{t('escrow.buttons.vest')}</ButtonPrimary>
       </ButtonRow>
     </PageContainer>
   );

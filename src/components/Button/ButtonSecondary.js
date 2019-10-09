@@ -8,16 +8,17 @@ const ButtonSecondary = ({
   as = 'button',
   href = undefined,
   target = undefined,
+  width,
 }) => {
   return (
-    <Button target={target} href={href} as={as} onClick={onClick}>
+    <Button width={width} target={target} href={href} as={as} onClick={onClick}>
       <ButtonSecondaryLabel>{children}</ButtonSecondaryLabel>
     </Button>
   );
 };
 
 const Button = styled.button`
-  width: ${props => (props.width ? props.width + 'px' : '400px')};
+  width: ${props => (props.width ? props.width : '400px')};
   text-decoration: none;
   display: flex;
   justify-content: center;

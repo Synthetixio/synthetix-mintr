@@ -26,6 +26,11 @@ const onWalletClick = (wallet, dispatch) => {
       if (walletStatus.walletType === 'Metamask') {
         onMetamaskAccountChange(async () => {
           const address = await snxJSConnector.signer.getNextAddresses();
+          const signer = new snxJSConnector.signers['Metamask']({});
+          snxJSConnector.setContractSettings({
+            networkId: walletStatus.networkId,
+            signer,
+          });
           if (address && address[0]) {
             updateWalletStatus({ currentWallet: address[0] }, dispatch);
           }
