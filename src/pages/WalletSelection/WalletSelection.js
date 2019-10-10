@@ -194,7 +194,7 @@ const WalletConnection = ({ t }) => {
                               key={wallet.address}
                               onClick={() => {
                                 snxJSConnector.signer.setAddressIndex(
-                                  currentPage + i
+                                  currentPage * WALLET_PAGE_SIZE + i
                                 );
                                 updateWalletStatus(
                                   {
