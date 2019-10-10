@@ -188,11 +188,14 @@ const WalletConnection = ({ t }) => {
                           currentPage * WALLET_PAGE_SIZE,
                           currentPage * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
                         )
-                        .map(wallet => {
+                        .map((wallet, i) => {
                           return (
                             <ListBodyRow
                               key={wallet.address}
                               onClick={() => {
+                                snxJSConnector.signer.setAddressIndex(
+                                  currentPage + i
+                                );
                                 updateWalletStatus(
                                   {
                                     currentWallet: wallet.address,
