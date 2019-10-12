@@ -8,7 +8,7 @@ import { updateNetworkInfo } from '../../ducks/network';
 import { Store } from '../../store';
 
 import Dashboard from '../../screens/Dashboard';
-// import MintrPanel from '../../screens/MintrPanel';
+import MintrPanel from '../../screens/MintrPanel';
 import SETHPoolRewardDistribution from '../../screens/SETHPoolRewardDistribution';
 
 const Main = () => {
@@ -36,7 +36,11 @@ const Main = () => {
   return (
     <MainWrapper>
       <Dashboard />
-      <SETHPoolRewardDistribution />
+      {window.location.pathname === '/multisig' ? (
+        <SETHPoolRewardDistribution />
+      ) : (
+        <MintrPanel />
+      )}
     </MainWrapper>
   );
 };
