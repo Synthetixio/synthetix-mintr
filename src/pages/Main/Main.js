@@ -9,6 +9,7 @@ import { Store } from '../../store';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
+import SETHPoolRewardDistribution from '../../screens/SETHPoolRewardDistribution';
 
 const Main = () => {
   const { dispatch } = useContext(Store);
@@ -35,7 +36,11 @@ const Main = () => {
   return (
     <MainWrapper>
       <Dashboard />
-      <MintrPanel />
+      {window.location.pathname === '/multisig' ? (
+        <SETHPoolRewardDistribution />
+      ) : (
+        <MintrPanel />
+      )}
     </MainWrapper>
   );
 };

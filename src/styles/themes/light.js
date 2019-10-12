@@ -12,6 +12,7 @@ export default {
   buttonPrimaryText: COLORS.white,
   buttonPrimaryBg: COLORS.buttonLight,
   buttonPrimaryBgFocus: COLORS.buttonDark,
+  buttonPrimaryBgDisabled: COLORS.buttonLightDisabled,
 
   buttonTertiaryText: COLORS.light3,
   buttonTertiaryBgFocus: COLORS.light6,
