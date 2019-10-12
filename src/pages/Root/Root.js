@@ -25,6 +25,8 @@ const renderCurrentPage = currentPage => {
       return <Main />;
     case 'maintenance':
       return <MaintenanceMessage />;
+    case 'sethpool':
+      return <Main />;
   }
 };
 
