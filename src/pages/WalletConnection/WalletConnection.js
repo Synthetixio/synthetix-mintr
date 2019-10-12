@@ -44,11 +44,12 @@ const onWalletClick = (wallet, dispatch) => {
 const renderWalletButtons = dispatch => {
   return SUPPORTED_WALLETS.map(wallet => {
     const noMetamask = wallet === 'metamask' && !hasWeb3();
+    const walletName = wallet === 'Coinbase' ? 'Coinbase Wallet' : wallet;
     return (
       <Wallet disabled={noMetamask} key={wallet}>
         <Icon src={`images/wallets/${wallet}.svg`} />
         <WalletTitle>
-          <WalletConnectionH2>{wallet}</WalletConnectionH2>
+          <WalletConnectionH2>{walletName}</WalletConnectionH2>
           <PLarge mt={0}>{noMetamask ? '(not installed)' : ''}</PLarge>
         </WalletTitle>
         <ButtonPrimaryMedium
@@ -130,7 +131,7 @@ const WalletConnectionPMega = styled(PMega)`
 const Wallet = styled.div`
   background-color: ${props => props.theme.colorStyles.panels};
   display: flex;
-  width: 400px;
+  width: 300px;
   height: 400px;
   flex-direction: column;
   align-items: center;
