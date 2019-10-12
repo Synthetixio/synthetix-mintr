@@ -9,6 +9,9 @@ const ERROR_CODES = {
     '27013': USER_DENIED,
   },
   Trezor: {},
+  Coinbase: {
+    '-32603': USER_DENIED,
+  },
 };
 
 export default (error, walletType) => {

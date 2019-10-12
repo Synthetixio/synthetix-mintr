@@ -1,5 +1,5 @@
 import { SynthetixJs } from 'synthetix-js';
-import { getEthereumNetwork } from './networkHelper';
+import { getEthereumNetwork, INFURA_JSON_RPC_URLS } from './networkHelper';
 
 let snxJSConnector = {
   initialized: false,
@@ -15,21 +15,13 @@ let snxJSConnector = {
   },
 };
 
-const connectToMetamask = async (networkId, name, signer) => {
+const connectToMetamask = async (networkId, networkName) => {
   try {
     // Otherwise we enable ethereum if needed (modern browsers)
     if (window.ethereum) {
       window.ethereum.autoRefreshOnNetworkChange = true;
       await window.ethereum.enable();
     }
-    // And we set the connector with the latest details
-    snxJSConnector.setContractSettings({
-      networkId,
-      provider: snxJSConnector.snxJS.ethers.getDefaultProvider(
-        name && name.toLowerCase()
-      ),
-      signer: signer,
-    });
     const accounts = await snxJSConnector.signer.getNextAddresses();
     if (accounts && accounts.length > 0) {
       return {
@@ -38,7 +30,7 @@ const connectToMetamask = async (networkId, name, signer) => {
         walletType: 'Metamask',
         unlocked: true,
         networkId,
-        networkName: name.toLowerCase(),
+        networkName: networkName.toLowerCase(),
       };
     } else {
       return {
@@ -59,39 +51,84 @@ const connectToMetamask = async (networkId, name, signer) => {
   }
 };
 
-const connectToHardwareWallet = type => {
+const connectToCoinbase = async (networkId, networkName) => {
+  try {
+    const accounts = await snxJSConnector.signer.getNextAddresses();
+    if (accounts && accounts.length > 0) {
+      return {
+        currentWallet: accounts[0],
+        availableWallets: accounts,
+        walletType: 'Coinbase',
+        unlocked: true,
+        networkId: 1,
+        networkName: networkName.toLowerCase(),
+      };
+    } else {
+      return {
+        walletType: 'Coinbase',
+        unlocked: false,
+        unlockReason: 'CoinbaseNoAccounts',
+      };
+    }
+    // We updateWalletStatus with all the infos
+  } catch (e) {
+    console.log(e);
+    return {
+      walletType: 'Coinbase',
+      unlocked: false,
+      unlockReason: 'ErrorWhileConnectingToCoinbase',
+      unlockMessage: e,
+    };
+  }
+};
+
+const connectToHardwareWallet = (networkId, networkName, walletType) => {
   return {
-    walletType: type,
+    walletType,
     unlocked: true,
-    networkId: 1,
-    networkName: 'mainnet',
+    networkId,
+    networkName: networkName.toLowerCase(),
   };
 };
 
 export const connectToWallet = async type => {
   const { name, networkId } = await getEthereumNetwork();
-  // If current network is not supported, we show an error
   if (!name) {
     // updateWalletStatus => error
     return {
-      walletType: 'Metamask',
+      walletType: '',
       unlocked: false,
       unlockReason: 'NetworkNotSupported',
     };
   }
-  const signer = new snxJSConnector.signers[type]({});
+
+  const signerConfig =
+    type === 'Coinbase'
+      ? {
+          appName: 'Mintr',
+          appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
+          jsonRpcUrl: INFURA_JSON_RPC_URLS[networkId],
+          networkId,
+        }
+      : {};
+
+  const signer = new snxJSConnector.signers[type](signerConfig);
+
   snxJSConnector.setContractSettings({
     networkId,
     signer,
   });
+
   switch (type) {
     case 'Metamask':
-      return connectToMetamask(networkId, name, signer);
+      return connectToMetamask(networkId, name);
+    case 'Coinbase':
+      return connectToCoinbase(networkId, name);
     case 'Trezor':
     case 'Ledger':
-      return connectToHardwareWallet(type);
+      return connectToHardwareWallet(networkId, name, type);
     default:
-      return null;
+      return {};
   }
 };
 

@@ -84,7 +84,7 @@ const useGetWallets = currentPage => {
         setWallets([...wallets, ...availableWallets]);
       } catch (e) {
         console.log(e);
-        setError('Please check your wallet is not in stand-by mode and retry.');
+        setError(e.message);
         updateWalletStatus(
           {
             unlocked: false,
