@@ -121,6 +121,7 @@ const List = ({ setPage, openDetails }) => {
           <PageTitle fontSize={32} marginBottom={0} marginTop={20}>
             sETH Pool Reward Distribution
           </PageTitle>
+          <SubtitleContainer></SubtitleContainer>
           <Button onClick={() => setPage('create')} disabled={!isOwner}>
             <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
           </Button>
@@ -201,6 +202,12 @@ const Link = styled('button')`
     opacity: 0.5;
     cursor: default;
   }
+`;
+
+const SubtitleContainer = styled.div`
+  width: 500px;
+  text-align: center;
+  margin: 15px 0;
 `;
 
 const LabelContainer = styled.div`
