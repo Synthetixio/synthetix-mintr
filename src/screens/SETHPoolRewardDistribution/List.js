@@ -1,11 +1,16 @@
 import React, { Fragment, useContext, useState } from 'react';
 import styled from 'styled-components';
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 import { Store } from '../../store';
 
 import Table from '../../components/Table';
-import { PageTitle, ButtonPrimaryLabel, PLarge, H5, PSmall } from '../../components/Typography';
+import {
+  PageTitle,
+  ButtonPrimaryLabel,
+  H5,
+  PSmall,
+} from '../../components/Typography';
 import { ButtonTertiary } from '../../components/Button';
 
 import COLORS from '../../styles/colors';
@@ -23,18 +28,17 @@ const ExpandableList = ({ label, transactions, ...props }) => {
     <TableContainer>
       <LabelContainer>
         <H5 margin={0}>{label}</H5>
-        <ButtonTertiary onClick={toggleShowAll}>{showAll ? 'See Less' : 'See More'}</ButtonTertiary>
+        <ButtonTertiary onClick={toggleShowAll}>
+          {showAll ? 'See Less' : 'See More'}
+        </ButtonTertiary>
       </LabelContainer>
-      {React.cloneElement(
-        props.children,
-        {
-          transactions: showAll ? transactions : transactions.slice(0, 3),
-          ...props,
-        }
-      )}
+      {React.cloneElement(props.children, {
+        transactions: showAll ? transactions : transactions.slice(0, 3),
+        ...props,
+      })}
     </TableContainer>
   );
-}
+};
 
 const PendingList = ({ transactions, openDetails, isOwner }) => {
   const requiredConfirmationCount = useRequiredConfirmationCount();
@@ -47,19 +51,24 @@ const PendingList = ({ transactions, openDetails, isOwner }) => {
         { key: 'confirm', value: 'confirm' },
       ]}
       data={transactions.map(item => {
-        const disabled = !isOwner || item.youConfirmed || item.confirmationCount >= requiredConfirmationCount;
+        const disabled =
+          !isOwner ||
+          item.youConfirmed ||
+          item.confirmationCount >= requiredConfirmationCount;
         return {
           id: item.id,
           committed: format(item.date, 'd-M-yy | HH:mm'),
           signers: `${item.confirmationCount}/${requiredConfirmationCount}`,
           confirm: (
-            <Link onClick={() => openDetails(item)} disabled={disabled}>Confirm</Link>
+            <Link onClick={() => openDetails(item)} disabled={disabled}>
+              Confirm
+            </Link>
           ),
         };
       })}
     />
   );
-}
+};
 
 const CompletedList = ({ transactions, networkName }) => (
   <Table
@@ -79,7 +88,9 @@ const CompletedList = ({ transactions, networkName }) => (
             }etherscan.io/tx/${item.transactionHash}`}
             as="a"
             target="_blank"
-          >View</Link>
+          >
+            View
+          </Link>
         ),
       };
     })}
@@ -93,41 +104,47 @@ const List = ({ setPage, openDetails }) => {
     },
   } = useContext(Store);
   const owners = useOwners();
-  const { loading, pendingTransactions, completedTransactions } = useTransactions();
+  const {
+    loading,
+    pendingTransactions,
+    completedTransactions,
+  } = useTransactions();
 
   const isOwner = owners.includes(currentWallet.toLowerCase());
 
   return (
     <Fragment>
-      {loading
-        ? <div>Loading...</div>
-        : (
-          <PageContainer>
-            <PageTitle fontSize={32} marginBottom={0} marginTop={20}>
-              sETH Pool Reward Distribution
-            </PageTitle>
-            <SubtitleContainer>
-              <PLarge>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-              </PLarge>
-            </SubtitleContainer>
-            <Button onClick={() => setPage('create')} disabled={!isOwner}>
-              <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
-            </Button>
-            {!isOwner && (
-              <PSmall color={COLORS.light3}>
-                Owner of the multisig but unable to submit or confirm a transaction? Please switch wallets.
-              </PSmall>
-            )}
-            <ExpandableList transactions={pendingTransactions} openDetails={openDetails} isOwner={isOwner}>
-              <PendingList />
-            </ExpandableList>
-            <ExpandableList transactions={completedTransactions} networkName={networkName}>
-              <CompletedList />
-            </ExpandableList>
-          </PageContainer>
-        )
-      }
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <PageContainer>
+          <PageTitle fontSize={32} marginBottom={0} marginTop={20}>
+            sETH Pool Reward Distribution
+          </PageTitle>
+          <Button onClick={() => setPage('create')} disabled={!isOwner}>
+            <ButtonPrimaryLabel>submit a new transaction</ButtonPrimaryLabel>
+          </Button>
+          {!isOwner && (
+            <PSmall color={COLORS.light3}>
+              Owner of the multisig but unable to submit or confirm a
+              transaction? Please switch wallets.
+            </PSmall>
+          )}
+          <ExpandableList
+            transactions={pendingTransactions}
+            openDetails={openDetails}
+            isOwner={isOwner}
+          >
+            <PendingList />
+          </ExpandableList>
+          <ExpandableList
+            transactions={completedTransactions}
+            networkName={networkName}
+          >
+            <CompletedList />
+          </ExpandableList>
+        </PageContainer>
+      )}
     </Fragment>
   );
 };
@@ -162,7 +179,8 @@ const Button = styled.button`
   }
   margin-bottom: 10px;
   &:disabled {
-    background-color: ${props => props.theme.colorStyles.buttonPrimaryBgDisabled};
+    background-color: ${props =>
+      props.theme.colorStyles.buttonPrimaryBgDisabled};
     cursor: default;
   }
 `;
@@ -183,12 +201,6 @@ const Link = styled('button')`
     opacity: 0.5;
     cursor: default;
   }
-`;
-
-const SubtitleContainer = styled.div`
-  width: 500px;
-  text-align: center;
-  margin: 15px 0;
 `;
 
 const LabelContainer = styled.div`
