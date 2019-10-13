@@ -32,7 +32,7 @@ export default {
 
   paginatorButtonBackground: COLORS.light6,
   paginatorButtonBackgroundHover: COLORS.light5,
-  paginatorButtonBackgroundActive: COLORS.light2,
+  paginatorButtonBackgroundActive: COLORS.light5,
 
   brandRed: COLORS.brandRed,
   brandBlue: COLORS.brandBlue,

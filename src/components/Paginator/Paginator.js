@@ -74,11 +74,13 @@ const Button = styled.button`
   font-size: 14px;
   line-height: 25px;
   font-weight: 500;
+  transition: all 0.1s ease;
   color: ${props =>
     props.active
-      ? props.theme.colorStyles.buttonPrimaryText
-      : props.theme.colorStyles.tableHeading};
+      ? props.theme.colorStyles.heading
+      : props.theme.colorStyles.subtext};
   :hover {
+    color: ${props => props.theme.colorStyles.heading};
     background-color: ${props =>
       props.active
         ? props.theme.colorStyles.paginatorButtonBackgroundActive

@@ -45,9 +45,9 @@ const HiddenContent = ({ t, data }) => {
   return (
     <HiddenContentWrapper>
       <table style={{ width: '100%' }}>
-        <thead style={{ marginBottom: '16px' }}>
-          <TRHead style={{ marginBottom: '16px' }}>
-            {['Activity', 'Amount', 'Rate', 'Date | Time', 'View'].map(
+        <thead>
+          <TRHead padding={'0 0 16px 0'}>
+            {['Activity', 'Amount', 'Rate', 'Time | Date', 'View'].map(
               headerElement => {
                 return (
                   <TH key={headerElement}>
@@ -63,7 +63,7 @@ const HiddenContent = ({ t, data }) => {
             return (
               <TRBody key={i}>
                 <TD style={{ display: 'flex' }}>
-                  <TypeImage src='/images/actions/tiny-sold.svg' />
+                  <TypeImage src="/images/actions/tiny-sold.svg" />
                   <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
                 </TD>
                 <TD>
@@ -91,18 +91,18 @@ const ExpandableTable = withTranslation(({ t }) => {
   const data = [
     {
       amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
+      remaining: '2,000.00',
+      date: '14:00 | 12 Oct `19',
+    },
+    {
+      amount: '1,000.00',
+      remaining: '100.00',
+      date: '08:00 | 4 Oct `19',
     },
     {
       amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
+      remaining: '1,500.00',
+      date: '19:00 | 2 Oct `19',
     },
   ];
   const [expandedElements, setExpanded] = useState([]);
@@ -110,7 +110,7 @@ const ExpandableTable = withTranslation(({ t }) => {
     <Fragment>
       <Activity>
         <ActivityHeader>
-          <H5 marginTop='10px'>{t('depot.table.title')}</H5>
+          <H5 marginTop="10px">{t('depot.table.title')}</H5>
           <MoreButtons>
             <ButtonTertiary>{t('depot.buttons.more')}</ButtonTertiary>
             <ButtonTertiary>{t('depot.buttons.contract')}</ButtonTertiary>
@@ -118,7 +118,7 @@ const ExpandableTable = withTranslation(({ t }) => {
         </ActivityHeader>
         <List>
           <HeaderRow>
-            {['Type', 'Amount', 'Remaining', 'Date | Time', 'Details'].map(
+            {['Type', 'Amount', 'Remaining', 'Time | Date', 'Details'].map(
               headerElement => {
                 return (
                   <HeaderCell key={headerElement}>
@@ -145,7 +145,7 @@ const ExpandableTable = withTranslation(({ t }) => {
                   }
                 >
                   <Cell>
-                    <TypeImage src='/images/actions/tiny-deposit.svg' />
+                    <TypeImage src="/images/actions/tiny-deposit.svg" />
                     <TableDataMedium>Deposit</TableDataMedium>
                   </Cell>
                   <Cell>
@@ -378,8 +378,8 @@ const MoreButtons = styled.span`
 `;
 
 const TypeImage = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
 `;
 
