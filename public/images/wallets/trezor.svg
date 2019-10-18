@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-    <title>atoms / icon / 80px / trezor</title>
-    <desc>Created with Sketch.</desc>
-    <g id="atoms-/-icon-/-80px-/-trezor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="boundingBox">
-            <rect x="0" y="0" width="64" height="64"></rect>
-        </g>
-        <path d="M23.0123021,9.16436411 C28.674868,7.7214547 34.337434,7 40,7 C45.6625693,7 51.3251387,7.72145556 56.987708,9.16436668 C58.7597977,9.61593052 60,11.2117863 60,13.0405049 C60,20.1126417 60,29.2658067 60,40.5 C60,57.2813791 52.4998124,70.1199782 43.9953375,73.2602255 C42.6795786,73.7460648 37.3223491,73.7196761 36.0075022,73.1907016 C27.5018572,69.7688057 20,55.9516229 20,40.5071318 C20,30.0117924 20,20.8562465 20,13.0404943 C20.0000085,11.2117759 21.2402107,9.61592039 23.0123021,9.16436411 Z" id="Rectangle" fill="#27223F"></path>
-        <rect id="Rectangle" fill="#535285" x="24" y="18" width="32" height="18" rx="0.5"></rect>
-        <rect id="Rectangle" fill="#6F6E98" x="24" y="40" width="14" height="6" rx="0.5"></rect>
-        <rect id="Rectangle" fill="#6F6E98" x="42" y="40" width="14" height="6" rx="0.5"></rect>
-    </g>
-</svg>
+<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M0 0h64v64H0z"/><path d="M23.012 9.164C28.675 7.721 34.337 7 40 7s11.325.721 16.988 2.164A4 4 0 0160 13.041V40.5c0 16.781-7.5 29.62-16.005 32.76-1.315.486-6.673.46-7.987-.07C27.502 69.77 20 55.953 20 40.508V13.04a4 4 0 013.012-3.876z" fill="#27223F"/><rect fill="#535285" x="24" y="18" width="32" height="18" rx=".5"/><rect fill="#6F6E98" x="24" y="40" width="14" height="6" rx=".5"/><rect fill="#6F6E98" x="42" y="40" width="14" height="6" rx=".5"/></g></svg>
