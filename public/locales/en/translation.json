@@ -298,10 +298,20 @@
       "pageSubtitle": "If you have locked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here. All SNX staking rewards are escrowed for 12 months.",
       "total": "Total vesting:",
       "table": {
-        "none": "No schedule",
+        "none": "You have no schedule",
         "title": "Vesting schedule",
         "date": "Vesting date",
         "quantity": "Quantity"
+      },
+      "confirmation": {
+        "pageTitle": "Please confirm transaction",
+        "actionDescription": "Vesting:",
+        "loading": "Waiting for user response..."
+      },
+      "complete": {
+        "pageTitle": "Deposit in progress!",
+        "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
+        "actionDescription": "Depositing:"
       }
     },
     "tokenSale": {

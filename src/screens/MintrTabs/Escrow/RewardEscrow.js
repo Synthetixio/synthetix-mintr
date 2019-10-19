@@ -5,7 +5,10 @@ import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
-import { formatCurrency } from '../../../helpers/formatters';
+import {
+  formatCurrency,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import Spinner from '../../../components/Spinner';
 import {
@@ -25,9 +28,35 @@ import {
   DataHeaderLarge,
   DataMega,
 } from '../../../components/Typography';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import ErrorMessage from '../../../components/ErrorMessage';
+import EscrowActions from '../../EscrowActions';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+
+const useGetGasEstimateError = () => {
+  const { dispatch } = useContext(Store);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const getGasEstimate = async () => {
+      setError(null);
+      fetchingGasLimit(dispatch);
+      let gasEstimate;
+      try {
+        gasEstimate = await snxJSConnector.snxJS.SynthetixEscrow.contract.estimate.vest();
+      } catch (e) {
+        console.log(e);
+        const errorMessage =
+          (e && e.message) || 'Error while getting gas estimate';
+        setError(errorMessage);
+      }
+      updateGasLimit(Number(gasEstimate), dispatch);
+    };
+    getGasEstimate();
+  }, []);
+  return error;
+};
 
 const useGetVestingData = walletAddress => {
   const [data, setData] = useState({ loading: true });
@@ -52,6 +81,7 @@ const useGetVestingData = walletAddress => {
         setData({ schedule, total, loading: false });
       } catch (e) {
         console.log(e);
+        setData({ loading: false });
       }
     };
     getVestingData();
@@ -59,23 +89,22 @@ const useGetVestingData = walletAddress => {
   return data;
 };
 
-const VestingTable = () => {
+const VestingTable = ({ data }) => {
   const { t } = useTranslation();
-  const {
-    state: {
-      wallet: { currentWallet },
-    },
-  } = useContext(Store);
-  const vestingData = useGetVestingData(currentWallet);
-  if (vestingData.loading) {
+  if (data.loading) {
     return (
-      <SpinnerWrapper>
+      <TablePlaceholder>
         <Spinner />
-      </SpinnerWrapper>
+      </TablePlaceholder>
     );
   }
-  if (!vestingData.schedule) {
-    return <div>{t('escrow.staking.table.none')}</div>;
+
+  if (!data.total || data.total.length === 0) {
+    return (
+      <TablePlaceholder>
+        <PLarge>{t('escrow.staking.table.none')}</PLarge>
+      </TablePlaceholder>
+    );
   }
   return (
     <ScheduleWrapper>
@@ -89,8 +118,8 @@ const VestingTable = () => {
       <TableWrapper>
         <Table cellSpacing="0">
           <TBody>
-            {vestingData && vestingData.schedule
-              ? vestingData.schedule.map((row, i) => {
+            {data && data.schedule
+              ? data.schedule.map((row, i) => {
                   return (
                     <TR key={i}>
                       <TD>
@@ -114,10 +143,7 @@ const VestingTable = () => {
             {t('escrow.staking.total')}
           </DataHeaderLarge>
           <DataMegaEscrow>
-            {vestingData && vestingData.total
-              ? formatCurrency(vestingData.total)
-              : '--'}{' '}
-            SNX
+            {data && data.total ? formatCurrency(data.total) : '--'} SNX
           </DataMegaEscrow>
         </DataBlock>
       </RightBlock>
@@ -125,19 +151,58 @@ const VestingTable = () => {
   );
 };
 
-const RewardEscrow = ({ t }) => {
+const RewardEscrow = ({ t, onPageChange }) => {
+  const [currentScenario, setCurrentScenario] = useState(null);
+  const {
+    state: {
+      wallet: { currentWallet },
+    },
+  } = useContext(Store);
+  const vestingData = useGetVestingData(currentWallet);
+  const hasNoVestingSchedule =
+    !vestingData.total || vestingData.total.length === 0;
+  const gasEstimateError = useGetGasEstimateError();
+
   return (
     <Fragment>
+      <EscrowActions
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+        vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
+      />
+
       <PageTitle>{t('escrow.staking.pageTitle')}</PageTitle>
       <PLarge>{t('escrow.staking.pageSubtitle')}</PLarge>
-      <VestingTable />
+      <VestingTable data={vestingData} />
+      {!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
+      <ErrorMessage message={gasEstimateError} />
+      <ButtonRow>
+        <ButtonSecondary
+          width="48%"
+          onClick={() => onPageChange('tokenSaleVesting')}
+        >
+          VIEW TOKEN SALE ESCROW
+        </ButtonSecondary>
+        <ButtonPrimary
+          disabled={hasNoVestingSchedule || gasEstimateError}
+          onClick={() => setCurrentScenario('rewardsVesting')}
+          width="48%"
+        >
+          {t('escrow.buttons.vest')}
+        </ButtonPrimary>
+      </ButtonRow>
     </Fragment>
   );
 };
 
+// const Container = styled.div`
+//   width: 100%;
+//   position: relative;
+// `;
+
 const ScheduleWrapper = styled.div`
   width: 100%;
-  margin: 50px 0;
+  margin-top: 50px;
 `;
 
 const RightBlock = styled.div`
@@ -147,7 +212,7 @@ const RightBlock = styled.div`
   width: 100%;
 `;
 
-const SpinnerWrapper = styled.div`
+const TablePlaceholder = styled.div`
   height: 500px;
   display: flex;
   justify-content: center;
@@ -168,6 +233,12 @@ const DataBlock = styled.div`
 
 const DataMegaEscrow = styled(DataMega)`
   color: ${props => props.theme.colorStyles.escrowNumberBig};
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 `;
 
 export default withTranslation()(RewardEscrow);
