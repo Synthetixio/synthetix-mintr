@@ -22,7 +22,7 @@ const TabRow = ({ state }) => {
       <TabButton
         key={tab}
         isSelected={tab === currentTab}
-        disabled={[].includes(tab)}
+        disabled={['transactionsHistory', 'depot'].includes(tab)}
         onClick={() => updateCurrentTab(tab, dispatch)}
       >
         {/* i18next-extract-disable-next-line */}
