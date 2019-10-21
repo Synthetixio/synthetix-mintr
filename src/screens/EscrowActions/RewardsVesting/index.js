@@ -20,15 +20,15 @@ const RewardsVesting = ({ onDestroy, vestAmount }) => {
       network: {
         settings: { gasPrice, gasLimit },
       },
-      dispatch,
     },
+    dispatch,
   } = useContext(Store);
 
   useLayoutEffect(() => {
     const vest = async () => {
       if (!hasLoaded) return;
       try {
-        const transaction = await snxJSConnector.snxJS.SynthetixEscrow.vest({
+        const transaction = await snxJSConnector.snxJS.RewardEscrow.vest({
           gasPrice: gasPrice * GWEI_UNIT,
           gasLimit,
         });

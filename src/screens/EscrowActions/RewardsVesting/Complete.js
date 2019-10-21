@@ -14,35 +14,33 @@ import {
 
 const Success = ({ t, onDestroy, vestAmount }) => {
   return (
-    <SlidePage>
-      <Container>
-        <Top>
-          <Intro>
-            <ActionImage src="/images/success.svg" big />
-            <PageTitle>{t('escrow.staking.complete.pageTitle')}</PageTitle>
-            <PLarge>{t('escrow.staking.complete.pageSubtitle')}</PLarge>
-          </Intro>
-          <Details>
-            <Box>
-              <DataHeaderLarge>
-                {t('escrow.staking.complete.actionDescription')}
-              </DataHeaderLarge>
-              <Amount>
-                {formatCurrency(vestAmount)}
-                SNX
-              </Amount>
-            </Box>
-          </Details>
-        </Top>
-        <Bottom>
-          <Buttons>
-            <ButtonPrimary onClick={onDestroy}>
-              {t('button.navigation.ok')}
-            </ButtonPrimary>
-          </Buttons>
-        </Bottom>
-      </Container>
-    </SlidePage>
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/success.svg" big />
+          <PageTitle>{t('escrow.staking.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('escrow.staking.complete.pageSubtitle')}</PLarge>
+        </Intro>
+        <Details>
+          <Box>
+            <DataHeaderLarge>
+              {t('escrow.staking.complete.actionDescription')}
+            </DataHeaderLarge>
+            <Amount>
+              {formatCurrency(vestAmount)}
+              SNX
+            </Amount>
+          </Box>
+        </Details>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonPrimary onClick={onDestroy}>
+            {t('button.navigation.ok')}
+          </ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
   );
 };
 

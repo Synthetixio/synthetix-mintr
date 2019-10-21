@@ -28,7 +28,9 @@ const Confirmation = ({ t, onDestroy, walletType, vestAmount }) => {
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>{t('escrow.staking.confirmation.pageTitle')}</PageTitle>
+            <PageTitle>
+              {t('escrow.tokenSale.confirmation.pageTitle')}
+            </PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
@@ -36,7 +38,7 @@ const Confirmation = ({ t, onDestroy, walletType, vestAmount }) => {
           <Details>
             <Box>
               <DataHeaderLarge>
-                {t('escrow.staking.confirmation.actionDescription')}
+                {t('escrow.tokenSale.confirmation.actionDescription')}
               </DataHeaderLarge>
               <Amount>{formatCurrency(vestAmount)} SNX</Amount>
             </Box>
@@ -44,7 +46,7 @@ const Confirmation = ({ t, onDestroy, walletType, vestAmount }) => {
         </Top>
         <Loading>
           <Spinner margin="auto" />
-          <Subtext>{t('escrow.staking.confirmation.loading')}</Subtext>
+          <Subtext>{t('escrow.tokenSale.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <TransactionPriceIndicator canEdit={false} />

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { format } from 'date-fns';
@@ -6,7 +5,10 @@ import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
-import { formatCurrency } from '../../../helpers/formatters';
+import {
+  formatCurrency,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import {
   TableHeader,
@@ -25,9 +27,13 @@ import {
   DataHeaderLarge,
   DataMega,
 } from '../../../components/Typography';
+import Spinner from '../../../components/Spinner';
+import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
-const formatBigNumber = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import ErrorMessage from '../../../components/ErrorMessage';
+import EscrowActions from '../../EscrowActions';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
 const mapVestingData = data => {
   const currentUnixTime = new Date().getTime();
@@ -38,11 +44,11 @@ const mapVestingData = data => {
   let hasVesting = false;
   let lastVestTime;
   let groupedData = [];
-  let availableTokensForVesting = false;
+  let availableTokensForVesting = 0;
   let totalVesting;
 
   for (let i = 0; i < dataReversed.length - 1; i += 2) {
-    const parsedQuantity = formatBigNumber(dataReversed[i], 3);
+    const parsedQuantity = bigNumberFormatter(dataReversed[i], 3);
     const parsedDate = parseInt(dataReversed[i + 1]) * 1000;
     if (parsedDate !== 0) {
       hasVesting = true;
@@ -58,7 +64,7 @@ const mapVestingData = data => {
     }
 
     if (parsedDate > 0 && parsedDate < currentUnixTime) {
-      availableTokensForVesting = true;
+      availableTokensForVesting += parsedQuantity;
     }
 
     if (lastVestTime) {
@@ -80,9 +86,32 @@ const mapVestingData = data => {
         totalPeriod,
         availableTokensForVesting,
         data: groupedData,
-        totalVesting: formatBigNumber(totalVesting),
+        totalVesting: bigNumberFormatter(totalVesting),
       }
     : null;
+};
+
+const useGetGasEstimateError = () => {
+  const { dispatch } = useContext(Store);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const getGasEstimate = async () => {
+      setError(null);
+      fetchingGasLimit(dispatch);
+      let gasEstimate;
+      try {
+        gasEstimate = await snxJSConnector.snxJS.SynthetixEscrow.contract.estimate.vest();
+      } catch (e) {
+        console.log(e);
+        const errorMessage =
+          (e && e.message) || 'Error while getting gas estimate';
+        setError(errorMessage);
+      }
+      updateGasLimit(Number(gasEstimate), dispatch);
+    };
+    getGasEstimate();
+  }, []);
+  return error;
 };
 
 const useGetVestingData = walletAddress => {
@@ -90,18 +119,17 @@ const useGetVestingData = walletAddress => {
   useEffect(() => {
     const getVestingData = async () => {
       try {
-        let schedule = [];
-        let total = 0;
+        setData({ loading: true });
         const result = await snxJSConnector.snxJS.EscrowChecker.checkAccountSchedule(
           walletAddress
         );
-        console.log(result);
         if (result) {
           const vestingData = mapVestingData(result);
+          setData({ ...vestingData, loading: false });
         }
-        setData(vestingData);
       } catch (e) {
         console.log(e);
+        setData({ loading: false });
       }
     };
     getVestingData();
@@ -127,7 +155,7 @@ const VestingInfo = ({ state }) => {
         </TableHeaderMedium>
       </TableHeader>
       <TableWrapper style={{ height: 'auto' }}>
-        <Table cellSpacing='0'>
+        <Table cellSpacing="0">
           <TBody>
             <TR>
               <TD>
@@ -193,7 +221,7 @@ const VestingSchedule = ({ state }) => {
         </TableHeaderMedium>
       </TableHeader>
       <TableWrapper>
-        <Table cellSpacing='0'>
+        <Table cellSpacing="0">
           <TBody>{tableContent}</TBody>
         </Table>
       </TableWrapper>
@@ -211,7 +239,8 @@ const VestingSchedule = ({ state }) => {
   );
 };
 
-const TokenSaleEscrow = ({ t }) => {
+const TokenSaleEscrow = ({ t, onPageChange }) => {
+  const [currentScenario, setCurrentScenario] = useState(null);
   const {
     state: {
       wallet: { currentWallet },
@@ -224,15 +253,53 @@ const TokenSaleEscrow = ({ t }) => {
     availableTokensForVesting,
     data,
     totalVesting,
+    loading,
   } = useGetVestingData(currentWallet);
+
+  const gasEstimateError = useGetGasEstimateError();
+
   return (
     <Fragment>
+      <EscrowActions
+        action={currentScenario}
+        onDestroy={() => setCurrentScenario(null)}
+        vestAmount={availableTokensForVesting}
+      />
       <PageTitle>{t('escrow.tokenSale.pageTitle')}</PageTitle>
       <PLarge>{t('escrow.tokenSale.pageSubtitle')}</PLarge>
-      <VestingInfo
-        state={{ escrowPeriod, releaseIntervalMonths, totalPeriod }}
-      />
-      <VestingSchedule state={{ data, totalVesting }} />
+      {escrowPeriod ? (
+        <Fragment>
+          <VestingInfo
+            state={{ escrowPeriod, releaseIntervalMonths, totalPeriod }}
+          />
+          <VestingSchedule state={{ data, totalVesting }} />
+          <TransactionPriceIndicator />
+        </Fragment>
+      ) : (
+        <TablePlaceholder>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <PLarge>{t('escrow.tokenSale.table.none')}</PLarge>
+          )}
+        </TablePlaceholder>
+      )}
+      <ErrorMessage message={gasEstimateError} />
+      <ButtonRow>
+        <ButtonSecondary
+          width="48%"
+          onClick={() => onPageChange('rewardEscrow')}
+        >
+          VIEW REWARDS ESCROW
+        </ButtonSecondary>
+        <ButtonPrimary
+          disabled={!availableTokensForVesting || gasEstimateError}
+          onClick={() => setCurrentScenario('tokenSaleVesting')}
+          width="48%"
+        >
+          {t('escrow.buttons.vest')}
+        </ButtonPrimary>
+      </ButtonRow>
     </Fragment>
   );
 };
@@ -263,6 +330,19 @@ const DataBlock = styled.div`
 
 const DataMegaEscrow = styled(DataMega)`
   color: ${props => props.theme.colorStyles.escrowNumberBig};
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const TablePlaceholder = styled.div`
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default withTranslation()(TokenSaleEscrow);

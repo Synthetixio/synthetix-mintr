@@ -14,35 +14,33 @@ import {
 
 const Success = ({ t, onDestroy, vestAmount }) => {
   return (
-    <SlidePage>
-      <Container>
-        <Top>
-          <Intro>
-            <ActionImage src="/images/success.svg" big />
-            <PageTitle>{t('escrow.staking.complete.pageTitle')}</PageTitle>
-            <PLarge>{t('escrow.staking.complete.pageSubtitle')}</PLarge>
-          </Intro>
-          <Details>
-            <Box>
-              <DataHeaderLarge>
-                {t('escrow.staking.complete.actionDescription')}
-              </DataHeaderLarge>
-              <Amount>
-                {formatCurrency(vestAmount)}
-                SNX
-              </Amount>
-            </Box>
-          </Details>
-        </Top>
-        <Bottom>
-          <Buttons>
-            <ButtonPrimary onClick={onDestroy}>
-              {t('button.navigation.ok')}
-            </ButtonPrimary>
-          </Buttons>
-        </Bottom>
-      </Container>
-    </SlidePage>
+    <Fragment>
+      <Top>
+        <Intro>
+          <ActionImage src="/images/success.svg" big />
+          <PageTitle>{t('escrow.tokenSale.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('escrow.tokenSale.complete.pageSubtitle')}</PLarge>
+        </Intro>
+        <Details>
+          <Box>
+            <DataHeaderLarge>
+              {t('escrow.tokenSale.complete.actionDescription')}
+            </DataHeaderLarge>
+            <Amount>
+              {formatCurrency(vestAmount)}
+              SNX
+            </Amount>
+          </Box>
+        </Details>
+      </Top>
+      <Bottom>
+        <Buttons>
+          <ButtonPrimary onClick={onDestroy}>
+            {t('button.navigation.ok')}
+          </ButtonPrimary>
+        </Buttons>
+      </Bottom>
+    </Fragment>
   );
 };
 
@@ -93,12 +91,12 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
   margin-bottom: 20px;
-  padding: 40px 64px;
+  padding: 48px 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const Intro = styled.div`

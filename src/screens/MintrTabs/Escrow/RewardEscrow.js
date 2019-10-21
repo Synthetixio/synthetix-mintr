@@ -44,7 +44,7 @@ const useGetGasEstimateError = () => {
       fetchingGasLimit(dispatch);
       let gasEstimate;
       try {
-        gasEstimate = await snxJSConnector.snxJS.SynthetixEscrow.contract.estimate.vest();
+        gasEstimate = await snxJSConnector.snxJS.RewardEscrow.contract.estimate.vest();
       } catch (e) {
         console.log(e);
         const errorMessage =
@@ -59,12 +59,15 @@ const useGetGasEstimateError = () => {
 };
 
 const useGetVestingData = walletAddress => {
-  const [data, setData] = useState({ loading: true });
+  const [data, setData] = useState({});
   useEffect(() => {
     const getVestingData = async () => {
       try {
         let schedule = [];
         let total = 0;
+        let canVest = false;
+        const currentUnixTime = new Date().getTime();
+        setData({ loading: true });
         const result = await snxJSConnector.snxJS.RewardEscrow.checkAccountSchedule(
           walletAddress
         );
@@ -72,13 +75,16 @@ const useGetVestingData = walletAddress => {
           const quantity = Number(bigNumberFormatter(result[i + 1]));
           total += Number(quantity);
           if (!result[i].isZero() && quantity) {
+            if (result[i] * 1000 < currentUnixTime) {
+              canVest = true;
+            }
             schedule.push({
               date: new Date(Number(result[i]) * 1000),
               quantity,
             });
           }
         }
-        setData({ schedule, total, loading: false });
+        setData({ schedule, total, loading: false, canVest });
       } catch (e) {
         console.log(e);
         setData({ loading: false });
@@ -184,7 +190,9 @@ const RewardEscrow = ({ t, onPageChange }) => {
           VIEW TOKEN SALE ESCROW
         </ButtonSecondary>
         <ButtonPrimary
-          disabled={hasNoVestingSchedule || gasEstimateError}
+          disabled={
+            hasNoVestingSchedule || gasEstimateError || !vestingData.canVest
+          }
           onClick={() => setCurrentScenario('rewardsVesting')}
           width="48%"
         >
@@ -194,11 +202,6 @@ const RewardEscrow = ({ t, onPageChange }) => {
     </Fragment>
   );
 };
-
-// const Container = styled.div`
-//   width: 100%;
-//   position: relative;
-// `;
 
 const ScheduleWrapper = styled.div`
   width: 100%;

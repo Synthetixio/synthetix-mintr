@@ -20,8 +20,8 @@ const TokenSaleVesting = ({ onDestroy, vestAmount }) => {
       network: {
         settings: { gasPrice, gasLimit },
       },
-      dispatch,
     },
+    dispatch,
   } = useContext(Store);
 
   useLayoutEffect(() => {
