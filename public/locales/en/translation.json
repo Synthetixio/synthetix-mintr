@@ -228,6 +228,7 @@
       "cancel": "Cancel",
       "back": "Go back",
       "etherscan": "View on Etherscan",
+      "view": "View",
       "finish": "Finish & return home",
       "ok": "OK"
     }
@@ -339,6 +340,30 @@
         "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
         "actionDescription": "Depositing:"
       }
+    }
+  },
+  "transactions": {
+    "events": {
+      "minted": "Minted",
+      "burned": "Burned",
+      "claimedFees": "Claimed Rewards",
+      "exchanged": "Bought",
+      "traded": "Traded",
+      "sent": "Sent",
+      "deposited": "Deposited",
+      "withdrawn": "Withdrawn",
+      "sold": "Sold"
+    },
+    "details": {
+      "minted": "Locked SNX",
+      "burned": "Unlocked SNX",
+      "claimedFees": "Claimed Fees",
+      "exchanged": "Bought",
+      "traded": "Traded",
+      "sent": "Sent",
+      "deposited": "Deposited",
+      "withdrawn": "Withdrawn",
+      "sold": "Sold"
     }
   },
   "network": {

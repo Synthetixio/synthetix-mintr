@@ -44,6 +44,7 @@ export const TH = styled.th`
 `;
 
 export const TD = styled.td`
+  white-space: nowrap;
   height: 40px;
   padding: ${props => (props.padding ? props.padding : '20px')};
   border-top: 1px solid ${props => props.theme.colorStyles.borders};
