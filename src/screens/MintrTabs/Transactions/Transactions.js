@@ -242,7 +242,7 @@ const Transactions = () => {
           </Inputs>
         </Filters> */}
         <TransactionsPanel>
-          {transactions ? (
+          {transactions && transactions.length > 0 ? (
             <TransactionsTable
               data={transactions.slice(
                 PAGINATION_INDEX * currentPage,
