@@ -296,9 +296,12 @@ const Depot = ({ t }) => {
     },
     dispatch,
   } = useContext(Store);
-  const { totalSellableDeposits, sUSDBalance, loadingData } = useGetDepotData(
-    currentWallet
-  );
+  const {
+    totalSellableDeposits,
+    sUSDBalance,
+    loadingData,
+    minimumDepositAmount,
+  } = useGetDepotData(currentWallet);
   const { amountAvailable, depositsMade, loadingEvents } = useGetDepotEvents(
     currentWallet,
     networkName
@@ -308,6 +311,7 @@ const Depot = ({ t }) => {
     onDestroy: () => setCurrentScenario(null),
     sUSDBalance,
     amountAvailable,
+    minimumDepositAmount,
   };
 
   return (

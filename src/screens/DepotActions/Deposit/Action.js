@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
@@ -10,58 +10,64 @@ import {
   ButtonTertiary,
   ButtonMax,
 } from '../../../components/Button';
-import { PLarge, H1, Subtext } from '../../../components/Typography';
+import { PLarge, H1 } from '../../../components/Typography';
 import Input from '../../../components/Input';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+import ErrorMessage from '../../../components/ErrorMessage';
 
-const Action = ({ t, onDestroy, onDeposit, sUSDBalance }) => {
-  const [amount, setAmount] = useState('');
+const Action = ({
+  t,
+  onDestroy,
+  onDeposit,
+  sUSDBalance,
+  gasEstimateError,
+  isFetchingGasLimit,
+  setDepositAmount,
+  depositAmount,
+}) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
           <ButtonTertiary onClick={onDestroy}>
-            {t('button.navigation.back')}
+            {t('button.navigation.cancel')}
           </ButtonTertiary>
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/deposit.svg' />
-            <H1>{t('deposit.action.intro.pageTitle')}</H1>
-            <PLarge>{t('deposit.action.intro.amountSubtitle')}</PLarge>
+            <ActionImage src="/images/actions/deposit.svg" />
+            <H1>{t('depot.deposit.action.pageTitle')}</H1>
+            <PLarge>{t('depot.deposit.action.amountSubtitle')}</PLarge>
             <Amount>${formatCurrency(sUSDBalance)}</Amount>
           </Intro>
           <Form>
-            <PLarge>{t('deposit.action.instruction')}</PLarge>
+            <PLarge>{t('depot.deposit.action.instruction')}</PLarge>
             <Input
-              onChange={e => setAmount(e.target.value)}
-              value={amount}
-              placeholder='0.00'
-              leftComponent={
-                <Type>
-                  <img
-                    src='/images/currencies/sUSD.svg'
-                    height='24px'
-                    style={{ marginRight: '8px' }}
-                  />
-                  <PLarge>sUSD</PLarge>
-                </Type>
-              }
+              singleSynth={'sUSD'}
+              onChange={e => setDepositAmount(e.target.value)}
+              value={depositAmount}
+              placeholder="0.00"
               rightComponent={
                 <ButtonMax
                   onClick={() => {
-                    setAmount(sUSDBalance);
+                    setDepositAmount(sUSDBalance);
                   }}
                 />
               }
             />
+            <ErrorMessage message={gasEstimateError} />
           </Form>
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
-            {t('network.gas')} <Highlighted>EDIT</Highlighted>
-          </Subtext>
-          <ButtonPrimary onClick={() => onDeposit(amount)} margin='auto'>
-            {t('deposit.action.buttons.deposit')}
+          <TransactionPriceIndicator />
+
+          <ButtonPrimary
+            disabled={isFetchingGasLimit || gasEstimateError || !depositAmount}
+            onClick={onDeposit}
+            margin="auto"
+            margin="auto"
+          >
+            {t('depot.deposit.action.buttons.deposit')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -123,19 +129,6 @@ const Amount = styled.span`
 
 const Form = styled.div`
   margin: 0px 0px 80px 0px;
-`;
-
-const Type = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default withTranslation()(Action);

@@ -22,14 +22,14 @@ const Success = ({
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/success.svg' big />
-          <PageTitle>{t('deposit.complete.pageTitle')}</PageTitle>
-          <PLarge>{t('deposit.complete.intro.pageSubtitle')}</PLarge>
+          <ActionImage src="/images/success.svg" big />
+          <PageTitle>{t('depot.deposit.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('depot.deposit.complete.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
             <DataHeaderLarge>
-              {t('deposit.complete.actionDescription')}
+              {t('depot.deposit.complete.actionDescription')}
             </DataHeaderLarge>
             <Amount>{formatCurrency(depositAmount)} sUSD</Amount>
           </Box>
@@ -41,8 +41,8 @@ const Success = ({
             href={`https://${
               networkName === 'mainnet' ? '' : networkName + '.'
             }etherscan.io/tx/${transactionHash}`}
-            as='a'
-            target='_blank'
+            as="a"
+            target="_blank"
           >
             {t('button.navigation.etherscan')}
           </ButtonSecondary>
@@ -60,7 +60,7 @@ const Failure = ({ t, transactionError, onDestroy }) => {
     <Fragment>
       <Top>
         <Intro>
-          <ActionImage src='/images/failure.svg' big />
+          <ActionImage src="/images/failure.svg" big />
           <PageTitle>{t('error.pageTitle')}</PageTitle>
           {transactionError.code ? (
             <PLarge>
