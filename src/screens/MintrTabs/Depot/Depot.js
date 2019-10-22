@@ -2,10 +2,13 @@
 import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { formatCurrency } from '../../../helpers/formatters';
+import {
+  formatCurrency,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import {
   PageTitle,
@@ -29,9 +32,7 @@ import {
 import { Plus, Minus } from '../../../components/Icons';
 
 import DepotAction from '../../DepotActions';
-
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { updateCurrentTab } from '../../../ducks/ui';
 
 const sumBy = (collection, key) => {
   return collection.reduce((acc, curr) => {
@@ -41,7 +42,8 @@ const sumBy = (collection, key) => {
 
 const initialScenario = null;
 
-const HiddenContent = ({ t, data }) => {
+const HiddenContent = ({ data }) => {
+  const { t } = useTranslation();
   return (
     <HiddenContentWrapper>
       <table style={{ width: '100%' }}>
@@ -87,7 +89,15 @@ const HiddenContent = ({ t, data }) => {
   );
 };
 
-const ExpandableTable = withTranslation(({ t }) => {
+const ExpandableTable = () => {
+  const { t } = useTranslation();
+  const [expandedElements, setExpanded] = useState([]);
+  const {
+    state: {
+      wallet: { currentWallet, networkName },
+    },
+    dispatch,
+  } = useContext(Store);
   const data = [
     {
       amount: '2,000.00',
@@ -105,15 +115,30 @@ const ExpandableTable = withTranslation(({ t }) => {
       date: '19:00 | 2 Oct `19',
     },
   ];
-  const [expandedElements, setExpanded] = useState([]);
   return (
     <Fragment>
       <Activity>
         <ActivityHeader>
           <H5 marginTop="10px">{t('depot.table.title')}</H5>
           <MoreButtons>
-            <ButtonTertiary>{t('depot.buttons.more')}</ButtonTertiary>
-            <ButtonTertiary>{t('depot.buttons.contract')}</ButtonTertiary>
+            <ButtonTertiary
+              onClick={() => updateCurrentTab('transactionsHistory', dispatch)}
+            >
+              {t('depot.buttons.more')}
+            </ButtonTertiary>
+            <ButtonTertiary
+              href={`https://${
+                networkName === 'mainnet' ? '' : networkName + '.'
+              }etherscan.io/address/${
+                snxJSConnector.snxJS.Depot.contract.address
+              }`}
+              as="a"
+              target="_blank"
+              as="a"
+              target="_blank"
+            >
+              {t('depot.buttons.contract')}
+            </ButtonTertiary>
           </MoreButtons>
         </ActivityHeader>
         <List>
@@ -187,7 +212,7 @@ const ExpandableTable = withTranslation(({ t }) => {
       </Activity>
     </Fragment>
   );
-});
+};
 
 const getApiUrl = networkName =>
   `https://${
@@ -372,7 +397,7 @@ const ActivityHeader = styled.span`
 const MoreButtons = styled.span`
   height: auto;
   display: flex;
-  & :first-child {
+  & > :first-child {
     margin-right: 8px;
   }
 `;
