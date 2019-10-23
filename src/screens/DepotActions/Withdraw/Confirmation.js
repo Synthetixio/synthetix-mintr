@@ -5,6 +5,7 @@ import { withTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   PLarge,
   PageTitle,
@@ -27,7 +28,7 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>{t('withdraw.confirmation.pageTitle')}</PageTitle>
+            <PageTitle>{t('depot.withdraw.confirmation.pageTitle')}</PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
@@ -35,21 +36,18 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
           <Details>
             <Box>
               <DataHeaderLarge>
-                {t('withdraw.confirmation.actionDescription')}
+                {t('depot.withdraw.confirmation.actionDescription')}
               </DataHeaderLarge>
               <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
-          <Spinner margin='auto' />
-          <Subtext>{t('withdraw.confirmation.loading')}</Subtext>
+          <Spinner margin="auto" />
+          <Subtext>{t('depot.withdraw.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
-          <Fees>
-            <Subtext>{t('network.gas')}</Subtext>
-            <Subtext>{t('network.speed')}</Subtext>
-          </Fees>
+          <TransactionPriceIndicator canEdit={false} />
         </Bottom>
       </Container>
     </SlidePage>
@@ -122,10 +120,6 @@ const Amount = styled.span`
   font-family: 'apercu-medium';
   font-size: 24px;
   margin: 16px 0px 0px 0px;
-`;
-
-const Fees = styled.div`
-  height: auto;
 `;
 
 const Loading = styled.div`

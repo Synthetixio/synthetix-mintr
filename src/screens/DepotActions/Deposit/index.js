@@ -52,11 +52,6 @@ const useGetGasEstimate = (
 const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
   const { handleNext, handlePrev } = useContext(SliderContext);
   const [depositAmount, setDepositAmount] = useState(null);
-  const gasEstimateError = useGetGasEstimate(
-    depositAmount,
-    sUSDBalance,
-    minimumDepositAmount
-  );
   const [transactionInfo, setTransactionInfo] = useState({});
   const {
     state: {
@@ -67,6 +62,11 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
     },
     dispatch,
   } = useContext(Store);
+  const gasEstimateError = useGetGasEstimate(
+    depositAmount,
+    sUSDBalance,
+    minimumDepositAmount
+  );
 
   const onDeposit = async () => {
     try {

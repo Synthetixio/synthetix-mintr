@@ -22,7 +22,6 @@ import {
 import PageContainer from '../../../components/PageContainer';
 import { ButtonTertiary, BorderlessButton } from '../../../components/Button';
 import {
-  List,
   HeaderRow,
   BodyRow,
   Cell,
@@ -131,17 +130,19 @@ const ExpandableTable = ({ data }) => {
       </HeaderRow>
       {depositsMade.map((deposit, i) => {
         const isExpanded = expandedElements.includes(i);
+        const hasDetails = deposit.details && deposit.details.length > 0;
         return (
           <ExpandableRow key={i} expanded={isExpanded}>
             <BodyRow
               key={i}
-              onClick={() =>
+              onClick={() => {
+                if (!hasDetails) return;
                 setExpanded(currentExpandedState => {
                   if (currentExpandedState.includes(i)) {
                     return currentExpandedState.filter(state => state !== i);
                   } else return [...currentExpandedState, i];
-                })
-              }
+                });
+              }}
             >
               <Cell>
                 <TypeImage src="/images/actions/tiny-deposit.svg" />
@@ -162,7 +163,13 @@ const ExpandableTable = ({ data }) => {
                   {format(deposit.date, 'H:mm | d MMM yy')}
                 </TableDataMedium>
               </Cell>
-              <Cell>{isExpanded ? <Minus> </Minus> : <Plus />}</Cell>
+              <Cell>
+                {isExpanded ? (
+                  <Minus />
+                ) : (
+                  <Plus style={{ opacity: hasDetails ? '1' : '0.3' }} />
+                )}
+              </Cell>
             </BodyRow>
             <HiddenContent data={deposit.details} />
           </ExpandableRow>
@@ -210,7 +217,6 @@ const useGetDepotEvents = (walletAddress, networkName) => {
         const totalDepositsMade = sumBy(depositsMade, 'value');
         const totalDepositsCleared = sumBy(depositsCleared, 'toAmount');
         const totalDepositsRemoved = sumBy(depositsRemoved, 'value');
-
         const depositsMadeFiltered = depositsMade
           .filter(depositMade => {
             return !depositsRemoved.find(
@@ -238,7 +244,6 @@ const useGetDepotEvents = (walletAddress, networkName) => {
               details,
             };
           });
-
         setData({
           loadingEvents: false,
           amountAvailable: Math.max(
@@ -364,7 +369,7 @@ const Depot = ({ t }) => {
             </ButtonTertiary>
           </MoreButtons>
         </ActivityHeader>
-        {depositsMade ? (
+        {depositsMade && depositsMade.length > 0 ? (
           <ExpandableTable data={{ depositsMade }} />
         ) : (
           <TablePlaceholder>
@@ -419,7 +424,9 @@ const Amount = styled.span`
   margin: 8px 0px 0px 0px;
 `;
 
-const Activity = styled.div``;
+const Activity = styled.div`
+  min-height: 400px;
+`;
 
 const ActivityHeader = styled.span`
   height: auto;
@@ -489,9 +496,13 @@ const HiddenTableCellContainer = styled.div`
 
 const TablePlaceholder = styled.div`
   display: flex;
-  height: 300px;
+  height: 100%;
   align-items: center;
   justify-content: center;
+`;
+
+const List = styled.div`
+  width: 100%;
 `;
 
 export default withTranslation()(Depot);

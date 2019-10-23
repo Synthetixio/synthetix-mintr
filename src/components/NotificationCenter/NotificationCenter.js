@@ -113,9 +113,9 @@ const NotificationCenter = () => {
 };
 
 const NotificationCenterWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   right: 20px;
-  bottom: 20px;
+  top: calc(100vh - 40px - 40px);
   z-index: 100;
 `;
 

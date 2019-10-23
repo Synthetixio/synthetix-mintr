@@ -60,12 +60,9 @@ const Action = ({
         </Top>
         <Bottom>
           <TransactionPriceIndicator />
-
           <ButtonPrimary
             disabled={isFetchingGasLimit || gasEstimateError || !depositAmount}
             onClick={onDeposit}
-            margin="auto"
-            margin="auto"
           >
             {t('depot.deposit.action.buttons.deposit')}
           </ButtonPrimary>
