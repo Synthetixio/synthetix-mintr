@@ -6,6 +6,7 @@ import HeaderButton from './HeaderButton';
 import TabButton from './TabButton';
 import WalletStatusButton from './WalletStatusButton';
 import ButtonTransactionEdit from './ButtonTransactionEdit';
+import BorderlessButton from './BorderlessButton';
 
 export {
   ButtonPrimary,
@@ -17,4 +18,5 @@ export {
   TabButton,
   WalletStatusButton,
   ButtonTransactionEdit,
+  BorderlessButton,
 };

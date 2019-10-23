@@ -5,7 +5,6 @@ import { withTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
-import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import {
   PLarge,
   PageTitle,
@@ -13,14 +12,15 @@ import {
   Subtext,
 } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
-const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
+const Confirmation = ({ t, onDestroy, walletType, vestAmount }) => {
   return (
     <SlidePage>
       <Container>
         <Navigation>
-          <ButtonTertiary onClick={() => goBack(1)}>
-            {t('button.navigation.back')}
+          <ButtonTertiary onClick={onDestroy}>
+            {t('button.navigation.cancel')}
           </ButtonTertiary>
         </Navigation>
         <Top>
@@ -28,7 +28,9 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
             <ActionImage
               src={`/images/wallets/${walletType.toLowerCase()}.svg`}
             />
-            <PageTitle>{t('depot.withdraw.confirmation.pageTitle')}</PageTitle>
+            <PageTitle>
+              {t('escrow.tokenSale.confirmation.pageTitle')}
+            </PageTitle>
             <PLarge>
               {`To continue, follow the prompts on your ${walletType} Wallet.`}
             </PLarge>
@@ -36,15 +38,15 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
           <Details>
             <Box>
               <DataHeaderLarge>
-                {t('depot.withdraw.confirmation.actionDescription')}
+                {t('escrow.tokenSale.confirmation.actionDescription')}
               </DataHeaderLarge>
-              <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
+              <Amount>{formatCurrency(vestAmount)} SNX</Amount>
             </Box>
           </Details>
         </Top>
         <Loading>
           <Spinner margin="auto" />
-          <Subtext>{t('depot.withdraw.confirmation.loading')}</Subtext>
+          <Subtext>{t('escrow.tokenSale.confirmation.loading')}</Subtext>
         </Loading>
         <Bottom>
           <TransactionPriceIndicator canEdit={false} />

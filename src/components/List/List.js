@@ -84,7 +84,7 @@ export const HeaderCell = styled.div`
 `;
 
 export const ExpandableRow = styled.div`
-  height: ${props => (props.expanded ? '255px' : '78px')};
+  height: ${props => (props.expanded ? 'auto' : '78px')};
   overflow: hidden;
   transition: height 0.2s ease-in-out;
 `;

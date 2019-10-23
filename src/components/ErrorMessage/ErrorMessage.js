@@ -8,7 +8,7 @@ const ErrorMessage = ({ message = null }) => {
 
 const Container = styled.div`
   opacity: ${props => (props.visible ? 1 : 0)};
-  width: 400px;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 10px 15px;

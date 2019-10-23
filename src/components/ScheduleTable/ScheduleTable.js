@@ -5,7 +5,7 @@ export const TableHeader = styled.div`
   display: flex;
   justify-content: space-between;
   text-transform: uppercase;
-  padding: 0 20px;
+  padding: 0;
 `;
 
 export const TableWrapper = styled.div`
@@ -30,7 +30,6 @@ export const TR = styled.tr`
   td {
     text-align: left;
   }
-
   & > th:last-child,
   td:last-child {
     text-align: right;
@@ -45,6 +44,7 @@ export const TH = styled.th`
 `;
 
 export const TD = styled.td`
+  white-space: nowrap;
   height: 40px;
   padding: ${props => (props.padding ? props.padding : '20px')};
   border-top: 1px solid ${props => props.theme.colorStyles.borders};

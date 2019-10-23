@@ -2,52 +2,41 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
+import { formatCurrency } from '../../../helpers/formatters';
+
 import { SlidePage } from '../../../components/ScreenSlider';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { ButtonPrimary } from '../../../components/Button';
 import {
   PLarge,
   PageTitle,
   DataHeaderLarge,
 } from '../../../components/Typography';
-import { formatCurrency } from '../../../helpers/formatters';
 
-const Success = ({
-  t,
-  amountAvailable,
-  onDestroy,
-  networkName,
-  transactionHash,
-}) => {
+const Success = ({ t, onDestroy, vestAmount }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
           <ActionImage src="/images/success.svg" big />
-          <PageTitle>{t('depot.withdraw.complete.pageTitle')}</PageTitle>
-          <PLarge>{t('depot.withdraw.complete.pageSubtitle')}</PLarge>
+          <PageTitle>{t('escrow.staking.complete.pageTitle')}</PageTitle>
+          <PLarge>{t('escrow.staking.complete.pageSubtitle')}</PLarge>
         </Intro>
         <Details>
           <Box>
             <DataHeaderLarge>
-              {t('depot.withdraw.complete.actionDescription')}
+              {t('escrow.staking.complete.actionDescription')}
             </DataHeaderLarge>
-            <Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
+            <Amount>
+              {formatCurrency(vestAmount)}
+              SNX
+            </Amount>
           </Box>
         </Details>
       </Top>
       <Bottom>
         <Buttons>
-          <ButtonSecondary
-            href={`https://${
-              networkName === 'mainnet' ? '' : networkName + '.'
-            }etherscan.io/tx/${transactionHash}`}
-            as="a"
-            target="_blank"
-          >
-            {t('button.navigation.etherscan')}
-          </ButtonSecondary>
           <ButtonPrimary onClick={onDestroy}>
-            {t('button.navigation.finish')}
+            {t('button.navigation.ok')}
           </ButtonPrimary>
         </Buttons>
       </Bottom>
@@ -55,26 +44,22 @@ const Success = ({
   );
 };
 
-const Failure = ({ t, transactionError, onDestroy }) => {
+const Failure = ({ transactionError, onDestroy }) => {
   return (
     <Fragment>
       <Top>
         <Intro>
           <ActionImage src="/images/failure.svg" big />
-          <PageTitle>{t('error.pageTitle')}</PageTitle>
+          <PageTitle>Something went wrong...</PageTitle>
           {transactionError.code ? (
-            <PLarge>
-              {t('error.pageSubtitle')} {transactionError.code}
-            </PLarge>
+            <PLarge>Code: {transactionError.code}</PLarge>
           ) : null}
           <PLarge>{transactionError.message}</PLarge>
         </Intro>
       </Top>
       <Bottom>
         <Buttons>
-          <ButtonPrimary onClick={onDestroy}>
-            {t('button.navigation.ok')}
-          </ButtonPrimary>
+          <ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
         </Buttons>
       </Bottom>
     </Fragment>
@@ -128,15 +113,14 @@ const ActionImage = styled.img`
 
 const Details = styled.div`
   display: flex;
-  margin: auto;
   margin-bottom: 48px;
 `;
 
 const Box = styled.div`
   height: auto;
-  width: 320px;
+  width: auto;
   padding: 24px 40px;
-  margin: auto;
+  margin: 0px 16px;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 2px;
   display: flex;

@@ -18,11 +18,13 @@ const useSliding = () => {
   const containerRef = useRef(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [distance, setDistance] = useState(0);
+  const [hasLoaded, setHasLoading] = useState(false);
 
   useLayoutEffect(() => {
     const containerWidth = containerRef.current.clientWidth;
     setContainerWidth(containerWidth);
     setDistance(-containerWidth);
+    setHasLoading(true);
   }, []);
 
   const handlePrev = count => {
@@ -37,19 +39,29 @@ const useSliding = () => {
     style: { transform: `translate3d(${distance}px, 0, 0)` },
   };
 
-  return { handlePrev, handleNext, slideProps, containerRef };
+  return {
+    handlePrev,
+    handleNext,
+    slideProps,
+    containerRef,
+    hasLoaded,
+  };
 };
 
 const ScreenSlider = ({ children, isVisible }) => {
   const { width, elementRef } = useSizeElement();
-  const { slideProps, containerRef, handleNext, handlePrev } = useSliding(
-    width,
-    React.Children.count(children)
-  );
+  const {
+    slideProps,
+    containerRef,
+    handleNext,
+    handlePrev,
+    hasLoaded,
+  } = useSliding(width, React.Children.count(children));
   const contextValue = {
     elementRef,
     handleNext,
     handlePrev,
+    hasLoaded,
   };
   return (
     <ScreenSliderContext.Provider value={contextValue}>

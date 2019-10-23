@@ -37,9 +37,9 @@ const Header = ({ t, currentWallet }) => {
           {shortenAddress(currentWallet)}
         </WalletStatusButton>
         <RoundButton
-          as='a'
-          href='https://help.synthetix.io/hc/en-us/categories/360001538994-Mintr'
-          target='_blank'
+          as="a"
+          href="https://help.synthetix.io/hc/en-us/categories/360001538994-Mintr"
+          target="_blank"
         >
           <SupportBubble />
         </RoundButton>

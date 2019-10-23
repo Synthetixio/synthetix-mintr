@@ -1,11 +1,14 @@
-/* eslint-disable */
-import React, { useContext, useEffect, useState, Fragment } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
-import { withTranslation } from 'react-i18next';
+import { format } from 'date-fns';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { formatCurrency } from '../../../helpers/formatters';
+import {
+  formatCurrency,
+  bigNumberFormatter,
+} from '../../../helpers/formatters';
 
 import {
   PageTitle,
@@ -14,12 +17,11 @@ import {
   H5,
   TableDataMedium,
   TableHeaderMedium,
-  HyperlinkSmall,
+  DataLarge,
 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
-import { ButtonTertiary } from '../../../components/Button';
+import { ButtonTertiary, BorderlessButton } from '../../../components/Button';
 import {
-  List,
   HeaderRow,
   BodyRow,
   Cell,
@@ -27,11 +29,10 @@ import {
   ExpandableRow,
 } from '../../../components/List';
 import { Plus, Minus } from '../../../components/Icons';
+import Spinner from '../../../components/Spinner';
 
 import DepotAction from '../../DepotActions';
-
-const bigNumberFormatter = value =>
-  Number(snxJSConnector.utils.formatEther(value));
+import { updateCurrentTab } from '../../../ducks/ui';
 
 const sumBy = (collection, key) => {
   return collection.reduce((acc, curr) => {
@@ -41,153 +42,142 @@ const sumBy = (collection, key) => {
 
 const initialScenario = null;
 
-const HiddenContent = ({ t, data }) => {
+const HiddenContent = ({ data }) => {
+  const { t } = useTranslation();
+  const {
+    state: {
+      wallet: { networkName },
+    },
+  } = useContext(Store);
   return (
     <HiddenContentWrapper>
-      <table style={{ width: '100%' }}>
-        <thead style={{ marginBottom: '16px' }}>
-          <TRHead style={{ marginBottom: '16px' }}>
-            {['Activity', 'Amount', 'Rate', 'Date | Time', 'View'].map(
+      <HiddenTable style={{ width: '100%' }}>
+        <HiddenTableHead>
+          <HiddenTableRow>
+            {['Activity', 'Amount', 'Rate', 'Time | Date', ''].map(
               headerElement => {
                 return (
-                  <TH key={headerElement}>
-                    <TableHeaderMedium>{headerElement}</TableHeaderMedium>
-                  </TH>
+                  <HiddenTableHeaderCell key={headerElement}>
+                    <DataLarge style={{ fontSize: '14px' }}>
+                      {headerElement}
+                    </DataLarge>
+                  </HiddenTableHeaderCell>
                 );
               }
             )}
-          </TRHead>
-        </thead>
-        <tbody>
-          {data.map((dataElement, i) => {
+          </HiddenTableRow>
+        </HiddenTableHead>
+        <HiddenTableBody>
+          {data.map((detail, i) => {
             return (
-              <TRBody key={i}>
-                <TD style={{ display: 'flex' }}>
-                  <TypeImage src='/images/actions/tiny-sold.svg' />
-                  <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
-                </TD>
-                <TD>
-                  <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
-                </TD>
-                <TD>
-                  <TableDataMedium>{dataElement.rate} sUSD</TableDataMedium>
-                </TD>
-                <TD>
-                  <TableDataMedium>{dataElement.date}</TableDataMedium>
-                </TD>
-                <TD>
-                  <HyperlinkSmall>VIEW</HyperlinkSmall>
-                </TD>
-              </TRBody>
+              <HiddenTableRow key={i}>
+                <HiddenTableCell>
+                  <HiddenTableCellContainer>
+                    <TypeImage src="/images/actions/tiny-sold.svg" />
+                    <TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
+                  </HiddenTableCellContainer>
+                </HiddenTableCell>
+                <HiddenTableCell>
+                  <TableDataMedium>
+                    {formatCurrency(detail.amount)} sUSD
+                  </TableDataMedium>
+                </HiddenTableCell>
+                <HiddenTableCell>
+                  <TableDataMedium>
+                    {formatCurrency(detail.rate)} sUSD / ETH
+                  </TableDataMedium>
+                </HiddenTableCell>
+                <HiddenTableCell>
+                  <TableDataMedium>
+                    {format(detail.date, 'H:mm | d MMM yy')}
+                  </TableDataMedium>
+                </HiddenTableCell>
+                <HiddenTableCell>
+                  <BorderlessButton
+                    href={`https://${
+                      networkName === 'mainnet' ? '' : networkName + '.'
+                    }etherscan.io/tx/${detail.transactionHash}`}
+                    as="a"
+                    target="_blank"
+                  >
+                    {t('button.navigation.view')}
+                  </BorderlessButton>
+                </HiddenTableCell>
+              </HiddenTableRow>
             );
           })}
-        </tbody>
-      </table>
+        </HiddenTableBody>
+      </HiddenTable>
     </HiddenContentWrapper>
   );
 };
 
-const ExpandableTable = withTranslation(({ t }) => {
-  const data = [
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-    {
-      amount: '2,000.00',
-      remaining: '500.00',
-      date: '14:00 | 4 Oct 2019',
-    },
-  ];
+const ExpandableTable = ({ data }) => {
+  const { depositsMade } = data;
   const [expandedElements, setExpanded] = useState([]);
   return (
-    <Fragment>
-      <Activity>
-        <ActivityHeader>
-          <H5 marginTop='10px'>{t('depot.table.title')}</H5>
-          <MoreButtons>
-            <ButtonTertiary>{t('depot.buttons.more')}</ButtonTertiary>
-            <ButtonTertiary>{t('depot.buttons.contract')}</ButtonTertiary>
-          </MoreButtons>
-        </ActivityHeader>
-        <List>
-          <HeaderRow>
-            {['Type', 'Amount', 'Remaining', 'Date | Time', 'Details'].map(
-              headerElement => {
-                return (
-                  <HeaderCell key={headerElement}>
-                    <TableHeaderMedium>{headerElement}</TableHeaderMedium>
-                  </HeaderCell>
-                );
-              }
-            )}
-          </HeaderRow>
-          {data.map((dataElement, i) => {
-            const isExpanded = expandedElements.includes(i);
+    <List>
+      <HeaderRow>
+        {['Type', 'Amount', 'Remaining', 'Time | Date', 'Details'].map(
+          headerElement => {
             return (
-              <ExpandableRow key={i} expanded={isExpanded}>
-                <BodyRow
-                  key={i}
-                  onClick={() =>
-                    setExpanded(currentExpandedState => {
-                      if (currentExpandedState.includes(i)) {
-                        return currentExpandedState.filter(
-                          state => state !== i
-                        );
-                      } else return [...currentExpandedState, i];
-                    })
-                  }
-                >
-                  <Cell>
-                    <TypeImage src='/images/actions/tiny-deposit.svg' />
-                    <TableDataMedium>Deposit</TableDataMedium>
-                  </Cell>
-                  <Cell>
-                    <TableDataMedium>{dataElement.amount} sUSD</TableDataMedium>
-                  </Cell>
-                  <Cell>
-                    <TableDataMedium>
-                      {dataElement.remaining} sUSD
-                    </TableDataMedium>
-                  </Cell>
-                  <Cell>
-                    <TableDataMedium>{dataElement.date}</TableDataMedium>
-                  </Cell>
-                  <Cell>{isExpanded ? <Minus> </Minus> : <Plus />}</Cell>
-                </BodyRow>
-                <HiddenContent
-                  data={[
-                    {
-                      amount: '2,000.00',
-                      remaining: '500.00',
-                      date: '14:00 | 4 Oct 2019',
-                    },
-                    {
-                      amount: '2,000.00',
-                      remaining: '500.00',
-                      date: '14:00 | 4 Oct 2019',
-                    },
-                    {
-                      amount: '2,000.00',
-                      remaining: '500.00',
-                      date: '14:00 | 4 Oct 2019',
-                    },
-                  ]}
-                />
-              </ExpandableRow>
+              <HeaderCell key={headerElement}>
+                <TableHeaderMedium>{headerElement}</TableHeaderMedium>
+              </HeaderCell>
             );
-          })}
-        </List>
-      </Activity>
-    </Fragment>
+          }
+        )}
+      </HeaderRow>
+      {depositsMade.map((deposit, i) => {
+        const isExpanded = expandedElements.includes(i);
+        const hasDetails = deposit.details && deposit.details.length > 0;
+        return (
+          <ExpandableRow key={i} expanded={isExpanded}>
+            <BodyRow
+              key={i}
+              onClick={() => {
+                if (!hasDetails) return;
+                setExpanded(currentExpandedState => {
+                  if (currentExpandedState.includes(i)) {
+                    return currentExpandedState.filter(state => state !== i);
+                  } else return [...currentExpandedState, i];
+                });
+              }}
+            >
+              <Cell>
+                <TypeImage src="/images/actions/tiny-deposit.svg" />
+                <TableDataMedium>Deposit</TableDataMedium>
+              </Cell>
+              <Cell>
+                <TableDataMedium>
+                  {formatCurrency(deposit.amount)} sUSD
+                </TableDataMedium>
+              </Cell>
+              <Cell>
+                <TableDataMedium>
+                  {formatCurrency(deposit.remaining)} sUSD
+                </TableDataMedium>
+              </Cell>
+              <Cell>
+                <TableDataMedium>
+                  {format(deposit.date, 'H:mm | d MMM yy')}
+                </TableDataMedium>
+              </Cell>
+              <Cell>
+                {isExpanded ? (
+                  <Minus />
+                ) : (
+                  <Plus style={{ opacity: hasDetails ? '1' : '0.3' }} />
+                )}
+              </Cell>
+            </BodyRow>
+            <HiddenContent data={deposit.details} />
+          </ExpandableRow>
+        );
+      })}
+    </List>
   );
-});
+};
 
 const getApiUrl = networkName =>
   `https://${
@@ -199,6 +189,7 @@ const useGetDepotEvents = (walletAddress, networkName) => {
   useEffect(() => {
     const getDepotEvents = async () => {
       try {
+        setData({ loadingEvents: true });
         const results = await Promise.all([
           fetch(
             `${getApiUrl(
@@ -226,15 +217,44 @@ const useGetDepotEvents = (walletAddress, networkName) => {
         const totalDepositsMade = sumBy(depositsMade, 'value');
         const totalDepositsCleared = sumBy(depositsCleared, 'toAmount');
         const totalDepositsRemoved = sumBy(depositsRemoved, 'value');
-
+        const depositsMadeFiltered = depositsMade
+          .filter(depositMade => {
+            return !depositsRemoved.find(
+              depositRemoved =>
+                depositRemoved.depositIndex === depositMade.depositIndex
+            );
+          })
+          .map(deposit => {
+            let remaining = deposit.value;
+            let details = depositsCleared
+              .filter(d => d.depositIndex === deposit.depositIndex)
+              .map(d => {
+                remaining -= d.toAmount;
+                return {
+                  amount: d.toAmount,
+                  rate: d.toAmount / d.fromETHAmount,
+                  date: new Date(d.blockTimestampDate),
+                  transactionHash: d.transactionHash,
+                };
+              });
+            return {
+              amount: deposit.value,
+              date: new Date(deposit.blockTimestampDate),
+              remaining,
+              details,
+            };
+          });
         setData({
+          loadingEvents: false,
           amountAvailable: Math.max(
             0,
             totalDepositsMade - totalDepositsCleared - totalDepositsRemoved
           ),
+          depositsMade: depositsMadeFiltered,
         });
       } catch (e) {
         console.log(e);
+        setData({ loadingEvents: false });
       }
     };
     getDepotEvents();
@@ -246,6 +266,7 @@ const useGetDepotData = walletAddress => {
   useEffect(() => {
     const getDepotData = async () => {
       try {
+        setData({ loadingData: true });
         const results = await Promise.all([
           snxJSConnector.snxJS.Depot.totalSellableDeposits(),
           snxJSConnector.snxJS.Depot.minimumDepositAmount(),
@@ -257,11 +278,14 @@ const useGetDepotData = walletAddress => {
           sUSDBalance,
         ] = results.map(bigNumberFormatter);
         setData({
+          loadingData: false,
           totalSellableDeposits,
+          minimumDepositAmount,
           sUSDBalance,
         });
       } catch (e) {
         console.log(e);
+        setData({ loadingData: false });
       }
     };
     getDepotData();
@@ -275,21 +299,31 @@ const Depot = ({ t }) => {
     state: {
       wallet: { currentWallet, networkName },
     },
+    dispatch,
   } = useContext(Store);
-  const { totalSellableDeposits, sUSDBalance } = useGetDepotData(currentWallet);
-  const { amountAvailable } = useGetDepotEvents(currentWallet, networkName);
+  const {
+    totalSellableDeposits,
+    sUSDBalance,
+    loadingData,
+    minimumDepositAmount,
+  } = useGetDepotData(currentWallet);
+  const { amountAvailable, depositsMade, loadingEvents } = useGetDepotEvents(
+    currentWallet,
+    networkName
+  );
 
   const props = {
     onDestroy: () => setCurrentScenario(null),
     sUSDBalance,
     amountAvailable,
+    minimumDepositAmount,
   };
 
   return (
     <PageContainer>
       <DepotAction action={currentScenario} {...props} />
       <PageTitle>
-        {t('depot.intro.pageTitle')}${formatCurrency(totalSellableDeposits)}{' '}
+        {t('depot.intro.pageTitle')} ${formatCurrency(totalSellableDeposits)}{' '}
         sUSD
       </PageTitle>
       <PLarge>{t('depot.intro.pageSubtitle')}</PLarge>
@@ -313,7 +347,40 @@ const Depot = ({ t }) => {
           );
         })}
       </ButtonRow>
-      <ExpandableTable />
+      <Activity>
+        <ActivityHeader>
+          <H5 marginTop="10px">{t('depot.table.title')}</H5>
+          <MoreButtons>
+            <ButtonTertiary
+              onClick={() => updateCurrentTab('transactionsHistory', dispatch)}
+            >
+              {t('depot.buttons.more')}
+            </ButtonTertiary>
+            <ButtonTertiary
+              href={`https://${
+                networkName === 'mainnet' ? '' : networkName + '.'
+              }etherscan.io/address/${
+                snxJSConnector.snxJS.Depot.contract.address
+              }`}
+              as="a"
+              target="_blank"
+            >
+              {t('depot.buttons.contract')}
+            </ButtonTertiary>
+          </MoreButtons>
+        </ActivityHeader>
+        {depositsMade && depositsMade.length > 0 ? (
+          <ExpandableTable data={{ depositsMade }} />
+        ) : (
+          <TablePlaceholder>
+            {loadingEvents || loadingData ? (
+              <Spinner></Spinner>
+            ) : (
+              <TableDataMedium>No Data</TableDataMedium>
+            )}
+          </TablePlaceholder>
+        )}
+      </Activity>
     </PageContainer>
   );
 };
@@ -357,8 +424,8 @@ const Amount = styled.span`
   margin: 8px 0px 0px 0px;
 `;
 
-const Activity = styled.span`
-  height: auto;
+const Activity = styled.div`
+  min-height: 400px;
 `;
 
 const ActivityHeader = styled.span`
@@ -372,14 +439,14 @@ const ActivityHeader = styled.span`
 const MoreButtons = styled.span`
   height: auto;
   display: flex;
-  & :first-child {
+  & > :first-child {
     margin-right: 8px;
   }
 `;
 
 const TypeImage = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
 `;
 
@@ -389,34 +456,53 @@ const HiddenContentWrapper = styled.div`
   border-top-width: 0;
 `;
 
-const TH = styled.th`
-  text-transform: uppercase;
+const HiddenTable = styled.table`
+  width: 100%;
+`;
+
+const HiddenTableHead = styled.thead``;
+
+const HiddenTableBody = styled.tbody``;
+
+const HiddenTableHeaderCell = styled.th`
+  padding-bottom: 5px;
   text-align: left;
-  & :last-child {
+  border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
+  :last-child {
     text-align: right;
   }
 `;
 
-const TRHead = styled.tr`
-  & :last-child,
-  & :nth-last-child(2) {
-    text-align: right;
+const HiddenTableRow = styled.tr`
+  :first-child {
+    td {
+      padding: 15px 0 5px 0;
+    }
   }
 `;
 
-const TRBody = styled.tr`
-  & :last-child,
-  & :nth-last-child(2) {
-    text-align: right;
-  }
-`;
-
-const TD = styled.td`
+const HiddenTableCell = styled.td`
+  padding: 5px 0;
   text-align: left;
+  :last-child {
+    text-align: right;
+  }
+`;
+
+const HiddenTableCellContainer = styled.div`
+  display: flex;
   align-items: center;
-  & :last-child {
-    text-align: right;
-  }
+`;
+
+const TablePlaceholder = styled.div`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const List = styled.div`
+  width: 100%;
 `;
 
 export default withTranslation()(Depot);

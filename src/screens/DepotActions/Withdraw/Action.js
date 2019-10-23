@@ -6,9 +6,19 @@ import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
 
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
-import { PLarge, H1, Subtext } from '../../../components/Typography';
+import { PLarge, H1 } from '../../../components/Typography';
 
-const Action = ({ t, onDestroy, onWithdraw, amountAvailable }) => {
+import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+import ErrorMessage from '../../../components/ErrorMessage';
+
+const Action = ({
+  t,
+  onDestroy,
+  onWithdraw,
+  amountAvailable,
+  isFetchingGasLimit,
+  gasEstimateError,
+}) => {
   return (
     <SlidePage>
       <Container>
@@ -19,18 +29,23 @@ const Action = ({ t, onDestroy, onWithdraw, amountAvailable }) => {
         </Navigation>
         <Top>
           <Intro>
-            <ActionImage src='/images/actions/withdraw.svg' />
-            <H1>{t('withdraw.action.pageTitle')}</H1>
-            <PLarge>{t('withdraw.action.amountSubtitle')}</PLarge>
+            <ActionImage src="/images/actions/withdraw.svg" />
+            <H1>{t('depot.withdraw.action.pageTitle')}</H1>
+            <PLarge>{t('depot.withdraw.action.amountSubtitle')}</PLarge>
             <Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
           </Intro>
+          <ErrorMessage message={gasEstimateError} />
         </Top>
         <Bottom>
-          <Subtext marginBottom='32px'>
-            {t('network.gas')} <Highlighted>EDIT</Highlighted>
-          </Subtext>
-          <ButtonPrimary onClick={() => onWithdraw()} margin='auto'>
-            {t('withdraw.action.buttons.withdraw')}
+          <TransactionPriceIndicator />
+          <ButtonPrimary
+            disabled={
+              isFetchingGasLimit || gasEstimateError || !amountAvailable
+            }
+            onClick={onWithdraw}
+            margin="auto"
+          >
+            {t('depot.withdraw.action.buttons.withdraw')}
           </ButtonPrimary>
         </Bottom>
       </Container>
@@ -58,12 +73,11 @@ const Container = styled.div`
 `;
 
 const Top = styled.div`
-  height: auto;
-  margin-bottom: 80px;
+  width: 100%;
+  margin: 0 auto 80px auto;
 `;
 
 const Bottom = styled.div`
-  height: auto;
   margin-bottom: 40px;
 `;
 
@@ -74,7 +88,6 @@ const Navigation = styled.div`
 `;
 
 const Intro = styled.div`
-  max-width: 380px;
   margin-bottom: 64px;
 `;
 
@@ -89,11 +102,6 @@ const Amount = styled.span`
   font-family: 'apercu-medium';
   font-size: 24px;
   margin: 8px 0px 0px 0px;
-`;
-
-const Highlighted = styled.span`
-  font-family: 'apercu-bold';
-  color: ${props => props.theme.colorStyles.hyperlink};
 `;
 
 export default withTranslation()(Action);

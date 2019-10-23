@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 
-const Plus = () => {
+const Plus = ({ style }) => {
   const theme = useContext(ThemeContext);
   return (
-    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+    <svg {...style} width="24" height="24" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" fillRule="evenodd">
         <circle
           stroke={theme.colorStyles.borders}

@@ -48,7 +48,7 @@ const HeaderBlock = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 104px;
+  width: 120px;
   margin-right: 18px;
 `;
 
