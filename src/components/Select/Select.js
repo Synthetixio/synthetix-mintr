@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import Calendar from 'react-calendar'
 
 import { ButtonTertiaryLabel, DataLarge } from '../Typography';
 
@@ -18,7 +19,6 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
     <SelectContainer>
       <List>
         {data.map(element => {
-
           return (
             <ListElement onClick={() => handleSelect(element)}>
               <ListElementInner>
@@ -34,15 +34,37 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
   );
 };
 
+const CalendarFilter = ({ data = [], onSelect, selected = [] }) => {
+  return (
+    <SelectContainer autoWidth>
+      <Calendar
+       returnValue="range"
+       selectRange={true}
+       onChange={([from, to]) => onSelect({from, to})} />
+    </SelectContainer>
+  )
+};
+
+const RangeFilter = ({ data = [], onSelect, selected = [] }) => {
+  return (
+    <SelectContainer>
+      <Label for="from">From:</Label>
+      <Input name="from" type="number"></Input>
+      <Label for="to">To:</Label>
+      <Input name="to" type="number"></Input>
+    </SelectContainer>
+  )
+};
+
 const Dropdown = ({ type, data, onSelect, selected }) => {
   const props = { data, onSelect, selected };
   switch (type) {
     case 'select':
       return <DropdownSelect {...props} />;
     case 'calendar':
-      return null;
-    case 'input':
-      return null;
+      return <CalendarFilter {...props} />;
+    case 'range':
+      return <RangeFilter {...props} />;
   }
 };
 
@@ -103,7 +125,7 @@ const SelectContainer = styled.div`
   position: absolute;
   top: calc(100% + 10px);
   left: 0;
-  width: 100%;
+  width: ${props => props.autoWidth ? 'auto' : '100%'};
   border: 1px solid ${props => props.theme.colorStyles.borders};
   border-radius: 5px;
   background-color: ${props => props.theme.colorStyles.panels};
@@ -131,5 +153,11 @@ const ListElementInner = styled.li`
 const ListElementIcon = styled.img`
   margin-right: 10px;
 `;
+
+const Label = styled.label`
+  
+`
+
+const Input = styled.input``
 
 export default Select;

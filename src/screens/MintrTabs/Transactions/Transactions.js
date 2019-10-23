@@ -2,7 +2,7 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
+import { format, isWithinInterval } from 'date-fns';
 import { formatCurrency } from '../../../helpers/formatters';
 import Select from '../../../components/Select';
 
@@ -137,11 +137,17 @@ const getEventInfo = data => {
 };
 
 const filterTransactions = (transactions, filters) => {
+  const { events, dates, amount } = filters
+  console.log(events, dates)
   if (!transactions || !transactions.length) return transactions
-
+    console.log(transactions[0])
   return transactions.filter(t => {
-    if (filters.events.length) {
-      if (!filters.events.includes(t.event)) return
+    if (events.length) {
+      if (!events.includes(t.event)) return
+    }
+
+    if (dates.from) {
+      if (!isWithinInterval(new Date(t.createdAt), {start: dates.from, end: dates.to})) return
     }
 
     return true
@@ -220,8 +226,8 @@ const Transactions = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [filters, setFilters] = useState({
     events: [],
-    dates: {},
-    amount: null,
+    dates: { from: null, to: null },
+    amount: { from: null, to: null },
   })
   const {
     state: {
@@ -254,10 +260,20 @@ const Transactions = () => {
               ></Select>
             </InputContainer>
             <InputContainer>
-              <Select placeholder="dates"></Select>
+              <Select 
+                placeholder="dates"
+                type="calendar"
+                selected={filters.dates}
+                onSelect={selected => setFilters({...filters, ...{dates: selected}})}
+              ></Select>
             </InputContainer>
             <InputContainer>
-              <Select placeholder="amount"></Select>
+              <Select 
+                placeholder="amount"
+                type="range"
+                selected={filters.amount}
+                onSelect={selected => setFilters({...filters, ...{amount: selected}})}
+              ></Select>
             </InputContainer>
 
             <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
