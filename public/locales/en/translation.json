@@ -236,7 +236,7 @@
   "depot": {
     "intro": {
       "pageTitle": "Depot:",
-      "pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Uniswap, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
+      "pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Synthetix.exchange, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
     },
     "table": {
       "title": "Recent activity:"
