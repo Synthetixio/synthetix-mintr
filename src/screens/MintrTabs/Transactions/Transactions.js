@@ -27,7 +27,14 @@ import { ButtonTertiary, BorderlessButton } from '../../../components/Button';
 
 const PAGINATION_INDEX = 10;
 
-const EVENT_LIST = ['Issued', 'Burned', 'FeesClaimed', 'SynthExchange'];
+const EVENT_LIST = [
+  'Issued',
+  'Burned',
+  'FeesClaimed',
+  'SynthExchange',
+  'SynthDeposit',
+  'SynthWithdrawal',
+];
 
 const getIconForEvent = event => {
   switch (event) {
@@ -39,6 +46,10 @@ const getIconForEvent = event => {
       return 'tiny-claim.svg';
     case 'SynthExchange':
       return 'tiny-trade.svg';
+    case 'SynthDeposit':
+      return 'tiny-deposit.svg';
+    case 'SynthWithdrawal':
+      return 'tiny-withdraw.svg';
   }
 };
 
