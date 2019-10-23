@@ -1,55 +1,54 @@
 body {
-  margin: 0;
-  font-family: 'apercu-regular';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family: 'apercu-regular';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 * {
-  box-sizing: border-box;
-  font-weight: normal;
-  font-style: normal;
+	box-sizing: border-box;
+	font-weight: normal;
+	font-style: normal;
 }
 
 h1 {
-  text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 h2 {
-  text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 h4 {
-  text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 h5 {
-  text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 @font-face {
-  font-family: 'apercu-regular';
-  src: url('/fonts/apercu-regular.eot');
-  src: url('/fonts/apercu-regular.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/apercu-regular.woff2') format('woff2'),
-    url('/fonts/apercu-regular.woff') format('woff'),
-    url('/fonts/apercu-regular.ttf') format('truetype');
+	font-family: 'apercu-regular';
+	src: url('/fonts/apercu-regular.eot');
+	src: url('/fonts/apercu-regular.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/apercu-regular.woff2') format('woff2'),
+		url('/fonts/apercu-regular.woff') format('woff'),
+		url('/fonts/apercu-regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'apercu-medium';
-  src: url('/fonts/apercu-medium.eot');
-  src: url('/fonts/apercu-medium.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/apercu-medium.woff2') format('woff2'),
-    url('/fonts/apercu-medium.woff') format('woff'),
-    url('/fonts/apercu-medium.ttf') format('truetype');
+	font-family: 'apercu-medium';
+	src: url('/fonts/apercu-medium.eot');
+	src: url('/fonts/apercu-medium.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/apercu-medium.woff2') format('woff2'),
+		url('/fonts/apercu-medium.woff') format('woff'),
+		url('/fonts/apercu-medium.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'apercu-bold';
-  src: url('/fonts/apercu-bold.eot');
-  src: url('/fonts/apercu-bold.eot?#iefix') format('embedded-opentype'),
-    url('/fonts/apercu-bold.woff2') format('woff2'),
-    url('/fonts/apercu-bold.woff') format('woff'),
-    url('/fonts/apercu-bold.ttf') format('truetype');
+	font-family: 'apercu-bold';
+	src: url('/fonts/apercu-bold.eot');
+	src: url('/fonts/apercu-bold.eot?#iefix') format('embedded-opentype'),
+		url('/fonts/apercu-bold.woff2') format('woff2'), url('/fonts/apercu-bold.woff') format('woff'),
+		url('/fonts/apercu-bold.ttf') format('truetype');
 }
