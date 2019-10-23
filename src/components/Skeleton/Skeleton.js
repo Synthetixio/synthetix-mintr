@@ -15,13 +15,13 @@ const Skeleton = styled.div`
   width: ${props => (props.width ? props.width : '90px')};
   height: ${props => (props.height ? props.height : '15px')};
   background: ${props =>
-    'linear-gradient(-90deg, ' +
-    props.theme.colorStyles.skeletonDark +
-    ' 0%, ' +
-    props.theme.colorStyles.skeletonLight +
-    ' 50%, ' +
-    props.theme.colorStyles.skeletonDark +
-    ' 100%)'};
+		'linear-gradient(-90deg, ' +
+		props.theme.colorStyles.skeletonDark +
+		' 0%, ' +
+		props.theme.colorStyles.skeletonLight +
+		' 50%, ' +
+		props.theme.colorStyles.skeletonDark +
+		' 100%)'};
   background-size: 400% 400%;
   animation: ${pulse} 1.4s ease-out infinite;
 `;

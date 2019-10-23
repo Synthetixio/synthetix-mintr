@@ -13,41 +13,41 @@ import MaintenanceMessage from '../MaintenanceMessage';
 import NotificationCenter from '../../components/NotificationCenter';
 
 const renderCurrentPage = currentPage => {
-  switch (currentPage) {
-    case 'landing':
-    default:
-      return <Landing />;
-    case 'walletConnection':
-      return <WalletConnection />;
-    case 'walletSelection':
-      return <WalletSelection />;
-    case 'main':
-      return <Main />;
-    case 'maintenance':
-      return <MaintenanceMessage />;
-  }
+	switch (currentPage) {
+		case 'landing':
+		default:
+			return <Landing />;
+		case 'walletConnection':
+			return <WalletConnection />;
+		case 'walletSelection':
+			return <WalletSelection />;
+		case 'main':
+			return <Main />;
+		case 'maintenance':
+			return <MaintenanceMessage />;
+	}
 };
 
 const Root = () => {
-  const {
-    state: {
-      ui: { currentPage },
-    },
-  } = useContext(Store);
-  return (
-    <Suspense fallback={<div></div>}>
-      <RootWrapper>
-        {renderCurrentPage(currentPage)}
-        <NotificationCenter></NotificationCenter>
-      </RootWrapper>
-    </Suspense>
-  );
+	const {
+		state: {
+			ui: { currentPage },
+		},
+	} = useContext(Store);
+	return (
+		<Suspense fallback={<div></div>}>
+			<RootWrapper>
+				{renderCurrentPage(currentPage)}
+				<NotificationCenter></NotificationCenter>
+			</RootWrapper>
+		</Suspense>
+	);
 };
 
 const RootWrapper = styled('div')`
-  position: relative;
-  background: ${props => props.theme.colorStyles.background};
-  width: 100%;
+	position: relative;
+	background: ${props => props.theme.colorStyles.background};
+	width: 100%;
 `;
 
 export default hot(Root);
