@@ -147,6 +147,7 @@ const filterTransactions = (transactions, filters) => {
     if (dates.from) {
       if (!isWithinInterval(new Date(t.createdAt), {start: dates.from, end: dates.to})) return
     }
+
     if (!isNaN(amount.from) && !isNaN(amount.to)) {
       // console.log(t.value, amount.from, amount.to, t.value < amount.from, )
       if (t.value < amount.from || t.value > amount.to) return 
@@ -231,9 +232,18 @@ const Transactions = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [filters, setFilters] = useState({
     events: [],
-    dates: { from: null, to: null },
-    amount: { from: null, to: null },
+    dates: { from: undefined, to: undefined },
+    amount: { from: undefined, to: undefined },
   })
+
+  const clearFilters = () => {
+    setFilters({
+      events: [],
+      dates: { from: undefined, to: undefined },
+      amount: { from: undefined, to: undefined },
+   })
+  }
+
   const {
     state: {
       wallet: { currentWallet, networkName },
@@ -281,7 +291,7 @@ const Transactions = () => {
               ></Select>
             </InputContainer>
 
-            <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
+            <ButtonTertiary onClick={clearFilters}>CLEAR FILTERS</ButtonTertiary>
           </Inputs>
         </Filters>
         <TransactionsPanel>

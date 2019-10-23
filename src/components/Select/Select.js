@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Calendar from 'react-calendar'
+import { format } from 'date-fns';
+
+import { formatCurrency } from '../../helpers/formatters';
 
 import { ButtonTertiaryLabel, InputTextSmall, InputLabelSmall, DataLarge } from '../Typography';
 const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
@@ -97,7 +100,10 @@ const Select = ({ placeholder, type = 'select', data = null, onSelect, selected 
       <Container>
         <Button onClick={() => setDropdownVisible(!dropdownVisible)}>
           <ButtonInner>
-            <ButtonTertiaryLabel>{placeholder}</ButtonTertiaryLabel>
+            {(selected.length || selected.from) 
+              ? <SelectedValue type={type} selected={selected} data={data}/>
+              : <ButtonTertiaryLabel>{placeholder}</ButtonTertiaryLabel>
+             }
             <ButtonImage src={'/images/caret-down.svg'}></ButtonImage>
           </ButtonInner>
         </Button>
@@ -113,6 +119,39 @@ const Select = ({ placeholder, type = 'select', data = null, onSelect, selected 
     </OutsideClickHandler>
   );
 };
+
+const SelectedValue = ({ type, data, selected }) => {
+  let text
+  switch (type) {
+    case 'select':
+      const elements = data.filter(d => selected.includes(d.label))
+      if (elements.length === 1) {
+        return (
+          <span>
+            <ListElementIcon src={elements[0].icon}></ListElementIcon>
+            <DataLarge>{elements[0].label}</DataLarge>
+          </span>
+        ) 
+      }
+
+      return (
+        <span>
+          {elements.map(e => <ListElementIcon src={e.icon} key={e.label}></ListElementIcon>)}
+        </span>
+      );
+
+    case 'calendar':
+      text = `${format(new Date(selected.from), 'dd-MM-yy')} → ${format(new Date(selected.to), 'dd-MM-yy')}`
+      return (
+        <SelectedValueText>{text}</SelectedValueText>
+      )
+    case 'range':
+      text = `${formatCurrency(selected.from)} → ${formatCurrency(selected.to)}`
+      return (
+        <SelectedValueText>{text}</SelectedValueText>
+      )
+  }
+}
 
 const Container = styled.div`
   width: 100%;
@@ -173,7 +212,9 @@ const ListElementInner = styled.li`
 `;
 
 const ListElementIcon = styled.img`
-  margin-right: 10px;
+  margin-left: 7px;
+  margin-right: 8px;
+  vertical-align: text-bottom;
 `;
 
 const RangeContainer = styled.div`
@@ -190,7 +231,17 @@ const Input = styled(InputTextSmall)`
   margin: 8px 0 25px 0;
   border: 1px solid ${props => props.theme.colorStyles.borders};
   width: 100%;
+
+  -moz-appearance:textfield;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
 `
 
+const SelectedValueText = styled(ButtonTertiaryLabel)`
+  color: ${props => props.theme.colorStyles.inputTextSmall}
+`
 
 export default Select;

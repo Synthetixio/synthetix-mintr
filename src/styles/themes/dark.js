@@ -9,6 +9,7 @@ export default {
   background: COLORS.dark1,
   hyperlink: COLORS.buttonLight,
 
+
   buttonPrimaryText: COLORS.white,
   buttonPrimaryBg: COLORS.buttonLight,
   buttonPrimaryBgFocus: COLORS.buttonDark,
@@ -18,6 +19,7 @@ export default {
   buttonTertiaryBgFocus: COLORS.dark3,
 
   inputLabelSmall: COLORS.dark6,
+  inputTextSmall: COLORS.buttonLight,
 
   menu: COLORS.dark2,
   panelButton: COLORS.dark3,
