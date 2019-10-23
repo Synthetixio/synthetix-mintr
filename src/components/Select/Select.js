@@ -5,15 +5,24 @@ import OutsideClickHandler from 'react-outside-click-handler';
 
 import { ButtonTertiaryLabel, DataLarge } from '../Typography';
 
-const DropdownSelect = ({ data = [], onSelect }) => {
+const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
+  const handleSelect = (element) => {
+    if (selected.includes(element.label)) {
+      return onSelect(selected.filter(s => s !== element.label))
+    } else {
+      return onSelect([element.label, ...selected])
+    }
+  }
+
   return (
     <SelectContainer>
       <List>
         {data.map(element => {
+
           return (
-            <ListElement onClick={() => onSelect(element)}>
+            <ListElement onClick={() => handleSelect(element)}>
               <ListElementInner>
-                <input type="checkbox"></input>
+                <input type="checkbox" checked={selected.includes(element.label)}></input>
                 <ListElementIcon src={element.icon}></ListElementIcon>
                 <DataLarge>{element.label}</DataLarge>
               </ListElementInner>
@@ -25,8 +34,8 @@ const DropdownSelect = ({ data = [], onSelect }) => {
   );
 };
 
-const Dropdown = ({ type, data, onSelect }) => {
-  const props = { data, onSelect };
+const Dropdown = ({ type, data, onSelect, selected }) => {
+  const props = { data, onSelect, selected };
   switch (type) {
     case 'select':
       return <DropdownSelect {...props} />;
@@ -37,10 +46,8 @@ const Dropdown = ({ type, data, onSelect }) => {
   }
 };
 
-const Select = ({ placeholder, type = 'select', data = null }) => {
-  const [selected, setSelected] = useState([]);
+const Select = ({ placeholder, type = 'select', data = null, onSelect, selected }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  console.log(selected);
   return (
     <OutsideClickHandler onOutsideClick={() => setDropdownVisible(false)}>
       <Container>
@@ -54,7 +61,8 @@ const Select = ({ placeholder, type = 'select', data = null }) => {
           <Dropdown
             type={type}
             data={data}
-            onSelect={element => setSelected([element, ...selected])}
+            onSelect={onSelect}
+            selected={selected}
           ></Dropdown>
         ) : null}
       </Container>

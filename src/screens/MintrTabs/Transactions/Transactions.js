@@ -136,6 +136,19 @@ const getEventInfo = data => {
   };
 };
 
+const filterTransactions = (transactions, filters) => {
+  if (!transactions || !transactions.length) return transactions
+
+  return transactions.filter(t => {
+    if (filters.events.length) {
+      if (!filters.events.includes(t.event)) return
+    }
+
+    return true
+  })
+  
+}
+
 const TransactionsTable = ({ data }) => {
   const {
     state: {
@@ -205,6 +218,11 @@ const TransactionsTable = ({ data }) => {
 
 const Transactions = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [filters, setFilters] = useState({
+    events: [],
+    dates: {},
+    amount: null,
+  })
   const {
     state: {
       wallet: { currentWallet, networkName },
@@ -215,10 +233,12 @@ const Transactions = () => {
     networkName
   );
 
+  const filteredTransactions = filterTransactions(transactions, filters)
+
   return (
     <PageContainer>
       <Fragment>
-        {/* <Filters>
+        <Filters>
           <Inputs>
             <InputContainer>
               <Select
@@ -229,6 +249,8 @@ const Transactions = () => {
                     icon: `/images/actions/${getIconForEvent(event)}`,
                   };
                 })}
+                selected={filters.events}
+                onSelect={selected => setFilters({...filters, ...{events: selected}})}
               ></Select>
             </InputContainer>
             <InputContainer>
@@ -240,11 +262,11 @@ const Transactions = () => {
 
             <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
           </Inputs>
-        </Filters> */}
+        </Filters>
         <TransactionsPanel>
-          {transactions && transactions.length > 0 ? (
+          {filteredTransactions && filteredTransactions.length > 0 ? (
             <TransactionsTable
-              data={transactions.slice(
+              data={filteredTransactions.slice(
                 PAGINATION_INDEX * currentPage,
                 PAGINATION_INDEX * currentPage + PAGINATION_INDEX
               )}
@@ -255,7 +277,7 @@ const Transactions = () => {
             </TransactionsPlaceholder>
           )}
           <Paginator
-            disabled={loading || !transactions}
+            disabled={loading || !filteredTransactions}
             currentPage={currentPage}
             onPageChange={page => setCurrentPage(page)}
           />
