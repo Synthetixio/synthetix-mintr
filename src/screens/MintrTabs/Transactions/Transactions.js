@@ -138,9 +138,7 @@ const getEventInfo = data => {
 
 const filterTransactions = (transactions, filters) => {
   const { events, dates, amount } = filters
-  console.log(events, dates)
   if (!transactions || !transactions.length) return transactions
-    console.log(transactions[0])
   return transactions.filter(t => {
     if (events.length) {
       if (!events.includes(t.event)) return
@@ -148,6 +146,13 @@ const filterTransactions = (transactions, filters) => {
 
     if (dates.from) {
       if (!isWithinInterval(new Date(t.createdAt), {start: dates.from, end: dates.to})) return
+    }
+    if (!isNaN(amount.from) && !isNaN(amount.to)) {
+      // console.log(t.value, amount.from, amount.to, t.value < amount.from, )
+      if (t.value < amount.from || t.value > amount.to) return 
+      if (t.snxRewards < amount.from || t.snxRewards > amount.to) return
+      if (t.exchangeFromAmount < amount.from || t.exchangeFromAmount > amount.to) return
+      if (t.exchangeToAmount < amount.from || t.exchangeToAmount > amount.to) return
     }
 
     return true

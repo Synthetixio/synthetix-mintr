@@ -218,6 +218,24 @@ export const InputTextLarge = props => {
   );
 };
 
+export const InputTextSmall = props => {
+  const { inputTextSmall } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...inputTextSmall} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
+export const InputLabelSmall = props => {
+  const { inputLabelSmall } = useContext(ThemeContext).textStyles;
+  return (
+    <DynamicComponent {...inputLabelSmall} {...props}>
+      {props.children}
+    </DynamicComponent>
+  );
+};
+
 export const TableDataMedium = props => {
   const { tableDataMedium } = useContext(ThemeContext).textStyles;
   return (

@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Calendar from 'react-calendar'
 
-import { ButtonTertiaryLabel, DataLarge } from '../Typography';
-
+import { ButtonTertiaryLabel, InputTextSmall, InputLabelSmall, DataLarge } from '../Typography';
 const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
   const handleSelect = (element) => {
     if (selected.includes(element.label)) {
@@ -34,7 +33,7 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
   );
 };
 
-const CalendarFilter = ({ data = [], onSelect, selected = [] }) => {
+const CalendarFilter = ({ data = [], onSelect, selected }) => {
   return (
     <SelectContainer autoWidth>
       <Calendar
@@ -45,13 +44,36 @@ const CalendarFilter = ({ data = [], onSelect, selected = [] }) => {
   )
 };
 
-const RangeFilter = ({ data = [], onSelect, selected = [] }) => {
+const RangeFilter = ({ data = [], onSelect, selected }) => {
+  const [filters, setFilters] = useState(selected)
+  let updateTimeout
+
+  const onChange = (e) => {
+    const {value, name} = e.target
+    setFilters({...filters, ...{[name]: value}})
+  }
+
+  const handleKey = (e) => {
+    if (e.key === 'Enter') {
+      update()
+    }
+  }
+
+  const update = () => {
+    clearTimeout(updateTimeout)
+    if (filters.from !== selected.from || filters.to !== selected.to) {
+      onSelect(filters)
+    }
+  }
+
   return (
     <SelectContainer>
-      <Label for="from">From:</Label>
-      <Input name="from" type="number"></Input>
-      <Label for="to">To:</Label>
-      <Input name="to" type="number"></Input>
+      <RangeContainer>
+        <InputLabelSmall htmlFor="from">From:</InputLabelSmall>
+        <Input name="from" type="number" onChange={onChange} onBlur={update} onKeyDown={handleKey} value={filters.from} />
+        <InputLabelSmall htmlFor="to">To:</InputLabelSmall>
+        <Input name="to" type="number" onChange={onChange} onBlur={update} onKeyDown={handleKey} value={filters.to} />
+      </RangeContainer>
     </SelectContainer>
   )
 };
@@ -154,10 +176,21 @@ const ListElementIcon = styled.img`
   margin-right: 10px;
 `;
 
-const Label = styled.label`
-  
+const RangeContainer = styled.div`
+  height: 178px;
+
+  padding: 16px 24px;
 `
 
-const Input = styled.input``
+const Label = styled.label`
+`
+
+const Input = styled(InputTextSmall)`
+  height: 32px;
+  margin: 8px 0 25px 0;
+  border: 1px solid ${props => props.theme.colorStyles.borders};
+  width: 100%;
+`
+
 
 export default Select;
