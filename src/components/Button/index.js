@@ -9,14 +9,14 @@ import ButtonTransactionEdit from './ButtonTransactionEdit';
 import BorderlessButton from './BorderlessButton';
 
 export {
-  ButtonPrimary,
-  ButtonSecondary,
-  ButtonTertiary,
-  ButtonMax,
-  ButtonPrimaryMedium,
-  HeaderButton,
-  TabButton,
-  WalletStatusButton,
-  ButtonTransactionEdit,
-  BorderlessButton,
+	ButtonPrimary,
+	ButtonSecondary,
+	ButtonTertiary,
+	ButtonMax,
+	ButtonPrimaryMedium,
+	HeaderButton,
+	TabButton,
+	WalletStatusButton,
+	ButtonTransactionEdit,
+	BorderlessButton,
 };

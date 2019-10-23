@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { ButtonTertiaryLabel } from '../Typography';
 
 const DashboardHeaderButton = ({ children, onClick }) => {
-  return (
-    <Button onClick={onClick}>
-      <ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
-    </Button>
-  );
+	return (
+		<Button onClick={onClick}>
+			<ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
+		</Button>
+	);
 };
 
 const Button = styled.button`
