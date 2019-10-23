@@ -6,11 +6,13 @@ module.exports = {
 	},
 	parser: 'babel-eslint',
 	extends: 'eslint:recommended',
-	plugins: ['react', 'react-hooks', 'import'],
+	plugins: ['react', 'react-hooks', 'import', 'prettier'],
 	parserOptions: {
 		sourceType: 'module',
 	},
 	rules: {
+		'prettier/prettier': 'error',
+		'no-mixed-spaces-and-tabs': ['warn', 'smart-tabs'],
 		'no-console': 'off',
 		'import/no-unresolved': 2,
 		'no-undef': 2,
