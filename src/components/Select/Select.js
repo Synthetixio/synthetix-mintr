@@ -26,7 +26,7 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
               <ListElementInner>
                 <input type="checkbox" checked={selected.includes(element.label)}></input>
                 <ListElementIcon src={element.icon}></ListElementIcon>
-                <DataLarge>{element.label}</DataLarge>
+                <ListElementLabel>{element.label}</ListElementLabel>
               </ListElementInner>
             </ListElement>
           );
@@ -129,7 +129,7 @@ const SelectedValue = ({ type, data, selected }) => {
         return (
           <span>
             <ListElementIcon src={elements[0].icon}></ListElementIcon>
-            <DataLarge>{elements[0].label}</DataLarge>
+            <ListElementLabel>{elements[0].label}</ListElementLabel>
           </span>
         ) 
       }
@@ -211,10 +211,16 @@ const ListElementInner = styled.li`
   align-items: center;
 `;
 
+const ListElementLabel = styled(DataLarge)`
+  width: 100%;
+  overflow: hidden;
+`
+
 const ListElementIcon = styled.img`
   margin-left: 7px;
   margin-right: 8px;
   vertical-align: text-bottom;
+  width: 16px;
 `;
 
 const RangeContainer = styled.div`

@@ -7,7 +7,7 @@ const LanguageDropdown = () => {
   return (
     <Wrapper>
       <Languages>
-        {['English', 'French'].map(language => {
+        {['English'].map(language => {
           return (
             <LanguageElement
               key={language}
