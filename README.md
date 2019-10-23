@@ -3,7 +3,7 @@
 
 # Mintr v2
 
-This is the code for the new Synthetix Mintr dApp. https://beta.mintr.synthetix.io
+This is the code for the new Synthetix Mintr dApp: https://beta.mintr.synthetix.io
 
 The dApp communicates with the [Synthetix contracts](https://developer.synthetix.io/api/docs/deployed-contracts.html), allowing users to perform the following actions:
 
@@ -19,6 +19,8 @@ Mintr v2 supports the following wallet providers:
 - Trezor
 - Ledger
 - Coinbase Wallet
+
+![mintrv2](https://user-images.githubusercontent.com/799038/67426237-aa7a5c00-f5a7-11e9-96a6-1d721f3c58ba.gif)
 
 ---
 
