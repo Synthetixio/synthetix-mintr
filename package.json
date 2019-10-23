@@ -30,6 +30,7 @@
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
+		"clean-install": "rm ./package-lock.json && rm -rf node_modules/* && npm i",
 		"start": "node scripts/start.js",
 		"build": "node scripts/build.js",
 		"test": "node scripts/test.js",
