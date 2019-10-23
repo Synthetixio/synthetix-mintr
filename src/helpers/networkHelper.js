@@ -18,7 +18,6 @@ export const DEFAULT_GAS_LIMIT = {
 	sendSynth: 150000,
 };
 
-console.log(process.env.REACT_APP_INFURA_PROJECT_ID, 'env');
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const INFURA_JSON_RPC_URLS = {
