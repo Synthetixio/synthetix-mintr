@@ -26,7 +26,8 @@
 	"walletConnection": {
 		"intro": {
 			"pageTitle": "Connect wallet",
-			"pageSubtitle": "Please connect a wallet with your SNX holdings to continue."
+			"pageSubtitle": "Please connect a wallet with your SNX holdings to continue.",
+			"noMetamask": "Not installed"
 		}
 	},
 	"walletSelection": {
@@ -37,8 +38,11 @@
 		},
 		"success": {
 			"pageTitle": "Select Wallet",
-			"pageSubtitle": "Please select the wallet you would like to use with Mintr",
-			"connectInstructions": "Please follow the prompts on your device to unlock your wallet."
+			"pageSubtitle": "Please select the wallet you would like to use with Mintr"
+		},
+		"loading": {
+			"connectInstructions": "Please follow the prompts on your device to unlock your wallet.",
+			"connectVia": "Connect via {{walletType}}"
 		}
 	},
 	"dashboard": {
@@ -394,5 +398,9 @@
 		"list": {
 			"placeholder": "Search a synth..."
 		}
+	},
+	"maintenance": {
+		"title": "Mintr is currently unavailable due to upgrades.",
+		"subtitle": "Sorry for the inconvenience, it shall be back shortly."
 	}
 }

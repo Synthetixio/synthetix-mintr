@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { withTranslation, useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
@@ -110,9 +110,11 @@ const Heading = ({ hasLoaded, error }) => {
 			</HeadingContent>
 		) : (
 			<HeadingContent>
-				<WalletConnectionH1>{`Connect via ${walletType}`}</WalletConnectionH1>
+				<WalletConnectionH1>
+					<Trans i18nKey="walletSelection.loading.connectVia">Connect via {{ walletType }}</Trans>
+				</WalletConnectionH1>
 				<WalletConnectionPMega>
-					{t('walletSelection.success.connectInstructions')}
+					{t('walletSelection.loading.connectInstructions')}
 				</WalletConnectionPMega>
 			</HeadingContent>
 		);
