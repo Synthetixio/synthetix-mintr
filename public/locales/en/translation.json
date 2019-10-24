@@ -1,394 +1,404 @@
 {
-  "onboarding": {
-    "buttons": {
-      "mainnet": "Mainnet",
-      "synthetix": "What is Synthetix?",
-      "support": "Having trouble?"
-    }
-  },
-  "landing": {
-    "intro": {
-      "pageTitle": "Mint, Burn, Claim",
-      "pageSubtitle": "Mintr is a dApp for SNX holders to mint synthetic assets (Synths) and participate in the Synthetix Network."
-    },
-    "functionality": {
-      "mintTitle": "Mint Synths",
-      "mintDescription": "By locking up SNX collateral",
-      "burnTitle": "Burn Synths",
-      "burnDescription": "To unlock SNX",
-      "claimTitle": "Claim fees",
-      "claimDescription": "From the Synthetix Network"
-    },
-    "buttons": {
-      "connect": "Connect wallet"
-    }
-  },
-  "walletConnection": {
-    "intro": {
-      "pageTitle": "Connect wallet",
-      "pageSubtitle": "Please connect a wallet with your SNX holdings to continue."
-    }
-  },
-  "walletSelection": {
-    "error": {
-      "pageTitle": "Error",
-      "pageSubtitle": "Mintr couldn't access your wallet.",
-      "retry": "Retry"
-    },
-    "success": {
-      "pageTitle": "Select Wallet",
-      "pageSubtitle": "Please select the wallet you would like to use with Mintr",
-      "connectInstructions": "Please follow the prompts on your device to unlock your wallet."
-    }
-  },
-  "dashboard": {
-    "header": {
-      "support": "Support",
-      "onLabel": "Dark",
-      "offLabel": "Light"
-    },
-    "sections": {
-      "prices": "Current balances & prices:",
-      "wallet": "Your wallet details:"
-    },
-    "rewards": {
-      "open": "left to claim rewards",
-      "blocked": "Claiming rewards is <1>blocked</1>"
-    },
-    "ratio": {
-      "current": "Current collateralization ratio",
-      "target": "Target collateralization ratio"
-    },
-    "chart": {
-      "title": "Your SNX holdings:",
-      "staking": "Staking",
-      "transferrable": "Transferrable"
-    },
-    "buttons": {
-      "exchange": "Go to Synthetix.Exchange",
-      "synths": "View your Synths balance"
-    },
-    "holdings": {
-      "locked": "Locked",
-      "transferable": "Transferable",
-      "staking": "Staking",
-      "nonStaking": "Non-staking",
-      "escrowed": "Escrowed",
-      "nonEscrowed": "Non-escrowed"
-    },
-    "table": {
-      "debt": "Debt",
-      "synths": "Synths",
-      "balance": "Balance"
-    }
-  },
-  "mainContent": {
-    "header": {
-      "buttons": {
-        "home": "Home",
-        "depot": "Depot",
-        "transactionsHistory": "Transactions History",
-        "escrow": "Escrow",
-        "support": "Support"
-      }
-    }
-  },
-  "home": {
-    "pageTitle": "What would you like to do?",
-    "pageSubtitle": "Click any button below to view more info, confirm or change the amount before submitting.",
-    "actions": {
-      "mintTitle": "Mint",
-      "mintDescription": "Mint sUSD by locking SNX",
-      "burnTitle": "Burn",
-      "burnDescription": "Burn sUSD and unlock SNX",
-      "claimTitle": "Claim",
-      "claimDescription": "sUSD and SNX staking rewards",
-      "tradeTitle": "Trade",
-      "tradeDescription": "Trade any Synth to sUSD",
-      "sendTitle": "Transfer",
-      "sendDescription": "Transfer SNX, Synths or ETH to another wallet"
-    }
-  },
-  "mintrActions": {
-    "mint": {
-      "action": {
-        "pageTitle": "Mint",
-        "pageSubtitle": "Mint sUSD by staking and locking your SNX. This gives you a collateralisation ratio and a debt, allowing you to earn staking rewards.",
-        "instruction": "Confirm or enter amount to mint:",
-        "buttons": {
-          "mint": "Mint now"
-        }
-      },
-      "confirmation": {
-        "actionDescription": "Minting",
-        "subActionDescription": "By locking"
-      },
-      "complete": {
-        "pageTitle": "Minting in progress!"
-      }
-    },
-    "burn": {
-      "action": {
-        "pageTitle": "Burn",
-        "pageSubtitle": "Burn sUSD to unlock your staked Synths. This reduces your collateralisation ratio and eliminates your debt, allowing you to transfer your SNX.",
-        "instruction": "Confirm or enter amount to burn:",
-        "buttons": {
-          "burn": "Burn now"
-        }
-      },
-      "confirmation": {
-        "actionDescription": "Burning",
-        "subActionDescription": "And Unlocking"
-      },
-      "complete": {
-        "pageTitle": "Burning in progress!"
-      }
-    },
-    "claim": {
-      "action": {
-        "pageTitle": "Claim",
-        "pageSubtitle": "If you have locked your SNX and minted sUSD, you are eligible to collect two kinds of rewards: SNX staking rewards, and sUSD trading rewards generated on Synthetix.Exchange (sX).",
-        "table": {
-          "title": "Claimable periods:",
-          "period": "Period",
-          "status": "Fee claim status"
-        },
-        "tradingRewards": "Your available sUSD trading rewards:",
-        "stakingRewards": "Your available SNX staking rewards:",
-        "buttons": {
-          "claim": "Claim now",
-          "history": "Claim History"
-        },
-        "note": "Note: if not collected in the current period it will be forfeited and rolled over into the fee pool for the next fee period."
-      },
-      "confirmation": {
-        "actionDescription": "Claiming:"
-      },
-      "complete": {
-        "pageTitle": "Claiming in progress!"
-      }
-    },
-    "trade": {
-      "action": {
-        "pageTitle": "Trade",
-        "pageSubtitle": "Trade your Synths for sUSD. For a more detailed interface that allows you to trade between any Synths, use our Synthetix.Exchange dApp.",
-        "buttons": {
-          "trade": "Trade now",
-          "exchange": "Open in sX"
-        }
-      },
-      "confirmation": {
-        "actionDescription": "Trading:",
-        "subActionDescription": "Receiving:"
-      },
-      "complete": {
-        "pageTitle": "Trade in progress!"
-      }
-    },
-    "send": {
-      "action": {
-        "pageTitle": "Transfer",
-        "pageSubtitle": "Transfer your ETH, SNX or Synths to another wallet.",
-        "available": "Transferrable amount:",
-        "amountInstruction": "Enter amount or select max available:",
-        "walletInstruction": "Enter wallet address to send funds to:",
-        "buttons": {
-          "send": "Send now"
-        }
-      },
-      "confirmation": {
-        "actionDescription": "Sending:",
-        "subActionDescription": "To wallet:"
-      },
-      "complete": {
-        "pageTitle": "Sending in progress!"
-      }
-    },
-    "confirmation": {
-      "pageTitle": "Please confirm transaction",
-      "pageSubtitle": "",
-      "loading": "Waiting for user response..."
-    },
-    "complete": {
-      "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background."
-    }
-  },
-  "transactionSettings": {
-    "pageTitle": "Set transaction speed and gas",
-    "pageSubtitle": "Adjust the slider below to set the transaction speed and Ethereum Network Fees (Gas) before proceeding.",
-    "minutes": "mins",
-    "button": {
-      "submit": "Submit"
-    }
-  },
-  "button": {
-    "max": "Max",
-    "edit": "Edit",
-    "navigation": {
-      "cancel": "Cancel",
-      "back": "Go back",
-      "etherscan": "View on Etherscan",
-      "view": "View",
-      "finish": "Finish & return home",
-      "ok": "OK"
-    }
-  },
-  "depot": {
-    "intro": {
-      "pageTitle": "Depot:",
-      "pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Synthetix.exchange, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
-    },
-    "table": {
-      "title": "Recent activity:"
-    },
-    "buttons": {
-      "available": "Amount available:",
-      "more": "View more",
-      "contract": "View contract"
-    },
-    "deposit": {
-      "action": {
-        "pageTitle": "Deposit",
-        "amountSubtitle": "Amount available:",
-        "instruction": "Enter deposit amount or select max available:",
-        "buttons": {
-          "deposit": "Deposit now"
-        }
-      },
-      "confirmation": {
-        "pageTitle": "Please confirm transaction",
-        "actionDescription": "Depositing:",
-        "loading": "Waiting for user response..."
-      },
-      "complete": {
-        "pageTitle": "Deposit in progress!",
-        "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
-        "actionDescription": "Depositing:"
-      }
-    },
-    "withdraw": {
-      "action": {
-        "pageTitle": "Withdraw",
-        "amountSubtitle": "Amount available:",
-        "buttons": {
-          "withdraw": "Withdraw now"
-        }
-      },
-      "confirmation": {
-        "pageTitle": "Please confirm transaction",
-        "actionDescription": "Withdrawing:",
-        "loading": "Waiting for user response..."
-      },
-      "complete": {
-        "pageTitle": "Withdrawal in progress!",
-        "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
-        "actionDescription": "Withdrawing:"
-      }
-    }
-  },
-  "escrow": {
-    "type": {
-      "staking": "Staking",
-      "token": "Token sale"
-    },
-    "buttons": {
-      "vest": "Vest now"
-    },
-    "staking": {
-      "pageTitle": "Vest your SNX staking rewards in escrow",
-      "pageSubtitle": "If you have locked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here. All SNX staking rewards are escrowed for 12 months.",
-      "total": "Total vesting:",
-      "table": {
-        "none": "You have no schedule",
-        "title": "Vesting schedule",
-        "date": "Vesting date",
-        "quantity": "Quantity"
-      },
-      "confirmation": {
-        "pageTitle": "Please confirm transaction",
-        "actionDescription": "Vesting:",
-        "loading": "Waiting for user response..."
-      },
-      "complete": {
-        "pageTitle": "Deposit in progress!",
-        "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
-        "actionDescription": "Depositing:"
-      }
-    },
-    "tokenSale": {
-      "pageTitle": "Vest your token sale SNX in escrow",
-      "pageSubtitle": "If you participated in the SNX token sale and chose to escrow your SNX, you can vest them here.",
-      "total": "Total vesting:",
-      "table": {
-        "title": "Vesting schedule",
-        "period": "Vesting period",
-        "interval": "Interval",
-        "number": "No. of intervals",
-        "months": "Months",
-        "vested": "Vested",
-        "date": "Vesting date",
-        "quantity": "Quantity",
-        "none": "You have no schedule"
-      },
-      "confirmation": {
-        "pageTitle": "Please confirm transaction",
-        "actionDescription": "Vesting:",
-        "loading": "Waiting for user response..."
-      },
-      "complete": {
-        "pageTitle": "Deposit in progress!",
-        "pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
-        "actionDescription": "Depositing:"
-      }
-    }
-  },
-  "transactions": {
-    "events": {
-      "minted": "Minted",
-      "burned": "Burned",
-      "claimedFees": "Claimed Rewards",
-      "exchanged": "Bought",
-      "traded": "Traded",
-      "sent": "Sent",
-      "deposited": "Deposited",
-      "withdrawn": "Withdrawn",
-      "sold": "Sold"
-    },
-    "details": {
-      "minted": "Locked SNX",
-      "burned": "Unlocked SNX",
-      "claimedFees": "Claimed Fees",
-      "exchanged": "Bought",
-      "traded": "Traded",
-      "sent": "Sent",
-      "deposited": "Deposited",
-      "withdrawn": "Withdrawn",
-      "sold": "Sold"
-    }
-  },
-  "network": {
-    "gas": "Ethereum Network Fees (Gas):",
-    "tradingFee": "Trading fee:",
-    "speed": "Estimated transaction speed:"
-  },
-  "error": {
-    "pageTitle": "Something went wrong...",
-    "pageSubtitle": "Code:"
-  },
-  "notification": {
-    "status": {
-      "pending": "Transaction in progress",
-      "success": "Transaction complete!",
-      "error": "An error occurred..."
-    },
-    "buttons": {
-      "view": "View",
-      "close": "Close"
-    }
-  },
-  "input": {
-    "list": {
-      "placeholder": "Search a synth..."
-    }
-  }
+	"onboarding": {
+		"buttons": {
+			"mainnet": "Mainnet",
+			"synthetix": "What is Synthetix?",
+			"support": "Having trouble?"
+		}
+	},
+	"landing": {
+		"intro": {
+			"pageTitle": "Mint, Burn, Claim",
+			"pageSubtitle": "Mintr is a dApp for SNX holders to mint synthetic assets (Synths) and participate in the Synthetix Network."
+		},
+		"functionality": {
+			"mintTitle": "Mint Synths",
+			"mintDescription": "By locking up SNX collateral",
+			"burnTitle": "Burn Synths",
+			"burnDescription": "To unlock SNX",
+			"claimTitle": "Claim fees",
+			"claimDescription": "From the Synthetix Network"
+		},
+		"buttons": {
+			"connect": "Connect wallet"
+		}
+	},
+	"walletConnection": {
+		"intro": {
+			"pageTitle": "Connect wallet",
+			"pageSubtitle": "Please connect a wallet with your SNX holdings to continue."
+		}
+	},
+	"walletSelection": {
+		"error": {
+			"pageTitle": "Error",
+			"pageSubtitle": "Mintr couldn't access your wallet.",
+			"retry": "Retry"
+		},
+		"success": {
+			"pageTitle": "Select Wallet",
+			"pageSubtitle": "Please select the wallet you would like to use with Mintr",
+			"connectInstructions": "Please follow the prompts on your device to unlock your wallet."
+		}
+	},
+	"dashboard": {
+		"header": {
+			"support": "Support",
+			"onLabel": "Dark",
+			"offLabel": "Light"
+		},
+		"sections": {
+			"prices": "Current balances & prices:",
+			"wallet": "Your wallet details:"
+		},
+		"rewards": {
+			"open": "left to claim rewards",
+			"blocked": "Claiming rewards is <1>blocked</1>"
+		},
+		"ratio": {
+			"current": "Current collateralization ratio",
+			"target": "Target collateralization ratio"
+		},
+		"chart": {
+			"title": "Your SNX holdings:",
+			"staking": "Staking",
+			"transferrable": "Transferrable"
+		},
+		"buttons": {
+			"exchange": "Go to Synthetix.Exchange",
+			"synths": "View your Synths balance"
+		},
+		"holdings": {
+			"locked": "Locked",
+			"transferable": "Transferable",
+			"staking": "Staking",
+			"nonStaking": "Non-staking",
+			"escrowed": "Escrowed",
+			"nonEscrowed": "Non-escrowed"
+		},
+		"table": {
+			"debt": "Debt",
+			"synths": "Synths",
+			"balance": "Balance"
+		}
+	},
+	"mainContent": {
+		"header": {
+			"buttons": {
+				"home": "Home",
+				"depot": "Depot",
+				"transactionsHistory": "Transactions History",
+				"escrow": "Escrow",
+				"support": "Support"
+			}
+		}
+	},
+	"home": {
+		"pageTitle": "What would you like to do?",
+		"pageSubtitle": "Click any button below to view more info, confirm or change the amount before submitting.",
+		"actions": {
+			"mintTitle": "Mint",
+			"mintDescription": "Mint sUSD by locking SNX",
+			"burnTitle": "Burn",
+			"burnDescription": "Burn sUSD and unlock SNX",
+			"claimTitle": "Claim",
+			"claimDescription": "sUSD and SNX staking rewards",
+			"tradeTitle": "Trade",
+			"tradeDescription": "Trade any Synth to sUSD",
+			"sendTitle": "Transfer",
+			"sendDescription": "Transfer SNX, Synths or ETH to another wallet"
+		}
+	},
+	"mintrActions": {
+		"mint": {
+			"action": {
+				"pageTitle": "Mint",
+				"pageSubtitle": "Mint sUSD by staking and locking your SNX. This gives you a collateralisation ratio and a debt, allowing you to earn staking rewards.",
+				"instruction": "Confirm or enter amount to mint:",
+				"buttons": {
+					"mint": "Mint now"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Minting",
+				"subActionDescription": "By locking"
+			},
+			"complete": {
+				"pageTitle": "Minting in progress!"
+			}
+		},
+		"burn": {
+			"action": {
+				"pageTitle": "Burn",
+				"pageSubtitle": "Burn sUSD to unlock your staked Synths. This reduces your collateralisation ratio and eliminates your debt, allowing you to transfer your SNX.",
+				"instruction": "Confirm or enter amount to burn:",
+				"transferrable": {
+					"title": "Transferrable SNX being unlocked:",
+					"button": "View transferrable SNX+"
+				},
+				"buttons": {
+					"burn": "Burn now"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Burning",
+				"subActionDescription": "And Unlocking"
+			},
+			"complete": {
+				"pageTitle": "Burning in progress!"
+			}
+		},
+		"claim": {
+			"action": {
+				"pageTitle": "Claim",
+				"pageSubtitle": "If you have locked your SNX and minted sUSD, you are eligible to collect two kinds of rewards: SNX staking rewards, and sUSD trading rewards generated on Synthetix.Exchange (sX).",
+				"table": {
+					"title": "Claimable periods:",
+					"period": "Period",
+					"status": "Fee claim status",
+					"open": "Open",
+					"blocked": "Blocked"
+				},
+				"tradingRewards": "Your available sUSD trading rewards:",
+				"stakingRewards": "Your available SNX staking rewards:",
+				"buttons": {
+					"claim": "Claim now",
+					"history": "Claim History"
+				},
+				"note": "Note: if not collected in the current period it will be forfeited and rolled over into the fee pool for the next fee period."
+			},
+			"confirmation": {
+				"actionDescription": "Claiming:"
+			},
+			"complete": {
+				"pageTitle": "Claiming in progress!"
+			}
+		},
+		"trade": {
+			"action": {
+				"pageTitle": "Trade",
+				"pageSubtitle": "Trade your Synths for sUSD. For a more detailed interface that allows you to trade between any Synths, use our Synthetix.Exchange dApp.",
+				"buttons": {
+					"trade": "Trade now",
+					"exchange": "Open in sX"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Trading:",
+				"subActionDescription": "Receiving:"
+			},
+			"complete": {
+				"pageTitle": "Trade in progress!"
+			}
+		},
+		"send": {
+			"action": {
+				"pageTitle": "Transfer",
+				"pageSubtitle": "Transfer your ETH, SNX or Synths to another wallet.",
+				"available": "Transferrable amount:",
+				"amountInstruction": "Enter amount or select max available:",
+				"walletInstruction": "Enter wallet address to send funds to:",
+				"buttons": {
+					"send": "Send now"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Sending:",
+				"subActionDescription": "To wallet:"
+			},
+			"complete": {
+				"pageTitle": "Sending in progress!"
+			}
+		},
+		"confirmation": {
+			"pageTitle": "Please confirm transaction",
+			"pageSubtitle": "",
+			"loading": "Waiting for user response..."
+		},
+		"complete": {
+			"pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background."
+		}
+	},
+	"transactionSettings": {
+		"priceIndicator": "Ethereum Network Fees:",
+		"pageTitle": "Set transaction speed and gas",
+		"pageSubtitle": "Adjust the slider below to set the transaction speed and Ethereum Network Fees (Gas) before proceeding.",
+		"minutes": "mins",
+		"button": {
+			"submit": "Submit"
+		}
+	},
+	"button": {
+		"max": "Max",
+		"edit": "Edit",
+		"navigation": {
+			"cancel": "Cancel",
+			"back": "Go back",
+			"etherscan": "View on Etherscan",
+			"view": "View",
+			"finish": "Finish & return home",
+			"ok": "OK"
+		}
+	},
+	"depot": {
+		"intro": {
+			"pageTitle": "Depot:",
+			"pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Synthetix.Exchange, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
+		},
+		"table": {
+			"title": "Recent activity:"
+		},
+		"buttons": {
+			"available": "Amount available:",
+			"more": "View more",
+			"contract": "View contract"
+		},
+		"deposit": {
+			"action": {
+				"pageTitle": "Deposit",
+				"amountSubtitle": "Amount available:",
+				"instruction": "Enter deposit amount or select max available:",
+				"buttons": {
+					"deposit": "Deposit now"
+				}
+			},
+			"confirmation": {
+				"pageTitle": "Please confirm transaction",
+				"actionDescription": "Depositing:",
+				"loading": "Waiting for user response..."
+			},
+			"complete": {
+				"pageTitle": "Deposit in progress!",
+				"pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
+				"actionDescription": "Depositing:"
+			}
+		},
+		"withdraw": {
+			"action": {
+				"pageTitle": "Withdraw",
+				"amountSubtitle": "Amount available:",
+				"buttons": {
+					"withdraw": "Withdraw now"
+				}
+			},
+			"confirmation": {
+				"pageTitle": "Please confirm transaction",
+				"actionDescription": "Withdrawing:",
+				"loading": "Waiting for user response..."
+			},
+			"complete": {
+				"pageTitle": "Withdrawal in progress!",
+				"pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
+				"actionDescription": "Withdrawing:"
+			}
+		}
+	},
+	"escrow": {
+		"type": {
+			"staking": "Staking",
+			"token": "Token sale"
+		},
+		"buttons": {
+			"vest": "Vest now"
+		},
+		"staking": {
+			"pageTitle": "Vest your SNX staking rewards in escrow",
+			"pageSubtitle": "If you have locked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here. All SNX staking rewards are escrowed for 12 months.",
+			"total": "Total vesting:",
+			"table": {
+				"none": "You have no schedule",
+				"title": "Vesting schedule",
+				"date": "Vesting date",
+				"quantity": "Quantity"
+			},
+			"confirmation": {
+				"pageTitle": "Please confirm transaction",
+				"actionDescription": "Vesting:",
+				"loading": "Waiting for user response..."
+			},
+			"complete": {
+				"pageTitle": "Deposit in progress!",
+				"pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
+				"actionDescription": "Depositing:"
+			}
+		},
+		"tokenSale": {
+			"pageTitle": "Vest your token sale SNX in escrow",
+			"pageSubtitle": "If you participated in the SNX token sale and chose to escrow your SNX, you can vest them here.",
+			"total": "Total vesting:",
+			"table": {
+				"title": "Vesting schedule",
+				"period": "Vesting period",
+				"interval": "Interval",
+				"number": "No. of intervals",
+				"months": "Months",
+				"vested": "Vested",
+				"date": "Vesting date",
+				"quantity": "Quantity",
+				"none": "You have no schedule"
+			},
+			"confirmation": {
+				"pageTitle": "Please confirm transaction",
+				"actionDescription": "Vesting:",
+				"loading": "Waiting for user response..."
+			},
+			"complete": {
+				"pageTitle": "Deposit in progress!",
+				"pageSubtitle": "Sent to the Ethereum network and will be available in your wallet shortly. You may close this window as the transaction completes in the background.",
+				"actionDescription": "Depositing:"
+			}
+		}
+	},
+	"transactions": {
+		"events": {
+			"minted": "Minted",
+			"burned": "Burned",
+			"claimedFees": "Claimed Rewards",
+			"exchanged": "Bought",
+			"traded": "Traded",
+			"sent": "Sent",
+			"deposited": "Deposited",
+			"withdrawn": "Withdrawn",
+			"sold": "Sold"
+		},
+		"details": {
+			"minted": "Locked SNX",
+			"burned": "Unlocked SNX",
+			"claimedFees": "Claimed Fees",
+			"exchanged": "Bought",
+			"traded": "Traded",
+			"sent": "Sent",
+			"deposited": "Deposited",
+			"withdrawn": "Withdrawn",
+			"sold": "Sold"
+		}
+	},
+	"network": {
+		"gas": "Ethereum Network Fees (Gas):",
+		"tradingFee": "Trading fee:",
+		"speed": "Estimated transaction speed:"
+	},
+	"error": {
+		"pageTitle": "Something went wrong...",
+		"pageSubtitle": "Code:"
+	},
+	"notification": {
+		"status": {
+			"pending": "Transaction in progress",
+			"success": "Transaction complete!",
+			"error": "An error occurred..."
+		},
+		"buttons": {
+			"view": "View",
+			"close": "Close"
+		}
+	},
+	"input": {
+		"list": {
+			"placeholder": "Search a synth..."
+		}
+	},
+	"wallet": {
+		"prompts": "To continue, follow the prompts on your <1>walletType</1> Wallet."
+	}
 }

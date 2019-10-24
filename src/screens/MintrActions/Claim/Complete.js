@@ -48,20 +48,24 @@ const Success = ({ t, onDestroy, feesAvailable }) => {
 	);
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
 	return (
 		<Fragment>
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>Something went wrong...</PageTitle>
-					{transactionError.code ? <PLarge>Code: {transactionError.code}</PLarge> : null}
+					<PageTitle>{t('error.pageTitle')}</PageTitle>
+					{transactionError.code ? (
+						<PLarge>
+							{t('error.pageSubtitle')} {transactionError.code}
+						</PLarge>
+					) : null}
 					<PLarge>{transactionError.message}</PLarge>
 				</Intro>
 			</Top>
 			<Bottom>
 				<Buttons>
-					<ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.ok')}</ButtonPrimary>
 				</Buttons>
 			</Bottom>
 		</Fragment>

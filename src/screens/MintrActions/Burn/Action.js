@@ -52,7 +52,7 @@ const Action = ({
 						<ErrorMessage message={gasEstimateError} />
 						{snxInputIsVisible ? (
 							<Fragment>
-								<PLarge>Transferrable SNX being unlocked:</PLarge>
+								<PLarge>{t('mintrActions.burn.action.transferrable.title')}</PLarge>
 								<Input
 									singleSynth={'SNX'}
 									onChange={e => setTransferableAmount(e.target.value)}
@@ -62,7 +62,9 @@ const Action = ({
 							</Fragment>
 						) : (
 							<ButtonToggleInput onClick={() => toggleSnxInput(true)}>
-								<HyperlinkSmall>View transferrable SNX +</HyperlinkSmall>
+								<HyperlinkSmall>
+									{t('mintrActions.burn.action.transferrable.button')}
+								</HyperlinkSmall>
 							</ButtonToggleInput>
 						)}
 					</Form>

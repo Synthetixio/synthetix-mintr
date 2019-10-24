@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { withTranslation } from 'react-i18next';
 
 import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 import { Store } from '../../store';
 
-const Button = () => {
+const Button = ({ t }) => {
 	const { dispatch } = useContext(Store);
 	return (
 		<ButtonWrapper onClick={() => toggleTransactionSettingsPopup(true, dispatch)}>
-			EDIT
+			{t('button.edit')}
 		</ButtonWrapper>
 	);
 };
@@ -18,6 +19,7 @@ const ButtonWrapper = styled.button`
 	border: none;
 	background-color: transparent;
 	font-size: 15px;
+	text-transform: uppercase;
 	cursor: pointer;
 	color: ${props => props.theme.colorStyles.hyperlink};
 	:hover {
@@ -25,4 +27,4 @@ const ButtonWrapper = styled.button`
 	}
 `;
 
-export default Button;
+export default withTranslation()(Button);
