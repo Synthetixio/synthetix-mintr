@@ -2,72 +2,72 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const Spinner = () => {
-  return (
-    <Wrapper>
-      <Inner>
-        {[0, 1, 2, 3].map(i => {
-          return <Circle key={i} />;
-        })}
-      </Inner>
-    </Wrapper>
-  );
+	return (
+		<Wrapper>
+			<Inner>
+				{[0, 1, 2, 3].map(i => {
+					return <Circle key={i} />;
+				})}
+			</Inner>
+		</Wrapper>
+	);
 };
 
 export const MicroSpinner = () => {
-  return (
-    <MicroWrapper>
-      <Inner isMicro={true}>
-        {[0, 1, 2, 3].map(i => {
-          return <MicroCircle key={i} />;
-        })}
-      </Inner>
-    </MicroWrapper>
-  );
+	return (
+		<MicroWrapper>
+			<Inner isMicro={true}>
+				{[0, 1, 2, 3].map(i => {
+					return <MicroCircle key={i} />;
+				})}
+			</Inner>
+		</MicroWrapper>
+	);
 };
 
 export const NotificationSpinner = () => {
-  return (
-    <NotificationSpinnerWrapper>
-      <Inner isSmall={true}>
-        {[0, 1, 2, 3].map(i => {
-          return <NotificationSpinnerCircle key={i} />;
-        })}
-      </Inner>
-    </NotificationSpinnerWrapper>
-  );
+	return (
+		<NotificationSpinnerWrapper>
+			<Inner isSmall={true}>
+				{[0, 1, 2, 3].map(i => {
+					return <NotificationSpinnerCircle key={i} />;
+				})}
+			</Inner>
+		</NotificationSpinnerWrapper>
+	);
 };
 
 const NotificationSpinnerWrapper = styled.div`
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-  transition: all 0.3s ease-out;
-  z-index: 3;
-  background-color: ${props => props.theme.colorStyles.brandBlue};
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+	transition: all 0.3s ease-out;
+	z-index: 3;
+	background-color: ${props => props.theme.colorStyles.brandBlue};
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 const Wrapper = styled.div`
-  width: 60px;
-  height: 60px;
-  margin: 40px auto;
-  transition: all 0.3s ease-out;
-  z-index: 3;
+	width: 60px;
+	height: 60px;
+	margin: 40px auto;
+	transition: all 0.3s ease-out;
+	z-index: 3;
 `;
 
 const MicroWrapper = styled.div`
-  width: 20px;
-  height: 20px;
-  transition: all 0.3s ease-out;
-  z-index: 3;
-  margin: 0 20px;
+	width: 20px;
+	height: 20px;
+	transition: all 0.3s ease-out;
+	z-index: 3;
+	margin: 0 20px;
 `;
 
 const direction = (a, r = 24) => {
-  return `top: ${(1 - Math.sin(a)) * r}px; left: ${(1 + Math.cos(a)) * r}px`;
+	return `top: ${(1 - Math.sin(a)) * r}px; left: ${(1 + Math.cos(a)) * r}px`;
 };
 
 const move = keyframes`
@@ -113,61 +113,56 @@ const moveMicro = keyframes`
 `;
 
 const Inner = styled.div`
-  width: ${props => (props.isSmall ? '30px' : props.isMicro ? '20px' : '60px')};
-  height: ${props =>
-    props.isSmall ? '30px' : props.isMicro ? '20px' : '60px'};
-  border-radius: 50%;
-  position: relative;
-  & :nth-child(1) {
-    animation: ${props =>
-        props.isSmall ? moveSmall : props.isMicro ? moveMicro : move}
-      0.6s infinite;
-    animation-timing-function: linear;
-  }
-  & :nth-child(2) {
-    animation: ${props =>
-        props.isSmall ? moveSmall : props.isMicro ? moveMicro : move}
-      0.8s infinite;
-    animation-timing-function: linear;
-  }
-  & :nth-child(3) {
-    animation: ${props =>
-        props.isSmall ? moveSmall : props.isMicro ? moveMicro : move}
-      1.2s infinite;
-    animation-timing-function: linear;
-  }
-  & :nth-child(4) {
-    animation: ${props =>
-        props.isSmall ? moveSmall : props.isMicro ? moveMicro : move}
-      2.4s infinite;
-    animation-timing-function: linear;
-  }
+	width: ${props => (props.isSmall ? '30px' : props.isMicro ? '20px' : '60px')};
+	height: ${props => (props.isSmall ? '30px' : props.isMicro ? '20px' : '60px')};
+	border-radius: 50%;
+	position: relative;
+	& :nth-child(1) {
+		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 0.6s
+			infinite;
+		animation-timing-function: linear;
+	}
+	& :nth-child(2) {
+		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 0.8s
+			infinite;
+		animation-timing-function: linear;
+	}
+	& :nth-child(3) {
+		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 1.2s
+			infinite;
+		animation-timing-function: linear;
+	}
+	& :nth-child(4) {
+		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 2.4s
+			infinite;
+		animation-timing-function: linear;
+	}
 `;
 
 const Circle = styled.div`
-  background-color: ${props => props.theme.colorStyles.hyperlink};
-  width: ${props => (props.isSmall ? '10px' : '12px')};
-  height: ${props => (props.isSmall ? '10px' : '12px')};
-  border-radius: 50%;
-  position: absolute;
-  top: 30px;
-  left: 60px;
+	background-color: ${props => props.theme.colorStyles.hyperlink};
+	width: ${props => (props.isSmall ? '10px' : '12px')};
+	height: ${props => (props.isSmall ? '10px' : '12px')};
+	border-radius: 50%;
+	position: absolute;
+	top: 30px;
+	left: 60px;
 `;
 
 const NotificationSpinnerCircle = styled(Circle)`
-  background-color: #ffffff;
-  width: 5px;
-  height: 5px;
-  top: 20px;
-  left: 0;
+	background-color: #ffffff;
+	width: 5px;
+	height: 5px;
+	top: 20px;
+	left: 0;
 `;
 
 const MicroCircle = styled(Circle)`
-  background-color: ${props => props.theme.colorStyles.hyperlink};
-  width: 5px;
-  height: 5px;
-  top: 20px;
-  left: 0;
+	background-color: ${props => props.theme.colorStyles.hyperlink};
+	width: 5px;
+	height: 5px;
+	top: 20px;
+	left: 0;
 `;
 
 export default Spinner;
