@@ -45,10 +45,16 @@ const HiddenContent = ({ data }) => {
 			<HiddenTable style={{ width: '100%' }}>
 				<HiddenTableHead>
 					<HiddenTableRow>
-						{['Activity', 'Amount', 'Rate', 'Time | Date', ''].map(headerElement => {
+						{[
+							'depot.table.activity',
+							'depot.table.amount',
+							'depot.table.rate',
+							'depot.table.timeDate',
+							'',
+						].map(headerElement => {
 							return (
 								<HiddenTableHeaderCell key={headerElement}>
-									<DataLarge style={{ fontSize: '14px' }}>{headerElement}</DataLarge>
+									<DataLarge style={{ fontSize: '14px' }}>{t(headerElement)}</DataLarge>
 								</HiddenTableHeaderCell>
 							);
 						})}
@@ -61,7 +67,7 @@ const HiddenContent = ({ data }) => {
 								<HiddenTableCell>
 									<HiddenTableCellContainer>
 										<TypeImage src="/images/actions/tiny-sold.svg" />
-										<TableDataMedium>{t('Sold by Depot')}</TableDataMedium>
+										<TableDataMedium>{t('depot.table.soldByDepot')}</TableDataMedium>
 									</HiddenTableCellContainer>
 								</HiddenTableCell>
 								<HiddenTableCell>
@@ -95,14 +101,21 @@ const HiddenContent = ({ data }) => {
 
 const ExpandableTable = ({ data }) => {
 	const { depositsMade } = data;
+	const { t } = useTranslation();
 	const [expandedElements, setExpanded] = useState([]);
 	return (
 		<List>
 			<HeaderRow>
-				{['Type', 'Amount', 'Remaining', 'Time | Date', 'Details'].map(headerElement => {
+				{[
+					'depot.table.type',
+					'depot.table.amount',
+					'depot.table.remaining',
+					'depot.table.timeDate',
+					'depot.table.details',
+				].map(headerElement => {
 					return (
 						<HeaderCell key={headerElement}>
-							<TableHeaderMedium>{headerElement}</TableHeaderMedium>
+							<TableHeaderMedium>{t(headerElement)}</TableHeaderMedium>
 						</HeaderCell>
 					);
 				})}
@@ -125,7 +138,7 @@ const ExpandableTable = ({ data }) => {
 						>
 							<Cell>
 								<TypeImage src="/images/actions/tiny-deposit.svg" />
-								<TableDataMedium>Deposit</TableDataMedium>
+								<TableDataMedium>{t('depot.table.deposit')}</TableDataMedium>
 							</Cell>
 							<Cell>
 								<TableDataMedium>{formatCurrency(deposit.amount)} sUSD</TableDataMedium>
@@ -255,6 +268,17 @@ const useGetDepotData = walletAddress => {
 	return data;
 };
 
+const buttonLabelMapper = label => {
+	switch (label) {
+		case 'deposit':
+			return 'depot.buttons.deposit';
+		case 'withdraw':
+			return 'depot.buttons.withdraw';
+		default:
+			return '';
+	}
+};
+
 const Depot = ({ t }) => {
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	const {
@@ -291,7 +315,7 @@ const Depot = ({ t }) => {
 						<Button key={action} onClick={() => setCurrentScenario(action)}>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
-								<H2>{action}</H2>
+								<H2>{t(buttonLabelMapper(action))}</H2>
 								<PLarge>{t('depot.buttons.available')}</PLarge>
 								<Amount>
 									$
@@ -330,7 +354,7 @@ const Depot = ({ t }) => {
 						{loadingEvents || loadingData ? (
 							<Spinner></Spinner>
 						) : (
-							<TableDataMedium>No Data</TableDataMedium>
+							<TableDataMedium>{t('general.noData')}</TableDataMedium>
 						)}
 					</TablePlaceholder>
 				)}

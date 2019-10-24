@@ -89,7 +89,7 @@ const useGetGasEstimateError = () => {
 				gasEstimate = await snxJSConnector.snxJS.SynthetixEscrow.contract.estimate.vest();
 			} catch (e) {
 				console.log(e);
-				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
+				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
 				setError(errorMessage);
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
@@ -252,7 +252,7 @@ const TokenSaleEscrow = ({ t, onPageChange }) => {
 			<ErrorMessage message={gasEstimateError} />
 			<ButtonRow>
 				<ButtonSecondary width="48%" onClick={() => onPageChange('rewardEscrow')}>
-					VIEW REWARDS ESCROW
+					{t('escrow.buttons.viewRewards')}
 				</ButtonSecondary>
 				<ButtonPrimary
 					disabled={!availableTokensForVesting || gasEstimateError}
