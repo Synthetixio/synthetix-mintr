@@ -4,7 +4,6 @@ import snxJSConnector from '../../helpers/snxJSConnector';
 import { withTranslation, useTranslation } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
-// import errorMapper from '../../helpers/errorMapper';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';

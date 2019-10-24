@@ -36,7 +36,7 @@ const Success = ({ t, onDestroy, vestAmount }) => {
 	);
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
 	return (
 		<Fragment>
 			<Top>
@@ -44,7 +44,7 @@ const Failure = ({ transactionError, onDestroy }) => {
 					<ActionImage src="/images/failure.svg" big />
 					<PageTitle>Something went wrong...</PageTitle>
 					{transactionError.code ? <PLarge>Code: {transactionError.code}</PLarge> : null}
-					<PLarge>{transactionError.message}</PLarge>
+					<PLarge>{t(transactionError.message)}</PLarge>
 				</Intro>
 			</Top>
 			<Bottom>
