@@ -9,12 +9,15 @@ import MintrAction from '../../MintrActions';
 
 const initialScenario = null;
 
-const actionMapper = {
-	mint: 'Mint sUSD by staking your SNX',
-	burn: 'Burn sUSD to unlock your staked Synths',
-	claim: 'sUSD and SNX staking rewards',
-	trade: 'Trade your Synths for sUSD',
-	transfer: 'Transfer SNX, Synths and ETH',
+const actionLabelMapper = {
+	mint: { description: 'home.actions.mint.description', title: 'home.actions.mint.title' },
+	burn: { description: 'home.actions.burn.description', title: 'home.actions.burn.title' },
+	claim: { description: 'home.actions.claim.description', title: 'home.actions.claim.title' },
+	trade: { description: 'home.actions.trade.description', title: 'home.actions.trade.title' },
+	transfer: {
+		description: 'home.actions.transfer.description',
+		title: 'home.actions.transfer.title',
+	},
 };
 
 const Home = ({ t }) => {
@@ -23,15 +26,14 @@ const Home = ({ t }) => {
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
 			<PageTitle>{t('home.pageTitle')}</PageTitle>
-			{/* <PLarge>{t('home.pageSubtitle')}</PLarge> */}
 			<ButtonRow margin="30px 0 40px 0">
 				{['mint', 'burn'].map(action => {
 					return (
 						<Button key={action} onClick={() => setCurrentScenario(action)} big>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} big />
-								<H1>{action}</H1>
-								<PMega>{actionMapper[action]}</PMega>
+								<H1>{t(actionLabelMapper[action].title)}</H1>
+								<PMega>{t(actionLabelMapper[action].description)}</PMega>
 							</ButtonContainer>
 						</Button>
 					);
@@ -43,8 +45,8 @@ const Home = ({ t }) => {
 						<Button key={action} onClick={() => setCurrentScenario(action)}>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
-								<H2>{action}</H2>
-								<PLarge>{actionMapper[action]}</PLarge>
+								<H2>{t(actionLabelMapper[action].title)}</H2>
+								<PLarge>{t(actionLabelMapper[action].description)}</PLarge>
 							</ButtonContainer>
 						</Button>
 					);

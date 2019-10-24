@@ -53,7 +53,7 @@ const Failure = ({ t, transactionError, onDestroy }) => {
 							{t('error.pageSubtitle')} {transactionError.code}
 						</PLarge>
 					) : null}
-					<PLarge>{transactionError.message}</PLarge>
+					<PLarge>{t(transactionError.message)}</PLarge>
 				</Intro>
 			</Top>
 			<Bottom>

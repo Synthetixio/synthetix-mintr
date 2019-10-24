@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { H1, H2 } from '../../components/Typography';
+import { withTranslation } from 'react-i18next';
 
-const MaintenanceMessage = () => {
+const MaintenanceMessage = ({ t }) => {
 	return (
 		<Container>
-			<H1>Mintr is currently unavailable due to upgrades.</H1>
-			<H2>Sorry for the inconvenience, it shall be back shortly.</H2>
+			<H1>{t('maintenance.title')}</H1>
+			<H2>{t('maintenance.subtitle')}</H2>
 		</Container>
 	);
 };
@@ -19,4 +20,4 @@ const Container = styled.div`
 	justify-content: center;
 `;
 
-export default MaintenanceMessage;
+export default withTranslation()(MaintenanceMessage);
