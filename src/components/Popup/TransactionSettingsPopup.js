@@ -77,8 +77,8 @@ const TransactionSettingsPopup = ({ t }) => {
 		<PopupContainer margin="auto">
 			<Wrapper>
 				<Intro>
-					<PageTitle>{t('transactionSettings.pageTitle')}</PageTitle>
-					<PLarge>{t('transactionSettings.pageSubtitle')}</PLarge>
+					<PageTitle>{t('transactionSettings.title')}</PageTitle>
+					<PLarge>{t('transactionSettings.subtitle')}</PLarge>
 				</Intro>
 				<SliderWrapper>
 					<Slider

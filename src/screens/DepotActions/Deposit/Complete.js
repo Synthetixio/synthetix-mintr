@@ -13,12 +13,12 @@ const Success = ({ t, depositAmount, onDestroy, networkName, transactionHash }) 
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('depot.deposit.complete.pageTitle')}</PageTitle>
-					<PLarge>{t('depot.deposit.complete.pageSubtitle')}</PLarge>
+					<PageTitle>{t('depot.deposit.complete.title')}</PageTitle>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
-						<DataHeaderLarge>{t('depot.deposit.complete.actionDescription')}</DataHeaderLarge>
+						<DataHeaderLarge>{t('depot.deposit.actionDescription')}</DataHeaderLarge>
 						<Amount>{formatCurrency(depositAmount)} sUSD</Amount>
 					</Box>
 				</Details>
@@ -47,13 +47,13 @@ const Failure = ({ t, transactionError, onDestroy }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>{t('error.pageTitle')}</PageTitle>
+					<PageTitle>{t('transactionProcessing.error.title')}</PageTitle>
 					{transactionError.code ? (
 						<PLarge>
-							{t('error.pageSubtitle')} {transactionError.code}
+							{t('transactionProcessing.error.subtitle')} {transactionError.code}
 						</PLarge>
 					) : null}
-					<PLarge>{transactionError.message}</PLarge>
+					<PLarge>{t(transactionError.message)}</PLarge>
 				</Intro>
 			</Top>
 			<Bottom>

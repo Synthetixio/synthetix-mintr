@@ -37,7 +37,7 @@ const useGetGasEstimateError = () => {
 				gasEstimate = await snxJSConnector.snxJS.RewardEscrow.contract.estimate.vest();
 			} catch (e) {
 				console.log(e);
-				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
+				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
 				setError(errorMessage);
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
@@ -159,14 +159,14 @@ const RewardEscrow = ({ t, onPageChange }) => {
 				vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
 			/>
 
-			<PageTitle>{t('escrow.staking.pageTitle')}</PageTitle>
-			<PLarge>{t('escrow.staking.pageSubtitle')}</PLarge>
+			<PageTitle>{t('escrow.staking.title')}</PageTitle>
+			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
 			<VestingTable data={vestingData} />
 			{!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
-			<ErrorMessage message={gasEstimateError} />
+			<ErrorMessage message={t(gasEstimateError)} />
 			<ButtonRow>
 				<ButtonSecondary width="48%" onClick={() => onPageChange('tokenSaleVesting')}>
-					VIEW TOKEN SALE ESCROW
+					{t('escrow.buttons.viewTokenSale')}
 				</ButtonSecondary>
 				<ButtonPrimary
 					disabled={hasNoVestingSchedule || gasEstimateError || !vestingData.canVest}

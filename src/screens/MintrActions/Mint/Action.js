@@ -28,8 +28,8 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/mint.svg" big />
-						<H1>{t('mintrActions.mint.action.pageTitle')}</H1>
-						<PLarge>{t('mintrActions.mint.action.pageSubtitle')}</PLarge>
+						<H1>{t('mintrActions.mint.action.title')}</H1>
+						<PLarge>{t('mintrActions.mint.action.subtitle')}</PLarge>
 					</Intro>
 					<Form>
 						<PLarge>{t('mintrActions.mint.action.instruction')}</PLarge>

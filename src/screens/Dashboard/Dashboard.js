@@ -122,7 +122,7 @@ const Charts = ({ state }) => {
 		<Box full={true}>
 			<BoxInner>
 				<BoxHeading>
-					<H6 style={{ textTransform: 'uppercase' }}>{t('dashboard.chart.title')}</H6>
+					<H6 style={{ textTransform: 'uppercase' }}>{t('dashboard.holdings.title')}</H6>
 					<H6>{formatCurrency(balances.snx) || 0} SNX</H6>
 				</BoxHeading>
 				{chartData.map((data, i) => {
