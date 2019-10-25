@@ -104,7 +104,9 @@ const Action = ({
 							<PMedium width="100%">{t('mintrActions.claim.action.table.status')}</PMedium>
 							<State>
 								<Highlighted red={!feesAreClaimable} marginRight="8px">
-									{feesAreClaimable ? 'OPEN' : 'BLOCKED'}
+									{feesAreClaimable
+										? t('mintrActions.claim.action.table.open')
+										: t('mintrActions.claim.action.table.blocked')}
 								</Highlighted>
 								<Info width="4px" />
 							</State>

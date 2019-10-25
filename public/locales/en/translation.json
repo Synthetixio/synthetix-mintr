@@ -146,6 +146,10 @@
 				"pageTitle": "Burn",
 				"pageSubtitle": "Burn sUSD to unlock your staked Synths. This reduces your collateralisation ratio and eliminates your debt, allowing you to transfer your SNX.",
 				"instruction": "Confirm or enter amount to burn:",
+				"transferrable": {
+					"title": "Transferrable SNX being unlocked:",
+					"button": "View transferrable SNX+"
+				},
 				"buttons": {
 					"burn": "Burn now"
 				}
@@ -165,7 +169,9 @@
 				"table": {
 					"title": "Claimable periods:",
 					"period": "Period",
-					"status": "Fee claim status"
+					"status": "Fee claim status",
+					"open": "Open",
+					"blocked": "Blocked"
 				},
 				"tradingRewards": "Your available sUSD trading rewards:",
 				"stakingRewards": "Your available SNX staking rewards:",
@@ -228,6 +234,7 @@
 		}
 	},
 	"transactionSettings": {
+		"priceIndicator": "Ethereum Network Fees:",
 		"pageTitle": "Set transaction speed and gas",
 		"pageSubtitle": "Adjust the slider below to set the transaction speed and Ethereum Network Fees (Gas) before proceeding.",
 		"minutes": "mins",
@@ -250,7 +257,7 @@
 	"depot": {
 		"intro": {
 			"pageTitle": "Depot:",
-			"pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Synthetix.exchange, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
+			"pageSubtitle": "Deposit sUSD you’ve freshly minted into a queue to be sold on Synthetix.Exchange, and you’ll receive the proceeds of all sales in ETH. While your sUSD is in the queue waiting to be sold, you can withdraw your sUSD back into your wallet at any time. Note: minimum deposit is 50 sUSD."
 		},
 		"table": {
 			"title": "Recent activity:",
@@ -411,6 +418,9 @@
 		"list": {
 			"placeholder": "Search a synth..."
 		}
+	},
+	"wallet": {
+		"prompts": "To continue, follow the prompts on your <1>walletType</1> Wallet."
 	},
 	"maintenance": {
 		"title": "Mintr is currently unavailable due to upgrades.",

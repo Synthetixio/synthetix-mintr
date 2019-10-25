@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
@@ -20,7 +20,11 @@ const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
 					<Intro>
 						<ActionImage src={`/images/wallets/${walletType}.svg`} big />
 						<PageTitle>{t('mintrActions.confirmation.pageTitle')}</PageTitle>
-						<PLarge>{`To continue, follow the prompts on your ${walletType} Wallet.`}</PLarge>
+						<PLarge>
+							<Trans i18nKey="wallet.prompts">
+								To continue, follow the prompts on your ${walletType} Wallet.
+							</Trans>
+						</PLarge>
 					</Intro>
 					<Details>
 						<Box>
