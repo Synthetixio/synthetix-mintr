@@ -1,8 +1,7 @@
 {
 	"onboarding": {
 		"header": {
-			"mainnet": "Mainnet",
-			"synthetix": "What is Synthetix?",
+			"whatIsSynthetix": "What is Synthetix?",
 			"support": "Having trouble?"
 		},
 		"landing": {
@@ -36,11 +35,6 @@
 			}
 		},
 		"walletSelection": {
-			"error": {
-				"title": "Error",
-				"subtitle": "Mintr couldn't access your wallet.",
-				"retry": "Retry"
-			},
 			"success": {
 				"title": "Select Wallet",
 				"subtitle": "Please select the wallet you would like to use with Mintr"
@@ -48,6 +42,11 @@
 			"loading": {
 				"connectInstructions": "Please follow the prompts on your device to unlock your wallet.",
 				"connectVia": "Connect via {{walletType}}"
+			},
+			"error": {
+				"title": "Error",
+				"subtitle": "Mintr couldn't access your wallet.",
+				"retry": "Retry"
 			}
 		}
 	},
