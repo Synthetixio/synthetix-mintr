@@ -30,8 +30,8 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/deposit.svg" />
-						<H1>{t('depot.deposit.action.pageTitle')}</H1>
-						<PLarge>{t('depot.deposit.action.amountSubtitle')}</PLarge>
+						<H1>{t('depot.deposit.action.title')}</H1>
+						<PLarge>{t('depot.deposit.action.subtitle')}</PLarge>
 						<Amount>${formatCurrency(sUSDBalance)}</Amount>
 					</Intro>
 					<Form>

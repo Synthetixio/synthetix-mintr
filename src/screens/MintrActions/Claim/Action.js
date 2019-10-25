@@ -93,8 +93,8 @@ const Action = ({
 				</Navigation>
 				<Intro>
 					<ActionImage src="/images/actions/claim.svg" big />
-					<H1 m={'10px 0'}>{t('mintrActions.claim.action.pageTitle')}</H1>
-					<PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
+					<H1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</H1>
+					<PLarge>{t('mintrActions.claim.action.subtitle')}</PLarge>
 				</Intro>
 				<Middle>
 					<Schedule>

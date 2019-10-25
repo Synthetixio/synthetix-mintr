@@ -13,8 +13,8 @@ const Success = ({ t, tradeAmount, onDestroy, networkName, transactionHash, base
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('mintrActions.trade.complete.pageTitle')}</PageTitle>
-					<PLarge>{t('mintrActions.complete.pageSubtitle')}</PLarge>
+					<PageTitle>{t('mintrActions.trade.complete.title')}</PageTitle>
+					<PLarge>{t('mintrActions.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
@@ -57,10 +57,10 @@ const Failure = ({ t, transactionError, onDestroy }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>{t('error.pageTitle')}</PageTitle>
+					<PageTitle>{t('transactionProcessing.error.title')}</PageTitle>
 					{transactionError.code ? (
 						<PLarge>
-							{t('error.pageSubtitle')} {transactionError.code}
+							{t('transactionProcessing.error.subtitle')} {transactionError.code}
 						</PLarge>
 					) : null}
 					<PLarge>{t(transactionError.message)}</PLarge>

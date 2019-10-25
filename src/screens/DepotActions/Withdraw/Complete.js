@@ -13,12 +13,12 @@ const Success = ({ t, amountAvailable, onDestroy, networkName, transactionHash }
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('depot.withdraw.complete.pageTitle')}</PageTitle>
-					<PLarge>{t('depot.withdraw.complete.pageSubtitle')}</PLarge>
+					<PageTitle>{t('depot.withdraw.complete.title')}</PageTitle>
+					<PLarge>{t('depot.withdraw.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
-						<DataHeaderLarge>{t('depot.withdraw.complete.actionDescription')}</DataHeaderLarge>
+						<DataHeaderLarge>{t('depot.withdraw.actionDescription')}</DataHeaderLarge>
 						<Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
 					</Box>
 				</Details>
@@ -47,10 +47,10 @@ const Failure = ({ t, transactionError, onDestroy }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>{t('error.pageTitle')}</PageTitle>
+					<PageTitle>{t('transactionProcessing.error.title')}</PageTitle>
 					{transactionError.code ? (
 						<PLarge>
-							{t('error.pageSubtitle')} {transactionError.code}
+							{t('transactionProcessing.error.subtitle')} {transactionError.code}
 						</PLarge>
 					) : null}
 					<PLarge>{t(transactionError.message)}</PLarge>
