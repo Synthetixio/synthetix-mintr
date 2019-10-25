@@ -259,13 +259,10 @@
 					"deposit": "Deposit now"
 				}
 			},
-			"confirmation": {
-				"actionDescription": "Depositing:"
-			},
 			"complete": {
-				"title": "Deposit in progress!",
-				"actionDescription": "Depositing:"
-			}
+				"title": "Deposit in progress!"
+			},
+			"actionDescription": "Depositing:"
 		},
 		"withdraw": {
 			"action": {
@@ -275,13 +272,10 @@
 					"withdraw": "Withdraw now"
 				}
 			},
-			"confirmation": {
-				"actionDescription": "Withdrawing:"
-			},
 			"complete": {
-				"title": "Withdrawal in progress!",
-				"actionDescription": "Withdrawing:"
-			}
+				"title": "Withdrawal in progress!"
+			},
+			"actionDescription": "Withdrawing:"
 		}
 	},
 	"escrow": {
