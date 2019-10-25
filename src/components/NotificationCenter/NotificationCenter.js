@@ -77,10 +77,10 @@ const Notification = ({ transaction }) => {
 					as="a"
 					target="_blank"
 				>
-					{t('notification.buttons.view')}
+					{t('button.navigation.view')}
 				</ButtonTertiary>
 				<ButtonTertiary onClick={() => hideTransaction(transaction.hash, dispatch)}>
-					{t('notification.buttons.close')}
+					{t('button.navigation.close')}
 				</ButtonTertiary>
 			</ButtonBlock>
 		</NotificationWrapper>

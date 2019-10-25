@@ -20,9 +20,9 @@ const Confirmation = ({ t, goBack, walletType, feesAvailable }) => {
 				<Top>
 					<Intro>
 						<ActionImage src={`/images/wallets/${walletType.toLowerCase()}.svg`} big />
-						<PageTitle>{t('mintrActions.confirmation.pageTitle')}</PageTitle>
+						<PageTitle>{t('transactionProcessing.confirmation.title')}</PageTitle>
 						<PLarge>
-							<Trans i18nKey="wallet.prompts">
+							<Trans i18nKey="transactionProcessing.confirmation.subtitle">
 								To continue, follow the prompts on your ${walletType} Wallet.
 							</Trans>
 						</PLarge>
@@ -48,7 +48,7 @@ const Confirmation = ({ t, goBack, walletType, feesAvailable }) => {
 				</Top>
 				<Loading>
 					<Spinner margin="auto" />
-					<Subtext>{t('mintrActions.confirmation.loading')}</Subtext>
+					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
 					<TransactionPriceIndicator />

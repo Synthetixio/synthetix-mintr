@@ -19,25 +19,23 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
 				<Top>
 					<Intro>
 						<ActionImage src={`/images/wallets/${walletType.toLowerCase()}.svg`} />
-						<PageTitle>{t('depot.withdraw.confirmation.pageTitle')}</PageTitle>
+						<PageTitle>{t('depot.withdraw.confirmation.title')}</PageTitle>
 						<PLarge>
-							<Trans i18nKey="wallet.prompts">
+							<Trans i18nKey="transactionProcessing.confirmation.subtitle">
 								To continue, follow the prompts on your ${walletType} Wallet.
 							</Trans>
 						</PLarge>
 					</Intro>
 					<Details>
 						<Box>
-							<DataHeaderLarge>
-								{t('depot.withdraw.confirmation.actionDescription')}
-							</DataHeaderLarge>
+							<DataHeaderLarge>{t('depot.withdraw.actionDescription')}</DataHeaderLarge>
 							<Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
 						</Box>
 					</Details>
 				</Top>
 				<Loading>
 					<Spinner margin="auto" />
-					<Subtext>{t('depot.withdraw.confirmation.loading')}</Subtext>
+					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
 					<TransactionPriceIndicator canEdit={false} />

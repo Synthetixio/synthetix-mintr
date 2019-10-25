@@ -236,8 +236,8 @@ const TokenSaleEscrow = ({ t, onPageChange }) => {
 				onDestroy={() => setCurrentScenario(null)}
 				vestAmount={availableTokensForVesting}
 			/>
-			<PageTitle>{t('escrow.tokenSale.pageTitle')}</PageTitle>
-			<PLarge>{t('escrow.tokenSale.pageSubtitle')}</PLarge>
+			<PageTitle>{t('escrow.tokenSale.title')}</PageTitle>
+			<PLarge>{t('escrow.tokenSale.subtitle')}</PLarge>
 			{escrowPeriod ? (
 				<Fragment>
 					<VestingInfo state={{ escrowPeriod, releaseIntervalMonths, totalPeriod }} />

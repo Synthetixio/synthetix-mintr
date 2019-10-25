@@ -48,10 +48,12 @@ const WalletButtons = () => {
 				<Icon src={`images/wallets/${wallet}.svg`} />
 				<WalletTitle>
 					<WalletConnectionH2>{walletName}</WalletConnectionH2>
-					{noMetamask ? <PLarge mt={0}>({t('walletConnection.intro.noMetamask')})</PLarge> : null}
+					{noMetamask ? (
+						<PLarge mt={0}>({t('onboarding.walletConnection.intro.noMetamask')})</PLarge>
+					) : null}
 				</WalletTitle>
 				<ButtonPrimaryMedium disabled={noMetamask} onClick={onWalletClick(wallet, dispatch)}>
-					Connect
+					{t('onboarding.walletConnection.buttons.connect')}
 				</ButtonPrimaryMedium>
 			</Wallet>
 		);
@@ -63,8 +65,10 @@ const WalletConnection = ({ t }) => {
 		<OnBoardingPageContainer>
 			<Content>
 				<HeadingContent>
-					<WalletConnectionH1>{t('walletConnection.intro.pageTitle')}</WalletConnectionH1>
-					<WalletConnectionPMega>{t('walletConnection.intro.pageSubtitle')}</WalletConnectionPMega>
+					<WalletConnectionH1>{t('onboarding.walletConnection.intro.title')}</WalletConnectionH1>
+					<WalletConnectionPMega>
+						{t('onboarding.walletConnection.intro.subtitle')}
+					</WalletConnectionPMega>
 				</HeadingContent>
 				<BodyContent>
 					<WalletButtons></WalletButtons>

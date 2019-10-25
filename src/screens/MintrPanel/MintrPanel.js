@@ -25,7 +25,7 @@ const TabRow = () => {
 				onClick={() => updateCurrentTab(tab, dispatch)}
 			>
 				{/* i18next-extract-disable-next-line */}
-				{t(`mainContent.header.buttons.${tab}`)}
+				{t(`mainNavigation.tabs.${tab}`)}
 			</TabButton>
 		);
 	});

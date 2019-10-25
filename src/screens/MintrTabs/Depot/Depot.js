@@ -306,9 +306,9 @@ const Depot = ({ t }) => {
 		<PageContainer>
 			<DepotAction action={currentScenario} {...props} />
 			<PageTitle>
-				{t('depot.intro.pageTitle')} ${formatCurrency(totalSellableDeposits)} sUSD
+				{t('depot.intro.title')} ${formatCurrency(totalSellableDeposits)} sUSD
 			</PageTitle>
-			<PLarge>{t('depot.intro.pageSubtitle')}</PLarge>
+			<PLarge>{t('depot.intro.subtitle')}</PLarge>
 			<ButtonRow>
 				{['deposit', 'withdraw'].map(action => {
 					return (

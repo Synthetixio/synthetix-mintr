@@ -97,24 +97,30 @@ const Heading = ({ hasLoaded, error }) => {
 			<HeadingContent>
 				<ErrorHeading>
 					<ErrorImg src="/images/failure.svg" />
-					<WalletConnectionH1>{t('walletSelection.error.pageTitle')}</WalletConnectionH1>
+					<WalletConnectionH1>{t('onboarding.walletSelection.error.title')}</WalletConnectionH1>
 				</ErrorHeading>
-				<WalletConnectionPMega>{t('walletSelection.error.pageSubtitle')}</WalletConnectionPMega>
+				<WalletConnectionPMega>
+					{t('onboarding.walletSelection.error.subtitle')}
+				</WalletConnectionPMega>
 			</HeadingContent>
 		);
 	} else
 		return hasLoaded ? (
 			<HeadingContent>
-				<WalletConnectionH1>{t('walletSelection.success.pageTitle')}</WalletConnectionH1>
-				<WalletConnectionPMega>{t('walletSelection.success.pageSubtitle')}</WalletConnectionPMega>
+				<WalletConnectionH1>{t('onboarding.walletSelection.success.title')}</WalletConnectionH1>
+				<WalletConnectionPMega>
+					{t('onboarding.walletSelection.success.subtitle')}
+				</WalletConnectionPMega>
 			</HeadingContent>
 		) : (
 			<HeadingContent>
 				<WalletConnectionH1>
-					<Trans i18nKey="walletSelection.loading.connectVia">Connect via {{ walletType }}</Trans>
+					<Trans i18nKey="onboarding.walletSelection.loading.connectVia">
+						Connect via {{ walletType }}
+					</Trans>
 				</WalletConnectionH1>
 				<WalletConnectionPMega>
-					{t('walletSelection.loading.connectInstructions')}
+					{t('onboarding.walletSelection.loading.connectInstructions')}
 				</WalletConnectionPMega>
 			</HeadingContent>
 		);
@@ -132,7 +138,7 @@ const WalletConnection = ({ t }) => {
 					<ErrorContainer>
 						<PMega>{error}</PMega>
 						<ButtonPrimaryMedium onClick={() => updateCurrentPage('walletConnection', dispatch)}>
-							{t('walletSelection.error.retry')}
+							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>
 				) : (

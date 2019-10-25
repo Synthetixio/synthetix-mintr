@@ -31,8 +31,8 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/burn.svg" big />
-						<H1>{t('mintrActions.burn.action.pageTitle')}</H1>
-						<PLarge>{t('mintrActions.burn.action.pageSubtitle')}</PLarge>
+						<H1>{t('mintrActions.burn.action.title')}</H1>
+						<PLarge>{t('mintrActions.burn.action.subtitle')}</PLarge>
 					</Intro>
 					<Form>
 						<PLarge>{t('mintrActions.burn.action.instruction')}</PLarge>

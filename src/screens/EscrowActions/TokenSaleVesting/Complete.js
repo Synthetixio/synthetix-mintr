@@ -14,8 +14,8 @@ const Success = ({ t, onDestroy, vestAmount }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('escrow.tokenSale.complete.pageTitle')}</PageTitle>
-					<PLarge>{t('escrow.tokenSale.complete.pageSubtitle')}</PLarge>
+					<PageTitle>{t('escrow.tokenSale.complete.title')}</PageTitle>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
@@ -42,10 +42,10 @@ const Failure = ({ t, transactionError, onDestroy }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>{t('error.pageTitle')}</PageTitle>
+					<PageTitle>{t('transactionProcessing.error.title')}</PageTitle>
 					{transactionError.code ? (
 						<PLarge>
-							{t('error.pageSubtitle')} {transactionError.code}
+							{t('transactionProcessing.error.subtitle')} {transactionError.code}
 						</PLarge>
 					) : null}
 					<PLarge>{t(transactionError.message)}</PLarge>

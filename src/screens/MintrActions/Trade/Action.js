@@ -43,8 +43,8 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/trade.svg" big />
-						<H1>{t('mintrActions.trade.action.pageTitle')}</H1>
-						<PLarge>{t('mintrActions.trade.action.pageSubtitle')}</PLarge>
+						<H1>{t('mintrActions.trade.action.title')}</H1>
+						<PLarge>{t('mintrActions.trade.action.subtitle')}</PLarge>
 					</Intro>
 					<Form>
 						<Input

@@ -159,8 +159,8 @@ const RewardEscrow = ({ t, onPageChange }) => {
 				vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
 			/>
 
-			<PageTitle>{t('escrow.staking.pageTitle')}</PageTitle>
-			<PLarge>{t('escrow.staking.pageSubtitle')}</PLarge>
+			<PageTitle>{t('escrow.staking.title')}</PageTitle>
+			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
 			<VestingTable data={vestingData} />
 			{!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
 			<ErrorMessage message={t(gasEstimateError)} />
