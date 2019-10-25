@@ -14,8 +14,8 @@ const Success = ({ t, onDestroy, vestAmount }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('escrow.tokenSale.complete.pageTitle')}</PageTitle>
-					<PLarge>{t('escrow.tokenSale.complete.pageSubtitle')}</PLarge>
+					<PageTitle>{t('escrow.tokenSale.complete.title')}</PageTitle>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
@@ -36,20 +36,24 @@ const Success = ({ t, onDestroy, vestAmount }) => {
 	);
 };
 
-const Failure = ({ transactionError, onDestroy }) => {
+const Failure = ({ t, transactionError, onDestroy }) => {
 	return (
 		<Fragment>
 			<Top>
 				<Intro>
 					<ActionImage src="/images/failure.svg" big />
-					<PageTitle>Something went wrong...</PageTitle>
-					{transactionError.code ? <PLarge>Code: {transactionError.code}</PLarge> : null}
-					<PLarge>{transactionError.message}</PLarge>
+					<PageTitle>{t('transactionProcessing.error.title')}</PageTitle>
+					{transactionError.code ? (
+						<PLarge>
+							{t('transactionProcessing.error.subtitle')} {transactionError.code}
+						</PLarge>
+					) : null}
+					<PLarge>{t(transactionError.message)}</PLarge>
 				</Intro>
 			</Top>
 			<Bottom>
 				<Buttons>
-					<ButtonPrimary onClick={onDestroy}>OK</ButtonPrimary>
+					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.ok')}</ButtonPrimary>
 				</Buttons>
 			</Bottom>
 		</Fragment>

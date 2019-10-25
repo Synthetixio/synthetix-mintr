@@ -93,8 +93,8 @@ const Action = ({
 				</Navigation>
 				<Intro>
 					<ActionImage src="/images/actions/claim.svg" big />
-					<H1 m={'10px 0'}>{t('mintrActions.claim.action.pageTitle')}</H1>
-					<PLarge>{t('mintrActions.claim.action.pageSubtitle')}</PLarge>
+					<H1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</H1>
+					<PLarge>{t('mintrActions.claim.action.subtitle')}</PLarge>
 				</Intro>
 				<Middle>
 					<Schedule>
@@ -104,7 +104,9 @@ const Action = ({
 							<PMedium width="100%">{t('mintrActions.claim.action.table.status')}</PMedium>
 							<State>
 								<Highlighted red={!feesAreClaimable} marginRight="8px">
-									{feesAreClaimable ? 'OPEN' : 'BLOCKED'}
+									{feesAreClaimable
+										? t('mintrActions.claim.action.table.open')
+										: t('mintrActions.claim.action.table.blocked')}
 								</Highlighted>
 								<Info width="4px" />
 							</State>

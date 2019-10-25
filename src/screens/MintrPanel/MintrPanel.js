@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 import { updateCurrentTab } from '../../ducks/ui';
@@ -9,8 +9,8 @@ import { Home, Depot, Transactions, Escrow } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { TransactionSettingsPopup } from '../../components/Popup';
 
-const TabRow = ({ state }) => {
-	const { t } = state;
+const TabRow = () => {
+	const { t } = useTranslation();
 	const {
 		state: {
 			ui: { currentTab },
@@ -25,7 +25,7 @@ const TabRow = ({ state }) => {
 				onClick={() => updateCurrentTab(tab, dispatch)}
 			>
 				{/* i18next-extract-disable-next-line */}
-				{t(`mainContent.header.buttons.${tab}`)}
+				{t(`mainNavigation.tabs.${tab}`)}
 			</TabButton>
 		);
 	});
@@ -45,7 +45,7 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = ({ t }) => {
+const MainContainer = () => {
 	const {
 		state: {
 			ui: { currentTab, transactionSettingsPopupIsVisible },
@@ -56,7 +56,7 @@ const MainContainer = ({ t }) => {
 		<MainContainerWrapper>
 			<Overlay isVisible={transactionSettingsPopupIsVisible}></Overlay>
 			<Header>
-				<TabRow state={{ t }} />
+				<TabRow />
 			</Header>
 			{renderScreen(currentTab)}
 			{transactionSettingsPopupIsVisible ? (

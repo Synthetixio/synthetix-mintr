@@ -5,8 +5,9 @@ import { ButtonTransactionEdit } from '../Button';
 import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
+import { withTranslation } from 'react-i18next';
 
-const TransactionPriceIndicator = ({ canEdit = true, ...style }) => {
+const TransactionPriceIndicator = ({ t, canEdit = true, ...style }) => {
 	const {
 		state: {
 			network: {
@@ -17,7 +18,7 @@ const TransactionPriceIndicator = ({ canEdit = true, ...style }) => {
 	return (
 		<Container {...style}>
 			<Block>
-				<Subtext mr={'10px'}>Ethereum Network Fees:</Subtext>
+				<Subtext mr={'10px'}>{t('transactionSettings.priceIndicator')}</Subtext>
 			</Block>
 			<Block>
 				{isFetchingGasLimit ? (
@@ -47,4 +48,4 @@ const Block = styled.div`
 	white-space: nowrap;
 `;
 
-export default TransactionPriceIndicator;
+export default withTranslation()(TransactionPriceIndicator);

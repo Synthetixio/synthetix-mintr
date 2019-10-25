@@ -28,8 +28,8 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/withdraw.svg" />
-						<H1>{t('depot.withdraw.action.pageTitle')}</H1>
-						<PLarge>{t('depot.withdraw.action.amountSubtitle')}</PLarge>
+						<H1>{t('depot.withdraw.action.title')}</H1>
+						<PLarge>{t('depot.withdraw.action.subtitle')}</PLarge>
 						<Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
 					</Intro>
 					<ErrorMessage message={gasEstimateError} />

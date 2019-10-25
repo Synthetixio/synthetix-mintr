@@ -22,11 +22,11 @@ const getStatusSentence = status => {
 	switch (status) {
 		case 'pending':
 		default:
-			return 'Transaction in progress';
+			return 'notification.status.pending';
 		case 'success':
-			return 'Transaction complete!';
+			return 'notification.status.success';
 		case 'error':
-			return 'An error occurred...';
+			return 'notification.status.error';
 	}
 };
 
@@ -65,7 +65,7 @@ const Notification = ({ transaction }) => {
 			<LeftBlock>
 				<StatusImage status={status} />
 				<InfoBlock>
-					<NotificationStatus>{getStatusSentence(status)}</NotificationStatus>
+					<NotificationStatus>{t(getStatusSentence(status))}</NotificationStatus>
 					<NotificationInfo>{transaction.info}</NotificationInfo>
 				</InfoBlock>
 			</LeftBlock>
@@ -77,10 +77,10 @@ const Notification = ({ transaction }) => {
 					as="a"
 					target="_blank"
 				>
-					{t('notification.buttons.view')}
+					{t('button.navigation.view')}
 				</ButtonTertiary>
 				<ButtonTertiary onClick={() => hideTransaction(transaction.hash, dispatch)}>
-					{t('notification.buttons.close')}
+					{t('button.navigation.close')}
 				</ButtonTertiary>
 			</ButtonBlock>
 		</NotificationWrapper>
@@ -173,7 +173,7 @@ const NotificationInfo = styled.p`
 const ButtonBlock = styled.div`
 	display: flex;
 	& > :last-child {
-		margin-left: 20px;
+		margin-left: 10px;
 	}
 `;
 
