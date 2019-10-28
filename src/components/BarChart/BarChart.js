@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-// import isEqual from 'lodash/isEqual';
 import { PMedium } from '../Typography';
 
 import { formatCurrency } from '../../helpers/formatters';

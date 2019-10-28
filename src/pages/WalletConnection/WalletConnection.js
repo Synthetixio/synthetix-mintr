@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
@@ -37,19 +37,23 @@ const onWalletClick = (wallet, dispatch) => {
 	};
 };
 
-const renderWalletButtons = dispatch => {
+const WalletButtons = () => {
+	const { dispatch } = useContext(Store);
+	const { t } = useTranslation();
 	return SUPPORTED_WALLETS.map(wallet => {
-		const noMetamask = wallet === 'metamask' && !hasWeb3();
+		const noMetamask = wallet === 'Metamask' && !hasWeb3();
 		const walletName = wallet === 'Coinbase' ? 'Coinbase Wallet' : wallet;
 		return (
 			<Wallet disabled={noMetamask} key={wallet}>
 				<Icon src={`images/wallets/${wallet}.svg`} />
 				<WalletTitle>
 					<WalletConnectionH2>{walletName}</WalletConnectionH2>
-					<PLarge mt={0}>{noMetamask ? '(not installed)' : ''}</PLarge>
+					{noMetamask ? (
+						<PLarge mt={0}>({t('onboarding.walletConnection.intro.noMetamask')})</PLarge>
+					) : null}
 				</WalletTitle>
 				<ButtonPrimaryMedium disabled={noMetamask} onClick={onWalletClick(wallet, dispatch)}>
-					Connect
+					{t('onboarding.walletConnection.buttons.connect')}
 				</ButtonPrimaryMedium>
 			</Wallet>
 		);
@@ -57,15 +61,18 @@ const renderWalletButtons = dispatch => {
 };
 
 const WalletConnection = ({ t }) => {
-	const { dispatch } = useContext(Store);
 	return (
 		<OnBoardingPageContainer>
 			<Content>
 				<HeadingContent>
-					<WalletConnectionH1>{t('walletConnection.intro.pageTitle')}</WalletConnectionH1>
-					<WalletConnectionPMega>{t('walletConnection.intro.pageSubtitle')}</WalletConnectionPMega>
+					<WalletConnectionH1>{t('onboarding.walletConnection.intro.title')}</WalletConnectionH1>
+					<WalletConnectionPMega>
+						{t('onboarding.walletConnection.intro.subtitle')}
+					</WalletConnectionPMega>
 				</HeadingContent>
-				<BodyContent>{renderWalletButtons(dispatch)}</BodyContent>
+				<BodyContent>
+					<WalletButtons></WalletButtons>
+				</BodyContent>
 			</Content>
 		</OnBoardingPageContainer>
 	);

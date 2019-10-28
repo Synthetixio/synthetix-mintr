@@ -15,29 +15,35 @@ const Landing = ({ t }) => {
 		<OnBoardingPageContainer>
 			<Content>
 				<HeadingContent>
-					<LandingH1>{t('landing.intro.pageTitle')}</LandingH1>
-					<LandingPMega>{t('landing.intro.pageSubtitle')}</LandingPMega>
+					<LandingH1>{t('onboarding.landing.intro.title')}</LandingH1>
+					<LandingPMega>{t('onboarding.landing.intro.subtitle')}</LandingPMega>
 				</HeadingContent>
 				<BodyContent>
 					<Functionalities>
 						<Functionality>
 							<Icon src="images/actions/mint.svg" />
-							<LandingH2>{t('landing.functionality.mintTitle')}</LandingH2>
-							<LandingPLarge>{t('landing.functionality.mintDescription')}</LandingPLarge>
+							<LandingH2>{t('onboarding.landing.functionality.mint.title')}</LandingH2>
+							<LandingPLarge>
+								{t('onboarding.landing.functionality.mint.description')}
+							</LandingPLarge>
 						</Functionality>
 						<Functionality>
 							<Icon src="images/actions/burn.svg" />
-							<LandingH2>{t('landing.functionality.burnTitle')}</LandingH2>
-							<LandingPLarge>{t('landing.functionality.burnDescription')}</LandingPLarge>
+							<LandingH2>{t('onboarding.landing.functionality.burn.title')}</LandingH2>
+							<LandingPLarge>
+								{t('onboarding.landing.functionality.burn.description')}
+							</LandingPLarge>
 						</Functionality>
 						<Functionality>
 							<Icon src="images/actions/claim.svg" />
-							<LandingH2>{t('landing.functionality.claimTitle')}</LandingH2>
-							<LandingPLarge>{t('landing.functionality.claimDescription')}</LandingPLarge>
+							<LandingH2>{t('onboarding.landing.functionality.claim.title')}</LandingH2>
+							<LandingPLarge>
+								{t('onboarding.landing.functionality.claim.description')}
+							</LandingPLarge>
 						</Functionality>
 					</Functionalities>
 					<ButtonPrimary onClick={() => updateCurrentPage('walletConnection', dispatch)}>
-						{t('landing.buttons.connect')}
+						{t('onboarding.landing.buttons.connect')}
 					</ButtonPrimary>
 				</BodyContent>
 			</Content>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
@@ -19,8 +19,12 @@ const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
 				<Top>
 					<Intro>
 						<ActionImage src={`/images/wallets/${walletType}.svg`} big />
-						<PageTitle>{t('mintrActions.confirmation.pageTitle')}</PageTitle>
-						<PLarge>{`To continue, follow the prompts on your ${walletType} Wallet.`}</PLarge>
+						<PageTitle>{t('transactionProcessing.confirmation.title')}</PageTitle>
+						<PLarge>
+							<Trans i18nKey="transactionProcessing.confirmation.subtitle">
+								To continue, follow the prompts on your ${walletType} Wallet.
+							</Trans>
+						</PLarge>
 					</Intro>
 					<Details>
 						<Box>
@@ -41,7 +45,7 @@ const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
 				</Top>
 				<Loading>
 					<Spinner margin="auto" />
-					<Subtext>{t('mintrActions.confirmation.loading')}</Subtext>
+					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
 					<TransactionPriceIndicator />
