@@ -26,7 +26,6 @@ const Home = ({ t }) => {
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
 			<PageTitle>{t('home.intro.title')}</PageTitle>
-			<PLarge>{t('home.intro.subtitle')}</PLarge>
 			<ButtonRow margin="30px 0 40px 0">
 				{['mint', 'burn'].map(action => {
 					return (
