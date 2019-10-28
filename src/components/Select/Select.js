@@ -18,7 +18,7 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
 	};
 
 	return (
-		<SelectContainer>
+		<SelectContainer autoWidth>
 			<List>
 				{data.map(element => {
 					return (
@@ -140,11 +140,10 @@ const SelectedValue = ({ type, data, selected }) => {
 				return (
 					<span>
 						<ListElementIcon src={elements[0].icon}></ListElementIcon>
-						<ListElementLabel>{elements[0].label}</ListElementLabel>
+						<ListElementLabel></ListElementLabel>
 					</span>
 				);
 			}
-
 			return (
 				<span>
 					{elements.map(e => (
@@ -195,23 +194,13 @@ const ButtonInner = styled.div`
 const ButtonImage = styled.img``;
 
 const SelectContainer = styled.div`
-<<<<<<< HEAD
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  width: ${props => (props.autoWidth ? 'auto' : '100%')};
-  border: 1px solid ${props => props.theme.colorStyles.borders};
-  border-radius: 5px;
-  background-color: ${props => props.theme.colorStyles.panels};
-=======
 	position: absolute;
 	top: calc(100% + 10px);
 	left: 0;
-	width: 100%;
+	width: ${props => (props.autoWidth ? 'auto' : '100%')};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;
 	background-color: ${props => props.theme.colorStyles.panels};
->>>>>>> staging
 `;
 
 const List = styled.ul`
@@ -239,19 +228,13 @@ const ListElementLabel = styled(DataLarge)`
 `;
 
 const ListElementIcon = styled.img`
-<<<<<<< HEAD
-  margin-left: 7px;
-  margin-right: 8px;
-  vertical-align: text-bottom;
-  width: 16px;
-=======
-	margin-right: 10px;
->>>>>>> staging
+	margin: 0 5px;
+	vertical-align: text-bottom;
+	width: 16px;
 `;
 
 const RangeContainer = styled.div`
 	height: 178px;
-
 	padding: 16px 24px;
 `;
 
@@ -260,9 +243,11 @@ const Label = styled.label``;
 const Input = styled(InputTextSmall)`
 	height: 32px;
 	margin: 8px 0 25px 0;
+	border-radius: 5px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
+	background-color: ${props => props.theme.colorStyles.panels};
+	color: ${props => props.theme.colorStyles.heading};
 	width: 100%;
-
 	-moz-appearance: textfield;
 	&::-webkit-outer-spin-button,
 	&::-webkit-inner-spin-button {
