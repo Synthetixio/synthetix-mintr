@@ -157,10 +157,10 @@ const SelectedValue = ({ type, data, selected }) => {
 				new Date(selected.to),
 				'dd-MM-yy'
 			)}`;
-			return <SelectedValueText>{text}</SelectedValueText>;
+			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
 		case 'range':
 			text = `${formatCurrency(selected.from)} → ${formatCurrency(selected.to)}`;
-			return <SelectedValueText>{text}</SelectedValueText>;
+			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
 	}
 };
 
@@ -240,9 +240,10 @@ const RangeContainer = styled.div`
 
 const Label = styled.label``;
 
-const Input = styled(InputTextSmall)`
+const Input = styled.input`
 	height: 32px;
 	margin: 8px 0 25px 0;
+	padding: 0 10px;
 	border-radius: 5px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	background-color: ${props => props.theme.colorStyles.panels};
@@ -254,10 +255,6 @@ const Input = styled(InputTextSmall)`
 		-webkit-appearance: none;
 		margin: 0;
 	}
-`;
-
-const SelectedValueText = styled(ButtonTertiaryLabel)`
-	color: ${props => props.theme.colorStyles.inputTextSmall};
 `;
 
 export default Select;

@@ -220,23 +220,6 @@ const theme = mode => {
 			color: colorStyles.buttonTertiaryText,
 			letterSpacing: 0.6,
 		},
-		inputTextLarge: {
-			as: 'input',
-			fontSize: [20, 22, 24],
-			fontWeight: 500,
-			fontFamily: fontFamilies.regular,
-			color: colorStyles.heading,
-			letterSpacing: 0.5,
-		},
-		inputTextSmall: {
-			as: 'input',
-			fontSize: [10, 12, 14],
-			fontWeight: 400,
-			fontFamily: fontFamilies.regular,
-			color: colorStyles.light1,
-			letterSpacing: 0,
-			paddingLeft: '0.5em',
-		},
 		inputLabelSmall: {
 			as: 'label',
 			fontSize: [10, 12, 14],
