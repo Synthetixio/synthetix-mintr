@@ -14,8 +14,8 @@
   status = 200
   
 [[redirects]]
-  from = "http://alpha.synthetix.io"
-  to = "http://beta.synthetix.io"
+  from = "http://alpha.mintr.synthetix.io"
+  to = "http://beta.mintr.synthetix.io"
   status = 301
   force = true
 
