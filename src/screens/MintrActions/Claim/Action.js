@@ -19,7 +19,7 @@ import {
 } from '../../../components/Typography';
 import { TableWrapper, Table, THead, TBody, TH, TR, TD } from '../../../components/ScheduleTable';
 import Skeleton from '../../../components/Skeleton';
-import { Info } from '../../../components/Icons';
+import Tooltip from '../../../components/Tooltip';
 
 const Periods = ({ state = {} }) => {
 	const { t } = useTranslation();
@@ -108,7 +108,7 @@ const Action = ({
 										? t('mintrActions.claim.action.table.open')
 										: t('mintrActions.claim.action.table.blocked')}
 								</Highlighted>
-								<Info width="4px" />
+								<Tooltip content={t('tooltip.claim')} />
 							</State>
 						</Status>
 					</Schedule>
