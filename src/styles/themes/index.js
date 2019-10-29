@@ -220,13 +220,13 @@ const theme = mode => {
 			color: colorStyles.buttonTertiaryText,
 			letterSpacing: 0.6,
 		},
-		inputTextLarge: {
-			as: 'span',
-			fontSize: [20, 22, 24],
-			fontWeight: 500,
+		inputLabelSmall: {
+			as: 'label',
+			fontSize: [10, 12, 14],
+			fontWeight: 400,
 			fontFamily: fontFamilies.regular,
-			color: colorStyles.heading,
-			letterSpacing: 0.5,
+			color: colorStyles.inputLabelSmall,
+			letterSpacing: 0,
 		},
 		hyperlinkSmall: {
 			as: 'span',

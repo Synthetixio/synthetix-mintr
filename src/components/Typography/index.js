@@ -209,10 +209,10 @@ export const ButtonTertiaryLabel = props => {
 	);
 };
 
-export const InputTextLarge = props => {
-	const { inputTextLarge } = useContext(ThemeContext).textStyles;
+export const InputLabelSmall = props => {
+	const { inputLabelSmall } = useContext(ThemeContext).textStyles;
 	return (
-		<DynamicComponent {...inputTextLarge} {...props}>
+		<DynamicComponent {...inputLabelSmall} {...props}>
 			{props.children}
 		</DynamicComponent>
 	);
