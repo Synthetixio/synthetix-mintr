@@ -194,6 +194,7 @@ const ButtonInner = styled.div`
 const ButtonImage = styled.img``;
 
 const SelectContainer = styled.div`
+	z-index: 10;
 	position: absolute;
 	top: calc(100% + 10px);
 	left: 0;

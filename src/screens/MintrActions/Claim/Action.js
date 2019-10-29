@@ -87,7 +87,7 @@ const Action = ({
 			<Container>
 				<Navigation>
 					<ButtonTertiary onClick={onDestroy}>{t('button.navigation.cancel')}</ButtonTertiary>
-					<ButtonTertiary disabled={true} onClick={onClaimHistory}>
+					<ButtonTertiary onClick={onClaimHistory}>
 						{t('mintrActions.claim.action.buttons.history')} ↗
 					</ButtonTertiary>
 				</Navigation>

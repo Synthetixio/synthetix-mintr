@@ -158,7 +158,9 @@ const Claim = ({ onDestroy }) => {
 	};
 
 	const onClaimHistory = () => {
-		updateCurrentTab('escrow', dispatch);
+		updateCurrentTab('transactionsHistory', dispatch, {
+			filters: ['FeesClaimed'],
+		});
 	};
 
 	const props = {
