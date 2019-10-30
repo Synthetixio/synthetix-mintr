@@ -154,7 +154,7 @@ const OnboardingH1 = styled(H1)`
 `;
 
 const OnboardingPMega = styled(PMega)`
-	margin: 20px auto;
+	margin: 20px auto 0 auto;
 	font-size: 18px;
 	line-height: 25px;
 	width: 100%;
@@ -188,6 +188,7 @@ const ButtonRow = styled.div`
 `;
 
 const WalletConnectContainer = styled.div`
+	z-index: 100;
 	height: 100%;
 	max-width: 500px;
 	padding: 20px;
