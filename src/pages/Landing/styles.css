@@ -1,0 +1,11 @@
+.carousel .slide {
+	background: transparent;
+}
+
+.carousel .slide img {
+	width: auto;
+}
+
+.carousel .control-dots {
+	padding: 0;
+}

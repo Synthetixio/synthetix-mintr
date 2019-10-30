@@ -6,44 +6,53 @@ import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpe
 import { Store } from '../../store';
 import { ButtonPrimary, ButtonSecondary, BorderlessButton } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
-// import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './styles.css';
 import { Carousel } from 'react-responsive-carousel';
+import { Welcome, WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
 
 const OnBoardingCarousel = ({ pageIndex }) => {
+	const { t } = useTranslation();
 	return (
-		<Carousel
-			selectedItem={pageIndex}
-			showArrows={false}
-			showThumbs={false}
-			showStatus={false}
-			interval={10000}
-			autoplay
-		>
-			<div>
-				<OnboardingH1>What is Synthetix?</OnboardingH1>
-				<OnboardingPMega>
-					Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
-					synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX). These
-					Synths can be exchanged for each other directly with the Synthetix smart contracts on
-					Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity and
-					slippage issues experienced by DEX’s.
-				</OnboardingPMega>
-				<img src="images/onboarding/slide-1.svg"></img>
-			</div>
-			<div>
-				<OnboardingH1>What is Synthetix?</OnboardingH1>
-				<OnboardingPMega>
-					Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
-					synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX). These
-					Synths can be exchanged for each other directly with the Synthetix smart contracts on
-					Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity and
-					slippage issues experienced by DEX’s.
-				</OnboardingPMega>
-				<img src="images/onboarding/slide-1.svg"></img>
-			</div>
-		</Carousel>
+		<CarouselContainer>
+			<Carousel
+				selectedItem={pageIndex}
+				showArrows={false}
+				showThumbs={false}
+				showStatus={false}
+				interval={10000}
+				autoplay
+			>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.welcome.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.welcome.description')}</OnboardingPMega>
+					<Welcome />
+				</CarouselSlide>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.whatIsSynthetix.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.whatIsSynthetix.description')}</OnboardingPMega>
+					<WhatIsSynthetix />
+				</CarouselSlide>
+
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.whyStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.whyStakeSnx.description')}</OnboardingPMega>
+					<WhyStakeSnx />
+				</CarouselSlide>
+
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.howStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.howStakeSnx.description')}</OnboardingPMega>
+					<HowStakeSnx />
+				</CarouselSlide>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.risks.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.risks.description')}</OnboardingPMega>
+					<Risks />
+				</CarouselSlide>
+			</Carousel>
+		</CarouselContainer>
 	);
 };
 
@@ -70,20 +79,30 @@ const WalletButtons = () => {
 
 const Landing = () => {
 	const [pageIndex, setPageIndex] = useState(0);
+	const {
+		state: {
+			ui: { themeIsDark },
+		},
+	} = useContext(Store);
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
-				<CarouselContent>
-					<OnBoardingCarousel pageIndex={pageIndex} />
-					<ButtonRow>
-						<ButtonSecondary onClick={() => setPageIndex(Math.max(pageIndex - 1), 0)} width="45%">
-							PREVIOUS
-						</ButtonSecondary>
-						<ButtonPrimary onClick={() => setPageIndex(pageIndex + 1)} width="45%">
-							CONTINUE
-						</ButtonPrimary>
-					</ButtonRow>
-				</CarouselContent>
+				<Header>
+					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+				</Header>
+				<OnBoardingCarousel pageIndex={pageIndex} />
+				<ButtonRow>
+					<ButtonSecondary
+						onClick={() => setPageIndex(Math.max(pageIndex - 1), 0)}
+						height="64px"
+						width="320px"
+					>
+						PREVIOUS
+					</ButtonSecondary>
+					<ButtonPrimary onClick={() => setPageIndex(pageIndex + 1)} height="64px" width="320px">
+						CONTINUE
+					</ButtonPrimary>
+				</ButtonRow>
 			</OnboardingContainer>
 			<WalletConnectContainer>
 				<PMega>Please connect a wallet with your SNX holdings to start:</PMega>
@@ -107,26 +126,17 @@ const LandingPageContainer = styled.div`
 `;
 
 const OnboardingContainer = styled.div`
-	height: 100%;
-	width: 80%;
-	padding: 64px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	width: 100%;
+	padding: 42px;
 	background-color: ${props => props.theme.colorStyles.panels};
 	border-right: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
-const CarouselContent = styled.div`
-	width: 80%;
-	margin: 0 auto;
-	max-width: 1200px;
+const CarouselContainer = styled.div`
+	width: 854px;
+	margin: 0 auto 50px auto;
 	text-align: center;
-	height: 80%;
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	margin-top: 40px;
 `;
 
 const Heading = styled.div`
@@ -139,20 +149,21 @@ const Heading = styled.div`
 `;
 
 const OnboardingH1 = styled(H1)`
-	text-transform: capitalize;
-	font-size: 48px;
+	text-transform: none;
 	margin-bottom: 24px;
 `;
 
 const OnboardingPMega = styled(PMega)`
-	font-size: 22px;
-	font-family: 'apercu-regular';
-	text-align: center;
-	line-height: 32px;
+	margin: 20px auto;
+	font-size: 18px;
+	line-height: 25px;
+	width: 100%;
+	max-width: 600px;
 `;
 
 const Illustration = styled.img`
-	margin: 128px auto 160px auto;
+	margin: 40px 0;
+	width: 300px;
 `;
 
 const Progress = styled.div`
@@ -170,9 +181,10 @@ const Bubble = styled.div`
 
 const ButtonRow = styled.div`
 	display: flex;
-	width: 80%;
+	width: 100%;
 	margin: auto;
-	justify-content: space-between;
+	justify-content: space-around;
+	max-width: 800px;
 `;
 
 const WalletConnectContainer = styled.div`
@@ -247,6 +259,19 @@ const BottomLinks = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+`;
+
+const CarouselSlide = styled.div`
+	// background-color: ${props => props.theme.colorStyles.panelButton};
+`;
+
+const Header = styled.div`
+	width: 100%;
+`;
+
+const Logo = styled.img`
+	width: 120px;
+	margin-right: 18px;
 `;
 
 // const LandingH2 = styled(H2)`
