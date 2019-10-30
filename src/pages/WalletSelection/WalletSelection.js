@@ -137,7 +137,7 @@ const WalletConnection = ({ t }) => {
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
-						<ButtonPrimaryMedium onClick={() => updateCurrentPage('walletConnection', dispatch)}>
+						<ButtonPrimaryMedium onClick={() => updateCurrentPage('landing', dispatch)}>
 							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>

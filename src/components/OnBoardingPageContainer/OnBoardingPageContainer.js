@@ -19,8 +19,8 @@ const OnBoardingPageContainer = ({ t, children }) => {
 					{/* <Network>{networkName}</Network> */}
 				</HeaderBlock>
 				<HeaderBlock>
-					<ButtonTertiary>{t('onboarding.header.support')}</ButtonTertiary>
-					<ButtonTertiary>{t('onboarding.header.whatIsSynthetix')}</ButtonTertiary>
+					<ButtonTertiary>{t('button.havingTrouble')}</ButtonTertiary>
+					<ButtonTertiary>{t('button.whatIsSynthetix')}</ButtonTertiary>
 				</HeaderBlock>
 			</Header>
 			{children}

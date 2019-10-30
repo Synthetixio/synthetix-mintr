@@ -1,18 +1,47 @@
-/* eslint-disable */
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { Carousel } from 'react-responsive-carousel';
 import { withTranslation, useTranslation } from 'react-i18next';
-import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+
+import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
+
 import { Store } from '../../store';
-import { ButtonPrimary, ButtonSecondary, BorderlessButton } from '../../components/Button';
+import { updateCurrentPage } from '../../ducks/ui';
+import { updateWalletStatus } from '../../ducks/wallet';
+
+import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+import { Welcome, WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
+import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './styles.css';
-import { Carousel } from 'react-responsive-carousel';
-import { Welcome, WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
 
 const SLIDE_COUNT = 4;
+
+const onWalletClick = (wallet, dispatch) => {
+	return async () => {
+		const walletStatus = await connectToWallet(wallet);
+
+		updateWalletStatus(walletStatus, dispatch);
+		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
+			if (walletStatus.walletType === 'Metamask') {
+				onMetamaskAccountChange(async () => {
+					const address = await snxJSConnector.signer.getNextAddresses();
+					const signer = new snxJSConnector.signers['Metamask']({});
+					snxJSConnector.setContractSettings({
+						networkId: walletStatus.networkId,
+						signer,
+					});
+					if (address && address[0]) {
+						updateWalletStatus({ currentWallet: address[0] }, dispatch);
+					}
+				});
+			}
+			updateCurrentPage('main', dispatch);
+		} else updateCurrentPage('walletSelection', dispatch);
+	};
+};
 
 const OnBoardingCarousel = ({ pageIndex }) => {
 	const { t } = useTranslation();
@@ -60,18 +89,14 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 
 const WalletButtons = () => {
 	const { dispatch } = useContext(Store);
-	const { t } = useTranslation();
 	return (
 		<Wallets>
 			{SUPPORTED_WALLETS.map(wallet => {
 				const noMetamask = wallet === 'Metamask' && !hasWeb3();
 				return (
-					<Button disabled={noMetamask} key={wallet} onClick={null}>
+					<Button disabled={noMetamask} key={wallet} onClick={onWalletClick(wallet, dispatch)}>
 						<Icon src={`images/wallets/${wallet}.svg`} />
 						<WalletConnectionH2>{wallet}</WalletConnectionH2>
-						{noMetamask ? (
-							<PLarge mt={0}>({t('onboarding.walletConnection.intro.noMetamask')})</PLarge>
-						) : null}
 					</Button>
 				);
 			})}
@@ -114,10 +139,10 @@ const Landing = ({ t }) => {
 				<PMega>{t('onboarding.walletConnection.title')}</PMega>
 				<WalletButtons />
 				<BottomLinks>
-					<Link href="https://synthetix.io" target="_blank">
+					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
-					<Link href="https://synthetix.io" target="_blank">
+					<Link href="https://www.synthetix.io/uploads/synthetix_litepaper.pdf" target="_blank">
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 				</BottomLinks>
@@ -145,15 +170,6 @@ const CarouselContainer = styled.div`
 	margin-top: 40px;
 `;
 
-const Heading = styled.div`
-	max-width: 1000px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-`;
-
 const OnboardingH1 = styled(H1)`
 	text-transform: none;
 	margin-bottom: 24px;
@@ -165,24 +181,6 @@ const OnboardingPMega = styled(PMega)`
 	line-height: 25px;
 	width: 100%;
 	max-width: 600px;
-`;
-
-const Illustration = styled.img`
-	margin: 40px 0;
-	width: 300px;
-`;
-
-const Progress = styled.div`
-	display: flex;
-`;
-
-const Bubble = styled.div`
-	background-color: ${props => props.theme.colorStyles.borders};
-	height: 16px;
-	width: 16px;
-	border-radius: 100%;
-	margin: 12px;
-	cursor: pointer;
 `;
 
 const ButtonRow = styled.div`
@@ -267,9 +265,7 @@ const BottomLinks = styled.div`
 	justify-content: space-between;
 `;
 
-const CarouselSlide = styled.div`
-	// background-color: ${props => props.theme.colorStyles.panelButton};
-`;
+const CarouselSlide = styled.div``;
 
 const Header = styled.div`
 	width: 100%;
