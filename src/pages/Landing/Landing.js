@@ -12,6 +12,8 @@ import './styles.css';
 import { Carousel } from 'react-responsive-carousel';
 import { Welcome, WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
 
+const SLIDE_COUNT = 4;
+
 const OnBoardingCarousel = ({ pageIndex }) => {
 	const { t } = useTranslation();
 	return (
@@ -25,30 +27,30 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 				autoplay
 			>
 				<CarouselSlide>
-					<OnboardingH1>{t('onboarding.welcome.title')}</OnboardingH1>
-					<OnboardingPMega>{t('onboarding.welcome.description')}</OnboardingPMega>
+					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
 					<Welcome />
 				</CarouselSlide>
 				<CarouselSlide>
-					<OnboardingH1>{t('onboarding.whatIsSynthetix.title')}</OnboardingH1>
-					<OnboardingPMega>{t('onboarding.whatIsSynthetix.description')}</OnboardingPMega>
+					<OnboardingH1>{t('onboarding.slides.whatIsSynthetix.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.whatIsSynthetix.description')}</OnboardingPMega>
 					<WhatIsSynthetix />
 				</CarouselSlide>
 
 				<CarouselSlide>
-					<OnboardingH1>{t('onboarding.whyStakeSnx.title')}</OnboardingH1>
-					<OnboardingPMega>{t('onboarding.whyStakeSnx.description')}</OnboardingPMega>
+					<OnboardingH1>{t('onboarding.slides.whyStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.whyStakeSnx.description')}</OnboardingPMega>
 					<WhyStakeSnx />
 				</CarouselSlide>
 
 				<CarouselSlide>
-					<OnboardingH1>{t('onboarding.howStakeSnx.title')}</OnboardingH1>
-					<OnboardingPMega>{t('onboarding.howStakeSnx.description')}</OnboardingPMega>
+					<OnboardingH1>{t('onboarding.slides.howStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.howStakeSnx.description')}</OnboardingPMega>
 					<HowStakeSnx />
 				</CarouselSlide>
 				<CarouselSlide>
-					<OnboardingH1>{t('onboarding.risks.title')}</OnboardingH1>
-					<OnboardingPMega>{t('onboarding.risks.description')}</OnboardingPMega>
+					<OnboardingH1>{t('onboarding.slides.risks.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.risks.description')}</OnboardingPMega>
 					<Risks />
 				</CarouselSlide>
 			</Carousel>
@@ -77,7 +79,7 @@ const WalletButtons = () => {
 	);
 };
 
-const Landing = () => {
+const Landing = ({ t }) => {
 	const [pageIndex, setPageIndex] = useState(0);
 	const {
 		state: {
@@ -93,26 +95,30 @@ const Landing = () => {
 				<OnBoardingCarousel pageIndex={pageIndex} />
 				<ButtonRow>
 					<ButtonSecondary
-						onClick={() => setPageIndex(Math.max(pageIndex - 1), 0)}
+						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
 						height="64px"
 						width="320px"
 					>
-						PREVIOUS
+						{t('button.previous')}
 					</ButtonSecondary>
-					<ButtonPrimary onClick={() => setPageIndex(pageIndex + 1)} height="64px" width="320px">
-						CONTINUE
+					<ButtonPrimary
+						onClick={() => setPageIndex(pageIndex === SLIDE_COUNT ? 0 : pageIndex + 1)}
+						height="64px"
+						width="320px"
+					>
+						{pageIndex === SLIDE_COUNT ? t('button.startOver') : t('button.next')}
 					</ButtonPrimary>
 				</ButtonRow>
 			</OnboardingContainer>
 			<WalletConnectContainer>
-				<PMega>Please connect a wallet with your SNX holdings to start:</PMega>
+				<PMega>{t('onboarding.walletConnection.title')}</PMega>
 				<WalletButtons />
 				<BottomLinks>
 					<Link href="https://synthetix.io" target="_blank">
-						<ButtonTertiaryLabel>Having trouble?</ButtonTertiaryLabel>
+						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
 					<Link href="https://synthetix.io" target="_blank">
-						<ButtonTertiaryLabel>What is Synthetix?</ButtonTertiaryLabel>
+						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 				</BottomLinks>
 			</WalletConnectContainer>
@@ -273,38 +279,5 @@ const Logo = styled.img`
 	width: 120px;
 	margin-right: 18px;
 `;
-
-// const LandingH2 = styled(H2)`
-// 	text-transform: capitalize;
-// 	font-size: 22px;
-// 	margin: 30px 0px 16px 0px;
-// `;
-
-// const LandingPLarge = styled(PLarge)`
-// 	font-size: 18px;
-// 	font-family: 'apercu-regular';
-// 	margin-top: 0;
-// `;
-
-// const Functionalities = styled.div`
-// 	display: flex;
-// 	width: 100%;
-// 	margin: 80px auto 100px auto;
-// 	justify-content: space-between;
-// 	color: white;
-// `;
-
-// const Functionality = styled.div`
-// 	display: flex;
-// 	width: 100%;
-// 	flex-direction: column;
-// 	align-items: center;
-// 	text-align: center;
-// `;
-
-// const Icon = styled.img`
-// 	width: 64px;
-// 	height: 64px;
-// `;
 
 export default withTranslation()(Landing);

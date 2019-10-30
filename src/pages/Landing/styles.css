@@ -9,3 +9,20 @@
 .carousel .control-dots {
 	padding: 0;
 }
+
+.carousel .control-dots .dot {
+	transition: background 0.25s ease-in;
+	background: #e8e7fd;
+	border-radius: 50%;
+	width: 16px;
+	box-shadow: none;
+	opacity: 1;
+	height: 16px;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 8px;
+}
+
+.carousel .control-dots .dot.selected {
+	background: #727cff;
+}
