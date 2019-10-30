@@ -1,107 +1,101 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
-
-import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
+import { withTranslation, useTranslation } from 'react-i18next';
+import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+import { Store } from '../../store';
+import { ButtonPrimary, ButtonSecondary, BorderlessButton } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 // import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 
-// Don't forget to include the css in your page
-// <link rel="stylesheet" href="carousel.css"/>
-// Begin DemoSliderControls
-
-const DemoCarousel = () => {
+const OnBoardingCarousel = ({ pageIndex }) => {
 	return (
-		<Carousel>
+		<Carousel
+			selectedItem={pageIndex}
+			showArrows={false}
+			showThumbs={false}
+			showStatus={false}
+			interval={10000}
+			autoplay
+		>
 			<div>
-				<Heading>
-					<OnboardingH1>What is Synthetix?</OnboardingH1>
-					<OnboardingPMega>
-						Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
-						synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX).
-						These Synths can be exchanged for each other directly with the Synthetix smart contracts
-						on Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity
-						and slippage issues experienced by DEX’s.
-					</OnboardingPMega>
-					<Illustration src="images/onboarding/slide-1.svg"></Illustration>
-				</Heading>
+				<OnboardingH1>What is Synthetix?</OnboardingH1>
+				<OnboardingPMega>
+					Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
+					synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX). These
+					Synths can be exchanged for each other directly with the Synthetix smart contracts on
+					Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity and
+					slippage issues experienced by DEX’s.
+				</OnboardingPMega>
+				<img src="images/onboarding/slide-1.svg"></img>
 			</div>
 			<div>
-				<Heading>
-					<OnboardingH1>What is Synthetix?</OnboardingH1>
-					<OnboardingPMega>
-						Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
-						synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX).
-						These Synths can be exchanged for each other directly with the Synthetix smart contracts
-						on Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity
-						and slippage issues experienced by DEX’s.
-					</OnboardingPMega>
-					<Illustration src="images/onboarding/slide-1.svg"></Illustration>
-				</Heading>
+				<OnboardingH1>What is Synthetix?</OnboardingH1>
+				<OnboardingPMega>
+					Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum. These
+					synthetic assets (Synths) are created by staking the Synthetix Network Token (SNX). These
+					Synths can be exchanged for each other directly with the Synthetix smart contracts on
+					Synthetix.Exchange, avoiding the need for counterparties and solving the liquidity and
+					slippage issues experienced by DEX’s.
+				</OnboardingPMega>
+				<img src="images/onboarding/slide-1.svg"></img>
 			</div>
 		</Carousel>
 	);
 };
 
+const WalletButtons = () => {
+	const { dispatch } = useContext(Store);
+	const { t } = useTranslation();
+	return (
+		<Wallets>
+			{SUPPORTED_WALLETS.map(wallet => {
+				const noMetamask = wallet === 'Metamask' && !hasWeb3();
+				return (
+					<Button disabled={noMetamask} key={wallet} onClick={null}>
+						<Icon src={`images/wallets/${wallet}.svg`} />
+						<WalletConnectionH2>{wallet}</WalletConnectionH2>
+						{noMetamask ? (
+							<PLarge mt={0}>({t('onboarding.walletConnection.intro.noMetamask')})</PLarge>
+						) : null}
+					</Button>
+				);
+			})}
+		</Wallets>
+	);
+};
+
 const Landing = () => {
+	const [pageIndex, setPageIndex] = useState(0);
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
 				<CarouselContent>
-					<DemoCarousel />
-					<Heading>
-						<OnboardingH1>What is Synthetix?</OnboardingH1>
-						<OnboardingPMega>
-							Synthetix is a decentralised synthetic asset issuance protocol built on Ethereum.
-							These synthetic assets (Synths) are created by staking the Synthetix Network Token
-							(SNX). These Synths can be exchanged for each other directly with the Synthetix smart
-							contracts on Synthetix.Exchange, avoiding the need for counterparties and solving the
-							liquidity and slippage issues experienced by DEX’s.
-						</OnboardingPMega>
-						<Illustration src="images/onboarding/slide-1.svg"></Illustration>
-					</Heading>
-					<Progress>
-						<Bubble />
-						<Bubble />
-						<Bubble />
-						<Bubble />
-						<Bubble />
-					</Progress>
+					<OnBoardingCarousel pageIndex={pageIndex} />
 					<ButtonRow>
-						<ButtonSecondary width="45%">PREVIOUS</ButtonSecondary>
-						<ButtonPrimary width="45%">CONTINUE</ButtonPrimary>
+						<ButtonSecondary onClick={() => setPageIndex(Math.max(pageIndex - 1), 0)} width="45%">
+							PREVIOUS
+						</ButtonSecondary>
+						<ButtonPrimary onClick={() => setPageIndex(pageIndex + 1)} width="45%">
+							CONTINUE
+						</ButtonPrimary>
 					</ButtonRow>
 				</CarouselContent>
 			</OnboardingContainer>
 			<WalletConnectContainer>
 				<PMega>Please connect a wallet with your SNX holdings to start:</PMega>
-				<WalletTypes>
-					<Button>
-						<Icon src="images/wallets/metamask.svg" />
-						<WalletConnectionH2>MetaMask</WalletConnectionH2>
-					</Button>
-					<Button>
-						<Icon src="images/wallets/trezor.svg" />
-						<WalletConnectionH2>Trezor</WalletConnectionH2>
-					</Button>
-					<Button>
-						<Icon src="images/wallets/ledger.svg" />
-						<WalletConnectionH2>Ledger</WalletConnectionH2>
-					</Button>
-					<Button>
-						<Icon src="images/wallets/coinbase.svg" />
-						<WalletConnectionH2>Coinbase</WalletConnectionH2>
-					</Button>
-				</WalletTypes>
-				<Link href="https://synthetix.io" target="_blank">
-					<ButtonTertiaryLabel>Having trouble?</ButtonTertiaryLabel>
-				</Link>
-				<Link href="https://synthetix.io" target="_blank">
-					<ButtonTertiaryLabel>What is Synthetix?</ButtonTertiaryLabel>
-				</Link>
+				<WalletButtons />
+				<BottomLinks>
+					<Link href="https://synthetix.io" target="_blank">
+						<ButtonTertiaryLabel>Having trouble?</ButtonTertiaryLabel>
+					</Link>
+					<Link href="https://synthetix.io" target="_blank">
+						<ButtonTertiaryLabel>What is Synthetix?</ButtonTertiaryLabel>
+					</Link>
+				</BottomLinks>
 			</WalletConnectContainer>
 		</LandingPageContainer>
 	);
@@ -183,29 +177,29 @@ const ButtonRow = styled.div`
 
 const WalletConnectContainer = styled.div`
 	height: 100%;
-	width: 20%;
-	padding: 64px;
+	max-width: 500px;
+	padding: 20px;
+	text-align: center;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	background-color: ${props => props.theme.colorStyles.background};
 `;
 
-const WalletTypes = styled.div`
+const Wallets = styled.div`
 	display: flex;
+	align-items: center;
 	flex-direction: column;
-	height: 80vh;
 	width: 100%;
-	margin: 32px auto 0 auto;
 `;
 
 const Button = styled.button`
-	height: 128px;
-	width: 100%;
+	height: 120px;
+	width: 300px;
 	border-radius: 2px;
 	padding: 16px 48px;
-	margin: 16px 0;
+	margin: 10px 0;
 	display: flex;
 	justify-content: left;
 	align-items: center;
@@ -222,6 +216,7 @@ const Button = styled.button`
 
 const WalletConnectionH2 = styled(H2)`
 	text-transform: capitalize;
+	margin: 0;
 	font-size: 22px;
 `;
 
@@ -233,14 +228,25 @@ const Icon = styled.img`
 
 const Link = styled.a`
 	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+	border: 1px solid ${props => props.theme.colorStyles.borders};
 	text-transform: uppercase;
 	font-size: 32px;
 	text-decoration: none;
+	width: 300px;
 	cursor: pointer;
-	height: 48px;
+	height: 64px;
 	padding: 16px 20px;
-	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
+	margin: 10px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+const BottomLinks = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 `;
 
 // const LandingH2 = styled(H2)`
