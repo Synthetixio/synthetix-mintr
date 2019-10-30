@@ -207,7 +207,7 @@ const Wallets = styled.div`
 `;
 
 const Button = styled.button`
-	height: 120px;
+	height: 85px;
 	width: 300px;
 	border-radius: 2px;
 	padding: 16px 48px;
@@ -229,7 +229,7 @@ const Button = styled.button`
 const WalletConnectionH2 = styled(H2)`
 	text-transform: capitalize;
 	margin: 0;
-	font-size: 22px;
+	font-size: 18px;
 `;
 
 const Icon = styled.img`
@@ -246,8 +246,7 @@ const Link = styled.a`
 	text-decoration: none;
 	width: 300px;
 	cursor: pointer;
-	height: 64px;
-	padding: 16px 20px;
+	height: 50px;
 	border-radius: 2px;
 	margin: 10px 0;
 	display: flex;
