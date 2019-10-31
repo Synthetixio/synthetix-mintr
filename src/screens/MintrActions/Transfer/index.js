@@ -11,7 +11,8 @@ import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 import { bigNumberFormatter, shortenAddress } from '../../../helpers/formatters';
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { useTranslation } from 'react-i18next';
 
 const useGetBalances = (walletAddress, setCurrentCurrency) => {
 	const [data, setData] = useState([]);
@@ -67,15 +68,16 @@ const useGetBalances = (walletAddress, setCurrentCurrency) => {
 const useGetGasEstimate = (currency, amount, destination) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
+	const { t } = useTranslation();
 	useEffect(() => {
 		if (!currency || !currency.name || !amount || !destination) return;
-		const amountBN = snxJSConnector.utils.parseEther(amount.toString());
 		const getGasEstimate = async () => {
 			setError(null);
 			let gasEstimate;
 			try {
-				if (amount > currency.balance)
-					throw new Error(`You don't have enough ${currency.name} to send`);
+				if (amount > currency.balance) throw new Error('input.error.balanceTooLow');
+				if (!Number(amount)) throw new Error('input.error.invalidAmount');
+				const amountBN = snxJSConnector.utils.parseEther(amount.toString());
 				fetchingGasLimit(dispatch);
 				if (currency.name === 'SNX') {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
@@ -83,8 +85,7 @@ const useGetGasEstimate = (currency, amount, destination) => {
 						amountBN
 					);
 				} else if (currency.name === 'ETH') {
-					if (amount === currency.balance)
-						throw new Error(`You don't have enough ${currency.name} to send`);
+					if (amount === currency.balance) throw new Error('input.error.balanceTooLow');
 					gasEstimate = await snxJSConnector.provider.estimateGas({
 						value: amountBN,
 						to: destination,
@@ -97,14 +98,8 @@ const useGetGasEstimate = (currency, amount, destination) => {
 				}
 			} catch (e) {
 				console.log(e);
-				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				setError(errorMessage);
-				gasEstimate =
-					currency.name === 'SNX'
-						? DEFAULT_GAS_LIMIT['sendSNX']
-						: currency.name === 'ETH'
-						? DEFAULT_GAS_LIMIT['sendEth']
-						: DEFAULT_GAS_LIMIT['sendSynth'];
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
