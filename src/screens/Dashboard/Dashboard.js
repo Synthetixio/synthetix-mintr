@@ -19,12 +19,12 @@ import {
 	Figure,
 	ButtonTertiaryLabel,
 } from '../../components/Typography';
-import { Info } from '../../components/Icons';
+import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
 
 const RewardInfo = ({ state }) => {
 	const { t } = useTranslation();
-	const { rewardData, theme, dashboardIsLoading } = state;
+	const { rewardData, dashboardIsLoading } = state;
 	if (dashboardIsLoading) return <Skeleton />;
 	const content = rewardData.feesAreClaimable ? (
 		<DataLarge>
@@ -44,7 +44,7 @@ const RewardInfo = ({ state }) => {
 	return (
 		<Row padding="0px 8px">
 			{content}
-			<Info theme={theme} />
+			<Tooltip content={t('tooltip.claim')} />
 		</Row>
 	);
 };
@@ -157,6 +157,15 @@ const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) =>
 	return { balance, usdValue };
 };
 
+const renderTooltip = (dataType, t) => {
+	if (!['Synths', 'Debt'].includes(dataType)) return;
+	return (
+		<TooltipWrapper>
+			<Tooltip content={t(`tooltip.${dataType.toLowerCase()}Balance`)} />
+		</TooltipWrapper>
+	);
+};
+
 const processTableData = (state, t) => {
 	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
 		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType.toLowerCase();
@@ -169,6 +178,7 @@ const processTableData = (state, t) => {
 				<TableIconCell>
 					<CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
 					{assetName}
+					{renderTooltip(dataType, t)}
 				</TableIconCell>
 			),
 			balance: balance ? formatCurrency(balance) : 0,
@@ -360,6 +370,10 @@ const CurrencyIcon = styled.img`
 const TableIconCell = styled.div`
 	display: flex;
 	align-items: center;
+`;
+
+const TooltipWrapper = styled.div`
+	margin-left: 10px;
 `;
 
 export default withTranslation()(Dashboard);

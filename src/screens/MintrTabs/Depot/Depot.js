@@ -333,7 +333,13 @@ const Depot = ({ t }) => {
 				<ActivityHeader>
 					<H5 marginTop="10px">{t('depot.table.title')}</H5>
 					<MoreButtons>
-						<ButtonTertiary onClick={() => updateCurrentTab('transactionsHistory', dispatch)}>
+						<ButtonTertiary
+							onClick={() =>
+								updateCurrentTab('transactionsHistory', dispatch, {
+									filters: ['SynthDeposit', 'SynthWithdrawal', 'ClearedDeposit', 'Exchange'],
+								})
+							}
+						>
 							{t('depot.buttons.more')}
 						</ButtonTertiary>
 						<ButtonTertiary
