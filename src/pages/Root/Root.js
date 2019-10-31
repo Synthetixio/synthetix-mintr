@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Store } from '../../store';
 
 import Landing from '../Landing';
-import WalletConnection from '../WalletConnection';
 import WalletSelection from '../WalletSelection';
 import Main from '../Main';
 import MaintenanceMessage from '../MaintenanceMessage';
@@ -17,8 +16,6 @@ const renderCurrentPage = currentPage => {
 		case 'landing':
 		default:
 			return <Landing />;
-		case 'walletConnection':
-			return <WalletConnection />;
 		case 'walletSelection':
 			return <WalletSelection />;
 		case 'main':
