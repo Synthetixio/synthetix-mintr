@@ -7,14 +7,22 @@ import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typography';
 import { formatCurrency } from '../../../helpers/formatters';
 
-const Success = ({ t, tradeAmount, onDestroy, networkName, transactionHash, baseSynth }) => {
+const Success = ({
+	t,
+	baseAmount,
+	quoteAmount,
+	onDestroy,
+	networkName,
+	transactionHash,
+	baseSynth,
+}) => {
 	return (
 		<Fragment>
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
 					<PageTitle>{t('mintrActions.trade.complete.title')}</PageTitle>
-					<PLarge>{t('mintrActions.complete.subtitle')}</PLarge>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
@@ -22,14 +30,14 @@ const Success = ({ t, tradeAmount, onDestroy, networkName, transactionHash, base
 							{t('mintrActions.trade.confirmation.actionDescription')}
 						</DataHeaderLarge>
 						<Amount>
-							{formatCurrency(tradeAmount ? tradeAmount.base : 0)} {baseSynth && baseSynth.name}
+							{formatCurrency(baseAmount ? baseAmount : 0)} {baseSynth && baseSynth.name}
 						</Amount>
 					</Box>
 					<Box>
 						<DataHeaderLarge>
 							{t('mintrActions.trade.confirmation.subActionDescription')}
 						</DataHeaderLarge>
-						<Amount>{formatCurrency(tradeAmount ? tradeAmount.quote : 0)} sUSD</Amount>
+						<Amount>{formatCurrency(quoteAmount ? quoteAmount : 0)} sUSD</Amount>
 					</Box>
 				</Details>
 			</Top>
@@ -118,6 +126,7 @@ const ActionImage = styled.img`
 
 const Details = styled.div`
 	display: flex;
+	justify-content: center;
 	margin-bottom: 48px;
 `;
 

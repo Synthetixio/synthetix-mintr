@@ -9,7 +9,7 @@ import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../../components
 import { formatCurrency } from '../../../helpers/formatters';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
+const Confirmation = ({ t, goBack, walletType, baseAmount, quoteAmount, baseSynth }) => {
 	return (
 		<SlidePage>
 			<Container>
@@ -32,14 +32,14 @@ const Confirmation = ({ t, goBack, walletType, tradeAmount, baseSynth }) => {
 								{t('mintrActions.trade.confirmation.actionDescription')}
 							</DataHeaderLarge>
 							<Amount>
-								{formatCurrency(tradeAmount ? tradeAmount.base : 0)} {baseSynth && baseSynth.name}
+								{formatCurrency(baseAmount ? baseAmount : 0)} {baseSynth && baseSynth.name}
 							</Amount>
 						</Box>
 						<Box>
 							<DataHeaderLarge>
 								{t('mintrActions.trade.confirmation.subActionDescription')}
 							</DataHeaderLarge>
-							<Amount>{formatCurrency(tradeAmount ? tradeAmount.quote : 0)} sUSD</Amount>
+							<Amount>{formatCurrency(quoteAmount ? quoteAmount : 0)} sUSD</Amount>
 						</Box>
 					</Details>
 				</Top>

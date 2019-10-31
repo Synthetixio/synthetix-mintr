@@ -12,6 +12,7 @@ import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { useTranslation } from 'react-i18next';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});
@@ -68,6 +69,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
+	const { t } = useTranslation();
 	useEffect(() => {
 		if (!burnAmount) return;
 		const sUSDBytes = bytesFormatter('sUSD');
@@ -94,7 +96,7 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
-				setError(errorMessage);
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
