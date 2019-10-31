@@ -19,15 +19,15 @@ const OnBoardingPageContainer = ({ t, children }) => {
 					{/* <Network>{networkName}</Network> */}
 				</HeaderBlock>
 				<HeaderBlock>
-					<ButtonTertiary as="a" href="https://help.synthetix.io" target="_blank">
-						{t('onboarding.header.support')}
+					<ButtonTertiary as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
+						{t('button.havingTrouble')}
 					</ButtonTertiary>
 					<ButtonTertiary
 						as="a"
 						href="https://www.synthetix.io/uploads/synthetix_litepaper.pdf"
 						target="_blank"
 					>
-						{t('onboarding.header.whatIsSynthetix')}
+						{t('button.whatIsSynthetix')}
 					</ButtonTertiary>
 				</HeaderBlock>
 			</Header>
