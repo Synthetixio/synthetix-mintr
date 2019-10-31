@@ -14,16 +14,13 @@ const Success = ({ t, onDestroy, vestAmount }) => {
 			<Top>
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
-					<PageTitle>{t('escrow.tokenSale.complete.title')}</PageTitle>
+					<PageTitle>{t('escrow.complete.title')}</PageTitle>
 					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>
-						<DataHeaderLarge>{t('escrow.tokenSale.complete.actionDescription')}</DataHeaderLarge>
-						<Amount>
-							{formatCurrency(vestAmount)}
-							SNX
-						</Amount>
+						<DataHeaderLarge>{t('escrow.complete.actionDescription')}</DataHeaderLarge>
+						<Amount>{formatCurrency(vestAmount)} SNX</Amount>
 					</Box>
 				</Details>
 			</Top>
@@ -103,6 +100,7 @@ const ActionImage = styled.img`
 
 const Details = styled.div`
 	display: flex;
+	justify-content: center;
 	margin-bottom: 48px;
 `;
 
