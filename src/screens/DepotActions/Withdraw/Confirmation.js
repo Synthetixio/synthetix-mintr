@@ -19,7 +19,7 @@ const Confirmation = ({ t, goBack, walletType, amountAvailable }) => {
 				<Top>
 					<Intro>
 						<ActionImage src={`/images/wallets/${walletType.toLowerCase()}.svg`} />
-						<PageTitle>{t('depot.withdraw.confirmation.title')}</PageTitle>
+						<PageTitle>{t('transactionProcessing.confirmation.title')}</PageTitle>
 						<PLarge>
 							<Trans i18nKey="transactionProcessing.confirmation.subtitle">
 								To continue, follow the prompts on your ${walletType} Wallet.
