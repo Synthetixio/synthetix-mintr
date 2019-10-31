@@ -56,7 +56,7 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
 			try {
 				if (!parseFloat(mintAmount)) throw new Error('input.error.invalidAmount');
 				if (mintAmount <= 0 || mintAmount > issuableSynths)
-					throw new Error('input.error.notEnoughSusd');
+					throw new Error('input.error.notEnoughToMint');
 				if (mintAmount === issuableSynths) {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
 						sUSDBytes

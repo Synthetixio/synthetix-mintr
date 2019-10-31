@@ -8,7 +8,7 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { Store } from '../../../store';
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
@@ -69,12 +69,14 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	useEffect(() => {
+		if (!burnAmount) return;
 		const sUSDBytes = bytesFormatter('sUSD');
 		const getGasEstimate = async () => {
 			setError(null);
 			let gasEstimate;
 			try {
-				if (maxBurnAmount === 0) throw new Error();
+				if (maxBurnAmount === 0) throw new Error('input.error.notEnoughToBurn');
+				if (!parseFloat(burnAmount)) throw new Error('input.error.invalidAmount');
 				fetchingGasLimit(dispatch);
 
 				let amountToBurn;
@@ -91,14 +93,8 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
 				);
 			} catch (e) {
 				console.log(e);
-				let errorMessage;
-				if (!maxBurnAmount || maxBurnAmount === 0) {
-					errorMessage = 'You have no sUSD left to burn';
-				} else {
-					errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				}
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(errorMessage);
-				gasEstimate = DEFAULT_GAS_LIMIT['burn'];
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
@@ -180,8 +176,10 @@ const Burn = ({ onDestroy }) => {
 		burnAmount,
 		setBurnAmount: amount => {
 			const amountNB = Number(amount);
-			setBurnAmount(amountNB);
-			setTransferableAmount(Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) || '');
+			setBurnAmount(amount);
+			setTransferableAmount(
+				amountNB ? Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) : 0
+			);
 		},
 		transferableAmount,
 		setTransferableAmount: amount => {
