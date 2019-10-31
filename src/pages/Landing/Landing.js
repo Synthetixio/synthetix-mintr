@@ -10,7 +10,7 @@ import { updateCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus } from '../../ducks/wallet';
 
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
-import { Welcome, WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
+// import { WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 
@@ -45,6 +45,11 @@ const onWalletClick = (wallet, dispatch) => {
 
 const OnBoardingCarousel = ({ pageIndex }) => {
 	const { t } = useTranslation();
+	const {
+		state: {
+			ui: { themeIsDark },
+		},
+	} = useContext(Store);
 	return (
 		<CarouselContainer>
 			<Carousel
@@ -58,29 +63,39 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
-					<Welcome />
+					<OnboardingIllustration
+						src={`/images/onboarding/welcome-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
 				</CarouselSlide>
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.whatIsSynthetix.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.whatIsSynthetix.description')}</OnboardingPMega>
-					<WhatIsSynthetix />
+					<OnboardingIllustration
+						src={`/images/onboarding/what-is-synthetix-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
 				</CarouselSlide>
 
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.whyStakeSnx.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.whyStakeSnx.description')}</OnboardingPMega>
-					<WhyStakeSnx />
+					<OnboardingIllustration
+						src={`/images/onboarding/why-stake-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
 				</CarouselSlide>
 
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.howStakeSnx.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.howStakeSnx.description')}</OnboardingPMega>
-					<HowStakeSnx />
+					<OnboardingIllustration
+						src={`/images/onboarding/what-to-do-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
 				</CarouselSlide>
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.risks.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.risks.description')}</OnboardingPMega>
-					<Risks />
+					<OnboardingIllustration
+						src={`/images/onboarding/risks-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
 				</CarouselSlide>
 			</Carousel>
 		</CarouselContainer>
@@ -181,6 +196,10 @@ const OnboardingPMega = styled(PMega)`
 	line-height: 25px;
 	width: 100%;
 	max-width: 600px;
+`;
+
+const OnboardingIllustration = styled.img`
+	width: 60vw;
 `;
 
 const ButtonRow = styled.div`
