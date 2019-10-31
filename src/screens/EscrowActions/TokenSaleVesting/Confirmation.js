@@ -28,9 +28,7 @@ const Confirmation = ({ t, onDestroy, walletType, vestAmount }) => {
 					</Intro>
 					<Details>
 						<Box>
-							<DataHeaderLarge>
-								{t('escrow.tokenSale.confirmation.actionDescription')}
-							</DataHeaderLarge>
+							<DataHeaderLarge>{t('escrow.confirmation.actionDescription')}</DataHeaderLarge>
 							<Amount>{formatCurrency(vestAmount)} SNX</Amount>
 						</Box>
 					</Details>

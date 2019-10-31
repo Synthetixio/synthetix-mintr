@@ -14,7 +14,7 @@ const Success = ({ t, amountAvailable, onDestroy, networkName, transactionHash }
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
 					<PageTitle>{t('depot.withdraw.complete.title')}</PageTitle>
-					<PLarge>{t('depot.withdraw.complete.subtitle')}</PLarge>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>

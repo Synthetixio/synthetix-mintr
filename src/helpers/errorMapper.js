@@ -1,5 +1,5 @@
 /* eslint-disable */
-const USER_DENIED = 'error.type.userDenied';
+const USER_DENIED = 'transactionProcessing.error.type.userDenied';
 
 const ERROR_CODES = {
 	Metamask: {
@@ -18,7 +18,7 @@ const ERROR_CODES = {
 export default (error, walletType) => {
 	const code = (error.code || error.statusCode).toString();
 	if (!code || !ERROR_CODES[walletType][code]) {
-		return { message: error.message || 'error.type.generic' };
+		return { message: error.message || 'transactionProcessing.error.type.generic' };
 	}
 	return { code, message: ERROR_CODES[walletType][code] };
 };

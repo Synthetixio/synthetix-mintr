@@ -12,9 +12,11 @@ import errorMapper from '../../../helpers/errorMapper';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
+import { useTranslation } from 'react-i18next';
 
 const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => {
 	const { dispatch } = useContext(Store);
+	const { t } = useTranslation();
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		if (!depositAmount) return;
@@ -22,9 +24,9 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 			setError(null);
 			let gasEstimate = 0;
 			try {
-				if (depositAmount < minimumDepositAmount) {
-					throw new Error(`Minimum deposit amount is ${minimumDepositAmount}`);
-				}
+				if (depositAmount < minimumDepositAmount)
+					throw new Error('input.error.lowerThanMinDeposit');
+				if (!Number(depositAmount)) throw new Error('input.error.invalidAmount');
 				fetchingGasLimit(dispatch);
 				const depotAddress = snxJSConnector.snxJS.Depot.contract.address;
 				gasEstimate = await snxJSConnector.snxJS.sUSD.contract.estimate.transfer(
@@ -33,8 +35,8 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 				);
 			} catch (e) {
 				console.log(e);
-				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				setError(errorMessage);
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
@@ -46,7 +48,7 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 
 const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
-	const [depositAmount, setDepositAmount] = useState(null);
+	const [depositAmount, setDepositAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const {
 		state: {
@@ -77,7 +79,7 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 					{
 						hash: transaction.hash,
 						status: 'pending',
-						info: `Depositing ${formatCurrency(depositAmount)} sUSD`,
+						info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
 						hasNotification: true,
 					},
 					dispatch

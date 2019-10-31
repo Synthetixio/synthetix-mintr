@@ -10,10 +10,11 @@ import { SliderContext } from '../../../components/ScreenSlider';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 
-import { bigNumberFormatter, bytesFormatter } from '../../../helpers/formatters';
+import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../helpers/formatters';
 
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
+import { useTranslation } from 'react-i18next';
 
 const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 	const [data, setData] = useState(null);
@@ -68,6 +69,7 @@ const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
+	const { t } = useTranslation();
 	useEffect(() => {
 		if (!baseSynth || baseAmount <= 0) return;
 		const getGasEstimate = async () => {
@@ -75,6 +77,7 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 			let gasEstimate;
 			try {
 				fetchingGasLimit(dispatch);
+				if (!Number(baseAmount)) throw new Error('input.error.invalidAmount');
 				const amountToExchange =
 					baseAmount === baseSynth.balance
 						? baseSynth.rawBalance
@@ -87,9 +90,8 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 				);
 			} catch (e) {
 				console.log(e);
-				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				setError(errorMessage);
-				gasEstimate = DEFAULT_GAS_LIMIT['exchange'];
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
@@ -140,10 +142,9 @@ const Trade = ({ onDestroy }) => {
 					{
 						hash: transaction.hash,
 						status: 'pending',
-						info: `Exchanging ${Math.round(baseAmount, 3)} ${baseSynth.name} to ${Math.round(
-							quoteAmount,
-							3
-						)} sUSD`,
+						info: `Exchanging ${formatCurrency(baseAmount, 3)} ${
+							baseSynth.name
+						} to ${formatCurrency(quoteAmount, 3)} sUSD`,
 						hasNotification: true,
 					},
 					dispatch

@@ -193,7 +193,7 @@ const RightBlock = styled.div`
 `;
 
 const TablePlaceholder = styled.div`
-	height: 500px;
+	height: 650px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

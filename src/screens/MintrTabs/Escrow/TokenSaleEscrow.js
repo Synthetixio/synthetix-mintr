@@ -301,7 +301,7 @@ const ButtonRow = styled.div`
 `;
 
 const TablePlaceholder = styled.div`
-	height: 500px;
+	height: 700px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

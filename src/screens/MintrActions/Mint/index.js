@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
@@ -13,7 +13,7 @@ import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});
@@ -43,6 +43,7 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 };
 
 const useGetGasEstimate = (mintAmount, issuableSynths) => {
+	const { t } = useTranslation();
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	useEffect(() => {
@@ -53,7 +54,9 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
 			fetchingGasLimit(dispatch);
 			let gasEstimate;
 			try {
-				if (mintAmount <= 0 || mintAmount > issuableSynths) throw new Error();
+				if (!parseFloat(mintAmount)) throw new Error('input.error.invalidAmount');
+				if (mintAmount <= 0 || mintAmount > issuableSynths)
+					throw new Error('input.error.notEnoughToMint');
 				if (mintAmount === issuableSynths) {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
 						sUSDBytes
@@ -67,14 +70,8 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
 				updateGasLimit(Number(gasEstimate), dispatch);
 			} catch (e) {
 				console.log(e);
-				let errorMessage;
-				if (issuableSynths <= 0 || mintAmount > issuableSynths) {
-					errorMessage = 'You have no or not enough sUSD left to mint.';
-				} else {
-					errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				}
-				setError(errorMessage);
-				gasEstimate = DEFAULT_GAS_LIMIT['burn'];
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
