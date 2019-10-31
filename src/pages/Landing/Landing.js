@@ -10,12 +10,11 @@ import { updateCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus } from '../../ducks/wallet';
 
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
-// import { WhatIsSynthetix, WhyStakeSnx, HowStakeSnx, Risks } from './Illustrations';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import './styles.css';
+import './carousel.css';
 
 const SLIDE_COUNT = 4;
 
@@ -64,6 +63,7 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
 					<OnboardingIllustration
+						style={{ marginTop: '20px' }}
 						src={`/images/onboarding/welcome-${themeIsDark ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
@@ -104,8 +104,10 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 
 const WalletButtons = () => {
 	const { dispatch } = useContext(Store);
+	const { t } = useTranslation();
 	return (
 		<Wallets>
+			<PMega mb={'30px'}>{t('onboarding.walletConnection.title')}</PMega>
 			{SUPPORTED_WALLETS.map(wallet => {
 				const noMetamask = wallet === 'Metamask' && !hasWeb3();
 				return (
@@ -136,22 +138,21 @@ const Landing = ({ t }) => {
 				<ButtonRow>
 					<ButtonSecondary
 						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
-						height="64px"
-						width="320px"
+						height="56px"
+						width="280px"
 					>
 						{t('button.previous')}
 					</ButtonSecondary>
 					<ButtonPrimary
 						onClick={() => setPageIndex(pageIndex === SLIDE_COUNT ? 0 : pageIndex + 1)}
-						height="64px"
-						width="320px"
+						height="56px"
+						width="280px"
 					>
 						{pageIndex === SLIDE_COUNT ? t('button.startOver') : t('button.next')}
 					</ButtonPrimary>
 				</ButtonRow>
 			</OnboardingContainer>
 			<WalletConnectContainer>
-				<PMega>{t('onboarding.walletConnection.title')}</PMega>
 				<WalletButtons />
 				<BottomLinks>
 					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
@@ -179,7 +180,7 @@ const OnboardingContainer = styled.div`
 `;
 
 const CarouselContainer = styled.div`
-	width: 854px;
+	width: 70%;
 	margin: 0 auto 50px auto;
 	text-align: center;
 	margin-top: 40px;
@@ -214,7 +215,7 @@ const WalletConnectContainer = styled.div`
 	z-index: 100;
 	height: 100%;
 	max-width: 500px;
-	padding: 20px;
+	padding: 32px;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -232,7 +233,7 @@ const Wallets = styled.div`
 
 const Button = styled.button`
 	height: 85px;
-	width: 300px;
+	width: 100%;
 	border-radius: 2px;
 	padding: 16px 48px;
 	margin: 10px 0;

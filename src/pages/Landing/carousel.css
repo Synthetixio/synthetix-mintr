@@ -2,10 +2,6 @@
 	background: transparent;
 }
 
-.carousel .slide img {
-	/* width: auto; */
-}
-
 .carousel .control-dots {
 	padding: 0;
 }
@@ -14,10 +10,10 @@
 	transition: background 0.25s ease-in;
 	background: #e8e7fd;
 	border-radius: 50%;
-	width: 16px;
+	width: 10px;
 	box-shadow: none;
 	opacity: 1;
-	height: 16px;
+	height: 10px;
 	cursor: pointer;
 	display: inline-block;
 	margin: 0 8px;
