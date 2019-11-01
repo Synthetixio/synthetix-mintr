@@ -81,6 +81,7 @@ const useGetWallets = currentPage => {
 			}
 		};
 		getWallets();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
 	return { wallets, isLoading, error };
 };
@@ -137,7 +138,7 @@ const WalletConnection = ({ t }) => {
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
-						<ButtonPrimaryMedium onClick={() => updateCurrentPage('walletConnection', dispatch)}>
+						<ButtonPrimaryMedium onClick={() => updateCurrentPage('landing', dispatch)}>
 							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>

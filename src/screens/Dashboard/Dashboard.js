@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { formatDistanceToNow } from 'date-fns';
-import { withTranslation, useTranslation, Trans } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -11,43 +10,10 @@ import { useFetchData } from './fetchData';
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
 import Table from '../../components/Table';
-import {
-	DataLarge,
-	DataHeaderLarge,
-	H5,
-	H6,
-	Figure,
-	ButtonTertiaryLabel,
-} from '../../components/Typography';
-import { Info } from '../../components/Icons';
+import { ButtonTertiary } from '../../components/Button';
+import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components/Typography';
+import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
-
-const RewardInfo = ({ state }) => {
-	const { t } = useTranslation();
-	const { rewardData, theme, dashboardIsLoading } = state;
-	if (dashboardIsLoading) return <Skeleton />;
-	const content = rewardData.feesAreClaimable ? (
-		<DataLarge>
-			<Highlighted>
-				{rewardData.currentPeriodEnd ? formatDistanceToNow(rewardData.currentPeriodEnd) : '--'}
-			</Highlighted>{' '}
-			{t('dashboard.rewards.open')}
-		</DataLarge>
-	) : (
-		<DataLarge>
-			<Trans i18nKey="dashboard.rewards.blocked">
-				Claiming rewards <Highlighted red={true}>blocked</Highlighted>
-			</Trans>
-		</DataLarge>
-	);
-
-	return (
-		<Row padding="0px 8px">
-			{content}
-			<Info theme={theme} />
-		</Row>
-	);
-};
 
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();
@@ -157,6 +123,15 @@ const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) =>
 	return { balance, usdValue };
 };
 
+const renderTooltip = (dataType, t) => {
+	if (!['Synths', 'Debt'].includes(dataType)) return;
+	return (
+		<TooltipWrapper>
+			<Tooltip content={t(`tooltip.${dataType.toLowerCase()}Balance`)} />
+		</TooltipWrapper>
+	);
+};
+
 const processTableData = (state, t) => {
 	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
 		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType.toLowerCase();
@@ -169,6 +144,7 @@ const processTableData = (state, t) => {
 				<TableIconCell>
 					<CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
 					{assetName}
+					{renderTooltip(dataType, t)}
 				</TableIconCell>
 			),
 			balance: balance ? formatCurrency(balance) : 0,
@@ -203,6 +179,7 @@ const BalanceTable = ({ state }) => {
 
 const Dashboard = ({ t }) => {
 	const theme = useContext(ThemeContext);
+	const [forceRefresh, triggerRefresh] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet },
@@ -214,11 +191,10 @@ const Dashboard = ({ t }) => {
 	const {
 		balances = {},
 		prices = {},
-		rewardData = {},
 		debtData = {},
 		synthData = {},
 		escrowData = {},
-	} = useFetchData(currentWallet, successQueue);
+	} = useFetchData(currentWallet, successQueue, forceRefresh);
 
 	return (
 		<DashboardWrapper>
@@ -226,13 +202,29 @@ const Dashboard = ({ t }) => {
 			<Content>
 				<Container>
 					<ContainerHeader>
-						<H5>{t('dashboard.sections.wallet')}</H5>
-						<DataHeaderLarge margin="0px 0px 22px 0px" color={theme.colorStyles.body} />
+						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
+						{/* //Big hack, won't stay here for long... */}
+						<ButtonTertiary onClick={() => triggerRefresh(forceRefresh + 1)}>
+							{t('dashboard.buttons.refresh')}
+						</ButtonTertiary>
 					</ContainerHeader>
 					<CollRatios state={{ debtData, dashboardIsLoading }} />
-					<Container curved={true}>
-						<RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
-					</Container>
+					<PricesContainer>
+						{['SNX', 'ETH'].map(asset => {
+							return (
+								<Asset key={asset}>
+									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
+									{dashboardIsLoading ? (
+										<Skeleton height="22px" />
+									) : (
+										<CurrencyPrice>
+											1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
+										</CurrencyPrice>
+									)}
+								</Asset>
+							);
+						})}
+					</PricesContainer>
 					<Charts
 						state={{
 							balances,
@@ -255,11 +247,9 @@ const Dashboard = ({ t }) => {
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
 						</Link>
-						{/* <Link>
-              <ButtonTertiaryLabel>
-                {t('dashboard.buttons.synths')}
-              </ButtonTertiaryLabel>
-            </Link> */}
+						<Link href="https://dashboard.synthetix.io" target="_blank">
+							<ButtonTertiaryLabel>{t('dashboard.buttons.synthetixDashboard')}</ButtonTertiaryLabel>
+						</Link>
 					</Row>
 				</Container>
 			</Content>
@@ -300,6 +290,7 @@ const ContainerHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 20px;
 `;
 
 const Row = styled.div`
@@ -309,12 +300,6 @@ const Row = styled.div`
 	align-items: center;
 	margin: ${props => (props.margin ? props.margin : 0)};
 	padding: ${props => (props.padding ? props.padding : 0)};
-`;
-
-const Highlighted = styled.span`
-	font-family: 'apercu-bold';
-	color: ${props =>
-		props.red ? props.theme.colorStyles.brandRed : props.theme.colorStyles.hyperlink};
 `;
 
 const Box = styled.div`
@@ -360,6 +345,35 @@ const CurrencyIcon = styled.img`
 const TableIconCell = styled.div`
 	display: flex;
 	align-items: center;
+`;
+
+const TooltipWrapper = styled.div`
+	margin-left: 10px;
+`;
+
+const PricesContainer = styled.div`
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	border-radius: 5px;
+	padding: 16px;
+	margin-bottom: 16px;
+	display: flex;
+	flex-direction: row;
+`;
+
+const Asset = styled.div`
+	display: flex;
+	flex-direction: row;
+	margin: auto;
+	align-items: center;
+	justify-content: center;
+`;
+
+const CurrencyPrice = styled.div`
+	font-size: 16px;
+	font-family: 'apercu-medium';
+	margin-left: 4px;
+	align-items: center;
+	color: ${props => props.theme.colorStyles.body};
 `;
 
 export default withTranslation()(Dashboard);

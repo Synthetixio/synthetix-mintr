@@ -9,9 +9,10 @@ const ButtonSecondary = ({
 	href = undefined,
 	target = undefined,
 	width,
+	height,
 }) => {
 	return (
-		<Button width={width} target={target} href={href} as={as} onClick={onClick}>
+		<Button height={height} width={width} target={target} href={href} as={as} onClick={onClick}>
 			<ButtonSecondaryLabel>{children}</ButtonSecondaryLabel>
 		</Button>
 	);
@@ -23,7 +24,7 @@ const Button = styled.button`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 72px;
+	height: ${props => (props.height ? props.height : '72px')};
 	border-radius: 5px;
 	text-transform: uppercase;
 	border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg};

@@ -1,125 +1,299 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { Carousel } from 'react-responsive-carousel';
+import { withTranslation, useTranslation } from 'react-i18next';
+
+import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
+import { updateWalletStatus } from '../../ducks/wallet';
 
-import { ButtonPrimary } from '../../components/Button';
-import { H1, H2, PMega, PLarge } from '../../components/Typography';
-import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
+import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
+import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 
-const Landing = ({ t }) => {
-	const { dispatch } = useContext(Store);
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './carousel.css';
+
+const SLIDE_COUNT = 4;
+
+const onWalletClick = (wallet, dispatch) => {
+	return async () => {
+		const walletStatus = await connectToWallet(wallet);
+
+		updateWalletStatus(walletStatus, dispatch);
+		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
+			if (walletStatus.walletType === 'Metamask') {
+				onMetamaskAccountChange(async () => {
+					const address = await snxJSConnector.signer.getNextAddresses();
+					const signer = new snxJSConnector.signers['Metamask']({});
+					snxJSConnector.setContractSettings({
+						networkId: walletStatus.networkId,
+						signer,
+					});
+					if (address && address[0]) {
+						updateWalletStatus({ currentWallet: address[0] }, dispatch);
+					}
+				});
+			}
+			updateCurrentPage('main', dispatch);
+		} else updateCurrentPage('walletSelection', dispatch);
+	};
+};
+
+const OnBoardingCarousel = ({ pageIndex }) => {
+	const { t } = useTranslation();
+	const {
+		state: {
+			ui: { themeIsDark },
+		},
+	} = useContext(Store);
 	return (
-		<OnBoardingPageContainer>
-			<Content>
-				<HeadingContent>
-					<LandingH1>{t('onboarding.landing.intro.title')}</LandingH1>
-					<LandingPMega>{t('onboarding.landing.intro.subtitle')}</LandingPMega>
-				</HeadingContent>
-				<BodyContent>
-					<Functionalities>
-						<Functionality>
-							<Icon src="images/actions/mint.svg" />
-							<LandingH2>{t('onboarding.landing.functionality.mint.title')}</LandingH2>
-							<LandingPLarge>
-								{t('onboarding.landing.functionality.mint.description')}
-							</LandingPLarge>
-						</Functionality>
-						<Functionality>
-							<Icon src="images/actions/burn.svg" />
-							<LandingH2>{t('onboarding.landing.functionality.burn.title')}</LandingH2>
-							<LandingPLarge>
-								{t('onboarding.landing.functionality.burn.description')}
-							</LandingPLarge>
-						</Functionality>
-						<Functionality>
-							<Icon src="images/actions/claim.svg" />
-							<LandingH2>{t('onboarding.landing.functionality.claim.title')}</LandingH2>
-							<LandingPLarge>
-								{t('onboarding.landing.functionality.claim.description')}
-							</LandingPLarge>
-						</Functionality>
-					</Functionalities>
-					<ButtonPrimary onClick={() => updateCurrentPage('walletConnection', dispatch)}>
-						{t('onboarding.landing.buttons.connect')}
-					</ButtonPrimary>
-				</BodyContent>
-			</Content>
-		</OnBoardingPageContainer>
+		<CarouselContainer>
+			<Carousel
+				selectedItem={pageIndex}
+				showArrows={false}
+				showThumbs={false}
+				showStatus={false}
+				interval={10000}
+				autoplay
+			>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
+					<OnboardingIllustration
+						style={{ marginTop: '20px' }}
+						src={`/images/onboarding/welcome-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
+				</CarouselSlide>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.slides.whatIsSynthetix.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.whatIsSynthetix.description')}</OnboardingPMega>
+					<OnboardingIllustration
+						src={`/images/onboarding/what-is-synthetix-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
+				</CarouselSlide>
+
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.slides.whyStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.whyStakeSnx.description')}</OnboardingPMega>
+					<OnboardingIllustration
+						src={`/images/onboarding/why-stake-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
+				</CarouselSlide>
+
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.slides.howStakeSnx.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.howStakeSnx.description')}</OnboardingPMega>
+					<OnboardingIllustration
+						src={`/images/onboarding/what-to-do-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
+				</CarouselSlide>
+				<CarouselSlide>
+					<OnboardingH1>{t('onboarding.slides.risks.title')}</OnboardingH1>
+					<OnboardingPMega>{t('onboarding.slides.risks.description')}</OnboardingPMega>
+					<OnboardingIllustration
+						src={`/images/onboarding/risks-${themeIsDark ? 'dark' : 'light'}.png`}
+					/>
+				</CarouselSlide>
+			</Carousel>
+		</CarouselContainer>
 	);
 };
 
-const HeadingContent = styled.div`
-	width: 50%;
-	max-width: 600px;
-	margin: 0 auto;
+const WalletButtons = () => {
+	const { dispatch } = useContext(Store);
+	const { t } = useTranslation();
+	return (
+		<Wallets>
+			<PMega mb={'30px'}>{t('onboarding.walletConnection.title')}</PMega>
+			{SUPPORTED_WALLETS.map(wallet => {
+				const noMetamask = wallet === 'Metamask' && !hasWeb3();
+				return (
+					<Button disabled={noMetamask} key={wallet} onClick={onWalletClick(wallet, dispatch)}>
+						<Icon src={`images/wallets/${wallet}.svg`} />
+						<WalletConnectionH2>{wallet}</WalletConnectionH2>
+					</Button>
+				);
+			})}
+		</Wallets>
+	);
+};
+
+const Landing = ({ t }) => {
+	const [pageIndex, setPageIndex] = useState(0);
+	const {
+		state: {
+			ui: { themeIsDark },
+		},
+	} = useContext(Store);
+	return (
+		<LandingPageContainer>
+			<OnboardingContainer>
+				<Header>
+					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+				</Header>
+				<OnBoardingCarousel pageIndex={pageIndex} />
+				<ButtonRow>
+					<ButtonSecondary
+						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
+						height="56px"
+						width="280px"
+					>
+						{t('button.previous')}
+					</ButtonSecondary>
+					<ButtonPrimary
+						onClick={() => setPageIndex(pageIndex === SLIDE_COUNT ? 0 : pageIndex + 1)}
+						height="56px"
+						width="280px"
+					>
+						{pageIndex === SLIDE_COUNT ? t('button.startOver') : t('button.next')}
+					</ButtonPrimary>
+				</ButtonRow>
+			</OnboardingContainer>
+			<WalletConnectContainer>
+				<WalletButtons />
+				<BottomLinks>
+					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
+						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
+					</Link>
+					<Link href="https://www.synthetix.io/uploads/synthetix_litepaper.pdf" target="_blank">
+						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
+					</Link>
+				</BottomLinks>
+			</WalletConnectContainer>
+		</LandingPageContainer>
+	);
+};
+
+const LandingPageContainer = styled.div`
+	height: 100vh;
 	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
 `;
 
-const BodyContent = styled.div`
-	width: 80%;
-	margin: 0 auto;
-	max-width: 1200px;
-	text-align: center;
-`;
-
-const Content = styled.div`
-	height: 100%;
+const OnboardingContainer = styled.div`
 	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	padding: 42px;
+	background-color: ${props => props.theme.colorStyles.panels};
+	border-right: 1px solid ${props => props.theme.colorStyles.borders};
 `;
 
-const LandingH1 = styled(H1)`
-	text-transform: capitalize;
-	font-size: 48px;
-`;
-
-const LandingH2 = styled(H2)`
-	text-transform: capitalize;
-	font-size: 22px;
-	margin: 30px 0px 16px 0px;
-`;
-
-const LandingPMega = styled(PMega)`
-	font-size: 22px;
-	font-family: 'apercu-regular';
+const CarouselContainer = styled.div`
+	width: 70%;
+	margin: 0 auto 50px auto;
 	text-align: center;
-	line-height: 32px;
+	margin-top: 40px;
 `;
 
-const LandingPLarge = styled(PLarge)`
+const OnboardingH1 = styled(H1)`
+	text-transform: none;
+	margin-bottom: 24px;
+`;
+
+const OnboardingPMega = styled(PMega)`
+	margin: 20px auto 0 auto;
 	font-size: 18px;
-	font-family: 'apercu-regular';
-	margin-top: 0;
+	line-height: 25px;
+	width: 100%;
+	max-width: 600px;
 `;
 
-const Functionalities = styled.div`
-	display: flex;
-	width: 100%;
-	margin: 80px auto 100px auto;
-	justify-content: space-between;
-	color: white;
+const OnboardingIllustration = styled.img`
+	width: 60vw;
 `;
 
-const Functionality = styled.div`
+const ButtonRow = styled.div`
 	display: flex;
 	width: 100%;
-	flex-direction: column;
-	align-items: center;
+	margin: auto;
+	justify-content: space-around;
+	max-width: 800px;
+`;
+
+const WalletConnectContainer = styled.div`
+	z-index: 100;
+	height: 100%;
+	max-width: 500px;
+	padding: 32px;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	background-color: ${props => props.theme.colorStyles.background};
+`;
+
+const Wallets = styled.div`
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+`;
+
+const Button = styled.button`
+	height: 85px;
+	width: 100%;
+	border-radius: 2px;
+	padding: 16px 48px;
+	margin: 10px 0;
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	background-color: ${props => props.theme.colorStyles.panelButton};
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
+	opacity: ${props => (props.disabled ? '0.4' : 1)};
+	cursor: pointer;
+	transition: all 0.1s ease;
+	:hover {
+		background-color: ${props => props.theme.colorStyles.panelButtonHover};
+	}
+`;
+
+const WalletConnectionH2 = styled(H2)`
+	text-transform: capitalize;
+	margin: 0;
+	font-size: 18px;
 `;
 
 const Icon = styled.img`
-	width: 64px;
-	height: 64px;
+	width: 40px;
+	height: 40px;
+	margin-right: 24px;
+`;
+
+const Link = styled.a`
+	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	text-transform: uppercase;
+	font-size: 32px;
+	text-decoration: none;
+	width: 300px;
+	cursor: pointer;
+	height: 50px;
+	border-radius: 2px;
+	margin: 10px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+const BottomLinks = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+`;
+
+const CarouselSlide = styled.div``;
+
+const Header = styled.div`
+	width: 100%;
+`;
+
+const Logo = styled.img`
+	width: 120px;
+	margin-right: 18px;
 `;
 
 export default withTranslation()(Landing);

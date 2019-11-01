@@ -2,20 +2,31 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import Calendar from 'react-calendar';
+import { format } from 'date-fns';
 
-import { ButtonTertiaryLabel, DataLarge } from '../Typography';
+import { formatCurrency } from '../../helpers/formatters';
 
-const DropdownSelect = ({ data = [], onSelect }) => {
+import { ButtonTertiaryLabel, InputTextSmall, InputLabelSmall, DataLarge } from '../Typography';
+const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
+	const handleSelect = element => {
+		if (selected.includes(element.label)) {
+			return onSelect(selected.filter(s => s !== element.label));
+		} else {
+			return onSelect([element.label, ...selected]);
+		}
+	};
+
 	return (
-		<SelectContainer>
+		<SelectContainer autoWidth>
 			<List>
 				{data.map(element => {
 					return (
-						<ListElement onClick={() => onSelect(element)}>
+						<ListElement onClick={() => handleSelect(element)}>
 							<ListElementInner>
-								<input type="checkbox"></input>
+								<input type="checkbox" checked={selected.includes(element.label)}></input>
 								<ListElementIcon src={element.icon}></ListElementIcon>
-								<DataLarge>{element.label}</DataLarge>
+								<ListElementLabel>{element.label}</ListElementLabel>
 							</ListElementInner>
 						</ListElement>
 					);
@@ -25,41 +36,132 @@ const DropdownSelect = ({ data = [], onSelect }) => {
 	);
 };
 
-const Dropdown = ({ type, data, onSelect }) => {
-	const props = { data, onSelect };
+const CalendarFilter = ({ data = [], onSelect, selected }) => {
+	return (
+		<SelectContainer autoWidth>
+			<Calendar
+				returnValue="range"
+				selectRange={true}
+				onChange={([from, to]) => onSelect({ from, to })}
+			/>
+		</SelectContainer>
+	);
+};
+
+const RangeFilter = ({ data = [], onSelect, selected }) => {
+	const [filters, setFilters] = useState(selected);
+	let updateTimeout;
+
+	const onChange = e => {
+		const { value, name } = e.target;
+		setFilters({ ...filters, ...{ [name]: value } });
+	};
+
+	const handleKey = e => {
+		if (e.key === 'Enter') {
+			update();
+		}
+	};
+
+	const update = () => {
+		clearTimeout(updateTimeout);
+		if (filters.from !== selected.from || filters.to !== selected.to) {
+			onSelect(filters);
+		}
+	};
+
+	return (
+		<SelectContainer>
+			<RangeContainer>
+				<InputLabelSmall htmlFor="from">From:</InputLabelSmall>
+				<Input
+					name="from"
+					type="number"
+					onChange={onChange}
+					onBlur={update}
+					onKeyDown={handleKey}
+					value={filters.from}
+				/>
+				<InputLabelSmall htmlFor="to">To:</InputLabelSmall>
+				<Input
+					name="to"
+					type="number"
+					onChange={onChange}
+					onBlur={update}
+					onKeyDown={handleKey}
+					value={filters.to}
+				/>
+			</RangeContainer>
+		</SelectContainer>
+	);
+};
+
+const Dropdown = ({ type, data, onSelect, selected }) => {
+	const props = { data, onSelect, selected };
 	switch (type) {
 		case 'select':
 			return <DropdownSelect {...props} />;
 		case 'calendar':
-			return null;
-		case 'input':
-			return null;
+			return <CalendarFilter {...props} />;
+		case 'range':
+			return <RangeFilter {...props} />;
 	}
 };
 
-const Select = ({ placeholder, type = 'select', data = null }) => {
-	const [selected, setSelected] = useState([]);
+const Select = ({ placeholder, type = 'select', data = null, onSelect, selected }) => {
 	const [dropdownVisible, setDropdownVisible] = useState(false);
-	console.log(selected);
 	return (
 		<OutsideClickHandler onOutsideClick={() => setDropdownVisible(false)}>
 			<Container>
 				<Button onClick={() => setDropdownVisible(!dropdownVisible)}>
 					<ButtonInner>
-						<ButtonTertiaryLabel>{placeholder}</ButtonTertiaryLabel>
+						{selected.length || selected.from ? (
+							<SelectedValue type={type} selected={selected} data={data} />
+						) : (
+							<ButtonTertiaryLabel>{placeholder}</ButtonTertiaryLabel>
+						)}
 						<ButtonImage src={'/images/caret-down.svg'}></ButtonImage>
 					</ButtonInner>
 				</Button>
 				{dropdownVisible ? (
-					<Dropdown
-						type={type}
-						data={data}
-						onSelect={element => setSelected([element, ...selected])}
-					></Dropdown>
+					<Dropdown type={type} data={data} onSelect={onSelect} selected={selected}></Dropdown>
 				) : null}
 			</Container>
 		</OutsideClickHandler>
 	);
+};
+
+const SelectedValue = ({ type, data, selected }) => {
+	let text;
+	switch (type) {
+		case 'select':
+			const elements = data.filter(d => selected.includes(d.label));
+			if (elements.length === 1) {
+				return (
+					<span>
+						<ListElementIcon src={elements[0].icon}></ListElementIcon>
+						<ListElementLabel></ListElementLabel>
+					</span>
+				);
+			}
+			return (
+				<span>
+					{elements.map(e => (
+						<ListElementIcon src={e.icon} key={e.label}></ListElementIcon>
+					))}
+				</span>
+			);
+
+		case 'calendar':
+			text = `${format(new Date(selected.from), 'dd-MM-yy')} → ${format(
+				new Date(selected.to),
+				'dd-MM-yy'
+			)}`;
+			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
+		case 'range':
+			text = `${formatCurrency(selected.from)} → ${formatCurrency(selected.to)}`;
+			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
+	}
 };
 
 const Container = styled.div`
@@ -92,10 +194,11 @@ const ButtonInner = styled.div`
 const ButtonImage = styled.img``;
 
 const SelectContainer = styled.div`
+	z-index: 10;
 	position: absolute;
 	top: calc(100% + 10px);
 	left: 0;
-	width: 100%;
+	width: ${props => (props.autoWidth ? 'auto' : '100%')};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;
 	background-color: ${props => props.theme.colorStyles.panels};
@@ -120,8 +223,39 @@ const ListElementInner = styled.li`
 	align-items: center;
 `;
 
+const ListElementLabel = styled(DataLarge)`
+	width: 100%;
+	overflow: hidden;
+`;
+
 const ListElementIcon = styled.img`
-	margin-right: 10px;
+	margin: 0 5px;
+	vertical-align: text-bottom;
+	width: 16px;
+`;
+
+const RangeContainer = styled.div`
+	height: 178px;
+	padding: 16px 24px;
+`;
+
+const Label = styled.label``;
+
+const Input = styled.input`
+	height: 32px;
+	margin: 8px 0 25px 0;
+	padding: 0 10px;
+	border-radius: 5px;
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	background-color: ${props => props.theme.colorStyles.panels};
+	color: ${props => props.theme.colorStyles.heading};
+	width: 100%;
+	-moz-appearance: textfield;
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 `;
 
 export default Select;

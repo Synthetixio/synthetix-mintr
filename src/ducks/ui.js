@@ -17,7 +17,8 @@ export default (state, action) => {
 			return { ...state, currentPage: action.payload };
 		}
 		case UPDATE_CURRENT_TAB: {
-			return { ...state, currentTab: action.payload };
+			const { tab, params } = action.payload;
+			return { ...state, currentTab: tab, tabParams: params };
 		}
 		case TOGGLE_DASHBOARD_IS_LOADING: {
 			return { ...state, dashboardIsLoading: action.payload };
@@ -48,10 +49,10 @@ export const updateCurrentPage = (page, dispatch) => {
 	});
 };
 
-export const updateCurrentTab = (tab, dispatch) => {
+export const updateCurrentTab = (tab, dispatch, params = null) => {
 	return dispatch({
 		type: UPDATE_CURRENT_TAB,
-		payload: tab,
+		payload: { tab, params },
 	});
 };
 

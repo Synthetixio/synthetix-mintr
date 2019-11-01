@@ -8,10 +8,11 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { Store } from '../../../store';
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { useTranslation } from 'react-i18next';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});
@@ -27,6 +28,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
 					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
 					snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
+					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress, sUSDBytes),
 				]);
 				const [
 					debt,
@@ -36,6 +38,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					totalRewardEscrow,
 					totalTokenSaleEscrow,
 					cRatio,
+					issuableSynths,
 				] = results.map(bigNumberFormatter);
 
 				let maxBurnAmount, maxBurnAmountBN;
@@ -49,11 +52,13 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 
 				setData({
 					issuanceRatio,
+					sUSDBalance,
 					maxBurnAmount,
 					maxBurnAmountBN,
 					SNXPrice,
 					escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
 					cRatio,
+					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
 				});
 			} catch (e) {
 				console.log(e);
@@ -65,16 +70,20 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 	return data;
 };
 
-const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
+const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN, sUSDBalance) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
+	const { t } = useTranslation();
 	useEffect(() => {
+		if (!burnAmount) return;
 		const sUSDBytes = bytesFormatter('sUSD');
 		const getGasEstimate = async () => {
 			setError(null);
 			let gasEstimate;
 			try {
-				if (maxBurnAmount === 0) throw new Error();
+				if (!parseFloat(burnAmount)) throw new Error('input.error.invalidAmount');
+				if (burnAmount > sUSDBalance || maxBurnAmount === 0)
+					throw new Error('input.error.notEnoughToBurn');
 				fetchingGasLimit(dispatch);
 
 				let amountToBurn;
@@ -91,14 +100,8 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN) => {
 				);
 			} catch (e) {
 				console.log(e);
-				let errorMessage;
-				if (!maxBurnAmount || maxBurnAmount === 0) {
-					errorMessage = 'You have no sUSD left to burn';
-				} else {
-					errorMessage = (e && e.message) || 'Error while getting gas estimate';
-				}
-				setError(errorMessage);
-				gasEstimate = DEFAULT_GAS_LIMIT['burn'];
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setError(t(errorMessage));
 			}
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
@@ -127,13 +130,19 @@ const Burn = ({ onDestroy }) => {
 	const {
 		maxBurnAmount,
 		maxBurnAmountBN,
+		sUSDBalance,
 		issuanceRatio,
 		SNXPrice,
 		escrowBalance,
 		cRatio,
+		burnAmountToFixCRatio,
 	} = useGetDebtData(currentWallet, sUSDBytes);
-	const gasEstimateError = useGetGasEstimate(burnAmount, maxBurnAmount, maxBurnAmountBN);
-
+	const gasEstimateError = useGetGasEstimate(
+		burnAmount,
+		maxBurnAmount,
+		maxBurnAmountBN,
+		sUSDBalance
+	);
 	const onBurn = async () => {
 		try {
 			handleNext(1);
@@ -180,8 +189,10 @@ const Burn = ({ onDestroy }) => {
 		burnAmount,
 		setBurnAmount: amount => {
 			const amountNB = Number(amount);
-			setBurnAmount(amountNB);
-			setTransferableAmount(Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) || '');
+			setBurnAmount(amount);
+			setTransferableAmount(
+				amountNB ? Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) : 0
+			);
 		},
 		transferableAmount,
 		setTransferableAmount: amount => {
@@ -194,6 +205,7 @@ const Burn = ({ onDestroy }) => {
 		SNXPrice,
 		isFetchingGasLimit,
 		gasEstimateError,
+		burnAmountToFixCRatio,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (

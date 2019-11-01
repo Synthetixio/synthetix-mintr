@@ -22,7 +22,7 @@ const Success = ({
 				<Intro>
 					<ActionImage src="/images/success.svg" big />
 					<PageTitle>{t('mintrActions.send.complete.title')}</PageTitle>
-					<PLarge>{t('mintrActions.complete.subtitle')}</PLarge>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
 				</Intro>
 				<Details>
 					<Box>

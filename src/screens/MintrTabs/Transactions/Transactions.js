@@ -1,8 +1,9 @@
 /* eslint-disable */
 import React, { Fragment, useContext, useState, useEffect } from 'react';
+import orderBy from 'lodash/orderBy';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
+import { format, isWithinInterval } from 'date-fns';
 import { formatCurrency } from '../../../helpers/formatters';
 import Select from '../../../components/Select';
 
@@ -27,6 +28,8 @@ const EVENT_LIST = [
 	'SynthExchange',
 	'SynthDeposit',
 	'SynthWithdrawal',
+	'ClearedDeposit',
+	'Exchange',
 ];
 
 const getIconForEvent = event => {
@@ -43,6 +46,10 @@ const getIconForEvent = event => {
 			return 'tiny-deposit.svg';
 		case 'SynthWithdrawal':
 			return 'tiny-withdraw.svg';
+		case 'ClearedDeposit':
+			return 'tiny-cleared-deposit.svg';
+		case 'Exchange':
+			return 'tiny-bought.svg';
 	}
 };
 
@@ -63,18 +70,32 @@ const useGetTransactions = (walletAddress, networkName) => {
 	const [data, setData] = useState({});
 	useEffect(() => {
 		const getTransaction = async () => {
-			const query = {
-				fromAddress: walletAddress,
-			};
 			try {
 				setData({ loading: true });
-				const response = await fetch(
-					`${getApiUrl(networkName)}blockchainEventsFiltered${stringifyQuery(query)}`
+				const response = await Promise.all([
+					fetch(
+						`${getApiUrl(networkName)}blockchainEventsFiltered${stringifyQuery({
+							fromAddress: walletAddress,
+						})}`
+					),
+					fetch(
+						`${getApiUrl(networkName)}blockchainEventsFiltered${stringifyQuery({
+							toAddress: walletAddress,
+							event: 'ClearedDeposit',
+						})}`
+					),
+				]);
+				const [transactions, clearedDeposits] = await Promise.all(
+					response.map(result => result.json())
 				);
-				const transactions = await response.json();
+				//filtering out outgoing ClearedDeposits
+				const filteredTransactions = transactions
+					.filter(tx => tx.event !== 'ClearedDeposit' && EVENT_LIST.includes(tx.event))
+					.concat(clearedDeposits);
+
 				setData({
 					loading: false,
-					transactions: transactions.filter(transaction => EVENT_LIST.includes(transaction.event)),
+					transactions: orderBy(filteredTransactions, ['blockTimestamp'], ['desc']),
 				});
 			} catch (e) {
 				console.log(e);
@@ -106,9 +127,11 @@ const getEventInfo = data => {
 			imageUrl = getIconForEvent(event);
 			break;
 		case 'SynthExchange':
-			amount = `${formatCurrency(data.exchangeFromAmount)} ${
-				data.exchangeFromCurrency
-			} to ${formatCurrency(data.exchangeToAmount)} ${data.exchangeToCurrency}`;
+			const fromCurrency = data.exchangeFromCurrency.replace(/\u0000/g, '');
+			const toCurrency = data.exchangeToCurrency.replace(/\u0000/g, '');
+			amount = `${formatCurrency(data.exchangeFromAmount)} ${fromCurrency} / ${formatCurrency(
+				data.exchangeToAmount
+			)} ${toCurrency}`;
 			type = 'transactions.events.traded';
 			imageUrl = getIconForEvent(event);
 			break;
@@ -122,6 +145,21 @@ const getEventInfo = data => {
 			break;
 		case 'ClearedDeposit':
 			type = 'transactions.events.sold';
+			amount = `${formatCurrency(data.toAmount)} ${data.token} (${formatCurrency(
+				data.fromETHAmount
+			)} ETH)`;
+			imageUrl = getIconForEvent(event);
+			break;
+		case 'Exchange':
+			if (data.exchangeFromCurrency === 'ETH') {
+				type = 'transactions.events.exchanged';
+			} else {
+				type = 'transactions.events.sold';
+			}
+			amount = `${formatCurrency(data.exchangeToAmount)} ${
+				data.exchangeToCurrency
+			} (${formatCurrency(data.exchangeFromAmount)} ${data.exchangeFromCurrency})`;
+			type = 'transactions.events.exchanged';
 			imageUrl = getIconForEvent(event);
 			break;
 		default:
@@ -132,6 +170,29 @@ const getEventInfo = data => {
 		imageUrl,
 		amount,
 	};
+};
+
+const filterTransactions = (transactions, filters) => {
+	const { events, dates, amount } = filters;
+	if (!transactions || !transactions.length) return transactions;
+	return transactions.filter(t => {
+		if (events.length) {
+			if (!events.includes(t.event)) return;
+		}
+
+		if (dates.from) {
+			if (!isWithinInterval(new Date(t.createdAt), { start: dates.from, end: dates.to })) return;
+		}
+
+		if (!isNaN(amount.from) && !isNaN(amount.to)) {
+			if (t.value < amount.from || t.value > amount.to) return;
+			if (t.snxRewards < amount.from || t.snxRewards > amount.to) return;
+			if (t.exchangeFromAmount < amount.from || t.exchangeFromAmount > amount.to) return;
+			if (t.exchangeToAmount < amount.from || t.exchangeToAmount > amount.to) return;
+		}
+
+		return true;
+	});
 };
 
 const TransactionsTable = ({ data }) => {
@@ -196,44 +257,75 @@ const TransactionsTable = ({ data }) => {
 };
 
 const Transactions = () => {
+	const {
+		state: {
+			ui: { tabParams },
+		},
+	} = useContext(Store);
 	const [currentPage, setCurrentPage] = useState(0);
+	const [filters, setFilters] = useState({
+		events: (tabParams && tabParams.filters) || [],
+		dates: { from: undefined, to: undefined },
+		amount: { from: undefined, to: undefined },
+	});
+
+	const clearFilters = () => {
+		setFilters({
+			events: [],
+			dates: { from: undefined, to: undefined },
+			amount: { from: undefined, to: undefined },
+		});
+	};
+
 	const {
 		state: {
 			wallet: { currentWallet, networkName },
 		},
 	} = useContext(Store);
 	const { loading, transactions } = useGetTransactions(currentWallet, networkName);
-
+	const filteredTransactions = filterTransactions(transactions, filters);
 	return (
 		<PageContainer>
 			<Fragment>
-				{/* <Filters>
-          <Inputs>
-            <InputContainer>
-              <Select
-                placeholder="type"
-                data={EVENT_LIST.map(event => {
-                  return {
-                    label: event,
-                    icon: `/images/actions/${getIconForEvent(event)}`,
-                  };
-                })}
-              ></Select>
-            </InputContainer>
-            <InputContainer>
-              <Select placeholder="dates"></Select>
-            </InputContainer>
-            <InputContainer>
-              <Select placeholder="amount"></Select>
-            </InputContainer>
+				<Filters>
+					<Inputs>
+						<InputContainer>
+							<Select
+								placeholder="type"
+								data={EVENT_LIST.map(event => {
+									return {
+										label: event,
+										icon: `/images/actions/${getIconForEvent(event)}`,
+									};
+								})}
+								selected={filters.events}
+								onSelect={selected => setFilters({ ...filters, ...{ events: selected } })}
+							></Select>
+						</InputContainer>
+						<InputContainer>
+							<Select
+								placeholder="dates"
+								type="calendar"
+								selected={filters.dates}
+								onSelect={selected => setFilters({ ...filters, ...{ dates: selected } })}
+							></Select>
+						</InputContainer>
+						<InputContainer>
+							<Select
+								placeholder="amount"
+								type="range"
+								selected={filters.amount}
+								onSelect={selected => setFilters({ ...filters, ...{ amount: selected } })}
+							></Select>
+						</InputContainer>
 
-            <ButtonTertiary>CLEAR FILTERS</ButtonTertiary>
-          </Inputs>
-        </Filters> */}
+						<ButtonTertiary onClick={clearFilters}>CLEAR FILTERS</ButtonTertiary>
+					</Inputs>
+				</Filters>
 				<TransactionsPanel>
-					{transactions && transactions.length > 0 ? (
+					{filteredTransactions && filteredTransactions.length > 0 ? (
 						<TransactionsTable
-							data={transactions.slice(
+							data={filteredTransactions.slice(
 								PAGINATION_INDEX * currentPage,
 								PAGINATION_INDEX * currentPage + PAGINATION_INDEX
 							)}
@@ -244,7 +336,7 @@ const Transactions = () => {
 						</TransactionsPlaceholder>
 					)}
 					<Paginator
-						disabled={loading || !transactions}
+						disabled={loading || !filteredTransactions}
 						currentPage={currentPage}
 						onPageChange={page => setCurrentPage(page)}
 					/>

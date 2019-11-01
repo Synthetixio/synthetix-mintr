@@ -57,6 +57,7 @@ const TokenSaleVesting = ({ onDestroy, vestAmount }) => {
 			}
 		};
 		vest();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasLoaded]);
 
 	const props = {

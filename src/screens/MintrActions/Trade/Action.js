@@ -25,12 +25,12 @@ const Action = ({
 }) => {
 	const onBaseAmountChange = amount => {
 		setBaseAmount(amount);
-		setQuoteAmount(amount ? Number(amount) * Number(baseSynth.rate) : '');
+		setQuoteAmount(Number(amount) ? Number(amount) * Number(baseSynth.rate) : '');
 	};
 
 	const onQuoteAmountChange = amount => {
 		setQuoteAmount(amount);
-		setBaseAmount(amount ? Number(amount) / Number(baseSynth.rate) : '');
+		setBaseAmount(Number(amount) ? Number(amount) / Number(baseSynth.rate) : '');
 	};
 
 	return (

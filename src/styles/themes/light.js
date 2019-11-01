@@ -17,6 +17,9 @@ export default {
 	buttonTertiaryText: COLORS.light3,
 	buttonTertiaryBgFocus: COLORS.light6,
 
+	inputLabelSmall: COLORS.light2,
+	inputTextSmall: COLORS.buttonLight,
+
 	panelButton: COLORS.white,
 	panelButtonHover: COLORS.white,
 	menu: COLORS.light6,
