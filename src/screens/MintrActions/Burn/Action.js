@@ -20,6 +20,7 @@ const Action = ({
 	setTransferableAmount,
 	isFetchingGasLimit,
 	gasEstimateError,
+	burnAmountToFixCRatio,
 }) => {
 	const [snxInputIsVisible, toggleSnxInput] = useState(false);
 	return (
@@ -43,9 +44,16 @@ const Action = ({
 								}}
 								width="30%"
 							>
-								Burn Max
+								{t('button.burnMax')}
 							</AmountButton>
-							<AmountButton width="66%">Fix your Collaterization Ratio</AmountButton>
+							<AmountButton
+								onClick={() => {
+									setBurnAmount(burnAmountToFixCRatio);
+								}}
+								width="66%"
+							>
+								{t('button.fixCRatio')}
+							</AmountButton>
 						</ButtonRow>
 						<Input
 							singleSynth={'sUSD'}
@@ -53,7 +61,6 @@ const Action = ({
 							value={burnAmount}
 							placeholder="0.00"
 						/>
-						{/* <RatioError>To fix your C-Ratio, buy 1000.00 sUSD on Uniswap or sX</RatioError> */}
 						<ErrorMessage message={gasEstimateError} />
 						{snxInputIsVisible ? (
 							<Fragment>
@@ -135,7 +142,9 @@ const ActionImage = styled.img`
 	margin-bottom: 8px;
 `;
 
-const Form = styled.div``;
+const Form = styled.div`
+	width: 400px;
+`;
 
 const ButtonToggleInput = styled.button`
 	border: none;
@@ -151,7 +160,7 @@ const ButtonRow = styled.div`
 	margin-bottom: 16px;
 `;
 
-const AmountButton = styled.div`
+const AmountButton = styled.button`
 	padding: 8px 4px;
 	width: ${props => (props.width ? props.width : '100%')}
 	border: 1px solid ${props => props.theme.colorStyles.borders};
@@ -163,37 +172,5 @@ const AmountButton = styled.div`
 	cursor: pointer;
 	white-space: no-wrap;
 `;
-
-// const MaxButton = styled.button`
-// 	padding: 8px 4px;
-// 	width: 30%;
-// 	border: 1px solid ${props => props.theme.colorStyles.borders};
-// 	border-radius: 3px;
-// 	color: #fff;
-// 	font-family: 'apercu-medium';
-// 	font-size: 16px;
-// 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
-// 	cursor: pointer;
-// `;
-
-// const RatioButton = styled.button`
-// 	padding: 8px 4px;
-// 	width: 66%;
-// 	border: 1px solid ${props => props.theme.colorStyles.borders};
-// 	border-radius: 3px;
-// 	color: #fff;
-// 	font-family: 'apercu-medium';
-// 	font-size: 16px;
-// 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
-// 	cursor: pointer;
-// `;
-
-// const RatioError = styled.div`
-// 	background-color: ${props => props.theme.colorStyles.accentLight};
-// 	color: ${props => props.theme.colorStyles.heading};
-// 	border-radius: 4px;
-// 	padding: 8px 16px;
-// 	margin-top: 8px;
-// `;
 
 export default withTranslation()(Action);

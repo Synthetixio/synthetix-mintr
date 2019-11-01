@@ -111,6 +111,7 @@ const ActionImage = styled.img`
 `;
 
 const Form = styled.div`
+	width: 400px;
 	margin: 0px 0px 80px 0px;
 `;
 
