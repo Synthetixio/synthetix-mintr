@@ -200,7 +200,6 @@ const Dashboard = ({ t }) => {
 		synthData = {},
 		escrowData = {},
 	} = useFetchData(currentWallet, successQueue);
-	console.log(prices);
 
 	return (
 		<DashboardWrapper>
@@ -215,11 +214,15 @@ const Dashboard = ({ t }) => {
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
-								<Asset>
+								<Asset key={asset}>
 									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
-									<CurrencyPrice>
-										1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
-									</CurrencyPrice>
+									{dashboardIsLoading ? (
+										<Skeleton height="22px" />
+									) : (
+										<CurrencyPrice>
+											1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
+										</CurrencyPrice>
+									)}
 								</Asset>
 							);
 						})}
