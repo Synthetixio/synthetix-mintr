@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { formatDistanceToNow } from 'date-fns';
-import { withTranslation, useTranslation, Trans } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
@@ -21,33 +20,6 @@ import {
 } from '../../components/Typography';
 import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
-
-const RewardInfo = ({ state }) => {
-	const { t } = useTranslation();
-	const { rewardData, dashboardIsLoading } = state;
-	if (dashboardIsLoading) return <Skeleton />;
-	const content = rewardData.feesAreClaimable ? (
-		<DataLarge>
-			<Highlighted>
-				{rewardData.currentPeriodEnd ? formatDistanceToNow(rewardData.currentPeriodEnd) : '--'}
-			</Highlighted>{' '}
-			{t('dashboard.rewards.open')}
-		</DataLarge>
-	) : (
-		<DataLarge>
-			<Trans i18nKey="dashboard.rewards.blocked">
-				Claiming rewards <Highlighted red={true}>blocked</Highlighted>
-			</Trans>
-		</DataLarge>
-	);
-
-	return (
-		<Row padding="0px 8px">
-			{content}
-			<Tooltip content={t('tooltip.claim')} />
-		</Row>
-	);
-};
 
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();
@@ -224,11 +196,11 @@ const Dashboard = ({ t }) => {
 	const {
 		balances = {},
 		prices = {},
-		rewardData = {},
 		debtData = {},
 		synthData = {},
 		escrowData = {},
 	} = useFetchData(currentWallet, successQueue);
+	console.log(prices);
 
 	return (
 		<DashboardWrapper>
@@ -240,9 +212,18 @@ const Dashboard = ({ t }) => {
 						<DataHeaderLarge margin="0px 0px 22px 0px" color={theme.colorStyles.body} />
 					</ContainerHeader>
 					<CollRatios state={{ debtData, dashboardIsLoading }} />
-					<Container curved={true}>
-						<RewardInfo state={{ rewardData, theme, dashboardIsLoading }} />
-					</Container>
+					<PricesContainer>
+						{['SNX', 'ETH'].map(asset => {
+							return (
+								<Asset>
+									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
+									<CurrencyPrice>
+										1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
+									</CurrencyPrice>
+								</Asset>
+							);
+						})}
+					</PricesContainer>
 					<Charts
 						state={{
 							balances,
@@ -265,11 +246,9 @@ const Dashboard = ({ t }) => {
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
 						</Link>
-						{/* <Link>
-              <ButtonTertiaryLabel>
-                {t('dashboard.buttons.synths')}
-              </ButtonTertiaryLabel>
-            </Link> */}
+						<Link>
+							<ButtonTertiaryLabel>Go to Synthetix Dashboard</ButtonTertiaryLabel>
+						</Link>
 					</Row>
 				</Container>
 			</Content>
@@ -321,12 +300,6 @@ const Row = styled.div`
 	padding: ${props => (props.padding ? props.padding : 0)};
 `;
 
-const Highlighted = styled.span`
-	font-family: 'apercu-bold';
-	color: ${props =>
-		props.red ? props.theme.colorStyles.brandRed : props.theme.colorStyles.hyperlink};
-`;
-
 const Box = styled.div`
 	border-radius: 2px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
@@ -374,6 +347,31 @@ const TableIconCell = styled.div`
 
 const TooltipWrapper = styled.div`
 	margin-left: 10px;
+`;
+
+const PricesContainer = styled.div`
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	border-radius: 5px;
+	padding: 16px;
+	margin-bottom: 16px;
+	display: flex;
+	flex-direction: row;
+`;
+
+const Asset = styled.div`
+	display: flex;
+	flex-direction: row;
+	margin: auto;
+	align-items: center;
+	justify-content: center;
+`;
+
+const CurrencyPrice = styled.div`
+	font-size: 16px;
+	font-family: 'apercu-medium';
+	margin-left: 4px;
+	align-items: center;
+	color: ${props => props.theme.colorStyles.body};
 `;
 
 export default withTranslation()(Dashboard);
