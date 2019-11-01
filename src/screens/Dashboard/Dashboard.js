@@ -249,8 +249,8 @@ const Dashboard = ({ t }) => {
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
 						</Link>
-						<Link>
-							<ButtonTertiaryLabel>Go to Synthetix Dashboard</ButtonTertiaryLabel>
+						<Link href="https://dashboard.synthetix.io" target="_blank">
+							<ButtonTertiaryLabel>{t('dashboard.buttons.synthetixDashboard')}</ButtonTertiaryLabel>
 						</Link>
 					</Row>
 				</Container>
