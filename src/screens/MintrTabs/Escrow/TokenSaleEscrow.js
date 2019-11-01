@@ -95,6 +95,7 @@ const useGetGasEstimateError = () => {
 			updateGasLimit(Number(gasEstimate), dispatch);
 		};
 		getGasEstimate();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return error;
 };

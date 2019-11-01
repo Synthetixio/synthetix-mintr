@@ -81,6 +81,7 @@ const useGetWallets = currentPage => {
 			}
 		};
 		getWallets();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPage]);
 	return { wallets, isLoading, error };
 };
