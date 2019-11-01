@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { withTranslation, useTranslation } from 'react-i18next';
 
@@ -10,14 +10,8 @@ import { useFetchData } from './fetchData';
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
 import Table from '../../components/Table';
-import {
-	DataLarge,
-	DataHeaderLarge,
-	H5,
-	H6,
-	Figure,
-	ButtonTertiaryLabel,
-} from '../../components/Typography';
+import { ButtonTertiary } from '../../components/Button';
+import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components/Typography';
 import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
 
@@ -185,6 +179,7 @@ const BalanceTable = ({ state }) => {
 
 const Dashboard = ({ t }) => {
 	const theme = useContext(ThemeContext);
+	const [forceRefresh, triggerRefresh] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet },
@@ -199,7 +194,7 @@ const Dashboard = ({ t }) => {
 		debtData = {},
 		synthData = {},
 		escrowData = {},
-	} = useFetchData(currentWallet, successQueue);
+	} = useFetchData(currentWallet, successQueue, forceRefresh);
 
 	return (
 		<DashboardWrapper>
@@ -207,8 +202,11 @@ const Dashboard = ({ t }) => {
 			<Content>
 				<Container>
 					<ContainerHeader>
-						<H5>{t('dashboard.sections.wallet')}</H5>
-						<DataHeaderLarge margin="0px 0px 22px 0px" color={theme.colorStyles.body} />
+						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
+						{/* //Big hack, won't stay here for long... */}
+						<ButtonTertiary onClick={() => triggerRefresh(forceRefresh + 1)}>
+							{t('dashboard.buttons.refresh')}
+						</ButtonTertiary>
 					</ContainerHeader>
 					<CollRatios state={{ debtData, dashboardIsLoading }} />
 					<PricesContainer>
@@ -292,6 +290,7 @@ const ContainerHeader = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 20px;
 `;
 
 const Row = styled.div`

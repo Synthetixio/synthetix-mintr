@@ -126,7 +126,7 @@ const getSynths = async walletAddress => {
 	}
 };
 
-export const useFetchData = (walletAddress, successQueue) => {
+export const useFetchData = (walletAddress, successQueue, forceRefresh) => {
 	const [data, setData] = useState({});
 	const { dispatch } = useContext(Store);
 	useEffect(() => {
@@ -156,6 +156,6 @@ export const useFetchData = (walletAddress, successQueue) => {
 			console.log(e);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [walletAddress, successQueue.length]);
+	}, [walletAddress, successQueue.length, forceRefresh]);
 	return data;
 };
