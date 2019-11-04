@@ -32,11 +32,7 @@ const Header = ({ t, currentWallet }) => {
 				<WalletStatusButton onClick={() => updateCurrentPage('walletSelection', dispatch)}>
 					{shortenAddress(currentWallet)}
 				</WalletStatusButton>
-				<RoundButton
-					as="a"
-					href="https://help.synthetix.io/hc/en-us/categories/360001538994-Mintr"
-					target="_blank"
-				>
+				<RoundButton as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
 					<SupportBubble />
 				</RoundButton>
 				<LanguageButtonWrapper>
