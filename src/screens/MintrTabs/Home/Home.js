@@ -74,7 +74,7 @@ const Button = styled.button`
 `;
 
 const ButtonContainer = styled.div`
-	max-width: 140px;
+	padding: 10px;
 	margin: 0 auto;
 `;
 

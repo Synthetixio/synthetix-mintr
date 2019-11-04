@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import OutsideClickHandler from 'react-outside-click-handler';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
@@ -9,7 +8,7 @@ import { Store } from '../../store';
 import { WalletStatusButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
-import { updateCurrentPage, toggleLanguageDropdown } from '../../ducks/ui';
+import { updateCurrentPage } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
 
 import { LanguageDropdown } from '../../components/Dropdown';
@@ -17,11 +16,12 @@ import { LanguageDropdown } from '../../components/Dropdown';
 const Header = ({ t, currentWallet }) => {
 	const {
 		state: {
-			ui: { themeIsDark, languageDropdownIsVisible },
+			ui: { themeIsDark },
 			wallet: { networkName },
 		},
 		dispatch,
 	} = useContext(Store);
+	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	return (
 		<HeaderWrapper>
 			<HeaderBlock>
@@ -40,14 +40,14 @@ const Header = ({ t, currentWallet }) => {
 					<SupportBubble />
 				</RoundButton>
 				<LanguageButtonWrapper>
-					<RoundButton onClick={() => toggleLanguageDropdown(!languageDropdownIsVisible, dispatch)}>
+					<RoundButton onClick={() => setFlagVisibility(true)}>
 						<Globe />
 					</RoundButton>
-					{languageDropdownIsVisible ? (
-						<OutsideClickHandler onOutsideClick={() => toggleLanguageDropdown(false, dispatch)}>
-							<LanguageDropdown />
-						</OutsideClickHandler>
-					) : null}
+					<LanguageDropdown
+						isVisible={flagDropdownIsVisible}
+						setIsVisible={setFlagVisibility}
+						position={{ left: 0 }}
+					/>
 				</LanguageButtonWrapper>
 				<ThemeSwitcher
 					onLabel={t('dashboard.header.onLabel')}

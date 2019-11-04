@@ -5,15 +5,26 @@ import { Store } from '../../store';
 import { ThemeContext } from 'styled-components';
 import { toggleTheme } from '../../ducks/ui';
 
-const ThemeSwitcher = ({ onLabel, offLabel }) => {
+import './ThemeSwitcher.css';
+
+const ThemeSwitcher = () => {
 	const { state, dispatch } = useContext(Store);
 	const theme = useContext(ThemeContext);
 	return (
 		<Switch
+			className={state.ui.themeIsDark ? 'dark' : 'light'}
 			height={40}
-			width={96}
-			checkedIcon={<Label>{onLabel}</Label>}
-			uncheckedIcon={<Label>{offLabel}</Label>}
+			width={70}
+			checkedIcon={
+				<IconWrapper>
+					<Icon src={'/images/dark-mode.svg'}></Icon>
+				</IconWrapper>
+			}
+			uncheckedIcon={
+				<IconWrapper>
+					<Icon src={'/images/light-mode.svg'}></Icon>
+				</IconWrapper>
+			}
 			handleDiameter={24}
 			onChange={() => toggleTheme(!state.ui.themeIsDark, dispatch)}
 			checked={state.ui.themeIsDark}
@@ -25,15 +36,14 @@ const ThemeSwitcher = ({ onLabel, offLabel }) => {
 	);
 };
 
-const Label = styled.span`
-	text-transform: uppercase;
+const IconWrapper = styled.div`
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	height: 100%;
-	justify-content: center;
-	font-family: 'apercu-regular';
-	color: ${props => props.theme.colorStyles.themeToggleFontColor};
-	font-size: 14px;
+`;
+const Icon = styled.img`
+	width: 25px;
 `;
 
 export default ThemeSwitcher;

@@ -70,7 +70,7 @@ const theme = mode => {
 			as: 'p',
 			fontSize: [12, 14, 16],
 			fontWeight: 400,
-			lineHeight: ['14px', '18x', '22px'],
+			lineHeight: ['14px', '18px', '22px'],
 			fontFamily: fontFamilies.regular,
 			color: colorStyles.body,
 		},

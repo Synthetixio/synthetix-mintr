@@ -247,7 +247,11 @@ const Dashboard = ({ t }) => {
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
 						</Link>
-						<Link href="https://dashboard.synthetix.io" target="_blank">
+						<Link
+							href="https://dashboard.synthetix.io"
+							target="_blank"
+							style={{ marginLeft: '5px' }}
+						>
 							<ButtonTertiaryLabel>{t('dashboard.buttons.synthetixDashboard')}</ButtonTertiaryLabel>
 						</Link>
 					</Row>
@@ -330,10 +334,11 @@ const Link = styled.a`
 	text-transform: uppercase;
 	text-decoration: none;
 	cursor: pointer;
-	height: 48px;
 	padding: 16px 20px;
+	width: 50%;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
+	text-align: center;
 `;
 
 const CurrencyIcon = styled.img`
