@@ -3,15 +3,34 @@ import styled from 'styled-components';
 
 import { PLarge } from '../Typography';
 
+import snxTranslations from 'synthetix-translations';
+import i18n from 'i18next';
+
+const codeToLang = code => {
+	switch (code) {
+		case 'en':
+			return 'English';
+		case 'fr':
+			return 'French';
+		case 'es':
+			return 'Spanish';
+		case 'ru':
+			return 'Russian';
+		case 'cn':
+			return 'Chinese';
+	}
+};
+
 const LanguageDropdown = () => {
+	const languages = Object.keys(snxTranslations['synthetix-mintr']);
 	return (
 		<Wrapper>
 			<Languages>
-				{['English'].map(language => {
+				{languages.map(language => {
 					return (
-						<LanguageElement key={language} onClick={() => console.log(language)}>
+						<LanguageElement key={language} onClick={() => i18n.changeLanguage(language)}>
 							<LanguageImage src={`/images/languages/${language}.svg`}></LanguageImage>
-							<PLarge>{language}</PLarge>
+							<PLarge>{codeToLang(language)}</PLarge>
 						</LanguageElement>
 					);
 				})}
@@ -41,7 +60,7 @@ const Languages = styled.ul`
 `;
 
 const LanguageElement = styled.li`
-	padding: 16px;
+	padding: 10px;
 	display: flex;
 	align-items: center;
 	border-radius: 2px;
@@ -53,7 +72,7 @@ const LanguageElement = styled.li`
 `;
 
 const LanguageImage = styled.img`
-	height: 24px;
+	height: 18px;
 	margin-right: 16px;
 `;
 
