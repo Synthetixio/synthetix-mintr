@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 import { PLarge } from '../Typography';
 
@@ -21,21 +22,24 @@ const codeToLang = code => {
 	}
 };
 
-const LanguageDropdown = () => {
+const LanguageDropdown = ({ setIsVisible, isVisible, position }) => {
 	const languages = Object.keys(snxTranslations['synthetix-mintr']);
+	if (!isVisible) return null;
 	return (
-		<Wrapper>
-			<Languages>
-				{languages.map(language => {
-					return (
-						<LanguageElement key={language} onClick={() => i18n.changeLanguage(language)}>
-							<LanguageImage src={`/images/languages/${language}.svg`}></LanguageImage>
-							<PLarge>{codeToLang(language)}</PLarge>
-						</LanguageElement>
-					);
-				})}
-			</Languages>
-		</Wrapper>
+		<OutsideClickHandler onOutsideClick={() => setIsVisible(false)}>
+			<Wrapper style={{ ...position }}>
+				<Languages>
+					{languages.map(language => {
+						return (
+							<LanguageElement key={language} onClick={() => i18n.changeLanguage(language)}>
+								<LanguageImage src={`/images/languages/${language}.svg`}></LanguageImage>
+								<PLarge m={0}>{codeToLang(language)}</PLarge>
+							</LanguageElement>
+						);
+					})}
+				</Languages>
+			</Wrapper>
+		</OutsideClickHandler>
 	);
 };
 
@@ -60,7 +64,7 @@ const Languages = styled.ul`
 `;
 
 const LanguageElement = styled.li`
-	padding: 10px;
+	padding: 5px 10px;
 	display: flex;
 	align-items: center;
 	border-radius: 2px;

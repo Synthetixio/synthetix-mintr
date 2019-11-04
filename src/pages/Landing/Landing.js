@@ -13,6 +13,10 @@ import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpe
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 
+import { Globe } from '../../components/Icons';
+
+import { LanguageDropdown } from '../../components/Dropdown';
+
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './carousel.css';
 
@@ -123,6 +127,7 @@ const WalletButtons = () => {
 
 const Landing = ({ t }) => {
 	const [pageIndex, setPageIndex] = useState(0);
+	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	const {
 		state: {
 			ui: { themeIsDark },
@@ -133,6 +138,16 @@ const Landing = ({ t }) => {
 			<OnboardingContainer>
 				<Header>
 					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+					<LanguageButtonWrapper>
+						<RoundButton onClick={() => setFlagVisibility(true)}>
+							<Globe />
+						</RoundButton>
+						<LanguageDropdown
+							isVisible={flagDropdownIsVisible}
+							setIsVisible={setFlagVisibility}
+							position={{ right: 0 }}
+						/>
+					</LanguageButtonWrapper>
 				</Header>
 				<OnBoardingCarousel pageIndex={pageIndex} />
 				<ButtonRow>
@@ -192,7 +207,7 @@ const OnboardingH1 = styled(H1)`
 `;
 
 const OnboardingPMega = styled(PMega)`
-	margin: 20px auto 0 auto;
+	// margin: 20px auto 0 auto;
 	font-size: 18px;
 	line-height: 25px;
 	width: 100%;
@@ -289,11 +304,32 @@ const CarouselSlide = styled.div``;
 
 const Header = styled.div`
 	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 `;
 
 const Logo = styled.img`
 	width: 120px;
 	margin-right: 18px;
+`;
+
+const RoundButton = styled.button`
+	margin: 0 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 30px;
+	padding: 0;
+	height: 40px;
+	width: 40px;
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+`;
+
+const LanguageButtonWrapper = styled.div`
+	position: relative;
 `;
 
 export default withTranslation()(Landing);
