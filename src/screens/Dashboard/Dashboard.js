@@ -338,6 +338,7 @@ const Link = styled.a`
 	width: 50%;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
+	text-align: center;
 `;
 
 const CurrencyIcon = styled.img`

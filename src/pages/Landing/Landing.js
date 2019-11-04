@@ -207,7 +207,7 @@ const OnboardingH1 = styled(H1)`
 `;
 
 const OnboardingPMega = styled(PMega)`
-	// margin: 20px auto 0 auto;
+	margin: 20px auto 0 auto;
 	font-size: 18px;
 	line-height: 25px;
 	width: 100%;
