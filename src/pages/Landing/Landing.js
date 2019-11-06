@@ -46,7 +46,7 @@ const onWalletClick = (wallet, dispatch) => {
 	};
 };
 
-const OnBoardingCarousel = ({ pageIndex }) => {
+const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 	const { t } = useTranslation();
 	const {
 		state: {
@@ -61,6 +61,7 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 				showThumbs={false}
 				showStatus={false}
 				interval={10000}
+				onChange={position => setPageIndex(position)}
 				autoplay
 			>
 				<CarouselSlide>
@@ -149,7 +150,7 @@ const Landing = ({ t }) => {
 						/>
 					</LanguageButtonWrapper>
 				</Header>
-				<OnBoardingCarousel pageIndex={pageIndex} />
+				<OnBoardingCarousel pageIndex={pageIndex} setPageIndex={setPageIndex} />
 				<ButtonRow>
 					<ButtonSecondary
 						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
