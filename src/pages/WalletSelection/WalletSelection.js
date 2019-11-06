@@ -19,7 +19,7 @@ import {
 	ListCell,
 	ListHeaderCell,
 } from '../../components/List';
-import Paginator from '../../components/Paginator';
+import WalletPaginator from './WalletPaginator';
 import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import { H1, PMega, TableHeaderMedium, TableDataMedium } from '../../components/Typography';
@@ -27,13 +27,13 @@ import { ButtonPrimaryMedium } from '../../components/Button';
 
 const WALLET_PAGE_SIZE = 5;
 
-const useGetWallets = currentPage => {
+const useGetWallets = paginatorIndex => {
 	const { dispatch } = useContext(Store);
 	const [wallets, setWallets] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
 	useEffect(() => {
-		const walletIndex = currentPage * WALLET_PAGE_SIZE;
+		const walletIndex = paginatorIndex * WALLET_PAGE_SIZE;
 		if (wallets[walletIndex]) return;
 		setIsLoading(true);
 		const getWallets = async () => {
@@ -82,7 +82,7 @@ const useGetWallets = currentPage => {
 		};
 		getWallets();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentPage]);
+	}, [paginatorIndex]);
 	return { wallets, isLoading, error };
 };
 
@@ -128,9 +128,14 @@ const Heading = ({ hasLoaded, error }) => {
 };
 
 const WalletConnection = ({ t }) => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const { wallets, isLoading, error } = useGetWallets(currentPage);
-	const { dispatch } = useContext(Store);
+	const [paginatorIndex, setPaginatorIndex] = useState(0);
+	const { wallets, isLoading, error } = useGetWallets(paginatorIndex);
+	const {
+		state: {
+			wallet: { walletType },
+		},
+		dispatch,
+	} = useContext(Store);
 	return (
 		<OnBoardingPageContainer>
 			<Content>
@@ -165,17 +170,18 @@ const WalletConnection = ({ t }) => {
 										<ListBody>
 											{wallets
 												.slice(
-													currentPage * WALLET_PAGE_SIZE,
-													currentPage * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
+													paginatorIndex * WALLET_PAGE_SIZE,
+													paginatorIndex * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
 												)
 												.map((wallet, i) => {
 													return (
 														<ListBodyRow
 															key={wallet.address}
 															onClick={() => {
-																snxJSConnector.signer.setAddressIndex(
-																	currentPage * WALLET_PAGE_SIZE + i
-																);
+																const walletIndex = paginatorIndex * WALLET_PAGE_SIZE + i;
+																if (['Ledger', 'Trezor'].includes(walletType)) {
+																	snxJSConnector.signer.setAddressIndex(walletIndex);
+																}
 																updateWalletStatus(
 																	{
 																		currentWallet: wallet.address,
@@ -214,10 +220,10 @@ const WalletConnection = ({ t }) => {
 							)}
 						</ListContainer>
 						{wallets.length > 0 ? (
-							<Paginator
+							<WalletPaginator
 								disabled={isLoading}
-								currentPage={currentPage}
-								onPageChange={page => setCurrentPage(page)}
+								currentIndex={paginatorIndex}
+								onIndexChange={setPaginatorIndex}
 							/>
 						) : null}
 					</BodyContent>
@@ -238,8 +244,8 @@ const HeadingContent = styled.div`
 `;
 
 const BodyContent = styled.div`
-	width: 100%;
-	margin-top: 50px;
+	width: 80%;
+	margin: 50px auto 0 auto;
 	max-width: 1400px;
 	display: flex;
 	justify-content: center;
