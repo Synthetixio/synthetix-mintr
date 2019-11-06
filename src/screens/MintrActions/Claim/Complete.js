@@ -10,41 +10,39 @@ import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typograp
 
 const Success = ({ t, onDestroy, feesAvailable }) => {
 	return (
-		<SlidePage>
-			<Container>
-				<Top>
-					<Intro>
-						<ActionImage src="/images/success.svg" big />
-						<PageTitle>{t('mintrActions.claim.complete.title')}</PageTitle>
-						<PLarge>{t('mintrActions.complete.subtitle')}</PLarge>
-					</Intro>
-					<Details>
-						<Box>
-							<DataHeaderLarge>
-								{t('mintrActions.claim.confirmation.actionDescription')}
-							</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
-							</Amount>
-						</Box>
-						<Box>
-							<DataHeaderLarge>
-								{t('mintrActions.claim.confirmation.actionDescription')}
-							</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0} SNX
-							</Amount>
-						</Box>
-					</Details>
-				</Top>
-				<Bottom>
-					<Buttons>
-						<ButtonSecondary>{t('button.navigation.etherscan')}</ButtonSecondary>
-						<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
-					</Buttons>
-				</Bottom>
-			</Container>
-		</SlidePage>
+		<Fragment>
+			<Top>
+				<Intro>
+					<ActionImage src="/images/success.svg" big />
+					<PageTitle>{t('mintrActions.claim.complete.title')}</PageTitle>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
+				</Intro>
+				<Details>
+					<Box>
+						<DataHeaderLarge>
+							{t('mintrActions.claim.confirmation.actionDescription')}
+						</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
+						</Amount>
+					</Box>
+					<Box>
+						<DataHeaderLarge>
+							{t('mintrActions.claim.confirmation.actionDescription')}
+						</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0} SNX
+						</Amount>
+					</Box>
+				</Details>
+			</Top>
+			<Bottom>
+				<Buttons>
+					<ButtonSecondary>{t('button.navigation.etherscan')}</ButtonSecondary>
+					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
+				</Buttons>
+			</Bottom>
+		</Fragment>
 	);
 };
 
