@@ -25,8 +25,7 @@ const SLIDE_COUNT = 4;
 const onWalletClick = (wallet, dispatch) => {
 	return async () => {
 		const walletStatus = await connectToWallet(wallet);
-
-		updateWalletStatus(walletStatus, dispatch);
+		updateWalletStatus({ ...walletStatus, availableWallets: [] }, dispatch);
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === 'Metamask') {
 				onMetamaskAccountChange(async () => {
