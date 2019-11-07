@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Arrow } from '../../components/Icons';
+import { Arrow } from '../Icons';
+import { DataLarge } from '../Typography';
 
 const Paginator = ({ currentIndex, disabled, onIndexChange }) => {
 	return (
@@ -14,6 +15,7 @@ const Paginator = ({ currentIndex, disabled, onIndexChange }) => {
 			>
 				<Arrow direction="left" />
 			</Button>
+			<DataLarge>{currentIndex + 1}</DataLarge>
 			<Button
 				onClick={() => {
 					onIndexChange(currentIndex + 1);
@@ -30,16 +32,14 @@ const Wrapper = styled.div`
 	margin: 30px 0;
 	display: flex;
 	justify-content: center;
-	& > :first-child,
-	& > :last-child {
-		margin: 0 20px;
-	}
+	align-items: center;
 	transition: opacity 0.1s ease-out;
 	opacity: ${props => (props.disabled ? 0.6 : 1)};
 	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 
 const Button = styled.button`
+	margin: 0 20px;
 	border: none;
 	width: 24px;
 	height: 24px;
@@ -52,21 +52,7 @@ const Button = styled.button`
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-	margin: 0 5px;
-	font-family: 'apercu-medium';
-	font-size: 14px;
-	line-height: 25px;
-	font-weight: 500;
 	transition: all 0.1s ease;
-	color: ${props =>
-		props.active ? props.theme.colorStyles.heading : props.theme.colorStyles.subtext};
-	:hover {
-		color: ${props => props.theme.colorStyles.heading};
-		background-color: ${props =>
-			props.active
-				? props.theme.colorStyles.paginatorButtonBackgroundActive
-				: props.theme.colorStyles.paginatorButtonBackgroundHover};
-	}
 `;
 
 export default Paginator;

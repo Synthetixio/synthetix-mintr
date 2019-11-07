@@ -26,7 +26,6 @@ const connectToMetamask = async (networkId, networkName) => {
 		if (accounts && accounts.length > 0) {
 			return {
 				currentWallet: accounts[0],
-				availableWallets: accounts,
 				walletType: 'Metamask',
 				unlocked: true,
 				networkId,
@@ -57,7 +56,6 @@ const connectToCoinbase = async (networkId, networkName) => {
 		if (accounts && accounts.length > 0) {
 			return {
 				currentWallet: accounts[0],
-				availableWallets: accounts,
 				walletType: 'Coinbase',
 				unlocked: true,
 				networkId: 1,

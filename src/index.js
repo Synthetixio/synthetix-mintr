@@ -16,6 +16,8 @@ const initialState = {
 	},
 	wallet: {
 		unlocked: false,
+		walletPaginatorIndex: 0,
+		availableWallets: [],
 	},
 	transactions: {
 		currentTransactions: [],

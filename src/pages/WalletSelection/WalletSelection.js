@@ -7,7 +7,7 @@ import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
-import { updateWalletStatus } from '../../ducks/wallet';
+import { updateWalletStatus, updateWalletPaginatorIndex } from '../../ducks/wallet';
 
 import Spinner from '../../components/Spinner';
 import {
@@ -19,7 +19,7 @@ import {
 	ListCell,
 	ListHeaderCell,
 } from '../../components/List';
-import WalletPaginator from './WalletPaginator';
+import WalletPaginator from '../../components/WalletPaginator';
 import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import { H1, PMega, TableHeaderMedium, TableDataMedium } from '../../components/Typography';
@@ -28,29 +28,35 @@ import { ButtonPrimaryMedium } from '../../components/Button';
 const WALLET_PAGE_SIZE = 5;
 
 const useGetWallets = paginatorIndex => {
-	const { dispatch } = useContext(Store);
-	const [wallets, setWallets] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const {
+		state: {
+			wallet: { availableWallets = [] },
+		},
+		dispatch,
+	} = useContext(Store);
+	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		const walletIndex = paginatorIndex * WALLET_PAGE_SIZE;
-		if (wallets[walletIndex]) return;
+		if (availableWallets[walletIndex]) return;
 		setIsLoading(true);
 		const getWallets = async () => {
 			try {
 				const results = await snxJSConnector.signer.getNextAddresses(walletIndex, WALLET_PAGE_SIZE);
 
-				const availableWallets = results.map(address => {
+				const nextWallets = results.map(address => {
 					return {
 						address,
 						balances: [],
 					};
 				});
-				updateWalletStatus({ unlocked: true }, dispatch);
+				updateWalletStatus(
+					{ unlocked: true, availableWallets: [...availableWallets, ...nextWallets] },
+					dispatch
+				);
 				setIsLoading(false);
-				setWallets([...wallets, ...availableWallets]);
 				const balances = await Promise.all(
-					availableWallets.map(async wallet => {
+					nextWallets.map(async wallet => {
 						return {
 							snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
 							sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
@@ -58,7 +64,7 @@ const useGetWallets = paginatorIndex => {
 						};
 					})
 				);
-				availableWallets.forEach((wallet, index) => {
+				nextWallets.forEach((wallet, index) => {
 					wallet.balances = {
 						snxBalance: bigNumberFormatter(balances[index].snxBalance),
 						sUSDBalance: bigNumberFormatter(balances[index].sUSDBalance),
@@ -66,7 +72,7 @@ const useGetWallets = paginatorIndex => {
 					};
 				});
 
-				setWallets([...wallets, ...availableWallets]);
+				updateWalletStatus({ availableWallets: [...availableWallets, ...nextWallets] }, dispatch);
 			} catch (e) {
 				console.log(e);
 				setError(e.message);
@@ -83,7 +89,7 @@ const useGetWallets = paginatorIndex => {
 		getWallets();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [paginatorIndex]);
-	return { wallets, isLoading, error };
+	return { isLoading, error };
 };
 
 const Heading = ({ hasLoaded, error }) => {
@@ -128,18 +134,18 @@ const Heading = ({ hasLoaded, error }) => {
 };
 
 const WalletConnection = ({ t }) => {
-	const [paginatorIndex, setPaginatorIndex] = useState(0);
-	const { wallets, isLoading, error } = useGetWallets(paginatorIndex);
 	const {
 		state: {
-			wallet: { walletType },
+			wallet: { walletType, walletPaginatorIndex = 0, availableWallets = [], networkName },
 		},
 		dispatch,
 	} = useContext(Store);
+	const { isLoading, error } = useGetWallets(walletPaginatorIndex);
+	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
 	return (
 		<OnBoardingPageContainer>
 			<Content>
-				<Heading hasLoaded={wallets.length > 0} error={error}></Heading>
+				<Heading hasLoaded={availableWallets.length > 0} error={error}></Heading>
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
@@ -155,7 +161,7 @@ const WalletConnection = ({ t }) => {
 									<List cellSpacing={0}>
 										<ListHead>
 											<ListHeaderRow>
-												{['Address', 'SNX', 'sUSD', 'ETH'].map((headerElement, i) => {
+												{['Address', 'SNX', 'sUSD', 'ETH', ''].map((headerElement, i) => {
 													return (
 														<ListHeaderCell
 															style={{ textAlign: i > 0 ? 'right' : 'left' }}
@@ -168,18 +174,18 @@ const WalletConnection = ({ t }) => {
 											</ListHeaderRow>
 										</ListHead>
 										<ListBody>
-											{wallets
+											{availableWallets
 												.slice(
-													paginatorIndex * WALLET_PAGE_SIZE,
-													paginatorIndex * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
+													walletPaginatorIndex * WALLET_PAGE_SIZE,
+													walletPaginatorIndex * WALLET_PAGE_SIZE + WALLET_PAGE_SIZE
 												)
 												.map((wallet, i) => {
 													return (
 														<ListBodyRow
 															key={wallet.address}
 															onClick={() => {
-																const walletIndex = paginatorIndex * WALLET_PAGE_SIZE + i;
-																if (['Ledger', 'Trezor'].includes(walletType)) {
+																const walletIndex = walletPaginatorIndex * WALLET_PAGE_SIZE + i;
+																if (isHardwareWallet) {
 																	snxJSConnector.signer.setAddressIndex(walletIndex);
 																}
 																updateWalletStatus(
@@ -209,6 +215,21 @@ const WalletConnection = ({ t }) => {
 																	{formatCurrency(wallet.balances.ethBalance) || 0}
 																</TableDataMedium>
 															</ListCell>
+															<ListCell
+																style={{ textAlign: 'right' }}
+																onClick={e => {
+																	e.stopPropagation();
+																}}
+															>
+																<Link
+																	href={`https://${
+																		networkName === 'mainnet' ? '' : networkName + '.'
+																	}etherscan.io/address/${wallet.address}`}
+																	target="_blank"
+																>
+																	<LinkImg width="20" src="/images/etherscan-logo.png" />
+																</Link>
+															</ListCell>
 														</ListBodyRow>
 													);
 												})}
@@ -219,11 +240,11 @@ const WalletConnection = ({ t }) => {
 								<Spinner />
 							)}
 						</ListContainer>
-						{wallets.length > 0 ? (
+						{availableWallets.length > 0 ? (
 							<WalletPaginator
-								disabled={isLoading}
-								currentIndex={paginatorIndex}
-								onIndexChange={setPaginatorIndex}
+								disabled={isLoading || !isHardwareWallet}
+								currentIndex={walletPaginatorIndex}
+								onIndexChange={index => updateWalletPaginatorIndex(index, dispatch)}
 							/>
 						) : null}
 					</BodyContent>
@@ -309,6 +330,17 @@ const ListContainer = styled.div`
 const ListInner = styled.div`
 	animation: ${fadeIn} 0.2s linear both;
 	width: 100%;
+`;
+
+const Link = styled.a`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+`;
+
+const LinkImg = styled.img`
+	width: 20px;
+	height: 20px;
 `;
 
 export default withTranslation()(WalletConnection);
