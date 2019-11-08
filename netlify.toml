@@ -11,13 +11,7 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
-  
-[[redirects]]
-  from = "http://alpha.synthetix.io"
-  to = "http://beta.synthetix.io"
-  status = 301
-  force = true
+  status = 200 
 
 [[headers]]
   for = "/*"
