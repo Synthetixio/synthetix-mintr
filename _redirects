@@ -1,5 +1,6 @@
 # Redirect domain aliases to primary domain
-https://alpha.mintr.synthetix.io/* https://beta.mintr.synthetix.io/:splat 301!
+https://alpha.mintr.synthetix.io/* https://mintr.synthetix.io/:splat 301!
+https://beta.mintr.synthetix.io/* https://mintr.synthetix.io/:splat 301!
 
 # Optional: Redirect default Netlify subdomain to primary domain
-https://synthetix-mintr.netlify.com/* https://beta.mintr.synthetix.io/:splat 301!
+https://synthetix-mintr.netlify.com/* https://mintr.synthetix.io/:splat 301!
