@@ -3,7 +3,7 @@
 
 # Mintr v2
 
-This is the code for the new Synthetix Mintr dApp: https://beta.mintr.synthetix.io
+This is the code for the new Synthetix Mintr dApp: https://mintr.synthetix.io
 
 The dApp communicates with the [Synthetix contracts](https://developer.synthetix.io/api/docs/deployed-contracts.html), allowing users to perform the following actions:
 
