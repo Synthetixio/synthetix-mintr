@@ -11,7 +11,6 @@ const initialState = {
 		themeIsDark: localStorage.getItem('dark') === 'true' || false,
 		currentPage: 'landing',
 		currentTab: 'home',
-		dashboardIsLoading: false,
 		transactionSettingsPopupIsVisible: false,
 	},
 	wallet: {
