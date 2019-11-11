@@ -108,7 +108,7 @@ const Action = ({
 										? t('mintrActions.claim.action.table.open')
 										: t('mintrActions.claim.action.table.blocked')}
 								</Highlighted>
-								<Tooltip content={t('tooltip.claim')} />
+								<Tooltip width={'250px'} content={t('tooltip.claim')} />
 							</State>
 						</Status>
 					</Schedule>

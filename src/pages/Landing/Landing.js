@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
 import { withTranslation, useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
@@ -173,7 +174,12 @@ const Landing = ({ t }) => {
 					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
-					<Link href="https://www.synthetix.io/uploads/synthetix_litepaper.pdf" target="_blank">
+					<Link
+						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
+							i18n.language === 'zh' ? '_chinese' : ''
+						}.pdf`}
+						target="_blank"
+					>
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 				</BottomLinks>
