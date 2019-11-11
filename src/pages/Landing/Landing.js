@@ -176,7 +176,7 @@ const Landing = ({ t }) => {
 					</Link>
 					<Link
 						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
-							i18n.language === 'zh' ? '_chinese' : ''
+							i18n.language === 'zh' ? '_mandarin' : ''
 						}.pdf`}
 						target="_blank"
 					>
