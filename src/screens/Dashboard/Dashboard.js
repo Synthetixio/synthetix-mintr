@@ -166,7 +166,7 @@ const BalanceTable = ({ state }) => {
 					<Table
 						header={[
 							{ key: 'rowLegend', value: '' },
-							{ key: 'balance', value: 'balance' },
+							{ key: 'balance', value: t('dashboard.table.balance') },
 							{ key: 'usdValue', value: '$ usd' },
 						]}
 						data={data}
