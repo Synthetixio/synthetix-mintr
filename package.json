@@ -28,7 +28,7 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-js": "2.12.2",
+		"synthetix-js": "2.13.0-gas-opt-1",
 		"synthetix-translations": "1.2.0",
 		"walletlink": "^1.0.0"
 	},
