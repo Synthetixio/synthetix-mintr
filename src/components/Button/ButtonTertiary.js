@@ -9,9 +9,10 @@ const ButtonTertiary = ({
 	href = undefined,
 	target = undefined,
 	disabled,
+	style,
 }) => {
 	return (
-		<Button disabled={disabled} target={target} href={href} as={as} onClick={onClick}>
+		<Button disabled={disabled} target={target} href={href} as={as} onClick={onClick} style={style}>
 			<ButtonTertiaryLabel>{children}</ButtonTertiaryLabel>
 		</Button>
 	);

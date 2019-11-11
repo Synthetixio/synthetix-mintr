@@ -225,7 +225,7 @@ const theme = mode => {
 			fontSize: [10, 12, 14],
 			fontWeight: 400,
 			fontFamily: fontFamilies.regular,
-			color: colorStyles.inputLabelSmall,
+			color: colorStyles.tableBody,
 			letterSpacing: 0,
 		},
 		hyperlinkSmall: {

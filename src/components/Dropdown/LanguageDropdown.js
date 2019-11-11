@@ -17,7 +17,7 @@ const codeToLang = code => {
 			return 'Spanish';
 		case 'ru':
 			return 'Russian';
-		case 'cn':
+		case 'zh':
 			return 'Chinese';
 		case 'nl':
 			return 'Dutch';
