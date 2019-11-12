@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
-import { useFetchData } from './fetchData';
+import { fetchData } from './fetchData';
 
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
@@ -179,22 +179,26 @@ const BalanceTable = ({ state }) => {
 
 const Dashboard = ({ t }) => {
 	const theme = useContext(ThemeContext);
-	const [forceRefresh, triggerRefresh] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet },
-			ui: { dashboardIsLoading },
 			transactions: { successQueue },
 		},
 	} = useContext(Store);
 
-	const {
-		balances = {},
-		prices = {},
-		debtData = {},
-		synthData = {},
-		escrowData = {},
-	} = useFetchData(currentWallet, successQueue, forceRefresh);
+	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
+	const [data, setData] = useState({});
+	const loadData = useCallback(() => {
+		setDashboardIsLoading(true);
+		fetchData(currentWallet, successQueue).then(data => {
+			setData(data);
+			setDashboardIsLoading(false);
+		});
+	}, [currentWallet, successQueue]);
+
+	useEffect(() => loadData(), [loadData]);
+
+	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
 
 	return (
 		<DashboardWrapper>
@@ -203,8 +207,7 @@ const Dashboard = ({ t }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						{/* //Big hack, won't stay here for long... */}
-						<ButtonTertiary onClick={() => triggerRefresh(forceRefresh + 1)}>
+						<ButtonTertiary onClick={() => loadData()}>
 							{t('dashboard.buttons.refresh')}
 						</ButtonTertiary>
 					</ContainerHeader>
