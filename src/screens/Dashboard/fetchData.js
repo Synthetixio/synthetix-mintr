@@ -1,11 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
-import { Store } from '../../store';
-
 import { bytesFormatter } from '../../helpers/formatters';
-import { toggleDashboardIsLoading } from '../../ducks/ui';
 
 const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
 
@@ -126,36 +122,22 @@ const getSynths = async walletAddress => {
 	}
 };
 
-export const useFetchData = (walletAddress, successQueue, forceRefresh) => {
-	const [data, setData] = useState({});
-	const { dispatch } = useContext(Store);
-	useEffect(() => {
-		try {
-			toggleDashboardIsLoading(true, dispatch);
-			const fetchData = async () => {
-				const [balances, prices, rewardData, debtData, escrowData, synthData] = await Promise.all([
-					getBalances(walletAddress),
-					getPrices(),
-					getRewards(walletAddress),
-					getDebt(walletAddress),
-					getEscrow(walletAddress),
-					getSynths(walletAddress),
-				]);
-				setData({
-					balances,
-					prices,
-					rewardData,
-					debtData,
-					escrowData,
-					synthData,
-				});
-				toggleDashboardIsLoading(false, dispatch);
-			};
-			fetchData();
-		} catch (e) {
-			console.log(e);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [walletAddress, successQueue.length, forceRefresh]);
-	return data;
+export const fetchData = async walletAddress => {
+	const [balances, prices, rewardData, debtData, escrowData, synthData] = await Promise.all([
+		getBalances(walletAddress),
+		getPrices(),
+		getRewards(walletAddress),
+		getDebt(walletAddress),
+		getEscrow(walletAddress),
+		getSynths(walletAddress),
+	]).catch(e => console.log(e));
+
+	return {
+		balances,
+		prices,
+		rewardData,
+		debtData,
+		escrowData,
+		synthData,
+	};
 };
