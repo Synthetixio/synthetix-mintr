@@ -243,9 +243,11 @@ const WalletConnection = ({ t }) => {
 											<AddWalletInput
 												name={'walletAddress'}
 												required
-												placeholder={'Wallet address'}
+												placeholder={t('onboarding.walletSelection.addWallet.placeholder')}
 											/>
-											<ButtonPrimaryMedium type="submit">Add</ButtonPrimaryMedium>
+											<ButtonPrimaryMedium type="submit">
+												{t('onboarding.walletSelection.addWallet.buttonText')}
+											</ButtonPrimaryMedium>
 										</AddWalletForm>
 									)}
 								</ListInner>
