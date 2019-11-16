@@ -14,6 +14,7 @@ module.exports = {
 		'prettier/prettier': 'error',
 		'no-mixed-spaces-and-tabs': ['warn', 'smart-tabs'],
 		'no-console': 'off',
+		'no-debugger': 'off',
 		'import/no-unresolved': 2,
 		'no-undef': 2,
 		quotes: [2, 'single'],
