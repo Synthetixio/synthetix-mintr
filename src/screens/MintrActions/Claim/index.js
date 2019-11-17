@@ -113,7 +113,7 @@ const Claim = ({ onDestroy }) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const {
 		state: {
-			wallet: { currentWallet, walletType },
+			wallet: { currentWallet, walletType, networkName },
 			network: {
 				settings: { gasPrice, gasLimit, isFetchingGasLimit },
 			},
@@ -176,6 +176,7 @@ const Claim = ({ onDestroy }) => {
 		...transactionInfo,
 		gasEstimateError,
 		isFetchingGasLimit,
+		networkName,
 	};
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
 		<SlideContent key={i} {...props} />

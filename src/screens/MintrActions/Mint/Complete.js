@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
 import { SlidePage } from '../../../components/ScreenSlider';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { ButtonPrimary } from '../../../components/Button';
 import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typography';
 import { formatCurrency } from '../../../helpers/formatters';
+import EtherScanBtn from '../../../components/EtherscanBtn';
 
 const Success = ({
 	t,
@@ -43,15 +44,9 @@ const Success = ({
 			</Top>
 			<Bottom>
 				<Buttons>
-					<ButtonSecondary
-						href={`https://${
-							networkName === 'mainnet' ? '' : networkName + '.'
-						}etherscan.io/tx/${transactionHash}`}
-						as="a"
-						target="_blank"
-					>
+					<EtherScanBtn networkName={networkName} transactionHash={transactionHash}>
 						{t('button.navigation.etherscan')}
-					</ButtonSecondary>
+					</EtherScanBtn>
 					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
 				</Buttons>
 			</Bottom>
