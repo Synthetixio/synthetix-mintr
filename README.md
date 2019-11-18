@@ -3,7 +3,9 @@
 
 # Mintr v2
 
-This is the code for the new Synthetix Mintr dApp: https://mintr.synthetix.io
+This is the code for the new Synthetix Mintr dApp: https://mintr.synthetix.io.
+
+For translator instructions, [go here](#translator-instructions).
 
 The dApp communicates with the [Synthetix contracts](https://developer.synthetix.io/api/docs/deployed-contracts.html), allowing users to perform the following actions:
 
@@ -25,6 +27,52 @@ Mintr v2 supports the following wallet providers:
 ---
 
 > Note: This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Translator instructions
+
+1. Fork this repo using the fork button on the top right ^^^.
+2. Create language folder using your language code https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes in the `public/locales` folder e.g public/locales/es/.
+3. Copy the `public/locales/en/translation.json` file.
+4. Paste it into your langage folder e.g. public/locales/es/translation.json
+5. Translate English to your language
+6. Submit PR back to this repo
+
+Before submitting a translation, please make sure to respect the following repository architecture:
+`public/locales/{LANG-CODE}/translation.json`
+with {LANG-CODE} the language code for your language to translate.
+
+Examples:
+
+```
+public/locales/fr/translation.json
+public/locales/es/translation.json
+```
+
+Please make sure to use the latest version of the english (en) file as a reference before starting the translation.
+
+`translation.json` follows a simple key:value format which has to be respected in order to be published.
+
+```
+	"home": {
+		"intro": {
+			"title": "What would you like to do?",
+			"subtitle": "Click any button below to view more info, confirm or change the amount before submitting."
+		},
+	},
+```
+
+With the example above, a new translation should look like:
+
+```
+	"home": {
+		"intro": {
+			"title": "YOUR_TRANSLATION",
+			"subtitle": "YOUR_TRANSLATION"
+		},
+	},
+```
+
+To be merged and published a translation will have to cover every key:value.
 
 ## Available Scripts
 
