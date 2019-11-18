@@ -9,7 +9,7 @@
 		"ethers": "4.0.38",
 		"i18next": "^17.0.4",
 		"i18next-browser-languagedetector": "^3.0.1",
-		"i18next-xhr-backend": "^3.0.0",
+		"i18next-xhr-backend": "^3.2.2",
 		"keccak": "^2.0.0",
 		"lodash": "^4.17.15",
 		"numbro": "^2.1.2",
@@ -29,7 +29,6 @@
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
 		"synthetix-js": "2.13.0-alpha",
-		"synthetix-translations": "1.2.3",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {

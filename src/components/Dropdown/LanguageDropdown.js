@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 
 import { PLarge } from '../Typography';
-
-import snxTranslations from 'synthetix-translations';
 import i18n from 'i18next';
+
+const SUPPORTED_LANGUAGES = ['en', 'es', 'ru', 'zh'];
 
 const codeToLang = code => {
 	switch (code) {
@@ -23,13 +23,12 @@ const codeToLang = code => {
 };
 
 const LanguageDropdown = ({ setIsVisible, isVisible, position }) => {
-	const languages = Object.keys(snxTranslations['synthetix-mintr']);
 	if (!isVisible) return null;
 	return (
 		<OutsideClickHandler onOutsideClick={() => setIsVisible(false)}>
 			<Wrapper style={{ ...position }}>
 				<Languages>
-					{languages.map(language => {
+					{SUPPORTED_LANGUAGES.map(language => {
 						return (
 							<LanguageElement key={language} onClick={() => i18n.changeLanguage(language)}>
 								<LanguageImage src={`/images/languages/${language}.svg`}></LanguageImage>
