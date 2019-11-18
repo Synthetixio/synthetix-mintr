@@ -5,10 +5,11 @@ import { withTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import { SlidePage } from '../../../components/ScreenSlider';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { ButtonPrimary } from '../../../components/Button';
 import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typography';
+import EtherScanBtn from '../../../components/EtherscanBtn';
 
-const Success = ({ t, onDestroy, feesAvailable }) => {
+const Success = ({ t, onDestroy, feesAvailable, networkName, transactionHash }) => {
 	return (
 		<Fragment>
 			<Top>
@@ -38,7 +39,9 @@ const Success = ({ t, onDestroy, feesAvailable }) => {
 			</Top>
 			<Bottom>
 				<Buttons>
-					<ButtonSecondary>{t('button.navigation.etherscan')}</ButtonSecondary>
+					<EtherScanBtn networkName={networkName} transactionHash={transactionHash}>
+						{t('button.navigation.etherscan')}
+					</EtherScanBtn>
 					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
 				</Buttons>
 			</Bottom>
