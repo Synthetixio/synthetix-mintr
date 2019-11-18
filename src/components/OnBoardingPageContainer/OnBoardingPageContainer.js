@@ -1,21 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ButtonTertiary } from '../../components/Button';
-import { Store } from '../../store';
+import Logo from '../../components/Logo';
 import { withTranslation } from 'react-i18next';
 
 const OnBoardingPageContainer = ({ t, children }) => {
-	const {
-		state: {
-			ui: { themeIsDark },
-			// wallet: { networkName },
-		},
-	} = useContext(Store);
 	return (
 		<PageContainer>
 			<Header>
 				<HeaderBlock>
-					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+					<Logo />
 					{/* <Network>{networkName}</Network> */}
 				</HeaderBlock>
 				<HeaderBlock>
@@ -51,11 +45,6 @@ const HeaderBlock = styled.div`
 	& :first-child:not(:last-child) {
 		margin-right: 10px;
 	}
-`;
-
-const Logo = styled.img`
-	width: 120px;
-	margin-right: 18px;
 `;
 
 // const Network = styled.div`
