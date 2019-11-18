@@ -13,6 +13,7 @@ import { updateWalletStatus } from '../../ducks/wallet';
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
+import Logo from '../../components/Logo';
 
 import { Globe } from '../../components/Icons';
 
@@ -129,16 +130,12 @@ const WalletButtons = () => {
 const Landing = ({ t }) => {
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
-	const {
-		state: {
-			ui: { themeIsDark },
-		},
-	} = useContext(Store);
+
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
 				<Header>
-					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+					<Logo />
 					<LanguageButtonWrapper>
 						<RoundButton onClick={() => setFlagVisibility(true)}>
 							<Globe />
@@ -313,11 +310,6 @@ const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-`;
-
-const Logo = styled.img`
-	width: 120px;
-	margin-right: 18px;
 `;
 
 const RoundButton = styled.button`

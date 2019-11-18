@@ -12,11 +12,11 @@ import { updateCurrentPage } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
 
 import { LanguageDropdown } from '../../components/Dropdown';
+import Logo from '../../components/Logo';
 
 const Header = ({ t, currentWallet }) => {
 	const {
 		state: {
-			ui: { themeIsDark },
 			wallet: { networkName },
 		},
 		dispatch,
@@ -25,7 +25,7 @@ const Header = ({ t, currentWallet }) => {
 	return (
 		<HeaderWrapper>
 			<HeaderBlock>
-				<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+				<SmallLogo />
 				<Network>{networkName}</Network>
 			</HeaderBlock>
 			<HeaderBlock>
@@ -66,7 +66,7 @@ const HeaderBlock = styled.div`
 	display: flex;
 `;
 
-const Logo = styled.img`
+const SmallLogo = styled(Logo)`
 	width: 104px;
 	margin-right: 8px;
 `;
