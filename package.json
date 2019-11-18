@@ -38,6 +38,7 @@
 		"test": "node scripts/test.js",
 		"i18n-extract": "cp nodes",
 		"lint": "eslint .",
+		"lint:css":"stylelint src/**/**/*.js",
 		"format": "prettier --write '**/*.js'"
 	},
 	"eslintConfig": {
@@ -151,6 +152,10 @@
 		"sass-loader": "7.1.0",
 		"semver": "6.0.0",
 		"style-loader": "0.23.1",
+		"stylelint": "^12.0.0",
+		"stylelint-config-recommended": "^3.0.0",
+		"stylelint-config-styled-components": "^0.1.1",
+		"stylelint-processor-styled-components": "^1.8.0",
 		"ts-pnp": "1.1.2",
 		"uglifyjs-webpack-plugin": "^2.2.0",
 		"url-loader": "1.1.2",
