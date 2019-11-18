@@ -325,7 +325,6 @@ const BoxInner = styled.div`
 `;
 
 const BoxHeading = styled.div`
-	witdh: 100%;
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
@@ -377,7 +376,7 @@ const Asset = styled.div`
 
 const CurrencyPrice = styled.div`
 	font-size: 16px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	margin-left: 4px;
 	align-items: center;
 	color: ${props => props.theme.colorStyles.body};
