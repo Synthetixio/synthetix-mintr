@@ -41,7 +41,7 @@ const Thead = styled.thead`
 	color: ${props => props.theme.colorStyles.body};
 	font-size: 12px;
 	text-transform: uppercase;
-	font-family: 'apercu-bold';
+	font-family: 'apercu-bold', sans-serif;
 `;
 
 const Tbody = styled.tbody`
@@ -71,7 +71,7 @@ const Td = styled.td`
 	padding: 0 15px;
 	height: 40px;
 	font-size: 12px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	text-align: ${props => (props.alignRight ? 'right' : 'left')};
 	& :first-child {
 		border-top: none;

@@ -66,7 +66,7 @@ const Button = styled.button`
 	align-items: center;
 	cursor: pointer;
 	margin: 0 5px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	font-size: 14px;
 	line-height: 25px;
 	font-weight: 500;

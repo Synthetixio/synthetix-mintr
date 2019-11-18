@@ -275,7 +275,6 @@ const DashboardWrapper = styled('div')`
 		color: ${props => props.theme.colorStyles.body};
 		margin: 0;
 	}
-	// transition: all ease-out 0.5s;
 	flex-shrink: 0;
 	border-right: 1px solid ${props => props.theme.colorStyles.borders};
 	padding-bottom: 40px;

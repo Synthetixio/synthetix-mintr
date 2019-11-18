@@ -246,10 +246,10 @@ const Input = styled.input`
 	background-color: ${props => props.theme.colorStyles.panels};
 	color: ${props => props.theme.colorStyles.heading};
 	width: 100%;
-	-moz-appearance: textfield;
+	appearance: textfield;
 	&::-webkit-outer-spin-button,
 	&::-webkit-inner-spin-button {
-		-webkit-appearance: none;
+		appearance: none;
 		margin: 0;
 	}
 `;

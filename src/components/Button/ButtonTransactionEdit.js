@@ -15,7 +15,7 @@ const Button = ({ t }) => {
 };
 
 const ButtonWrapper = styled.button`
-	font-family: 'apercu-bold';
+	font-family: 'apercu-bold', sans-serif;
 	border: none;
 	background-color: transparent;
 	font-size: 15px;
