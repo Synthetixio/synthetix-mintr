@@ -14,6 +14,10 @@ export default {
 	buttonPrimaryBgFocus: COLORS.buttonDark,
 	buttonPrimaryBgDisabled: COLORS.buttonLightDisabled,
 
+	simpleSelectOption: COLORS.white,
+	simpleSelectSelectedOption: COLORS.light5,
+	simpleSelectHoveredOption: COLORS.light6,
+
 	buttonTertiaryText: COLORS.light3,
 	buttonTertiaryBgFocus: COLORS.light6,
 

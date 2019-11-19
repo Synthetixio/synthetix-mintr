@@ -177,6 +177,7 @@ const WalletConnection = ({ t }) => {
 						{isLedger && (
 							<SelectWrapper>
 								<SimpleSelect
+									searchable={false}
 									options={LEDGER_DERIVATION_PATHS}
 									value={derivationPath || LEDGER_DERIVATION_PATHS[0]}
 									onChange={option => {
