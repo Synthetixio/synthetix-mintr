@@ -27,8 +27,10 @@ import { H1, PMega, TableHeaderMedium, TableDataMedium } from '../../components/
 import { ButtonPrimaryMedium } from '../../components/Button';
 
 const WALLET_PAGE_SIZE = 5;
-
-const useGetWallets = paginatorIndex => {
+const LEDGER_DERIVATION_PATHS = [
+	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
+	{ value: "44'/60'/0'/0", label: "Ethereum - Ledger Live - m/44'/60'" },
+];
 	const {
 		state: {
 			wallet: { availableWallets = [] },
@@ -143,6 +145,7 @@ const WalletConnection = ({ t }) => {
 	} = useContext(Store);
 	const { isLoading, error } = useGetWallets(walletPaginatorIndex);
 	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
+	const isLedger = walletType === 'Ledger';
 	return (
 		<OnBoardingPageContainer>
 			<Content>
@@ -156,6 +159,18 @@ const WalletConnection = ({ t }) => {
 					</ErrorContainer>
 				) : (
 					<BodyContent>
+						{isLedger && (
+							<SelectWrapper>
+								<SimpleSelect
+									options={LEDGER_DERIVATION_PATHS}
+									value={derivationPath || LEDGER_DERIVATION_PATHS[0]}
+									onChange={option => {
+										setSigner({ type: 'Ledger', networkId, derivationPath: option.value });
+										setDerivationPath(option, dispatch);
+									}}
+								></SimpleSelect>
+							</SelectWrapper>
+						)}
 						<ListContainer>
 							{!isLoading ? (
 								<ListInner>
