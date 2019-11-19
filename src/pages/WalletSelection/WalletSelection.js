@@ -334,7 +334,7 @@ const WalletConnectionH1 = styled(H1)`
 
 const WalletConnectionPMega = styled(PMega)`
 	font-size: 22px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	text-align: center;
 	line-height: 32px;
 `;

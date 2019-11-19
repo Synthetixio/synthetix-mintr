@@ -27,12 +27,12 @@ const Button = styled.button`
 	cursor: pointer;
 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
 	transition: all ease-in 0.1s;
-	&:hover:not(:disabled) {
-		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
-	}
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+	}
+	&:hover:not(:disabled) {
+		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
 	}
 `;
 
