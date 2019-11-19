@@ -38,7 +38,7 @@
 		"test": "node scripts/test.js",
 		"i18n-extract": "cp nodes",
 		"lint": "eslint .",
-		"lint:css":"stylelint src/**/**/*.js",
+		"lint:css": "stylelint src/**/**/*.js",
 		"format": "prettier --write '**/*.js'"
 	},
 	"eslintConfig": {
