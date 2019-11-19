@@ -168,7 +168,6 @@ const Button = styled.button`
 const Link = styled('button')`
 	cursor: pointer;
 	color: ${COLORS.buttonLight};
-	underline: none;
 	text-transform: uppercase;
 	padding: 0;
 	border: none;

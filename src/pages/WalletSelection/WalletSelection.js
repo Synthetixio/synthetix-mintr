@@ -9,6 +9,7 @@ import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus, updateWalletPaginatorIndex } from '../../ducks/wallet';
 
+import { SimpleInput } from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import {
 	List,
@@ -188,12 +189,7 @@ const WalletConnection = ({ t }) => {
 																if (isHardwareWallet) {
 																	snxJSConnector.signer.setAddressIndex(walletIndex);
 																}
-																updateWalletStatus(
-																	{
-																		currentWallet: wallet.address,
-																	},
-																	dispatch
-																);
+																updateWalletStatus({ currentWallet: wallet.address }, dispatch);
 																updateCurrentPage('main', dispatch);
 															}}
 														>
@@ -235,6 +231,25 @@ const WalletConnection = ({ t }) => {
 												})}
 										</ListBody>
 									</List>
+									{location.href.includes('walletAddress') && (
+										<AddWalletForm
+											onSubmit={e => {
+												e.preventDefault();
+												const walletAddress = e.target.walletAddress.value;
+												updateWalletStatus({ currentWallet: walletAddress }, dispatch);
+												updateCurrentPage('main', dispatch);
+											}}
+										>
+											<AddWalletInput
+												name={'walletAddress'}
+												required
+												placeholder={t('onboarding.walletSelection.addWallet.placeholder')}
+											/>
+											<ButtonPrimaryMedium type="submit">
+												{t('onboarding.walletSelection.addWallet.buttonText')}
+											</ButtonPrimaryMedium>
+										</AddWalletForm>
+									)}
 								</ListInner>
 							) : (
 								<Spinner />
@@ -265,7 +280,6 @@ const HeadingContent = styled.div`
 `;
 
 const BodyContent = styled.div`
-	width: 80%;
 	margin: 50px auto 0 auto;
 	max-width: 1400px;
 	display: flex;
@@ -290,6 +304,20 @@ const ErrorHeading = styled.div`
 	display: flex;
 `;
 
+const AddWalletForm = styled.form`
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+`;
+const AddWalletInput = styled(SimpleInput)`
+	margin-right: 10px;
+	flex-grow: 1;
+	& > div {
+		height: 48px;
+		margin: 0;
+	}
+`;
+
 const Content = styled.div`
 	width: 100%;
 	display: flex;
@@ -306,7 +334,7 @@ const WalletConnectionH1 = styled(H1)`
 
 const WalletConnectionPMega = styled(PMega)`
 	font-size: 22px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	text-align: center;
 	line-height: 32px;
 `;

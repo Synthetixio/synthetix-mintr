@@ -39,7 +39,6 @@ const ButtonClose = styled.button`
 	cursor: pointer;
 	background-color: transparent;
 	border: none;
-	// 210 210 210 60
 `;
 
 export default Popup;

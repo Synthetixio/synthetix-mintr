@@ -27,15 +27,15 @@ const Button = styled.button`
 		${props =>
 			props.isSelected ? props.theme.colorStyles.accentDark : props.theme.colorStyles.menu};
 	color: ${props => props.theme.colorStyles.subtext};
+	&:disabled {
+		opacity: 0.3;
+	}
 	&:hover:not(:disabled),
 	&:focus:not(:disabled) {
 		background-color: ${props => props.theme.colorStyles.borders};
 		border-bottom: 8px solid
 			${props =>
 				props.isSelected ? props.theme.colorStyles.accentDark : props.theme.colorStyles.borders};
-	}
-	&:disabled {
-		opacity: 0.3;
 	}
 `;
 
