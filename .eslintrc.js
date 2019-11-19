@@ -17,7 +17,6 @@ module.exports = {
 		'no-debugger': 'off',
 		'import/no-unresolved': 2,
 		'no-undef': 2,
-		quotes: [2, 'single'],
 		'comma-dangle': [2, 'always-multiline'],
 		'react/jsx-no-undef': 2,
 		'react/jsx-uses-react': 2,
