@@ -1,16 +1,22 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import snxJSConnector from '../../helpers/snxJSConnector';
+import snxJSConnector, { setSigner } from '../../helpers/snxJSConnector';
 import { withTranslation, useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
 import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
-import { updateWalletStatus, updateWalletPaginatorIndex } from '../../ducks/wallet';
+import {
+	updateWalletStatus,
+	updateWalletPaginatorIndex,
+	setDerivationPath,
+} from '../../ducks/wallet';
 
 import { SimpleInput } from '../../components/Input';
 import Spinner from '../../components/Spinner';
+import SimpleSelect from '../../components/SimpleSelect';
+
 import {
 	List,
 	ListHead,
@@ -31,6 +37,7 @@ const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
 	{ value: "44'/60'/0'/0", label: "Ethereum - Ledger Live - m/44'/60'" },
 ];
+const useGetWallets = (paginatorIndex, derivationPath) => {
 	const {
 		state: {
 			wallet: { availableWallets = [] },
@@ -39,6 +46,7 @@ const LEDGER_DERIVATION_PATHS = [
 	} = useContext(Store);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
+
 	useEffect(() => {
 		const walletIndex = paginatorIndex * WALLET_PAGE_SIZE;
 		if (availableWallets[walletIndex]) return;
@@ -91,7 +99,7 @@ const LEDGER_DERIVATION_PATHS = [
 		};
 		getWallets();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [paginatorIndex]);
+	}, [paginatorIndex, derivationPath]);
 	return { isLoading, error };
 };
 
@@ -139,11 +147,18 @@ const Heading = ({ hasLoaded, error }) => {
 const WalletConnection = ({ t }) => {
 	const {
 		state: {
-			wallet: { walletType, walletPaginatorIndex = 0, availableWallets = [], networkName },
+			wallet: {
+				derivationPath,
+				walletType,
+				walletPaginatorIndex = 0,
+				availableWallets = [],
+				networkName,
+				networkId,
+			},
 		},
 		dispatch,
 	} = useContext(Store);
-	const { isLoading, error } = useGetWallets(walletPaginatorIndex);
+	const { isLoading, error } = useGetWallets(walletPaginatorIndex, derivationPath);
 	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
 	const isLedger = walletType === 'Ledger';
 	return (
@@ -283,6 +298,10 @@ const WalletConnection = ({ t }) => {
 		</OnBoardingPageContainer>
 	);
 };
+
+const SelectWrapper = styled.div`
+	width: 400px;
+`;
 
 const HeadingContent = styled.div`
 	width: 50%;
