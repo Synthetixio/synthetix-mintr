@@ -12,7 +12,12 @@ export default (state, action) => {
 			return { ...state, walletPaginatorIndex: action.payload };
 		}
 		case SET_DERIVATION_PATH: {
-			return { ...state, derivationPath: action.payload };
+			return {
+				...state,
+				derivationPath: action.payload,
+				availableWallets: [],
+				walletPaginatorIndex: 0,
+			};
 		}
 		default:
 			return state;

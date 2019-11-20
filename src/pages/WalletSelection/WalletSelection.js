@@ -35,7 +35,7 @@ import { ButtonPrimaryMedium } from '../../components/Button';
 const WALLET_PAGE_SIZE = 5;
 const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
-	{ value: "44'/60'/0'/0", label: "Ethereum - Ledger Live - m/44'/60'" },
+	{ value: "44'/60'/0'/0/0", label: "Ethereum - Ledger Live - m/44'/60'/0'/0" },
 ];
 const useGetWallets = (paginatorIndex, derivationPath) => {
 	const {
@@ -46,7 +46,6 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 	} = useContext(Store);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
-
 	useEffect(() => {
 		const walletIndex = paginatorIndex * WALLET_PAGE_SIZE;
 		if (availableWallets[walletIndex]) return;
@@ -161,6 +160,9 @@ const WalletConnection = ({ t }) => {
 	const { isLoading, error } = useGetWallets(walletPaginatorIndex, derivationPath);
 	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
 	const isLedger = walletType === 'Ledger';
+	const selectedDerivationPath = derivationPath
+		? LEDGER_DERIVATION_PATHS.find(path => path.value === derivationPath)
+		: LEDGER_DERIVATION_PATHS[0];
 	return (
 		<OnBoardingPageContainer>
 			<Content>
@@ -177,12 +179,13 @@ const WalletConnection = ({ t }) => {
 						{isLedger && (
 							<SelectWrapper>
 								<SimpleSelect
+									isDisabled={isLoading}
 									searchable={false}
 									options={LEDGER_DERIVATION_PATHS}
-									value={derivationPath || LEDGER_DERIVATION_PATHS[0]}
+									value={selectedDerivationPath}
 									onChange={option => {
 										setSigner({ type: 'Ledger', networkId, derivationPath: option.value });
-										setDerivationPath(option, dispatch);
+										setDerivationPath(option.value, dispatch);
 									}}
 								></SimpleSelect>
 							</SelectWrapper>
