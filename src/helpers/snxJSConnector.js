@@ -1,8 +1,6 @@
 import { SynthetixJs } from 'synthetix-js';
 import { getEthereumNetwork, INFURA_JSON_RPC_URLS } from './networkHelper';
 
-const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
-
 let snxJSConnector = {
 	initialized: false,
 	signers: SynthetixJs.signers,
@@ -88,11 +86,11 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 		unlocked: true,
 		networkId,
 		networkName: networkName.toLowerCase(),
-		derivationPath: walletType === 'Ledger' ? DEFAULT_LEDGER_DERIVATION_PATH : null,
 	};
 };
 
 const getSignerConfig = ({ type, networkId, derivationPath }) => {
+	const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
 	if (type === 'Ledger') {
 		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
 	}
