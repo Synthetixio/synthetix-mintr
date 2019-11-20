@@ -90,8 +90,8 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 };
 
 const getSignerConfig = ({ type, networkId, derivationPath }) => {
-	const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
 	if (type === 'Ledger') {
+		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
 		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
 	}
 	if (type === 'Coinbase') {
