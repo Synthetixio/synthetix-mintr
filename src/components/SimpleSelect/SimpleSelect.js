@@ -12,18 +12,15 @@ export default function SimpleSelect(props) {
 	return (
 		<Select
 			styles={{
+				container: provided => ({
+					...provided,
+					opacity: props.isDisabled ? 0.4 : 1,
+				}),
 				singleValue: provided => ({
 					...provided,
 					color: colorStyles.heading,
 					boxShadow: 'none',
 					border: 'none',
-					'&:hover': {
-						opacity: 0.2,
-					},
-				}),
-				container: provided => ({
-					...provided,
-					opacity: props.isDisabled ? 0.4 : 1,
 				}),
 				control: provided => ({
 					...provided,

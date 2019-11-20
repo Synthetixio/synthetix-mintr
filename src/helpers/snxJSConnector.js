@@ -88,7 +88,7 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 		unlocked: true,
 		networkId,
 		networkName: networkName.toLowerCase(),
-		derivationPath: DEFAULT_LEDGER_DERIVATION_PATH,
+		derivationPath: walletType === 'Ledger' ? DEFAULT_LEDGER_DERIVATION_PATH : null,
 	};
 };
 
