@@ -54,7 +54,7 @@ const useGetFeeData = walletAddress => {
 							snxJSConnector.snxJS.FeePool.recentFeePeriods(period)
 						)
 					),
-					snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress, sUSDBytes),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(xdrBytes),
 				]);

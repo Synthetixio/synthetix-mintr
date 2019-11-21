@@ -34,7 +34,7 @@ const getPrices = async () => {
 const getRewards = async walletAddress => {
 	try {
 		const [feesAreClaimable, currentFeePeriod, feePeriodDuration] = await Promise.all([
-			snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+			snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 			snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
 			snxJSConnector.snxJS.FeePool.feePeriodDuration(),
 		]);
