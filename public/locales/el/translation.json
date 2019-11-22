@@ -11,7 +11,7 @@
 			},
 			"whyStakeSnx": {
 				"title": "Γιατί να κάνετε stake τα SNX;",
-				"description": "Όσοι κάνουν stake τα SNX λαμβάνουν δύο είδη ανταμοιβών. Πρώτον, λαμβάνουν νέα SNX, τα οποία δημιουργούνται μέσω της πληθωριστικής νομισματικής πολιτικής. Δεύτερον, ανταμοιβές συναλλαγών synths, οι οποίες δημιουργούνται από τις ανταλλαγές synths που γίνονται στο Synthetix.Exchange"
+				"description": "Όσοι κάνουν stake τα SNX λαμβάνουν δύο είδη ανταμοιβών. Πρώτον, λαμβάνουν νέα SNX, τα οποία δημιουργούνται μέσω της πληθωριστικής νομισματικής πολιτικής. Δεύτερον, λαμβάνουν ανταμοιβές συναλλαγών synths, οι οποίες δημιουργούνται από τις ανταλλαγές synths που γίνονται στο Synthetix.Exchange"
 			},
 			"howStakeSnx": {
 				"title": "Τι χρειάζεται να κάνουν όσοι κάνουν stake SNX;",
@@ -47,137 +47,137 @@
 	},
 	"dashboard": {
 		"header": {
-			"support": "Support"
+			"support": "Υποστήριξη"
 		},
 		"sections": {
-			"wallet": "Your wallet details:"
+			"wallet": "Τα στοιχεία του πορτοφολιού σας:"
 		},
 		"rewards": {
-			"open": "left to claim rewards",
-			"blocked": "Claiming rewards is <1>blocked</1>"
+			"open": "αριστερά για να λάβετε ανταμοιβές",
+			"blocked": "Οι ανταμοιβές ειναι <1>blocked</1>"
 		},
 		"ratio": {
-			"current": "Current collateralization ratio",
-			"target": "Target collateralization ratio"
+			"current": "Τρέχων αναλογία ασφάλειας",
+			"target": "Στόχος αναλογίας ασφάλειας"
 		},
 		"holdings": {
-			"title": "Total SNX:",
-			"locked": "Locked",
-			"transferable": "Transferable",
+			"title": "Σύνολο SNX:",
+			"locked": "Κλειδωμένα",
+			"transferable": "Μεταβιβάσιμα",
 			"staking": "Staked",
-			"nonStaking": "Not staked",
-			"escrowed": "Escrowed",
-			"nonEscrowed": "Not escrowed"
+			"nonStaking": "Όχι staked",
+			"escrowed": "Σε μεσεγγύηση",
+			"nonEscrowed": "Όχι σε μεσεγγύηση"
 		},
 		"table": {
-			"debt": "Debt",
+			"debt": "Χρέος",
 			"synths": "Synths",
-			"balance": "Balance"
+			"balance": "Υπόλοιπο"
 		},
 		"buttons": {
-			"exchange": "Go to Synthetix.Exchange",
-			"synthetixDashboard": "View prices on Dashboard",
-			"refresh": "Refresh"
+			"exchange": "Μετάβαση στο Synthetix.Exchange",
+			"synthetixDashboard": "Προβολή τιμών στο Dashboard",
+			"refresh": "Ανανέωση"
 		}
 	},
 	"mainNavigation": {
 		"tabs": {
-			"home": "Home",
-			"depot": "Depot",
-			"transactionsHistory": "Transactions",
-			"escrow": "Escrow"
+			"home": "Αρχική",
+			"depot": "Σταθμός",
+			"transactionsHistory": "Συναλλαγές",
+			"escrow": "Μεσεγγύηση"
 		}
 	},
 	"home": {
 		"intro": {
-			"title": "What would you like to do?"
+			"title": "Τι θα θέλατε να κάνετε;"
 		},
 		"actions": {
 			"mint": {
-				"title": "Mint",
-				"description": "Mint sUSD by staking SNX"
+				"title": "Παραγωγή",
+				"description": "Παράξτε sUSD κάνοντας stake SNX"
 			},
 			"burn": {
-				"title": "Burn",
-				"description": "Burn sUSD to unlock staked SNX"
+				"title": "Κάψιμο",
+				"description": "Κάψτε sUSD για να ξεκλειδώστε staked SNX"
 			},
 			"claim": {
-				"title": "Claim",
-				"description": "Claim rewards from SNX staking and Synth exchanges"
+				"title": "Αξίωση",
+				"description": "Διεκδικήστε ανταμοιβές από το SNX και τις ανταλλαγές Synths"
 			},
 			"trade": {
-				"title": "Trade",
-				"description": "Trade any Synth to sUSD"
+				"title": "Ανταλλαγή",
+				"description": "Ανταλλάξτε οποιοδήποτε Synth με το sUSD"
 			},
 			"transfer": {
-				"title": "Transfer",
-				"description": "Transfer SNX, Synths, or ETH"
+				"title": "Μεταφορά",
+				"description": "Μεταφορά SNX, Synths ή ETH"
 			}
 		}
 	},
 	"mintrActions": {
 		"mint": {
 			"action": {
-				"title": "Mint",
-				"subtitle": "Mint sUSD by staking your SNX. This gives you a Collateralization Ratio and a debt, allowing you to earn staking rewards.",
-				"instruction": "Confirm or enter amount to mint:",
+				"title": "Παραγωγή",
+				"subtitle": "Παράξτε sUSD κάνοντας Stake τα SNX σας. Έτσι θα αποκτήσετε αναλογία ασφαλείας και χρέος, επιτρέποντας σας να κερδίζετε ανταμοιβές από το staking.",
+				"instruction": "Επιβεβαιώστε ή εισαγάγετε το ποσό που θέλετε να παράγετε:",
 				"buttons": {
-					"mint": "Mint now"
+					"mint": "Παράξτε"
 				}
 			},
 			"confirmation": {
-				"actionDescription": "Minting",
+				"actionDescription": "Παραγωγή",
 				"subActionDescription": "Staking"
 			},
 			"complete": {
-				"title": "Minting in progress!"
+				"title": "Παραγωγή σε εξέλιξη!"
 			}
 		},
 		"burn": {
 			"action": {
-				"title": "Burn",
-				"subtitle": "Burn sUSD to unlock your staked SNX. This increases your Collateralization Ratio and reduces your debt, allowing you to transfer your non-escrowed SNX.",
-				"instruction": "Confirm or enter amount to burn:",
+				"title": "Κάψιμο",
+				"subtitle": "Κάψε sUSD για να ξεκλειδώσετε SNX. Αυτό αυξάνει την αναλογία ασφάλειας και μειώνει το χρέος σας, επιτρέποντάς σας να μεταφέρετε SNX που δεν βρίσκονται σε μεσεγγύηση.",
+				"instruction": "Επιβεβαιώστε ή εισαγετε ποσό για κάψιμο:",
 				"transferrable": {
-					"title": "Transferable SNX being unlocked:",
-					"button": "View transferable SNX"
+					"title": "Μεταβιβάσιμα SNX που ξεκλειδώνονται:",
+					"button": "Προβολή μεταβιβάσιμων SNX"
 				},
 				"buttons": {
-					"burn": "Burn now"
+					"burn": "Κάψτε"
 				}
 			},
 			"confirmation": {
-				"actionDescription": "Burning",
-				"subActionDescription": "Unlocking"
+				"actionDescription": "Καύση",
+				"subActionDescription": "Ξεκλείδωμα"
 			},
 			"complete": {
-				"title": "Burning in progress!"
+				"title": "Κάψιμο σε εξέλιξη!"
 			}
 		},
 		"claim": {
 			"action": {
-				"title": "Claim",
-				"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to collect two kinds of rewards: SNX staking rewards, and Synth exchange rewards generated on Synthetix.Exchange.",
+				"title": "Αξίωση",
+				"subtitle": "Αν έχετε κάνει stake τα SNX σας και έχετε παράγει sUSD, είστε επιλέξιμοι για να συλλέξετε δύο είδη ανταμοιβών: SNX staking ανταμοιβές, και ανταμοιβές ανταλλαγής Synths που δημιουργούνται στο Synthetix.Exchange.",
 				"table": {
-					"title": "Claimable periods:",
-					"period": "Period",
-					"status": "Claim status",
-					"open": "Open",
-					"blocked": "Blocked"
+					"title": "Περίοδοι:",
+					"period": "Περίοδος",
+					"status": "Κατάσταση αξίωσης",
+					"open": "Ανοιχτή",
+					"blocked": "Σε αποκλεισμό"
 				},
-				"tradingRewards": "Your available Synth exchange rewards:",
-				"stakingRewards": "Your available SNX staking rewards:",
+				"tradingRewards": "Οι διαθέσιμες ανταμοιβές σας από τις συναλλαγές synths:",
+				"stakingRewards": "Οι διαθέσιμες ανταμοιβές σας από το SNX staking:",
 				"buttons": {
-					"claim": "Claim now",
-					"history": "Claim History"
+					"claim": "Αξιώστε τώρα",
+					"history": "Ιστορικό αξιώσεων"
 				},
-				"note": "Note: if not collected within two periods, your rewards will be forfeited and rolled over into the fee pool."
+				"note": "Σημείωση: αν δεν συλλεχθούν εντός δύο περιόδων, οι ανταμοιβές σας θα χαθούν και θα μετακυλήσουν στην δεξαμενή τελών."
 			},
 			"confirmation": {
-				"actionDescription": "Claiming:"
+				"actionDescription": "Αξίωση:"
 			},
 			"complete": {
-				"title": "Claiming in progress!"
+				"title": "Αξίωση σε εξέλιξη!"
 			}
 		},
 		"trade": {
