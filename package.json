@@ -28,12 +28,12 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-js": "2.13.1",
+		"synthetix-js": "2.13.1-1",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
 		"clean-install": "rm ./package-lock.json && rm -rf node_modules/* && npm i",
-		"start": "node scripts/start.js",
+		"start": "node --max-old-space-size=4096 scripts/start.js",
 		"build": "node scripts/build.js",
 		"test": "node scripts/test.js",
 		"i18n-extract": "cp nodes",
