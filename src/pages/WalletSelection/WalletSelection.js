@@ -35,7 +35,7 @@ import { ButtonPrimaryMedium } from '../../components/Button';
 const WALLET_PAGE_SIZE = 5;
 const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
-	{ value: "44'/60'/0'/0/0", label: "Ethereum - Ledger Live - m/44'/60'/0'/0" },
+	{ value: "44'/60'/", label: "Ethereum - Ledger Live - m/44'/60'" },
 ];
 const useGetWallets = (paginatorIndex, derivationPath) => {
 	const {
@@ -53,7 +53,7 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 		const getWallets = async () => {
 			try {
 				const results = await snxJSConnector.signer.getNextAddresses(walletIndex, WALLET_PAGE_SIZE);
-
+				if (!results) throw new Error('Could not get addresses from wallet');
 				const nextWallets = results.map(address => {
 					return {
 						address,
@@ -184,6 +184,7 @@ const WalletConnection = ({ t }) => {
 									options={LEDGER_DERIVATION_PATHS}
 									value={selectedDerivationPath}
 									onChange={option => {
+										if (option.value === derivationPath) return;
 										setSigner({ type: 'Ledger', networkId, derivationPath: option.value });
 										setDerivationPath(option.value, dispatch);
 									}}
