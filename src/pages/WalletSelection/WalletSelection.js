@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import snxJSConnector, { setSigner } from '../../helpers/snxJSConnector';
+import snxJSConnector from '../../helpers/snxJSConnector';
 import { withTranslation, useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
@@ -10,7 +10,7 @@ import { updateCurrentPage } from '../../ducks/ui';
 import {
 	updateWalletStatus,
 	updateWalletPaginatorIndex,
-	setDerivationPath,
+	derivationPathChange,
 } from '../../ducks/wallet';
 
 import { SimpleInput } from '../../components/Input';
@@ -185,8 +185,12 @@ const WalletConnection = ({ t }) => {
 									value={selectedDerivationPath}
 									onChange={option => {
 										if (option.value === derivationPath) return;
-										setSigner({ type: 'Ledger', networkId, derivationPath: option.value });
-										setDerivationPath(option.value, dispatch);
+										const signerOptions = {
+											type: 'Ledger',
+											networkId,
+											derivationPath: option.value,
+										};
+										derivationPathChange(signerOptions, option.value, dispatch);
 									}}
 								></SimpleSelect>
 							</SelectWrapper>
