@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"author": "Synthetix",
 	"dependencies": {
+		"@rehooks/component-size": "^1.0.3",
 		"date-fns": "^2.0.1",
 		"ethers": "4.0.38",
 		"i18next": "^17.0.4",
