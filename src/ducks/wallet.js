@@ -1,5 +1,3 @@
-import { setSigner } from '../helpers/snxJSConnector';
-
 const UPDATE_WALLET_STATUS = 'WALLET/UPDATE_WALLET_STATUS';
 const UPDATE_WALLET_PAGINATOR_INDEX = 'WALLET/UPDATE_WALLET_PAGINATOR_INDEX';
 const SET_DERIVATION_PATH = 'WALLET/SET_DERIVATION_PATH';
@@ -27,16 +25,11 @@ export default (state, action) => {
 };
 
 // Actions
-const setDerivationPath = (path, dispatch) => {
+export const setDerivationPath = (path, dispatch) => {
 	return dispatch({
 		type: SET_DERIVATION_PATH,
 		payload: path,
 	});
-};
-export const derivationPathChange = (signerOptions, derivationPath, dispatch) => {
-	setSigner(signerOptions);
-	localStorage.setItem('derivationPath', derivationPath);
-	return setDerivationPath(derivationPath, dispatch);
 };
 export const updateWalletStatus = (walletStatus, dispatch) => {
 	return dispatch({

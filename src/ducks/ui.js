@@ -8,6 +8,7 @@ export default (state, action) => {
 	switch (action.type) {
 		case TOGGLE_THEME: {
 			const themeIsDark = action.payload;
+			localStorage.setItem('dark', JSON.stringify(themeIsDark));
 			return { ...state, themeIsDark };
 		}
 		case UPDATE_CURRENT_PAGE: {
@@ -28,8 +29,6 @@ export default (state, action) => {
 
 // Actions
 export const toggleTheme = (themeIsDark, dispatch) => {
-	localStorage.setItem('dark', JSON.stringify(themeIsDark));
-
 	return dispatch({
 		type: TOGGLE_THEME,
 		payload: themeIsDark,
