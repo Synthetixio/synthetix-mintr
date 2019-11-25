@@ -17,7 +17,6 @@ const initialState = {
 		unlocked: false,
 		walletPaginatorIndex: 0,
 		availableWallets: [],
-		derivationPath: localStorage.getItem('derivationPath'),
 	},
 	transactions: {
 		currentTransactions: [],
