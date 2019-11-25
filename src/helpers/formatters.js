@@ -15,3 +15,5 @@ export const shortenAddress = address => {
 export const bytesFormatter = input => snxJSConnector.ethersUtils.formatBytes32String(input);
 
 export const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
+
+export const getAddress = addr => snxJSConnector.ethersUtils.getAddress(addr);
