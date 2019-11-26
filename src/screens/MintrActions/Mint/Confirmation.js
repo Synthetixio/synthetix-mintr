@@ -8,6 +8,7 @@ import { ButtonTertiary } from '../../../components/Button';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
+import { getStakingAmount } from './mint-helpers';
 
 const Confirmation = ({ t, goBack, walletType, mintAmount, issuanceRatio, SNXPrice }) => {
 	return (
@@ -38,7 +39,12 @@ const Confirmation = ({ t, goBack, walletType, mintAmount, issuanceRatio, SNXPri
 								{t('mintrActions.mint.confirmation.subActionDescription')}
 							</DataHeaderLarge>
 							<Amount>
-								{issuanceRatio ? formatCurrency(mintAmount / issuanceRatio / SNXPrice) : '--'} SNX
+								{getStakingAmount({
+									issuanceRatio,
+									mintAmount,
+									SNXPrice,
+								})}
+								{' SNX'}
 							</Amount>
 						</Box>
 					</Details>

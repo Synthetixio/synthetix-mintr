@@ -8,7 +8,7 @@ import { ButtonPrimary, ButtonTertiary, ButtonMax } from '../../../components/Bu
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
-import { formatCurrency } from '../../../helpers/formatters';
+import { getStakingAmount } from './mint-helpers';
 
 const Action = ({
 	t,
@@ -56,10 +56,12 @@ const Action = ({
 					<StakedSNXRow>
 						<Subtext mr={'10px'}>{t('mintrActions.mint.action.staking')}:</Subtext>
 						<Subtext>
-							{issuanceRatio && mintAmount
-								? formatCurrency(mintAmount / issuanceRatio / SNXPrice)
-								: '0'}{' '}
-							SNX
+							{getStakingAmount({
+								issuanceRatio,
+								mintAmount,
+								SNXPrice,
+							})}
+							{' SNX'}
 						</Subtext>
 					</StakedSNXRow>
 				</Top>
