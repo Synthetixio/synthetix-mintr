@@ -27,7 +27,7 @@ const convertFromSynth = (fromSynthRate, toSynthRate) => {
 export const getSusdInUsd = (synthRates, sethToEthRate) => {
 	const sEth = convertFromSynth(synthRates.susd, synthRates.seth);
 	const eth = sEth * sethToEthRate;
-	return eth * synthRates.eth;
+	return eth * synthRates.seth;
 };
 const getSETHtoETH = async () => {
 	const exchangeAddress = '0xe9cf7887b93150d4f2da7dfc6d502b216438f244';
@@ -39,9 +39,8 @@ const getSETHtoETH = async () => {
 
 const getPrices = async () => {
 	try {
-		// sETH seems to be the same as ETH??
 		const synthsP = snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
-			['SNX', 'sUSD', 'ETH', 'sETH'].map(bytesFormatter)
+			['SNX', 'sUSD', 'sETH'].map(bytesFormatter)
 		);
 		const sethToEthRateP = getSETHtoETH();
 		const [synths, sethToEthRate] = await Promise.all([synthsP, sethToEthRateP]);
