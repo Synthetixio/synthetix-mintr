@@ -1,3 +1,5 @@
+import { getAddress } from '../helpers/formatters';
+
 const UPDATE_WALLET_STATUS = 'WALLET/UPDATE_WALLET_STATUS';
 const UPDATE_WALLET_PAGINATOR_INDEX = 'WALLET/UPDATE_WALLET_PAGINATOR_INDEX';
 const SET_DERIVATION_PATH = 'WALLET/SET_DERIVATION_PATH';
@@ -34,7 +36,10 @@ export const setDerivationPath = (path, dispatch) => {
 export const updateWalletStatus = (walletStatus, dispatch) => {
 	return dispatch({
 		type: UPDATE_WALLET_STATUS,
-		payload: walletStatus,
+		payload: {
+			...walletStatus,
+			currentWallet: walletStatus.currentWallet ? getAddress(walletStatus.currentWallet) : null,
+		},
 	});
 };
 
