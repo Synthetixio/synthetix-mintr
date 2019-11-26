@@ -5,9 +5,10 @@ import { withTranslation } from 'react-i18next';
 import { SlidePage } from '../../../components/ScreenSlider';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import { ButtonPrimary, ButtonTertiary, ButtonMax } from '../../../components/Button';
-import { PLarge, H1 } from '../../../components/Typography';
+import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
+import { formatCurrency } from '../../../helpers/formatters';
 
 const Action = ({
 	t,
@@ -18,6 +19,8 @@ const Action = ({
 	setMintAmount,
 	isFetchingGasLimit,
 	gasEstimateError,
+	issuanceRatio,
+	SNXPrice,
 }) => {
 	return (
 		<SlidePage>
@@ -25,12 +28,14 @@ const Action = ({
 				<Navigation>
 					<ButtonTertiary onClick={onDestroy}>{t('button.navigation.cancel')}</ButtonTertiary>
 				</Navigation>
+
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/mint.svg" big />
 						<H1>{t('mintrActions.mint.action.title')}</H1>
 						<PLarge>{t('mintrActions.mint.action.subtitle')}</PLarge>
 					</Intro>
+
 					<Form>
 						<PLarge>{t('mintrActions.mint.action.instruction')}</PLarge>
 						<Input
@@ -48,9 +53,18 @@ const Action = ({
 						/>
 						<ErrorMessage message={gasEstimateError} />
 					</Form>
+					<StakedSNXRow>
+						<Subtext mr={'10px'}>{t('mintrActions.mint.action.staking')}:</Subtext>
+						<Subtext>
+							{issuanceRatio && mintAmount
+								? formatCurrency(mintAmount / issuanceRatio / SNXPrice)
+								: '0'}{' '}
+							SNX
+						</Subtext>
+					</StakedSNXRow>
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicatorNoTopMargin />
 					<ButtonPrimary
 						disabled={isFetchingGasLimit || gasEstimateError}
 						onClick={onMint}
@@ -92,6 +106,15 @@ const Bottom = styled.div`
 	margin-bottom: 64px;
 `;
 
+const TransactionPriceIndicatorNoTopMargin = styled(TransactionPriceIndicator)`
+	margin-top: 0;
+`;
+
+const StakedSNXRow = styled.div`
+	display: flex;
+	justify-content: center;
+`;
+
 const Navigation = styled.div`
 	width: 100%;
 	display: flex;
@@ -112,7 +135,7 @@ const ActionImage = styled.img`
 
 const Form = styled.div`
 	width: 400px;
-	margin: 0px 0px 80px 0px;
+	margin: 0px 0px 10px 0px;
 `;
 
 export default withTranslation()(Action);
