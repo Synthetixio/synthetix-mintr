@@ -5,7 +5,7 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { PLarge } from '../Typography';
 import i18n from 'i18next';
 
-const SUPPORTED_LANGUAGES = ['en', 'es', 'ru', 'zh', 'zh-tw'];
+const SUPPORTED_LANGUAGES = ['en', 'es', 'ru', 'zh-CN', 'zh-TW'];
 
 const codeToLang = code => {
 	switch (code) {
@@ -17,9 +17,9 @@ const codeToLang = code => {
 			return 'Spanish';
 		case 'ru':
 			return 'Russian';
-		case 'zh':
-			return 'Chinese';
-		case 'zh-tw':
+		case 'zh-CN':
+			return 'Chinese (Simplified)';
+		case 'zh-TW':
 			return 'Chinese (Traditional)';
 	}
 };
