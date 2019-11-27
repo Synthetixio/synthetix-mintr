@@ -128,7 +128,7 @@ const Action = ({
 					</Details>
 				</Middle>
 				<Bottom>
-					<TransactionPriceIndicator style={{ margin: '10px 0' }} />
+					<TransactionPriceIndicator style={{ margin: '0' }} />
 					<ButtonPrimary
 						disabled={!feesAreClaimable || isFetchingGasLimit || gasEstimateError}
 						onClick={onClaim}
@@ -144,7 +144,7 @@ const Action = ({
 		</SlidePage>
 	);
 };
-
+const WrapTableBreakpoint = 1310;
 const Container = styled.div`
 	width: 100%;
 	height: 850px;
@@ -171,6 +171,9 @@ const Middle = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		flex-direction: column;
+	}
 `;
 
 const Bottom = styled.div`
@@ -201,6 +204,9 @@ const Schedule = styled.div`
 	margin: 8px 16px 8px 0px;
 	padding: 24px 16px 0 16px;
 	text-align: left;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		width: 100%;
+	}
 `;
 
 const Status = styled.div`
@@ -220,6 +226,16 @@ const Details = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 40%;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		flex-direction: row;
+		width: 100%;
+		justify-content: space-between;
+		> div {
+			width: calc(50% - 8px);
+			padding-top: 16px;
+			padding-bottom: 16px;
+		}
+	}
 `;
 
 const Box = styled.div`
@@ -248,7 +264,7 @@ const Highlighted = styled.span`
 `;
 
 const Note = styled.div`
-	margin-top: 24px;
+	margin-top: 16px;
 	max-width: 420px;
 `;
 
