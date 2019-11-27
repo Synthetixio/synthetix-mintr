@@ -47,7 +47,6 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	useEffect(() => {
-		const sUSDBytes = bytesFormatter('sUSD');
 		if (!mintAmount) return;
 		const getGasEstimate = async () => {
 			setError(null);
@@ -58,12 +57,9 @@ const useGetGasEstimate = (mintAmount, issuableSynths) => {
 				if (mintAmount <= 0 || mintAmount > issuableSynths)
 					throw new Error('input.error.notEnoughToMint');
 				if (mintAmount === issuableSynths) {
-					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths(
-						sUSDBytes
-					);
+					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueMaxSynths();
 				} else {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.issueSynths(
-						sUSDBytes,
 						snxJSConnector.utils.parseEther(mintAmount.toString())
 					);
 				}
@@ -109,13 +105,9 @@ const Mint = ({ onDestroy }) => {
 			handleNext(1);
 			let transaction;
 			if (mintAmount === issuableSynths) {
-				transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(
-					sUSDBytes,
-					transactionSettings
-				);
+				transaction = await snxJSConnector.snxJS.Synthetix.issueMaxSynths(transactionSettings);
 			} else {
 				transaction = await snxJSConnector.snxJS.Synthetix.issueSynths(
-					sUSDBytes,
 					snxJSConnector.utils.parseEther(mintAmount.toString()),
 					transactionSettings
 				);
