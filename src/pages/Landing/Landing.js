@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
 import { withTranslation, useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
@@ -12,6 +13,7 @@ import { updateWalletStatus } from '../../ducks/wallet';
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
+import Logo from '../../components/Logo';
 
 import { Globe } from '../../components/Icons';
 
@@ -25,8 +27,7 @@ const SLIDE_COUNT = 4;
 const onWalletClick = (wallet, dispatch) => {
 	return async () => {
 		const walletStatus = await connectToWallet(wallet);
-
-		updateWalletStatus(walletStatus, dispatch);
+		updateWalletStatus({ ...walletStatus, availableWallets: [] }, dispatch);
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === 'Metamask') {
 				onMetamaskAccountChange(async () => {
@@ -46,7 +47,7 @@ const onWalletClick = (wallet, dispatch) => {
 	};
 };
 
-const OnBoardingCarousel = ({ pageIndex }) => {
+const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 	const { t } = useTranslation();
 	const {
 		state: {
@@ -61,6 +62,7 @@ const OnBoardingCarousel = ({ pageIndex }) => {
 				showThumbs={false}
 				showStatus={false}
 				interval={10000}
+				onChange={position => setPageIndex(position)}
 				autoplay
 			>
 				<CarouselSlide>
@@ -116,7 +118,7 @@ const WalletButtons = () => {
 				const noMetamask = wallet === 'Metamask' && !hasWeb3();
 				return (
 					<Button disabled={noMetamask} key={wallet} onClick={onWalletClick(wallet, dispatch)}>
-						<Icon src={`images/wallets/${wallet}.svg`} />
+						<Icon src={`images/wallets/${wallet.toLowerCase()}.svg`} />
 						<WalletConnectionH2>{wallet}</WalletConnectionH2>
 					</Button>
 				);
@@ -128,16 +130,12 @@ const WalletButtons = () => {
 const Landing = ({ t }) => {
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
-	const {
-		state: {
-			ui: { themeIsDark },
-		},
-	} = useContext(Store);
+
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
 				<Header>
-					<Logo src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
+					<Logo />
 					<LanguageButtonWrapper>
 						<RoundButton onClick={() => setFlagVisibility(true)}>
 							<Globe />
@@ -149,7 +147,7 @@ const Landing = ({ t }) => {
 						/>
 					</LanguageButtonWrapper>
 				</Header>
-				<OnBoardingCarousel pageIndex={pageIndex} />
+				<OnBoardingCarousel pageIndex={pageIndex} setPageIndex={setPageIndex} />
 				<ButtonRow>
 					<ButtonSecondary
 						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
@@ -173,7 +171,12 @@ const Landing = ({ t }) => {
 					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
-					<Link href="https://www.synthetix.io/uploads/synthetix_litepaper.pdf" target="_blank">
+					<Link
+						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
+							i18n.language === 'zh' ? '_mandarin' : ''
+						}.pdf`}
+						target="_blank"
+					>
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 				</BottomLinks>
@@ -307,11 +310,6 @@ const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-`;
-
-const Logo = styled.img`
-	width: 120px;
-	margin-right: 18px;
 `;
 
 const RoundButton = styled.button`

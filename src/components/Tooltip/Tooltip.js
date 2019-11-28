@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Info } from '../Icons';
 import { DataLarge } from '../Typography';
 
-const Tooltip = ({ content }) => {
+const Tooltip = ({ content, width }) => {
 	const [isVisible, setIsVisible] = useState(false);
 	return (
 		<Container>
@@ -13,7 +13,7 @@ const Tooltip = ({ content }) => {
 			>
 				<Info />
 			</IconContainer>
-			<Popup isVisible={isVisible}>
+			<Popup isVisible={isVisible} width={width}>
 				<DataLarge>{content}</DataLarge>
 			</Popup>
 		</Container>
@@ -43,7 +43,7 @@ const Popup = styled.div`
 	border-radius: ${props => (props.curved ? '40px' : '5px')};
 	padding: 10px;
 	top: calc(-10px);
-	width: 300px;
+	width: ${props => (props.width ? props.width : '300px')};
 	transform: translateY(-100%);
 	:after {
 		content: '';

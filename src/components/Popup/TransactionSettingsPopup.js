@@ -23,7 +23,7 @@ const RatesData = ({ gasInfo }) => {
 					return (
 						<Rates key={i}>
 							<DataHeaderLarge marginBottom="8px" style={{ textTransform: 'capitalize' }}>
-								{gas.speed}
+								{t(`transactionSettings.speed.${gas.speed}`)}
 							</DataHeaderLarge>
 							<DataLarge marginBottom="4px">${formatCurrency(gas.price)}</DataLarge>
 							<DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>

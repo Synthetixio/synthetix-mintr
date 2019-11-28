@@ -17,6 +17,10 @@ export default {
 	buttonTertiaryText: COLORS.dark6,
 	buttonTertiaryBgFocus: COLORS.dark3,
 
+	simpleSelectOption: COLORS.dark2,
+	simpleSelectSelectedOption: COLORS.dark3,
+	simpleSelectHoveredOption: COLORS.dark4,
+
 	menu: COLORS.dark2,
 	panelButton: COLORS.dark3,
 	panelButtonHover: COLORS.dark4,

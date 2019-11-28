@@ -85,8 +85,7 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.exchange(
 					bytesFormatter(baseSynth.name),
 					amountToExchange,
-					bytesFormatter('sUSD'),
-					currentWallet
+					bytesFormatter('sUSD')
 				);
 			} catch (e) {
 				console.log(e);
@@ -130,7 +129,6 @@ const Trade = ({ onDestroy }) => {
 				bytesFormatter(baseSynth.name),
 				amountToExchange,
 				bytesFormatter('sUSD'),
-				currentWallet,
 				{
 					gasPrice: gasPrice * GWEI_UNIT,
 					gasLimit,

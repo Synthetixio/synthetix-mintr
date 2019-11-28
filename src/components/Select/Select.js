@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { useTranslation } from 'react-i18next';
 import Calendar from 'react-calendar';
 import { format } from 'date-fns';
 
@@ -9,14 +10,14 @@ import { formatCurrency } from '../../helpers/formatters';
 
 import { ButtonTertiaryLabel, InputTextSmall, InputLabelSmall, DataLarge } from '../Typography';
 const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
+	const { t } = useTranslation();
 	const handleSelect = element => {
-		if (selected.includes(element.label)) {
-			return onSelect(selected.filter(s => s !== element.label));
+		if (selected.includes(element.key)) {
+			return onSelect(selected.filter(s => s !== element.key));
 		} else {
-			return onSelect([element.label, ...selected]);
+			return onSelect([element.key, ...selected]);
 		}
 	};
-
 	return (
 		<SelectContainer autoWidth>
 			<List>
@@ -24,9 +25,11 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
 					return (
 						<ListElement onClick={() => handleSelect(element)}>
 							<ListElementInner>
-								<input type="checkbox" checked={selected.includes(element.label)}></input>
-								<ListElementIcon src={element.icon}></ListElementIcon>
-								<ListElementLabel>{element.label}</ListElementLabel>
+								<input type="checkbox" checked={selected.includes(element.key)}></input>
+								<ListElementIcon src={`/images/actions/${element.icon}`}></ListElementIcon>
+								<ListElementLabel style={{ whiteSpace: 'nowrap' }}>
+									{t(element.label)}
+								</ListElementLabel>
 							</ListElementInner>
 						</ListElement>
 					);
@@ -49,6 +52,7 @@ const CalendarFilter = ({ data = [], onSelect, selected }) => {
 };
 
 const RangeFilter = ({ data = [], onSelect, selected }) => {
+	const { t } = useTranslation();
 	const [filters, setFilters] = useState(selected);
 	let updateTimeout;
 
@@ -73,7 +77,7 @@ const RangeFilter = ({ data = [], onSelect, selected }) => {
 	return (
 		<SelectContainer>
 			<RangeContainer>
-				<InputLabelSmall htmlFor="from">From:</InputLabelSmall>
+				<InputLabelSmall htmlFor="from">{t('transactions.inputs.from')}</InputLabelSmall>
 				<Input
 					name="from"
 					type="number"
@@ -82,7 +86,7 @@ const RangeFilter = ({ data = [], onSelect, selected }) => {
 					onKeyDown={handleKey}
 					value={filters.from}
 				/>
-				<InputLabelSmall htmlFor="to">To:</InputLabelSmall>
+				<InputLabelSmall htmlFor="to">{t('transactions.inputs.to')}</InputLabelSmall>
 				<Input
 					name="to"
 					type="number"
@@ -135,19 +139,11 @@ const SelectedValue = ({ type, data, selected }) => {
 	let text;
 	switch (type) {
 		case 'select':
-			const elements = data.filter(d => selected.includes(d.label));
-			if (elements.length === 1) {
-				return (
-					<span>
-						<ListElementIcon src={elements[0].icon}></ListElementIcon>
-						<ListElementLabel></ListElementLabel>
-					</span>
-				);
-			}
+			const elements = data.filter(d => selected.includes(d.key));
 			return (
 				<span>
 					{elements.map(e => (
-						<ListElementIcon src={e.icon} key={e.label}></ListElementIcon>
+						<ListElementIcon src={`/images/actions/${e.icon}`} key={e.label}></ListElementIcon>
 					))}
 				</span>
 			);
@@ -250,10 +246,10 @@ const Input = styled.input`
 	background-color: ${props => props.theme.colorStyles.panels};
 	color: ${props => props.theme.colorStyles.heading};
 	width: 100%;
-	-moz-appearance: textfield;
+	appearance: textfield;
 	&::-webkit-outer-spin-button,
 	&::-webkit-inner-spin-button {
-		-webkit-appearance: none;
+		appearance: none;
 		margin: 0;
 	}
 `;

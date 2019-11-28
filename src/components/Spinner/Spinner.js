@@ -117,22 +117,22 @@ const Inner = styled.div`
 	height: ${props => (props.isSmall ? '30px' : props.isMicro ? '20px' : '60px')};
 	border-radius: 50%;
 	position: relative;
-	& :nth-child(1) {
+	& div:nth-child(1) {
 		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 0.6s
 			infinite;
 		animation-timing-function: linear;
 	}
-	& :nth-child(2) {
+	& div:nth-child(2) {
 		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 0.8s
 			infinite;
 		animation-timing-function: linear;
 	}
-	& :nth-child(3) {
+	& div:nth-child(3) {
 		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 1.2s
 			infinite;
 		animation-timing-function: linear;
 	}
-	& :nth-child(4) {
+	& div:nth-child(4) {
 		animation: ${props => (props.isSmall ? moveSmall : props.isMicro ? moveMicro : move)} 2.4s
 			infinite;
 		animation-timing-function: linear;

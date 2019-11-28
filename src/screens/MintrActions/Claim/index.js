@@ -54,7 +54,7 @@ const useGetFeeData = walletAddress => {
 							snxJSConnector.snxJS.FeePool.recentFeePeriods(period)
 						)
 					),
-					snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress, sUSDBytes),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(xdrBytes),
 				]);
@@ -86,13 +86,12 @@ const useGetGasEstimate = () => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	useEffect(() => {
-		const sUSDBytes = bytesFormatter('sUSD');
 		const getGasEstimate = async () => {
 			setError(null);
 			let gasEstimate;
 			try {
 				fetchingGasLimit(dispatch);
-				gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees(sUSDBytes);
+				gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees();
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
@@ -109,11 +108,10 @@ const useGetGasEstimate = () => {
 
 const Claim = ({ onDestroy }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
-	const sUSDBytes = bytesFormatter('sUSD');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const {
 		state: {
-			wallet: { currentWallet, walletType },
+			wallet: { currentWallet, walletType, networkName },
 			network: {
 				settings: { gasPrice, gasLimit, isFetchingGasLimit },
 			},
@@ -128,7 +126,7 @@ const Claim = ({ onDestroy }) => {
 	const onClaim = async () => {
 		try {
 			handleNext(1);
-			const transaction = await snxJSConnector.snxJS.FeePool.claimFees(sUSDBytes, {
+			const transaction = await snxJSConnector.snxJS.FeePool.claimFees({
 				gasPrice: gasPrice * GWEI_UNIT,
 				gasLimit,
 			});
@@ -176,6 +174,7 @@ const Claim = ({ onDestroy }) => {
 		...transactionInfo,
 		gasEstimateError,
 		isFetchingGasLimit,
+		networkName,
 	};
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
 		<SlideContent key={i} {...props} />

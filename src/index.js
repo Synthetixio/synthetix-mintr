@@ -9,13 +9,14 @@ import './i18n';
 const initialState = {
 	ui: {
 		themeIsDark: localStorage.getItem('dark') === 'true' || false,
-		currentPage: 'maintenance',
+		currentPage: 'landing',
 		currentTab: 'home',
-		dashboardIsLoading: false,
 		transactionSettingsPopupIsVisible: false,
 	},
 	wallet: {
 		unlocked: false,
+		walletPaginatorIndex: 0,
+		availableWallets: [],
 	},
 	transactions: {
 		currentTransactions: [],

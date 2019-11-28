@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { withTranslation, useTranslation } from 'react-i18next';
 
 import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
-import { useFetchData } from './fetchData';
+import { fetchData } from './fetchData';
 
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
@@ -134,7 +134,7 @@ const renderTooltip = (dataType, t) => {
 
 const processTableData = (state, t) => {
 	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
-		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType.toLowerCase();
+		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType;
 		const assetName = ['Synths', 'Debt'].includes(dataType)
 			? t(`dashboard.table.${dataType.toLowerCase()}`)
 			: dataType;
@@ -166,7 +166,7 @@ const BalanceTable = ({ state }) => {
 					<Table
 						header={[
 							{ key: 'rowLegend', value: '' },
-							{ key: 'balance', value: 'balance' },
+							{ key: 'balance', value: t('dashboard.table.balance') },
 							{ key: 'usdValue', value: '$ usd' },
 						]}
 						data={data}
@@ -179,22 +179,26 @@ const BalanceTable = ({ state }) => {
 
 const Dashboard = ({ t }) => {
 	const theme = useContext(ThemeContext);
-	const [forceRefresh, triggerRefresh] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet },
-			ui: { dashboardIsLoading },
 			transactions: { successQueue },
 		},
 	} = useContext(Store);
 
-	const {
-		balances = {},
-		prices = {},
-		debtData = {},
-		synthData = {},
-		escrowData = {},
-	} = useFetchData(currentWallet, successQueue, forceRefresh);
+	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
+	const [data, setData] = useState({});
+	const loadData = useCallback(() => {
+		setDashboardIsLoading(true);
+		fetchData(currentWallet, successQueue).then(data => {
+			setData(data);
+			setDashboardIsLoading(false);
+		});
+	}, [currentWallet, successQueue]);
+
+	useEffect(() => loadData(), [loadData]);
+
+	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
 
 	return (
 		<DashboardWrapper>
@@ -203,8 +207,7 @@ const Dashboard = ({ t }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						{/* //Big hack, won't stay here for long... */}
-						<ButtonTertiary onClick={() => triggerRefresh(forceRefresh + 1)}>
+						<ButtonTertiary onClick={() => loadData()}>
 							{t('dashboard.buttons.refresh')}
 						</ButtonTertiary>
 					</ContainerHeader>
@@ -272,7 +275,6 @@ const DashboardWrapper = styled('div')`
 		color: ${props => props.theme.colorStyles.body};
 		margin: 0;
 	}
-	// transition: all ease-out 0.5s;
 	flex-shrink: 0;
 	border-right: 1px solid ${props => props.theme.colorStyles.borders};
 	padding-bottom: 40px;
@@ -323,7 +325,6 @@ const BoxInner = styled.div`
 `;
 
 const BoxHeading = styled.div`
-	witdh: 100%;
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
@@ -375,7 +376,7 @@ const Asset = styled.div`
 
 const CurrencyPrice = styled.div`
 	font-size: 16px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	margin-left: 4px;
 	align-items: center;
 	color: ${props => props.theme.colorStyles.body};

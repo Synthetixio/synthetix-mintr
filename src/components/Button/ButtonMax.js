@@ -29,7 +29,6 @@ const Button = styled.button`
 	&:hover {
 		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
 	}
-	text-transform: uppercase;
 `;
 
 export default withTranslation()(ButtonMax);

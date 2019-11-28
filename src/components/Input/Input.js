@@ -90,11 +90,17 @@ const Dropdown = ({ onClick, synth, singleSynth }) => {
 	);
 };
 
-export const SimpleInput = ({ value, onChange, placeholder }) => {
+export const SimpleInput = ({ value, onChange, placeholder, name, className }) => {
 	return (
-		<InputWrapper>
+		<InputWrapper className={className}>
 			<InputInner>
-				<InputElement value={value} onChange={onChange} placeholder={placeholder} type="text" />
+				<InputElement
+					value={value}
+					onChange={onChange}
+					placeholder={placeholder}
+					type="text"
+					name={name}
+				/>
 			</InputInner>
 		</InputWrapper>
 	);
@@ -138,12 +144,10 @@ const InputWrapper = styled.div`
 const InputInner = styled.div`
 	display: flex;
 	width: 100%;
-	height: 50px;
 	border-radius: 5px;
 	height: 64px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	background-color: ${props => props.theme.colorStyles.panelButton};
-	inner-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
 	align-items: center;
 	justify-content: center;
 `;
@@ -190,15 +194,15 @@ const InputElement = styled.input`
 `;
 
 const ListInputWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 40px;
-  & > img:first-child {
-    left 16px;
-  }
-  & > img:last-child {
-    right: 16px;
-  }
+	position: relative;
+	width: 100%;
+	height: 40px;
+	& > img:first-child {
+		left: 16px;
+	}
+	& > img:last-child {
+		right: 16px;
+	}
 `;
 
 const ListInputIcon = styled.img`

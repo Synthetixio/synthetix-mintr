@@ -26,7 +26,6 @@ const connectToMetamask = async (networkId, networkName) => {
 		if (accounts && accounts.length > 0) {
 			return {
 				currentWallet: accounts[0],
-				availableWallets: accounts,
 				walletType: 'Metamask',
 				unlocked: true,
 				networkId,
@@ -57,7 +56,6 @@ const connectToCoinbase = async (networkId, networkName) => {
 		if (accounts && accounts.length > 0) {
 			return {
 				currentWallet: accounts[0],
-				availableWallets: accounts,
 				walletType: 'Coinbase',
 				unlocked: true,
 				networkId: 1,
@@ -91,33 +89,44 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 	};
 };
 
+const getSignerConfig = ({ type, networkId, derivationPath }) => {
+	if (type === 'Ledger') {
+		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
+		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
+	}
+	if (type === 'Coinbase') {
+		return {
+			appName: 'Mintr',
+			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
+			jsonRpcUrl: INFURA_JSON_RPC_URLS[networkId],
+			networkId,
+		};
+	}
+
+	return {};
+};
+
+export const setSigner = ({ type, networkId, derivationPath }) => {
+	const signer = new snxJSConnector.signers[type](
+		getSignerConfig({ type, networkId, derivationPath })
+	);
+
+	snxJSConnector.setContractSettings({
+		networkId,
+		signer,
+	});
+};
+
 export const connectToWallet = async type => {
 	const { name, networkId } = await getEthereumNetwork();
 	if (!name) {
-		// updateWalletStatus => error
 		return {
 			walletType: '',
 			unlocked: false,
 			unlockReason: 'NetworkNotSupported',
 		};
 	}
-
-	const signerConfig =
-		type === 'Coinbase'
-			? {
-					appName: 'Mintr',
-					appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
-					jsonRpcUrl: INFURA_JSON_RPC_URLS[networkId],
-					networkId,
-			  }
-			: {};
-
-	const signer = new snxJSConnector.signers[type](signerConfig);
-
-	snxJSConnector.setContractSettings({
-		networkId,
-		signer,
-	});
+	setSigner({ type, networkId });
 
 	switch (type) {
 		case 'Metamask':

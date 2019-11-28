@@ -19,7 +19,7 @@ const ButtonInner = styled.div`
 	width: 100%;
 	align-items: center;
 	justify-content: space-between;
-	font-family: 'apercu-regular';
+	font-family: 'apercu-regular', sans-serif;
 	font-size: 14px;
 `;
 

@@ -2,7 +2,7 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import orderBy from 'lodash/orderBy';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { format, isWithinInterval } from 'date-fns';
 import { formatCurrency } from '../../../helpers/formatters';
 import Select from '../../../components/Select';
@@ -22,36 +22,15 @@ import { ButtonTertiary, BorderlessButton } from '../../../components/Button';
 const PAGINATION_INDEX = 10;
 
 const EVENT_LIST = [
-	'Issued',
-	'Burned',
-	'FeesClaimed',
-	'SynthExchange',
-	'SynthDeposit',
-	'SynthWithdrawal',
-	'ClearedDeposit',
-	'Exchange',
+	{ key: 'Issued', label: 'transactions.events.minted', icon: 'tiny-mint.svg' },
+	{ key: 'Burned', label: 'transactions.events.burned', icon: 'tiny-burn.svg' },
+	{ key: 'FeesClaimed', label: 'transactions.events.claimedFees', icon: 'tiny-claim.svg' },
+	{ key: 'SynthExchange', label: 'transactions.events.traded', icon: 'tiny-trade.svg' },
+	{ key: 'SynthDeposit', label: 'transactions.events.deposited', icon: 'tiny-deposit.svg' },
+	{ key: 'SynthWithdrawal', label: 'transactions.events.withdrawn', icon: 'tiny-withdraw.svg' },
+	{ key: 'ClearedDeposit', label: 'transactions.events.sold', icon: 'tiny-cleared-deposit.svg' },
+	{ key: 'Exchange', label: 'transactions.events.exchanged', icon: 'tiny-bought.svg' },
 ];
-
-const getIconForEvent = event => {
-	switch (event) {
-		case 'Issued':
-			return 'tiny-mint.svg';
-		case 'Burned':
-			return 'tiny-burn.svg';
-		case 'FeesClaimed':
-			return 'tiny-claim.svg';
-		case 'SynthExchange':
-			return 'tiny-trade.svg';
-		case 'SynthDeposit':
-			return 'tiny-deposit.svg';
-		case 'SynthWithdrawal':
-			return 'tiny-withdraw.svg';
-		case 'ClearedDeposit':
-			return 'tiny-cleared-deposit.svg';
-		case 'Exchange':
-			return 'tiny-bought.svg';
-	}
-};
 
 const stringifyQuery = query => {
 	return (query = Object.keys(query).reduce((acc, next, index) => {
@@ -90,8 +69,17 @@ const useGetTransactions = (walletAddress, networkName) => {
 				);
 				//filtering out outgoing ClearedDeposits
 				const filteredTransactions = transactions
-					.filter(tx => tx.event !== 'ClearedDeposit' && EVENT_LIST.includes(tx.event))
-					.concat(clearedDeposits);
+					.filter(
+						tx => tx.event !== 'ClearedDeposit' && EVENT_LIST.find(event => event.key === tx.event)
+					)
+					.concat(clearedDeposits)
+					.map(transactions => {
+						const eventInfo = EVENT_LIST.find(event => transactions.event === event.key);
+						return {
+							...transactions,
+							...eventInfo,
+						};
+					});
 
 				setData({
 					loading: false,
@@ -110,21 +98,10 @@ const useGetTransactions = (walletAddress, networkName) => {
 const getEventInfo = data => {
 	const event = data.event;
 	let amount = `${formatCurrency(data.value || 0)} sUSD`;
-	let type,
-		imageUrl = '';
+	let { label, icon } = data;
 	switch (event) {
-		case 'Issued':
-			type = 'transactions.events.minted';
-			imageUrl = getIconForEvent(event);
-			break;
-		case 'Burned':
-			type = 'transactions.events.burned';
-			imageUrl = getIconForEvent(event);
-			break;
 		case 'FeesClaimed':
 			amount = `${formatCurrency(data.snxRewards || 0)} SNX`;
-			type = 'transactions.events.claimedFees';
-			imageUrl = getIconForEvent(event);
 			break;
 		case 'SynthExchange':
 			const fromCurrency = data.exchangeFromCurrency.replace(/\u0000/g, '');
@@ -132,42 +109,26 @@ const getEventInfo = data => {
 			amount = `${formatCurrency(data.exchangeFromAmount)} ${fromCurrency} / ${formatCurrency(
 				data.exchangeToAmount
 			)} ${toCurrency}`;
-			type = 'transactions.events.traded';
-			imageUrl = getIconForEvent(event);
-			break;
-		case 'SynthDeposit':
-			type = 'transactions.events.deposited';
-			imageUrl = getIconForEvent(event);
-			break;
-		case 'SynthWithdrawal':
-			type = 'transactions.events.withdrawn';
-			imageUrl = getIconForEvent(event);
 			break;
 		case 'ClearedDeposit':
-			type = 'transactions.events.sold';
 			amount = `${formatCurrency(data.toAmount)} ${data.token} (${formatCurrency(
 				data.fromETHAmount
 			)} ETH)`;
-			imageUrl = getIconForEvent(event);
 			break;
 		case 'Exchange':
 			if (data.exchangeFromCurrency === 'ETH') {
-				type = 'transactions.events.exchanged';
+				label = 'transactions.events.exchanged';
 			} else {
-				type = 'transactions.events.sold';
+				label = 'transactions.events.sold';
 			}
 			amount = `${formatCurrency(data.exchangeToAmount)} ${
 				data.exchangeToCurrency
 			} (${formatCurrency(data.exchangeFromAmount)} ${data.exchangeFromCurrency})`;
-			type = 'transactions.events.exchanged';
-			imageUrl = getIconForEvent(event);
 			break;
-		default:
-			return {};
 	}
 	return {
-		type,
-		imageUrl,
+		label,
+		icon,
 		amount,
 	};
 };
@@ -207,10 +168,15 @@ const TransactionsTable = ({ data }) => {
 			<Table cellSpacing="0">
 				<THead>
 					<TR>
-						{['Type', 'Amount', 'Time | Date', ''].map((headerElement, i) => {
+						{[
+							'transactions.filters.type',
+							'transactions.filters.amount',
+							'transactions.filters.date',
+							'',
+						].map((headerElement, i) => {
 							return (
 								<TH style={{ textAlign: i === 2 ? 'right' : 'left' }} key={headerElement}>
-									<TableHeaderMedium>{headerElement}</TableHeaderMedium>
+									<TableHeaderMedium>{t(headerElement)}</TableHeaderMedium>
 								</TH>
 							);
 						})}
@@ -219,13 +185,13 @@ const TransactionsTable = ({ data }) => {
 
 				<TBody>
 					{data.map((dataElement, i) => {
-						const { type, imageUrl, amount } = getEventInfo(dataElement);
+						const { label, icon, amount } = getEventInfo(dataElement);
 						return (
 							<TR key={i}>
 								<TD>
 									<TDInner>
-										<TypeImage img src={`/images/actions/${imageUrl}`} />
-										<DataLarge>{t(type)}</DataLarge>
+										<TypeImage img src={`/images/actions/${icon}`} />
+										<DataLarge>{t(label)}</DataLarge>
 									</TDInner>
 								</TD>
 								<TD>
@@ -256,7 +222,7 @@ const TransactionsTable = ({ data }) => {
 	);
 };
 
-const Transactions = () => {
+const Transactions = ({ t }) => {
 	const {
 		state: {
 			ui: { tabParams },
@@ -291,20 +257,15 @@ const Transactions = () => {
 					<Inputs>
 						<InputContainer>
 							<Select
-								placeholder="type"
-								data={EVENT_LIST.map(event => {
-									return {
-										label: event,
-										icon: `/images/actions/${getIconForEvent(event)}`,
-									};
-								})}
+								placeholder={t('transactions.filters.type')}
+								data={EVENT_LIST}
 								selected={filters.events}
 								onSelect={selected => setFilters({ ...filters, ...{ events: selected } })}
 							></Select>
 						</InputContainer>
 						<InputContainer>
 							<Select
-								placeholder="dates"
+								placeholder={t('transactions.filters.date')}
 								type="calendar"
 								selected={filters.dates}
 								onSelect={selected => setFilters({ ...filters, ...{ dates: selected } })}
@@ -312,14 +273,16 @@ const Transactions = () => {
 						</InputContainer>
 						<InputContainer>
 							<Select
-								placeholder="amount"
+								placeholder={t('transactions.filters.amount')}
 								type="range"
 								selected={filters.amount}
 								onSelect={selected => setFilters({ ...filters, ...{ amount: selected } })}
 							></Select>
 						</InputContainer>
 
-						<ButtonTertiary onClick={clearFilters}>CLEAR FILTERS</ButtonTertiary>
+						<ButtonTertiary style={{ textTransform: 'uppercase' }} onClick={clearFilters}>
+							{t('transactions.buttons.clearFilters')}
+						</ButtonTertiary>
 					</Inputs>
 				</Filters>
 				<TransactionsPanel>
@@ -404,4 +367,4 @@ const TransactionsPlaceholder = styled.div`
 	justify-content: center;
 `;
 
-export default Transactions;
+export default withTranslation()(Transactions);

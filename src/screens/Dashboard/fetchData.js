@@ -1,11 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
-import { Store } from '../../store';
-
 import { bytesFormatter } from '../../helpers/formatters';
-import { toggleDashboardIsLoading } from '../../ducks/ui';
 
 const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
 
@@ -23,22 +19,51 @@ const getBalances = async walletAddress => {
 	}
 };
 
+const convertFromSynth = (fromSynthRate, toSynthRate) => {
+	return fromSynthRate * (1 / toSynthRate);
+};
+
+// exported for tests
+export const getSusdInUsd = (synthRates, sethToEthRate) => {
+	const sEth = convertFromSynth(synthRates.susd, synthRates.seth);
+	const eth = sEth * sethToEthRate;
+	return eth * synthRates.eth;
+};
+const getSETHtoETH = async () => {
+	const exchangeAddress = '0xe9cf7887b93150d4f2da7dfc6d502b216438f244';
+	const data = await fetch(
+		`https://uniswap-api.loanscan.io/v1/ticker?exchangeAddress=${exchangeAddress}`
+	).then(x => x.json());
+	return data.invPrice;
+};
+
 const getPrices = async () => {
 	try {
-		const result = await snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
-			['SNX', 'sUSD', 'ETH'].map(bytesFormatter)
+		// sETH seems to be the same as ETH??
+		const synthsP = snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
+			['SNX', 'sUSD', 'ETH', 'sETH'].map(bytesFormatter)
 		);
-		const [snx, susd, eth] = result.map(bigNumberFormatter);
-		return { snx, susd, eth };
+		const sethToEthRateP = getSETHtoETH();
+		const [synths, sethToEthRate] = await Promise.all([synthsP, sethToEthRateP]);
+		const [snx, susd, eth, seth] = synths.map(bigNumberFormatter);
+
+		const susdInUsd = getSusdInUsd(
+			{
+				susd,
+				eth,
+				seth,
+			},
+			sethToEthRate
+		);
+		return { snx, susd: susdInUsd, eth };
 	} catch (e) {
 		console.log(e);
 	}
 };
-
 const getRewards = async walletAddress => {
 	try {
 		const [feesAreClaimable, currentFeePeriod, feePeriodDuration] = await Promise.all([
-			snxJSConnector.snxJS.FeePool.feesClaimable(walletAddress),
+			snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 			snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
 			snxJSConnector.snxJS.FeePool.feePeriodDuration(),
 		]);
@@ -126,36 +151,22 @@ const getSynths = async walletAddress => {
 	}
 };
 
-export const useFetchData = (walletAddress, successQueue, forceRefresh) => {
-	const [data, setData] = useState({});
-	const { dispatch } = useContext(Store);
-	useEffect(() => {
-		try {
-			toggleDashboardIsLoading(true, dispatch);
-			const fetchData = async () => {
-				const [balances, prices, rewardData, debtData, escrowData, synthData] = await Promise.all([
-					getBalances(walletAddress),
-					getPrices(),
-					getRewards(walletAddress),
-					getDebt(walletAddress),
-					getEscrow(walletAddress),
-					getSynths(walletAddress),
-				]);
-				setData({
-					balances,
-					prices,
-					rewardData,
-					debtData,
-					escrowData,
-					synthData,
-				});
-				toggleDashboardIsLoading(false, dispatch);
-			};
-			fetchData();
-		} catch (e) {
-			console.log(e);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [walletAddress, successQueue.length, forceRefresh]);
-	return data;
+export const fetchData = async walletAddress => {
+	const [balances, prices, rewardData, debtData, escrowData, synthData] = await Promise.all([
+		getBalances(walletAddress),
+		getPrices(),
+		getRewards(walletAddress),
+		getDebt(walletAddress),
+		getEscrow(walletAddress),
+		getSynths(walletAddress),
+	]).catch(e => console.log(e));
+
+	return {
+		balances,
+		prices,
+		rewardData,
+		debtData,
+		escrowData,
+		synthData,
+	};
 };

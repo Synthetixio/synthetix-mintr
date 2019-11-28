@@ -76,7 +76,6 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN, sUSDBalan
 	const { t } = useTranslation();
 	useEffect(() => {
 		if (!burnAmount) return;
-		const sUSDBytes = bytesFormatter('sUSD');
 		const getGasEstimate = async () => {
 			setError(null);
 			let gasEstimate;
@@ -95,7 +94,6 @@ const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN, sUSDBalan
 				} else amountToBurn = 0;
 
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
-					sUSDBytes,
 					amountToBurn
 				);
 			} catch (e) {
@@ -150,7 +148,7 @@ const Burn = ({ onDestroy }) => {
 				burnAmount === maxBurnAmount
 					? maxBurnAmountBN
 					: snxJSConnector.utils.parseEther(burnAmount.toString());
-			const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(sUSDBytes, amountToBurn, {
+			const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(amountToBurn, {
 				gasPrice: gasPrice * GWEI_UNIT,
 				gasLimit,
 			});

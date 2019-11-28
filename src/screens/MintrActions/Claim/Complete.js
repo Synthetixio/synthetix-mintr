@@ -5,46 +5,47 @@ import { withTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../helpers/formatters';
 
 import { SlidePage } from '../../../components/ScreenSlider';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { ButtonPrimary } from '../../../components/Button';
 import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typography';
+import EtherScanBtn from '../../../components/EtherscanBtn';
 
-const Success = ({ t, onDestroy, feesAvailable }) => {
+const Success = ({ t, onDestroy, feesAvailable, networkName, transactionHash }) => {
 	return (
-		<SlidePage>
-			<Container>
-				<Top>
-					<Intro>
-						<ActionImage src="/images/success.svg" big />
-						<PageTitle>{t('mintrActions.claim.complete.title')}</PageTitle>
-						<PLarge>{t('mintrActions.complete.subtitle')}</PLarge>
-					</Intro>
-					<Details>
-						<Box>
-							<DataHeaderLarge>
-								{t('mintrActions.claim.confirmation.actionDescription')}
-							</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
-							</Amount>
-						</Box>
-						<Box>
-							<DataHeaderLarge>
-								{t('mintrActions.claim.confirmation.actionDescription')}
-							</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0} SNX
-							</Amount>
-						</Box>
-					</Details>
-				</Top>
-				<Bottom>
-					<Buttons>
-						<ButtonSecondary>{t('button.navigation.etherscan')}</ButtonSecondary>
-						<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
-					</Buttons>
-				</Bottom>
-			</Container>
-		</SlidePage>
+		<Fragment>
+			<Top>
+				<Intro>
+					<ActionImage src="/images/success.svg" big />
+					<PageTitle>{t('mintrActions.claim.complete.title')}</PageTitle>
+					<PLarge>{t('transactionProcessing.complete.subtitle')}</PLarge>
+				</Intro>
+				<Details>
+					<Box>
+						<DataHeaderLarge>
+							{t('mintrActions.claim.confirmation.actionDescription')}
+						</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
+						</Amount>
+					</Box>
+					<Box>
+						<DataHeaderLarge>
+							{t('mintrActions.claim.confirmation.actionDescription')}
+						</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0} SNX
+						</Amount>
+					</Box>
+				</Details>
+			</Top>
+			<Bottom>
+				<Buttons>
+					<EtherScanBtn networkName={networkName} transactionHash={transactionHash}>
+						{t('button.navigation.etherscan')}
+					</EtherScanBtn>
+					<ButtonPrimary onClick={onDestroy}>{t('button.navigation.finish')}</ButtonPrimary>
+				</Buttons>
+			</Bottom>
+		</Fragment>
 	);
 };
 
