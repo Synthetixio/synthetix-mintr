@@ -44,17 +44,16 @@ const getPrices = async () => {
 		);
 		const sethToEthRateP = getSETHtoETH();
 		const [synths, sethToEthRate] = await Promise.all([synthsP, sethToEthRateP]);
-		const [snx, susd, eth, seth] = synths.map(bigNumberFormatter);
+		const [snx, susd, seth] = synths.map(bigNumberFormatter);
 
 		const susdInUsd = getSusdInUsd(
 			{
 				susd,
-				eth,
 				seth,
 			},
 			sethToEthRate
 		);
-		return { snx, susd: susdInUsd, eth };
+		return { snx, susd: susdInUsd, eth: seth };
 	} catch (e) {
 		console.log(e);
 	}
