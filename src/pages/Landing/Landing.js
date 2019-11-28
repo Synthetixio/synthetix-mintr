@@ -24,9 +24,9 @@ import './carousel.css';
 
 const SLIDE_COUNT = 4;
 
-const onWalletClick = (wallet, dispatch) => {
+const onWalletClick = ({ wallet, derivationPath }, dispatch) => {
 	return async () => {
-		const walletStatus = await connectToWallet(wallet);
+		const walletStatus = await connectToWallet({ wallet, derivationPath });
 		updateWalletStatus({ ...walletStatus, availableWallets: [] }, dispatch);
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === 'Metamask') {
@@ -109,7 +109,12 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 };
 
 const WalletButtons = () => {
-	const { dispatch } = useContext(Store);
+	const {
+		state: {
+			wallet: { derivationPath },
+		},
+		dispatch,
+	} = useContext(Store);
 	const { t } = useTranslation();
 	return (
 		<Wallets>
@@ -117,8 +122,12 @@ const WalletButtons = () => {
 			{SUPPORTED_WALLETS.map(wallet => {
 				const noMetamask = wallet === 'Metamask' && !hasWeb3();
 				return (
-					<Button disabled={noMetamask} key={wallet} onClick={onWalletClick(wallet, dispatch)}>
-						<Icon src={`images/wallets/${wallet.toLowerCase()}.svg`} />
+					<Button
+						disabled={noMetamask}
+						key={wallet}
+						onClick={onWalletClick({ wallet, derivationPath }, dispatch)}
+					>
+						<Icon src={`images/wallets/${wallet}.svg`} />
 						<WalletConnectionH2>{wallet}</WalletConnectionH2>
 					</Button>
 				);
@@ -173,7 +182,7 @@ const Landing = ({ t }) => {
 					</Link>
 					<Link
 						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
-							i18n.language === 'zh' ? '_mandarin' : ''
+							i18n.language === 'zh-CN' ? '_mandarin' : ''
 						}.pdf`}
 						target="_blank"
 					>

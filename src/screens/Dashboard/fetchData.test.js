@@ -4,7 +4,6 @@ describe('getSusdInUsd', () => {
 	test('converts correctly', () => {
 		const synthRates = {
 			susd: 1,
-			eth: 150.89559276124712,
 			seth: 150.89559276124712,
 		};
 		const sethToEthRate = 0.9838261979298352;

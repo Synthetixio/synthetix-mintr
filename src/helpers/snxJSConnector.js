@@ -117,7 +117,7 @@ export const setSigner = ({ type, networkId, derivationPath }) => {
 	});
 };
 
-export const connectToWallet = async type => {
+export const connectToWallet = async ({ wallet, derivationPath }) => {
 	const { name, networkId } = await getEthereumNetwork();
 	if (!name) {
 		return {
@@ -126,16 +126,16 @@ export const connectToWallet = async type => {
 			unlockReason: 'NetworkNotSupported',
 		};
 	}
-	setSigner({ type, networkId });
+	setSigner({ type: wallet, networkId, derivationPath });
 
-	switch (type) {
+	switch (wallet) {
 		case 'Metamask':
 			return connectToMetamask(networkId, name);
 		case 'Coinbase':
 			return connectToCoinbase(networkId, name);
 		case 'Trezor':
 		case 'Ledger':
-			return connectToHardwareWallet(networkId, name, type);
+			return connectToHardwareWallet(networkId, name, wallet);
 		default:
 			return {};
 	}

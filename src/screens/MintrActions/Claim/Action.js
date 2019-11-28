@@ -33,13 +33,13 @@ const Periods = ({ state = {} }) => {
 					<Table cellSpacing="0">
 						<THead>
 							<TR>
-								<TH padding={'10px 20px'}>
+								<TH padding={'10px'}>
 									<TableHeaderMedium>sUSD</TableHeaderMedium>
 								</TH>
-								<TH padding={'10px 20px'}>
+								<TH padding={'10px'}>
 									<TableHeaderMedium>SNX</TableHeaderMedium>
 								</TH>
-								<TH padding={'10px 20px'}>
+								<TH padding={'10px'}>
 									<TableHeaderMedium>
 										{t('mintrActions.claim.action.table.period')}
 									</TableHeaderMedium>
@@ -50,10 +50,10 @@ const Periods = ({ state = {} }) => {
 							{feesByPeriod.map(({ fee, reward, closeIn }, i) => {
 								return (
 									<TR key={i}>
-										<TD padding={'0 20px'}>
+										<TD padding={'0 10px'}>
 											<DataLarge>{formatCurrency(fee, 3)}</DataLarge>
 										</TD>
-										<TD padding={'0 20px'}>
+										<TD padding={'0 10px'}>
 											<DataLarge>{formatCurrency(reward, 3)}</DataLarge>
 										</TD>
 										<TD style={{ whiteSpace: 'nowrap' }} padding={'0 20px'}>
@@ -94,7 +94,7 @@ const Action = ({
 				<Intro>
 					<ActionImage src="/images/actions/claim.svg" big />
 					<H1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</H1>
-					<PLarge>{t('mintrActions.claim.action.subtitle')}</PLarge>
+					<Subtitle>{t('mintrActions.claim.action.subtitle')}</Subtitle>
 				</Intro>
 				<Middle>
 					<Schedule>
@@ -128,7 +128,7 @@ const Action = ({
 					</Details>
 				</Middle>
 				<Bottom>
-					<TransactionPriceIndicator style={{ margin: '10px 0' }} />
+					<TransactionPriceIndicator style={{ margin: '0' }} />
 					<ButtonPrimary
 						disabled={!feesAreClaimable || isFetchingGasLimit || gasEstimateError}
 						onClick={onClaim}
@@ -144,7 +144,7 @@ const Action = ({
 		</SlidePage>
 	);
 };
-
+const WrapTableBreakpoint = 1340;
 const Container = styled.div`
 	width: 100%;
 	height: 850px;
@@ -171,6 +171,9 @@ const Middle = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		flex-direction: column;
+	}
 `;
 
 const Bottom = styled.div`
@@ -192,6 +195,10 @@ const Intro = styled.div`
 const ActionImage = styled.img`
 	height: ${props => (props.big ? '64px' : '48px')};
 	width: ${props => (props.big ? '64px' : '48px')};
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		width: 48px;
+		height: 48px;
+	}
 `;
 
 const Schedule = styled.div`
@@ -201,6 +208,9 @@ const Schedule = styled.div`
 	margin: 8px 16px 8px 0px;
 	padding: 24px 16px 0 16px;
 	text-align: left;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		width: 100%;
+	}
 `;
 
 const Status = styled.div`
@@ -220,12 +230,22 @@ const Details = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 40%;
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		flex-direction: row;
+		width: 100%;
+		justify-content: space-between;
+		> div {
+			width: calc(50% - 8px);
+			padding-top: 16px;
+			padding-bottom: 16px;
+		}
+	}
 `;
 
 const Box = styled.div`
 	height: auto;
 	width: auto;
-	padding: 24px 32px;
+	padding: 24px;
 	margin: 8px 0px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
@@ -248,8 +268,15 @@ const Highlighted = styled.span`
 `;
 
 const Note = styled.div`
-	margin-top: 24px;
+	margin-top: 16px;
 	max-width: 420px;
+`;
+
+const Subtitle = styled(PLarge)`
+	@media (max-width: ${WrapTableBreakpoint}px) {
+		font-size: 14px;
+		line-height: 18px;
+	}
 `;
 
 export default withTranslation()(Action);
