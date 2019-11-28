@@ -182,7 +182,7 @@ const Landing = ({ t }) => {
 					</Link>
 					<Link
 						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
-							i18n.language === 'zh' ? '_mandarin' : ''
+							i18n.language === 'zh-CN' ? '_mandarin' : ''
 						}.pdf`}
 						target="_blank"
 					>
