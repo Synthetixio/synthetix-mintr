@@ -41,7 +41,7 @@
 			},
 			"addWallet":{
 				"placeholder": "Διεύθυνση πορτοφολιού",
-				"buttonText": "Προσθέστε"
+				"buttonText": "Πρόσθεση"
 			}
 		}
 	},
