@@ -182,91 +182,91 @@
 		},
 		"trade": {
 			"action": {
-				"title": "Trade",
-				"subtitle": "Trade your Synths for sUSD. For the full dApp, which allows you to trade between any Synths, use Synthetix.Exchange.",
+				"title": "Ανταλλαγή",
+				"subtitle": "Ανταλλάξτε τα Synth σας με  sUSD. Για το πλήρες dApp, το οποίο σας επιτρέπει να κάνετε συναλλαγές μεταξύ οποιωνδήποτε Synth, χρησιμοποιήστε το Synthetix.Exchange",
 				"buttons": {
-					"trade": "Trade now",
-					"exchange": "Open Synthetix.Exchange"
+					"trade": "Ανταλλάξτε τώρα",
+					"exchange": "Μετάβαση στο Synthetix.Exchange"
 				}
 			},
 			"confirmation": {
-				"actionDescription": "Trading:",
-				"subActionDescription": "Receiving:"
+				"actionDescription": "Ανταλλαγή:",
+				"subActionDescription": "λήψη:"
 			},
 			"complete": {
-				"title": "Trade in progress!"
+				"title": "Συναλλαγή σε εξέλιξη!"
 			}
 		},
 		"send": {
 			"action": {
-				"title": "Transfer",
-				"subtitle": "Transfer your ETH, SNX or Synths.",
-				"available": "Transferable amount:",
-				"amountInstruction": "Enter amount:",
-				"walletInstruction": "Enter destination address:",
+				"title": "Μεταφορά",
+				"subtitle": "Μεταφέρετε τα ETH, SNX ή Synths σας.",
+				"available": "Ποσό ικανό προς μεταφορά:",
+				"amountInstruction": "Εισαγωγή ποσού:",
+				"walletInstruction": "Εισαγωγή διεύθυνσης προορισμού:",
 				"buttons": {
-					"send": "Send now"
+					"send": "Αποστολή τώρα"
 				}
 			},
 			"confirmation": {
-				"actionDescription": "Sending:",
-				"subActionDescription": "Destination:"
+				"actionDescription": "Αποστολή:",
+				"subActionDescription": "Προορισμός:"
 			},
 			"complete": {
-				"title": "Sending in progress!"
+				"title": "Αποστολή σε εξέλιξη!"
 			}
 		}
 	},
 	"depot": {
 		"intro": {
-			"title": "Depot:",
-			"subtitle": "Deposit sUSD into a queue to be sold on Synthetix.Exchange for ETH. You can withdraw your sUSD at any time while waiting. Note: minimum deposit is 50 sUSD."
+			"title": "Σταθμός:",
+			"subtitle": "Καταθέστε sUSD σε μια ουρά για να πωληθούν στο Synthetix.Exchange για ETH. Μπορείτε να αποσύρετε τα sUSD σας οποιαδήποτε στιγμή ενώ περιμένετε. Σημείωση: η ελάχιστη κατάθεση είναι 50 sUSD."
 		},
 		"table": {
-			"title": "Recent activity:",
-			"type": "Type",
-			"activity": "Activity",
-			"remaining": "Remaining",
-			"amount": "Amount",
-			"rate": "Rate",
-			"timeDate": "Time | Date",
-			"details": "Details",
-			"deposit": "Deposit",
-			"soldByDepot": "Sold by depot"
+			"title": "Πρόσφατη δραστηριότητα:",
+			"type": "Τύπος",
+			"activity": "Δραστηριότητα",
+			"remaining": "Απομένουν",
+			"amount": "Ποσό",
+			"rate": "Ισοτιμία",
+			"timeDate": "Ώρα | Ημερομηνία",
+			"details": "Λεπτομέρειες",
+			"deposit": "ποσό κατάθεσης",
+			"soldByDepot": "Πωλήθηκαν"
 		},
 		"buttons": {
-			"available": "Amount available:",
-			"more": "View more",
-			"contract": "View contract",
-			"deposit": "Deposit",
-			"withdraw": "Withdraw"
+			"available": "Διαθέσιμο ποσό:",
+			"more": "Δείτε περισσότερα",
+			"contract": "Προβολή συμβολαίου",
+			"deposit": "Κατάθεση",
+			"withdraw": "Ανάληψη"
 		},
 		"deposit": {
 			"action": {
-				"title": "Deposit",
-				"subtitle": "Amount available:",
-				"instruction": "Enter deposit amount:",
+				"title": "Κατάθεση",
+				"subtitle": "Διαθέσιμο ποσό:",
+				"instruction": "Εισαγωγή ποσού κατάθεσης:",
 				"buttons": {
-					"deposit": "Deposit now"
+					"deposit": "Κατάθεση τώρα"
 				}
 			},
 			"complete": {
-				"title": "Deposit in progress!"
+				"title": "Κατάθεση σε εξέλιξη!"
 			},
-			"actionDescription": "Depositing:"
+			"actionDescription": "Κατάθεση:"
 		},
 		"withdraw": {
 			"action": {
-				"title": "Withdraw",
-				"subtitle": "Amount available:",
+				"title": "Ανάληψη",
+				"subtitle": "Διαθέσιμο ποσό:",
 				"buttons": {
-					"withdraw": "Withdraw now"
+					"withdraw": "Ανάληψη τώρα"
 				}
 			},
 			"complete": {
-				"title": "Withdrawal in progress!"
+				"title": "Ανάληψη σε εξέλιξη!"
 			},
-			"actionDescription": "Withdrawing:"
+			"actionDescription": "Ανάληψη:"
 		}
 	},
 	"escrow": {
