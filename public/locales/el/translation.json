@@ -7,19 +7,19 @@
 			},
 			"whatIsSynthetix": {
 				"title": "Τι είναι το Synthetix;",
-				"description": "To Synthetix είναι ένα αποκεντρικοποιημένο πρωτόκολλο παραγωγής συνθετικών, χτισμένο στο Ethereum. Τα συνθετικά (Synths) δημιουργούνται κάνοντας stake το Synthetix Network Token (SNX), και συναλλάσσονται μεταξύ τους απευθείας με τα smart contracts του Synthetix στο Synthetix.Exchange."
+				"description": "To Synthetix είναι ένα αποκεντρικοποιημένο πρωτόκολλο παραγωγής συνθετικών, χτισμένο στο Ethereum. Τα συνθετικά (Synths) δημιουργούνται διακυβεύοντας το Synthetix Network Token (SNX), και συναλλάσσονται μεταξύ τους απευθείας με τα smart contracts του Synthetix στο Synthetix.Exchange."
 			},
 			"whyStakeSnx": {
-				"title": "Γιατί να κάνετε stake τα SNX;",
-				"description": "Όσοι κάνουν stake τα SNX λαμβάνουν δύο είδη ανταμοιβών. Πρώτον, λαμβάνουν νέα SNX, τα οποία δημιουργούνται μέσω της πληθωριστικής νομισματικής πολιτικής. Δεύτερον, λαμβάνουν ανταμοιβές συναλλαγών synths, οι οποίες δημιουργούνται από τις ανταλλαγές synths που γίνονται στο Synthetix.Exchange"
+				"title": "Γιατί να διακυβεύσετε (stake) τα SNX;",
+				"description": "Όσοι διακυβεύουν (staking) τα SNX λαμβάνουν δύο είδη ανταμοιβών. Πρώτον, λαμβάνουν νέα SNX, τα οποία δημιουργούνται μέσω της πληθωριστικής νομισματικής πολιτικής. Δεύτερον, λαμβάνουν ανταμοιβές συναλλαγών synths, οι οποίες δημιουργούνται από τις ανταλλαγές synths που γίνονται στο Synthetix.Exchange"
 			},
 			"howStakeSnx": {
-				"title": "Τι χρειάζεται να κάνουν όσοι κάνουν stake SNX;",
-				"description": "Όλα τα synths πρέπει να υποστηρίζονται από SNX σε αναλογία ασφάλειας 750%. Όσοι κάνουν stake SNX πρέπει να διαχειρίζονται τη δική τους αναλογία για να είναι πάνω από αυτό το ποσοστό, το οποίο μπορεί να γίνει καίγοντας Synths για να αυξηθεί η αναλογία ή παράγοντας Synths για να μειωθεί. Αν το κάνουν αυτό, μπορούν να συλλέγουν τις εβδομάδες ανταμοιβές."
+				"title": "Τι χρειάζεται να κάνουν όσοι διακυβεύουν SNX;",
+				"description": "Όλα τα synths πρέπει να υποστηρίζονται από SNX σε αναλογία ασφάλειας 750%. Όσοι διακυβεύουν SNX πρέπει να διαχειρίζονται τη δική τους αναλογία για να είναι πάνω από αυτό το ποσοστό, το οποίο μπορεί να γίνει καίγοντας Synths για να αυξηθεί η αναλογία ή παράγοντας Synths για να μειωθεί. Αν το κάνουν αυτό, μπορούν να συλλέγουν τις εβδομάδες ανταμοιβές."
 			},
 			"risks": {
 				"title": "Ποιο είναι το ρίσκο;",
-				"description": "Όλοι οι SNX stakers δημιουργούν ένα “χρέος” όταν κάνουν stake. To χρέος τους αρχίζει ως το ποσό των sUSD που αρχικά παρήγαν, και κυμαίνεται ανάλογα με τα κέρδη ή τις ζημίες που έχουν γίνει από άλλους κατόχους Synths. Κάθε φορά που κάποιος έχει ένα Synth που αυξάνεται η την αξία του, το κέρδος κατανέμεται αναλογικά μεταξύ όλων των χρεών των κατόχων SNX. Ένας staker πρέπει να πληρώσει το χρέος του, πριν μπορέσει να ξεκλειδώσει τα SNX του."
+				"description": "Όλοι οι διακυβευτές SNX δημιουργούν ένα “χρέος” όταν διακυβεύουν. To χρέος τους αρχίζει ως το ποσό των sUSD που αρχικά παρήγαν, και κυμαίνεται ανάλογα με τα κέρδη ή τις ζημίες που έχουν γίνει από άλλους κατόχους Synths. Κάθε φορά που κάποιος έχει ένα Synth που αυξάνεται η την αξία του, το κέρδος κατανέμεται αναλογικά μεταξύ όλων των χρεών των κατόχων SNX. Ένας διακυβευτής πρέπει να πληρώσει το χρέος του, πριν μπορέσει να ξεκλειδώσει τα SNX του."
 			}
 		},
 		"walletConnection": {
@@ -64,8 +64,8 @@
 			"title": "Σύνολο SNX:",
 			"locked": "Κλειδωμένα",
 			"transferable": "Μεταβιβάσιμα",
-			"staking": "Staked",
-			"nonStaking": "Όχι staked",
+			"staking": "Σε διακύβευση",
+			"nonStaking": "Όχι σε διακύβευση",
 			"escrowed": "Σε μεσεγγύηση",
 			"nonEscrowed": "Όχι σε μεσεγγύηση"
 		},
@@ -95,14 +95,14 @@
 		"actions": {
 			"mint": {
 				"title": "Παραγωγή",
-				"description": "Παράξτε sUSD κάνοντας stake SNX"
+				"description": "Παράξτε sUSD διακυβεύοντας SNX"
 			},
 			"burn": {
 				"title": "Κάψιμο",
-				"description": "Κάψτε sUSD για να ξεκλειδώστε staked SNX"
+				"description": "Κάψτε sUSD για να ξεκλειδώστε διακυβευμένα SNX"
 			},
 			"claim": {
-				"title": "Αξίωση",
+				"title": "Διεκδίκηση",
 				"description": "Διεκδικήστε ανταμοιβές από το SNX και τις ανταλλαγές Synths"
 			},
 			"trade": {
@@ -119,7 +119,7 @@
 		"mint": {
 			"action": {
 				"title": "Παραγωγή",
-				"subtitle": "Παράξτε sUSD κάνοντας Stake τα SNX σας. Έτσι θα αποκτήσετε αναλογία ασφαλείας και χρέος, επιτρέποντας σας να κερδίζετε ανταμοιβές από το staking.",
+				"subtitle": "Παράξτε sUSD διακυβεύοντας τα SNX σας. Έτσι θα αποκτήσετε αναλογία ασφαλείας και χρέος, επιτρέποντας σας να κερδίζετε ανταμοιβές από το staking.",
 				"instruction": "Επιβεβαιώστε ή εισαγάγετε το ποσό που θέλετε να παράγετε:",
 				"buttons": {
 					"mint": "Παράξτε"
@@ -157,27 +157,27 @@
 		"claim": {
 			"action": {
 				"title": "Αξίωση",
-				"subtitle": "Αν έχετε κάνει stake τα SNX σας και έχετε παράγει sUSD, είστε επιλέξιμοι για να συλλέξετε δύο είδη ανταμοιβών: SNX staking ανταμοιβές, και ανταμοιβές ανταλλαγής Synths που δημιουργούνται στο Synthetix.Exchange.",
+				"subtitle": "Αν έχετε διακυβεύσει τα SNX σας και έχετε παράγει sUSD, είστε επιλέξιμοι για να συλλέξετε δύο είδη ανταμοιβών: SNX staking ανταμοιβές, και ανταμοιβές ανταλλαγής Synths που δημιουργούνται στο Synthetix.Exchange.",
 				"table": {
 					"title": "Περίοδοι:",
 					"period": "Περίοδος",
-					"status": "Κατάσταση αξίωσης",
+					"status": "Κατάσταση Διεκδίκησης",
 					"open": "Ανοιχτή",
 					"blocked": "Σε αποκλεισμό"
 				},
 				"tradingRewards": "Οι διαθέσιμες ανταμοιβές σας από τις συναλλαγές synths:",
 				"stakingRewards": "Οι διαθέσιμες ανταμοιβές σας από το SNX staking:",
 				"buttons": {
-					"claim": "Αξιώστε τώρα",
-					"history": "Ιστορικό αξιώσεων"
+					"claim": "Διεκδίκηστε τώρα",
+					"history": "Ιστορικό διεκδικήσεων"
 				},
 				"note": "Σημείωση: αν δεν συλλεχθούν εντός δύο περιόδων, οι ανταμοιβές σας θα χαθούν και θα μετακυλήσουν στην δεξαμενή τελών."
 			},
 			"confirmation": {
-				"actionDescription": "Αξίωση:"
+				"actionDescription": "Διεκδίκηση:"
 			},
 			"complete": {
-				"title": "Αξίωση σε εξέλιξη!"
+				"title": "Διεκδίκηση σε εξέλιξη!"
 			}
 		},
 		"trade": {
@@ -271,141 +271,141 @@
 	},
 	"escrow": {
 		"type": {
-			"staking": "Staking",
-			"token": "Token sale"
+			"staking": "Διακύβευση",
+			"token": "Πώληση token"
 		},
 		"buttons": {
-			"vest": "Vest now",
-			"viewTokenSale": "View token sale escrow",
-			"viewRewards": "View rewards escrow"
+			"vest": "Ανάθεση τώρα",
+			"viewTokenSale": "Προβολή μεσεγγύησης πώλησης token",
+			"viewRewards": "Προβολή μεσεγγύησης ανταμοιβών"
 		},
 		"staking": {
-			"title": "Vest your SNX staking rewards in escrow",
-			"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here after they have been escrowed for 12 months.",
-			"total": "Total escrowed:",
+			"title": "Αναθέστε τις ανταμοιβές διακύβευσης SNX σε μεσεγγύηση",
+			"subtitle": "Αν έχετε διακυβεύσει τα SNX σας και έχετε παράγει sUSD, δικαιούστε να λάβετε ανταμοιβές διακύβευσης SNX, τις οποίες μπορείτε να αναθέσετε εδώ αφού έχουν υποβληθεί σε μεσεγγύηση για 12 μήνες.",
+			"total": "Σύνολο σε μεσεγγύηση:",
 			"table": {
-				"none": "You have no escrowed SNX",
-				"title": "Vesting schedule",
-				"date": "Vesting date",
-				"quantity": "Quantity"
+				"none": "Δεν έχετε SNX σε μεσεγγύηση",
+				"title": "Πρόγραμμα ανάθεσης",
+				"date": "Ημερομηνία ανάθεσης",
+				"quantity": "Ποσότητα"
 			}
 		},
 		"tokenSale": {
-			"title": "Vest your escrowed SNX from the token sale",
-			"subtitle": "If your SNX is still escrowed from the token sale, you can vest it here.",
-			"total": "Total vesting:",
+			"title": "Αναθέστε τα SNX σε μεσεγγύηση από το την πώληση token",
+			"subtitle": "Αν τα SNX σας είναι ακόμα σε μεσεγγύηση από την πώληση των token, μπορείτε να τα αναθέσετε εδώ.",
+			"total": "Σύνολο σε ανάθεση:",
 			"table": {
-				"title": "Vesting schedule",
-				"period": "Vesting period",
-				"interval": "Interval",
-				"number": "No. of intervals",
-				"months": "Months",
-				"vested": "Vested",
-				"date": "Vesting date",
-				"quantity": "Quantity",
-				"none": "You have no escrowed SNX"
+				"title": "Πρόγραμμα ανάθεσης",
+				"period": "Περίοδος ανάθεσης",
+				"interval": "Διάστημα",
+				"number": "Αριθμός διαστημάτων",
+				"months": "Μήνες",
+				"vested": "Σε ανάθεση",
+				"date": "Ημερομηνία ανάθεσης",
+				"quantity": "Ποσότητα",
+				"none": "Δεν έχετε SNX σε ανάθεση"
 			}
 		},
 		"confirmation": {
-			"actionDescription": "Vesting:"
+			"actionDescription": "Σε ανάθεση:"
 		},
 		"complete": {
-			"title": "Vesting in progress!",
-			"actionDescription": "Vesting:"
+			"title": "Ανάθεση σε εξέλιξη!",
+			"actionDescription": "Σε ανάθεση:"
 		}
 	},
 	"transactions": {
 		"filters": {
-			"type": "Type",
-			"date": "Date",
-			"amount": "Amount"
+			"type": "Τύπος",
+			"date": "Ημερομηνία",
+			"amount": "Ποσό"
 		},
 		"events": {
-			"minted": "Minted",
-			"burned": "Burned",
-			"claimedFees": "Claimed Rewards",
-			"exchanged": "Bought",
-			"traded": "Traded",
-			"sent": "Sent",
-			"deposited": "Deposited",
-			"withdrawn": "Withdrawn",
-			"sold": "Sold"
+			"minted": "Παράχθηκαν",
+			"burned": "Κάηκαν",
+			"claimedFees": "Ανταμοιβές που διεκδικήθηκαν",
+			"exchanged": "Αγοράστηκαν",
+			"traded": "ανταλλάχθηκαν",
+			"sent": "Απεστάλησαν",
+			"deposited": "Κατατέθηκαν",
+			"withdrawn": "Αναλήφθηκαν",
+			"sold": "πουλήθηκαν"
 		},
 		"buttons": {
-			"clearFilters": "Clear filters"
+			"clearFilters": "Απαλοιφή φίλτρων"
 		},
 		"inputs": {
-			"from": "from:",
-			"to": "to:"
+			"from": "Από:",
+			"to": "Σε:"
 		}
 	},
 	"transactionSettings": {
-		"priceIndicator": "Ethereum network fees:",
-		"title": "Set gas price",
-		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
-		"minutes": "mins",
+		"priceIndicator": "Τέλη του Ethereum δικτύου:",
+		"title": "Ρύθμιση της τιμής καυσίμου (gas price)",
+		"subtitle": "Ρυθμίστε την τιμή του καυσίμου (GWEI) παρακάτω για να ορίσετε την ταχύτητα συναλλαγής.",
+		"minutes": "λεπτά",
 		"speed": {
-			"slow": "Slow",
-			"average": "Average",
-			"fast": "Fast"
+			"slow": "Αργό",
+			"average": "Μέσο",
+			"fast": "Γρήγορο"
 		},
 		"button": {
-			"submit": "Submit"
+			"submit": "Υποβολή"
 		}
 	},
 	"transactionProcessing": {
 		"confirmation": {
-			"title": "Please confirm transaction",
-			"subtitle": "To continue, follow the prompts on your <1>walletType</1> Wallet.",
+			"title": "Παρακαλώ επιβεβαιώστε τη συναλλαγή",
+			"subtitle": "Για να συνεχίσετε, ακολουθήστε τις οδηγίες από το <1>walletType</1> πορτοφόλι σας.",
 			"loading": "Waiting for user response..."
 		},
 		"complete": {
-			"subtitle": "Your transaction has been broadcast to the Ethereum network. You may close this window as the transaction will complete in the background."
+			"subtitle": "Η συναλλαγή σας μεταδόθηκε στο δίκτυο του Ethereum. Μπορείτε να κλείσετε αυτό το παράθυρο, καθώς η συναλλαγή θα ολοκληρωθεί στο παρασκήνιο."
 		},
 		"error": {
-			"title": "Something went wrong...",
-			"subtitle": "Code:",
+			"title": "Κάτι πήγε στραβά...",
+			"subtitle": "Κωδικός:",
 			"type": {
-				"userDenied": "User denied transaction signature",
-				"generic": "Error"
+				"userDenied": "Ο χρήστης αρνήθηκε την υπογραφή συναλλαγής",
+				"generic": "Σφάλμα"
 			}
 		}
 	},
 	"notification": {
 		"status": {
-			"pending": "Transaction in progress",
-			"success": "Transaction complete!",
-			"error": "An error occurred..."
+			"pending": "Συναλλαγή σε εξέλιξη",
+			"success": "Η συναλλαγή ολοκληρώθηκε",
+			"error": "Παρουσιάστηκε σφάλμα..."
 		}
 	},
 	"button": {
-		"max": "Max",
-		"burnMax": "Burn max",
-		"fixCRatio": "Fix your Collateralization Ratio",
-		"edit": "Edit",
-		"havingTrouble": "Having trouble?",
-		"whatIsSynthetix": "What is Synthetix?",
-		"previous": "Previous",
-		"next": "Next",
-		"startOver": "Start over",
+		"max": "Μέγιστο ποσό",
+		"burnMax": "Καύση μέγιστου ποσού",
+		"fixCRatio": "Διορθώστε την αναλογία ασφάλειας",
+		"edit": "Επεξεργασία",
+		"havingTrouble": "Δυσκολεύεστε;",
+		"whatIsSynthetix": "Τι είναι το Synthetix;",
+		"previous": "Προηγούμενο",
+		"next": "Επόμενο",
+		"startOver": "Ξεκινήστε από την αρχή",
 		"navigation": {
-			"cancel": "Cancel",
-			"back": "Go back",
-			"close": "Close",
-			"etherscan": "View on Etherscan",
-			"view": "View",
-			"finish": "Finish & return home",
+			"cancel": "Ακύρωση",
+			"back": "Πίσω",
+			"close": "Κλείσιμο",
+			"etherscan": "Προβολή στο Etherscan",
+			"view": "Προβολή",
+			"finish": "Τέλος και επιστροφή στην αρχική",
 			"ok": "OK"
 		}
 	},
 	"input": {
 		"list": {
-			"placeholder": "Search for a synth..."
+			"placeholder": "Αναζητήστε ένα synth..."
 		},
 		"error": {
-			"notEnoughToMint": "You cannot currently mint that much sUSD",
-			"gasEstimate": "Error while getting gas estimate",
-			"invalidAmount": "Invalid amount",
+			"notEnoughToMint": "Δεν μπορείτε να παράγετε τόσα sUSD",
+			"gasEstimate": "Σφάλμα κατά τη εκτίμηση καυσίμου",
+			"invalidAmount": "Μη έγκυρο ποσό",
 			"notEnoughToBurn": "You do not have that much sUSD to burn. You can find the best rate on dex.ag to buy more.",
 			"balanceTooLow": "Your balance is too low",
 			"lowerThanMinDeposit": "Amount lower than minimum deposit"
