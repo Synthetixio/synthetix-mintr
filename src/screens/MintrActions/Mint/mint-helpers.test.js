@@ -49,6 +49,15 @@ describe('estimateCRatio', () => {
 		};
 		expect(estimateCRatio(arg)).toBe(1376);
 	});
+	test('handle invalid mint amount', () => {
+		const arg = {
+			SNXPrice: 1.3482923239482243,
+			debtBalance: 1169.1068040800776,
+			snxBalance: 11927.582086160464,
+			mintAmount: '12k3',
+		};
+		expect(estimateCRatio(arg)).toBe(1376);
+	});
 	test('calculates real life example correctly', () => {
 		const arg = {
 			SNXPrice: 1.3482923239482243,
