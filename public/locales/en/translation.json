@@ -122,6 +122,7 @@
 				"subtitle": "Mint sUSD by staking your SNX. This gives you a Collateralization Ratio and a debt, allowing you to earn staking rewards.",
 				"instruction": "Confirm or enter amount to mint:",
 				"staking": "Staking",
+				"estimateCRatio": "Estimated C-Ratio",
 				"buttons": {
 					"mint": "Mint now"
 				}

@@ -1,4 +1,4 @@
-import { getStakingAmount } from './mint-helpers';
+import { getStakingAmount, estimateCRatio } from './mint-helpers';
 
 describe('getStakingAmount', () => {
 	test('returns 0 when missing issuanceRatio', () => {
@@ -36,5 +36,26 @@ describe('getStakingAmount', () => {
 				SNXPrice: 1.37331447542872,
 			})
 		).toBe('546.12');
+	});
+});
+
+describe('estimateCRatio', () => {
+	test('handle empty string mint amount', () => {
+		const arg = {
+			SNXPrice: 1.3482923239482243,
+			debtBalance: 1169.1068040800776,
+			snxBalance: 11927.582086160464,
+			mintAmount: '',
+		};
+		expect(estimateCRatio(arg)).toBe(1376);
+	});
+	test('calculates real life example correctly', () => {
+		const arg = {
+			SNXPrice: 1.3482923239482243,
+			debtBalance: 1169.1068040800776,
+			snxBalance: 11927.582086160464,
+			mintAmount: 10,
+		};
+		expect(estimateCRatio(arg)).toBe(1364);
 	});
 });

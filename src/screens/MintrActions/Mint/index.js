@@ -26,12 +26,13 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
 					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
+					snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
 				]);
-				const [maxIssuableSynths, debtBalance, issuanceRatio, SNXPrice] = results.map(
+				const [maxIssuableSynths, debtBalance, issuanceRatio, SNXPrice, snxBalance] = results.map(
 					bigNumberFormatter
 				);
 				const issuableSynths = Math.max(0, maxIssuableSynths - debtBalance);
-				setData({ issuableSynths, debtBalance, issuanceRatio, SNXPrice });
+				setData({ issuableSynths, debtBalance, issuanceRatio, SNXPrice, snxBalance });
 			} catch (e) {
 				console.log(e);
 			}
@@ -92,7 +93,10 @@ const Mint = ({ onDestroy }) => {
 	} = useContext(Store);
 
 	const sUSDBytes = bytesFormatter('sUSD');
-	const { issuableSynths, issuanceRatio, SNXPrice } = useGetIssuanceData(currentWallet, sUSDBytes);
+	const { issuableSynths, issuanceRatio, SNXPrice, debtBalance, snxBalance } = useGetIssuanceData(
+		currentWallet,
+		sUSDBytes
+	);
 
 	const gasEstimateError = useGetGasEstimate(mintAmount, issuableSynths);
 
@@ -151,6 +155,8 @@ const Mint = ({ onDestroy }) => {
 		...transactionInfo,
 		isFetchingGasLimit,
 		gasEstimateError,
+		debtBalance,
+		snxBalance,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
