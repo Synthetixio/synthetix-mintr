@@ -8,7 +8,7 @@ import { ButtonPrimary, ButtonTertiary, ButtonMax } from '../../../components/Bu
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
-import { getStakingAmount } from './mint-helpers';
+import { getStakingAmount, estimateCRatio } from './mint-helpers';
 
 const Action = ({
 	t,
@@ -21,6 +21,8 @@ const Action = ({
 	gasEstimateError,
 	issuanceRatio,
 	SNXPrice,
+	debtBalance,
+	snxBalance,
 }) => {
 	return (
 		<SlidePage>
@@ -53,17 +55,25 @@ const Action = ({
 						/>
 						<ErrorMessage message={gasEstimateError} />
 					</Form>
-					<StakedSNXRow>
-						<Subtext mr={'10px'}>{t('mintrActions.mint.action.staking')}:</Subtext>
-						<Subtext>
-							{getStakingAmount({
-								issuanceRatio,
-								mintAmount,
-								SNXPrice,
-							})}
-							{' SNX'}
-						</Subtext>
-					</StakedSNXRow>
+					<InfoRow>
+						<InfoCol>
+							<Subtext mr={'10px'}>{t('mintrActions.mint.action.staking')}:</Subtext>
+							<Subtext>
+								{getStakingAmount({
+									issuanceRatio,
+									mintAmount,
+									SNXPrice,
+								})}
+								{' SNX'}
+							</Subtext>
+						</InfoCol>
+						<InfoCol>
+							<Subtext mr={'10px'}>{t('mintrActions.mint.action.estimateCRatio')}:</Subtext>
+							<Subtext>
+								{estimateCRatio({ SNXPrice, debtBalance, snxBalance, mintAmount })}%
+							</Subtext>
+						</InfoCol>
+					</InfoRow>
 				</Top>
 				<Bottom>
 					<TransactionPriceIndicatorNoTopMargin />
@@ -112,7 +122,11 @@ const TransactionPriceIndicatorNoTopMargin = styled(TransactionPriceIndicator)`
 	margin-top: 0;
 `;
 
-const StakedSNXRow = styled.div`
+const InfoRow = styled.div`
+	display: flex;
+	justify-content: space-between;
+`;
+const InfoCol = styled.div`
 	display: flex;
 	justify-content: center;
 `;
