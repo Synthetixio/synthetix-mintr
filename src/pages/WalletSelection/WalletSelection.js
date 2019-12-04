@@ -65,24 +65,29 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 					dispatch
 				);
 				setIsLoading(false);
-				const balances = await Promise.all(
-					nextWallets.map(async wallet => {
-						return {
-							snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
-							sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
-							ethBalance: await snxJSConnector.provider.getBalance(wallet.address),
-						};
-					})
-				);
-				nextWallets.forEach((wallet, index) => {
-					wallet.balances = {
-						snxBalance: bigNumberFormatter(balances[index].snxBalance),
-						sUSDBalance: bigNumberFormatter(balances[index].sUSDBalance),
-						ethBalance: bigNumberFormatter(balances[index].ethBalance),
-					};
-				});
 
-				updateWalletStatus({ availableWallets: [...availableWallets, ...nextWallets] }, dispatch);
+				const getBalanceForWallet = async wallet => {
+					return {
+						snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
+						sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
+						ethBalance: await snxJSConnector.provider.getBalance(wallet.address),
+					};
+				};
+
+				nextWallets.forEach((wallet, index) => {
+					getBalanceForWallet(wallet, index).then(balance => {
+						wallet.balances = {
+							snxBalance: bigNumberFormatter(balance.snxBalance),
+							sUSDBalance: bigNumberFormatter(balance.sUSDBalance),
+							ethBalance: bigNumberFormatter(balance.ethBalance),
+						};
+
+						updateWalletStatus(
+							{ availableWallets: [...availableWallets, ...nextWallets] },
+							dispatch
+						);
+					});
+				});
 			} catch (e) {
 				console.log(e);
 				setError(e.message);
