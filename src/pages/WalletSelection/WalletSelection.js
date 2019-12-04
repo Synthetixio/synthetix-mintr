@@ -14,7 +14,7 @@ import {
 } from '../../ducks/wallet';
 
 import { SimpleInput } from '../../components/Input';
-import Spinner from '../../components/Spinner';
+import Spinner, { MicroSpinner } from '../../components/Spinner';
 import SimpleSelect from '../../components/SimpleSelect';
 
 import {
@@ -142,6 +142,11 @@ const Heading = ({ hasLoaded, error }) => {
 			</HeadingContent>
 		);
 };
+const BalanceOrSpinner = ({ value }) => (
+	<RightAlignedTableDataMedium>
+		{value === undefined ? <NoMarginMicroSpinner /> : formatCurrency(value)}
+	</RightAlignedTableDataMedium>
+);
 
 const WalletConnection = ({ t }) => {
 	const {
@@ -236,19 +241,13 @@ const WalletConnection = ({ t }) => {
 																<TableDataMedium>{wallet.address}</TableDataMedium>
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.snxBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.snxBalance} />
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.sUSDBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.sUSDBalance} />
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.ethBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.ethBalance} />
 															</ListCell>
 															<ListCell
 																style={{ textAlign: 'right' }}
@@ -345,6 +344,13 @@ const ErrorImg = styled.img`
 
 const ErrorHeading = styled.div`
 	display: flex;
+`;
+const NoMarginMicroSpinner = styled(MicroSpinner)`
+	margin: 0px;
+`;
+const RightAlignedTableDataMedium = styled(TableDataMedium)`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 const AddWalletForm = styled.form`
