@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-control-regex */
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import orderBy from 'lodash/orderBy';
 import styled from 'styled-components';
@@ -91,7 +91,7 @@ const useGetTransactions = (walletAddress, networkName) => {
 			}
 		};
 		getTransaction();
-	}, [walletAddress]);
+	}, [walletAddress, networkName]);
 	return data;
 };
 
@@ -103,13 +103,14 @@ const getEventInfo = data => {
 		case 'FeesClaimed':
 			amount = `${formatCurrency(data.snxRewards || 0)} SNX`;
 			break;
-		case 'SynthExchange':
+		case 'SynthExchange': {
 			const fromCurrency = data.exchangeFromCurrency.replace(/\u0000/g, '');
 			const toCurrency = data.exchangeToCurrency.replace(/\u0000/g, '');
 			amount = `${formatCurrency(data.exchangeFromAmount)} ${fromCurrency} / ${formatCurrency(
 				data.exchangeToAmount
 			)} ${toCurrency}`;
 			break;
+		}
 		case 'ClearedDeposit':
 			amount = `${formatCurrency(data.toAmount)} ${data.token} (${formatCurrency(
 				data.fromETHAmount
