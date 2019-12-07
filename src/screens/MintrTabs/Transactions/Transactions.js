@@ -157,7 +157,40 @@ const filterTransactions = (transactions, filters) => {
 	});
 };
 
-const TransactionsTable = ({ data }) => {
+const TotalRow = ({ data, t }) => {
+	// If we only have one transaction it's not much point in showing total.
+	if (data.length < 1) return null;
+
+	const sortedByDate = data.slice().sort(function(a, b) {
+		return new Date(b.createdAt) - new Date(a.createdAt);
+	});
+	const lastTransactionDate = sortedByDate[0].createdAt;
+	const firstTransationDate = sortedByDate[sortedByDate.length - 1].createdAt;
+
+	const total = data.reduce((total, d) => {
+		return total + d.snxRewards;
+	}, 0);
+
+	return (
+		<TR>
+			<TD>
+				<DataLarge>{t('transactions.totalRow.total')}</DataLarge>
+			</TD>
+			<TD>
+				<DataLarge>{formatCurrency(total)} SNX</DataLarge>
+			</TD>
+			<TD style={{ textAlign: 'right' }}>
+				<DataLarge>
+					{format(new Date(firstTransationDate), 'd MMM yy')} -{' '}
+					{format(new Date(lastTransactionDate), 'd MMM yy')}
+				</DataLarge>
+			</TD>
+			<TD></TD>
+		</TR>
+	);
+};
+
+const TransactionsTable = ({ data, showTotal }) => {
 	const {
 		state: {
 			wallet: { networkName },
@@ -217,6 +250,7 @@ const TransactionsTable = ({ data }) => {
 							</TR>
 						);
 					})}
+					{showTotal && <TotalRow t={t} data={data} />}
 				</TBody>
 			</Table>
 		</TransactionsWrapper>
@@ -289,6 +323,7 @@ const Transactions = ({ t }) => {
 				<TransactionsPanel>
 					{filteredTransactions && filteredTransactions.length > 0 ? (
 						<TransactionsTable
+							showTotal={filters.events.length === 1 && filters.events[0] === 'FeesClaimed'}
 							data={filteredTransactions.slice(
 								PAGINATION_INDEX * currentPage,
 								PAGINATION_INDEX * currentPage + PAGINATION_INDEX

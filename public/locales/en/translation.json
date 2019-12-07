@@ -339,6 +339,9 @@
 		"inputs": {
 			"from": "from:",
 			"to": "to:"
+		},
+		"totalRow" : {
+			"total": "Total"
 		}
 	},
 	"transactionSettings": {
