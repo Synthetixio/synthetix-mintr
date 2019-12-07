@@ -199,7 +199,15 @@ const Dashboard = ({ t }) => {
 		});
 	}, [currentWallet, successQueue]);
 
-	useEffect(() => loadData(), [loadData]);
+	useEffect(() => {
+		loadData();
+		const intervalId = setInterval(() => {
+			loadData();
+		}, 10000);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [loadData]);
 
 	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
 
