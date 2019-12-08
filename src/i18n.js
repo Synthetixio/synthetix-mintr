@@ -10,7 +10,7 @@ i18n
 	.init({
 		fallbackLng: 'en',
 		detection: {
-			order: ['navigator'],
+			order: ['localStorage', 'navigator'],
 		},
 		react: {
 			useSuspense: true,
