@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import { withTranslation, useTranslation } from 'react-i18next';
+import { isEmpty } from 'lodash';
 
 import { Store } from '../../store';
 
@@ -14,14 +15,16 @@ import { ButtonTertiary } from '../../components/Button';
 import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components/Typography';
 import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
+import { MicroSpinner } from '../../components/Spinner';
 
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();
-	const { debtData, dashboardIsLoading } = state;
+	const { debtData } = state;
+
 	return (
 		<Row margin="0 0 22px 0">
 			<Box>
-				{dashboardIsLoading ? (
+				{isEmpty(debtData) ? (
 					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
 				) : (
 					<Figure>{debtData.currentCRatio ? Math.round(100 / debtData.currentCRatio) : 0}%</Figure>
@@ -29,7 +32,7 @@ const CollRatios = ({ state }) => {
 				<DataLarge>{t('dashboard.ratio.current')}</DataLarge>
 			</Box>
 			<Box>
-				{dashboardIsLoading ? (
+				{isEmpty(debtData) ? (
 					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
 				) : (
 					<Figure>{debtData.targetCRatio ? Math.round(100 / debtData.targetCRatio) : 0}%</Figure>
@@ -155,12 +158,12 @@ const processTableData = (state, t) => {
 
 const BalanceTable = ({ state }) => {
 	const { t } = useTranslation();
-	const { dashboardIsLoading } = state;
 	const data = processTableData(state, t);
+	const waitingForData = Object.values(state).some(value => isEmpty(value));
 	return (
 		<Box style={{ marginTop: '16px' }} full={true}>
 			<BoxInner>
-				{dashboardIsLoading ? (
+				{waitingForData ? (
 					<Skeleton width={'100%'} height={'242px'} />
 				) : (
 					<Table
@@ -196,7 +199,15 @@ const Dashboard = ({ t }) => {
 		});
 	}, [currentWallet, successQueue]);
 
-	useEffect(() => loadData(), [loadData]);
+	useEffect(() => {
+		loadData();
+		const intervalId = setInterval(() => {
+			loadData();
+		}, 10000);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [loadData]);
 
 	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
 
@@ -207,17 +218,20 @@ const Dashboard = ({ t }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						<ButtonTertiary onClick={() => loadData()}>
-							{t('dashboard.buttons.refresh')}
-						</ButtonTertiary>
+						<ButtonSpinnerContainer>
+							{dashboardIsLoading && <MicroSpinner />}
+							<ButtonTertiary onClick={() => loadData()}>
+								{t('dashboard.buttons.refresh')}
+							</ButtonTertiary>
+						</ButtonSpinnerContainer>
 					</ContainerHeader>
-					<CollRatios state={{ debtData, dashboardIsLoading }} />
+					<CollRatios state={{ debtData }} />
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
 								<Asset key={asset}>
 									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
-									{dashboardIsLoading ? (
+									{isEmpty(prices) ? (
 										<Skeleton height="22px" />
 									) : (
 										<CurrencyPrice>
@@ -233,7 +247,6 @@ const Dashboard = ({ t }) => {
 							balances,
 							debtData,
 							theme,
-							dashboardIsLoading,
 							escrowData,
 						}}
 					/>
@@ -243,7 +256,6 @@ const Dashboard = ({ t }) => {
 							synthData,
 							debtData,
 							prices,
-							dashboardIsLoading,
 						}}
 					/>
 					<Row margin="18px 0 0 0 ">
@@ -290,6 +302,11 @@ const Container = styled.div`
 	border-radius: ${props => (props.curved ? '40px' : '5px')};
 	padding: ${props => (props.curved ? '15px' : '32px 24px')};
 	margin: ${props => (props.curved ? '16px 0' : '0')};
+`;
+
+const ButtonSpinnerContainer = styled.div`
+	display: flex;
+	align-items: center;
 `;
 
 const ContainerHeader = styled.div`

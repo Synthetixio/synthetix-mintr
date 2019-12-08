@@ -14,7 +14,7 @@ import {
 } from '../../ducks/wallet';
 
 import { SimpleInput } from '../../components/Input';
-import Spinner from '../../components/Spinner';
+import Spinner, { MicroSpinner } from '../../components/Spinner';
 import SimpleSelect from '../../components/SimpleSelect';
 
 import {
@@ -65,24 +65,29 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 					dispatch
 				);
 				setIsLoading(false);
-				const balances = await Promise.all(
-					nextWallets.map(async wallet => {
-						return {
-							snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
-							sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
-							ethBalance: await snxJSConnector.provider.getBalance(wallet.address),
-						};
-					})
-				);
-				nextWallets.forEach((wallet, index) => {
-					wallet.balances = {
-						snxBalance: bigNumberFormatter(balances[index].snxBalance),
-						sUSDBalance: bigNumberFormatter(balances[index].sUSDBalance),
-						ethBalance: bigNumberFormatter(balances[index].ethBalance),
-					};
-				});
 
-				updateWalletStatus({ availableWallets: [...availableWallets, ...nextWallets] }, dispatch);
+				const getBalanceForWallet = async wallet => {
+					return {
+						snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
+						sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
+						ethBalance: await snxJSConnector.provider.getBalance(wallet.address),
+					};
+				};
+
+				nextWallets.forEach((wallet, index) => {
+					getBalanceForWallet(wallet, index).then(balance => {
+						wallet.balances = {
+							snxBalance: bigNumberFormatter(balance.snxBalance),
+							sUSDBalance: bigNumberFormatter(balance.sUSDBalance),
+							ethBalance: bigNumberFormatter(balance.ethBalance),
+						};
+
+						updateWalletStatus(
+							{ availableWallets: [...availableWallets, ...nextWallets] },
+							dispatch
+						);
+					});
+				});
 			} catch (e) {
 				console.log(e);
 				setError(e.message);
@@ -142,6 +147,11 @@ const Heading = ({ hasLoaded, error }) => {
 			</HeadingContent>
 		);
 };
+const BalanceOrSpinner = ({ value }) => (
+	<RightAlignedTableDataMedium>
+		{value === undefined ? <NoMarginMicroSpinner /> : formatCurrency(value)}
+	</RightAlignedTableDataMedium>
+);
 
 const WalletConnection = ({ t }) => {
 	const {
@@ -236,19 +246,13 @@ const WalletConnection = ({ t }) => {
 																<TableDataMedium>{wallet.address}</TableDataMedium>
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.snxBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.snxBalance} />
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.sUSDBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.sUSDBalance} />
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
-																<TableDataMedium>
-																	{formatCurrency(wallet.balances.ethBalance) || 0}
-																</TableDataMedium>
+																<BalanceOrSpinner value={wallet.balances.ethBalance} />
 															</ListCell>
 															<ListCell
 																style={{ textAlign: 'right' }}
@@ -345,6 +349,13 @@ const ErrorImg = styled.img`
 
 const ErrorHeading = styled.div`
 	display: flex;
+`;
+const NoMarginMicroSpinner = styled(MicroSpinner)`
+	margin: 0px;
+`;
+const RightAlignedTableDataMedium = styled(TableDataMedium)`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 const AddWalletForm = styled.form`

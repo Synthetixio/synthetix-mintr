@@ -13,9 +13,9 @@ const Spinner = () => {
 	);
 };
 
-export const MicroSpinner = () => {
+export const MicroSpinner = props => {
 	return (
-		<MicroWrapper>
+		<MicroWrapper {...props}>
 			<Inner isMicro={true}>
 				{[0, 1, 2, 3].map(i => {
 					return <MicroCircle key={i} />;
