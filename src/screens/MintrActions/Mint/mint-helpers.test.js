@@ -67,4 +67,30 @@ describe('estimateCRatio', () => {
 		};
 		expect(estimateCRatio(arg)).toBe(1364);
 	});
+	test('display 0 while data is loaded ', () => {
+		expect(
+			estimateCRatio({
+				debtBalance: 10,
+				snxBalance: 10,
+				SNXPrice: undefined,
+				mintAmount: '',
+			})
+		).toBe(0);
+		expect(
+			estimateCRatio({
+				debtBalance: 10,
+				snxBalance: undefined,
+				SNXPrice: 10,
+				mintAmount: '',
+			})
+		).toBe(0);
+		expect(
+			estimateCRatio({
+				debtBalance: undefined,
+				snxBalance: 10,
+				SNXPrice: 10,
+				mintAmount: '',
+			})
+		).toBe(0);
+	});
 });
