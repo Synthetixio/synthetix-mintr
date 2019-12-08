@@ -1,5 +1,5 @@
 import { hot } from 'react-hot-loader/root';
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense, useEffect, useContext, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { isMobileOrTablet } from '../../helpers/browserHelper';
@@ -12,6 +12,8 @@ import MaintenanceMessage from '../MaintenanceMessage';
 import MobileLanding from '../MobileLanding';
 
 import NotificationCenter from '../../components/NotificationCenter';
+import snxJSConnector from '../../helpers/snxJSConnector';
+import { getEthereumNetwork } from '../../helpers/networkHelper';
 
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
@@ -23,21 +25,48 @@ const renderCurrentPage = currentPage => {
 			return <WalletSelection />;
 		case 'main':
 			return <Main />;
-		case 'maintenance':
-			return <MaintenanceMessage />;
 	}
 };
 
 const Root = () => {
+	const [intervalId, setIntervalId] = useState(null);
+	const [isOnMaintenance, setIsOnMaintenance] = useState(false);
 	const {
 		state: {
 			ui: { currentPage },
 		},
 	} = useContext(Store);
+	const getAppState = useCallback(async () => {
+		try {
+			setIsOnMaintenance(await snxJSConnector.snxJS.DappMaintenance.isPausedMintr());
+		} catch (err) {
+			console.log('Could not get DappMaintenance contract data', err);
+			setIsOnMaintenance(false);
+		}
+	}, []);
+	useEffect(() => {
+		console.log(process.env.CONTEXT);
+		// if (process.env.CONTEXT !== 'production') return;
+		const init = async () => {
+			const { networkId } = await getEthereumNetwork();
+			snxJSConnector.setContractSettings({ networkId });
+			getAppState();
+			const intervalId = setInterval(() => {
+				getAppState();
+			}, 30 * 1000);
+			setIntervalId(intervalId);
+		};
+		init();
+		return () => {
+			clearInterval(intervalId);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [getAppState]);
+
 	return (
 		<Suspense fallback={<div></div>}>
 			<RootWrapper>
-				{renderCurrentPage(currentPage)}
+				{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
 				<NotificationCenter></NotificationCenter>
 			</RootWrapper>
 		</Suspense>
