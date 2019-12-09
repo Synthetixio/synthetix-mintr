@@ -45,8 +45,7 @@ const Root = () => {
 		}
 	}, []);
 	useEffect(() => {
-		console.log(process.env);
-		// if (process.env.CONTEXT !== 'production') return;
+		if (process.env.REACT_APP_CONTEXT !== 'production') return;
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
 			snxJSConnector.setContractSettings({ networkId });
