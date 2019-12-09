@@ -45,7 +45,7 @@ const Root = () => {
 		}
 	}, []);
 	useEffect(() => {
-		console.log(process.env.CONTEXT);
+		console.log(process.env.REACT_APP_CONTEXT);
 		// if (process.env.CONTEXT !== 'production') return;
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
