@@ -9,8 +9,13 @@
   RUBY_VERSION = "2.6.2"
   NODE_ENV = "production"
 
+[context.branch-deploy.environment]
+  CONTEXT = "staging1"
+  REACT_APP_CONTEXT = "staging2"
+
 [context.staging]
-  NODE_ENV = "staging"
+  CONTEXT = "staging3"
+  REACT_APP_CONTEXT = "staging4"
 
 [[redirects]]
   from = "/*"
