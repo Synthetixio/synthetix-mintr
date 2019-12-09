@@ -29,7 +29,6 @@ const renderCurrentPage = currentPage => {
 };
 
 const Root = () => {
-	const [intervalId, setIntervalId] = useState(null);
 	const [isOnMaintenance, setIsOnMaintenance] = useState(false);
 	const {
 		state: {
@@ -46,14 +45,14 @@ const Root = () => {
 	}, []);
 	useEffect(() => {
 		if (process.env.REACT_APP_CONTEXT !== 'production') return;
+		let intervalId;
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
 			snxJSConnector.setContractSettings({ networkId });
 			getAppState();
-			const intervalId = setInterval(() => {
+			intervalId = setInterval(() => {
 				getAppState();
 			}, 30 * 1000);
-			setIntervalId(intervalId);
 		};
 		init();
 		return () => {
