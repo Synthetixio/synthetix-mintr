@@ -9,7 +9,7 @@
   RUBY_VERSION = "2.6.2"
   NODE_ENV = "production"
 
-[context.branch-deploy.environment]
+[context.staging]
   NODE_ENV = "staging"
 
 [[redirects]]
