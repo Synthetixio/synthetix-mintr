@@ -7,12 +7,10 @@
   NODE_OPTIONS = "--max_old_space_size=4096"
   NODE_VERSION = "10.16.3"
   RUBY_VERSION = "2.6.2"
+  NODE_ENV = "production"
 
-[context.production]
-  CONTEXT = "production"
-
-[context.branch-deploy]
-  CONTEXT = "staging"
+[context.branch-deploy.environment]
+  NODE_ENV = "staging"
 
 [[redirects]]
   from = "/*"
