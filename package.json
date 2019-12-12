@@ -1,6 +1,6 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.15.0",
+	"version": "2.16.4",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
@@ -29,7 +29,7 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-js": "2.15.0",
+		"synthetix-js": "2.16.4",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
