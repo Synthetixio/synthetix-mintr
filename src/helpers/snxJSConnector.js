@@ -91,6 +91,7 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 
 const connectToWalletConnect = async (networkId, networkName) => {
 	try {
+		await snxJSConnector.signer.provider._web3Provider.enable();
 		const accounts = await snxJSConnector.signer.getNextAddresses();
 		if (accounts && accounts.length > 0) {
 			return {
@@ -135,8 +136,8 @@ const getSignerConfig = ({ type, networkId, derivationPath }) => {
 	return {};
 };
 
-export const setSigner = async ({ type, networkId, derivationPath }) => {
-	const signer = await new snxJSConnector.signers[type](
+export const setSigner = ({ type, networkId, derivationPath }) => {
+	const signer = new snxJSConnector.signers[type](
 		getSignerConfig({ type, networkId, derivationPath })
 	);
 
@@ -155,7 +156,7 @@ export const connectToWallet = async ({ wallet, derivationPath }) => {
 			unlockReason: 'NetworkNotSupported',
 		};
 	}
-	await setSigner({ type: wallet, networkId, derivationPath });
+	setSigner({ type: wallet, networkId, derivationPath });
 
 	switch (wallet) {
 		case 'Metamask':
