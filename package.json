@@ -1,6 +1,6 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.17.0-alpha",
+	"version": "2.17.0-release-candidate",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
