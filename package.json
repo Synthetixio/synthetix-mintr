@@ -29,7 +29,7 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-js": "2.17.1-alpha",
+		"synthetix-js": "2.17.4-beta-1",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
