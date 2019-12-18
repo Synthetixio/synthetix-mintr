@@ -2,12 +2,12 @@ import React, { useContext, useState, useEffect } from 'react';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
-import { formatCurrency } from '../../../helpers/formatters';
+// import { formatCurrency } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+// import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
-import { createTransaction } from '../../../ducks/transactions';
-import errorMapper from '../../../helpers/errorMapper';
+// import { createTransaction } from '../../../ducks/transactions';
+// import errorMapper from '../../../helpers/errorMapper';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -47,52 +47,51 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 };
 
 const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
-	const { handleNext, handlePrev } = useContext(SliderContext);
+	const { handlePrev } = useContext(SliderContext);
 	const [depositAmount, setDepositAmount] = useState('');
-	const [transactionInfo, setTransactionInfo] = useState({});
+	const [transactionInfo] = useState({});
 	const {
 		state: {
 			wallet: { walletType, networkName },
 			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
+				settings: { isFetchingGasLimit },
 			},
 		},
-		dispatch,
 	} = useContext(Store);
 	const gasEstimateError = useGetGasEstimate(depositAmount, sUSDBalance, minimumDepositAmount);
 
 	const onDeposit = async () => {
-		try {
-			handleNext(1);
-			const depotAddress = snxJSConnector.snxJS.Depot.contract.address;
-			const transaction = await snxJSConnector.snxJS.sUSD.contract.transfer(
-				depotAddress,
-				snxJSConnector.utils.parseEther(depositAmount.toString()),
-				{
-					gasPrice: gasPrice * GWEI_UNIT,
-					gasLimit,
-				}
-			);
-			if (transaction) {
-				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
-				handleNext(2);
-			}
-		} catch (e) {
-			console.log(e);
-			const errorMessage = errorMapper(e, walletType);
-			console.log(errorMessage);
-			setTransactionInfo({ ...transactionInfo, transactionError: e });
-			handleNext(2);
-		}
+		// try {
+		// 	handleNext(1);
+		// 	const depotAddress = snxJSConnector.snxJS.Depot.contract.address;
+		// 	const transaction = await snxJSConnector.snxJS.sUSD.contract.transfer(
+		// 		depotAddress,
+		// 		snxJSConnector.utils.parseEther(depositAmount.toString()),
+		// 		{
+		// 			gasPrice: gasPrice * GWEI_UNIT,
+		// 			gasLimit,
+		// 		}
+		// 	);
+		// 	if (transaction) {
+		// 		setTransactionInfo({ transactionHash: transaction.hash });
+		// 		createTransaction(
+		// 			{
+		// 				hash: transaction.hash,
+		// 				status: 'pending',
+		// 				info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
+		// 				hasNotification: true,
+		// 			},
+		// 			dispatch
+		// 		);
+		// 		handleNext(2);
+		// 	}
+		// } catch (e) {
+		// 	console.log(e);
+		// 	const errorMessage = errorMapper(e, walletType);
+		// 	console.log(errorMessage);
+		// 	setTransactionInfo({ ...transactionInfo, transactionError: e });
+		// 	handleNext(2);
+		// }
 	};
 
 	const props = {

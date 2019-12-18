@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { Store } from '../../../store';
 import { format } from 'date-fns';
@@ -312,18 +312,26 @@ const Depot = ({ t }) => {
 			<ButtonRow>
 				{['deposit', 'withdraw'].map(action => {
 					return (
-						<Button key={action} onClick={() => setCurrentScenario(action)}>
+						<Button
+							disabled={action === 'deposit'}
+							key={action}
+							onClick={() => setCurrentScenario(action)}
+						>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
 								<H2>{t(buttonLabelMapper(action))}</H2>
-								<PLarge>{t('depot.buttons.available')}</PLarge>
-								<Amount>
-									$
-									{action === 'deposit'
-										? formatCurrency(sUSDBalance)
-										: formatCurrency(amountAvailable)}{' '}
-									sUSD
-								</Amount>
+								{action === 'withdraw' ? (
+									<Fragment>
+										<PLarge>{t('depot.buttons.available')}</PLarge>
+										<Amount>
+											$
+											{action === 'deposit'
+												? formatCurrency(sUSDBalance)
+												: formatCurrency(amountAvailable)}{' '}
+											sUSD
+										</Amount>
+									</Fragment>
+								) : null}
 							</ButtonContainer>
 						</Button>
 					);
@@ -388,6 +396,10 @@ const Button = styled.button`
 		background-color: ${props => props.theme.colorStyles.panelButtonHover};
 		box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
 		transform: translateY(-2px);
+	}
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.5;
 	}
 `;
 
