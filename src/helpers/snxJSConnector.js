@@ -89,6 +89,30 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 	};
 };
 
+const connectToWalletConnect = async (networkId, networkName) => {
+	try {
+		await snxJSConnector.signer.provider._web3Provider.enable();
+		const accounts = await snxJSConnector.signer.getNextAddresses();
+		if (accounts && accounts.length > 0) {
+			return {
+				currentWallet: accounts[0],
+				walletType: 'WalletConnect',
+				unlocked: true,
+				networkId,
+				networkName: networkName.toLowerCase(),
+			};
+		}
+	} catch (e) {
+		console.log(e);
+		return {
+			walletType: 'WalletConnect',
+			unlocked: false,
+			unlockReason: 'ErrorWhileConnectingToWalletConnect',
+			unlockMessage: e,
+		};
+	}
+};
+
 const getSignerConfig = ({ type, networkId, derivationPath }) => {
 	if (type === 'Ledger') {
 		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
@@ -100,6 +124,12 @@ const getSignerConfig = ({ type, networkId, derivationPath }) => {
 			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
 			jsonRpcUrl: INFURA_JSON_RPC_URLS[networkId],
 			networkId,
+		};
+	}
+
+	if (type === 'WalletConnect') {
+		return {
+			infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
 		};
 	}
 
@@ -136,6 +166,8 @@ export const connectToWallet = async ({ wallet, derivationPath }) => {
 		case 'Trezor':
 		case 'Ledger':
 			return connectToHardwareWallet(networkId, name, wallet);
+		case 'WalletConnect':
+			return connectToWalletConnect(networkId, name);
 		default:
 			return {};
 	}
