@@ -118,7 +118,7 @@ const WalletButtons = () => {
 	const { t } = useTranslation();
 	return (
 		<Wallets>
-			<PMega mb={'30px'}>{t('onboarding.walletConnection.title')}</PMega>
+			<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 			{SUPPORTED_WALLETS.map(wallet => {
 				const noMetamask = wallet === 'Metamask' && !hasWeb3();
 				return (
@@ -259,7 +259,7 @@ const Wallets = styled.div`
 `;
 
 const Button = styled.button`
-	height: 85px;
+	height: 80px;
 	width: 100%;
 	border-radius: 2px;
 	padding: 16px 48px;
