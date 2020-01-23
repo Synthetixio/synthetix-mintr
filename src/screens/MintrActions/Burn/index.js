@@ -28,7 +28,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
 					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
 					snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
-					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress, sUSDBytes),
+					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
 				]);
 				const [
 					debt,

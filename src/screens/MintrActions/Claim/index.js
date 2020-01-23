@@ -36,7 +36,6 @@ const useGetFeeData = walletAddress => {
 	useEffect(() => {
 		const getFeeData = async () => {
 			const xdrBytes = bytesFormatter('XDR');
-			const sUSDBytes = bytesFormatter('sUSD');
 			try {
 				setData({ ...data, dataIsLoading: true });
 				const [
@@ -55,7 +54,7 @@ const useGetFeeData = walletAddress => {
 						)
 					),
 					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
-					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress, sUSDBytes),
+					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(xdrBytes),
 				]);
 				const formattedXdrRate = bigNumberFormatter(xdrRate);
