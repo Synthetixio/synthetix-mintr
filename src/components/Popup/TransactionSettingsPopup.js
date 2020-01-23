@@ -13,6 +13,7 @@ import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
 import { ButtonPrimary } from '../Button';
 import Slider from '../Slider';
+import { SimpleInput } from '../Input';
 
 const RatesData = ({ gasInfo }) => {
 	const { t } = useTranslation();
@@ -80,11 +81,24 @@ const TransactionSettingsPopup = ({ t }) => {
 					<PageTitle>{t('transactionSettings.title')}</PageTitle>
 					<PLarge>{t('transactionSettings.subtitle')}</PLarge>
 				</Intro>
+				<Input
+					type="number"
+					step={0.1}
+					placeholder={t('transactionSettings.placeholder')}
+					onChange={e => {
+						const newPrice = e.target.value;
+						setTransactionSettings({
+							gasPrice: newPrice,
+							usdPrice: getTransactionPrice(newPrice, gasLimit, ethPrice),
+						});
+					}}
+					value={currentTransactionSettings.gasPrice}
+				/>
 				<SliderWrapper>
 					<Slider
 						min={0}
 						max={50}
-						defaultValue={currentTransactionSettings.gasPrice}
+						value={currentTransactionSettings.gasPrice}
 						tooltipRenderer={() => renderTooltipContent(currentTransactionSettings)}
 						onChange={newPrice =>
 							setTransactionSettings({
@@ -124,10 +138,18 @@ const Wrapper = styled.div`
 	align-items: center;
 `;
 
+const Input = styled(SimpleInput)`
+	margin-bottom: 10px;
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		appearance: none;
+	}
+`;
+
 const Intro = styled.div`
 	width: 400px;
 	text-align: center;
-	margin-bottom: 88px;
+	margin-bottom: 50px;
 `;
 
 const SliderWrapper = styled.div`

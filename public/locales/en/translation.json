@@ -344,6 +344,7 @@
 	"transactionSettings": {
 		"priceIndicator": "Ethereum network fees:",
 		"title": "Set gas price",
+		"placeholder": "Add gas price (GWEI)",
 		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
 		"minutes": "mins",
 		"speed": {
