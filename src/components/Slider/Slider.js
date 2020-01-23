@@ -27,7 +27,7 @@ const SliderComponent = ({ min, max, defaultValue, tooltipRenderer, onChange }) 
 		<CustomSlider
 			min={min}
 			max={max}
-			defaultValue={defaultValue}
+			step={0.1}
 			handle={handle}
 			tipFormatter={tooltipRenderer}
 			onChange={onChange}
