@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { withTranslation } from 'react-i18next';
 
-import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
+import { CountdownButton, ButtonTertiary } from '../../../components/Button';
 import { PLarge, H1, HyperlinkSmall } from '../../../components/Typography';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Input from '../../../components/Input';
@@ -21,6 +21,7 @@ const Action = ({
 	isFetchingGasLimit,
 	gasEstimateError,
 	burnAmountToFixCRatio,
+	waitingPeriod,
 }) => {
 	const [snxInputIsVisible, toggleSnxInput] = useState(false);
 	return (
@@ -83,13 +84,14 @@ const Action = ({
 				</Top>
 				<Bottom>
 					<TransactionPriceIndicator />
-					<ButtonPrimary
+					<CountdownButton
+						waitingPeriod={waitingPeriod}
 						disabled={isFetchingGasLimit || gasEstimateError}
 						onClick={onBurn}
 						margin="auto"
-					>
-						{t('mintrActions.burn.action.buttons.burn')}
-					</ButtonPrimary>
+						defaultLabel="mintrActions.burn.action.buttons.burn"
+						countdownLabel="mintrActions.burn.action.buttons.waitingPeriod"
+					/>
 				</Bottom>
 			</Container>
 		</SlidePage>

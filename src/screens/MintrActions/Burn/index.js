@@ -29,6 +29,9 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
 					snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
 					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
+					new Promise(resolve => {
+						resolve(snxJSConnector.utils.parseEther('180000'));
+					}),
 				]);
 				const [
 					debt,
@@ -39,8 +42,8 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					totalTokenSaleEscrow,
 					cRatio,
 					issuableSynths,
+					waitingPeriod,
 				] = results.map(bigNumberFormatter);
-
 				let maxBurnAmount, maxBurnAmountBN;
 				if (debt > sUSDBalance) {
 					maxBurnAmount = sUSDBalance;
@@ -59,6 +62,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
 					cRatio,
 					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
+					waitingPeriod,
 				});
 			} catch (e) {
 				console.log(e);
@@ -134,7 +138,9 @@ const Burn = ({ onDestroy }) => {
 		escrowBalance,
 		cRatio,
 		burnAmountToFixCRatio,
+		waitingPeriod,
 	} = useGetDebtData(currentWallet, sUSDBytes);
+
 	const gasEstimateError = useGetGasEstimate(
 		burnAmount,
 		maxBurnAmount,
@@ -204,6 +210,7 @@ const Burn = ({ onDestroy }) => {
 		isFetchingGasLimit,
 		gasEstimateError,
 		burnAmountToFixCRatio,
+		waitingPeriod,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
