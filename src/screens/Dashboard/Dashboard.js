@@ -203,7 +203,7 @@ const Dashboard = ({ t }) => {
 		loadData();
 		const intervalId = setInterval(() => {
 			loadData();
-		}, 10000);
+		}, 5 * 60 * 1000);
 		return () => {
 			clearInterval(intervalId);
 		};

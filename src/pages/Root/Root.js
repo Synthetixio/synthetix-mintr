@@ -52,7 +52,7 @@ const Root = () => {
 			getAppState();
 			intervalId = setInterval(() => {
 				getAppState();
-			}, 30 * 1000);
+			}, 5 * 60 * 1000);
 		};
 		init();
 		return () => {
