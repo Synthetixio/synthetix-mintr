@@ -18,8 +18,6 @@ export const ButtonPrimaryMedium = ({ children, onClick, disabled }) => {
 	);
 };
 
-export default ButtonPrimary;
-
 const Button = styled.button`
 	width: ${props => (props.width ? props.width : '400px')};
 	height: ${props => (props.height ? props.height : '72px')};
