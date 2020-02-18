@@ -85,7 +85,7 @@ const Action = ({
 								</ButtonPrimary>
 								<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
 									There is a waiting period after completing a trade. Please wait approximately{' '}
-									{secondsToTime(waitingPeriod)} before attempting to burn Synths.
+									{secondsToTime(waitingPeriod)} before attempting to trade Synths.
 								</Subtext>
 							</RetryButtonWrapper>
 						) : (
