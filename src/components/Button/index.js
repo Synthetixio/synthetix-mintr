@@ -7,7 +7,6 @@ import TabButton from './TabButton';
 import WalletStatusButton from './WalletStatusButton';
 import ButtonTransactionEdit from './ButtonTransactionEdit';
 import BorderlessButton from './BorderlessButton';
-import CountdownButton from './CountdownButton';
 
 export {
 	ButtonPrimary,
@@ -20,5 +19,4 @@ export {
 	WalletStatusButton,
 	ButtonTransactionEdit,
 	BorderlessButton,
-	CountdownButton,
 };

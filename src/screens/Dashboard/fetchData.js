@@ -136,7 +136,7 @@ const getSynths = async walletAddress => {
 		);
 		const balances = await Promise.all(
 			result.map((balance, i) => {
-				return snxJSConnector.snxJS.Synthetix.effectiveValue(
+				return snxJSConnector.snxJS.ExchangeRates.effectiveValue(
 					bytesFormatter(synths[i]),
 					balance,
 					bytesFormatter('sUSD')
