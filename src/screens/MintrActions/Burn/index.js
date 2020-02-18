@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -39,8 +39,8 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					totalTokenSaleEscrow,
 					cRatio,
 					issuableSynths,
-					waitingPeriod,
 				] = results.map(bigNumberFormatter);
+
 				let maxBurnAmount, maxBurnAmountBN;
 				if (debt > sUSDBalance) {
 					maxBurnAmount = sUSDBalance;
@@ -59,7 +59,6 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
 					cRatio,
 					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
-					waitingPeriod,
 				});
 			} catch (e) {
 				console.log(e);
@@ -71,13 +70,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 	return data;
 };
 
-const useGetGasEstimate = (
-	burnAmount,
-	maxBurnAmount,
-	maxBurnAmountBN,
-	sUSDBalance,
-	waitingPeriod
-) => {
+const useGetGasEstimate = (burnAmount, maxBurnAmount, maxBurnAmountBN, sUSDBalance) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
@@ -88,7 +81,6 @@ const useGetGasEstimate = (
 			let gasEstimate;
 			try {
 				if (!parseFloat(burnAmount)) throw new Error('input.error.invalidAmount');
-				if (waitingPeriod) throw new Error('Waiting period for sUSD is still ongoing');
 				if (burnAmount > sUSDBalance || maxBurnAmount === 0)
 					throw new Error('input.error.notEnoughToBurn');
 				fetchingGasLimit(dispatch);
@@ -113,7 +105,7 @@ const useGetGasEstimate = (
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [burnAmount, maxBurnAmount, waitingPeriod]);
+	}, [burnAmount, maxBurnAmount]);
 	return error;
 };
 
@@ -122,7 +114,6 @@ const Burn = ({ onDestroy }) => {
 	const [burnAmount, setBurnAmount] = useState('');
 	const [transferableAmount, setTransferableAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet, walletType, networkName },
@@ -144,36 +135,14 @@ const Burn = ({ onDestroy }) => {
 		cRatio,
 		burnAmountToFixCRatio,
 	} = useGetDebtData(currentWallet, sUSDBytes);
-
-	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
-		try {
-			const maxSecsLeftInWaitingPeriod = await snxJSConnector.snxJS.Exchanger.maxSecsLeftInWaitingPeriod(
-				currentWallet,
-				bytesFormatter('sUSD')
-			);
-			setWaitingPeriod(Number(maxSecsLeftInWaitingPeriod));
-		} catch (e) {
-			console.log(e);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [burnAmount]);
-
-	useEffect(() => {
-		getMaxSecsLeftInWaitingPeriod();
-	}, [getMaxSecsLeftInWaitingPeriod]);
-
 	const gasEstimateError = useGetGasEstimate(
 		burnAmount,
 		maxBurnAmount,
 		maxBurnAmountBN,
-		sUSDBalance,
-		waitingPeriod
+		sUSDBalance
 	);
 	const onBurn = async () => {
 		try {
-			if (await snxJSConnector.snxJS.Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
-				throw new Error('Waiting period for sUSD is still ongoing');
-
 			handleNext(1);
 			const amountToBurn =
 				burnAmount === maxBurnAmount
@@ -235,8 +204,6 @@ const Burn = ({ onDestroy }) => {
 		isFetchingGasLimit,
 		gasEstimateError,
 		burnAmountToFixCRatio,
-		waitingPeriod,
-		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
