@@ -5,10 +5,11 @@ import { withTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SlidePage } from '../../../components/ScreenSlider';
 import { ButtonPrimary, ButtonTertiary, ButtonMax } from '../../../components/Button';
-import { PLarge, H1, DataHeaderLarge } from '../../../components/Typography';
+import { PLarge, H1, DataHeaderLarge, Subtext } from '../../../components/Typography';
 import Input, { SimpleInput } from '../../../components/Input';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import ErrorMessage from '../../../components/ErrorMessage';
+import { secondsToTime } from '../../../helpers/formatters';
 
 const Action = ({
 	t,
@@ -23,6 +24,8 @@ const Action = ({
 	setSendDestination,
 	isFetchingGasLimit,
 	gasEstimateError,
+	waitingPeriod,
+	onWaitingPeriodCheck,
 }) => {
 	return (
 		<SlidePage>
@@ -64,7 +67,7 @@ const Action = ({
 							}
 						/>
 						<ErrorMessage message={gasEstimateError} />
-						<PLarge marginTop="32px">{t('mintrActions.send.action.walletInstruction')}</PLarge>
+						<PLarge marginTop="10px">{t('mintrActions.send.action.walletInstruction')}</PLarge>
 						<SimpleInput
 							onChange={e => setSendDestination(e.target.value)}
 							value={sendDestination}
@@ -73,14 +76,26 @@ const Action = ({
 					</Form>
 				</Middle>
 				<Bottom>
-					<TransactionPriceIndicator />
-					<ButtonPrimary
-						disabled={!sendDestination || !sendAmount || gasEstimateError || isFetchingGasLimit}
-						onClick={onSend}
-						margin="auto"
-					>
-						{t('mintrActions.send.action.buttons.send')}
-					</ButtonPrimary>
+					<TransactionPriceIndicator margin="5px 0" />
+					{waitingPeriod ? (
+						<RetryButtonWrapper>
+							<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">
+								Retry
+							</ButtonPrimary>
+							<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+								There is a waiting period after completing a trade. Please wait approximately{' '}
+								{secondsToTime(waitingPeriod)} before attempting to burn Synths.
+							</Subtext>
+						</RetryButtonWrapper>
+					) : (
+						<ButtonPrimary
+							disabled={isFetchingGasLimit || gasEstimateError}
+							onClick={onSend}
+							margin="auto"
+						>
+							{t('mintrActions.send.action.buttons.send')}
+						</ButtonPrimary>
+					)}
 				</Bottom>
 			</Container>
 		</SlidePage>
@@ -97,13 +112,12 @@ const Container = styled.div`
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;
 	box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
-	margin-bottom: 20px;
 	padding: 0 64px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	justify-content: space-around;
+	justify-content: center;
 `;
 
 const Top = styled.div`
@@ -113,7 +127,7 @@ const Top = styled.div`
 
 const Middle = styled.div`
 	height: auto;
-	margin: 0px auto 16px auto;
+	margin: 0px auto;
 `;
 
 const Bottom = styled.div`
@@ -140,7 +154,7 @@ const ActionImage = styled.img`
 
 const Details = styled.div`
 	display: flex;
-	margin-bottom: 32px;
+	margin-bottom: 8px;
 `;
 
 const Box = styled.div`
@@ -163,10 +177,14 @@ const Amount = styled.span`
 `;
 
 const Form = styled.div`
-	margin: 0px 0px 24px 0px;
+	/* margin: 0px 0px 24px 0px; */
 	height: auto;
 	display: flex;
 	flex-direction: column;
+`;
+
+const RetryButtonWrapper = styled.div`
+	position: relative;
 `;
 
 export default withTranslation()(Action);
