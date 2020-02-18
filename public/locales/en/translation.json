@@ -39,7 +39,7 @@
 				"subtitle": "Mintr couldn't access your wallet.",
 				"retry": "Retry"
 			},
-			"addWallet": {
+			"addWallet":{
 				"placeholder": "Wallet address",
 				"buttonText": "Add"
 			}
@@ -145,8 +145,7 @@
 					"button": "View transferable SNX"
 				},
 				"buttons": {
-					"burn": "Burn now",
-					"waitingPeriod": "Burn synths unlocked in"
+					"burn": "Burn now"
 				}
 			},
 			"confirmation": {

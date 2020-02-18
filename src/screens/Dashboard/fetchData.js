@@ -30,23 +30,11 @@ export const getSusdInUsd = (synthRates, sethToEthRate) => {
 	return eth * synthRates.seth;
 };
 const getSETHtoETH = async () => {
-	const sEthAddress = snxJSConnector.snxJS.sETH.contract.address;
-	const query = `query {
-		exchanges(where: {tokenAddress:"${sEthAddress}"}) {
-			price
-		}
-	}`;
-	const response = await fetch('https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap', {
-		method: 'POST',
-		body: JSON.stringify({ query, variables: null }),
-	}).then(x => x.json());
-	return (
-		response &&
-		response.data &&
-		response.data.exchanges &&
-		response.data.exchanges[0] &&
-		1 / response.data.exchanges[0].price
-	);
+	const exchangeAddress = '0xe9cf7887b93150d4f2da7dfc6d502b216438f244';
+	const data = await fetch(
+		`https://uniswap-api.loanscan.io/v1/ticker?exchangeAddress=${exchangeAddress}`
+	).then(x => x.json());
+	return data.invPrice;
 };
 
 const getPrices = async () => {
@@ -136,7 +124,7 @@ const getSynths = async walletAddress => {
 		);
 		const balances = await Promise.all(
 			result.map((balance, i) => {
-				return snxJSConnector.snxJS.ExchangeRates.effectiveValue(
+				return snxJSConnector.snxJS.Synthetix.effectiveValue(
 					bytesFormatter(synths[i]),
 					balance,
 					bytesFormatter('sUSD')
