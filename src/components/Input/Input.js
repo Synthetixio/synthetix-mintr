@@ -90,7 +90,15 @@ const Dropdown = ({ onClick, synth, singleSynth }) => {
 	);
 };
 
-export const SimpleInput = ({ value, onChange, placeholder, name, className }) => {
+export const SimpleInput = ({
+	value,
+	onChange,
+	type = 'text',
+	step,
+	placeholder,
+	name,
+	className,
+}) => {
 	return (
 		<InputWrapper className={className}>
 			<InputInner>
@@ -98,7 +106,8 @@ export const SimpleInput = ({ value, onChange, placeholder, name, className }) =
 					value={value}
 					onChange={onChange}
 					placeholder={placeholder}
-					type="text"
+					type={type}
+					step={step}
 					name={name}
 				/>
 			</InputInner>
