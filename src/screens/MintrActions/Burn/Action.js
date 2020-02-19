@@ -8,7 +8,7 @@ import { PLarge, H1, HyperlinkSmall, Subtext } from '../../../components/Typogra
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
-import { secondsToTime } from '../../../helpers/formatters';
+import { formatCurrency, secondsToTime } from '../../../helpers/formatters';
 
 const Action = ({
 	t,
@@ -58,6 +58,10 @@ const Action = ({
 								{t('button.fixCRatio')}
 							</AmountButton>
 						</ButtonRow>
+						<SubtextRow>
+							<Subtext>${formatCurrency(maxBurnAmount)}</Subtext>
+							<Subtext>${formatCurrency(burnAmountToFixCRatio)}</Subtext>
+						</SubtextRow>
 						<Input
 							singleSynth={'sUSD'}
 							onChange={e => setBurnAmount(e.target.value)}
@@ -172,7 +176,11 @@ const ButtonRow = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 16px;
+`;
+
+const SubtextRow = styled.div`
+	display: flex;
+	justify-content: space-between;
 `;
 
 const AmountButton = styled.button`
