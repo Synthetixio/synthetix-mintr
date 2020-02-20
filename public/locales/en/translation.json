@@ -250,7 +250,8 @@
 				"subtitle": "Amount available:",
 				"instruction": "Enter deposit amount:",
 				"buttons": {
-					"deposit": "Deposit now"
+					"deposit": "Deposit now",
+					"unlock": "Unlock"
 				}
 			},
 			"complete": {

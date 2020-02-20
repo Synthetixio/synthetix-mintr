@@ -15,11 +15,13 @@ const Action = ({
 	t,
 	onDestroy,
 	onDeposit,
+	onUnlock,
 	sUSDBalance,
 	gasEstimateError,
 	isFetchingGasLimit,
 	setDepositAmount,
 	depositAmount,
+	hasAllowance,
 }) => {
 	return (
 		<SlidePage>
@@ -54,12 +56,18 @@ const Action = ({
 				</Top>
 				<Bottom>
 					<TransactionPriceIndicator />
-					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError || !depositAmount}
-						onClick={onDeposit}
-					>
-						{t('depot.deposit.action.buttons.deposit')}
-					</ButtonPrimary>
+					{hasAllowance ? (
+						<ButtonPrimary
+							disabled={isFetchingGasLimit || gasEstimateError || !depositAmount}
+							onClick={onDeposit}
+						>
+							{t('depot.deposit.action.buttons.deposit')}
+						</ButtonPrimary>
+					) : (
+						<ButtonPrimary onClick={onUnlock}>
+							{t('depot.deposit.action.buttons.unlock')}
+						</ButtonPrimary>
+					)}
 				</Bottom>
 			</Container>
 		</SlidePage>
