@@ -208,6 +208,12 @@ const UniPool = () => {
 								Rewards available:{' '}
 								{balances && balances.rewards ? formatCurrency(balances.rewards) : 0} SNX
 							</Label>
+							<Link
+								href="https://etherscan.io/address/0x48D7f315feDcaD332F68aafa017c7C158BC54760"
+								target="_blank"
+							>
+								<Label style={{ marginTop: '10px' }}>Go to contract</Label>
+							</Link>
 						</Data>
 						<ButtonRow>
 							<Left />
