@@ -76,11 +76,13 @@ const UniPool = () => {
 		const { parseEther } = snxJSConnector.utils;
 		const { uniswapContract, unipoolContract } = snxJSConnector;
 		try {
+			setError(null);
+			setTransactionHash(null);
 			const gasEstimate = await uniswapContract.estimate.approve(
 				unipoolContract.address,
 				parseEther(ALLOWANCE_LIMIT.toString())
 			);
-			await uniswapContract.approve(
+			const transaction = await uniswapContract.approve(
 				unipoolContract.address,
 				parseEther(ALLOWANCE_LIMIT.toString()),
 				{
@@ -88,7 +90,11 @@ const UniPool = () => {
 					gasPrice: gasPrice * GWEI_UNIT,
 				}
 			);
+			if (transaction) {
+				setTransactionHash(transaction.hash);
+			}
 		} catch (e) {
+			setError(e.message);
 			console.log(e);
 		}
 	};
@@ -180,7 +186,9 @@ const UniPool = () => {
 			<Inner>
 				{!hasAllowance ? (
 					<ButtonRow>
-						Allow token
+						<Left>
+							<Label>Set token allowance first</Label>
+						</Left>
 						<ButtonPrimary onClick={onUnlock}>Unlock</ButtonPrimary>
 					</ButtonRow>
 				) : (
