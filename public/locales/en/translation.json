@@ -85,7 +85,8 @@
 			"home": "Home",
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
-			"escrow": "Escrow"
+			"escrow": "Escrow",
+			"unipool": "UniPool"
 		}
 	},
 	"home": {
