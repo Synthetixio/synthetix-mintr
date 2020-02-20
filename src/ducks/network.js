@@ -27,7 +27,7 @@ export default (state, action) => {
 				...state,
 				gasStation,
 				ethPrice,
-				settings: { gasPrice: gasStation['slow'].gwei },
+				settings: { gasPrice: gasStation['average'].gwei },
 			};
 		}
 		case FETCHING_GAS_LIMIT: {

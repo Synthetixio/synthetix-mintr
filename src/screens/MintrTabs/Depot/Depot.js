@@ -312,11 +312,7 @@ const Depot = ({ t }) => {
 			<ButtonRow>
 				{['deposit', 'withdraw'].map(action => {
 					return (
-						<Button
-							disabled={action === 'deposit'}
-							key={action}
-							onClick={() => setCurrentScenario(action)}
-						>
+						<Button key={action} onClick={() => setCurrentScenario(action)}>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
 								<H2>{t(buttonLabelMapper(action))}</H2>

@@ -39,7 +39,7 @@
 				"subtitle": "Mintr couldn't access your wallet.",
 				"retry": "Retry"
 			},
-			"addWallet":{
+			"addWallet": {
 				"placeholder": "Wallet address",
 				"buttonText": "Add"
 			}
@@ -85,7 +85,8 @@
 			"home": "Home",
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
-			"escrow": "Escrow"
+			"escrow": "Escrow",
+			"unipool": "UniPool (beta)"
 		}
 	},
 	"home": {
@@ -145,7 +146,8 @@
 					"button": "View transferable SNX"
 				},
 				"buttons": {
-					"burn": "Burn now"
+					"burn": "Burn now",
+					"waitingPeriod": "Burn synths unlocked in"
 				}
 			},
 			"confirmation": {
@@ -249,7 +251,8 @@
 				"subtitle": "Amount available:",
 				"instruction": "Enter deposit amount:",
 				"buttons": {
-					"deposit": "Deposit now"
+					"deposit": "Deposit now",
+					"unlock": "Unlock"
 				}
 			},
 			"complete": {
@@ -344,6 +347,7 @@
 	"transactionSettings": {
 		"priceIndicator": "Ethereum network fees:",
 		"title": "Set gas price",
+		"placeholder": "Add gas price (GWEI)",
 		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
 		"minutes": "mins",
 		"speed": {

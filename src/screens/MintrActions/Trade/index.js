@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -66,7 +66,7 @@ const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 	return data;
 };
 
-const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
+const useGetGasEstimate = (baseSynth, baseAmount, currentWallet, waitingPeriod) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
@@ -78,6 +78,7 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 			try {
 				fetchingGasLimit(dispatch);
 				if (!Number(baseAmount)) throw new Error('input.error.invalidAmount');
+				if (waitingPeriod) throw new Error(`Waiting period for ${baseSynth.name} is still ongoing`);
 				const amountToExchange =
 					baseAmount === baseSynth.balance
 						? baseSynth.rawBalance
@@ -96,7 +97,7 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [baseSynth, baseAmount, currentWallet]);
+	}, [baseSynth, baseAmount, currentWallet, waitingPeriod]);
 	return error;
 };
 
@@ -105,6 +106,7 @@ const Trade = ({ onDestroy }) => {
 	const [baseSynth, setBaseSynth] = useState(null);
 	const [baseAmount, setBaseAmount] = useState('');
 	const [quoteAmount, setQuoteAmount] = useState('');
+	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const {
 		state: {
@@ -116,7 +118,25 @@ const Trade = ({ onDestroy }) => {
 		dispatch,
 	} = useContext(Store);
 	const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
-	const gasEstimateError = useGetGasEstimate(baseSynth, baseAmount, currentWallet);
+	const gasEstimateError = useGetGasEstimate(baseSynth, baseAmount, currentWallet, waitingPeriod);
+
+	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
+		if (!baseSynth || !baseAmount) return;
+		try {
+			const maxSecsLeftInWaitingPeriod = await snxJSConnector.snxJS.Exchanger.maxSecsLeftInWaitingPeriod(
+				currentWallet,
+				bytesFormatter(baseSynth.name)
+			);
+			setWaitingPeriod(Number(maxSecsLeftInWaitingPeriod));
+		} catch (e) {
+			console.log(e);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [baseSynth, baseAmount]);
+
+	useEffect(() => {
+		getMaxSecsLeftInWaitingPeriod();
+	}, [getMaxSecsLeftInWaitingPeriod]);
 
 	const onTrade = async () => {
 		try {
@@ -176,6 +196,8 @@ const Trade = ({ onDestroy }) => {
 		onBaseSynthChange: synth => setBaseSynth(synth),
 		isFetchingGasLimit,
 		gasEstimateError,
+		waitingPeriod,
+		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (

@@ -16,7 +16,7 @@ const Action = ({
 	onDestroy,
 	onWithdraw,
 	amountAvailable,
-	isFetchingGasLimit,
+	// isFetchingGasLimit,
 	gasEstimateError,
 }) => {
 	return (
@@ -37,7 +37,7 @@ const Action = ({
 				<Bottom>
 					<TransactionPriceIndicator />
 					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError || !amountAvailable}
+						// disabled={isFetchingGasLimit || gasEstimateError || !amountAvailable}
 						onClick={onWithdraw}
 						margin="auto"
 					>
