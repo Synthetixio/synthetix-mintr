@@ -1,5 +1,9 @@
 import { SynthetixJs } from 'synthetix-js';
 import { getEthereumNetwork, INFURA_JSON_RPC_URLS } from './networkHelper';
+import { ethers } from 'ethers';
+import contracts from './contracts';
+
+const { uniswap, unipool } = contracts;
 
 let snxJSConnector = {
 	initialized: false,
@@ -12,6 +16,8 @@ let snxJSConnector = {
 		this.provider = this.snxJS.contractSettings.provider;
 		this.utils = this.snxJS.utils;
 		this.ethersUtils = this.snxJS.ethers.utils;
+		this.uniswapContract = new ethers.Contract(uniswap.address, uniswap.abi, this.signer);
+		this.unipoolContract = new ethers.Contract(unipool.address, unipool.abi, this.signer);
 	},
 };
 
