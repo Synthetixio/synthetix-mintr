@@ -14,7 +14,6 @@ const ALLOWANCE_LIMIT = 100000000;
 const UniPool = () => {
 	const [hasAllowance, setAllowance] = useState(false);
 	const [balances, setBalances] = useState(null);
-	const [stakeAmount, setStakeAmount] = useState('');
 	const [withdrawAmount, setWithdrawAmount] = useState('');
 	const [error, setError] = useState(null);
 	const [transactionHash, setTransactionHash] = useState(null);
@@ -47,7 +46,11 @@ const UniPool = () => {
 				uniswapContract.balanceOf(currentWallet),
 				unipoolContract.rewards(currentWallet),
 			]);
-			setBalances({ univ1: bigNumberFormatter(univ1), rewards: bigNumberFormatter(rewards) });
+			setBalances({
+				univ1: bigNumberFormatter(univ1),
+				univ1BN: univ1,
+				rewards: bigNumberFormatter(rewards),
+			});
 		} catch (e) {
 			console.log(e);
 		}
@@ -63,12 +66,17 @@ const UniPool = () => {
 	useEffect(() => {
 		if (!currentWallet) return;
 		const { uniswapContract, unipoolContract } = snxJSConnector;
+		console.log(uniswapContract.removeAllListeners);
 		uniswapContract.on('Approval', (owner, spender) => {
 			if (owner === currentWallet && spender === unipoolContract.address) {
-				console.log('here', owner, spender);
 				fetchAllowance();
 			}
 		});
+		return () => {
+			if (snxJSConnector.initialized) {
+				uniswapContract.removeAllListeners('Approval');
+			}
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
 
@@ -100,14 +108,13 @@ const UniPool = () => {
 	};
 
 	const onStake = async () => {
-		const { parseEther } = snxJSConnector.utils;
 		const { unipoolContract } = snxJSConnector;
 		try {
-			if (!stakeAmount) return;
 			setError(null);
 			setTransactionHash(null);
-			const gasEstimate = await unipoolContract.estimate.stake(parseEther(stakeAmount.toString()));
-			const transaction = await unipoolContract.stake(parseEther(stakeAmount.toString()), {
+			if (!balances || !balances.univ1BN) return;
+			const gasEstimate = await unipoolContract.estimate.stake(balances.univ1BN);
+			const transaction = await unipoolContract.stake(balances.univ1BN, {
 				gasLimit: Number(gasEstimate) + 10000,
 				gasPrice: gasPrice * GWEI_UNIT,
 			});
@@ -203,14 +210,8 @@ const UniPool = () => {
 							</Label>
 						</Data>
 						<ButtonRow>
-							<Left>
-								<Input
-									type="number"
-									placeholder="enter an amount"
-									onChange={e => setStakeAmount(e.target.value)}
-								/>
-							</Left>
-							<ButtonPrimary onClick={onStake}>Stake</ButtonPrimary>
+							<Left />
+							<ButtonPrimary onClick={onStake}>Stake all</ButtonPrimary>
 						</ButtonRow>
 						<ButtonRow>
 							<Left />

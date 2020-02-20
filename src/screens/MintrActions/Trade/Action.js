@@ -75,7 +75,7 @@ const Action = ({
 						</Form>
 					</Top>
 					<Bottom>
-						<Subtext>{t('network.tradingFee')} 0.5%</Subtext>
+						<Subtext>{t('network.tradingFee')} 0.3%</Subtext>
 						{/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
 						<TransactionPriceIndicator margin="8px 0" />
 						{waitingPeriod ? (
