@@ -148,6 +148,9 @@ const InputWrapper = styled.div`
 	width: 400px;
 	margin: 0 auto;
 	opacity: ${props => (props.disabled ? '0.6' : 1)};
+	& input {
+		pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+	}
 `;
 
 const InputInner = styled.div`

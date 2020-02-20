@@ -39,6 +39,7 @@ const Action = ({
 					<Form>
 						<PLarge>{t('depot.deposit.action.instruction')}</PLarge>
 						<Input
+							isDisabled={!hasAllowance}
 							singleSynth={'sUSD'}
 							onChange={e => setDepositAmount(e.target.value)}
 							value={depositAmount}
