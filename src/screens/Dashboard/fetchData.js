@@ -1,11 +1,10 @@
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
-
 import { bytesFormatter } from '../../helpers/formatters';
 
 const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
 
-const getBalances = async walletAddress => {
+export const getBalances = async walletAddress => {
 	try {
 		const result = await Promise.all([
 			snxJSConnector.snxJS.Synthetix.collateral(walletAddress),

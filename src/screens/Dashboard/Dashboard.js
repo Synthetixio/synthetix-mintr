@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
-import { fetchData } from './fetchData';
+import { fetchData, getBalances } from './fetchData';
 
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
@@ -16,6 +16,8 @@ import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components
 import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
 import { MicroSpinner } from '../../components/Spinner';
+import snxJSConnector from '../../helpers/snxJSConnector';
+import { debounce } from 'lodash';
 
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();
@@ -201,13 +203,33 @@ const Dashboard = ({ t }) => {
 
 	useEffect(() => {
 		loadData();
+		const updateBalance = debounce(async () => {
+			const balances = await getBalances(currentWallet);
+			setData(currentData => ({ ...currentData, balances }));
+		}, 200);
+
+		// Add events
+		snxJSConnector.snxJS.sUSD.contract.on('Issued', async address => {
+			if (address === currentWallet) {
+				updateBalance(currentWallet);
+			}
+		});
+		snxJSConnector.snxJS.sUSD.contract.on('Burned', async address => {
+			if (address === currentWallet) {
+				updateBalance(currentWallet);
+			}
+		});
+
+		// TODO add more events
+
+		// When all events are added we should be able to remove this.
 		const intervalId = setInterval(() => {
 			loadData();
 		}, 10000);
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [loadData]);
+	}, [loadData, currentWallet]);
 
 	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
 
