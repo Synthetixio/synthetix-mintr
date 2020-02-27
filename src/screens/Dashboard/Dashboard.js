@@ -17,7 +17,7 @@ import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
 import { MicroSpinner } from '../../components/Spinner';
 
-const INTERVAL_TIMER = 3 * 60 * 1000;
+const INTERVAL_TIMER = 5 * 60 * 1000;
 
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();

@@ -9,7 +9,7 @@ import { updateCurrentTab } from '../../../ducks/ui';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
-import { bytesFormatter, bigNumberFormatter } from '../../../helpers/formatters';
+import { bigNumberFormatter } from '../../../helpers/formatters';
 
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
@@ -35,7 +35,6 @@ const useGetFeeData = walletAddress => {
 	const [data, setData] = useState({});
 	useEffect(() => {
 		const getFeeData = async () => {
-			const xdrBytes = bytesFormatter('XDR');
 			try {
 				setData({ ...data, dataIsLoading: true });
 				const [
@@ -44,7 +43,6 @@ const useGetFeeData = walletAddress => {
 					recentFeePeriods,
 					feesAreClaimable,
 					feesAvailable,
-					xdrRate,
 				] = await Promise.all([
 					snxJSConnector.snxJS.FeePool.feesByPeriod(walletAddress),
 					snxJSConnector.snxJS.FeePool.feePeriodDuration(),
@@ -55,12 +53,10 @@ const useGetFeeData = walletAddress => {
 					),
 					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress),
-					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(xdrBytes),
 				]);
-				const formattedXdrRate = bigNumberFormatter(xdrRate);
 				const formattedFeesByPeriod = feesByPeriod.slice(1).map(([fee, reward], i) => {
 					return {
-						fee: bigNumberFormatter(fee) * formattedXdrRate,
+						fee: bigNumberFormatter(fee),
 						reward: bigNumberFormatter(reward),
 						closeIn: getFeePeriodCountdown(i, recentFeePeriods, feePeriodDuration),
 					};
