@@ -22,6 +22,8 @@ export const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEth
 
 export const bigNumberToStringFormatter = value => snxJSConnector.utils.formatEther(value);
 
+export const parseBytes32String = input => snxJSConnector.ethersUtils.parseBytes32String(input);
+
 export const getAddress = addr => snxJSConnector.ethersUtils.getAddress(addr);
 
 export const secondsToTime = seconds => {
