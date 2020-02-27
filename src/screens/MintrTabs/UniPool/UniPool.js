@@ -44,7 +44,7 @@ const UniPool = () => {
 			const { uniswapContract, unipoolContract } = snxJSConnector;
 			const [univ1, rewards] = await Promise.all([
 				uniswapContract.balanceOf(currentWallet),
-				unipoolContract.rewards(currentWallet),
+				unipoolContract.earned(currentWallet),
 			]);
 			setBalances({
 				univ1: bigNumberFormatter(univ1),
