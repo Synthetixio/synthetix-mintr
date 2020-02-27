@@ -17,6 +17,8 @@ import Tooltip from '../../components/Tooltip';
 import Skeleton from '../../components/Skeleton';
 import { MicroSpinner } from '../../components/Spinner';
 
+const INTERVAL_TIMER = 3 * 60 * 1000;
+
 const CollRatios = ({ state }) => {
 	const { t } = useTranslation();
 	const { debtData } = state;
@@ -203,7 +205,7 @@ const Dashboard = ({ t }) => {
 		loadData();
 		const intervalId = setInterval(() => {
 			loadData();
-		}, 10000);
+		}, INTERVAL_TIMER);
 		return () => {
 			clearInterval(intervalId);
 		};
