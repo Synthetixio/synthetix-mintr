@@ -15,6 +15,8 @@ import NotificationCenter from '../../components/NotificationCenter';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getEthereumNetwork } from '../../helpers/networkHelper';
 
+const INTERVAL_TIMER = 5 * 60 * 1000;
+
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
 	switch (currentPage) {
@@ -52,7 +54,7 @@ const Root = () => {
 			getAppState();
 			intervalId = setInterval(() => {
 				getAppState();
-			}, 5 * 60 * 1000);
+			}, INTERVAL_TIMER);
 		};
 		init();
 		return () => {
