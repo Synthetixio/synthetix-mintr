@@ -42,13 +42,16 @@ const UniPool = () => {
 		if (!snxJSConnector.initialized) return;
 		try {
 			const { uniswapContract, unipoolContract } = snxJSConnector;
-			const [univ1, rewards] = await Promise.all([
+			const [univ1Held, univ1Staked, rewards] = await Promise.all([
 				uniswapContract.balanceOf(currentWallet),
+				unipoolContract.balanceOf(currentWallet),
 				unipoolContract.earned(currentWallet),
 			]);
 			setBalances({
-				univ1: bigNumberFormatter(univ1),
-				univ1BN: univ1,
+				univ1Held: bigNumberFormatter(univ1Held),
+				univ1HeldBN: univ1Held,
+				univ1Staked: bigNumberFormatter(univ1Staked),
+				univ1StakedBN: univ1Staked,
 				rewards: bigNumberFormatter(rewards),
 			});
 		} catch (e) {
@@ -112,9 +115,9 @@ const UniPool = () => {
 		try {
 			setError(null);
 			setTransactionHash(null);
-			if (!balances || !balances.univ1BN) return;
-			const gasEstimate = await unipoolContract.estimate.stake(balances.univ1BN);
-			const transaction = await unipoolContract.stake(balances.univ1BN, {
+			if (!balances || !balances.univ1HeldBN) return;
+			const gasEstimate = await unipoolContract.estimate.stake(balances.univ1HeldBN);
+			const transaction = await unipoolContract.stake(balances.univ1HeldBN, {
 				gasLimit: Number(gasEstimate) + 10000,
 				gasPrice: gasPrice * GWEI_UNIT,
 			});
@@ -202,7 +205,8 @@ const UniPool = () => {
 					<>
 						<Data>
 							<Label>
-								Balance: {balances && balances.univ1 ? formatCurrency(balances.univ1) : 0} UNI-V1
+								Balance:{' '}
+								{balances && balances.univ1Staked ? formatCurrency(balances.univ1Staked) : 0} UNI-V1
 							</Label>
 							<Label style={{ marginTop: '10px' }}>
 								Rewards available:{' '}
