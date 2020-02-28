@@ -205,7 +205,11 @@ const UniPool = () => {
 					<>
 						<Data>
 							<Label>
-								Balance:{' '}
+								Liquidity Tokens Held:{' '}
+								{balances && balances.univ1Held ? formatCurrency(balances.univ1Held) : 0} UNI-V1
+							</Label>
+							<Label style={{ marginTop: '10px' }}>
+								Liquidity Tokens Staked:{' '}
 								{balances && balances.univ1Staked ? formatCurrency(balances.univ1Staked) : 0} UNI-V1
 							</Label>
 							<Label style={{ marginTop: '10px' }}>
