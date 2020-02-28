@@ -30,7 +30,7 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-js": "2.20.0-release-candidate",
+		"synthetix-js": "^2.20.0-alpha-2",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
