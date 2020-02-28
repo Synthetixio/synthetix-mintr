@@ -27,7 +27,12 @@ export const parseBytes32String = input => snxJSConnector.ethersUtils.parseBytes
 export const getAddress = addr => snxJSConnector.ethersUtils.getAddress(addr);
 
 export const secondsToTime = seconds => {
-	const minutes = Math.floor(seconds / 60);
-	const secondsLeft = seconds - minutes * 60;
-	return str_pad_left(minutes, '0', 2) + ':' + str_pad_left(secondsLeft, '0', 2);
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds - hours * 3600) / 60);
+	if (hours > 0) {
+		return `${hours}h ${str_pad_left(minutes, '0', 2)}m`;
+	} else if (minutes > 0) {
+		return `${str_pad_left(minutes, '0', 2)} mins`;
+	}
+	return `up to 1 minute`;
 };

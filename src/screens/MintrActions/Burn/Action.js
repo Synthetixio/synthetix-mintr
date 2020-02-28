@@ -24,7 +24,48 @@ const Action = ({
 	burnAmountToFixCRatio,
 	waitingPeriod,
 	onWaitingPeriodCheck,
+	issuanceDelay,
+	onIssuanceDelayCheck,
+	sUSDBalance,
 }) => {
+	const renderSubmitButton = () => {
+		if (issuanceDelay) {
+			return (
+				<RetryButtonWrapper>
+					<ButtonPrimary onClick={onIssuanceDelayCheck} margin="auto">
+						Retry
+					</ButtonPrimary>
+					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+						There is a waiting period after minting before you can burn. Please wait{' '}
+						{secondsToTime(issuanceDelay)} before attempting to burn sUSD.
+					</Subtext>
+				</RetryButtonWrapper>
+			);
+		} else if (waitingPeriod) {
+			return (
+				<RetryButtonWrapper>
+					<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">
+						Retry
+					</ButtonPrimary>
+					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+						There is a waiting period after completing a trade. Please wait{' '}
+						{secondsToTime(waitingPeriod)} before attempting to burn sUSD.
+					</Subtext>
+				</RetryButtonWrapper>
+			);
+		} else {
+			return (
+				<ButtonPrimary
+					disabled={isFetchingGasLimit || gasEstimateError || sUSDBalance === 0}
+					onClick={onBurn}
+					margin="auto"
+				>
+					{t('mintrActions.burn.action.buttons.burn')}
+				</ButtonPrimary>
+			);
+		}
+	};
+
 	const [snxInputIsVisible, toggleSnxInput] = useState(false);
 	return (
 		<SlidePage>
@@ -90,25 +131,7 @@ const Action = ({
 				</Top>
 				<Bottom>
 					<TransactionPriceIndicator />
-					{waitingPeriod ? (
-						<RetryButtonWrapper>
-							<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">
-								Retry
-							</ButtonPrimary>
-							<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
-								There is a waiting period after completing a trade. Please wait approximately{' '}
-								{secondsToTime(waitingPeriod)} before attempting to burn Synths.
-							</Subtext>
-						</RetryButtonWrapper>
-					) : (
-						<ButtonPrimary
-							disabled={isFetchingGasLimit || gasEstimateError}
-							onClick={onBurn}
-							margin="auto"
-						>
-							{t('mintrActions.burn.action.buttons.burn')}
-						</ButtonPrimary>
-					)}
+					{renderSubmitButton()}
 				</Bottom>
 			</Container>
 		</SlidePage>
