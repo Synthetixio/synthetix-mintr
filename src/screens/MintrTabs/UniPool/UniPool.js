@@ -66,7 +66,7 @@ const UniPool = () => {
 				<SpinnerContainer>
 					<Spinner />
 				</SpinnerContainer>
-			) : hasAllowance ? (
+			) : !hasAllowance ? (
 				<SetAllowance />
 			) : (
 				<Stake />

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
+import { createTransaction } from '../../../ducks/transactions';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { Store } from '../../../store';
 import { GWEI_UNIT } from '../../../helpers/networkHelper';
@@ -19,6 +20,7 @@ const SetAllowance = ({ t }) => {
 				settings: { gasPrice },
 			},
 		},
+		dispatch,
 	} = useContext(Store);
 
 	const onUnlock = async () => {
@@ -40,7 +42,15 @@ const SetAllowance = ({ t }) => {
 				}
 			);
 			if (transaction) {
-				// register tx
+				createTransaction(
+					{
+						hash: transaction.hash,
+						status: 'pending',
+						info: `Setting Uni-V1 LP token allowance`,
+						hasNotification: true,
+					},
+					dispatch
+				);
 			}
 		} catch (e) {
 			setError(e.message);
