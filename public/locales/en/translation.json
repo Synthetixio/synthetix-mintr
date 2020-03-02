@@ -319,6 +319,36 @@
 			"actionDescription": "Vesting:"
 		}
 	},
+	"unipool": {
+		"locked": {
+			"title": "Uniswap Liquidity Pool",
+			"subtitle": "If you're contributing liquidity to the sETH/ETH liquidity pool on Uniswap, you can now earn SNX rewards by staking your Uniswap LP token here."
+		},
+		"unlocked": {
+			"title": "Stake & manage your UNI-V1 LP Tokens",
+			"subtitle": "Here you can stake/unstake your Uni-V1 LP tokens, claim rewards, or exit completely if you're already staking (includes claiming).",
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming"
+			},
+			"complete": "Transaction in progress!"
+		},
+		"buttons": {
+			"unlock": "unlock",
+			"goToContract": "Go to contract",
+			"stake": "Stake uni tokens",
+			"claim": "Claim rewards",
+			"unstake": "Unstake uni tokens",
+			"exit": "exit: claim & unstake"
+		}
+	},
 	"transactions": {
 		"filters": {
 			"type": "Type",
