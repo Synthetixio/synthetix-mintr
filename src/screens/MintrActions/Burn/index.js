@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { addSeconds, differenceInSeconds } from 'date-fns';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -76,7 +77,8 @@ const useGetGasEstimate = (
 	maxBurnAmount,
 	maxBurnAmountBN,
 	sUSDBalance,
-	waitingPeriod
+	waitingPeriod,
+	issuanceDelay
 ) => {
 	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
@@ -89,6 +91,7 @@ const useGetGasEstimate = (
 			try {
 				if (!parseFloat(burnAmount)) throw new Error('input.error.invalidAmount');
 				if (waitingPeriod) throw new Error('Waiting period for sUSD is still ongoing');
+				if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
 				if (burnAmount > sUSDBalance || maxBurnAmount === 0)
 					throw new Error('input.error.notEnoughToBurn');
 				fetchingGasLimit(dispatch);
@@ -113,7 +116,7 @@ const useGetGasEstimate = (
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [burnAmount, maxBurnAmount, waitingPeriod]);
+	}, [burnAmount, maxBurnAmount, waitingPeriod, issuanceDelay]);
 	return error;
 };
 
@@ -123,6 +126,7 @@ const Burn = ({ onDestroy }) => {
 	const [transferableAmount, setTransferableAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
+	const [issuanceDelay, setIssuanceDelay] = useState(0);
 	const {
 		state: {
 			wallet: { currentWallet, walletType, networkName },
@@ -146,8 +150,11 @@ const Burn = ({ onDestroy }) => {
 	} = useGetDebtData(currentWallet, sUSDBytes);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
+		const {
+			snxJS: { Exchanger },
+		} = snxJSConnector;
 		try {
-			const maxSecsLeftInWaitingPeriod = await snxJSConnector.snxJS.Exchanger.maxSecsLeftInWaitingPeriod(
+			const maxSecsLeftInWaitingPeriod = await Exchanger.maxSecsLeftInWaitingPeriod(
 				currentWallet,
 				bytesFormatter('sUSD')
 			);
@@ -156,23 +163,56 @@ const Burn = ({ onDestroy }) => {
 			console.log(e);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [burnAmount]);
+	}, []);
+
+	const getIssuanceDelay = useCallback(async () => {
+		const {
+			snxJS: { Issuer },
+		} = snxJSConnector;
+		try {
+			const [canBurnSynths, lastIssueEvent, minimumStakeTime] = await Promise.all([
+				Issuer.canBurnSynths(currentWallet),
+				Issuer.lastIssueEvent(currentWallet),
+				Issuer.minimumStakeTime(),
+			]);
+
+			if (Number(lastIssueEvent) && Number(minimumStakeTime)) {
+				const burnUnlockDate = addSeconds(Number(lastIssueEvent) * 1000, Number(minimumStakeTime));
+				const issuanceDelayInSeconds = differenceInSeconds(burnUnlockDate, new Date());
+				setIssuanceDelay(
+					issuanceDelayInSeconds > 0 ? issuanceDelayInSeconds : canBurnSynths ? 0 : 1
+				);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		getMaxSecsLeftInWaitingPeriod();
-	}, [getMaxSecsLeftInWaitingPeriod]);
+		getIssuanceDelay();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [getMaxSecsLeftInWaitingPeriod, getIssuanceDelay]);
 
 	const gasEstimateError = useGetGasEstimate(
 		burnAmount,
 		maxBurnAmount,
 		maxBurnAmountBN,
 		sUSDBalance,
-		waitingPeriod
+		waitingPeriod,
+		issuanceDelay
 	);
 	const onBurn = async () => {
+		const {
+			snxJS: { Synthetix, Issuer },
+		} = snxJSConnector;
 		try {
-			if (await snxJSConnector.snxJS.Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
+			if (await Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
 				throw new Error('Waiting period for sUSD is still ongoing');
+
+			if (!(await Issuer.canBurnSynths(currentWallet)))
+				throw new Error('Waiting period to burn is still ongoing');
 
 			handleNext(1);
 			const amountToBurn =
@@ -236,7 +276,10 @@ const Burn = ({ onDestroy }) => {
 		gasEstimateError,
 		burnAmountToFixCRatio,
 		waitingPeriod,
-		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
+		issuanceDelay,
+		sUSDBalance,
+		onWaitingPeriodCheck: getMaxSecsLeftInWaitingPeriod,
+		onIssuanceDelayCheck: getIssuanceDelay,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
