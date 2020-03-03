@@ -320,13 +320,13 @@
 		}
 	},
 	"unipool": {
+		"title": "Uniswap sETH LP Token Rewards",
 		"locked": {
-			"title": "Uniswap Liquidity Pool",
-			"subtitle": "If you're contributing liquidity to the sETH/ETH liquidity pool on Uniswap, you can now earn SNX rewards by staking your Uniswap LP token here."
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking."
 		},
 		"unlocked": {
-			"title": "Stake & manage your UNI-V1 LP Tokens",
-			"subtitle": "Here you can stake/unstake your Uni-V1 LP tokens, claim rewards, or exit completely if you're already staking (includes claiming).",
+			"link": "See blog post",
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely.",
 			"data": {
 				"balance": "Your balance",
 				"staked": "Currently staked",

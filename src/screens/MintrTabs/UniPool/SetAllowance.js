@@ -61,9 +61,9 @@ const SetAllowance = ({ t }) => {
 		<>
 			<TitleContainer>
 				<Logo src="/images/uniswap.svg" />
-				<PageTitle>{t('unipool.locked.title')}</PageTitle>
+				<PageTitle>{t('unipool.title')}</PageTitle>
+				<PLarge>{t('unipool.locked.subtitle')}</PLarge>
 			</TitleContainer>
-			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
 			<ButtonRow>
 				<ButtonPrimary onClick={onUnlock}>{t('unipool.buttons.unlock')}</ButtonPrimary>
 			</ButtonRow>
