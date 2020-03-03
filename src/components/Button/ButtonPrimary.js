@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonPrimaryLabel, ButtonPrimaryLabelMedium } from '../Typography';
 
-export const ButtonPrimary = ({ children, onClick, disabled, width, height }) => {
+export const ButtonPrimary = ({ children, onClick, disabled, width, height, ...rest }) => {
 	return (
-		<Button onClick={onClick} disabled={disabled} width={width} height={height}>
+		<Button onClick={onClick} disabled={disabled} width={width} height={height} {...rest}>
 			<ButtonPrimaryLabel>{children}</ButtonPrimaryLabel>
 		</Button>
 	);

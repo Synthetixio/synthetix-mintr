@@ -86,7 +86,7 @@
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Escrow",
-			"unipool": "UniPool (beta)"
+			"unipool": "UniPool"
 		}
 	},
 	"home": {
@@ -317,6 +317,36 @@
 		"complete": {
 			"title": "Vesting in progress!",
 			"actionDescription": "Vesting:"
+		}
+	},
+	"unipool": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking."
+		},
+		"unlocked": {
+			"link": "See blog post",
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely.",
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming"
+			},
+			"complete": "Transaction in progress!"
+		},
+		"buttons": {
+			"unlock": "unlock",
+			"goToContract": "Go to contract",
+			"stake": "Stake uni tokens",
+			"claim": "Claim rewards",
+			"unstake": "Unstake uni tokens",
+			"exit": "exit: claim & unstake"
 		}
 	},
 	"transactions": {
