@@ -1,16 +1,15 @@
 import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Cross } from '../Icons';
-import { Store } from '../../store';
 
 import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 
-const Popup = ({ children }) => {
-	const { dispatch } = useContext(Store);
+const Popup = ({ children, toggleTransactionSettingsPopup }) => {
 	return (
 		<PopupWrapper>
 			<Nav>
-				<ButtonClose onClick={() => toggleTransactionSettingsPopup(false, dispatch)}>
+				<ButtonClose onClick={() => toggleTransactionSettingsPopup(false)}>
 					<Cross />
 				</ButtonClose>
 			</Nav>
@@ -41,4 +40,8 @@ const ButtonClose = styled.button`
 	border: none;
 `;
 
-export default Popup;
+const mapDispatchToProps = {
+	toggleTransactionSettingsPopup,
+};
+
+export default connect(null, mapDispatchToProps)(Popup);

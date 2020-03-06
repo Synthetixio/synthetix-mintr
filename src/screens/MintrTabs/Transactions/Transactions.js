@@ -13,8 +13,6 @@ import { Table, THead, TBody, TH, TR, TD } from '../../../components/ScheduleTab
 
 import { DataLarge, TableHeaderMedium } from '../../../components/Typography';
 
-import { Store } from '../../../store';
-
 import PageContainer from '../../../components/PageContainer';
 import Paginator from '../../../components/Paginator';
 import { ButtonTertiary, BorderlessButton } from '../../../components/Button';

@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { createTransaction } from '../../../ducks/transactions';
+import { getNetworkSettings } from '../../../ducks/network';
+
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { GWEI_UNIT } from '../../../helpers/networkHelper';
 
 import { PageTitle, PLarge } from '../../../components/Typography';
@@ -12,16 +14,10 @@ import { ButtonPrimary } from '../../../components/Button';
 
 const ALLOWANCE_LIMIT = 100000000;
 
-const SetAllowance = ({ t }) => {
+const SetAllowance = ({ networkSettings, createTransaction }) => {
+	const { t } = useTranslation();
 	const [error, setError] = useState(null);
-	const {
-		state: {
-			network: {
-				settings: { gasPrice },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { gasPrice } = networkSettings;
 
 	const onUnlock = async () => {
 		const { parseEther } = snxJSConnector.utils;
@@ -42,15 +38,12 @@ const SetAllowance = ({ t }) => {
 				}
 			);
 			if (transaction) {
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Setting Uni-V1 LP token allowance`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Setting Uni-V1 LP token allowance`,
+					hasNotification: true,
+				});
 			}
 		} catch (e) {
 			setError(e.message);
@@ -95,4 +88,12 @@ const Error = styled.div`
 	margin-top: 40px;
 `;
 
-export default withTranslation()(SetAllowance);
+const mapStateToProps = state => ({
+	networkSettings: getNetworkSettings(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetAllowance);

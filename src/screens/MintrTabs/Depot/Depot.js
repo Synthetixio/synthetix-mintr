@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Store } from '../../../store';
 import { format } from 'date-fns';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
@@ -23,7 +23,9 @@ import { Plus, Minus } from '../../../components/Icons';
 import Spinner from '../../../components/Spinner';
 
 import DepotAction from '../../DepotActions';
+
 import { updateCurrentTab } from '../../../ducks/ui';
+import { getWalletDetails } from '../../../ducks/wallet';
 
 const sumBy = (collection, key) => {
 	return collection.reduce((acc, curr) => {
@@ -33,13 +35,8 @@ const sumBy = (collection, key) => {
 
 const initialScenario = null;
 
-const HiddenContent = ({ data }) => {
+const HiddenContent = ({ data, networkName }) => {
 	const { t } = useTranslation();
-	const {
-		state: {
-			wallet: { networkName },
-		},
-	} = useContext(Store);
 	return (
 		<HiddenContentWrapper>
 			<HiddenTable style={{ width: '100%' }}>
@@ -99,7 +96,7 @@ const HiddenContent = ({ data }) => {
 	);
 };
 
-const ExpandableTable = ({ data }) => {
+const ExpandableTable = ({ data, networkName }) => {
 	const { depositsMade } = data;
 	const { t } = useTranslation();
 	const [expandedElements, setExpanded] = useState([]);
@@ -153,7 +150,7 @@ const ExpandableTable = ({ data }) => {
 								{isExpanded ? <Minus /> : <Plus style={{ opacity: hasDetails ? '1' : '0.3' }} />}
 							</Cell>
 						</BodyRow>
-						<HiddenContent data={deposit.details} />
+						<HiddenContent data={deposit.details} networkName={networkName} />
 					</ExpandableRow>
 				);
 			})}
@@ -279,14 +276,11 @@ const buttonLabelMapper = label => {
 	}
 };
 
-const Depot = ({ t }) => {
+const Depot = ({ walletDetails, updateCurrentTab }) => {
+	const { currentWallet, networkName } = walletDetails;
+	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
-	const {
-		state: {
-			wallet: { currentWallet, networkName },
-		},
-		dispatch,
-	} = useContext(Store);
+
 	const { totalSellableDeposits, sUSDBalance, loadingData, minimumDepositAmount } = useGetDepotData(
 		currentWallet
 	);
@@ -339,7 +333,7 @@ const Depot = ({ t }) => {
 					<MoreButtons>
 						<ButtonTertiary
 							onClick={() =>
-								updateCurrentTab('transactionsHistory', dispatch, {
+								updateCurrentTab('transactionsHistory', {
 									filters: ['SynthDeposit', 'SynthWithdrawal', 'ClearedDeposit', 'Exchange'],
 								})
 							}
@@ -358,7 +352,7 @@ const Depot = ({ t }) => {
 					</MoreButtons>
 				</ActivityHeader>
 				{depositsMade && depositsMade.length > 0 ? (
-					<ExpandableTable data={{ depositsMade }} />
+					<ExpandableTable data={{ depositsMade }} networkName={networkName} />
 				) : (
 					<TablePlaceholder>
 						{loadingEvents || loadingData ? (
@@ -497,4 +491,12 @@ const List = styled.div`
 	width: 100%;
 `;
 
-export default withTranslation()(Depot);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateCurrentTab,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Depot);

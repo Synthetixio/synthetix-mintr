@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import { addSeconds, differenceInSeconds } from 'date-fns';
 
 import Action from './Action';
@@ -7,12 +8,13 @@ import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { Store } from '../../../store';
+
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
 import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 import { useTranslation } from 'react-i18next';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
@@ -78,9 +80,10 @@ const useGetGasEstimate = (
 	maxBurnAmountBN,
 	sUSDBalance,
 	waitingPeriod,
-	issuanceDelay
+	issuanceDelay,
+	fetchingGasLimit,
+	updateGasLimit
 ) => {
-	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
 	useEffect(() => {
@@ -94,7 +97,7 @@ const useGetGasEstimate = (
 				if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
 				if (burnAmount > sUSDBalance || maxBurnAmount === 0)
 					throw new Error('input.error.notEnoughToBurn');
-				fetchingGasLimit(dispatch);
+				fetchingGasLimit();
 
 				let amountToBurn;
 				if (burnAmount && maxBurnAmount) {
@@ -112,7 +115,7 @@ const useGetGasEstimate = (
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			updateGasLimit(Number(gasEstimate));
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,22 +123,22 @@ const useGetGasEstimate = (
 	return error;
 };
 
-const Burn = ({ onDestroy }) => {
+const Burn = ({
+	onDestroy,
+	fetchingGasLimit,
+	updateGasLimit,
+	walletDetails,
+	networkSettings,
+	createTransaction,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [burnAmount, setBurnAmount] = useState('');
 	const [transferableAmount, setTransferableAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const { gasPrice, gasLimit, isFetchingGasLimit } = networkSettings;
 
 	const sUSDBytes = bytesFormatter('sUSD');
 	const {
@@ -201,7 +204,9 @@ const Burn = ({ onDestroy }) => {
 		maxBurnAmountBN,
 		sUSDBalance,
 		waitingPeriod,
-		issuanceDelay
+		issuanceDelay,
+		fetchingGasLimit,
+		updateGasLimit
 	);
 	const onBurn = async () => {
 		const {
@@ -225,15 +230,12 @@ const Burn = ({ onDestroy }) => {
 			});
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Burning ${formatCurrency(burnAmount)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Burning ${formatCurrency(burnAmount)} sUSD`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -287,4 +289,15 @@ const Burn = ({ onDestroy }) => {
 	));
 };
 
-export default Burn;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	networkSettings: getNetworkSettings(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+	fetchingGasLimit,
+	updateGasLimit,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Burn);

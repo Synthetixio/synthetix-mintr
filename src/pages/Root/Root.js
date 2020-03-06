@@ -1,9 +1,10 @@
 import { hot } from 'react-hot-loader/root';
-import React, { Suspense, useEffect, useContext, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { isMobileOrTablet } from '../../helpers/browserHelper';
-import { Store } from '../../store';
+import { getCurrentPage } from '../../ducks/ui';
 
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -30,13 +31,8 @@ const renderCurrentPage = currentPage => {
 	}
 };
 
-const Root = () => {
+const Root = ({ currentPage }) => {
 	const [isOnMaintenance, setIsOnMaintenance] = useState(false);
-	const {
-		state: {
-			ui: { currentPage },
-		},
-	} = useContext(Store);
 	const getAppState = useCallback(async () => {
 		try {
 			setIsOnMaintenance(await snxJSConnector.snxJS.DappMaintenance.isPausedMintr());
@@ -64,12 +60,10 @@ const Root = () => {
 	}, [getAppState]);
 
 	return (
-		<Suspense fallback={<div></div>}>
-			<RootWrapper>
-				{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
-				<NotificationCenter></NotificationCenter>
-			</RootWrapper>
-		</Suspense>
+		<RootWrapper>
+			{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
+			<NotificationCenter></NotificationCenter>
+		</RootWrapper>
 	);
 };
 
@@ -79,4 +73,10 @@ const RootWrapper = styled('div')`
 	width: 100%;
 `;
 
-export default hot(Root);
+const mapStateToProps = state => ({
+	currentPage: getCurrentPage(state),
+});
+
+const mapDispatchToProps = {};
+
+export default hot(connect(mapStateToProps, mapDispatchToProps)(Root));

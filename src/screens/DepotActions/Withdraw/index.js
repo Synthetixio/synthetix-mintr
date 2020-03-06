@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-
+import { connect } from 'react-redux';
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { GWEI_UNIT } from '../../../helpers/networkHelper';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 import { createTransaction } from '../../../ducks/transactions';
 import errorMapper from '../../../helpers/errorMapper';
 
@@ -14,7 +14,6 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 const useGetGasEstimate = amountAvailable => {
-	const { dispatch } = useContext(Store);
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		if (!amountAvailable) return;
@@ -22,14 +21,14 @@ const useGetGasEstimate = amountAvailable => {
 			setError(null);
 			let gasEstimate = 0;
 			try {
-				fetchingGasLimit(dispatch);
+				fetchingGasLimit();
 				gasEstimate = await snxJSConnector.snxJS.Depot.contract.estimate.withdrawMyDepositedSynths();
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
 				setError(errorMessage);
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			updateGasLimit(Number(gasEstimate));
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,18 +36,17 @@ const useGetGasEstimate = amountAvailable => {
 	return error;
 };
 
-const Withdraw = ({ onDestroy, amountAvailable }) => {
+const Withdraw = ({
+	onDestroy,
+	amountAvailable,
+	walletDetails,
+	networkSettings,
+	createTransaction,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const {
-		state: {
-			wallet: { walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { walletType, networkName } = walletDetails;
+	const { gasPrice, gasLimit, isFetchingGasLimit } = networkSettings;
 	const gasEstimateError = useGetGasEstimate(amountAvailable);
 
 	const onWithdraw = async () => {
@@ -60,15 +58,12 @@ const Withdraw = ({ onDestroy, amountAvailable }) => {
 			});
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Withdrawing ${formatCurrency(amountAvailable)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Withdrawing ${formatCurrency(amountAvailable)} sUSD`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -97,4 +92,15 @@ const Withdraw = ({ onDestroy, amountAvailable }) => {
 	));
 };
 
-export default Withdraw;
+const mapStateToProps = state => ({
+	networkSettings: getNetworkSettings(state),
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateGasLimit,
+	fetchingGasLimit,
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Withdraw);

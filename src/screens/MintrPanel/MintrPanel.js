@@ -1,35 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Store } from '../../store';
-import { updateCurrentTab } from '../../ducks/ui';
+import {
+	updateCurrentTab,
+	getCurrentTab,
+	getTransactionSettingsPopupIsVisible,
+} from '../../ducks/ui';
 
 import { Home, Depot, Transactions, Escrow, UniPool } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { TransactionSettingsPopup } from '../../components/Popup';
-
-const TabRow = () => {
-	const { t } = useTranslation();
-	const {
-		state: {
-			ui: { currentTab },
-		},
-		dispatch,
-	} = useContext(Store);
-	return ['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
-		return (
-			<TabButton
-				key={tab}
-				isSelected={tab === currentTab}
-				onClick={() => updateCurrentTab(tab, dispatch)}
-			>
-				{/* i18next-extract-disable-next-line */}
-				{t(`mainNavigation.tabs.${tab}`)}
-			</TabButton>
-		);
-	});
-};
 
 const renderScreen = screen => {
 	switch (screen) {
@@ -47,18 +29,24 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = () => {
-	const {
-		state: {
-			ui: { currentTab, transactionSettingsPopupIsVisible },
-		},
-	} = useContext(Store);
-
+const MainContainer = ({ currentTab, transactionSettingsPopupIsVisible, updateCurrentTab }) => {
+	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
 			<Overlay isVisible={transactionSettingsPopupIsVisible}></Overlay>
 			<Header>
-				<TabRow />
+				{['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
+					return (
+						<TabButton
+							key={tab}
+							isSelected={tab === currentTab}
+							onClick={() => updateCurrentTab(tab)}
+						>
+							{/* i18next-extract-disable-next-line */}
+							{t(`mainNavigation.tabs.${tab}`)}
+						</TabButton>
+					);
+				})}
 			</Header>
 			{renderScreen(currentTab)}
 			{transactionSettingsPopupIsVisible ? (
@@ -92,4 +80,13 @@ const Overlay = styled.div`
 	z-index: 1000;
 `;
 
-export default withTranslation()(MainContainer);
+const mapStateToProps = state => ({
+	currentTab: getCurrentTab(state),
+	transactionSettingsPopupIsVisible: getTransactionSettingsPopupIsVisible(state),
+});
+
+const mapDispatchToProps = {
+	updateCurrentTab,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

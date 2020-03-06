@@ -1,10 +1,10 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 
 import { TableHeader, TableWrapper, Table, TBody, TR, TD } from '../../../components/ScheduleTable';
@@ -21,6 +21,8 @@ import Spinner from '../../../components/Spinner';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
+
 import ErrorMessage from '../../../components/ErrorMessage';
 import EscrowActions from '../../EscrowActions';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
@@ -77,13 +79,12 @@ const mapVestingData = data => {
 		: null;
 };
 
-const useGetGasEstimateError = () => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimateError = (fetchingGasLimit, updateGasLimit) => {
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		const getGasEstimate = async () => {
 			setError(null);
-			fetchingGasLimit(dispatch);
+			fetchingGasLimit();
 			let gasEstimate;
 			try {
 				gasEstimate = await snxJSConnector.snxJS.SynthetixEscrow.contract.estimate.vest();
@@ -92,7 +93,7 @@ const useGetGasEstimateError = () => {
 				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
 				setError(errorMessage);
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			updateGasLimit(Number(gasEstimate));
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,13 +212,10 @@ const VestingSchedule = ({ state }) => {
 	);
 };
 
-const TokenSaleEscrow = ({ t, onPageChange }) => {
+const TokenSaleEscrow = ({ onPageChange, walletDetails, fetchingGasLimit, updateGasLimit }) => {
+	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(null);
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 	const {
 		escrowPeriod,
 		releaseIntervalMonths,
@@ -228,7 +226,7 @@ const TokenSaleEscrow = ({ t, onPageChange }) => {
 		loading,
 	} = useGetVestingData(currentWallet);
 
-	const gasEstimateError = useGetGasEstimateError();
+	const gasEstimateError = useGetGasEstimateError(fetchingGasLimit, updateGasLimit);
 
 	return (
 		<Fragment>
@@ -308,4 +306,13 @@ const TablePlaceholder = styled.div`
 	align-items: center;
 `;
 
-export default withTranslation()(TokenSaleEscrow);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	fetchingGasLimit,
+	updateGasLimit,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TokenSaleEscrow);

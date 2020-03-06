@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Store } from '../../store';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
-import { updateGasPrice } from '../../ducks/network';
+import { updateGasPrice, getNetworkDetails } from '../../ducks/network';
 import { toggleTransactionSettingsPopup } from '../../ducks/ui';
 
 import PopupContainer from './PopupContainer';
@@ -48,17 +48,17 @@ const renderTooltipContent = ({ gasPrice, usdPrice }) => {
 	);
 };
 
-const TransactionSettingsPopup = ({ t }) => {
+const TransactionSettingsPopup = ({
+	networkDetails,
+	updateGasPrice,
+	toggleTransactionSettingsPopup,
+}) => {
+	const { t } = useTranslation();
 	const {
-		state: {
-			network: {
-				gasStation,
-				ethPrice,
-				settings: { gasPrice, gasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+		gasStation,
+		ethPrice,
+		settings: { gasPrice, gasLimit },
+	} = networkDetails;
 
 	const [currentTransactionSettings, setTransactionSettings] = useState({
 		gasPrice,
@@ -112,8 +112,8 @@ const TransactionSettingsPopup = ({ t }) => {
 				<ButtonWrapper>
 					<ButtonPrimary
 						onClick={() => {
-							updateGasPrice(currentTransactionSettings.gasPrice, dispatch);
-							toggleTransactionSettingsPopup(false, dispatch);
+							updateGasPrice(currentTransactionSettings.gasPrice);
+							toggleTransactionSettingsPopup(false);
 						}}
 					>
 						{t('transactionSettings.button.submit')}
@@ -185,4 +185,13 @@ const TooltipValue = styled.div`
 	margin-bottom: 4px;
 `;
 
-export default withTranslation()(TransactionSettingsPopup);
+const mapStateToProps = state => ({
+	networkDetails: getNetworkDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateGasPrice,
+	toggleTransactionSettingsPopup,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionSettingsPopup);

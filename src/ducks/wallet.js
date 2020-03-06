@@ -5,8 +5,15 @@ const UPDATE_WALLET_STATUS = 'WALLET/UPDATE_WALLET_STATUS';
 const UPDATE_WALLET_PAGINATOR_INDEX = 'WALLET/UPDATE_WALLET_PAGINATOR_INDEX';
 const SET_DERIVATION_PATH = 'WALLET/SET_DERIVATION_PATH';
 
+const defaultState = {
+	unlocked: false,
+	walletPaginatorIndex: 0,
+	availableWallets: [],
+	derivationPath: localStorage.getItem('derivationPath'),
+};
+
 // Reducer
-export default (state, action) => {
+export default (state = defaultState, action) => {
 	switch (action.type) {
 		case UPDATE_WALLET_STATUS: {
 			return { ...state, ...action.payload };
@@ -28,30 +35,32 @@ export default (state, action) => {
 };
 
 // Actions
-const setDerivationPath = (path, dispatch) => {
-	return dispatch({
+const setDerivationPath = path => {
+	return {
 		type: SET_DERIVATION_PATH,
 		payload: path,
-	});
+	};
 };
-export const derivationPathChange = (signerOptions, derivationPath, dispatch) => {
+export const derivationPathChange = (signerOptions, derivationPath) => {
 	setSigner(signerOptions);
 	localStorage.setItem('derivationPath', derivationPath);
-	return setDerivationPath(derivationPath, dispatch);
+	return setDerivationPath(derivationPath);
 };
-export const updateWalletStatus = (walletStatus, dispatch) => {
-	return dispatch({
+export const updateWalletStatus = walletStatus => {
+	return {
 		type: UPDATE_WALLET_STATUS,
 		payload: {
 			...walletStatus,
 			currentWallet: walletStatus.currentWallet ? getAddress(walletStatus.currentWallet) : null,
 		},
-	});
+	};
 };
 
-export const updateWalletPaginatorIndex = (index, dispatch) => {
-	return dispatch({
+export const updateWalletPaginatorIndex = index => {
+	return {
 		type: UPDATE_WALLET_PAGINATOR_INDEX,
 		payload: index,
-	});
+	};
 };
+
+export const getWalletDetails = state => state;

@@ -1,20 +1,19 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Store } from '../../store';
+
+import { useTranslation } from 'react-i18next';
+import { getNetworkSettings } from '../../ducks/network';
+
 import { ButtonTransactionEdit } from '../Button';
 import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
-import { withTranslation } from 'react-i18next';
 
-const TransactionPriceIndicator = ({ t, canEdit = true, ...style }) => {
-	const {
-		state: {
-			network: {
-				settings: { gasPrice, transactionUsdPrice, isFetchingGasLimit },
-			},
-		},
-	} = useContext(Store);
+const TransactionPriceIndicator = ({ canEdit = true, networkSettings, ...style }) => {
+	const { t } = useTranslation();
+	const { gasPrice, transactionUsdPrice, isFetchingGasLimit } = networkSettings;
+
 	return (
 		<Container {...style}>
 			<Block>
@@ -48,4 +47,8 @@ const Block = styled.div`
 	white-space: nowrap;
 `;
 
-export default withTranslation()(TransactionPriceIndicator);
+const mapStateToProps = state => ({
+	networkSettings: getNetworkSettings(state),
+});
+
+export default connect(mapStateToProps, {})(TransactionPriceIndicator);

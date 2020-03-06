@@ -3,8 +3,15 @@ const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
 const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
 const TOGGLE_TRANSACTION_SETTINGS_POPUP = 'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
 
+const defaultState = {
+	theme: 'dark',
+	currentPage: 'landing',
+	currentTab: 'home',
+	transactionSettingsPopupIsVisible: false,
+};
+
 // Reducer
-export default (state, action) => {
+export default (state = defaultState, action) => {
 	switch (action.type) {
 		case TOGGLE_THEME: {
 			const themeIsDark = action.payload;
@@ -28,30 +35,36 @@ export default (state, action) => {
 };
 
 // Actions
-export const toggleTheme = (themeIsDark, dispatch) => {
-	return dispatch({
+export const toggleTheme = themeIsDark => {
+	return {
 		type: TOGGLE_THEME,
 		payload: themeIsDark,
-	});
+	};
 };
 
-export const updateCurrentPage = (page, dispatch) => {
-	return dispatch({
+export const updateCurrentPage = page => {
+	return {
 		type: UPDATE_CURRENT_PAGE,
 		payload: page,
-	});
+	};
 };
 
-export const updateCurrentTab = (tab, dispatch, params = null) => {
-	return dispatch({
+export const updateCurrentTab = (tab, params = null) => {
+	return {
 		type: UPDATE_CURRENT_TAB,
 		payload: { tab, params },
-	});
+	};
 };
 
-export const toggleTransactionSettingsPopup = (isVisible, dispatch) => {
-	return dispatch({
+export const toggleTransactionSettingsPopup = isVisible => {
+	return {
 		type: TOGGLE_TRANSACTION_SETTINGS_POPUP,
 		payload: isVisible,
-	});
+	};
 };
+
+export const getCurrentPage = state => state.currenPage;
+export const getCurrentTheme = state => state.ui.theme;
+export const getCurrentTab = state => state.currentTab;
+export const getTransactionSettingsPopupIsVisible = state =>
+	state.transactionSettingsPopupIsVisible;

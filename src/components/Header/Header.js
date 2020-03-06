@@ -1,9 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { shortenAddress } from '../../helpers/formatters';
-import { Store } from '../../store';
+
+import { getWalletDetails } from '../../ducks/wallet';
 
 import { WalletStatusButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
@@ -14,13 +16,10 @@ import { Globe, SupportBubble } from '../Icons';
 import { LanguageDropdown } from '../../components/Dropdown';
 import Logo from '../../components/Logo';
 
-const Header = ({ t, currentWallet }) => {
-	const {
-		state: {
-			wallet: { networkName },
-		},
-		dispatch,
-	} = useContext(Store);
+const Header = ({ walletDetails, updateCurrentPage }) => {
+	const { t } = useTranslation();
+	const { currentWallet, networkName } = walletDetails;
+
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	return (
 		<HeaderWrapper>
@@ -29,7 +28,7 @@ const Header = ({ t, currentWallet }) => {
 				<Network>{networkName}</Network>
 			</HeaderBlock>
 			<HeaderBlock>
-				<WalletStatusButton onClick={() => updateCurrentPage('walletSelection', dispatch)}>
+				<WalletStatusButton onClick={() => updateCurrentPage('walletSelection')}>
 					{shortenAddress(currentWallet)}
 				</WalletStatusButton>
 				<RoundButton as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
@@ -101,4 +100,12 @@ const Network = styled.div`
 	border-radius: 2px;
 `;
 
-export default withTranslation()(Header);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateCurrentPage,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

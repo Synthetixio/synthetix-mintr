@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { toggleTransactionSettingsPopup } from '../../ducks/ui';
-import { Store } from '../../store';
 
-const Button = ({ t }) => {
-	const { dispatch } = useContext(Store);
+const Button = ({ toggleTransactionSettingsPopup }) => {
+	const { t } = useTranslation();
 	return (
-		<ButtonWrapper onClick={() => toggleTransactionSettingsPopup(true, dispatch)}>
+		<ButtonWrapper onClick={() => toggleTransactionSettingsPopup(true)}>
 			{t('button.edit')}
 		</ButtonWrapper>
 	);
@@ -27,4 +27,8 @@ const ButtonWrapper = styled.button`
 	}
 `;
 
-export default withTranslation()(Button);
+const mapDispatchToProps = {
+	toggleTransactionSettingsPopup,
+};
+
+export default connect(null, mapDispatchToProps)(Button);

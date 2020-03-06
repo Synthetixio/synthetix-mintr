@@ -1,18 +1,16 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getNetworkInfo } from '../../helpers/networkHelper';
 import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
 import { updateNetworkInfo } from '../../ducks/network';
-import { Store } from '../../store';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
-import SETHPoolRewardDistribution from '../../screens/SETHPoolRewardDistribution';
 
 const Main = () => {
-	const { dispatch } = useContext(Store);
 	useEffect(() => {
 		const fetchNetworkInfo = async () => {
 			try {
@@ -20,7 +18,7 @@ const Main = () => {
 					getNetworkInfo(),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(bytesFormatter('ETH')),
 				]);
-				updateNetworkInfo(networkInfo, bigNumberFormatter(ethPrice), dispatch);
+				updateNetworkInfo(networkInfo, bigNumberFormatter(ethPrice));
 			} catch (e) {
 				console.log('Error while trying to fetch network data', e);
 			}
@@ -34,7 +32,7 @@ const Main = () => {
 	return (
 		<MainWrapper>
 			<Dashboard />
-			{window.location.pathname === '/multisig' ? <SETHPoolRewardDistribution /> : <MintrPanel />}
+			<MintrPanel />
 		</MainWrapper>
 	);
 };
@@ -44,4 +42,8 @@ const MainWrapper = styled.div`
 	width: 100%;
 `;
 
-export default Main;
+const mapDispatchToProps = {
+	updateNetworkInfo,
+};
+
+export default connect(null, mapDispatchToProps)(Main);

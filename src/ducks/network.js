@@ -8,8 +8,12 @@ const FETCHING_GAS_LIMIT = 'NETWORK/FETCHING_GAS_LIMIT';
 
 const GAS_LIMIT_BUFFER = 5000;
 
+const defaultState = {
+	settings: {},
+};
+
 // Reducer
-export default (state, action) => {
+export default (state = defaultState, action) => {
 	switch (action.type) {
 		case UPDATE_ETH_PRICE: {
 			const { gasPrice, gasLimit } = state.settings;
@@ -80,36 +84,39 @@ export default (state, action) => {
 };
 
 // Actions
-export const updateEthPrice = (price, dispatch) => {
-	return dispatch({
+export const updateEthPrice = price => {
+	return {
 		type: UPDATE_ETH_PRICE,
 		payload: price,
-	});
+	};
 };
 
-export const updateNetworkInfo = (gasStation, ethPrice, dispatch) => {
-	return dispatch({
+export const updateNetworkInfo = (gasStation, ethPrice) => {
+	return {
 		type: UPDATE_INFO,
 		payload: { gasStation, ethPrice },
-	});
+	};
 };
 
-export const updateGasLimit = (gasLimit, dispatch) => {
-	return dispatch({
+export const updateGasLimit = gasLimit => {
+	return {
 		type: UPDATE_GAS_LIMIT,
 		payload: gasLimit,
-	});
+	};
 };
 
-export const updateGasPrice = (gasPrice, dispatch) => {
-	return dispatch({
+export const updateGasPrice = gasPrice => {
+	return {
 		type: UPDATE_GAS_PRICE,
 		payload: gasPrice,
-	});
+	};
 };
 
-export const fetchingGasLimit = dispatch => {
-	return dispatch({
+export const fetchingGasLimit = () => {
+	return {
 		type: FETCHING_GAS_LIMIT,
-	});
+	};
 };
+
+export const getNetworkSettings = state => state.settings;
+export const getNetworkDetails = state => state;

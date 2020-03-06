@@ -1,28 +1,30 @@
 import React, { useContext, useState, useLayoutEffect } from 'react';
+import { connect } from 'react-redux';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { SliderContext } from '../../../components/ScreenSlider';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import { createTransaction } from '../../../ducks/transactions';
+import { getNetworkSettings } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
+
+import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
-const RewardsVesting = ({ onDestroy, vestAmount }) => {
+const RewardsVesting = ({
+	onDestroy,
+	vestAmount,
+	networkSettings,
+	walletDetails,
+	createTransaction,
+}) => {
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const {
-		state: {
-			wallet: { walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { walletType, networkName } = walletDetails;
+	const { gasPrice, gasLimit } = networkSettings;
 
 	useLayoutEffect(() => {
 		const vest = async () => {
@@ -34,15 +36,12 @@ const RewardsVesting = ({ onDestroy, vestAmount }) => {
 				});
 				if (transaction) {
 					setTransactionInfo({ transactionHash: transaction.hash });
-					createTransaction(
-						{
-							hash: transaction.hash,
-							status: 'pending',
-							info: 'Vesting',
-							hasNotification: true,
-						},
-						dispatch
-					);
+					createTransaction({
+						hash: transaction.hash,
+						status: 'pending',
+						info: 'Vesting',
+						hasNotification: true,
+					});
 					handleNext(1);
 				}
 			} catch (e) {
@@ -71,4 +70,13 @@ const RewardsVesting = ({ onDestroy, vestAmount }) => {
 	return [Confirmation, Complete].map((SlideContent, i) => <SlideContent key={i} {...props} />);
 };
 
-export default RewardsVesting;
+const mapStateToProps = state => ({
+	networkSettings: getNetworkSettings(state),
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RewardsVesting);

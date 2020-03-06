@@ -1,13 +1,16 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
 import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
-import { createTransaction } from '../../../ducks/transactions';
 import errorMapper from '../../../helpers/errorMapper';
+
+import { getWalletDetails } from '../../../ducks/wallet';
+import { getNetworkSettings } from '../../../ducks/network';
+import { createTransaction } from '../../../ducks/transactions';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -16,8 +19,13 @@ import { useTranslation } from 'react-i18next';
 
 const ALLOWANCE_LIMIT = 100000000;
 
-const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimate = (
+	depositAmount,
+	sUSDBalance,
+	minimumDepositAmount,
+	fetchingGasLimit,
+	updateGasLimit
+) => {
 	const { t } = useTranslation();
 	const [error, setError] = useState(null);
 	useEffect(() => {
@@ -29,7 +37,7 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 				if (depositAmount < minimumDepositAmount)
 					throw new Error('input.error.lowerThanMinDeposit');
 				if (!Number(depositAmount)) throw new Error('input.error.invalidAmount');
-				fetchingGasLimit(dispatch);
+				fetchingGasLimit();
 				const Depot = snxJSConnector.snxJS.Depot;
 				gasEstimate = await Depot.contract.estimate.depositSynths(
 					snxJSConnector.utils.parseEther(depositAmount.toString())
@@ -39,7 +47,7 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			updateGasLimit(Number(gasEstimate));
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,21 +55,28 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 	return error;
 };
 
-const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
+const Deposit = ({
+	onDestroy,
+	sUSDBalance,
+	minimumDepositAmount,
+	walletDetails,
+	networkSettings,
+	createTransaction,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [depositAmount, setDepositAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [hasAllowance, setAllowance] = useState(true);
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { isFetchingGasLimit, gasPrice, gasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
-	const gasEstimateError = useGetGasEstimate(depositAmount, sUSDBalance, minimumDepositAmount);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const { isFetchingGasLimit, gasPrice, gasLimit } = networkSettings;
+
+	const gasEstimateError = useGetGasEstimate(
+		depositAmount,
+		sUSDBalance,
+		minimumDepositAmount,
+		fetchingGasLimit,
+		updateGasLimit
+	);
 
 	const fetchAllowance = useCallback(async () => {
 		try {
@@ -103,15 +118,12 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 			);
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -162,4 +174,15 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 	));
 };
 
-export default Deposit;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	networkSettings: getNetworkSettings(state),
+});
+
+const mapDispatchToProps = {
+	fetchingGasLimit,
+	updateGasLimit,
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Deposit);

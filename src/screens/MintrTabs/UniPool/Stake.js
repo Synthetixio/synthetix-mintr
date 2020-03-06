@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 
 import { bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';

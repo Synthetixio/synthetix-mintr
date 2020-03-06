@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
+import { getWalletDetails } from '../../../ducks/wallet';
 
 import { bigNumberFormatter } from '../../../helpers/formatters';
 
@@ -12,14 +13,10 @@ import Spinner from '../../../components/Spinner';
 import SetAllowance from './SetAllowance';
 import Stake from './Stake';
 
-const UniPool = () => {
+const UniPool = ({ walletDetails }) => {
 	const [hasAllowance, setAllowance] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 
 	const fetchAllowance = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
@@ -79,4 +76,8 @@ const SpinnerContainer = styled.div`
 	margin: 100px;
 `;
 
-export default UniPool;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+export default connect(mapStateToProps, {})(UniPool);

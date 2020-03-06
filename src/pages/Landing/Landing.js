@@ -1,14 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
-import { Store } from '../../store';
 import { updateCurrentPage } from '../../ducks/ui';
-import { updateWalletStatus } from '../../ducks/wallet';
+import { updateWalletStatus, getWalletDetails } from '../../ducks/wallet';
+import { getCurrentTheme } from '../../ducks/ui';
 
 import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
@@ -24,10 +25,10 @@ import './carousel.css';
 
 const SLIDE_COUNT = 4;
 
-const onWalletClick = ({ wallet, derivationPath }, dispatch) => {
+const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, updateCurrentPage }) => {
 	return async () => {
 		const walletStatus = await connectToWallet({ wallet, derivationPath });
-		updateWalletStatus({ ...walletStatus, availableWallets: [] }, dispatch);
+		updateWalletStatus({ ...walletStatus, availableWallets: [] });
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === 'Metamask') {
 				onMetamaskAccountChange(async () => {
@@ -38,22 +39,17 @@ const onWalletClick = ({ wallet, derivationPath }, dispatch) => {
 						signer,
 					});
 					if (address && address[0]) {
-						updateWalletStatus({ currentWallet: address[0] }, dispatch);
+						updateWalletStatus({ currentWallet: address[0] });
 					}
 				});
 			}
-			updateCurrentPage('main', dispatch);
-		} else updateCurrentPage('walletSelection', dispatch);
+			updateCurrentPage('main');
+		} else updateCurrentPage('walletSelection');
 	};
 };
 
-const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
+const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 	const { t } = useTranslation();
-	const {
-		state: {
-			ui: { themeIsDark },
-		},
-	} = useContext(Store);
 	return (
 		<CarouselContainer>
 			<Carousel
@@ -70,14 +66,14 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
 					<OnboardingIllustration
 						style={{ marginTop: '20px' }}
-						src={`/images/onboarding/welcome-${themeIsDark ? 'dark' : 'light'}.png`}
+						src={`/images/onboarding/welcome-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.whatIsSynthetix.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.whatIsSynthetix.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						src={`/images/onboarding/what-is-synthetix-${themeIsDark ? 'dark' : 'light'}.png`}
+						src={`/images/onboarding/what-is-synthetix-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
 
@@ -85,7 +81,7 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 					<OnboardingH1>{t('onboarding.slides.whyStakeSnx.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.whyStakeSnx.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						src={`/images/onboarding/why-stake-${themeIsDark ? 'dark' : 'light'}.png`}
+						src={`/images/onboarding/why-stake-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
 
@@ -93,14 +89,14 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 					<OnboardingH1>{t('onboarding.slides.howStakeSnx.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.howStakeSnx.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						src={`/images/onboarding/what-to-do-${themeIsDark ? 'dark' : 'light'}.png`}
+						src={`/images/onboarding/what-to-do-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
 				<CarouselSlide>
 					<OnboardingH1>{t('onboarding.slides.risks.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.risks.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						src={`/images/onboarding/risks-${themeIsDark ? 'dark' : 'light'}.png`}
+						src={`/images/onboarding/risks-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
 			</Carousel>
@@ -108,38 +104,10 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex }) => {
 	);
 };
 
-const WalletButtons = () => {
-	const {
-		state: {
-			wallet: { derivationPath },
-		},
-		dispatch,
-	} = useContext(Store);
-	const { t } = useTranslation();
-	return (
-		<Wallets>
-			<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
-			{SUPPORTED_WALLETS.map(wallet => {
-				const noMetamask = wallet === 'Metamask' && !hasWeb3();
-				return (
-					<Button
-						disabled={noMetamask}
-						key={wallet}
-						onClick={onWalletClick({ wallet, derivationPath }, dispatch)}
-					>
-						<Icon src={`images/wallets/${wallet}.svg`} />
-						<WalletConnectionH2>{wallet}</WalletConnectionH2>
-					</Button>
-				);
-			})}
-		</Wallets>
-	);
-};
-
-const Landing = ({ t }) => {
+const Landing = ({ t, currentTheme, walletDetails, updateWalletStatus, updateCurrentPage }) => {
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
-
+	const { derivationPath } = walletDetails;
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
@@ -156,7 +124,11 @@ const Landing = ({ t }) => {
 						/>
 					</LanguageButtonWrapper>
 				</Header>
-				<OnBoardingCarousel pageIndex={pageIndex} setPageIndex={setPageIndex} />
+				<OnBoardingCarousel
+					pageIndex={pageIndex}
+					setPageIndex={setPageIndex}
+					currentTheme={currentTheme}
+				/>
 				<ButtonRow>
 					<ButtonSecondary
 						onClick={() => setPageIndex(Math.max(pageIndex - 1, 0))}
@@ -175,7 +147,27 @@ const Landing = ({ t }) => {
 				</ButtonRow>
 			</OnboardingContainer>
 			<WalletConnectContainer>
-				<WalletButtons />
+				<Wallets>
+					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
+					{SUPPORTED_WALLETS.map(wallet => {
+						const noMetamask = wallet === 'Metamask' && !hasWeb3();
+						return (
+							<Button
+								disabled={noMetamask}
+								key={wallet}
+								onClick={onWalletClick({
+									wallet,
+									derivationPath,
+									updateWalletStatus,
+									updateCurrentPage,
+								})}
+							>
+								<Icon src={`images/wallets/${wallet}.svg`} />
+								<WalletConnectionH2>{wallet}</WalletConnectionH2>
+							</Button>
+						);
+					})}
+				</Wallets>
 				<BottomLinks>
 					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
@@ -339,4 +331,14 @@ const LanguageButtonWrapper = styled.div`
 	position: relative;
 `;
 
-export default withTranslation()(Landing);
+const mapStateToProps = state => ({
+	currentTheme: getCurrentTheme(state),
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateCurrentPage,
+	updateWalletStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
