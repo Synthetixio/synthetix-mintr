@@ -104,7 +104,8 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 	);
 };
 
-const Landing = ({ t, currentTheme, walletDetails, updateWalletStatus, updateCurrentPage }) => {
+const Landing = ({ currentTheme, walletDetails, updateWalletStatus, updateCurrentPage }) => {
+	const { t } = useTranslation();
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	const { derivationPath } = walletDetails;

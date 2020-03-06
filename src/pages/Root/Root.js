@@ -1,10 +1,11 @@
 import { hot } from 'react-hot-loader/root';
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { isDarkTheme, lightTheme, darkTheme } from '../../styles/themes';
 
 import { isMobileOrTablet } from '../../helpers/browserHelper';
-import { getCurrentPage } from '../../ducks/ui';
+import { getCurrentPage, getCurrentTheme } from '../../ducks/ui';
 
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -31,7 +32,8 @@ const renderCurrentPage = currentPage => {
 	}
 };
 
-const Root = ({ currentPage }) => {
+const Root = ({ currentPage, currentTheme }) => {
+	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
 	const [isOnMaintenance, setIsOnMaintenance] = useState(false);
 	const getAppState = useCallback(async () => {
 		try {
@@ -60,10 +62,12 @@ const Root = ({ currentPage }) => {
 	}, [getAppState]);
 
 	return (
-		<RootWrapper>
-			{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
-			<NotificationCenter></NotificationCenter>
-		</RootWrapper>
+		<ThemeProvider theme={themeStyle}>
+			<RootWrapper>
+				{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
+				<NotificationCenter></NotificationCenter>
+			</RootWrapper>
+		</ThemeProvider>
 	);
 };
 
@@ -75,6 +79,7 @@ const RootWrapper = styled('div')`
 
 const mapStateToProps = state => ({
 	currentPage: getCurrentPage(state),
+	currentTheme: getCurrentTheme(state),
 });
 
 const mapDispatchToProps = {};
