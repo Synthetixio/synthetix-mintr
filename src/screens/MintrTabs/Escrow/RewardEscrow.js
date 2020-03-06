@@ -149,7 +149,7 @@ const RewardEscrow = ({ onPageChange, fetchingGasLimit, updateGasLimit, walletDe
 	const { t } = useTranslation();
 	const vestingData = useGetVestingData(currentWallet);
 	const hasNoVestingSchedule = !vestingData.total || vestingData.total.length === 0;
-	const gasEstimateError = useGetGasEstimateError(fetchingGasLimit, updateGasLimit);
+	const gasEstimateError = useGetGasEstimateError({ fetchingGasLimit, updateGasLimit });
 
 	return (
 		<Fragment>

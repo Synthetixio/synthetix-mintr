@@ -1,8 +1,8 @@
-/* eslint-disable */
 import React, { Fragment, useContext, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import orderBy from 'lodash/orderBy';
 import styled from 'styled-components';
-import { useTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { format, isWithinInterval } from 'date-fns';
 import { formatCurrency } from '../../../helpers/formatters';
 import Select from '../../../components/Select';
@@ -16,6 +16,9 @@ import { DataLarge, TableHeaderMedium } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 import Paginator from '../../../components/Paginator';
 import { ButtonTertiary, BorderlessButton } from '../../../components/Button';
+
+import { getTabParams } from '../../../ducks/ui';
+import { getWalletDetails } from '../../../ducks/wallet';
 
 const PAGINATION_INDEX = 10;
 
@@ -101,13 +104,14 @@ const getEventInfo = data => {
 		case 'FeesClaimed':
 			amount = `${formatCurrency(data.snxRewards || 0)} SNX`;
 			break;
-		case 'SynthExchange':
+		case 'SynthExchange': {
 			const fromCurrency = data.exchangeFromCurrency.replace(/\u0000/g, '');
 			const toCurrency = data.exchangeToCurrency.replace(/\u0000/g, '');
 			amount = `${formatCurrency(data.exchangeFromAmount)} ${fromCurrency} / ${formatCurrency(
 				data.exchangeToAmount
 			)} ${toCurrency}`;
 			break;
+		}
 		case 'ClearedDeposit':
 			amount = `${formatCurrency(data.toAmount)} ${data.token} (${formatCurrency(
 				data.fromETHAmount
@@ -154,13 +158,9 @@ const filterTransactions = (transactions, filters) => {
 	});
 };
 
-const TransactionsTable = ({ data }) => {
-	const {
-		state: {
-			wallet: { networkName },
-		},
-	} = useContext(Store);
+const TransactionsTable = ({ data, networkName }) => {
 	const { t } = useTranslation();
+
 	return (
 		<TransactionsWrapper>
 			<Table cellSpacing="0">
@@ -220,12 +220,9 @@ const TransactionsTable = ({ data }) => {
 	);
 };
 
-const Transactions = ({ t }) => {
-	const {
-		state: {
-			ui: { tabParams },
-		},
-	} = useContext(Store);
+const Transactions = ({ tabParams, walletDetails }) => {
+	const { t } = useTranslation();
+	const { currentWallet, networkName } = walletDetails;
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filters, setFilters] = useState({
 		events: (tabParams && tabParams.filters) || [],
@@ -241,11 +238,6 @@ const Transactions = ({ t }) => {
 		});
 	};
 
-	const {
-		state: {
-			wallet: { currentWallet, networkName },
-		},
-	} = useContext(Store);
 	const { loading, transactions } = useGetTransactions(currentWallet, networkName);
 	const filteredTransactions = filterTransactions(transactions, filters);
 	return (
@@ -290,6 +282,7 @@ const Transactions = ({ t }) => {
 								PAGINATION_INDEX * currentPage,
 								PAGINATION_INDEX * currentPage + PAGINATION_INDEX
 							)}
+							networkName={networkName}
 						/>
 					) : (
 						<TransactionsPlaceholder>
@@ -365,4 +358,11 @@ const TransactionsPlaceholder = styled.div`
 	justify-content: center;
 `;
 
-export default withTranslation()(Transactions);
+const mapStateToProps = state => ({
+	tabParams: getTabParams(state),
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions);

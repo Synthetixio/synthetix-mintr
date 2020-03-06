@@ -1,13 +1,14 @@
-/* eslint-disable */
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import { bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import { updateGasLimit } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 
 import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../components/Typography';
 import DataBox from '../../../components/DataBox';
@@ -34,17 +35,12 @@ const TRANSACTION_DETAILS = {
 	},
 };
 
-const Stake = ({ t }) => {
+const Stake = ({ walletDetails, updateGasLimit }) => {
+	const { t } = useTranslation();
 	const { unipoolContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
 	const [currentScenario, setCurrentScenario] = useState({});
-	const [withdrawAmount, setWithdrawAmount] = useState('');
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
@@ -62,7 +58,7 @@ const Stake = ({ t }) => {
 				univ1StakedBN: univ1Staked,
 				rewards: bigNumberFormatter(rewards),
 			});
-			updateGasLimit(TRANSACTION_DETAILS.stake.gasLimit, dispatch);
+			updateGasLimit(TRANSACTION_DETAILS.stake.gasLimit);
 		} catch (e) {
 			console.log(e);
 		}
@@ -75,7 +71,7 @@ const Stake = ({ t }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { uniswapContract, unipoolContract } = snxJSConnector;
+		const { unipoolContract } = snxJSConnector;
 
 		unipoolContract.on('Staked', user => {
 			if (user === currentWallet) {
@@ -240,4 +236,12 @@ const ButtonAction = styled(ButtonPrimary)`
 	}
 `;
 
-export default withTranslation()(Stake);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	updateGasLimit,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stake);

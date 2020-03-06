@@ -13,8 +13,7 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 import errorMapper from '../../helpers/errorMapper';
 
-const UnipoolActions = ({
-	action,
+const SliderController = ({
 	amount,
 	label,
 	contractFunction,
@@ -22,13 +21,13 @@ const UnipoolActions = ({
 	onDestroy,
 	param,
 	walletDetails,
-	transactionSettings,
+	networkSettings,
 	createTransaction,
 }) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const { walletType, networkName } = walletDetails;
-	const { gasPrice } = transactionSettings;
+	const { gasPrice } = networkSettings;
 
 	useEffect(() => {
 		const { unipoolContract } = snxJSConnector;
@@ -74,13 +73,16 @@ const UnipoolActions = ({
 		networkName,
 	};
 
-	if (!action) return null;
+	return [Confirmation, Complete].map((SlideContent, i) => (
+		<SlideContent key={i} {...sliderProps} />
+	));
+};
+
+const UnipoolActions = props => {
+	if (!props.action) return null;
 	return (
 		<Slider>
-			{[Confirmation, Complete].map((SlideContent, i) => (
-				<SlideContent key={i} {...sliderProps} />
-			))}
-			;}
+			<SliderController {...props} />
 		</Slider>
 	);
 };

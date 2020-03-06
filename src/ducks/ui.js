@@ -12,6 +12,7 @@ const defaultState = {
 	theme: 'dark',
 	currentPage: 'landing',
 	currentTab: 'home',
+	tabParams: null,
 	transactionSettingsPopupIsVisible: false,
 	...persistedState,
 };
@@ -71,5 +72,6 @@ export const toggleTransactionSettingsPopup = isVisible => {
 export const getCurrentPage = state => state.ui.currentPage;
 export const getCurrentTheme = state => state.ui.theme;
 export const getCurrentTab = state => state.ui.currentTab;
+export const getTabParams = state => state.ui.tabParams;
 export const getTransactionSettingsPopupIsVisible = state =>
 	state.ui.transactionSettingsPopupIsVisible;
