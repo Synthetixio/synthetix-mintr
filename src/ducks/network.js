@@ -118,5 +118,5 @@ export const fetchingGasLimit = () => {
 	};
 };
 
-export const getNetworkSettings = state => state.settings;
-export const getNetworkDetails = state => state;
+export const getNetworkSettings = state => state.network.settings;
+export const getNetworkDetails = state => state.network;

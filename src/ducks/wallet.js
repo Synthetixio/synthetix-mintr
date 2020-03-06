@@ -63,4 +63,4 @@ export const updateWalletPaginatorIndex = index => {
 	};
 };
 
-export const getWalletDetails = state => state;
+export const getWalletDetails = state => state.wallet;

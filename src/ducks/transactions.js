@@ -82,5 +82,5 @@ export const clearSuccessQueue = () => {
 	};
 };
 
-export const getSuccessQueue = state => state.successQueue;
-export const getCurrentTransactions = state => state.currentTransactions;
+export const getSuccessQueue = state => state.transactions.successQueue;
+export const getCurrentTransactions = state => state.transactions.currentTransactions;

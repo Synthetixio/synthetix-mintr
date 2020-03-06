@@ -63,8 +63,8 @@ export const toggleTransactionSettingsPopup = isVisible => {
 	};
 };
 
-export const getCurrentPage = state => state.currenPage;
+export const getCurrentPage = state => state.ui.currentPage;
 export const getCurrentTheme = state => state.ui.theme;
-export const getCurrentTab = state => state.currentTab;
+export const getCurrentTab = state => state.ui.currentTab;
 export const getTransactionSettingsPopupIsVisible = state =>
-	state.transactionSettingsPopupIsVisible;
+	state.ui.transactionSettingsPopupIsVisible;
