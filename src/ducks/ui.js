@@ -1,22 +1,28 @@
+import { persistState, getPersistedState } from '../config/store';
+import { isLightTheme } from '../styles/themes';
+
 const TOGGLE_THEME = 'UI/TOGGLE_THEME';
 const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
 const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
 const TOGGLE_TRANSACTION_SETTINGS_POPUP = 'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
+
+const persistedState = getPersistedState('ui');
 
 const defaultState = {
 	theme: 'dark',
 	currentPage: 'landing',
 	currentTab: 'home',
 	transactionSettingsPopupIsVisible: false,
+	...persistedState,
 };
 
 // Reducer
 export default (state = defaultState, action) => {
 	switch (action.type) {
 		case TOGGLE_THEME: {
-			const themeIsDark = action.payload;
-			localStorage.setItem('dark', JSON.stringify(themeIsDark));
-			return { ...state, themeIsDark };
+			const theme = isLightTheme(state.theme) ? 'dark' : 'light';
+			persistState('ui', { theme });
+			return { ...state, theme };
 		}
 		case UPDATE_CURRENT_PAGE: {
 			return { ...state, currentPage: action.payload };
@@ -35,10 +41,9 @@ export default (state = defaultState, action) => {
 };
 
 // Actions
-export const toggleTheme = themeIsDark => {
+export const toggleTheme = () => {
 	return {
 		type: TOGGLE_THEME,
-		payload: themeIsDark,
 	};
 };
 
