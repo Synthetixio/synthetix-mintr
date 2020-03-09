@@ -10,7 +10,7 @@ import { updateNetworkInfo } from '../../ducks/network';
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
 
-const Main = () => {
+const Main = ({ updateNetworkInfo }) => {
 	useEffect(() => {
 		const fetchNetworkInfo = async () => {
 			try {

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import orderBy from 'lodash/orderBy';
 import styled from 'styled-components';
@@ -92,6 +92,7 @@ const useGetTransactions = (walletAddress, networkName) => {
 			}
 		};
 		getTransaction();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [walletAddress]);
 	return data;
 };
