@@ -20,6 +20,8 @@ import { Globe } from '../../components/Icons';
 
 import { LanguageDropdown } from '../../components/Dropdown';
 
+import { PAGES_BY_KEY } from '../../constants/ui';
+
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './carousel.css';
 
@@ -43,8 +45,8 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 					}
 				});
 			}
-			setCurrentPage('main');
-		} else setCurrentPage('walletSelection');
+			setCurrentPage(PAGES_BY_KEY.MAIN);
+		} else setCurrentPage(PAGES_BY_KEY.WALLET_SELECTION);
 	};
 };
 

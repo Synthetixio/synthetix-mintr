@@ -38,6 +38,9 @@ const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
 	{ value: "44'/60'/", label: "Ethereum - Ledger Live - m/44'/60'" },
 ];
+
+import { PAGES_BY_KEY } from '../../constants/ui';
+
 const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateWalletStatus) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -176,7 +179,7 @@ const WalletConnection = ({
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
-						<ButtonPrimaryMedium onClick={() => setCurrentPage('landing')}>
+						<ButtonPrimaryMedium onClick={() => setCurrentPage(PAGES_BY_KEY.LANDING)}>
 							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>
@@ -235,7 +238,7 @@ const WalletConnection = ({
 																	snxJSConnector.signer.setAddressIndex(walletIndex);
 																}
 																updateWalletStatus({ currentWallet: wallet.address });
-																setCurrentPage('main');
+																setCurrentPage(PAGES_BY_KEY.MAIN);
 															}}
 														>
 															<ListCell>
@@ -276,7 +279,7 @@ const WalletConnection = ({
 												e.preventDefault();
 												const walletAddress = e.target.walletAddress.value;
 												updateWalletStatus({ currentWallet: walletAddress });
-												setCurrentPage('main');
+												setCurrentPage(PAGES_BY_KEY.MAIN);
 											}}
 										>
 											<AddWalletInput

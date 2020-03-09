@@ -14,8 +14,10 @@ let snxJSConnector = {
 		this.provider = this.snxJS.contractSettings.provider;
 		this.utils = this.snxJS.utils;
 		this.ethersUtils = this.snxJS.ethers.utils;
-		this.uniswapContract = new ethers.Contract(uniswap.address, uniswap.abi, this.signer);
-		this.unipoolContract = new ethers.Contract(unipool.address, unipool.abi, this.signer);
+		if (this.signer) {
+			this.uniswapContract = new ethers.Contract(uniswap.address, uniswap.abi, this.signer);
+			this.unipoolContract = new ethers.Contract(unipool.address, unipool.abi, this.signer);
+		}
 		this.synthSummaryUtilContract = new ethers.Contract(
 			synthSummary.addresses[contractSettings.networkId],
 			synthSummary.abi,

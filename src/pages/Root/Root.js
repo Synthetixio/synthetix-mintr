@@ -1,11 +1,13 @@
 import { hot } from 'react-hot-loader/root';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import { isDarkTheme, lightTheme, darkTheme } from '../../styles/themes';
 
 import { isMobileOrTablet } from '../../helpers/browserHelper';
+
 import { getCurrentPage, getCurrentTheme } from '../../ducks/ui';
+import { setAppReady, fetchAppStatus, getAppIsOnMaintenance } from '../../ducks/app';
 
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -17,41 +19,35 @@ import NotificationCenter from '../../components/NotificationCenter';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getEthereumNetwork } from '../../helpers/networkHelper';
 
+import { PAGES_BY_KEY } from '../../constants/ui';
+
 const INTERVAL_TIMER = 5 * 60 * 1000;
 
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
 	switch (currentPage) {
-		case 'landing':
+		case PAGES_BY_KEY.LANDING:
 		default:
 			return <Landing />;
-		case 'walletSelection':
+		case PAGES_BY_KEY.WALLET_SELECTION:
 			return <WalletSelection />;
-		case 'main':
+		case PAGES_BY_KEY.MAIN:
 			return <Main />;
 	}
 };
 
-const Root = ({ currentPage, currentTheme }) => {
+const Root = ({ currentPage, currentTheme, setAppReady, fetchAppStatus, appIsOnMaintenance }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
-	const [isOnMaintenance, setIsOnMaintenance] = useState(false);
-	const getAppState = useCallback(async () => {
-		try {
-			setIsOnMaintenance(await snxJSConnector.snxJS.DappMaintenance.isPausedMintr());
-		} catch (err) {
-			console.log('Could not get DappMaintenance contract data', err);
-			setIsOnMaintenance(false);
-		}
-	}, []);
+
 	useEffect(() => {
-		if (process.env.REACT_APP_CONTEXT !== 'production') return;
 		let intervalId;
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
 			snxJSConnector.setContractSettings({ networkId });
-			getAppState();
+			setAppReady();
+			fetchAppStatus();
 			intervalId = setInterval(() => {
-				getAppState();
+				fetchAppStatus();
 			}, INTERVAL_TIMER);
 		};
 		init();
@@ -59,12 +55,12 @@ const Root = ({ currentPage, currentTheme }) => {
 			clearInterval(intervalId);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [getAppState]);
+	}, []);
 
 	return (
 		<ThemeProvider theme={themeStyle}>
 			<RootWrapper>
-				{isOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
+				{appIsOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
 				<NotificationCenter></NotificationCenter>
 			</RootWrapper>
 		</ThemeProvider>
@@ -80,8 +76,12 @@ const RootWrapper = styled('div')`
 const mapStateToProps = state => ({
 	currentPage: getCurrentPage(state),
 	currentTheme: getCurrentTheme(state),
+	appIsOnMaintenance: getAppIsOnMaintenance(state),
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+	setAppReady,
+	fetchAppStatus,
+};
 
 export default hot(connect(mapStateToProps, mapDispatchToProps)(Root));

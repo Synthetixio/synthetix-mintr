@@ -16,6 +16,8 @@ import { Globe, SupportBubble } from '../Icons';
 import { LanguageDropdown } from '../../components/Dropdown';
 import Logo from '../../components/Logo';
 
+import { PAGES_BY_KEY } from '../../constants/ui';
+
 const Header = ({ walletDetails, setCurrentPage }) => {
 	const { t } = useTranslation();
 	const { currentWallet, networkName } = walletDetails;
@@ -28,7 +30,7 @@ const Header = ({ walletDetails, setCurrentPage }) => {
 				<Network>{networkName}</Network>
 			</HeaderBlock>
 			<HeaderBlock>
-				<WalletStatusButton onClick={() => setCurrentPage('walletSelection')}>
+				<WalletStatusButton onClick={() => setCurrentPage(PAGES_BY_KEY.WALLET_SELECTION)}>
 					{shortenAddress(currentWallet)}
 				</WalletStatusButton>
 				<RoundButton as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
