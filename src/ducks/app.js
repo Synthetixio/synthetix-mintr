@@ -50,9 +50,9 @@ export const getAppIsOnMaintenance = state => getAppState(state).isOnMaintenance
 
 export const fetchAppStatus = () => async dispatch => {
 	if (process.env.REACT_APP_CONTEXT !== 'production') return;
-	const { DappMaintenance } = snxJSConnector.snxJS;
-	dispatch(fetchAppStatusRequest());
 	try {
+		const { DappMaintenance } = snxJSConnector.snxJS;
+		dispatch(fetchAppStatusRequest());
 		const isOnMaintenance = await DappMaintenance.isPausedMintr();
 		dispatch(fetchAppStatusSuccess(isOnMaintenance));
 	} catch (e) {

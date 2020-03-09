@@ -19,9 +19,7 @@ import NotificationCenter from '../../components/NotificationCenter';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getEthereumNetwork } from '../../helpers/networkHelper';
 
-import { PAGES_BY_KEY } from '../../constants/ui';
-
-const INTERVAL_TIMER = 5 * 60 * 1000;
+import { PAGES_BY_KEY, INTERVAL_TIMER } from '../../constants/ui';
 
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
