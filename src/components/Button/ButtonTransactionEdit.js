@@ -3,15 +3,11 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { toggleTransactionSettingsPopup } from '../../ducks/ui';
+import { toggleGweiPopup } from '../../ducks/ui';
 
-const Button = ({ toggleTransactionSettingsPopup }) => {
+const Button = ({ toggleGweiPopup }) => {
 	const { t } = useTranslation();
-	return (
-		<ButtonWrapper onClick={() => toggleTransactionSettingsPopup(true)}>
-			{t('button.edit')}
-		</ButtonWrapper>
-	);
+	return <ButtonWrapper onClick={() => toggleGweiPopup()}>{t('button.edit')}</ButtonWrapper>;
 };
 
 const ButtonWrapper = styled.button`
@@ -28,7 +24,7 @@ const ButtonWrapper = styled.button`
 `;
 
 const mapDispatchToProps = {
-	toggleTransactionSettingsPopup,
+	toggleGweiPopup,
 };
 
 export default connect(null, mapDispatchToProps)(Button);

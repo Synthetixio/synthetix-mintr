@@ -7,7 +7,7 @@ import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
 import { updateGasPrice, getNetworkDetails } from '../../ducks/network';
-import { toggleTransactionSettingsPopup } from '../../ducks/ui';
+import { toggleGweiPopup } from '../../ducks/ui';
 
 import PopupContainer from './PopupContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
@@ -48,11 +48,7 @@ const renderTooltipContent = ({ gasPrice, usdPrice }) => {
 	);
 };
 
-const TransactionSettingsPopup = ({
-	networkDetails,
-	updateGasPrice,
-	toggleTransactionSettingsPopup,
-}) => {
+const TransactionSettingsPopup = ({ networkDetails, updateGasPrice, toggleGweiPopup }) => {
 	const { t } = useTranslation();
 	const {
 		gasStation,
@@ -113,7 +109,7 @@ const TransactionSettingsPopup = ({
 					<ButtonPrimary
 						onClick={() => {
 							updateGasPrice(currentTransactionSettings.gasPrice);
-							toggleTransactionSettingsPopup(false);
+							toggleGweiPopup();
 						}}
 					>
 						{t('transactionSettings.button.submit')}
@@ -191,7 +187,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
 	updateGasPrice,
-	toggleTransactionSettingsPopup,
+	toggleGweiPopup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionSettingsPopup);

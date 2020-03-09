@@ -6,7 +6,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
-import { updateCurrentPage } from '../../ducks/ui';
+import { setCurrentPage } from '../../ducks/ui';
 import {
 	updateWalletStatus,
 	updateWalletPaginatorIndex,
@@ -140,7 +140,7 @@ const BalanceOrSpinner = ({ value }) => (
 
 const WalletConnection = ({
 	walletDetails,
-	updateCurrentPage,
+	setCurrentPage,
 	derivationPathChange,
 	updateWalletStatus,
 }) => {
@@ -176,7 +176,7 @@ const WalletConnection = ({
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
-						<ButtonPrimaryMedium onClick={() => updateCurrentPage('landing')}>
+						<ButtonPrimaryMedium onClick={() => setCurrentPage('landing')}>
 							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>
@@ -235,7 +235,7 @@ const WalletConnection = ({
 																	snxJSConnector.signer.setAddressIndex(walletIndex);
 																}
 																updateWalletStatus({ currentWallet: wallet.address });
-																updateCurrentPage('main');
+																setCurrentPage('main');
 															}}
 														>
 															<ListCell>
@@ -276,7 +276,7 @@ const WalletConnection = ({
 												e.preventDefault();
 												const walletAddress = e.target.walletAddress.value;
 												updateWalletStatus({ currentWallet: walletAddress });
-												updateCurrentPage('main');
+												setCurrentPage('main');
 											}}
 										>
 											<AddWalletInput
@@ -426,7 +426,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	updateCurrentPage,
+	setCurrentPage,
 	derivationPathChange,
 	updateWalletPaginatorIndex,
 	updateWalletStatus,

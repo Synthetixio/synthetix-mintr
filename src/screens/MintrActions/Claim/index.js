@@ -4,7 +4,7 @@ import { addSeconds, formatDistanceToNow } from 'date-fns';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import { SliderContext } from '../../../components/ScreenSlider';
-import { updateCurrentTab } from '../../../ducks/ui';
+import { setCurrentTab } from '../../../ducks/ui';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -108,7 +108,7 @@ const Claim = ({
 	fetchingGasLimit,
 	updateGasLimit,
 	createTransaction,
-	updateCurrentTab,
+	setCurrentTab,
 }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
@@ -150,8 +150,11 @@ const Claim = ({
 	};
 
 	const onClaimHistory = () => {
-		updateCurrentTab('transactionsHistory', {
-			filters: ['FeesClaimed'],
+		setCurrentTab({
+			tab: 'transactionsHistory',
+			params: {
+				filters: ['FeesClaimed'],
+			},
 		});
 	};
 
@@ -184,7 +187,7 @@ const mapDispatchToProps = {
 	createTransaction,
 	fetchingGasLimit,
 	updateGasLimit,
-	updateCurrentTab,
+	setCurrentTab,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Claim);

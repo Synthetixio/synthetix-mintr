@@ -24,7 +24,7 @@ import Spinner from '../../../components/Spinner';
 
 import DepotAction from '../../DepotActions';
 
-import { updateCurrentTab } from '../../../ducks/ui';
+import { setCurrentTab } from '../../../ducks/ui';
 import { getWalletDetails } from '../../../ducks/wallet';
 
 const sumBy = (collection, key) => {
@@ -276,7 +276,7 @@ const buttonLabelMapper = label => {
 	}
 };
 
-const Depot = ({ walletDetails, updateCurrentTab }) => {
+const Depot = ({ walletDetails, setCurrentTab }) => {
 	const { currentWallet, networkName } = walletDetails;
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
@@ -333,8 +333,11 @@ const Depot = ({ walletDetails, updateCurrentTab }) => {
 					<MoreButtons>
 						<ButtonTertiary
 							onClick={() =>
-								updateCurrentTab('transactionsHistory', {
-									filters: ['SynthDeposit', 'SynthWithdrawal', 'ClearedDeposit', 'Exchange'],
+								setCurrentTab({
+									tab: 'transactionsHistory',
+									params: {
+										filters: ['SynthDeposit', 'SynthWithdrawal', 'ClearedDeposit', 'Exchange'],
+									},
 								})
 							}
 						>
@@ -496,7 +499,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	updateCurrentTab,
+	setCurrentTab,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Depot);

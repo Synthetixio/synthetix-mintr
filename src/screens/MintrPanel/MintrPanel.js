@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import {
-	updateCurrentTab,
-	getCurrentTab,
-	getTransactionSettingsPopupIsVisible,
-} from '../../ducks/ui';
+import { setCurrentTab, getCurrentTab, getGweiPopupIsVisible } from '../../ducks/ui';
 
 import { Home, Depot, Transactions, Escrow, UniPool } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
@@ -29,18 +25,18 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = ({ currentTab, transactionSettingsPopupIsVisible, updateCurrentTab }) => {
+const MainContainer = ({ currentTab, gweiPopupIsVisible, setCurrentTab }) => {
 	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
-			<Overlay isVisible={transactionSettingsPopupIsVisible}></Overlay>
+			<Overlay isVisible={gweiPopupIsVisible}></Overlay>
 			<Header>
 				{['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
 					return (
 						<TabButton
 							key={tab}
 							isSelected={tab === currentTab}
-							onClick={() => updateCurrentTab(tab)}
+							onClick={() => setCurrentTab({ tab })}
 						>
 							{/* i18next-extract-disable-next-line */}
 							{t(`mainNavigation.tabs.${tab}`)}
@@ -49,9 +45,7 @@ const MainContainer = ({ currentTab, transactionSettingsPopupIsVisible, updateCu
 				})}
 			</Header>
 			{renderScreen(currentTab)}
-			{transactionSettingsPopupIsVisible ? (
-				<TransactionSettingsPopup></TransactionSettingsPopup>
-			) : null}
+			{gweiPopupIsVisible ? <TransactionSettingsPopup></TransactionSettingsPopup> : null}
 		</MainContainerWrapper>
 	);
 };
@@ -82,11 +76,11 @@ const Overlay = styled.div`
 
 const mapStateToProps = state => ({
 	currentTab: getCurrentTab(state),
-	transactionSettingsPopupIsVisible: getTransactionSettingsPopupIsVisible(state),
+	gweiPopupIsVisible: getGweiPopupIsVisible(state),
 });
 
 const mapDispatchToProps = {
-	updateCurrentTab,
+	setCurrentTab,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

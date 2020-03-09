@@ -7,7 +7,7 @@ import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
-import { updateCurrentPage } from '../../ducks/ui';
+import { setCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus, getWalletDetails } from '../../ducks/wallet';
 import { getCurrentTheme } from '../../ducks/ui';
 
@@ -25,7 +25,7 @@ import './carousel.css';
 
 const SLIDE_COUNT = 4;
 
-const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, updateCurrentPage }) => {
+const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentPage }) => {
 	return async () => {
 		const walletStatus = await connectToWallet({ wallet, derivationPath });
 		updateWalletStatus({ ...walletStatus, availableWallets: [] });
@@ -43,8 +43,8 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, updateCurre
 					}
 				});
 			}
-			updateCurrentPage('main');
-		} else updateCurrentPage('walletSelection');
+			setCurrentPage('main');
+		} else setCurrentPage('walletSelection');
 	};
 };
 
@@ -104,7 +104,7 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 	);
 };
 
-const Landing = ({ currentTheme, walletDetails, updateWalletStatus, updateCurrentPage }) => {
+const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPage }) => {
 	const { t } = useTranslation();
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
@@ -160,7 +160,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, updateCurren
 									wallet,
 									derivationPath,
 									updateWalletStatus,
-									updateCurrentPage,
+									setCurrentPage,
 								})}
 							>
 								<Icon src={`images/wallets/${wallet}.svg`} />
@@ -338,7 +338,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	updateCurrentPage,
+	setCurrentPage,
 	updateWalletStatus,
 };
 

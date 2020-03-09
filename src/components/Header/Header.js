@@ -10,13 +10,13 @@ import { getWalletDetails } from '../../ducks/wallet';
 import { WalletStatusButton } from '../Button';
 import ThemeSwitcher from '../ThemeSwitcher';
 
-import { updateCurrentPage } from '../../ducks/ui';
+import { setCurrentPage } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
 
 import { LanguageDropdown } from '../../components/Dropdown';
 import Logo from '../../components/Logo';
 
-const Header = ({ walletDetails, updateCurrentPage }) => {
+const Header = ({ walletDetails, setCurrentPage }) => {
 	const { t } = useTranslation();
 	const { currentWallet, networkName } = walletDetails;
 
@@ -28,7 +28,7 @@ const Header = ({ walletDetails, updateCurrentPage }) => {
 				<Network>{networkName}</Network>
 			</HeaderBlock>
 			<HeaderBlock>
-				<WalletStatusButton onClick={() => updateCurrentPage('walletSelection')}>
+				<WalletStatusButton onClick={() => setCurrentPage('walletSelection')}>
 					{shortenAddress(currentWallet)}
 				</WalletStatusButton>
 				<RoundButton as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
@@ -105,7 +105,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	updateCurrentPage,
+	setCurrentPage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
