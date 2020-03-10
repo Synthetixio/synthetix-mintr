@@ -2,32 +2,20 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import snxJSConnector from '../../helpers/snxJSConnector';
-import { getNetworkInfo } from '../../helpers/networkHelper';
-import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
-
-import { updateNetworkInfo } from '../../ducks/network';
 import { fetchRates } from '../../ducks/rates';
+import { fetchNetworkInfo } from '../../ducks/network';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
 
-const Main = ({ updateNetworkInfo, fetchRates }) => {
+const Main = ({ fetchNetworkInfo, fetchRates }) => {
 	useEffect(() => {
-		const fetchNetworkInfo = async () => {
+		const init = async () => {
 			fetchRates();
-			// 	try {
-			// 		const [networkInfo, ethPrice] = await Promise.all([
-			// 			getNetworkInfo(),
-			// 			snxJSConnector.snxJS.ExchangeRates.rateForCurrency(bytesFormatter('ETH')),
-			// 		]);
-			// 		updateNetworkInfo(networkInfo, bigNumberFormatter(ethPrice));
-			// 	} catch (e) {
-			// 		console.log('Error while trying to fetch network data', e);
-			// 	}
+			fetchNetworkInfo();
 		};
-		const fetchLoop = setInterval(fetchNetworkInfo, 5 * 60 * 1000);
-		fetchNetworkInfo();
+		init();
+		const fetchLoop = setInterval(init, 5 * 60 * 1000);
 		return () => clearInterval(fetchLoop);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -46,7 +34,7 @@ const MainWrapper = styled.div`
 `;
 
 const mapDispatchToProps = {
-	updateNetworkInfo,
+	fetchNetworkInfo,
 	fetchRates,
 };
 

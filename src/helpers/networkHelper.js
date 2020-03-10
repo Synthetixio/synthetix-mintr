@@ -1,4 +1,6 @@
 import throttle from 'lodash/throttle';
+import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
+import { URLS } from '../constants/urls';
 export const GWEI_UNIT = 1000000000;
 
 export const SUPPORTED_NETWORKS = {
@@ -47,27 +49,21 @@ export async function getEthereumNetwork() {
 	});
 }
 
-export const getNetworkInfo = async () => {
-	const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+export const getNetworkSpeed = async () => {
+	const result = await fetch(URLS.ETH_GAS_STATION);
 	const networkInfo = await result.json();
 	return {
-		slow: {
+		[NETWORK_SPEEDS_TO_KEY.SLOW]: {
 			gwei: networkInfo.safeLow / 10,
 			time: networkInfo.safeLowWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.safeLow / 10, gasLimit, ethPrice),
 		},
-		average: {
+		[NETWORK_SPEEDS_TO_KEY.AVERAGE]: {
 			gwei: networkInfo.average / 10,
 			time: networkInfo.avgWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.average / 10, gasLimit, ethPrice),
 		},
-		fast: {
+		[NETWORK_SPEEDS_TO_KEY.FAST]: {
 			gwei: networkInfo.fast / 10,
 			time: networkInfo.fastWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.fast / 10, gasLimit, ethPrice),
 		},
 	};
 };

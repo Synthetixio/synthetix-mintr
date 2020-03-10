@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
-import { updateGasPrice, getNetworkDetails } from '../../ducks/network';
+import { updateGasPrice, getNetworkInfo } from '../../ducks/network';
 import { toggleGweiPopup } from '../../ducks/ui';
 
 import PopupContainer from './PopupContainer';
@@ -182,7 +182,7 @@ const TooltipValue = styled.div`
 `;
 
 const mapStateToProps = state => ({
-	networkDetails: getNetworkDetails(state),
+	networkDetails: getNetworkInfo(state),
 });
 
 const mapDispatchToProps = {

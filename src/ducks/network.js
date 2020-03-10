@@ -1,122 +1,168 @@
-import { getTransactionPrice } from '../helpers/networkHelper';
+import { createSlice } from '@reduxjs/toolkit';
+import { getTransactionPrice, getNetworkSpeed } from '../helpers/networkHelper';
+import { GAS_LIMIT_BUFFER } from '../constants/network';
 
-const UPDATE_ETH_PRICE = 'NETWORK/UPDATE_ETH_PRICE';
-const UPDATE_INFO = 'NETWORK/UPDATE_INFO';
-const UPDATE_GAS_LIMIT = 'NETWORK/UPDATE_GAS_LIMIT';
-const UPDATE_GAS_PRICE = 'NETWORK/UPDATE_GAS_PRICE';
-const FETCHING_GAS_LIMIT = 'NETWORK/FETCHING_GAS_LIMIT';
+export const networkSlice = createSlice({
+	name: 'network',
+	initialState: {
+		isFetching: false,
+		isFetched: false,
+		isRefreshing: false,
+		fetchError: null,
+		networkInfo: null,
+	},
+	reducers: {
+		fetchNetworkInfoRequest: state => {
+			state.fetchError = null;
+			state.isFetching = true;
+			if (state.isFetched) {
+				state.isRefreshing = true;
+			}
+		},
+		fetchNetworkInfoFailure: (state, action) => {
+			state.fetchError = action.payload.error;
+			state.isFetching = false;
+			state.isRefreshing = false;
+		},
+		fetchNetworkInfoSuccess: (state, action) => {
+			state.networkInfo = action.payload;
+			state.isFetching = false;
+			state.isRefreshing = false;
+			state.isFetched = true;
+		},
+		fetchingGasLimit: state => {
+			state.blah = 1;
+		},
+		updateGasLimit: state => {
+			state.blah = 1;
+		},
+		updateGasPrice: state => {
+			state.blah = 1;
+		},
+	},
+});
 
-const GAS_LIMIT_BUFFER = 5000;
+const {
+	fetchNetworkInfoRequest,
+	fetchNetworkInfoFailure,
+	fetchNetworkInfoSuccess,
+	fetchingGasLimit,
+	updateGasLimit,
+	updateGasPrice,
+} = networkSlice.actions;
+export { fetchingGasLimit, updateGasLimit, updateGasPrice };
+const getNetworkState = state => state.network;
 
-const defaultState = {
-	settings: {},
-};
+export const getNetworkInfo = state => getNetworkState(state).networkInfo;
+export const getNetworkSettings = state => getNetworkState(state).networkInfo;
 
-// Reducer
-export default (state = defaultState, action) => {
-	switch (action.type) {
-		case UPDATE_ETH_PRICE: {
-			const { gasPrice, gasLimit } = state.settings;
-			const ethPrice = action.payload;
-			const transactionUsdPrice = getTransactionPrice(gasPrice, gasLimit, ethPrice);
-			return {
-				...state,
-				ethPrice,
-				settings: { ...state.settings, transactionUsdPrice },
-			};
-		}
-		case UPDATE_INFO: {
-			const { gasStation, ethPrice } = action.payload;
-			return {
-				...state,
-				gasStation,
-				ethPrice,
-				settings: { gasPrice: gasStation['average'].gwei },
-			};
-		}
-		case FETCHING_GAS_LIMIT: {
-			return {
-				...state,
-				settings: {
-					...state.settings,
-					isFetchingGasLimit: true,
-					transactionUsdPrice: null,
-					gasLimit: null,
-				},
-			};
-		}
-		case UPDATE_GAS_LIMIT: {
-			const {
-				ethPrice,
-				settings: { gasPrice },
-			} = state;
-			const gasLimit = action.payload + GAS_LIMIT_BUFFER;
-			const transactionUsdPrice = getTransactionPrice(gasPrice, gasLimit, ethPrice);
-			return {
-				...state,
-				settings: {
-					...state.settings,
-					gasLimit,
-					transactionUsdPrice,
-					isFetchingGasLimit: false,
-				},
-			};
-		}
-		case UPDATE_GAS_PRICE: {
-			const {
-				ethPrice,
-				settings: { gasLimit },
-			} = state;
-			const gasPrice = action.payload;
-			const transactionUsdPrice = getTransactionPrice(gasPrice, gasLimit, ethPrice);
-			return {
-				...state,
-				settings: {
-					...state.settings,
-					gasPrice: action.payload,
-					transactionUsdPrice,
-				},
-			};
-		}
-		default:
-			return state;
+export const fetchNetworkInfo = () => async dispatch => {
+	try {
+		dispatch(fetchNetworkInfoRequest());
+		const networkSpeed = await getNetworkSpeed();
+		dispatch(fetchNetworkInfoSuccess(networkSpeed));
+	} catch (e) {
+		dispatch(fetchNetworkInfoFailure({ error: e.message }));
 	}
 };
 
-// Actions
-export const updateEthPrice = price => {
-	return {
-		type: UPDATE_ETH_PRICE,
-		payload: price,
-	};
-};
+export default networkSlice.reducer;
 
-export const updateNetworkInfo = (gasStation, ethPrice) => {
-	return {
-		type: UPDATE_INFO,
-		payload: { gasStation, ethPrice },
-	};
-};
+// // Reducer
+// export default (state = defaultState, action) => {
+// 	switch (action.type) {
+// 		case UPDATE_INFO: {
+// 			const { gasStation, ethPrice } = action.payload;
+// 			return {
+// 				...state,
+// 				gasStation,
+// 				ethPrice,
+// 				settings: { gasPrice: gasStation['average'].gwei },
+// 			};
+// 		}
+// 		case FETCHING_GAS_LIMIT: {
+// 			return {
+// 				...state,
+// 				settings: {
+// 					...state.settings,
+// 					isFetchingGasLimit: true,
+// 					transactionUsdPrice: null,
+// 					gasLimit: null,
+// 				},
+// 			};
+// 		}
+// 		case UPDATE_GAS_LIMIT: {
+// 			const {
+// 				ethPrice,
+// 				settings: { gasPrice },
+// 			} = state;
+// 			const gasLimit = action.payload + GAS_LIMIT_BUFFER;
+// 			const transactionUsdPrice = getTransactionPrice(gasPrice, gasLimit, ethPrice);
+// 			return {
+// 				...state,
+// 				settings: {
+// 					...state.settings,
+// 					gasLimit,
+// 					transactionUsdPrice,
+// 					isFetchingGasLimit: false,
+// 				},
+// 			};
+// 		}
+// 		case UPDATE_GAS_PRICE: {
+// 			const {
+// 				ethPrice,
+// 				settings: { gasLimit },
+// 			} = state;
+// 			const gasPrice = action.payload;
+// 			const transactionUsdPrice = getTransactionPrice(gasPrice, gasLimit, ethPrice);
+// 			return {
+// 				...state,
+// 				settings: {
+// 					...state.settings,
+// 					gasPrice: action.payload,
+// 					transactionUsdPrice,
+// 				},
+// 			};
+// 		}
+// 		default:
+// 			return state;
+// 	}
+// };
 
-export const updateGasLimit = gasLimit => {
-	return {
-		type: UPDATE_GAS_LIMIT,
-		payload: gasLimit,
-	};
-};
+// // Actions
+// export const updateEthPrice = price => {
+// 	return {
+// 		type: UPDATE_ETH_PRICE,
+// 		payload: price,
+// 	};
+// };
 
-export const updateGasPrice = gasPrice => {
-	return {
-		type: UPDATE_GAS_PRICE,
-		payload: gasPrice,
-	};
-};
+// export const updateNetworkInfo = (gasStation, ethPrice) => {
+// 	return {
+// 		type: UPDATE_INFO,
+// 		payload: { gasStation, ethPrice },
+// 	};
+// };
 
-export const fetchingGasLimit = () => {
-	return {
-		type: FETCHING_GAS_LIMIT,
-	};
-};
+// export const updateGasLimit = gasLimit => {
+// 	return {
+// 		type: UPDATE_GAS_LIMIT,
+// 		payload: gasLimit,
+// 	};
+// };
 
-export const getNetworkSettings = state => state.network.settings;
-export const getNetworkDetails = state => state.network;
+// export const updateGasPrice = gasPrice => {
+// 	return {
+// 		type: UPDATE_GAS_PRICE,
+// 		payload: gasPrice,
+// 	};
+// };
+
+// export const fetchingGasLimit = () => {
+// 	return {
+// 		type: FETCHING_GAS_LIMIT,
+// 	};
+// };
+
+// export const getNetworkSettings = state => state.network.settings;
+// export const getNetworkDetails = state => state.network;
