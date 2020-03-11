@@ -14,12 +14,12 @@ import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../../components/T
 import DataBox from '../../../../components/DataBox';
 import { ButtonTertiary, ButtonPrimary } from '../../../../components/Button';
 
-import UnipoolActions from '../../../UnipoolActions';
+import CurvepoolActions from '../../../CurvepoolActions';
 
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 120000,
+		gasLimit: 150000,
 	},
 	claim: {
 		contractFunction: 'getReward',
@@ -108,7 +108,7 @@ const Stake = ({ t, goBack }) => {
 
 	return (
 		<Container>
-			<UnipoolActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
+			<CurvepoolActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
 			<Navigation>
 				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 				<ButtonTertiary
