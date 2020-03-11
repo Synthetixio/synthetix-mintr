@@ -1,18 +1,18 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
+import snxJSConnector from '../../../../helpers/snxJSConnector';
+import { Store } from '../../../../store';
 
-import { bigNumberFormatter } from '../../../helpers/formatters';
+import { bigNumberFormatter } from '../../../../helpers/formatters';
 
-import PageContainer from '../../../components/PageContainer';
-import Spinner from '../../../components/Spinner';
+import PageContainer from '../../../../components/PageContainer';
+import Spinner from '../../../../components/Spinner';
 
 import SetAllowance from './SetAllowance';
 import Stake from './Stake';
 
-const UniPool = () => {
+const UniPool = ({ goBack }) => {
 	const [hasAllowance, setAllowance] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const {
@@ -67,9 +67,9 @@ const UniPool = () => {
 					<Spinner />
 				</SpinnerContainer>
 			) : !hasAllowance ? (
-				<SetAllowance />
+				<SetAllowance goBack={goBack} />
 			) : (
-				<Stake />
+				<Stake goBack={goBack} />
 			)}
 		</PageContainer>
 	);

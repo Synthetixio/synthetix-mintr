@@ -5,7 +5,7 @@ import { withTranslation, useTranslation } from 'react-i18next';
 import { Store } from '../../store';
 import { updateCurrentTab } from '../../ducks/ui';
 
-import { Home, Depot, Transactions, Escrow, UniPool } from '../MintrTabs';
+import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { TransactionSettingsPopup } from '../../components/Popup';
 
@@ -17,7 +17,7 @@ const TabRow = () => {
 		},
 		dispatch,
 	} = useContext(Store);
-	return ['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
+	return ['home', 'depot', 'transactionsHistory', 'escrow', 'lpRewards'].map(tab => {
 		return (
 			<TabButton
 				key={tab}
@@ -42,8 +42,8 @@ const renderScreen = screen => {
 			return <Transactions />;
 		case 'escrow':
 			return <Escrow />;
-		case 'unipool':
-			return <UniPool />;
+		case 'lpRewards':
+			return <LPRewards />;
 	}
 };
 

@@ -86,7 +86,7 @@
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Escrow",
-			"unipool": "UniPool"
+			"lpRewards": "LP rewards"
 		}
 	},
 	"home": {
@@ -319,14 +319,21 @@
 			"actionDescription": "Vesting:"
 		}
 	},
-	"unipool": {
-		"locked": {
-			"title": "Uniswap Liquidity Pool",
-			"subtitle": "If you're contributing liquidity to the sETH/ETH liquidity pool on Uniswap, you can now earn SNX rewards by staking your Uniswap LP token here."
+	"lpRewards": {
+		"intro": {
+			"title": "Please choose a pool"
 		},
-		"unlocked": {
-			"title": "Stake & manage your UNI-V1 LP Tokens",
-			"subtitle": "Here you can stake/unstake your Uni-V1 LP tokens, claim rewards, or exit completely if you're already staking (includes claiming).",
+		"actions": {
+			"unipool": {
+				"title": "Unipool"
+			},
+			"curvepool": { "title": "Curvepool" }
+		},
+		"shared": {
+			"unlocked": {
+				"link": "See blog post",
+				"complete": "Transaction in progress!"
+			},
 			"data": {
 				"balance": "Your balance",
 				"staked": "Currently staked",
@@ -338,15 +345,34 @@
 				"unstaking": "Unstaking",
 				"exiting": "Unstaking & claiming"
 			},
-			"complete": "Transaction in progress!"
+			"buttons": {
+				"unlock": "unlock",
+				"goToContract": "Go to contract",
+				"stake": "Stake tokens",
+				"claim": "Claim rewards",
+				"unstake": "Unstake tokens",
+				"exit": "exit: claim & unstake"
+			}
+		}
+	},
+	"unipool": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
 		},
-		"buttons": {
-			"unlock": "unlock",
-			"goToContract": "Go to contract",
-			"stake": "Stake uni tokens",
-			"claim": "Claim rewards",
-			"unstake": "Unstake uni tokens",
-			"exit": "exit: claim & unstake"
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"curvepool": {
+		"title": "iearn.finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your yCurve tokens for staking.",
+			"transaction": "Setting yCurve token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your yCurve tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"transactions": {
