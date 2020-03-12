@@ -14,7 +14,7 @@ const DataBox = ({ heading, body }) => {
 
 const Box = styled.div`
 	flex: 1;
-	padding: 24px 40px;
+	padding: 18px;
 	white-space: nowrap;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
@@ -30,7 +30,7 @@ const Box = styled.div`
 const Amount = styled.span`
 	color: ${props => props.theme.colorStyles.hyperlink};
 	font-family: 'apercu-medium';
-	font-size: 24px;
+	font-size: 18px;
 	margin: 16px 0px 0px 0px;
 `;
 
