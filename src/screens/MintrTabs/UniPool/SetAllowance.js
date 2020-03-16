@@ -7,7 +7,7 @@ import { createTransaction } from '../../../ducks/transactions';
 import { getNetworkSettings } from '../../../ducks/network';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 
 import { PageTitle, PLarge } from '../../../components/Typography';
 import { ButtonPrimary } from '../../../components/Button';

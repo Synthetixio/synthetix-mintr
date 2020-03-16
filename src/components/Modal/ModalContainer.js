@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Cross } from '../Icons';
 
-import { toggleGweiPopup } from '../../ducks/ui';
+import { hideModal } from '../../ducks/modal';
 
-const Popup = ({ children, toggleGweiPopup }) => {
+const Popup = ({ children, hideModal }) => {
 	return (
 		<PopupWrapper>
 			<Nav>
-				<ButtonClose onClick={() => toggleGweiPopup()}>
+				<ButtonClose onClick={() => hideModal()}>
 					<Cross />
 				</ButtonClose>
 			</Nav>
@@ -41,7 +41,7 @@ const ButtonClose = styled.button`
 `;
 
 const mapDispatchToProps = {
-	toggleGweiPopup,
+	hideModal,
 };
 
 export default connect(null, mapDispatchToProps)(Popup);

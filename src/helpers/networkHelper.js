@@ -1,7 +1,7 @@
 import throttle from 'lodash/throttle';
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { URLS } from '../constants/urls';
-export const GWEI_UNIT = 1000000000;
+import { GWEI_UNIT } from '../constants/network';
 
 export const SUPPORTED_NETWORKS = {
 	1: 'MAINNET',
@@ -54,15 +54,15 @@ export const getNetworkSpeed = async () => {
 	const networkInfo = await result.json();
 	return {
 		[NETWORK_SPEEDS_TO_KEY.SLOW]: {
-			gwei: networkInfo.safeLow / 10,
+			price: networkInfo.safeLow / 10,
 			time: networkInfo.safeLowWait,
 		},
 		[NETWORK_SPEEDS_TO_KEY.AVERAGE]: {
-			gwei: networkInfo.average / 10,
+			price: networkInfo.average / 10,
 			time: networkInfo.avgWait,
 		},
 		[NETWORK_SPEEDS_TO_KEY.FAST]: {
-			gwei: networkInfo.fast / 10,
+			price: networkInfo.fast / 10,
 			time: networkInfo.fastWait,
 		},
 	};

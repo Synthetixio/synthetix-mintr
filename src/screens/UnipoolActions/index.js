@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { GWEI_UNIT } from '../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../constants/network';
 import Slider, { SliderContext } from '../../components/ScreenSlider';
 
 import { getWalletDetails } from '../../ducks/wallet';

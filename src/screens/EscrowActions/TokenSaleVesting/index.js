@@ -8,7 +8,7 @@ import { createTransaction } from '../../../ducks/transactions';
 import { getNetworkSettings } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 
 import Confirmation from './Confirmation';

@@ -6,7 +6,7 @@ import { bytesFormatter, bigNumberFormatter } from '../helpers/formatters';
 export const appSlice = createSlice({
 	name: 'rates',
 	initialState: {
-		rates: null,
+		rates: {},
 		isFetching: false,
 		isFetched: false,
 		isRefreshing: false,
@@ -40,7 +40,7 @@ export const appSlice = createSlice({
 const { setAppReady, fetchRatesRequest, fetchRatesFailure, fetchRatesSuccess } = appSlice.actions;
 
 const getRatesState = state => state.rates;
-
+export const getEthRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.ETH];
 export const getAppIsReady = state => getRatesState(state).isReady;
 export const getAppIsOnMaintenance = state => getRatesState(state).isOnMaintenance;
 

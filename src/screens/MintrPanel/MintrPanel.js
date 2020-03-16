@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { setCurrentTab, getCurrentTab, getGweiPopupIsVisible } from '../../ducks/ui';
+import { setCurrentTab, getCurrentTab } from '../../ducks/ui';
+import { getModalState } from '../../ducks/modal';
 
 import { Home, Depot, Transactions, Escrow, UniPool } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
-import { TransactionSettingsPopup } from '../../components/Popup';
+import { TransactionSettingsPopup } from '../../components/Modal';
+import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
 const renderScreen = screen => {
 	switch (screen) {
@@ -25,11 +27,11 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = ({ currentTab, gweiPopupIsVisible, setCurrentTab }) => {
+const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setCurrentTab }) => {
 	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
-			<Overlay isVisible={gweiPopupIsVisible}></Overlay>
+			<Overlay isVisible={modalType}></Overlay>
 			<Header>
 				{['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
 					return (
@@ -45,7 +47,7 @@ const MainContainer = ({ currentTab, gweiPopupIsVisible, setCurrentTab }) => {
 				})}
 			</Header>
 			{renderScreen(currentTab)}
-			{gweiPopupIsVisible ? <TransactionSettingsPopup></TransactionSettingsPopup> : null}
+			{modalType === MODAL_TYPES_TO_KEY.GWEI ? <TransactionSettingsPopup {...modalProps} /> : null}
 		</MainContainerWrapper>
 	);
 };
@@ -76,7 +78,7 @@ const Overlay = styled.div`
 
 const mapStateToProps = state => ({
 	currentTab: getCurrentTab(state),
-	gweiPopupIsVisible: getGweiPopupIsVisible(state),
+	modalState: getModalState(state),
 });
 
 const mapDispatchToProps = {

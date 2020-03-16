@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getTransactionPrice, getNetworkSpeed } from '../helpers/networkHelper';
-import { GAS_LIMIT_BUFFER } from '../constants/network';
+import { getNetworkSpeed } from '../helpers/networkHelper';
+import { GWEI_UNIT } from '../constants/network';
+
+import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 
 export const networkSlice = createSlice({
 	name: 'network',
@@ -9,60 +11,75 @@ export const networkSlice = createSlice({
 		isFetched: false,
 		isRefreshing: false,
 		fetchError: null,
-		networkInfo: null,
+		gasPrices: null,
+		currentGasPrice: null,
 	},
 	reducers: {
-		fetchNetworkInfoRequest: state => {
+		fetchGasPricesRequest: state => {
 			state.fetchError = null;
 			state.isFetching = true;
 			if (state.isFetched) {
 				state.isRefreshing = true;
 			}
 		},
-		fetchNetworkInfoFailure: (state, action) => {
+		fetchGasPricesFailure: (state, action) => {
 			state.fetchError = action.payload.error;
 			state.isFetching = false;
 			state.isRefreshing = false;
 		},
-		fetchNetworkInfoSuccess: (state, action) => {
-			state.networkInfo = action.payload;
+		fetchGasPricesSuccess: (state, action) => {
+			const gasPrices = action.payload;
+			state.gasPrices = gasPrices;
+			if (gasPrices?.[NETWORK_SPEEDS_TO_KEY.AVERAGE]) {
+				state.currentGasPrice = gasPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE];
+			}
 			state.isFetching = false;
 			state.isRefreshing = false;
 			state.isFetched = true;
 		},
-		fetchingGasLimit: state => {
-			state.blah = 1;
+		setGasPrice: (state, action) => {
+			const price = action.payload;
+			state.currentGasPrice = {
+				price,
+				formattedPrice: price * GWEI_UNIT,
+			};
 		},
-		updateGasLimit: state => {
-			state.blah = 1;
-		},
-		updateGasPrice: state => {
-			state.blah = 1;
-		},
+		// fetchingGasLimit: state => {
+		// 	state.blah = 1;
+		// },
+		// updateGasLimit: state => {
+		// 	state.blah = 1;
+		// },
+		// updateGasPrice: state => {
+		// 	state.blah = 1;
+		// },
 	},
 });
 
 const {
-	fetchNetworkInfoRequest,
-	fetchNetworkInfoFailure,
-	fetchNetworkInfoSuccess,
+	fetchGasPricesRequest,
+	fetchGasPricesFailure,
+	fetchGasPricesSuccess,
 	fetchingGasLimit,
 	updateGasLimit,
 	updateGasPrice,
+	setGasPrice,
 } = networkSlice.actions;
-export { fetchingGasLimit, updateGasLimit, updateGasPrice };
+export { fetchingGasLimit, updateGasLimit, updateGasPrice, setGasPrice };
 const getNetworkState = state => state.network;
 
 export const getNetworkInfo = state => getNetworkState(state).networkInfo;
 export const getNetworkSettings = state => getNetworkState(state).networkInfo;
+export const getCurrentGasPrice = state => getNetworkState(state).currentGasPrice;
+export const getNetworkPrices = state => getNetworkState(state).gasPrices;
 
-export const fetchNetworkInfo = () => async dispatch => {
+export const fetchGasPrices = () => async dispatch => {
 	try {
-		dispatch(fetchNetworkInfoRequest());
+		dispatch(fetchGasPricesRequest());
 		const networkSpeed = await getNetworkSpeed();
-		dispatch(fetchNetworkInfoSuccess(networkSpeed));
+		dispatch(fetchGasPricesSuccess(networkSpeed));
 	} catch (e) {
-		dispatch(fetchNetworkInfoFailure({ error: e.message }));
+		dispatch(fetchGasPricesFailure({ error: e.message }));
 	}
 };
 

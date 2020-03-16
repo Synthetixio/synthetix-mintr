@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
-import { updateGasPrice, getNetworkInfo } from '../../ducks/network';
-import { toggleGweiPopup } from '../../ducks/ui';
+import { setGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
+import { hideModal } from '../../ducks/modal';
+import { getEthRate } from '../../ducks/rates';
 
-import PopupContainer from './PopupContainer';
+import ModalContainer from './ModalContainer';
 import { PageTitle, PLarge, DataHeaderLarge, DataLarge } from '../Typography';
 import { ButtonPrimary } from '../Button';
 import Slider from '../Slider';
@@ -24,7 +25,7 @@ const RatesData = ({ gasInfo }) => {
 					return (
 						<Rates key={i}>
 							<DataHeaderLarge marginBottom="8px" style={{ textTransform: 'capitalize' }}>
-								{t(`transactionSettings.speed.${gas.speed}`)}
+								{t(`transactionSettings.speed.${gas.speed.toLowerCase()}`)}
 							</DataHeaderLarge>
 							<DataLarge marginBottom="4px">${formatCurrency(gas.price)}</DataLarge>
 							<DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
@@ -39,39 +40,38 @@ const RatesData = ({ gasInfo }) => {
 	);
 };
 
-const renderTooltipContent = ({ gasPrice, usdPrice }) => {
+const renderTooltipContent = (gasPrice, transactionPrice) => {
 	return (
 		<TooltipInner>
 			<TooltipValue>{gasPrice} GWEI</TooltipValue>
-			<TooltipValue>${formatCurrency(usdPrice)}</TooltipValue>
+			<TooltipValue>${formatCurrency(transactionPrice)}</TooltipValue>
 		</TooltipInner>
 	);
 };
 
-const TransactionSettingsPopup = ({ networkDetails, updateGasPrice, toggleGweiPopup }) => {
+const GweiModal = ({
+	networkPrices,
+	setGasPrice,
+	hideModal,
+	currentGasPrice,
+	gasLimit,
+	ethRate,
+}) => {
 	const { t } = useTranslation();
-	const {
-		gasStation,
-		ethPrice,
-		settings: { gasPrice, gasLimit },
-	} = networkDetails;
+	const [gasPriceSettings, setGasPriceSettings] = useState(currentGasPrice.price);
 
-	const [currentTransactionSettings, setTransactionSettings] = useState({
-		gasPrice,
-		usdPrice: getTransactionPrice(gasPrice, gasLimit, ethPrice),
-	});
-
-	const gasInfo = gasStation
-		? Object.keys(gasStation).map(speed => {
+	const gasInfo = networkPrices
+		? Object.keys(networkPrices).map(speed => {
+				const price = (networkPrices[speed] && networkPrices[speed].price) || 0;
 				return {
-					...gasStation[speed],
+					...networkPrices[speed],
 					speed,
-					price: gasStation[speed].getPrice(gasLimit, ethPrice),
+					price: getTransactionPrice(price, gasLimit, ethRate),
 				};
 		  })
 		: [];
 	return (
-		<PopupContainer margin="auto">
+		<ModalContainer margin="auto">
 			<Wrapper>
 				<Intro>
 					<PageTitle>{t('transactionSettings.title')}</PageTitle>
@@ -83,40 +83,37 @@ const TransactionSettingsPopup = ({ networkDetails, updateGasPrice, toggleGweiPo
 					placeholder={t('transactionSettings.placeholder')}
 					onChange={e => {
 						const newPrice = e.target.value;
-						setTransactionSettings({
-							gasPrice: newPrice,
-							usdPrice: getTransactionPrice(newPrice, gasLimit, ethPrice),
-						});
+						setGasPriceSettings(newPrice);
 					}}
-					value={currentTransactionSettings.gasPrice}
+					value={gasPriceSettings}
 				/>
 				<SliderWrapper>
 					<Slider
 						min={0}
 						max={50}
-						value={currentTransactionSettings.gasPrice}
-						tooltipRenderer={() => renderTooltipContent(currentTransactionSettings)}
-						onChange={newPrice =>
-							setTransactionSettings({
-								gasPrice: newPrice,
-								usdPrice: getTransactionPrice(newPrice, gasLimit, ethPrice),
-							})
+						value={gasPriceSettings}
+						tooltipRenderer={() =>
+							renderTooltipContent(
+								gasPriceSettings,
+								getTransactionPrice(gasPriceSettings, gasLimit, ethRate)
+							)
 						}
+						onChange={newPrice => setGasPriceSettings(newPrice)}
 					/>
-					{gasStation ? <RatesData gasInfo={gasInfo} /> : null}
+					{networkPrices ? <RatesData gasInfo={gasInfo} /> : null}
 				</SliderWrapper>
 				<ButtonWrapper>
 					<ButtonPrimary
 						onClick={() => {
-							updateGasPrice(currentTransactionSettings.gasPrice);
-							toggleGweiPopup();
+							setGasPrice(gasPriceSettings);
+							hideModal();
 						}}
 					>
 						{t('transactionSettings.button.submit')}
 					</ButtonPrimary>
 				</ButtonWrapper>
 			</Wrapper>
-		</PopupContainer>
+		</ModalContainer>
 	);
 };
 
@@ -182,12 +179,14 @@ const TooltipValue = styled.div`
 `;
 
 const mapStateToProps = state => ({
-	networkDetails: getNetworkInfo(state),
+	networkPrices: getNetworkPrices(state),
+	currentGasPrice: getCurrentGasPrice(state),
+	ethRate: getEthRate(state),
 });
 
 const mapDispatchToProps = {
-	updateGasPrice,
-	toggleGweiPopup,
+	setGasPrice,
+	hideModal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionSettingsPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(GweiModal);

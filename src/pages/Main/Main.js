@@ -3,19 +3,21 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { fetchRates } from '../../ducks/rates';
-import { fetchNetworkInfo } from '../../ducks/network';
+import { fetchGasPrices } from '../../ducks/network';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
 
-const Main = ({ fetchNetworkInfo, fetchRates }) => {
+import { INTERVAL_TIMER } from '../../constants/ui';
+
+const Main = ({ fetchGasPrices, fetchRates }) => {
 	useEffect(() => {
 		const init = async () => {
 			fetchRates();
-			fetchNetworkInfo();
+			fetchGasPrices();
 		};
 		init();
-		const fetchLoop = setInterval(init, 5 * 60 * 1000);
+		const fetchLoop = setInterval(init, INTERVAL_TIMER);
 		return () => clearInterval(fetchLoop);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -34,7 +36,7 @@ const MainWrapper = styled.div`
 `;
 
 const mapDispatchToProps = {
-	fetchNetworkInfo,
+	fetchGasPrices,
 	fetchRates,
 };
 

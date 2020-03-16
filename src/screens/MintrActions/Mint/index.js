@@ -14,7 +14,7 @@ import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});

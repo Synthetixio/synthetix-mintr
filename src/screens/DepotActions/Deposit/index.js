@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 import errorMapper from '../../../helpers/errorMapper';
 

@@ -5,6 +5,7 @@ import rates from './rates';
 import wallet from './wallet';
 import transactions from './transactions';
 import network from './network';
+import modal from './modal';
 
 export default combineReducers({
 	app,
@@ -13,4 +14,5 @@ export default combineReducers({
 	wallet,
 	transactions,
 	network,
+	modal,
 });

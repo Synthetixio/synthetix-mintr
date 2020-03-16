@@ -28,9 +28,6 @@ export const uiSlice = createSlice({
 			state.currentTab = tab;
 			state.tabParams = params;
 		},
-		toggleGweiPopup: state => {
-			state.gweiPopupIsVisible = !state.gweiPopupIsVisible;
-		},
 	},
 });
 
@@ -40,10 +37,9 @@ export const getCurrentTheme = state => state.ui.theme;
 export const getCurrentPage = state => getUiState(state).currentPage;
 export const getCurrentTab = state => getUiState(state).currentTab;
 export const getTabParams = state => getUiState(state).tabParams;
-export const getGweiPopupIsVisible = state => getUiState(state).gweiPopupIsVisible;
 
-const { toggleTheme, setCurrentPage, setCurrentTab, toggleGweiPopup } = uiSlice.actions;
+const { toggleTheme, setCurrentPage, setCurrentTab } = uiSlice.actions;
 
-export { toggleTheme, setCurrentPage, setCurrentTab, toggleGweiPopup };
+export { toggleTheme, setCurrentPage, setCurrentTab };
 
 export default uiSlice.reducer;

@@ -14,7 +14,7 @@ import { getWalletDetails } from '../../../ducks/wallet';
 
 import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../helpers/formatters';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
 

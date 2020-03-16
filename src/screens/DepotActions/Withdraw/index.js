@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import { createTransaction } from '../../../ducks/transactions';

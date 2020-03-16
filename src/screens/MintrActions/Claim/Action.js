@@ -81,6 +81,7 @@ const Action = ({
 	dataIsLoading,
 	isFetchingGasLimit,
 	gasEstimateError,
+	gasLimit,
 }) => {
 	return (
 		<SlidePage>
@@ -128,7 +129,11 @@ const Action = ({
 					</Details>
 				</Middle>
 				<Bottom>
-					<TransactionPriceIndicator style={{ margin: '0' }} />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+					/>
 					<ButtonPrimary
 						disabled={!feesAreClaimable || isFetchingGasLimit || gasEstimateError}
 						onClick={onClaim}

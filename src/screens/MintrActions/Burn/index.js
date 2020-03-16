@@ -10,7 +10,7 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
+import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';

@@ -3,17 +3,28 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { useTranslation } from 'react-i18next';
-import { getNetworkSettings } from '../../ducks/network';
+import { getCurrentGasPrice } from '../../ducks/network';
+import { showModal } from '../../ducks/modal';
+import { getEthRate } from '../../ducks/rates';
 
-import { ButtonTransactionEdit } from '../Button';
 import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
 
-const TransactionPriceIndicator = ({ canEdit = true, networkSettings, ...style }) => {
-	const { t } = useTranslation();
-	const { gasPrice, transactionUsdPrice, isFetchingGasLimit } = networkSettings;
+import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
+import { getTransactionPrice } from '../../helpers/networkHelper';
+
+const TransactionPriceIndicator = ({
+	canEdit = true,
+	currentGasPrice,
+	isFetchingGasLimit,
+	showModal,
+	gasLimit,
+	ethRate,
+	...style
+}) => {
+	const { t } = useTranslation();
 	return (
 		<Container {...style}>
 			<Block>
@@ -24,8 +35,22 @@ const TransactionPriceIndicator = ({ canEdit = true, networkSettings, ...style }
 					<MicroSpinner />
 				) : (
 					<Fragment>
-						<Subtext>{`$${formatCurrency(transactionUsdPrice)} / ${gasPrice} GWEI`}</Subtext>
-						{canEdit ? <ButtonTransactionEdit></ButtonTransactionEdit> : null}
+						<Subtext>
+							{currentGasPrice
+								? `$${formatCurrency(
+										getTransactionPrice(currentGasPrice.price, gasLimit, ethRate)
+								  )} / ${currentGasPrice.price} GWEI`
+								: 0}
+						</Subtext>
+						{canEdit ? (
+							<Button
+								onClick={() =>
+									showModal({ modalType: MODAL_TYPES_TO_KEY.GWEI, modalProps: { gasLimit } })
+								}
+							>
+								{t('button.edit')}
+							</Button>
+						) : null}
 					</Fragment>
 				)}
 			</Block>
@@ -47,8 +72,26 @@ const Block = styled.div`
 	white-space: nowrap;
 `;
 
+const Button = styled.button`
+	font-family: 'apercu-bold', sans-serif;
+	border: none;
+	background-color: transparent;
+	font-size: 15px;
+	text-transform: uppercase;
+	cursor: pointer;
+	color: ${props => props.theme.colorStyles.hyperlink};
+	:hover {
+		text-decoration: underline;
+	}
+`;
+
 const mapStateToProps = state => ({
-	networkSettings: getNetworkSettings(state),
+	currentGasPrice: getCurrentGasPrice(state),
+	ethRate: getEthRate(state),
 });
 
-export default connect(mapStateToProps, {})(TransactionPriceIndicator);
+const mapDispatchToProps = {
+	showModal,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionPriceIndicator);
