@@ -13,7 +13,7 @@ import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../hel
 import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import { useTranslation } from 'react-i18next';
 
@@ -81,8 +81,8 @@ const useGetGasEstimate = (
 	sUSDBalance,
 	waitingPeriod,
 	issuanceDelay,
-	fetchingGasLimit,
-	updateGasLimit
+	setFetchingGasLimit,
+	setGasLimit
 ) => {
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
@@ -97,7 +97,7 @@ const useGetGasEstimate = (
 				if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
 				if (burnAmount > sUSDBalance || maxBurnAmount === 0)
 					throw new Error('input.error.notEnoughToBurn');
-				fetchingGasLimit();
+				setFetchingGasLimit(true);
 
 				let amountToBurn;
 				if (burnAmount && maxBurnAmount) {
@@ -106,16 +106,16 @@ const useGetGasEstimate = (
 							? maxBurnAmountBN
 							: snxJSConnector.utils.parseEther(burnAmount.toString());
 				} else amountToBurn = 0;
-
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
 					amountToBurn
 				);
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate));
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,14 +123,7 @@ const useGetGasEstimate = (
 	return error;
 };
 
-const Burn = ({
-	onDestroy,
-	fetchingGasLimit,
-	updateGasLimit,
-	walletDetails,
-	networkSettings,
-	createTransaction,
-}) => {
+const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [burnAmount, setBurnAmount] = useState('');
 	const [transferableAmount, setTransferableAmount] = useState('');
@@ -138,7 +131,8 @@ const Burn = ({
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
 	const { currentWallet, walletType, networkName } = walletDetails;
-	const { gasPrice, gasLimit, isFetchingGasLimit } = networkSettings;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
 
 	const sUSDBytes = bytesFormatter('sUSD');
 	const {
@@ -205,8 +199,8 @@ const Burn = ({
 		sUSDBalance,
 		waitingPeriod,
 		issuanceDelay,
-		fetchingGasLimit,
-		updateGasLimit
+		setFetchingGasLimit,
+		setGasLimit
 	);
 	const onBurn = async () => {
 		const {
@@ -225,7 +219,7 @@ const Burn = ({
 					? maxBurnAmountBN
 					: snxJSConnector.utils.parseEther(burnAmount.toString());
 			const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(amountToBurn, {
-				gasPrice: gasPrice * GWEI_UNIT,
+				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
 			if (transaction) {
@@ -275,6 +269,7 @@ const Burn = ({
 		networkName,
 		SNXPrice,
 		isFetchingGasLimit,
+		gasLimit,
 		gasEstimateError,
 		burnAmountToFixCRatio,
 		waitingPeriod,
@@ -291,13 +286,11 @@ const Burn = ({
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	networkSettings: getNetworkSettings(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 const mapDispatchToProps = {
 	createTransaction,
-	fetchingGasLimit,
-	updateGasLimit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Burn);
