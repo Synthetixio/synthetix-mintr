@@ -9,12 +9,11 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import { SliderContext } from '../../../components/ScreenSlider';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 
 import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../helpers/formatters';
 
-import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
 
@@ -73,8 +72,8 @@ const useGetGasEstimate = (
 	baseAmount,
 	currentWallet,
 	waitingPeriod,
-	fetchingGasLimit,
-	updateGasLimit
+	setFetchingGasLimit,
+	setGasLimit
 ) => {
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
@@ -84,7 +83,7 @@ const useGetGasEstimate = (
 			setError(null);
 			let gasEstimate;
 			try {
-				fetchingGasLimit();
+				setFetchingGasLimit(true);
 				if (!Number(baseAmount)) throw new Error('input.error.invalidAmount');
 				if (waitingPeriod) throw new Error(`Waiting period for ${baseSynth.name} is still ongoing`);
 				const amountToExchange =
@@ -96,12 +95,13 @@ const useGetGasEstimate = (
 					amountToExchange,
 					bytesFormatter('sUSD')
 				);
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate));
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,14 +109,7 @@ const useGetGasEstimate = (
 	return error;
 };
 
-const Trade = ({
-	onDestroy,
-	walletDetails,
-	networkSettings,
-	createTransaction,
-	fetchingGasLimit,
-	updateGasLimit,
-}) => {
+const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [baseSynth, setBaseSynth] = useState(null);
 	const [baseAmount, setBaseAmount] = useState('');
@@ -124,7 +117,8 @@ const Trade = ({
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { currentWallet, walletType, networkName } = walletDetails;
-	const { gasPrice, gasLimit, isFetchingGasLimit } = networkSettings;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
 
 	const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
 	const gasEstimateError = useGetGasEstimate(
@@ -132,8 +126,8 @@ const Trade = ({
 		baseAmount,
 		currentWallet,
 		waitingPeriod,
-		fetchingGasLimit,
-		updateGasLimit
+		setFetchingGasLimit,
+		setGasLimit
 	);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
@@ -166,7 +160,7 @@ const Trade = ({
 				amountToExchange,
 				bytesFormatter('sUSD'),
 				{
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				}
 			);
@@ -209,6 +203,7 @@ const Trade = ({
 		...transactionInfo,
 		onBaseSynthChange: synth => setBaseSynth(synth),
 		isFetchingGasLimit,
+		gasLimit,
 		gasEstimateError,
 		waitingPeriod,
 		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
@@ -221,13 +216,11 @@ const Trade = ({
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	networkSettings: getNetworkSettings(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 const mapDispatchToProps = {
 	createTransaction,
-	fetchingGasLimit,
-	updateGasLimit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trade);
