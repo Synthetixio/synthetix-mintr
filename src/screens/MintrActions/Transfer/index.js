@@ -9,10 +9,9 @@ import { SliderContext } from '../../../components/ScreenSlider';
 
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit, getNetworkSettings } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import { bigNumberFormatter, shortenAddress, bytesFormatter } from '../../../helpers/formatters';
-import { GWEI_UNIT } from '../../../constants/network';
 import { useTranslation } from 'react-i18next';
 
 const useGetBalances = (walletAddress, setCurrentCurrency) => {
@@ -71,8 +70,8 @@ const useGetGasEstimate = (
 	amount,
 	destination,
 	waitingPeriod,
-	fetchingGasLimit,
-	updateGasLimit
+	setFetchingGasLimit,
+	setGasLimit
 ) => {
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
@@ -86,7 +85,7 @@ const useGetGasEstimate = (
 				if (waitingPeriod) throw new Error(`Waiting period for ${currency.name} is still ongoing`);
 				if (!Number(amount)) throw new Error('input.error.invalidAmount');
 				const amountBN = snxJSConnector.utils.parseEther(amount.toString());
-				fetchingGasLimit();
+				setFetchingGasLimit(true);
 				if (currency.name === 'SNX') {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
 						destination,
@@ -103,12 +102,13 @@ const useGetGasEstimate = (
 						currency.name
 					].contract.estimate.transferAndSettle(destination, amountBN);
 				}
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate));
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,14 +129,7 @@ const sendTransaction = (currency, amount, destination, settings) => {
 	} else return snxJSConnector.snxJS[currency].transferAndSettle(destination, amount, settings);
 };
 
-const Send = ({
-	onDestroy,
-	walletDetails,
-	networkSettings,
-	fetchingGasLimit,
-	updateGasLimit,
-	createTransaction,
-}) => {
+const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [sendAmount, setSendAmount] = useState('');
 	const [sendDestination, setSendDestination] = useState('');
@@ -144,7 +137,8 @@ const Send = ({
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const { currentWallet, walletType, networkName } = walletDetails;
-	const { gasPrice, gasLimit, isFetchingGasLimit } = networkSettings;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
 
 	const balances = useGetBalances(currentWallet, setCurrentCurrency);
 	const gasEstimateError = useGetGasEstimate(
@@ -152,8 +146,8 @@ const Send = ({
 		sendAmount,
 		sendDestination,
 		waitingPeriod,
-		fetchingGasLimit,
-		updateGasLimit
+		setFetchingGasLimit,
+		setGasLimit
 	);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
@@ -186,7 +180,7 @@ const Send = ({
 				currentCurrency.name,
 				realSendAmount,
 				sendDestination,
-				{ gasPrice: gasPrice * GWEI_UNIT, gasLimit }
+				{ gasPrice: currentGasPrice.formattedPrice, gasLimit }
 			);
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
@@ -230,6 +224,7 @@ const Send = ({
 		isFetchingGasLimit,
 		waitingPeriod,
 		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
+		gasLimit,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
@@ -239,12 +234,10 @@ const Send = ({
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	networkSettings: getNetworkSettings(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 const mapDispatchToProps = {
-	updateGasLimit,
-	fetchingGasLimit,
 	createTransaction,
 };
 

@@ -9,7 +9,16 @@ import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../../components
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ t, goBack, walletType, sendAmount, sendDestination, currentCurrency }) => {
+const Confirmation = ({
+	t,
+	goBack,
+	walletType,
+	sendAmount,
+	sendDestination,
+	currentCurrency,
+	isFetchingGasLimit,
+	gasLimit,
+}) => {
 	return (
 		<SlidePage>
 			<Container>
@@ -48,7 +57,12 @@ const Confirmation = ({ t, goBack, walletType, sendAmount, sendDestination, curr
 					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+						canEdit={false}
+					/>
 				</Bottom>
 			</Container>
 		</SlidePage>
