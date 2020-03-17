@@ -82,8 +82,11 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 		const getGasEstimate = async () => {
 			setError(null);
 			try {
+				const {
+					snxJS: { FeePool },
+				} = snxJSConnector;
 				setFetchingGasLimit(true);
-				const gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees();
+				const gasEstimate = await FeePool.contract.estimate.claimFees();
 				setFetchingGasLimit(false);
 				setGasLimit(Number(gasEstimate));
 			} catch (e) {
@@ -112,9 +115,12 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 
 	const onClaim = async () => {
 		try {
+			const {
+				snxJS: { FeePool },
+			} = snxJSConnector;
 			handleNext(1);
-			const transaction = await snxJSConnector.snxJS.FeePool.claimFees({
-				gasPrice: currentGasPrice,
+			const transaction = await FeePool.claimFees({
+				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
 			if (transaction) {
