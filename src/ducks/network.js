@@ -31,7 +31,12 @@ export const networkSlice = createSlice({
 			const gasPrices = action.payload;
 			state.gasPrices = gasPrices;
 			if (gasPrices?.[NETWORK_SPEEDS_TO_KEY.AVERAGE]) {
-				state.currentGasPrice = gasPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE];
+				const { price, time } = gasPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE];
+				state.currentGasPrice = {
+					price,
+					formattedPrice: price * GWEI_UNIT,
+					time,
+				};
 			}
 			state.isFetching = false;
 			state.isRefreshing = false;

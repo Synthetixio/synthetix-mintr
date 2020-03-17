@@ -91,6 +91,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
+				setFetchingGasLimit(false);
 				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
 				setError(errorMessage);
 			}
