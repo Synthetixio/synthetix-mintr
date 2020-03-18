@@ -1,15 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-
 import snxJSConnector from '../../helpers/snxJSConnector';
 import Slider, { SliderContext } from '../../components/ScreenSlider';
 
-import { getWalletDetails } from '../../ducks/wallet';
-import { getCurrentGasPrice } from '../../ducks/network';
-import { createTransaction } from '../../ducks/transactions';
-
 import Confirmation from './Confirmation';
 import Complete from './Complete';
+import { getWalletDetails } from '../../ducks/wallet';
+import { createTransaction } from '../../ducks/transactions';
+import { getCurrentGasPrice } from '../../ducks/network';
 import errorMapper from '../../helpers/errorMapper';
 
 const SliderController = ({
@@ -19,16 +17,15 @@ const SliderController = ({
 	gasLimit,
 	onDestroy,
 	param,
-	walletDetails,
 	currentGasPrice,
 	createTransaction,
+	walletDetails,
 }) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const { walletType, networkName } = walletDetails;
-
 	useEffect(() => {
-		const { unipoolContract } = snxJSConnector;
+		const { curvepoolContract } = snxJSConnector;
 		const run = async () => {
 			if (!hasLoaded) return;
 			try {
@@ -37,8 +34,8 @@ const SliderController = ({
 					gasLimit,
 				};
 				const transaction = param
-					? await unipoolContract[contractFunction](param, transactionSettings)
-					: await unipoolContract[contractFunction](transactionSettings);
+					? await curvepoolContract[contractFunction](param, transactionSettings)
+					: await curvepoolContract[contractFunction](transactionSettings);
 
 				if (transaction) {
 					setTransactionInfo({ transactionHash: transaction.hash });
@@ -62,20 +59,16 @@ const SliderController = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasLoaded]);
 
-	const sliderProps = {
+	const props = {
 		onDestroy,
 		walletType,
 		amount,
 		label,
 		gasLimit,
-		currentGasPrice,
 		...transactionInfo,
 		networkName,
 	};
-
-	return [Confirmation, Complete].map((SlideContent, i) => (
-		<SlideContent key={i} {...sliderProps} />
-	));
+	return [Confirmation, Complete].map((SlideContent, i) => <SlideContent key={i} {...props} />);
 };
 
 const UnipoolActions = props => {

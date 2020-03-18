@@ -2,28 +2,31 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
-import { getWalletDetails } from '../../../ducks/wallet';
+import snxJSConnector from '../../../../helpers/snxJSConnector';
+import { getWalletDetails } from '../../../../ducks/wallet';
 
-import { bigNumberFormatter } from '../../../helpers/formatters';
+import { bigNumberFormatter } from '../../../../helpers/formatters';
 
-import PageContainer from '../../../components/PageContainer';
-import Spinner from '../../../components/Spinner';
+import PageContainer from '../../../../components/PageContainer';
+import Spinner from '../../../../components/Spinner';
 
 import SetAllowance from './SetAllowance';
 import Stake from './Stake';
 
-const UniPool = ({ walletDetails }) => {
+const CurvePool = ({ goBack, walletDetails }) => {
 	const [hasAllowance, setAllowance] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const { currentWallet } = walletDetails;
 
 	const fetchAllowance = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
-		const { uniswapContract, unipoolContract } = snxJSConnector;
+		const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
 		try {
 			setIsLoading(true);
-			const allowance = await uniswapContract.allowance(currentWallet, unipoolContract.address);
+			const allowance = await curveLPTokenContract.allowance(
+				currentWallet,
+				curvepoolContract.address
+			);
 			setAllowance(!!bigNumberFormatter(allowance));
 			setIsLoading(false);
 		} catch (e) {
@@ -41,17 +44,17 @@ const UniPool = ({ walletDetails }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { uniswapContract, unipoolContract } = snxJSConnector;
+		const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
 
-		uniswapContract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === unipoolContract.address) {
+		curveLPTokenContract.on('Approval', (owner, spender) => {
+			if (owner === currentWallet && spender === curvepoolContract.address) {
 				setAllowance(true);
 			}
 		});
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				uniswapContract.removeAllListeners('Approval');
+				curveLPTokenContract.removeAllListeners('Approval');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +67,9 @@ const UniPool = ({ walletDetails }) => {
 					<Spinner />
 				</SpinnerContainer>
 			) : !hasAllowance ? (
-				<SetAllowance />
+				<SetAllowance goBack={goBack} />
 			) : (
-				<Stake />
+				<Stake goBack={goBack} />
 			)}
 		</PageContainer>
 	);
@@ -80,4 +83,4 @@ const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 });
 
-export default connect(mapStateToProps, {})(UniPool);
+export default connect(mapStateToProps, {})(CurvePool);

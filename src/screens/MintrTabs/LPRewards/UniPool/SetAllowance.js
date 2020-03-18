@@ -3,21 +3,19 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { createTransaction } from '../../../ducks/transactions';
-import { getNetworkSettings } from '../../../ducks/network';
+import { createTransaction } from '../../../../ducks/transactions';
+import { getCurrentGasPrice } from '../../../../ducks/network';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
-import { GWEI_UNIT } from '../../../constants/network';
+import { TOKEN_ALLOWANCE_LIMIT } from '../../../../constants/network';
 
-import { PageTitle, PLarge } from '../../../components/Typography';
-import { ButtonPrimary } from '../../../components/Button';
+import snxJSConnector from '../../../../helpers/snxJSConnector';
 
-const ALLOWANCE_LIMIT = 100000000;
+import { PageTitle, PLarge } from '../../../../components/Typography';
+import { ButtonPrimary, ButtonTertiary } from '../../../../components/Button';
 
-const SetAllowance = ({ networkSettings, createTransaction }) => {
+const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 	const { t } = useTranslation();
 	const [error, setError] = useState(null);
-	const { gasPrice } = networkSettings;
 
 	const onUnlock = async () => {
 		const { parseEther } = snxJSConnector.utils;
@@ -27,21 +25,21 @@ const SetAllowance = ({ networkSettings, createTransaction }) => {
 
 			const gasEstimate = await uniswapContract.estimate.approve(
 				unipoolContract.address,
-				parseEther(ALLOWANCE_LIMIT.toString())
+				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
 			const transaction = await uniswapContract.approve(
 				unipoolContract.address,
-				parseEther(ALLOWANCE_LIMIT.toString()),
+				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit: Number(gasEstimate) + 10000,
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 				}
 			);
 			if (transaction) {
 				createTransaction({
 					hash: transaction.hash,
 					status: 'pending',
-					info: `Setting Uni-V1 LP token allowance`,
+					info: t('unipool.locked.transaction'),
 					hasNotification: true,
 				});
 			}
@@ -52,13 +50,16 @@ const SetAllowance = ({ networkSettings, createTransaction }) => {
 	};
 	return (
 		<>
+			<Navigation>
+				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
+			</Navigation>
 			<TitleContainer>
 				<Logo src="/images/uniswap.svg" />
 				<PageTitle>{t('unipool.title')}</PageTitle>
 				<PLarge>{t('unipool.locked.subtitle')}</PLarge>
 			</TitleContainer>
 			<ButtonRow>
-				<ButtonPrimary onClick={onUnlock}>{t('unipool.buttons.unlock')}</ButtonPrimary>
+				<ButtonPrimary onClick={onUnlock}>{t('lpRewards.shared.buttons.unlock')}</ButtonPrimary>
 			</ButtonRow>
 			{error ? <Error>{`Error: ${error}`}</Error> : null}
 		</>
@@ -66,6 +67,12 @@ const SetAllowance = ({ networkSettings, createTransaction }) => {
 };
 
 const Logo = styled.img``;
+
+const Navigation = styled.div`
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 40px;
+`;
 
 const TitleContainer = styled.div`
 	margin-top: 30px;
@@ -89,7 +96,7 @@ const Error = styled.div`
 `;
 
 const mapStateToProps = state => ({
-	networkSettings: getNetworkSettings(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 const mapDispatchToProps = {

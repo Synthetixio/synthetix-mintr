@@ -3,23 +3,22 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
+import snxJSConnector from '../../../../helpers/snxJSConnector';
 
-import { bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
-import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
-import { updateGasLimit } from '../../../ducks/network';
-import { getWalletDetails } from '../../../ducks/wallet';
+import { bigNumberFormatter, formatCurrency } from '../../../../helpers/formatters';
+import TransactionPriceIndicator from '../../../../components/TransactionPriceIndicator';
+import { getWalletDetails } from '../../../../ducks/wallet';
 
-import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../components/Typography';
-import DataBox from '../../../components/DataBox';
-import { ButtonTertiary, ButtonPrimary } from '../../../components/Button';
+import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../../components/Typography';
+import DataBox from '../../../../components/DataBox';
+import { ButtonTertiary, ButtonPrimary } from '../../../../components/Button';
 
-import UnipoolActions from '../../UnipoolActions';
+import CurvepoolActions from '../../../CurvepoolActions';
 
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 120000,
+		gasLimit: 150000,
 	},
 	claim: {
 		contractFunction: 'getReward',
@@ -35,21 +34,22 @@ const TRANSACTION_DETAILS = {
 	},
 };
 
-const Stake = ({ walletDetails, updateGasLimit }) => {
+const Stake = ({ walletDetails, goBack }) => {
 	const { t } = useTranslation();
-	const { unipoolContract } = snxJSConnector;
+	const { curvepoolContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
+	const [gasLimit, setGasLimit] = useState(TRANSACTION_DETAILS.stake.gasLimit);
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
 		try {
-			const { uniswapContract, unipoolContract } = snxJSConnector;
+			const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
 			const [univ1Held, univ1Staked, rewards] = await Promise.all([
-				uniswapContract.balanceOf(currentWallet),
-				unipoolContract.balanceOf(currentWallet),
-				unipoolContract.earned(currentWallet),
+				curveLPTokenContract.balanceOf(currentWallet),
+				curvepoolContract.balanceOf(currentWallet),
+				curvepoolContract.earned(currentWallet),
 			]);
 			setBalances({
 				univ1Held: bigNumberFormatter(univ1Held),
@@ -58,7 +58,6 @@ const Stake = ({ walletDetails, updateGasLimit }) => {
 				univ1StakedBN: univ1Staked,
 				rewards: bigNumberFormatter(rewards),
 			});
-			updateGasLimit(TRANSACTION_DETAILS.stake.gasLimit);
 		} catch (e) {
 			console.log(e);
 		}
@@ -71,21 +70,21 @@ const Stake = ({ walletDetails, updateGasLimit }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { unipoolContract } = snxJSConnector;
+		const { curvepoolContract } = snxJSConnector;
 
-		unipoolContract.on('Staked', user => {
+		curvepoolContract.on('Staked', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('Withdrawn', user => {
+		curvepoolContract.on('Withdrawn', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('RewardPaid', user => {
+		curvepoolContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -93,9 +92,9 @@ const Stake = ({ walletDetails, updateGasLimit }) => {
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				unipoolContract.removeAllListeners('Staked');
-				unipoolContract.removeAllListeners('Withdrawn');
-				unipoolContract.removeAllListeners('RewardPaid');
+				curvepoolContract.removeAllListeners('Staked');
+				curvepoolContract.removeAllListeners('Withdrawn');
+				curvepoolContract.removeAllListeners('RewardPaid');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,99 +102,107 @@ const Stake = ({ walletDetails, updateGasLimit }) => {
 
 	return (
 		<Container>
-			<UnipoolActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
+			<CurvepoolActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
 			<Navigation>
+				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${unipoolContract.address}`}
+					href={`https://etherscan.io/address/${curvepoolContract.address}`}
 				>
-					{t('unipool.buttons.goToContract')} ↗
+					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
 			</Navigation>
-			<PageTitle>{t('unipool.title')}</PageTitle>
-			<PLarge>{t('unipool.unlocked.subtitle')}</PLarge>
+			<PageTitle>{t('curvepool.title')}</PageTitle>
+			<PLarge>{t('curvepool.unlocked.subtitle')}</PLarge>
 			<PLarge>
-				<Link href="https://blog.synthetix.io/new-uniswap-seth-lp-reward-system/" target="_blank">
-					<ButtonTertiaryLabel>{t('unipool.unlocked.link')}</ButtonTertiaryLabel>
+				<Link
+					href="https://blog.synthetix.io/susd-liquidity-trial-with-curve-iearn/"
+					target="_blank"
+				>
+					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
 				</Link>
 			</PLarge>
 			<BoxRow>
 				<DataBox
-					heading={t('unipool.unlocked.data.balance')}
-					body={`${balances ? formatCurrency(balances.univ1Held) : 0} UNI-V1`}
+					heading={t('lpRewards.shared.data.balance')}
+					body={`${balances ? formatCurrency(balances.univ1Held) : 0} yCurve`}
 				/>
 				<DataBox
-					heading={t('unipool.unlocked.data.staked')}
-					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} UNI-V1`}
+					heading={t('lpRewards.shared.data.staked')}
+					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} yCurve`}
 				/>
 				<DataBox
-					heading={t('unipool.unlocked.data.rewardsAvailable')}
+					heading={t('lpRewards.shared.data.rewardsAvailable')}
 					body={`${balances ? formatCurrency(balances.rewards) : 0} SNX`}
 				/>
 			</BoxRow>
 			<ButtonBlock>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
 						disabled={!balances || !balances.univ1Held}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'stake',
-								label: t('unipool.unlocked.actions.staking'),
-								amount: `${balances && formatCurrency(balances.univ1Held)} UNI-V1`,
+								label: t('lpRewards.shared.actions.staking'),
+								amount: `${balances && formatCurrency(balances.univ1Held)} yCurve`,
 								param: balances && balances.univ1HeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
 						}
 					>
-						{t('unipool.buttons.stake')}
+						{t('lpRewards.shared.buttons.stake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['claim'].gasLimit)}
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'claim',
-								label: t('unipool.unlocked.actions.claiming'),
+								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['claim'],
 							})
 						}
 					>
-						{t('unipool.buttons.claim')}
+						{t('lpRewards.shared.buttons.claim')}
 					</ButtonAction>
 				</ButtonRow>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['unstake'].gasLimit)}
 						disabled={!balances || !balances.univ1Staked}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'unstake',
-								label: t('unipool.unlocked.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1`,
+								label: t('lpRewards.shared.actions.unstaking'),
+								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve`,
 								param: balances && balances.univ1StakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
 						}
 					>
-						{t('unipool.buttons.unstake')}
+						{t('lpRewards.shared.buttons.unstake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['exit'].gasLimit)}
 						disabled={!balances || (!balances.univ1Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'exit',
-								label: t('unipool.unlocked.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1 & ${balances &&
+								label: t('lpRewards.shared.actions.exiting'),
+								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve & ${balances &&
 									formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
 						}
 					>
-						{t('unipool.buttons.exit')}
+						{t('lpRewards.shared.buttons.exit')}
 					</ButtonAction>
 				</ButtonRow>
 			</ButtonBlock>
-			<TransactionPriceIndicator canEdit={true} />
+			<TransactionPriceIndicator gasLimit={gasLimit} canEdit={true} />
 		</Container>
 	);
 };
@@ -210,7 +217,7 @@ const Container = styled.div`
 
 const Navigation = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 	margin-bottom: 40px;
 `;
 
@@ -240,8 +247,6 @@ const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 });
 
-const mapDispatchToProps = {
-	updateGasLimit,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stake);

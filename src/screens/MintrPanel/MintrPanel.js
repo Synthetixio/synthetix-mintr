@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { setCurrentTab, getCurrentTab } from '../../ducks/ui';
 import { getModalState } from '../../ducks/modal';
 
-import { Home, Depot, Transactions, Escrow, UniPool } from '../MintrTabs';
+import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { TransactionSettingsPopup } from '../../components/Modal';
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
@@ -22,8 +22,8 @@ const renderScreen = screen => {
 			return <Transactions />;
 		case 'escrow':
 			return <Escrow />;
-		case 'unipool':
-			return <UniPool />;
+		case 'lpRewards':
+			return <LPRewards />;
 	}
 };
 
@@ -33,7 +33,7 @@ const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setC
 		<MainContainerWrapper>
 			<Overlay isVisible={modalType}></Overlay>
 			<Header>
-				{['home', 'depot', 'transactionsHistory', 'escrow', 'unipool'].map(tab => {
+				{['home', 'depot', 'transactionsHistory', 'escrow', 'lpRewards'].map(tab => {
 					return (
 						<TabButton
 							key={tab}

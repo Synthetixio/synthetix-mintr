@@ -10,7 +10,6 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
-import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
@@ -30,7 +29,6 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
 					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
 					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
-					snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
 					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
 				]);
 				const [
@@ -40,9 +38,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					SNXPrice,
 					totalRewardEscrow,
 					totalTokenSaleEscrow,
-					cRatio,
 					issuableSynths,
-					waitingPeriod,
 				] = results.map(bigNumberFormatter);
 				let maxBurnAmount, maxBurnAmountBN;
 				if (debt > sUSDBalance) {
@@ -52,17 +48,15 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					maxBurnAmount = debt;
 					maxBurnAmountBN = results[0];
 				}
-
+				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
 				setData({
 					issuanceRatio,
 					sUSDBalance,
 					maxBurnAmount,
 					maxBurnAmountBN,
 					SNXPrice,
-					escrowBalance: totalRewardEscrow + totalTokenSaleEscrow,
-					cRatio,
 					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
-					waitingPeriod,
+					debtEscrow: Math.max(escrowBalance * SNXPrice * issuanceRatio + debt - issuableSynths, 0),
 				});
 			} catch (e) {
 				console.log(e);
@@ -141,9 +135,8 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 		sUSDBalance,
 		issuanceRatio,
 		SNXPrice,
-		escrowBalance,
-		cRatio,
 		burnAmountToFixCRatio,
+		debtEscrow,
 	} = useGetDebtData(currentWallet, sUSDBytes);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
@@ -256,13 +249,13 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 			const amountNB = Number(amount);
 			setBurnAmount(amount);
 			setTransferableAmount(
-				amountNB ? Math.max(amountNB / cRatio / SNXPrice - escrowBalance, 0) : 0
+				amountNB ? Math.max((amountNB - debtEscrow) / issuanceRatio / SNXPrice, 0) : 0
 			);
 		},
 		transferableAmount,
 		setTransferableAmount: amount => {
 			const amountNB = Number(amount);
-			setBurnAmount(amountNB > 0 ? (escrowBalance + amountNB) * issuanceRatio * SNXPrice : '');
+			setBurnAmount(amountNB > 0 ? debtEscrow + amountNB * issuanceRatio * SNXPrice : '');
 			setTransferableAmount(amount);
 		},
 		walletType,
