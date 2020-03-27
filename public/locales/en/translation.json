@@ -175,7 +175,7 @@
 					"claim": "Claim now",
 					"history": "Claim History"
 				},
-				"note": "Note: if not collected within two periods, your rewards will be forfeited and rolled over into the fee pool."
+				"note": "Note: if not collected within 7 days, your rewards will be forfeited and rolled over into the fee pool."
 			},
 			"confirmation": {
 				"actionDescription": "Claiming:"
