@@ -19,7 +19,7 @@ import UnipoolActions from '../../../UnipoolActions';
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 120000,
+		gasLimit: 200000,
 	},
 	claim: {
 		contractFunction: 'getReward',
