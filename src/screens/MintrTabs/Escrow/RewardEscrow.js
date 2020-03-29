@@ -21,28 +21,31 @@ import {
 } from '../../../components/Typography';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 
 import ErrorMessage from '../../../components/ErrorMessage';
 import EscrowActions from '../../EscrowActions';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
-const useGetGasEstimateError = ({ fetchingGasLimit, updateGasLimit }) => {
+const useGetGasEstimateError = ({ setFetchingGasLimit, setGasLimit }) => {
 	const [error, setError] = useState(null);
+	const {
+		snxJS: { RewardEscrow },
+	} = snxJSConnector;
 	useEffect(() => {
 		const getGasEstimate = async () => {
 			setError(null);
-			fetchingGasLimit();
-			let gasEstimate;
+			setFetchingGasLimit(true);
 			try {
-				gasEstimate = await snxJSConnector.snxJS.RewardEscrow.contract.estimate.vest();
+				const gasEstimate = await RewardEscrow.contract.estimate.vest();
+				setFetchingGasLimit(false);
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
+				setFetchingGasLimit(false);
 				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
 				setError(errorMessage);
 			}
-			updateGasLimit(Number(gasEstimate));
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,13 +57,16 @@ const useGetVestingData = walletAddress => {
 	const [data, setData] = useState({});
 	useEffect(() => {
 		const getVestingData = async () => {
+			const {
+				snxJS: { RewardEscrow },
+			} = snxJSConnector;
 			try {
 				let schedule = [];
 				let total = 0;
 				let canVest = false;
 				const currentUnixTime = new Date().getTime();
 				setData({ loading: true });
-				const result = await snxJSConnector.snxJS.RewardEscrow.checkAccountSchedule(walletAddress);
+				const result = await RewardEscrow.checkAccountSchedule(walletAddress);
 				for (let i = 0; i < result.length; i += 2) {
 					const quantity = Number(bigNumberFormatter(result[i + 1]));
 					total += Number(quantity);
@@ -143,26 +149,31 @@ const VestingTable = ({ data }) => {
 	);
 };
 
-const RewardEscrow = ({ onPageChange, fetchingGasLimit, updateGasLimit, walletDetails }) => {
-	const [currentScenario, setCurrentScenario] = useState(null);
-	const { currentWallet } = walletDetails;
+const RewardEscrow = ({ onPageChange, walletDetails }) => {
 	const { t } = useTranslation();
+	const [currentScenario, setCurrentScenario] = useState(null);
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+	const { currentWallet } = walletDetails;
 	const vestingData = useGetVestingData(currentWallet);
 	const hasNoVestingSchedule = !vestingData.total || vestingData.total.length === 0;
-	const gasEstimateError = useGetGasEstimateError({ fetchingGasLimit, updateGasLimit });
-
+	const gasEstimateError = useGetGasEstimateError({ setFetchingGasLimit, setGasLimit });
 	return (
 		<Fragment>
 			<EscrowActions
 				action={currentScenario}
 				onDestroy={() => setCurrentScenario(null)}
 				vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
+				gasLimit={gasLimit}
+				isFetchingGasLimit={isFetchingGasLimit}
 			/>
 
 			<PageTitle>{t('escrow.staking.title')}</PageTitle>
 			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
 			<VestingTable data={vestingData} />
-			{!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
+			{!hasNoVestingSchedule ? (
+				<TransactionPriceIndicator gasLimit={gasLimit} isFetchingGasLimit={isFetchingGasLimit} />
+			) : null}
 			<ErrorMessage message={t(gasEstimateError)} />
 			<ButtonRow>
 				<ButtonSecondary width="48%" onClick={() => onPageChange('tokenSaleVesting')}>
@@ -225,9 +236,6 @@ const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 });
 
-const mapDispatchToProps = {
-	fetchingGasLimit,
-	updateGasLimit,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RewardEscrow);

@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 
+import { getCurrentGasPrice } from '../../../ducks/network';
 import { createTransaction } from '../../../ducks/transactions';
-import { getNetworkSettings } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 
-import { GWEI_UNIT } from '../../../constants/network';
 import errorMapper from '../../../helpers/errorMapper';
 
 import Confirmation from './Confirmation';
@@ -17,21 +16,26 @@ import Complete from './Complete';
 const TokenSaleVesting = ({
 	onDestroy,
 	vestAmount,
-	networkSettings,
 	walletDetails,
 	createTransaction,
+	currentGasPrice,
+	gasLimit,
+	isFetchingGasLimit,
 }) => {
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { walletType, networkName } = walletDetails;
-	const { gasPrice, gasLimit } = networkSettings;
 
 	useLayoutEffect(() => {
 		const vest = async () => {
 			if (!hasLoaded) return;
+			const {
+				snxJS: { SynthetixEscrow },
+			} = snxJSConnector;
 			try {
-				const transaction = await snxJSConnector.snxJS.SynthetixEscrow.vest({
-					gasPrice: gasPrice * GWEI_UNIT,
+				console.log('here');
+				const transaction = await SynthetixEscrow.vest({
+					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				});
 				if (transaction) {
@@ -65,14 +69,16 @@ const TokenSaleVesting = ({
 		...transactionInfo,
 		walletType,
 		networkName,
+		gasLimit,
+		isFetchingGasLimit,
 	};
 
 	return [Confirmation, Complete].map((SlideContent, i) => <SlideContent key={i} {...props} />);
 };
 
 const mapStateToProps = state => ({
-	networkSettings: getNetworkSettings(state),
 	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 const mapDispatchToProps = {
