@@ -1,57 +1,45 @@
-const TOGGLE_THEME = 'UI/TOGGLE_THEME';
-const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
-const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
-const TOGGLE_TRANSACTION_SETTINGS_POPUP = 'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
+import { createSlice } from '@reduxjs/toolkit';
+import { persistState, getPersistedState } from '../config/store';
+import { isLightTheme } from '../styles/themes';
 
-// Reducer
-export default (state, action) => {
-	switch (action.type) {
-		case TOGGLE_THEME: {
-			const themeIsDark = action.payload;
-			localStorage.setItem('dark', JSON.stringify(themeIsDark));
-			return { ...state, themeIsDark };
-		}
-		case UPDATE_CURRENT_PAGE: {
-			return { ...state, currentPage: action.payload };
-		}
-		case UPDATE_CURRENT_TAB: {
+const persistedState = getPersistedState('ui');
+
+export const uiSlice = createSlice({
+	name: 'ui',
+	initialState: {
+		theme: 'dark',
+		currentPage: 'landing',
+		currentTab: 'home',
+		tabParams: null,
+		gweiPopupIsVisible: false,
+		...persistedState,
+	},
+	reducers: {
+		toggleTheme: state => {
+			const theme = isLightTheme(state.theme) ? 'dark' : 'light';
+			persistState('ui', { theme });
+			state.theme = theme;
+		},
+		setCurrentPage: (state, action) => {
+			state.currentPage = action.payload;
+		},
+		setCurrentTab: (state, action) => {
 			const { tab, params } = action.payload;
-			return { ...state, currentTab: tab, tabParams: params };
-		}
+			state.currentTab = tab;
+			state.tabParams = params;
+		},
+	},
+});
 
-		case TOGGLE_TRANSACTION_SETTINGS_POPUP: {
-			return { ...state, transactionSettingsPopupIsVisible: action.payload };
-		}
-		default:
-			return state;
-	}
-};
+const getUiState = state => state.ui;
 
-// Actions
-export const toggleTheme = (themeIsDark, dispatch) => {
-	return dispatch({
-		type: TOGGLE_THEME,
-		payload: themeIsDark,
-	});
-};
+export const getCurrentTheme = state => state.ui.theme;
+export const getCurrentPage = state => getUiState(state).currentPage;
+export const getCurrentTab = state => getUiState(state).currentTab;
+export const getTabParams = state => getUiState(state).tabParams;
 
-export const updateCurrentPage = (page, dispatch) => {
-	return dispatch({
-		type: UPDATE_CURRENT_PAGE,
-		payload: page,
-	});
-};
+const { toggleTheme, setCurrentPage, setCurrentTab } = uiSlice.actions;
 
-export const updateCurrentTab = (tab, dispatch, params = null) => {
-	return dispatch({
-		type: UPDATE_CURRENT_TAB,
-		payload: { tab, params },
-	});
-};
+export { toggleTheme, setCurrentPage, setCurrentTab };
 
-export const toggleTransactionSettingsPopup = (isVisible, dispatch) => {
-	return dispatch({
-		type: TOGGLE_TRANSACTION_SETTINGS_POPUP,
-		payload: isVisible,
-	});
-};
+export default uiSlice.reducer;

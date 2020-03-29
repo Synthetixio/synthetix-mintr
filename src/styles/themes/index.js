@@ -7,8 +7,13 @@ const fontFamilies = {
 	bold: 'apercu-bold',
 };
 
-const theme = mode => {
-	const colorStyles = mode === 'dark' ? themeDark : themeLight;
+export const isDarkTheme = theme => theme === 'dark';
+export const isLightTheme = theme => theme === 'light';
+
+const theme = themeName => {
+	const themeIsDark = isDarkTheme(themeName);
+	const themeIsLight = isLightTheme(themeName);
+	const colorStyles = themeIsDark ? themeDark : themeLight;
 	const textStyles = {
 		h1: {
 			as: 'h1',
@@ -237,7 +242,17 @@ const theme = mode => {
 			letterSpacing: 0.5,
 		},
 	};
-	return { textStyles, colorStyles, fontFamilies };
+	return {
+		textStyles,
+		colorStyles,
+		fontFamilies,
+		name: themeName,
+		isDarkTheme: themeIsDark,
+		isLightTheme: themeIsLight,
+	};
 };
+
+export const darkTheme = theme('dark');
+export const lightTheme = theme('light');
 
 export default theme;

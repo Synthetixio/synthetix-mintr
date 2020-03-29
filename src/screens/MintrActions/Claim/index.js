@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { connect } from 'react-redux';
 import { addSeconds, formatDistanceToNow } from 'date-fns';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
-import { Store } from '../../../store';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { updateCurrentTab } from '../../../ducks/ui';
+import { setCurrentTab } from '../../../ducks/ui';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 import { bigNumberFormatter } from '../../../helpers/formatters';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 import errorMapper from '../../../helpers/errorMapper';
-
-import { GWEI_UNIT, DEFAULT_GAS_LIMIT } from '../../../helpers/networkHelper';
 
 const FEE_PERIOD = 0;
 
@@ -75,23 +75,25 @@ const useGetFeeData = walletAddress => {
 	return data;
 };
 
-const useGetGasEstimate = () => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		const getGasEstimate = async () => {
 			setError(null);
-			let gasEstimate;
 			try {
-				fetchingGasLimit(dispatch);
-				gasEstimate = await snxJSConnector.snxJS.FeePool.contract.estimate.claimFees();
+				const {
+					snxJS: { FeePool },
+				} = snxJSConnector;
+				setFetchingGasLimit(true);
+				const gasEstimate = await FeePool.contract.estimate.claimFees();
+				setFetchingGasLimit(false);
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
+				setFetchingGasLimit(false);
 				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
 				setError(errorMessage);
-				gasEstimate = DEFAULT_GAS_LIMIT['burn'];
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,41 +101,36 @@ const useGetGasEstimate = () => {
 	return error;
 };
 
-const Claim = ({ onDestroy }) => {
+const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, setCurrentTab }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+
 	const { feesByPeriod, feesAreClaimable, feesAvailable, dataIsLoading } = useGetFeeData(
 		currentWallet
 	);
-	const gasEstimateError = useGetGasEstimate();
+	const gasEstimateError = useGetGasEstimate(setFetchingGasLimit, setGasLimit);
 
 	const onClaim = async () => {
 		try {
+			const {
+				snxJS: { FeePool },
+			} = snxJSConnector;
 			handleNext(1);
-			const transaction = await snxJSConnector.snxJS.FeePool.claimFees({
-				gasPrice: gasPrice * GWEI_UNIT,
+			const transaction = await FeePool.claimFees({
+				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: 'Claiming rewards',
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: 'Claiming rewards',
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -149,8 +146,11 @@ const Claim = ({ onDestroy }) => {
 	};
 
 	const onClaimHistory = () => {
-		updateCurrentTab('transactionsHistory', dispatch, {
-			filters: ['FeesClaimed'],
+		setCurrentTab({
+			tab: 'transactionsHistory',
+			params: {
+				filters: ['FeesClaimed'],
+			},
 		});
 	};
 
@@ -168,10 +168,21 @@ const Claim = ({ onDestroy }) => {
 		gasEstimateError,
 		isFetchingGasLimit,
 		networkName,
+		gasLimit,
 	};
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
 		<SlideContent key={i} {...props} />
 	));
 };
 
-export default Claim;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+	setCurrentTab,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Claim);

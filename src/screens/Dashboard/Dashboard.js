@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import styled, { ThemeContext } from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
-
-import { Store } from '../../store';
 
 import { formatCurrency } from '../../helpers/formatters';
 import { fetchData } from './fetchData';
+import { getWalletDetails } from '../../ducks/wallet';
+import { getSuccessQueue } from '../../ducks/transactions';
 
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
@@ -182,14 +183,10 @@ const BalanceTable = ({ state }) => {
 	);
 };
 
-const Dashboard = ({ t }) => {
+const Dashboard = ({ walletDetails, successQueue }) => {
+	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
-	const {
-		state: {
-			wallet: { currentWallet },
-			transactions: { successQueue },
-		},
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 
 	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
 	const [data, setData] = useState({});
@@ -401,4 +398,9 @@ const CurrencyPrice = styled.div`
 	color: ${props => props.theme.colorStyles.body};
 `;
 
-export default withTranslation()(Dashboard);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	successQueue: getSuccessQueue(state),
+});
+
+export default connect(mapStateToProps, {})(Dashboard);

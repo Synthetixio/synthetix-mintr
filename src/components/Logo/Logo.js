@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
-
-import { Store } from '../../store';
-
+import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-export default function Logo({ className }) {
-	const {
-		state: {
-			ui: { themeIsDark },
-		},
-	} = useContext(Store);
+import { getCurrentTheme } from '../../ducks/ui';
+
+const Logo = ({ className, themeIsDark }) => {
 	return (
 		<Link href="/" className={className}>
 			<LogoImg src={`/images/mintr-logo-${themeIsDark ? 'light' : 'dark'}.svg`} />
 		</Link>
 	);
-}
+};
+
+const mapStateToProps = state => ({
+	themeIsDark: getCurrentTheme(state),
+});
+
+export default connect(mapStateToProps, {})(Logo);
 
 const Link = styled.a`
 	width: 120px;

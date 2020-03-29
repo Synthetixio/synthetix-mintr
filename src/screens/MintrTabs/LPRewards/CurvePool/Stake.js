@@ -1,14 +1,13 @@
-/* eslint-disable */
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../../helpers/snxJSConnector';
-import { Store } from '../../../../store';
 
 import { bigNumberFormatter, formatCurrency } from '../../../../helpers/formatters';
 import TransactionPriceIndicator from '../../../../components/TransactionPriceIndicator';
-import { updateGasLimit } from '../../../../ducks/network';
+import { getWalletDetails } from '../../../../ducks/wallet';
 
 import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../../components/Typography';
 import DataBox from '../../../../components/DataBox';
@@ -19,7 +18,7 @@ import CurvepoolActions from '../../../CurvepoolActions';
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 150000,
+		gasLimit: 200000,
 	},
 	claim: {
 		contractFunction: 'getReward',
@@ -35,17 +34,13 @@ const TRANSACTION_DETAILS = {
 	},
 };
 
-const Stake = ({ t, goBack }) => {
+const Stake = ({ walletDetails, goBack }) => {
+	const { t } = useTranslation();
 	const { curvepoolContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
+	const [gasLimit, setGasLimit] = useState(TRANSACTION_DETAILS.stake.gasLimit);
 	const [currentScenario, setCurrentScenario] = useState({});
-	const [withdrawAmount, setWithdrawAmount] = useState('');
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
@@ -63,7 +58,6 @@ const Stake = ({ t, goBack }) => {
 				univ1StakedBN: univ1Staked,
 				rewards: bigNumberFormatter(rewards),
 			});
-			updateGasLimit(TRANSACTION_DETAILS.stake.gasLimit, dispatch);
 		} catch (e) {
 			console.log(e);
 		}
@@ -76,7 +70,7 @@ const Stake = ({ t, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
+		const { curvepoolContract } = snxJSConnector;
 
 		curvepoolContract.on('Staked', user => {
 			if (user === currentWallet) {
@@ -146,6 +140,7 @@ const Stake = ({ t, goBack }) => {
 			<ButtonBlock>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
 						disabled={!balances || !balances.univ1Held}
 						onClick={() =>
 							setCurrentScenario({
@@ -160,6 +155,7 @@ const Stake = ({ t, goBack }) => {
 						{t('lpRewards.shared.buttons.stake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['claim'].gasLimit)}
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
@@ -175,6 +171,7 @@ const Stake = ({ t, goBack }) => {
 				</ButtonRow>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['unstake'].gasLimit)}
 						disabled={!balances || !balances.univ1Staked}
 						onClick={() =>
 							setCurrentScenario({
@@ -189,6 +186,7 @@ const Stake = ({ t, goBack }) => {
 						{t('lpRewards.shared.buttons.unstake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['exit'].gasLimit)}
 						disabled={!balances || (!balances.univ1Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
@@ -204,7 +202,7 @@ const Stake = ({ t, goBack }) => {
 					</ButtonAction>
 				</ButtonRow>
 			</ButtonBlock>
-			<TransactionPriceIndicator canEdit={true} />
+			<TransactionPriceIndicator gasLimit={gasLimit} canEdit={true} />
 		</Container>
 	);
 };
@@ -245,4 +243,10 @@ const ButtonAction = styled(ButtonPrimary)`
 	}
 `;
 
-export default withTranslation()(Stake);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stake);

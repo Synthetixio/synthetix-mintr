@@ -1,37 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { StoreProvider } from './store';
-import rootReducer from './ducks';
+import { Provider } from 'react-redux';
+import store from './config/store';
+
 import './index.css';
 import Root from './pages/Root';
 import './i18n';
 
-const initialState = {
-	ui: {
-		themeIsDark: localStorage.getItem('dark') === 'true' || false,
-		currentPage: 'landing',
-		currentTab: 'home',
-		transactionSettingsPopupIsVisible: false,
-	},
-	wallet: {
-		unlocked: false,
-		walletPaginatorIndex: 0,
-		availableWallets: [],
-		derivationPath: localStorage.getItem('derivationPath'),
-	},
-	transactions: {
-		currentTransactions: [],
-		dataFetchers: {},
-		successQueue: [],
-	},
-	network: {
-		settings: {},
-	},
-};
-
 ReactDOM.render(
-	<StoreProvider reducers={rootReducer} initialState={initialState}>
-		<Root />
-	</StoreProvider>,
+	<Suspense fallback={<div />}>
+		<Provider store={store}>
+			<Root />
+		</Provider>
+	</Suspense>,
 	document.getElementById('root')
 );

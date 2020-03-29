@@ -9,7 +9,7 @@ import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../components/Ty
 import Spinner from '../../components/Spinner';
 import TransactionPriceIndicator from '../../components/TransactionPriceIndicator';
 
-const Confirmation = ({ t, onDestroy, walletType, amount, label }) => {
+const Confirmation = ({ t, onDestroy, walletType, amount, label, gasLimit }) => {
 	return (
 		<SlidePage>
 			<Container>
@@ -38,7 +38,7 @@ const Confirmation = ({ t, onDestroy, walletType, amount, label }) => {
 					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
-					<TransactionPriceIndicator canEdit={false} />
+					<TransactionPriceIndicator gasLimit={gasLimit} canEdit={false} />
 				</Bottom>
 			</Container>
 		</SlidePage>

@@ -1,5 +1,7 @@
 import throttle from 'lodash/throttle';
-export const GWEI_UNIT = 1000000000;
+import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
+import { URLS } from '../constants/urls';
+import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
 
 export const SUPPORTED_NETWORKS = {
 	1: 'MAINNET',
@@ -47,27 +49,21 @@ export async function getEthereumNetwork() {
 	});
 }
 
-export const getNetworkInfo = async () => {
-	const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+export const getNetworkSpeed = async () => {
+	const result = await fetch(URLS.ETH_GAS_STATION);
 	const networkInfo = await result.json();
 	return {
-		slow: {
-			gwei: networkInfo.safeLow / 10,
+		[NETWORK_SPEEDS_TO_KEY.SLOW]: {
+			price: networkInfo.safeLow / 10,
 			time: networkInfo.safeLowWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.safeLow / 10, gasLimit, ethPrice),
 		},
-		average: {
-			gwei: networkInfo.average / 10,
+		[NETWORK_SPEEDS_TO_KEY.AVERAGE]: {
+			price: networkInfo.average / 10,
 			time: networkInfo.avgWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.average / 10, gasLimit, ethPrice),
 		},
-		fast: {
-			gwei: networkInfo.fast / 10,
+		[NETWORK_SPEEDS_TO_KEY.FAST]: {
+			price: networkInfo.fast / 10,
 			time: networkInfo.fastWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.fast / 10, gasLimit, ethPrice),
 		},
 	};
 };
@@ -88,3 +84,5 @@ export function onMetamaskNetworkChange(cb) {
 	const listener = throttle(cb, 1000);
 	window.ethereum.on('networkChanged', listener);
 }
+
+export const addBufferToGasLimit = gasLimit => Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE);

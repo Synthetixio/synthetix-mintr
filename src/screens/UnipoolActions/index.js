@@ -1,27 +1,31 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { GWEI_UNIT } from '../../helpers/networkHelper';
-import { Store } from '../../store';
 import Slider, { SliderContext } from '../../components/ScreenSlider';
+
+import { getWalletDetails } from '../../ducks/wallet';
+import { getCurrentGasPrice } from '../../ducks/network';
+import { createTransaction } from '../../ducks/transactions';
 
 import Confirmation from './Confirmation';
 import Complete from './Complete';
-import { createTransaction } from '../../ducks/transactions';
 import errorMapper from '../../helpers/errorMapper';
 
-const SliderController = ({ amount, label, contractFunction, gasLimit, onDestroy, param }) => {
+const SliderController = ({
+	amount,
+	label,
+	contractFunction,
+	gasLimit,
+	onDestroy,
+	param,
+	walletDetails,
+	currentGasPrice,
+	createTransaction,
+}) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { handleNext, hasLoaded } = useContext(SliderContext);
-	const {
-		state: {
-			wallet: { walletType, networkName },
-			network: {
-				settings: { gasPrice },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { walletType, networkName } = walletDetails;
 
 	useEffect(() => {
 		const { unipoolContract } = snxJSConnector;
@@ -29,7 +33,7 @@ const SliderController = ({ amount, label, contractFunction, gasLimit, onDestroy
 			if (!hasLoaded) return;
 			try {
 				const transactionSettings = {
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				};
 				const transaction = param
@@ -38,15 +42,12 @@ const SliderController = ({ amount, label, contractFunction, gasLimit, onDestroy
 
 				if (transaction) {
 					setTransactionInfo({ transactionHash: transaction.hash });
-					createTransaction(
-						{
-							hash: transaction.hash,
-							status: 'pending',
-							info: label,
-							hasNotification: true,
-						},
-						dispatch
-					);
+					createTransaction({
+						hash: transaction.hash,
+						status: 'pending',
+						info: label,
+						hasNotification: true,
+					});
 					handleNext(2);
 				}
 			} catch (e) {
@@ -61,15 +62,20 @@ const SliderController = ({ amount, label, contractFunction, gasLimit, onDestroy
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [hasLoaded]);
 
-	const props = {
+	const sliderProps = {
 		onDestroy,
 		walletType,
 		amount,
 		label,
+		gasLimit,
+		currentGasPrice,
 		...transactionInfo,
 		networkName,
 	};
-	return [Confirmation, Complete].map((SlideContent, i) => <SlideContent key={i} {...props} />);
+
+	return [Confirmation, Complete].map((SlideContent, i) => (
+		<SlideContent key={i} {...sliderProps} />
+	));
 };
 
 const UnipoolActions = props => {
@@ -81,4 +87,13 @@ const UnipoolActions = props => {
 	);
 };
 
-export default UnipoolActions;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UnipoolActions);
