@@ -18,7 +18,7 @@ import CurvepoolActions from '../../../CurvepoolActions';
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 150000,
+		gasLimit: 200000,
 	},
 	claim: {
 		contractFunction: 'getReward',

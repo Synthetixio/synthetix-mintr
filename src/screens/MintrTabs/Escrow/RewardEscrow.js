@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 
 import Spinner from '../../../components/Spinner';
@@ -39,7 +40,7 @@ const useGetGasEstimateError = ({ setFetchingGasLimit, setGasLimit }) => {
 			try {
 				const gasEstimate = await RewardEscrow.contract.estimate.vest();
 				setFetchingGasLimit(false);
-				setGasLimit(Number(gasEstimate));
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);

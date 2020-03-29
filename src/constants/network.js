@@ -1,6 +1,6 @@
 import keyBy from 'lodash/keyBy';
 
-export const GAS_LIMIT_BUFFER = 5000;
+export const GAS_LIMIT_BUFFER_PERCENTAGE = 0.2;
 
 export const GWEI_UNIT = 1000000000;
 

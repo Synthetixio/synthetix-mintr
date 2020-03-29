@@ -1,8 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import snxJSConnector from '../../../helpers/snxJSConnector';
+
 import { formatCurrency } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
+
 import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import { createTransaction } from '../../../ducks/transactions';
@@ -24,7 +28,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 				setFetchingGasLimit(true);
 				const gasEstimate = await Depot.contract.estimate.withdrawMyDepositedSynths();
 				setFetchingGasLimit(false);
-				setGasLimit(Number(gasEstimate));
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);

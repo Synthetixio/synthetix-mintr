@@ -5,6 +5,7 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
 import errorMapper from '../../../helpers/errorMapper';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { getWalletDetails } from '../../../ducks/wallet';
 import { getCurrentGasPrice } from '../../../ducks/network';
@@ -43,7 +44,7 @@ const useGetGasEstimate = (
 					snxJSConnector.utils.parseEther(depositAmount.toString())
 				);
 				setFetchingGasLimit(false);
-				setGasLimit(Number(gasEstimate));
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);

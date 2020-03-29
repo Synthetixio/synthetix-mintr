@@ -5,6 +5,7 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import errorMapper from '../../../helpers/errorMapper';
@@ -102,7 +103,7 @@ const useGetGasEstimate = (
 						currency.name
 					].contract.estimate.transferAndSettle(destination, amountBN);
 				}
-				setGasLimit(Number(gasEstimate));
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';

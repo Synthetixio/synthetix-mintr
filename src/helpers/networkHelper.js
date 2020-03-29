@@ -1,7 +1,7 @@
 import throttle from 'lodash/throttle';
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { URLS } from '../constants/urls';
-import { GWEI_UNIT } from '../constants/network';
+import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
 
 export const SUPPORTED_NETWORKS = {
 	1: 'MAINNET',
@@ -84,3 +84,5 @@ export function onMetamaskNetworkChange(cb) {
 	const listener = throttle(cb, 1000);
 	window.ethereum.on('networkChanged', listener);
 }
+
+export const addBufferToGasLimit = gasLimit => Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE);

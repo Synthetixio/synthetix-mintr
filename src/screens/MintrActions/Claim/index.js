@@ -10,6 +10,7 @@ import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 import { bigNumberFormatter } from '../../../helpers/formatters';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
@@ -86,7 +87,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 				setFetchingGasLimit(true);
 				const gasEstimate = await FeePool.contract.estimate.claimFees();
 				setFetchingGasLimit(false);
-				setGasLimit(Number(gasEstimate));
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);
