@@ -102,7 +102,6 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 	);
 
 	const onMint = async () => {
-		console.log(currentGasPrice);
 		const transactionSettings = {
 			gasPrice: currentGasPrice.formattedPrice,
 			gasLimit,
