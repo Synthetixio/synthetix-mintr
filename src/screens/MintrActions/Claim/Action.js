@@ -11,7 +11,6 @@ import {
 	PLarge,
 	PMedium,
 	H1,
-	H5,
 	Subtext,
 	DataHeaderLarge,
 	DataLarge,
