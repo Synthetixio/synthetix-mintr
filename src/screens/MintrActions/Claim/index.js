@@ -16,16 +16,17 @@ import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import errorMapper from '../../../helpers/errorMapper';
 
-const getFeePeriodCountdown = (periodIndex, recentFeePeriods, feePeriodDuration) => {
+const FEE_PERIOD = 0;
+
+const getFeePeriodCountdown = (recentFeePeriods, feePeriodDuration) => {
 	if (!recentFeePeriods) return;
-	const currentFeePeriod = recentFeePeriods[periodIndex];
 	const currentPeriodStart =
-		currentFeePeriod && currentFeePeriod.startTime
-			? new Date(parseInt(currentFeePeriod.startTime * 1000))
+		recentFeePeriods && recentFeePeriods.startTime
+			? new Date(parseInt(recentFeePeriods.startTime * 1000))
 			: null;
 	const currentPeriodEnd =
 		currentPeriodStart && feePeriodDuration
-			? addSeconds(currentPeriodStart, feePeriodDuration * 2 - periodIndex)
+			? addSeconds(currentPeriodStart, feePeriodDuration)
 			: null;
 	return `${formatDistanceToNow(currentPeriodEnd)} left`;
 };
@@ -45,19 +46,16 @@ const useGetFeeData = walletAddress => {
 				] = await Promise.all([
 					snxJSConnector.snxJS.FeePool.feesByPeriod(walletAddress),
 					snxJSConnector.snxJS.FeePool.feePeriodDuration(),
-					Promise.all(
-						Array.from(Array(2).keys()).map(period =>
-							snxJSConnector.snxJS.FeePool.recentFeePeriods(period)
-						)
-					),
+					snxJSConnector.snxJS.FeePool.recentFeePeriods(FEE_PERIOD),
 					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress),
 				]);
-				const formattedFeesByPeriod = feesByPeriod.slice(1).map(([fee, reward], i) => {
+
+				const formattedFeesByPeriod = feesByPeriod.slice(1).map(([fee, reward]) => {
 					return {
 						fee: bigNumberFormatter(fee),
 						reward: bigNumberFormatter(reward),
-						closeIn: getFeePeriodCountdown(i, recentFeePeriods, feePeriodDuration),
+						closeIn: getFeePeriodCountdown(recentFeePeriods, feePeriodDuration),
 					};
 				});
 				setData({

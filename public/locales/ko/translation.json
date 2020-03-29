@@ -1,0 +1,496 @@
+{
+	"onboarding": {
+		"slides": {
+			"welcome": {
+				"title": "Mintr에 오신 걸 환영합니다!",
+				"description": "Mintr은 SNX 홀더를 위한 디앱입니다. 만약 Mintr을 사용해보신 적이 없으시다면, Mintr 가이드를 먼저 읽어주세요."
+			},
+			"whatIsSynthetix": {
+				"title": "신테틱스(Synthetix)가 뭔가요?",
+				"description": "신테틱스(Synthetix)는 이더리움 상에 구축된 탈중앙 인공(Synthetic) 자산 발행 프로토콜입니다. 이러한 인공 자산들(신스, Synths)은 신테틱스 네트워크 토큰(SNX)을 스테이킹함으로써 만들 수 있으며, Synthetix.Exchange 상에서 신테틱스 스마트 컨트랙트를 통해 다른 신스(인공 자산)들과 거래할 수 있습니다."
+			},
+			"whyStakeSnx": {
+				"title": "왜 SNX를 스테이킹 하나요?",
+				"description": "SNX를 스테이킹한 이들은 두 종류의 보상을 받게 됩니다. 먼저, 인플레이션 정책에 따라 만들어진 SNX 스테이킹 보상을 받습니다. 두 번째의 보상으로는, Synthetix.Exchange 상에서 신스(인공 자산)들이 거래되며 발생하는 수수료를 통해 신스(인공 자산) 거래 보상을 받습니다."
+			},
+			"howStakeSnx": {
+				"title": "SNX를 스테이킹하려면 어떻게 해야하나요?",
+				"description": "모든 신스(인공 자산)은 담보로써 스테이킹된 SNX를 필요로 하며, 담보 비율은 750% 입니다. SNX를 스테이킹한 이들은 담보 비율이 이보다 높게 유지될 수 있도록 관리해야하며, 담보 비율을 높이기 위해선, 자신이 발행한 신스(인공 자산)들을 소각시킴으로써 가능하며, 담보 비율을 낮추기 위해선 신스(인공 자산)들을 발행하여 낮출 수 있습니다. 이를 통해 담보 비율이 올바르게 유지되면, 주 마다 보상을 얻을 수 있습니다."
+			},
+			"risks": {
+				"title": "스테이킹하는 사람들이 지게되는 리스크는 어떤 게 있나요?",
+				"description": "SNX를 스테이킹한 모든 예치자들은 자신들이 스테이킹할 때 일종의 '부채'를 생성합니다. 이들의 부채는 자신들이 초기에 발행한 sUSD의 양 만큼 시작되며, 신스(인공 자산)를 보유하고 있는 이들이 얻는 손실과 이득에 따라서 변동됩니다. 거래자들이 보유한 신스(인공 자산)의 가치가 오르게 되면, 그로 인한 수익이 일부분 스테이킹된 SNX 홀더들의 부채에 분배됩니다. 예치자들은 자신들이 스테이킹한 SNX를 잠금 해제 하기 위해서, 자신들의 부채를 먼저 갚아야할 의무가 있습니다."
+			}
+		},
+		"walletConnection": {
+			"title": "SNX를 스테이킹하기 전에 지갑을 먼저 연결해주세요:"
+		},
+		"walletSelection": {
+			"success": {
+				"title": "지갑 선택",
+				"subtitle": "Mintr에서 사용하고자 하는 지갑을 선택해주세요."
+			},
+			"loading": {
+				"connectInstructions": "여러분의 지갑 연결을 위해 기기에서 승인해주세요.",
+				"connectVia": "{{walletType}}를 통해 연결"
+			},
+			"error": {
+				"title": "오류",
+				"subtitle": "Mintr에 지갑을 연결할 수 없습니다.",
+				"retry": "재시도"
+			},
+			"addWallet": {
+				"placeholder": "지갑 주소",
+				"buttonText": "추가"
+			}
+		}
+	},
+	"dashboard": {
+		"header": {
+			"support": "지원"
+		},
+		"sections": {
+			"wallet": "지갑 세부 사항:"
+		},
+		"rewards": {
+			"open": "보상 수령 신청",
+			"blocked": "보상 수령 신청이 <1>불가능</1> 합니다."
+		},
+		"ratio": {
+			"current": "현재 담보 비율",
+			"target": "목표 담보 비율"
+		},
+		"holdings": {
+			"title": "총 SNX:",
+			"locked": "잠긴 수량",
+			"transferable": "전송 가능 수량",
+			"staking": "스테이킹 수량",
+			"nonStaking": "스테이킹되지 않은 수량",
+			"escrowed": "에스크로된 수량",
+			"nonEscrowed": "에스크로되지 않은 수량"
+		},
+		"table": {
+			"debt": "부채",
+			"synths": "신스(Synths)",
+			"balance": "잔액"
+		},
+		"buttons": {
+			"exchange": "Synthetix.Exchange로 이동",
+			"synthetixDashboard": "대시보드에서 가격 확인",
+			"refresh": "새로 고침"
+		}
+	},
+	"mainNavigation": {
+		"tabs": {
+			"home": "메인 화면",
+			"depot": "데포",
+			"transactionsHistory": "거래 내역",
+			"escrow": "에스크로",
+			"lpRewards": "LP 보상"
+		}
+	},
+	"home": {
+		"intro": {
+			"title": "어떤 활동을 하고 싶으신가요?"
+		},
+		"actions": {
+			"mint": {
+				"title": "발행",
+				"description": "SNX를 스테이킹하여 sUSD 발행하기"
+			},
+			"burn": {
+				"title": "소각",
+				"description": "sUSD를 소각하여 SNX 스테이킹 해제하기"
+			},
+			"claim": {
+				"title": "보상 수령",
+				"description": "SNX 스테이킹 및 신스(Synth) 거래에서 발생한 보상 수령하기"
+			},
+			"trade": {
+				"title": "교환",
+				"description": "신스(Synth)들을 sUSD로 교환하기"
+			},
+			"transfer": {
+				"title": "전송",
+				"description": "SNX, 신스(Synths), 혹은 ETH 전송하기"
+			}
+		}
+	},
+	"mintrActions": {
+		"mint": {
+			"action": {
+				"title": "발행",
+				"subtitle": "여러분의 SNX를 스테이킹하여 sUSD를 발행합니다. 담보 비율에 따른 부채가 설정되며, 스테이킹 보상을 얻을 수 있게 됩니다.",
+				"instruction": "발행하고자 하는 수량을 입력해주세요:",
+				"staking": "스테이킹",
+				"estimateCRatio": "예상 담보 비율",
+				"buttons": {
+					"mint": "발행하기"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "발행",
+				"subActionDescription": "스테이킹"
+			},
+			"complete": {
+				"title": "발행 중입니다!"
+			}
+		},
+		"burn": {
+			"action": {
+				"title": "소각",
+				"subtitle": "여러분이 스테이킹한 SNX의 스테이킹을 해제하기 위해서 sUSD를 소각합니다. 소각을 통해서 여러분의 담보 비율을 증가시킬 수 있으며, 여러분의 부채를 줄일 수 있습니다. 또한, 에스크로에 잡혀있지 않은 SNX를 전송할 수 있게 해줍니다.",
+				"instruction": "소각하고자 하는 수량을 입력해주세요:",
+				"transferrable": {
+					"title": "언락된 전송 가능 SNX:",
+					"button": "전송 가능한 SNX 보기"
+				},
+				"buttons": {
+					"burn": "소각하기",
+					"waitingPeriod": "잠긴 신스(Synth) 소각하기"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "소각",
+				"subActionDescription": "잠금 해제"
+			},
+			"complete": {
+				"title": "소각 중입니다!"
+			}
+		},
+		"claim": {
+			"action": {
+				"title": "보상 수령",
+				"subtitle": "만약 여러분들이 SNX를 스테이킹하셨거나, sUSD를 발행하셨다면, 두 종류의 보상을 받으실 수 있습니다: SNX 스테이킹 보상 및 Synthetix.Exchange에서 발생한 신스(Synth) 거래 보상",
+				"table": {
+					"title": "수령 신청 가능 기간:",
+					"period": "기간",
+					"status": "신청 상태",
+					"open": "가능",
+					"blocked": "불가능"
+				},
+				"tradingRewards": "수령할 수 있는 신스(Synth) 거래 보상:",
+				"stakingRewards": "수령할 수 있는 SNX 스테이킹 보상:",
+				"buttons": {
+					"claim": "수령 신청 하기",
+					"history": "수령 신청 내역"
+				},
+				"note": "안내: 만약 7일 내에 수령하지 않으면, 보상을 수령하실 수 없게되며, 해당 보상은 수수료 풀로 넘어갑니다."
+			},
+			"confirmation": {
+				"actionDescription": "수령 신청:"
+			},
+			"complete": {
+				"title": "보상 수령이 진행 중입니다!"
+			}
+		},
+		"trade": {
+			"action": {
+				"title": "교환",
+				"subtitle": "여러분의 신스(Synth)들을 sUSD로 교환합니다. 모든 신스(Synth)들을 거래하기 위해선, Synthetix.Exchange를 이용해주세요.",
+				"buttons": {
+					"trade": "교환하기",
+					"exchange": "Synthetix.Exchange로 이동"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "교환:",
+				"subActionDescription": "받기:"
+			},
+			"complete": {
+				"title": "교환 중입니다!"
+			}
+		},
+		"send": {
+			"action": {
+				"title": "전송",
+				"subtitle": "여러분의 ETH, SNX 혹은 신스(Synth)들을 전송하세요.",
+				"available": "전송 가능한 수량:",
+				"amountInstruction": "수량 입력:",
+				"walletInstruction": "보내고 싶은 주소:",
+				"buttons": {
+					"send": "전송하기"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "전송:",
+				"subActionDescription": "목표 지갑 주소:"
+			},
+			"complete": {
+				"title": "전송 중입니다!"
+			}
+		}
+	},
+	"depot": {
+		"intro": {
+			"title": "데포:",
+			"subtitle": "Synthetix.Exchange에서 ETH로 판매하기 위한 대기열에 sUSD를 예치하세요. 기다리는 동안, 언제든 여러분의 sUSD를 인출할 수 있습니다. 안내: 최소 예치량은 50 sUSD입니다."
+		},
+		"table": {
+			"title": "최근 내역:",
+			"type": "유형",
+			"activity": "활동",
+			"remaining": "대기 중",
+			"amount": "수량",
+			"rate": "비율",
+			"timeDate": "시간 | 날짜",
+			"details": "세부 사항",
+			"deposit": "예치",
+			"soldByDepot": "데포를 통해 판매된 수량"
+		},
+		"buttons": {
+			"available": "사용 가능 수량:",
+			"more": "더 살펴보기",
+			"contract": "컨트랙트 살펴보기",
+			"deposit": "예치",
+			"withdraw": "인출"
+		},
+		"deposit": {
+			"action": {
+				"title": "예치",
+				"subtitle": "예치 가능 수량:",
+				"instruction": "예치 수량 입력:",
+				"buttons": {
+					"deposit": "예치하기",
+					"unlock": "잠금 해제"
+				}
+			},
+			"complete": {
+				"title": "예치 중입니다!"
+			},
+			"actionDescription": "예치:"
+		},
+		"withdraw": {
+			"action": {
+				"title": "인출",
+				"subtitle": "인출 가능 수량:",
+				"buttons": {
+					"withdraw": "인출하기"
+				}
+			},
+			"complete": {
+				"title": "인출 중입니다!"
+			},
+			"actionDescription": "인출:"
+		}
+	},
+	"escrow": {
+		"type": {
+			"staking": "스테이킹",
+			"token": "토큰 세일"
+		},
+		"buttons": {
+			"vest": "귀속하기",
+			"viewTokenSale": "토큰 세일 에스크로 보기",
+			"viewRewards": "보상 에스크로 보기"
+		},
+		"staking": {
+			"title": "여러분의 SNX 스테이킹 보상을 에스크로에 귀속하기",
+			"subtitle": "만약 여러분이 SNX를 스테이킹하고 sUSD를 발행하셨다면, SNX 스테이킹 보상을 받으실 수 있습니다. 스테이킹 보상을 여기 에스크로에 12월 간 귀속시키실 수 있습니다.",
+			"total": "에스크로에 귀속된 총 수량:",
+			"table": {
+				"none": "에스크로에 귀속된 SNX가 없습니다.",
+				"title": "귀속 일정",
+				"date": "귀속 일자",
+				"quantity": "수량"
+			}
+		},
+		"tokenSale": {
+			"title": "토큰 세일에서 구매해 에스크로된 SNX을 귀속하기",
+			"subtitle": "만약 여러분의 SNX가 토큰 세일 때부터 여전히 에스크로된 상태라면, 여기에 귀속하실 수 있습니다.",
+			"total": "총 귀속 수량:",
+			"table": {
+				"title": "귀속 일정",
+				"period": "귀속 기간",
+				"interval": "구간",
+				"number": "구간 No.",
+				"months": "달",
+				"vested": "귀속됨",
+				"date": "귀속 일자",
+				"quantity": "수량",
+				"none": "에스크로된 SNX가 없습니다."
+			}
+		},
+		"confirmation": {
+			"actionDescription": "귀속:"
+		},
+		"complete": {
+			"title": "귀속 중입니다!",
+			"actionDescription": "귀속:"
+		}
+	},
+	"lpRewards": {
+		"intro": {
+			"title": "풀(Pool)을 선택해주세요"
+		},
+		"actions": {
+			"unipool": {
+				"title": "Unipool"
+			},
+			"curvepool": { "title": "Curvepool" }
+		},
+		"shared": {
+			"unlocked": {
+				"link": "블로그 글 보러가기",
+				"complete": "트랜잭션이 진행 중입니다!"
+			},
+			"data": {
+				"balance": "잔액",
+				"staked": "현재 스테이킹된 수량",
+				"rewardsAvailable": "수령 가능한 보상"
+			},
+			"actions": {
+				"staking": "스테이킹",
+				"claiming": "보상 수령",
+				"unstaking": "스테이킹 해제",
+				"exiting": "스테이킹 해제 & 보상 수령"
+			},
+			"buttons": {
+				"unlock": "잠금 해제",
+				"goToContract": "컨트랙트로 이동",
+				"stake": "토큰 스테이킹",
+				"claim": "보상 수령 신청",
+				"unstake": "토큰 스테이킹 해제",
+				"exit": "나가기: 스테이킹 해제 및 보상 수령 신청"
+			}
+		}
+	},
+	"unipool": {
+		"title": "Uniswap sETH LP 토큰 보상",
+		"locked": {
+			"subtitle": "여러분의 sETH UNI-V1 토큰을 스테이킹하기 위해 승인해주세요.",
+			"transaction": "UNI-V1 토큰을 승인 설정 해주세요."
+		},
+		"unlocked": {
+			"subtitle": "이 곳에서 여러분들의 UNI-V1 유동성 공급 (LP) 토큰을 스테이킹하여 SNX 보상을 받을 수도, 혹은 종료할 수도 있습니다."
+		}
+	},
+	"curvepool": {
+		"title": "iearn.finance sUSD LP Token 보상",
+		"locked": {
+			"subtitle": "스테이킹하기 위해 yCurve 토큰을 전송하는 Curvepool 컨트랙트를 승인해주세요.",
+			"transaction": "yCurve 토큰을 승인 설정 해주세요."
+		},
+		"unlocked": {
+			"subtitle": "이 곳에서 여러분들의 yCurve 토큰을 스테이킹하여 SNX 보상을 받을 수도, 혹은 종료할 수도 있습니다."
+		}
+	},
+	"transactions": {
+		"filters": {
+			"type": "유형",
+			"date": "날짜",
+			"amount": "수량"
+		},
+		"events": {
+			"minted": "발행된 수량",
+			"burned": "소각된 수량",
+			"claimedFees": "수령한 보상",
+			"exchanged": "구매 됨",
+			"traded": "교환 됨",
+			"sent": "전송 됨",
+			"deposited": "예치 됨",
+			"withdrawn": "인출 됨",
+			"sold": "판매 됨"
+		},
+		"buttons": {
+			"clearFilters": "필터 초기화"
+		},
+		"inputs": {
+			"from": "from:",
+			"to": "to:"
+		}
+	},
+	"transactionSettings": {
+		"priceIndicator": "이더리움 네트워크 수수료:",
+		"title": "가스 가격 설정",
+		"subtitle": "전송 속도 설정을 위해 가스(GWEI) 가격을 설정해주세요.",
+		"minutes": "분",
+		"speed": {
+			"slow": "느림",
+			"average": "평균",
+			"fast": "빠름"
+		},
+		"button": {
+			"submit": "제출"
+		}
+	},
+	"transactionProcessing": {
+		"confirmation": {
+			"title": "전송을 확인해주세요",
+			"subtitle": "계속하기 위해서, <1>walletType</1> 지갑에서 승인해주세요.",
+			"loading": "사용자 응답 기다리는 중..."
+		},
+		"complete": {
+			"subtitle": "트랜잭션이 이더리움 네트워크로 전송됐습니다. 이 창을 닫으셔도, 전송이 진행될 것입니다."
+		},
+		"error": {
+			"title": "무언가 오류가 발생했습니다...",
+			"subtitle": "코드:",
+			"type": {
+				"userDenied": "사용자가 트랜잭션 서명을 거부했습니다",
+				"generic": "에러"
+			}
+		}
+	},
+	"notification": {
+		"status": {
+			"pending": "트랜잭션이 진행 중",
+			"success": "트랜잭션 완료!",
+			"error": "에러가 발생했습니다..."
+		}
+	},
+	"button": {
+		"max": "최대",
+		"burnMax": "최대 소각",
+		"fixCRatio": "담보 비율을 수정해주세요",
+		"edit": "수정",
+		"havingTrouble": "문제가 발생하셨나요?",
+		"whatIsSynthetix": "신테틱스가 뭔가요?",
+		"previous": "이전",
+		"next": "다음",
+		"startOver": "다시 시작",
+		"navigation": {
+			"cancel": "취소",
+			"back": "되돌아가기",
+			"close": "닫기",
+			"etherscan": "이더스캔에서 보기",
+			"view": "보기",
+			"finish": "종료 & 홈페이지로 돌아가기",
+			"ok": "확인"
+		}
+	},
+	"input": {
+		"list": {
+			"placeholder": "신스(Synth)를 찾는 중..."
+		},
+		"error": {
+			"notEnoughToMint": "현재 해당 수량 만큼 sUSD를 발행할 수 없습니다.",
+			"gasEstimate": "가스 측정 중 에러가 발생했습니다.",
+			"invalidAmount": "유효하지 않은 수량",
+			"notEnoughToBurn": "해당 수량 만큼 소각할 수 있는 sUSD를 가지고 있지 않습니다. dex.ag에서 더 구매하기 위한 최적의 비율을 살펴보실 수 있습니다.",
+			"balanceTooLow": "잔액이 너무 적습니다.",
+			"lowerThanMinDeposit": "최소 예치금보다 적은 수량입니다."
+		}
+	},
+	"general": {
+		"noData": "데이터가 없습니다."
+	},
+	"network": {
+		"gas": "이더리움 네트워크 수수료 (Gas):",
+		"tradingFee": "신스(Synth) 거래 수수료:",
+		"speed": "예상 전송 속도:"
+	},
+	"maintenance": {
+		"title": "Mintr은 현재 업그레이드로 인해 이용하실 수 없습니다.",
+		"subtitle": "불편을 드려 죄송합니다."
+	},
+	"mobileLanding": {
+		"title": "Mintr은 현재 모바일 기기나 태블릿 기기에서 이용 하실 수 없습니다.",
+		"subtitle": "모바일 버전으로 만나뵐 수 있는 날이 오길 기대하고 있겠습니다."
+	},
+	"tooltip": {
+		"claim": "보상을 수령하기 위해서는 목표 담보 비율의 1% 내로 담보 비율을 유지하셔야 합니다. 만약 이 수치보다 낮다면, 충분한 양의 sUSD를 소각하여 담보 비율을 맞추실 때 까지 보상 수령이 불가능 해집니다.",
+		"debtBalance": "부채는 여러분이 초기에 발행한 sUSD의 수량과 동일하게 시작되며, 신스(인공 자산)를 보유하고 있는 이들이 얻는 손실과 이득에 따라서 변동됩니다. 거래자들이 보유한 신스(인공 자산)의 가치가 오르게 되면, 그로 인한 수익이 일부분 스테이킹된 SNX 홀더들의 부채에 분배됩니다. 예치자들은 자신들이 스테이킹한 SNX를 잠금 해제 하기 위해서, 자신들의 부채를 먼저 갚아야할 의무가 있습니다.",
+		"synthsBalance": "신스(Synth)는 신테틱스 시스템에 존재하는 인공 자산들이며, sUSD, sBTC, iBTC, 등 다른 모든 자산들을 Synthetix.Exchange에서 거래하실 수 있습니다. 이 수치는 이 지갑에 보유하고 있는 모든 신스(Synths)들의 총 가치입니다. 만약 신스(Synth)들을 sUSD로 교환하고 싶으시다면, '교환' 버튼을 눌러주시기 바랍니다."
+	}
+}

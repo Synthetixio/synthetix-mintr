@@ -99,7 +99,6 @@ const Action = ({
 				</Intro>
 				<Middle>
 					<Schedule>
-						<H5>{t('mintrActions.claim.action.table.title')}</H5>
 						<Periods state={{ feesByPeriod, dataIsLoading }} />
 						<Status>
 							<PMedium width="100%">{t('mintrActions.claim.action.table.status')}</PMedium>
