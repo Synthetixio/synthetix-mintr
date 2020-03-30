@@ -7,7 +7,7 @@ import { updateCurrentTab } from '../../ducks/ui';
 
 import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
-import { TransactionSettingsPopup } from '../../components/Popup';
+import { TransactionSettingsPopup, DelegatePopup } from '../../components/Popup';
 
 const TabRow = () => {
 	const { t } = useTranslation();
@@ -50,20 +50,19 @@ const renderScreen = screen => {
 const MainContainer = () => {
 	const {
 		state: {
-			ui: { currentTab, transactionSettingsPopupIsVisible },
+			ui: { currentTab, transactionSettingsPopupIsVisible, delegationPopupIsVisible },
 		},
 	} = useContext(Store);
 
 	return (
 		<MainContainerWrapper>
-			<Overlay isVisible={transactionSettingsPopupIsVisible}></Overlay>
+			<Overlay isVisible={transactionSettingsPopupIsVisible || delegationPopupIsVisible}></Overlay>
 			<Header>
 				<TabRow />
 			</Header>
 			{renderScreen(currentTab)}
-			{transactionSettingsPopupIsVisible ? (
-				<TransactionSettingsPopup></TransactionSettingsPopup>
-			) : null}
+			{transactionSettingsPopupIsVisible ? <TransactionSettingsPopup /> : null}
+			{delegationPopupIsVisible ? <DelegatePopup /> : null}
 		</MainContainerWrapper>
 	);
 };

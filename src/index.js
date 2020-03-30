@@ -12,6 +12,7 @@ const initialState = {
 		currentPage: 'landing',
 		currentTab: 'home',
 		transactionSettingsPopupIsVisible: false,
+		delegationPopupIsVisible: false,
 	},
 	wallet: {
 		unlocked: false,

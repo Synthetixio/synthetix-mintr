@@ -75,7 +75,10 @@ const TransactionSettingsPopup = ({ t }) => {
 		  })
 		: [];
 	return (
-		<PopupContainer margin="auto">
+		<PopupContainer
+			handleClose={() => toggleTransactionSettingsPopup(false, dispatch)}
+			margin="auto"
+		>
 			<Wrapper>
 				<Intro>
 					<PageTitle>{t('transactionSettings.title')}</PageTitle>
