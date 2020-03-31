@@ -77,7 +77,8 @@
 		"buttons": {
 			"exchange": "Go to Synthetix.Exchange",
 			"synthetixDashboard": "View prices on Dashboard",
-			"refresh": "Refresh"
+			"refresh": "Refresh",
+			"delegate": "Delegate"
 		}
 	},
 	"mainNavigation": {
@@ -175,7 +176,7 @@
 					"claim": "Claim now",
 					"history": "Claim History"
 				},
-				"note": "Note: if not collected within two periods, your rewards will be forfeited and rolled over into the fee pool."
+				"note": "Note: if not collected within 7 days, your rewards will be forfeited and rolled over into the fee pool."
 			},
 			"confirmation": {
 				"actionDescription": "Claiming:"
@@ -375,6 +376,29 @@
 			"subtitle": "Here you can stake your yCurve tokens, claim SNX rewards, or exit completely."
 		}
 	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
+		}
+	},
 	"transactions": {
 		"filters": {
 			"type": "Type",
@@ -463,6 +487,9 @@
 	"input": {
 		"list": {
 			"placeholder": "Search for a synth..."
+		},
+		"address": {
+			"placeholder": "e.g. 0x3b18a4..."
 		},
 		"error": {
 			"notEnoughToMint": "You cannot currently mint that much sUSD",

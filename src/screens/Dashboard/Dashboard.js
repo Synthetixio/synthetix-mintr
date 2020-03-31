@@ -5,6 +5,8 @@ import { isEmpty } from 'lodash';
 
 import { Store } from '../../store';
 
+import { toggleDelegationPopup } from '../../ducks/ui';
+
 import { formatCurrency } from '../../helpers/formatters';
 import { fetchData } from './fetchData';
 
@@ -189,6 +191,7 @@ const Dashboard = ({ t }) => {
 			wallet: { currentWallet },
 			transactions: { successQueue },
 		},
+		dispatch,
 	} = useContext(Store);
 
 	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
@@ -220,12 +223,18 @@ const Dashboard = ({ t }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						<ButtonSpinnerContainer>
-							{dashboardIsLoading && <MicroSpinner />}
-							<ButtonTertiary onClick={() => loadData()}>
-								{t('dashboard.buttons.refresh')}
+						<ButtonContainer>
+							<ButtonTertiary onClick={() => toggleDelegationPopup(true, dispatch)}>
+								{t('dashboard.buttons.delegate')}
 							</ButtonTertiary>
-						</ButtonSpinnerContainer>
+							<ButtonTertiary
+								disabled={dashboardIsLoading}
+								style={{ minWidth: '102px' }}
+								onClick={() => loadData()}
+							>
+								{dashboardIsLoading ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
+							</ButtonTertiary>
+						</ButtonContainer>
 					</ContainerHeader>
 					<CollRatios state={{ debtData }} />
 					<PricesContainer>
@@ -306,9 +315,12 @@ const Container = styled.div`
 	margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
 
-const ButtonSpinnerContainer = styled.div`
+const ButtonContainer = styled.div`
 	display: flex;
 	align-items: center;
+	& > button + button {
+		margin-left: 10px;
+	}
 `;
 
 const ContainerHeader = styled.div`

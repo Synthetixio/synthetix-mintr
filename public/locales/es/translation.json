@@ -169,7 +169,7 @@
 					"claim": "Reclamar ahora",
 					"history": "Historial de reclamos"
 				},
-				"note": "Nota: si no se recogen dentro de los dos periodos, sus recompensas se perderán y se transferirán al fondo de comisiones."
+				"note": "Nota: si no se recogen en 7 días, sus recompensas se perderán y se transferirán al fondo de comisiones."
 			},
 			"confirmation": {
 				"actionDescription": "Reclamando:"

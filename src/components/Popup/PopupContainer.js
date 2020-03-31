@@ -1,16 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Cross } from '../Icons';
-import { Store } from '../../store';
 
-import { toggleTransactionSettingsPopup } from '../../ducks/ui';
-
-const Popup = ({ children }) => {
-	const { dispatch } = useContext(Store);
+const Popup = ({ children, handleClose }) => {
 	return (
 		<PopupWrapper>
 			<Nav>
-				<ButtonClose onClick={() => toggleTransactionSettingsPopup(false, dispatch)}>
+				<ButtonClose onClick={handleClose}>
 					<Cross />
 				</ButtonClose>
 			</Nav>
@@ -22,7 +18,7 @@ const Popup = ({ children }) => {
 const PopupWrapper = styled.div`
 	position: absolute;
 	left: 50%;
-	top: 50%;
+	top: 50vh;
 	transform: translate(-50%, -50%);
 	z-index: 1001;
 `;

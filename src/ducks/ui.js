@@ -2,6 +2,7 @@ const TOGGLE_THEME = 'UI/TOGGLE_THEME';
 const UPDATE_CURRENT_PAGE = 'UI/UPDATE_CURRENT_PAGE';
 const UPDATE_CURRENT_TAB = 'UI/UPDATE_CURRENT_TAB';
 const TOGGLE_TRANSACTION_SETTINGS_POPUP = 'UI/TOGGLE_TRANSACTION_SETTINGS_POPUP';
+const TOGGLE_DELEGATION_POPUP = 'UI/TOGGLE_DELEGATION_POPUP';
 
 // Reducer
 export default (state, action) => {
@@ -21,6 +22,9 @@ export default (state, action) => {
 
 		case TOGGLE_TRANSACTION_SETTINGS_POPUP: {
 			return { ...state, transactionSettingsPopupIsVisible: action.payload };
+		}
+		case TOGGLE_DELEGATION_POPUP: {
+			return { ...state, delegationPopupIsVisible: action.payload };
 		}
 		default:
 			return state;
@@ -52,6 +56,13 @@ export const updateCurrentTab = (tab, dispatch, params = null) => {
 export const toggleTransactionSettingsPopup = (isVisible, dispatch) => {
 	return dispatch({
 		type: TOGGLE_TRANSACTION_SETTINGS_POPUP,
+		payload: isVisible,
+	});
+};
+
+export const toggleDelegationPopup = (isVisible, dispatch) => {
+	return dispatch({
+		type: TOGGLE_DELEGATION_POPUP,
 		payload: isVisible,
 	});
 };
