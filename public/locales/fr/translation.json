@@ -1,0 +1,524 @@
+{
+	"onboarding": {
+		"slides": {
+			"welcome": {
+				"title": "Bienvenue sur Mintr!",
+				"description": "Mintr est une dApp pour les détenteurs de SNX. Si vous n'avez jamais utilisé Mintr auparavant, n'hésitez pas à lire notre rapide introduction"
+			},
+			"whatIsSynthetix": {
+				"title": "Qu'est-ce Synthetix?",
+				"description": "Synthetix est un protocole décentralisé d'émission d'actifs synthétiques construit sur Ethereum. Ces actifs synthétiques (Synths) sont créés via le staking du Synthetix Network Token (SNX), et ces Synths peuvent être échangés les uns contre les autres directement grâce aux smart contracts Synthetix sur Synthetix.Exchange."
+			},
+			"whyStakeSnx": {
+				"title": "Pourquoi staker SNX?",
+				"description": "Ceux qui stake du SNX recevront deux types de récompenses. Premièrement, des récompenses liées au staking de SNX, qui sont créées par la politique inflationiste de la monnaie. Deuxièmement, des récompenses liées aux échanges de Synths faits sur Synthetix.Exchange."
+			},
+			"howStakeSnx": {
+				"title": "Que doivent faire les stakers de SNX?",
+				"description" : "Tous les Synths doivent être backé par des SNX stakés avec un ratio de collatéralisation de 750%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en minant des Synths pour le réduire. S'ils font ça, ils pourront récupérer des récompenses hebdomadaires."
+			},
+			"risks": {
+				"title": "Quels sont les risques?",
+				"description" : "Tous les stakers SNX créent une 'dette' quand ils stakent. Leur dette initiale est égale au nombre de sUSD qui sont créés, et évolue en fonction des gains et pertes faits par les détenteurs de Synth. Chaque fois que quelqu'un détient un Synth dont la valeur augmente, ce gain est réparti proportionnellement entre toutes les dettes des stakers de SNX. Un staker doit payer sa dette afin de pouvoir récupérer ses SNX."
+			}
+		},
+		"walletConnection": {
+			"title": "Merci de connecter votre portefeuille contenant vos SNX pour démarrer:"
+		},
+		"walletSelection": {
+			"success": {
+				"title": "Sélectionnez un portefeuille",
+				"subtitle": "Merci de sélectionner le portefeuille que vous souhaitez utiliser avec Mintr"
+			},
+			"loading": {
+				"connectInstructions": "Merci de suivre les instructions sur votre appareil pour dévérouiller votre portefeuille.",
+				"connectVia": "Connexion via {{walletType}}"
+			},
+			"error": {
+				"title": "Erreur",
+				"subtitle": "Mintr n'as pas pu accéder à votre portefeuille.",
+				"retry": "Réessayer"
+			},
+			"addWallet": {
+				"placeholder": "Adresse du portefeuille",
+				"buttonText": "Ajouter"
+			}
+		}
+	},
+	"dashboard": {
+		"header": {
+			"support": "Support"
+		},
+		"sections": {
+			"wallet": "Détails de votre portefeuille:"
+		},
+		"rewards": {
+			"open": "restants pour réclamer vos récompenses",
+			"blocked": "Réclamation des récompenses <1>bloquée</1>"
+		},
+		"ratio": {
+			"current": "Ratio de collatéralisation actuel",
+			"target": "Ratio de collatéralisation cible"
+		},
+		"holdings": {	
+			"title": "Total SNX:",
+			"locked": "Vérouillés",
+			"transferable": "Transférables",
+			"staking": "Stakés",
+			"nonStaking": "Non stakés",
+			"escrowed": "Bloqués",
+			"nonEscrowed": "Non bloqués"
+		},
+		"table": {
+			"debt": "Dette",
+			"synths": "Synths",
+			"balance": "Balance"
+		},
+		"buttons": {
+			"exchange": "Aller sur Synthetix.Exchange",
+			"synthetixDashboard": "Voir les prix sur le tableau de bord",
+			"refresh": "Rafraichir",
+			"delegate": "Déléguer"
+		}
+	},
+	"mainNavigation": {
+		"tabs": {
+			"home": "Accueil",
+			"depot": "Dépots",
+			"transactionsHistory": "Transactions",
+			"escrow": "Tiers de confiance",
+			"unipool": "UniPool"
+		}
+	},
+	"home": {
+		"intro": {
+			"title": "Que voulez vous faire ?"
+		},
+		"actions": {
+			"mint": {
+				"title": "Créer",
+				"description": "Créer des sUSD en stakant des SNX"
+			},
+			"burn": {
+				"title": "Détruire",
+				"description": "Détruire des sUSD pour récupérer des SNX stakés"
+			},
+			"claim": {
+				"title": "Réclamer",
+				"description": "Réclamez vos récompenses de staking SNX et des échanges de Synth"
+			},
+			"trade": {
+				"title": "Echanger",
+				"description": "Echangez n'importe quel Synth contre des sUSD"
+			},
+			"transfer": {
+				"title": "Transférer",
+				"description": "Transférez vos SNX, Synths, ou ETH"
+			}
+		}
+	},
+	"mintrActions": {
+		"mint": {
+			"action": {
+				"title": "Créer",
+				"subtitle": "Créez des des sUSD en stakant vos SNX. Ceci vous donnera un ratio de collateralisation et une dette, ce qui vous permettra de recevoir des récompenses de staking.",
+				"instruction": "Entrez le montant de sUSD à créer:",
+				"staking": "Staking",
+				"estimateCRatio": "Ratio de colat. estimé",
+				"buttons": {
+					"mint": "Créer"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Création",
+				"subActionDescription": "Staking"
+			},
+			"complete": {
+				"title": "Création en cours!"
+			}
+		},
+		"burn": {
+			"action": {
+				"title": "Détruire",
+				"subtitle": "Détruisez des sUSD pour libérer vos SNX stakés. Cela augmente aussi votre ratio de collateralisation et réduit votre dette, vous permettant de transférer vos SNX.",
+				"instruction": "Entrez le montant à détruire:",
+				"transferrable": {
+					"title": "SNX transferables libérés:",
+					"button": "Voir les SNX transférables"
+				},
+				"buttons": {
+					"burn": "Détruire",
+					"waitingPeriod": "Destrcution des synths libérés dans"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Destruction",
+				"subActionDescription": "Libération"
+			},
+			"complete": {
+				"title": "Destruction en cours!"
+			}
+		},
+		"claim": {
+			"action": {
+				"title": "Réclamer",
+				"subtitle": "Si  vous avez stake vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liés au staking, et récompense de SNX générés par les échanges de Synths faits sur Synthetix.Exchange.",
+				"table": {
+					"title": "Périodes de réclamation:",
+					"period": "Période",
+					"status": "Status de réclamation",
+					"open": "Ouvert",
+					"blocked": "Bloqué"
+				},
+				"tradingRewards": "Vos récompenses liés aux échanges de Synths:",
+				"stakingRewards": "Vos récompénses de staking de SNX:",
+				"buttons": {
+					"claim": "Réclamer maintenant",
+					"history": "Historique de réclamation"
+				},
+				"note": "Note : Si vous ne récupérez pas vos récompenses dans les temps, elles seront annulées et transférer dans la pool de frais de la plateforme."
+			},
+			"confirmation": {
+				"actionDescription": "Réclamation:"
+			},
+			"complete": {
+				"title": "Réclamation en cours!"
+			}
+		},
+		"trade": {
+			"action": {
+				"title": "Echanger",
+				"subtitle": "Echangez vos Synths contre des sUSD. Pour l'application complète qui vous permet d'échanger n'importe quel Synths, utilisez Synthetix.Exchange.",
+				"buttons": {
+					"trade": "Echanger maintenant",
+					"exchange": "Ouvrir Synthetix.Exchange"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Echange:",
+				"subActionDescription": "Reception:"
+			},
+			"complete": {
+				"title": "Echange en cours!"
+			}
+		},
+		"send": {
+			"action": {
+				"title": "Transfère",
+				"subtitle": "Transférez vos ETH, SNX ou Synths.",
+				"available": "Montant transférable:",
+				"amountInstruction": "Entrez le montant:",
+				"walletInstruction": "Entrez l'adresse de destination:",
+				"buttons": {
+					"send": "Envoyer maintenant"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Envoi:",
+				"subActionDescription": "Destination:"
+			},
+			"complete": {
+				"title": "Envoi en cours!"
+			}
+		}
+	},
+	"depot": {
+		"intro": {
+			"title": "Dépot:",
+			"subtitle": "Déposez des sUSD pour être vendus contre des ETH sur Synthetix.Exchange. Vous pouvez récupérer vos sUSD à n'importe quel moment tant qu'ils sont en attente. Note : dépot minimum de 50 sUSD."
+		},
+		"table": {
+			"title": "Activité récente:",
+			"type": "Type",
+			"activity": "Activité",
+			"remaining": "Restant",
+			"amount": "Montant",
+			"rate": "Taux",
+			"timeDate": "Heure | Date",
+			"details": "Détails",
+			"deposit": "Dépot",
+			"soldByDepot": "Vendu par le dépot"
+		},
+		"buttons": {
+			"available": "Montant disponible:",
+			"more": "Voir plus",
+			"contract": "Voir le contrat",
+			"deposit": "Déposer",
+			"withdraw": "Retirer"
+		},
+		"deposit": {
+			"action": {
+				"title": "Déposer",
+				"subtitle": "Montant disponible:",
+				"instruction": "Entrer le montant à déposer:",
+				"buttons": {
+					"deposit": "Déposer maintenant",
+					"unlock": "Dévérouiller"
+				}
+			},
+			"complete": {
+				"title": "Dépot en cours!"
+			},
+			"actionDescription": "Dépot:"
+		},
+		"withdraw": {
+			"action": {
+				"title": "Retirer",
+				"subtitle": "Montant disponible:",
+				"buttons": {
+					"withdraw": "Retirer maintenant"
+				}
+			},
+			"complete": {
+				"title": "Retrait en cours!"
+			},
+			"actionDescription": "Retrait:"
+		}
+	},
+	"escrow": {
+		"type": {
+			"staking": "Staking",
+			"token": "Token sale"
+		},
+		"buttons": {
+			"vest": "Vest now",
+			"viewTokenSale": "View token sale escrow",
+			"viewRewards": "View rewards escrow"
+		},
+		"staking": {
+			"title": "Vest your SNX staking rewards in escrow",
+			"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here after they have been escrowed for 12 months.",
+			"total": "Total escrowed:",
+			"table": {
+				"none": "You have no escrowed SNX",
+				"title": "Vesting schedule",
+				"date": "Vesting date",
+				"quantity": "Quantity"
+			}
+		},
+		"tokenSale": {
+			"title": "Vest your escrowed SNX from the token sale",
+			"subtitle": "If your SNX is still escrowed from the token sale, you can vest it here.",
+			"total": "Total vesting:",
+			"table": {
+				"title": "Vesting schedule",
+				"period": "Vesting period",
+				"interval": "Interval",
+				"number": "No. of intervals",
+				"months": "Months",
+				"vested": "Vested",
+				"date": "Vesting date",
+				"quantity": "Quantity",
+				"none": "You have no escrowed SNX"
+			}
+		},
+		"confirmation": {
+			"actionDescription": "Vesting:"
+		},
+		"complete": {
+			"title": "Vesting in progress!",
+			"actionDescription": "Vesting:"
+		}
+	},
+	"lpRewards": {
+		"intro": {
+			"title": "Merci de choisir une pool"
+		},
+		"actions": {
+			"unipool": {
+				"title": "Unipool"
+			},
+			"curvepool": { "title": "Curvepool" }
+		},
+		"shared": {
+			"unlocked": {
+				"link": "Voir le post sur le blog",
+				"complete": "Transaction en cours!"
+			},
+			"data": {
+				"balance": "Votre balance",
+				"staked": "Actuellement stakés",
+				"rewardsAvailable": "Récompenses disponibles"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Réclamation",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming"
+			},
+			"buttons": {
+				"unlock": "dévérouiller",
+				"goToContract": "Voir le contrat",
+				"stake": "Stake tokens",
+				"claim": "Réclamer récompenses",
+				"unstake": "Unstake tokens",
+				"exit": "Sortir: claim & unstake"
+			}
+		}
+	},
+	"unipool": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "Vous devez d'abord approuver le contrat d'Unipool pour pouvoir staker vos tokens sETH UNI-V1.",
+			"transaction": "Autorisation d'utilisation des tokens Uni-V1 LP en cours"
+		},
+		"unlocked": {
+			"subtitle": "Ici vous pouvez stake vos tokens UNI-V1 Liquidity Provider (LP), réclamer vos récompenses SNX, sortir complètement."
+		}
+	},
+	"curvepool": {
+		"title": "iearn.finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "Vous devez d'abord approuver le contrat de Curvepool pour pouvoir staker vos tokens yCurve.",
+			"transaction": "Autorisation d'utilisation des tokens yCurve en cours"
+		},
+		"unlocked": {
+			"subtitle": "Ici vous pouvez stake vos tokens yCurve, réclamer vos récompenses SNX, sortir complètement."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Adresses de wallets délégués",
+			"link": "Voir le post sur le blog",
+			"description": "La délégation autorise un wallet à éxécuter des fonctions au nom d'un autre wallet: créer, détruire, réclamer, échanger, mais pas transférer.",
+			"input": {
+				"label": "Entrez une nouvelle adresse de wallet à déléguer:"
+			},
+			"table": {
+				"title": "Gérer les adresses des wallets",
+				"columns": {
+					"walletAddress": "Adresse du wallet",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Retirer tous les pouvoirs"
+				}
+			},
+			"buttons": {
+				"add": "Ajouter"
+			}
+		}
+	},
+	"transactions": {
+		"filters": {
+			"type": "Type",
+			"date": "Date",
+			"amount": "Montant"
+		},
+		"events": {
+			"minted": "Créé(s)",
+			"burned": "Détruit(s)",
+			"claimedFees": "Récompenses réclamées",
+			"exchanged": "Acheté",
+			"traded": "Echangé",
+			"sent": "Envoyé",
+			"deposited": "Déposé",
+			"withdrawn": "Retiré",
+			"sold": "Vendu"
+		},
+		"buttons": {
+			"clearFilters": "Réinitialiser les filtres"
+		},
+		"inputs": {
+			"from": "de:",
+			"to": "à:"
+		}
+	},
+	"transactionSettings": {
+		"priceIndicator": "Frais du réseau Ethereum:",
+		"title": "Définir le montant de gas",
+		"placeholder": "Montant de gas (GWEI)",
+		"subtitle": "Ajuster le montant de gas (GWEI) ci dessous pour définir la vitesse de transaction.",
+		"minutes": "mins",
+		"speed": {
+			"slow": "Lent",
+			"average": "Moyen",
+			"fast": "Rapide"
+		},
+		"button": {
+			"submit": "Ok"
+		}
+	},
+	"transactionProcessing": {
+		"confirmation": {
+			"title": "Merci de confirmer la transaction",
+			"subtitle": "Pour continuer, suivez les indications sur votre <1>walletType</1> Wallet.",
+			"loading": "Attente d'une réponse utilisateur..."
+		},
+		"complete": {
+			"subtitle": "Votre transaction a été émise sur le réseau Ethereum. Vous pouvez fermer cette fenêtre, la transaction va continuer en arrière plan."
+		},
+		"error": {
+			"title": "Quelquechose ne s'est pas déroulé correctement...",
+			"subtitle": "Code:",
+			"type": {
+				"userDenied": "L'utilisateur a refusé la signature de la transaction",
+				"generic": "Erreur"
+			}
+		}
+	},
+	"notification": {
+		"status": {
+			"pending": "Transaction en cours",
+			"success": "Transaction effectuée!",
+			"error": "Une erreur est survenue..."
+		}
+	},
+	"button": {
+		"max": "Max",
+		"burnMax": "Détruire le maximum",
+		"fixCRatio": "Rétablir votre ratio de collateralisation",
+		"edit": "Modifier",
+		"havingTrouble": "Des problèmes?",
+		"whatIsSynthetix": "Qu'est-ce que Synthetix?",
+		"previous": "Précédent",
+		"next": "Suivant",
+		"startOver": "Recommencer",
+		"navigation": {
+			"cancel": "Annuler",
+			"back": "Revenir en arrière",
+			"close": "Fermer",
+			"etherscan": "Voir sur Etherscan",
+			"view": "Voir",
+			"finish": "Finir & retour accueil",
+			"ok": "OK"
+		}
+	},
+	"input": {
+		"list": {
+			"placeholder": "Chercher un synth..."
+		},
+		"address": {
+			"placeholder": "ex. 0x3b18a4..."
+		},
+		"error": {
+			"notEnoughToMint": "Vous ne pouvez pas créer autant de sUSD",
+			"gasEstimate": "Erreur lors de l'estimation du gas",
+			"invalidAmount": "Montant invalide",
+			"notEnoughToBurn": "Vous n'avez pas autant de sUSD à détruire. Vous pouvez en acheter au meilleur prix sur dex.ag.",
+			"balanceTooLow": "Votre balance est trop faible",
+			"lowerThanMinDeposit": "Montant inférieur au dépot minimum"
+		}
+	},
+	"general": {
+		"noData": "Pas de données"
+	},
+	"network": {
+		"gas": "Frais du réseau Ethereum (Gas):",
+		"tradingFee": "Frais des échanges de Synths:",
+		"speed": "Vitesse de transaction estimée:"
+	},
+	"maintenance": {
+		"title": "Mintr est actuellement indisponible (mise à jour).",
+		"subtitle": "Désolé pour la gêne occasionnée, le site sera de retour très rapidement."
+	},
+	"mobileLanding": {
+		"title": "Mintr n'est actuellement pas disponible sur mobile et tablette.",
+		"subtitle": "Nous espérons avoir une version disponible dans les prochains mois."
+	},
+	"tooltip": {
+		"claim": "Pour réclamer vos récompenses vous devez être dans les 1% du ratio de collateralisation cible. Si vous êtes en dessous de ce chiffre, vous ne pourrez pas récupérer vos récompenses. Vous pouvez détruire des sUSD pour rétablir votre ratio.",
+		"debtBalance": "Votre dette est initialisée du montant des sUSD créés, et fluctue selon les gains et les pertes faits par les autres posesseurs de Synths. Chaque fois que quelqu'un détient un Synth qui prend de la valeur, ce gain est redistribué proportionnellement entre toutes les dettes des détenteurs de SNX stakés. Pour dévérouiller tout vos SNX stakés, vous devez d'abord payer votre dette.",
+		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange.Ce chiffre est la valeur totale de tout les Synths contenus dans ce wallet. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger."
+	}
+}
