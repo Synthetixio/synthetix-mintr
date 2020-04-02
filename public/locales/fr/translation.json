@@ -3,7 +3,7 @@
 		"slides": {
 			"welcome": {
 				"title": "Bienvenue sur Mintr!",
-				"description": "Mintr est une dApp pour les détenteurs de SNX. Si vous n'avez jamais utilisé Mintr auparavant, n'hésitez pas à lire notre rapide introduction"
+				"description": "Mintr est une dApp pour les détenteurs de SNX. Si vous n'avez jamais utilisé Mintr auparavant, n'hésitez pas à lire notre rapide introduction."
 			},
 			"whatIsSynthetix": {
 				"title": "Qu'est-ce Synthetix?",
@@ -11,11 +11,11 @@
 			},
 			"whyStakeSnx": {
 				"title": "Pourquoi staker SNX?",
-				"description": "Ceux qui stake du SNX recevront deux types de récompenses. Premièrement, des récompenses liées au staking de SNX, qui sont créées par la politique inflationiste de la monnaie. Deuxièmement, des récompenses liées aux échanges de Synths faits sur Synthetix.Exchange."
+				"description": "Les personnes qui stakent du SNX (stakers) recevront deux types de récompenses. Premièrement, des récompenses liées au staking de SNX, qui sont créées par la politique inflationiste de la monnaie. Deuxièmement, des récompenses liées aux échanges de Synths faits sur Synthetix.Exchange."
 			},
 			"howStakeSnx": {
 				"title": "Que doivent faire les stakers de SNX?",
-				"description" : "Tous les Synths doivent être backé par des SNX stakés avec un ratio de collatéralisation de 750%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en minant des Synths pour le réduire. S'ils font ça, ils pourront récupérer des récompenses hebdomadaires."
+				"description" : "Tous les Synths doivent être soutenus par des SNX stakés avec un ratio de collatéralisation de 750%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en générant des Synths (minting) pour le réduire. En faisant de la sorte, ces derniers seront en mesure de récupérer des récompenses hebdomadaires."
 			},
 			"risks": {
 				"title": "Quels sont les risques?",
@@ -449,7 +449,7 @@
 			"subtitle": "Votre transaction a été émise sur le réseau Ethereum. Vous pouvez fermer cette fenêtre, la transaction va continuer en arrière plan."
 		},
 		"error": {
-			"title": "Quelquechose ne s'est pas déroulé correctement...",
+			"title": "Quelque chose ne s'est pas déroulé correctement...",
 			"subtitle": "Code:",
 			"type": {
 				"userDenied": "L'utilisateur a refusé la signature de la transaction",
@@ -467,7 +467,7 @@
 	"button": {
 		"max": "Max",
 		"burnMax": "Détruire le maximum",
-		"fixCRatio": "Rétablir votre ratio de collateralisation",
+		"fixCRatio": "Rétablir votre ratio de collatéralisation",
 		"edit": "Modifier",
 		"havingTrouble": "Des problèmes?",
 		"whatIsSynthetix": "Qu'est-ce que Synthetix?",
@@ -517,8 +517,8 @@
 		"subtitle": "Nous espérons avoir une version disponible dans les prochains mois."
 	},
 	"tooltip": {
-		"claim": "Pour réclamer vos récompenses vous devez être dans les 1% du ratio de collateralisation cible. Si vous êtes en dessous de ce chiffre, vous ne pourrez pas récupérer vos récompenses. Vous pouvez détruire des sUSD pour rétablir votre ratio.",
-		"debtBalance": "Votre dette est initialisée du montant des sUSD créés, et fluctue selon les gains et les pertes faits par les autres posesseurs de Synths. Chaque fois que quelqu'un détient un Synth qui prend de la valeur, ce gain est redistribué proportionnellement entre toutes les dettes des détenteurs de SNX stakés. Pour dévérouiller tout vos SNX stakés, vous devez d'abord payer votre dette.",
-		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange.Ce chiffre est la valeur totale de tout les Synths contenus dans ce wallet. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger."
+		"claim": "Pour réclamer vos récompenses vous devez être dans les 1% du ratio de collatéralisation cible. Si vous êtes en dessous de ce chiffre, vous ne pourrez pas récupérer vos récompenses. Vous pouvez détruire des sUSD pour rétablir votre ratio.",
+		"debtBalance": "Votre dette est initialisée en fonction du montant de sUSD créés, et fluctue selon les gains et les pertes faits par les autres posesseurs de Synths. Chaque fois qu'une personne détient un Synth qui prend de la valeur, ce gain est redistribué proportionnellement entre toutes les dettes des détenteurs de SNX stakés. Pour dévérouiller tout vos SNX stakés, vous devez d'abord payer votre dette.",
+		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange. Ce chiffre est la valeur totale de tout les Synths contenus dans ce portefeuille. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger."
 	}
 }
