@@ -19,7 +19,7 @@
 			},
 			"risks": {
 				"title": "Quels sont les risques?",
-				"description" : "Tous les stakers SNX créent une 'dette' quand ils stakent. Leur dette initiale est égale au nombre de sUSD qui sont créés, et évolue en fonction des gains et pertes faits par les détenteurs de Synth. Chaque fois que quelqu'un détient un Synth dont la valeur augmente, ce gain est réparti proportionnellement entre toutes les dettes des stakers de SNX. Un staker doit payer sa dette afin de pouvoir récupérer ses SNX."
+				"description" : "Tous les détenteurs de SNX créent une 'dette' quand ils stakent. Leur dette initiale est égale au nombre de sUSD qui sont créés, et évolue en fonction des gains et pertes faits par les détenteurs de Synth. Chaque fois que quelqu'un détient un Synth dont la valeur augmente, ce gain est réparti proportionnellement entre toutes les dettes des stakers de SNX. Un staker doit payer sa dette afin de pouvoir récupérer ses SNX."
 			}
 		},
 		"walletConnection": {
@@ -75,8 +75,8 @@
 			"balance": "Balance"
 		},
 		"buttons": {
-			"exchange": "Aller sur Synthetix.Exchange",
-			"synthetixDashboard": "Voir les prix sur le tableau de bord",
+			"exchange": "Visiter Synthetix.Exchange",
+			"synthetixDashboard": "Consulter les prix sur le Dashboard",
 			"refresh": "Rafraichir",
 			"delegate": "Déléguer"
 		}
@@ -84,7 +84,7 @@
 	"mainNavigation": {
 		"tabs": {
 			"home": "Accueil",
-			"depot": "Dépots",
+			"depot": "Dépot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Tiers de confiance",
 			"unipool": "UniPool"
@@ -105,15 +105,15 @@
 			},
 			"claim": {
 				"title": "Réclamer",
-				"description": "Réclamez vos récompenses de staking SNX et des échanges de Synth"
+				"description": "Réclamer vos récompenses"
 			},
 			"trade": {
 				"title": "Echanger",
-				"description": "Echangez n'importe quel Synth contre des sUSD"
+				"description": "Echanger n'importe quel Synth contre des sUSD"
 			},
 			"transfer": {
 				"title": "Transférer",
-				"description": "Transférez vos SNX, Synths, ou ETH"
+				"description": "Transférer vos SNX, Synths, ou ETH"
 			}
 		}
 	},
@@ -121,7 +121,7 @@
 		"mint": {
 			"action": {
 				"title": "Créer",
-				"subtitle": "Créez des des sUSD en stakant vos SNX. Ceci vous donnera un ratio de collateralisation et une dette, ce qui vous permettra de recevoir des récompenses de staking.",
+				"subtitle": "Créez des sUSD en stakant vos SNX. Ceci vous donnera un ratio de collatéralisation et une dette, ce qui vous permettra de recevoir des récompenses de staking.",
 				"instruction": "Entrez le montant de sUSD à créer:",
 				"staking": "Staking",
 				"estimateCRatio": "Ratio de colat. estimé",
@@ -140,15 +140,15 @@
 		"burn": {
 			"action": {
 				"title": "Détruire",
-				"subtitle": "Détruisez des sUSD pour libérer vos SNX stakés. Cela augmente aussi votre ratio de collateralisation et réduit votre dette, vous permettant de transférer vos SNX.",
+				"subtitle": "Détruisez des sUSD pour libérer vos SNX stakés. Cela augmentera votre ratio de col. et réduira également votre dette, vous permettant ainsi de transférer vos SNX.",
 				"instruction": "Entrez le montant à détruire:",
 				"transferrable": {
-					"title": "SNX transferables libérés:",
+					"title": "SNX transférables libérés:",
 					"button": "Voir les SNX transférables"
 				},
 				"buttons": {
 					"burn": "Détruire",
-					"waitingPeriod": "Destrcution des synths libérés dans"
+					"waitingPeriod": "Destruction des synths libérés dans"
 				}
 			},
 			"confirmation": {
@@ -162,7 +162,7 @@
 		"claim": {
 			"action": {
 				"title": "Réclamer",
-				"subtitle": "Si  vous avez stake vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liés au staking, et récompense de SNX générés par les échanges de Synths faits sur Synthetix.Exchange.",
+				"subtitle": "Si vous avez staké vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liée au staking, et récompense de SNX générée par les échanges de Synths faits sur Synthetix.Exchange.",
 				"table": {
 					"title": "Périodes de réclamation:",
 					"period": "Période",
@@ -171,12 +171,12 @@
 					"blocked": "Bloqué"
 				},
 				"tradingRewards": "Vos récompenses liés aux échanges de Synths:",
-				"stakingRewards": "Vos récompénses de staking de SNX:",
+				"stakingRewards": "Vos récompenses de staking de SNX:",
 				"buttons": {
 					"claim": "Réclamer maintenant",
 					"history": "Historique de réclamation"
 				},
-				"note": "Note : Si vous ne récupérez pas vos récompenses dans les temps, elles seront annulées et transférer dans la pool de frais de la plateforme."
+				"note": "Note : Si vos récompenses ne sont pas récupérées dans les temps, ces dernières seront annulées et transférées dans la pool de frais (fee pool) du système."
 			},
 			"confirmation": {
 				"actionDescription": "Réclamation:"
@@ -188,7 +188,7 @@
 		"trade": {
 			"action": {
 				"title": "Echanger",
-				"subtitle": "Echangez vos Synths contre des sUSD. Pour l'application complète qui vous permet d'échanger n'importe quel Synths, utilisez Synthetix.Exchange.",
+				"subtitle": "Echangez vos Synths contre des sUSD. Pour l'application complète qui vous permet d'échanger n'importe quel Synth, utilisez Synthetix.Exchange.",
 				"buttons": {
 					"trade": "Echanger maintenant",
 					"exchange": "Ouvrir Synthetix.Exchange"
@@ -196,7 +196,7 @@
 			},
 			"confirmation": {
 				"actionDescription": "Echange:",
-				"subActionDescription": "Reception:"
+				"subActionDescription": "Réception:"
 			},
 			"complete": {
 				"title": "Echange en cours!"
@@ -204,13 +204,13 @@
 		},
 		"send": {
 			"action": {
-				"title": "Transfère",
+				"title": "Transférer",
 				"subtitle": "Transférez vos ETH, SNX ou Synths.",
 				"available": "Montant transférable:",
 				"amountInstruction": "Entrez le montant:",
 				"walletInstruction": "Entrez l'adresse de destination:",
 				"buttons": {
-					"send": "Envoyer maintenant"
+					"send": "Envoyer"
 				}
 			},
 			"confirmation": {
@@ -363,7 +363,7 @@
 			"transaction": "Autorisation d'utilisation des tokens Uni-V1 LP en cours"
 		},
 		"unlocked": {
-			"subtitle": "Ici vous pouvez stake vos tokens UNI-V1 Liquidity Provider (LP), réclamer vos récompenses SNX, sortir complètement."
+			"subtitle": "Ici vous pouvez staker vos tokens UNI-V1 Liquidity Provider (LP), réclamer vos récompenses SNX, sortir complètement."
 		}
 	},
 	"curvepool": {
@@ -373,21 +373,21 @@
 			"transaction": "Autorisation d'utilisation des tokens yCurve en cours"
 		},
 		"unlocked": {
-			"subtitle": "Ici vous pouvez stake vos tokens yCurve, réclamer vos récompenses SNX, sortir complètement."
+			"subtitle": "Ici vous pouvez staker vos tokens yCurve, réclamer vos récompenses SNX, sortir complètement."
 		}
 	},
 	"delegation": {
 		"popup": {
-			"title": "Adresses de wallets délégués",
+			"title": "Adresses de portefeuilles délégués",
 			"link": "Voir le post sur le blog",
-			"description": "La délégation autorise un wallet à éxécuter des fonctions au nom d'un autre wallet: créer, détruire, réclamer, échanger, mais pas transférer.",
+			"description": "La délégation autorise un portefeuille à éxécuter des fonctions au nom d'un autre portefeuille: créer, détruire, réclamer, échanger, mais pas transférer.",
 			"input": {
-				"label": "Entrez une nouvelle adresse de wallet à déléguer:"
+				"label": "Entrez une nouvelle adresse de portefeuille à déléguer:"
 			},
 			"table": {
-				"title": "Gérer les adresses des wallets",
+				"title": "Gérer les adresses des portefeuilles",
 				"columns": {
-					"walletAddress": "Adresse du wallet",
+					"walletAddress": "Adresse du portefeuille",
 					"actions": "actions"
 				},
 				"cells": {
@@ -428,7 +428,7 @@
 		"priceIndicator": "Frais du réseau Ethereum:",
 		"title": "Définir le montant de gas",
 		"placeholder": "Montant de gas (GWEI)",
-		"subtitle": "Ajuster le montant de gas (GWEI) ci dessous pour définir la vitesse de transaction.",
+		"subtitle": "Ajuster le GWEI ci dessous pour définir la vitesse de transaction.",
 		"minutes": "mins",
 		"speed": {
 			"slow": "Lent",
@@ -442,11 +442,11 @@
 	"transactionProcessing": {
 		"confirmation": {
 			"title": "Merci de confirmer la transaction",
-			"subtitle": "Pour continuer, suivez les indications sur votre <1>walletType</1> Wallet.",
+			"subtitle": "Pour continuer, suivez les indications sur votre portefeuille <1>walletType</1>.",
 			"loading": "Attente d'une réponse utilisateur..."
 		},
 		"complete": {
-			"subtitle": "Votre transaction a été émise sur le réseau Ethereum. Vous pouvez fermer cette fenêtre, la transaction va continuer en arrière plan."
+			"subtitle": "Votre transaction a été émise sur le réseau Ethereum. Vous pouvez fermer cette fenêtre, la transaction continuera en arrière plan."
 		},
 		"error": {
 			"title": "Quelque chose ne s'est pas déroulé correctement...",
