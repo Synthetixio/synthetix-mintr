@@ -15,7 +15,7 @@
 			},
 			"howStakeSnx": {
 				"title": "¿Qué deben hacer los inversores de SNX?",
-				"description": "Todos los Synths deben estar respaldados por SNX invertidos en un indice de colateralización del 750%. Los inversores de SNX necesitan administrar su propio indice para estar por encima de esta cifra, lo cual pueden hacerlo quemando Synths para aumentar su indice o acuñando Synths para reducirla. Si hacen esto, pueden recolectar recompensas semanales."
+				"description": "Todos los Synths deben estar respaldados por SNX invertidos en un indice de colateralización del 800%. Los inversores de SNX necesitan administrar su propio indice para estar por encima de esta cifra, lo cual pueden hacerlo quemando Synths para aumentar su indice o acuñando Synths para reducirla. Si hacen esto, pueden recolectar recompensas semanales."
 			},
 			"risks": {
 				"title": "¿Cuáles son los riesgos?",

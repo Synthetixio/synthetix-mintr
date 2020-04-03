@@ -15,7 +15,7 @@
 			},
 			"howStakeSnx": {
 				"title": "What do SNX stakers need to do?",
-				"description": "All Synths need to be backed by staked SNX at a Collateralisation Ratio of 750%. SNX stakers need to manage their own ratio to be above this figure, which they can do by burning Synths to increase their ratio or minting Synths to reduce it. If they do this, they can collect weekly rewards."
+				"description": "All Synths need to be backed by staked SNX at a Collateralisation Ratio of 800%. SNX stakers need to manage their own ratio to be above this figure, which they can do by burning Synths to increase their ratio or minting Synths to reduce it. If they do this, they can collect weekly rewards."
 			},
 			"risks": {
 				"title": "What are the risks?",
