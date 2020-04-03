@@ -15,11 +15,11 @@
 			},
 			"howStakeSnx": {
 				"title": "Que doivent faire les stakers de SNX?",
-				"description" : "Tous les Synths doivent être soutenus par des SNX stakés avec un ratio de collatéralisation de 750%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en générant des Synths (minting) pour le réduire. En faisant de la sorte, ces derniers seront en mesure de récupérer des récompenses hebdomadaires."
+				"description": "Tous les Synths doivent être soutenus par des SNX stakés avec un ratio de collatéralisation de 800%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en générant des Synths (minting) pour le réduire. En faisant de la sorte, ces derniers seront en mesure de récupérer des récompenses hebdomadaires."
 			},
 			"risks": {
 				"title": "Quels sont les risques?",
-				"description" : "Tous les détenteurs de SNX créent une 'dette' quand ils stakent. Leur dette initiale est égale au nombre de sUSD qui sont créés, et évolue en fonction des gains et pertes faits par les détenteurs de Synth. Chaque fois que quelqu'un détient un Synth dont la valeur augmente, ce gain est réparti proportionnellement entre toutes les dettes des stakers de SNX. Un staker doit payer sa dette afin de pouvoir récupérer ses SNX."
+				"description": "Tous les détenteurs de SNX créent une 'dette' quand ils stakent. Leur dette initiale est égale au nombre de sUSD qui sont créés, et évolue en fonction des gains et pertes faits par les détenteurs de Synth. Chaque fois que quelqu'un détient un Synth dont la valeur augmente, ce gain est réparti proportionnellement entre toutes les dettes des stakers de SNX. Un staker doit payer sa dette afin de pouvoir récupérer ses SNX."
 			}
 		},
 		"walletConnection": {
@@ -60,7 +60,7 @@
 			"current": "Ratio de collatéralisation actuel",
 			"target": "Ratio de collatéralisation cible"
 		},
-		"holdings": {	
+		"holdings": {
 			"title": "Total SNX:",
 			"locked": "Vérouillés",
 			"transferable": "Transférables",
@@ -76,7 +76,7 @@
 		},
 		"buttons": {
 			"exchange": "Visiter Synthetix.Exchange",
-			"synthetixDashboard": "Consulter les prix sur le Dashboard",
+			"synthetixDashboard": "Visiter le Dashboard",
 			"refresh": "Rafraichir",
 			"delegate": "Déléguer"
 		}
@@ -278,46 +278,46 @@
 	"escrow": {
 		"type": {
 			"staking": "Staking",
-			"token": "Token sale"
+			"token": "ICO"
 		},
 		"buttons": {
-			"vest": "Vest now",
-			"viewTokenSale": "View token sale escrow",
-			"viewRewards": "View rewards escrow"
+			"vest": "Débloquer",
+			"viewTokenSale": "ICO",
+			"viewRewards": "Récompenses"
 		},
 		"staking": {
-			"title": "Vest your SNX staking rewards in escrow",
-			"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here after they have been escrowed for 12 months.",
-			"total": "Total escrowed:",
+			"title": "Débloquer vos SNX stockés en tiers de confiance",
+			"subtitle": "Si vous avez staké vos SNX et créé du sUSD, vous pouvez recevoir des récompenses hebdomadaires, que vous pouvez débloquer ici après 12 mois.",
+			"total": "Montant total bloqué:",
 			"table": {
-				"none": "You have no escrowed SNX",
-				"title": "Vesting schedule",
-				"date": "Vesting date",
-				"quantity": "Quantity"
+				"none": "Aucun de vos SNX ne sont actuellement stockés en tiers de confiance",
+				"title": "Calendrier",
+				"date": "Date de déblocage",
+				"quantity": "(Quantité)"
 			}
 		},
 		"tokenSale": {
-			"title": "Vest your escrowed SNX from the token sale",
-			"subtitle": "If your SNX is still escrowed from the token sale, you can vest it here.",
-			"total": "Total vesting:",
+			"title": "Débloquer vos SNX stockés en tiers de confiance",
+			"subtitle": "Si vous avez participé à l'ICO et que vous possédez des SNX stockés en tiers de confiance, vous pouvez les débloquer ici.",
+			"total": "Montant total bloqué:",
 			"table": {
-				"title": "Vesting schedule",
-				"period": "Vesting period",
-				"interval": "Interval",
-				"number": "No. of intervals",
-				"months": "Months",
-				"vested": "Vested",
-				"date": "Vesting date",
-				"quantity": "Quantity",
-				"none": "You have no escrowed SNX"
+				"title": "Calendrier",
+				"period": "Période",
+				"interval": "Intervalle",
+				"number": "Nombre d'intervalles",
+				"months": "Mois",
+				"vested": "Débloqués",
+				"date": "Date de déblocage",
+				"quantity": "(Quantité)",
+				"none": "Aucun de vos SNX ne sont actuellement stockés en tiers de confiance"
 			}
 		},
 		"confirmation": {
-			"actionDescription": "Vesting:"
+			"actionDescription": "Déblocage:"
 		},
 		"complete": {
-			"title": "Vesting in progress!",
-			"actionDescription": "Vesting:"
+			"title": "Déblocage en cours!",
+			"actionDescription": "Déblocage:"
 		}
 	},
 	"lpRewards": {
@@ -476,7 +476,7 @@
 		"startOver": "Recommencer",
 		"navigation": {
 			"cancel": "Annuler",
-			"back": "Revenir en arrière",
+			"back": "Précedent",
 			"close": "Fermer",
 			"etherscan": "Voir sur Etherscan",
 			"view": "Voir",
