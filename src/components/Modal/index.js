@@ -1,3 +1,4 @@
-import TransactionSettingsPopup from './GweiModal';
+import GweiModal from './GweiModal';
+import DelegateModal from './DelegateModal';
 
-export { TransactionSettingsPopup };
+export { GweiModal, DelegateModal };

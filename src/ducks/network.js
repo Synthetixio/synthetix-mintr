@@ -62,8 +62,6 @@ const {
 export { updateGasPrice, setGasPrice };
 const getNetworkState = state => state.network;
 
-export const getNetworkInfo = state => getNetworkState(state).networkInfo;
-export const getNetworkSettings = state => getNetworkState(state).networkInfo;
 export const getCurrentGasPrice = state => getNetworkState(state).currentGasPrice;
 export const getNetworkPrices = state => getNetworkState(state).gasPrices;
 

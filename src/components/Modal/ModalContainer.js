@@ -5,23 +5,23 @@ import { Cross } from '../Icons';
 
 import { hideModal } from '../../ducks/modal';
 
-const Popup = ({ children, hideModal }) => {
+const Modal = ({ children, hideModal }) => {
 	return (
-		<PopupWrapper>
+		<ModalWrapper>
 			<Nav>
 				<ButtonClose onClick={() => hideModal()}>
 					<Cross />
 				</ButtonClose>
 			</Nav>
 			{children}
-		</PopupWrapper>
+		</ModalWrapper>
 	);
 };
 
-const PopupWrapper = styled.div`
+const ModalWrapper = styled.div`
 	position: absolute;
 	left: 50%;
-	top: 50%;
+	top: 50vh;
 	transform: translate(-50%, -50%);
 	z-index: 1001;
 `;
@@ -44,4 +44,4 @@ const mapDispatchToProps = {
 	hideModal,
 };
 
-export default connect(null, mapDispatchToProps)(Popup);
+export default connect(null, mapDispatchToProps)(Modal);

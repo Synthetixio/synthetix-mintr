@@ -8,6 +8,9 @@ import { formatCurrency } from '../../helpers/formatters';
 import { fetchData } from './fetchData';
 import { getWalletDetails } from '../../ducks/wallet';
 import { getSuccessQueue } from '../../ducks/transactions';
+import { showModal } from '../../ducks/modal';
+
+import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
 import Header from '../../components/Header';
 import BarChart from '../../components/BarChart';
@@ -183,7 +186,7 @@ const BalanceTable = ({ state }) => {
 	);
 };
 
-const Dashboard = ({ walletDetails, successQueue }) => {
+const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
 	const { currentWallet } = walletDetails;
@@ -217,12 +220,18 @@ const Dashboard = ({ walletDetails, successQueue }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						<ButtonSpinnerContainer>
-							{dashboardIsLoading && <MicroSpinner />}
-							<ButtonTertiary onClick={() => loadData()}>
-								{t('dashboard.buttons.refresh')}
+						<ButtonContainer>
+							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
+								{t('dashboard.buttons.delegate')}
 							</ButtonTertiary>
-						</ButtonSpinnerContainer>
+							<ButtonTertiary
+								disabled={dashboardIsLoading}
+								style={{ minWidth: '102px' }}
+								onClick={() => loadData()}
+							>
+								{dashboardIsLoading ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
+							</ButtonTertiary>
+						</ButtonContainer>
 					</ContainerHeader>
 					<CollRatios state={{ debtData }} />
 					<PricesContainer>
@@ -303,9 +312,12 @@ const Container = styled.div`
 	margin: ${props => (props.curved ? '16px 0' : '0')};
 `;
 
-const ButtonSpinnerContainer = styled.div`
+const ButtonContainer = styled.div`
 	display: flex;
 	align-items: center;
+	& > button + button {
+		margin-left: 10px;
+	}
 `;
 
 const ContainerHeader = styled.div`
@@ -403,4 +415,8 @@ const mapStateToProps = state => ({
 	successQueue: getSuccessQueue(state),
 });
 
-export default connect(mapStateToProps, {})(Dashboard);
+const mapDispatchToProps = {
+	showModal,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
