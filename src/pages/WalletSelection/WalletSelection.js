@@ -146,6 +146,7 @@ const WalletConnection = ({
 	setCurrentPage,
 	derivationPathChange,
 	updateWalletStatus,
+	updateWalletPaginatorIndex,
 }) => {
 	const { t } = useTranslation();
 	const {
@@ -163,7 +164,9 @@ const WalletConnection = ({
 		availableWallets,
 		updateWalletStatus
 	);
+
 	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
+
 	const isLedger = walletType === 'Ledger';
 	const selectedDerivationPath = derivationPath
 		? LEDGER_DERIVATION_PATHS.find(path => path.value === derivationPath)
