@@ -60,7 +60,7 @@ const Action = ({
 				</BoxRow>
 				<TimeLeftRow>
 					<TimeLeftHeading>{t('mintrActions.claim.action.timeLeft')}</TimeLeftHeading>
-					<H2>{closeIn}</H2>
+					<StyledH2>{closeIn}</StyledH2>
 				</TimeLeftRow>
 				<Bottom>
 					<Status>
@@ -113,6 +113,10 @@ const Container = styled.div`
 `;
 
 const Bottom = styled.div``;
+
+const StyledH2 = styled(H2)`
+	margin-top: 14px;
+`;
 
 const Navigation = styled.div`
 	width: 100%;
