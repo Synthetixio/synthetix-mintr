@@ -89,11 +89,10 @@ const Navigation = styled.div`
 `;
 
 const Top = styled.div`
-	height: auto;
+	width: 100%;
 `;
 
 const Bottom = styled.div`
-	height: auto;
 	margin-bottom: 48px;
 `;
 
@@ -113,14 +112,13 @@ const Details = styled.div`
 `;
 
 const Box = styled.div`
-	height: auto;
-	width: auto;
 	padding: 24px 40px;
 	margin: 0px 16px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 `;
 
 const Amount = styled.span`
@@ -128,6 +126,7 @@ const Amount = styled.span`
 	font-family: 'apercu-medium';
 	font-size: 24px;
 	margin: 16px 0px 0px 0px;
+	white-space: nowrap;
 `;
 
 const Loading = styled.div`
