@@ -85,4 +85,5 @@ export function onMetamaskNetworkChange(cb) {
 	window.ethereum.on('networkChanged', listener);
 }
 
-export const addBufferToGasLimit = gasLimit => Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE);
+export const addBufferToGasLimit = gasLimit =>
+	Math.round(Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE));
