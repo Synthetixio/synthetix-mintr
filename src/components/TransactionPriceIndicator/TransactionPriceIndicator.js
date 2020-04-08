@@ -66,7 +66,6 @@ const Container = styled.div`
 `;
 
 const Block = styled.div`
-	flex: 1;
 	display: flex;
 	justify-content: center;
 	white-space: nowrap;

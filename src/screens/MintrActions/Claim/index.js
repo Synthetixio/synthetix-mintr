@@ -29,7 +29,7 @@ const getFeePeriodCountdown = (recentFeePeriods, feePeriodDuration) => {
 		currentPeriodStart && feePeriodDuration
 			? addSeconds(currentPeriodStart, feePeriodDuration)
 			: null;
-	return `${formatDistanceToNow(currentPeriodEnd)} left`;
+	return formatDistanceToNow(currentPeriodEnd);
 };
 
 const useGetFeeData = walletAddress => {
@@ -39,28 +39,21 @@ const useGetFeeData = walletAddress => {
 			try {
 				setData({ ...data, dataIsLoading: true });
 				const [
-					feesByPeriod,
 					feePeriodDuration,
 					recentFeePeriods,
 					feesAreClaimable,
 					feesAvailable,
 				] = await Promise.all([
-					snxJSConnector.snxJS.FeePool.feesByPeriod(walletAddress),
 					snxJSConnector.snxJS.FeePool.feePeriodDuration(),
 					snxJSConnector.snxJS.FeePool.recentFeePeriods(FEE_PERIOD),
 					snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
 					snxJSConnector.snxJS.FeePool.feesAvailable(walletAddress),
 				]);
 
-				const formattedFeesByPeriod = feesByPeriod.slice(1).map(([fee, reward]) => {
-					return {
-						fee: bigNumberFormatter(fee),
-						reward: bigNumberFormatter(reward),
-						closeIn: getFeePeriodCountdown(recentFeePeriods, feePeriodDuration),
-					};
-				});
+				const closeIn = getFeePeriodCountdown(recentFeePeriods, feePeriodDuration);
+
 				setData({
-					feesByPeriod: formattedFeesByPeriod,
+					closeIn,
 					feesAreClaimable,
 					feesAvailable: feesAvailable.map(bigNumberFormatter),
 					dataIsLoading: false,
@@ -108,9 +101,7 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 
-	const { feesByPeriod, feesAreClaimable, feesAvailable, dataIsLoading } = useGetFeeData(
-		currentWallet
-	);
+	const { closeIn, feesAreClaimable, feesAvailable, dataIsLoading } = useGetFeeData(currentWallet);
 	const gasEstimateError = useGetGasEstimate(setFetchingGasLimit, setGasLimit);
 
 	const onClaim = async () => {
@@ -159,7 +150,7 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 		onClaim,
 		onClaimHistory,
 		goBack: handlePrev,
-		feesByPeriod,
+		closeIn,
 		feesAreClaimable,
 		feesAvailable,
 		walletType,
