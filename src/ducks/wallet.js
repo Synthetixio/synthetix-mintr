@@ -64,3 +64,5 @@ export const updateWalletPaginatorIndex = index => {
 };
 
 export const getWalletDetails = state => state.wallet;
+
+export const getCurrentWallet = state => state.wallet.currentWallet;
