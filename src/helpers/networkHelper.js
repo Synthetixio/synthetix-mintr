@@ -1,4 +1,6 @@
 import throttle from 'lodash/throttle';
+import invert from 'lodash/invert';
+
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { URLS } from '../constants/urls';
 import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
@@ -9,6 +11,8 @@ export const SUPPORTED_NETWORKS = {
 	4: 'RINKEBY',
 	42: 'KOVAN',
 };
+
+export const SUPPORTED_NETWORKS_MAP = invert(SUPPORTED_NETWORKS);
 
 export const DEFAULT_GAS_LIMIT = {
 	mint: 2200000,
@@ -87,3 +91,5 @@ export function onMetamaskNetworkChange(cb) {
 
 export const addBufferToGasLimit = gasLimit =>
 	Math.round(Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE));
+
+export const isMainNet = networkId => networkId === SUPPORTED_NETWORKS_MAP.MAINNET;

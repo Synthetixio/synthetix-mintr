@@ -407,15 +407,15 @@
 			"amount": "Amount"
 		},
 		"events": {
-			"minted": "Minted",
+			"issued": "Minted",
 			"burned": "Burned",
+			"exchanged": "Traded",
+			"deposit": "Deposited",
+			"cleared": "Sold",
+			"withdrawl": "Withdrawn",
+			"exchanged2": "Bought",
 			"claimedFees": "Claimed Rewards",
-			"exchanged": "Bought",
-			"traded": "Traded",
-			"sent": "Sent",
-			"deposited": "Deposited",
-			"withdrawn": "Withdrawn",
-			"sold": "Sold"
+			"sent": "Sent"
 		},
 		"buttons": {
 			"clearFilters": "Clear filters"
