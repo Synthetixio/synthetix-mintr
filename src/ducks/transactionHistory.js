@@ -3,6 +3,8 @@ import snxData from 'synthetix-data';
 import flatten from 'lodash/flatten';
 import orderBy from 'lodash/orderBy';
 
+import { TRANSACTION_EVENTS } from '../constants/transactionHistory';
+
 export const transactionHistorySlice = createSlice({
 	name: 'transactionHistory',
 	initialState: {
@@ -54,21 +56,27 @@ export const fetchTransactionHistory = walletAddress => async dispatch => {
 	dispatch(fetchTransactionHistoryRequest());
 
 	try {
-		const [issued, burned, exchanges, depotActions, clearedDeposits] = await Promise.all([
+		const [
+			issued,
+			burned,
+			feesClaimed,
+			exchanges,
+			depotActions,
+			clearedDeposits,
+		] = await Promise.all([
 			snxData.snx.issued({ account: walletAddress }),
 			snxData.snx.burned({ account: walletAddress }),
+			snxData.snx.feesClaimed({ account: walletAddress }),
 			snxData.exchanges.since({ fromAddress: walletAddress, minTimestamp: 0, max: 100 }),
 			snxData.depot.userActions({ user: walletAddress }),
 			snxData.depot.clearedDeposits({ toAddress: walletAddress }),
 		]);
 
-		const EVENT_TYPES = ['issued', 'burned', 'exchanged', 'cleared'];
-
 		const mergedArray = flatten(
-			[issued, burned, exchanges, clearedDeposits]
+			[issued, burned, feesClaimed, exchanges, clearedDeposits]
 				.map((eventType, i) => {
 					return eventType.map(event => {
-						return event.type ? event : { type: EVENT_TYPES[i], ...event };
+						return event.type ? event : { type: TRANSACTION_EVENTS[i], ...event };
 					});
 				})
 				.concat(depotActions)

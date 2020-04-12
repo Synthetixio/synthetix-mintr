@@ -5,6 +5,7 @@ export const PAGINATION_INDEX = 10;
 export const TRANSACTION_EVENTS = [
 	'issued',
 	'burned',
+	'feesClaimed',
 	'exchanged',
 	'cleared',
 	'deposit',

@@ -11,6 +11,7 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 import { bigNumberFormatter } from '../../../helpers/formatters';
 import { addBufferToGasLimit } from '../../../helpers/networkHelper';
+import { TRANSACTION_EVENTS_MAP } from '../../../constants/transactionHistory';
 
 import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
@@ -140,7 +141,7 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 		setCurrentTab({
 			tab: 'transactionsHistory',
 			params: {
-				filters: ['FeesClaimed'],
+				filters: [TRANSACTION_EVENTS_MAP.feesClaimed],
 			},
 		});
 	};
