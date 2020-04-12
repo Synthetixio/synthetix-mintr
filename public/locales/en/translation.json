@@ -414,7 +414,7 @@
 			"cleared": "Sold",
 			"withdrawl": "Withdrawn",
 			"exchanged2": "Bought",
-			"claimedFees": "Claimed Rewards",
+			"feesClaimed": "Claimed Rewards",
 			"sent": "Sent"
 		},
 		"buttons": {
