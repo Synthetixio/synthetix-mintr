@@ -353,7 +353,8 @@
 				"stake": "Stake tokens",
 				"claim": "Claim rewards",
 				"unstake": "Unstake tokens",
-				"exit": "exit: claim & unstake"
+				"exit": "exit: claim & unstake",
+				"exit-old": "Exit old rewards pool"
 			}
 		}
 	},
@@ -368,7 +369,7 @@
 		}
 	},
 	"curvepool": {
-		"title": "iearn.finance sUSD LP Token Rewards",
+		"title": "Curve Finance sUSD LP Token Rewards",
 		"locked": {
 			"subtitle": "First approve the Curvepool contract to transfer your yCurve tokens for staking.",
 			"transaction": "Setting yCurve token allowance"
