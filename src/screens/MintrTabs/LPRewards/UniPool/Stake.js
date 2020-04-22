@@ -235,6 +235,7 @@ const ButtonRow = styled.div`
 const ButtonAction = styled(ButtonPrimary)`
 	flex: 1;
 	width: 10px;
+	height: 64px;
 	&:first-child {
 		margin-right: 34px;
 	}

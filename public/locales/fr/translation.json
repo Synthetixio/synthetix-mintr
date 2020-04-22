@@ -352,7 +352,8 @@
 				"stake": "Stake tokens",
 				"claim": "Réclamer récompenses",
 				"unstake": "Unstake tokens",
-				"exit": "Sortir: claim & unstake"
+				"exit": "Sortir: claim & unstake",
+				"exit-old": "Sortir de l'ancienne pool"
 			}
 		}
 	},
@@ -367,7 +368,7 @@
 		}
 	},
 	"curvepool": {
-		"title": "iearn.finance sUSD LP Token Rewards",
+		"title": "Curve Finance sUSD LP Token Rewards",
 		"locked": {
 			"subtitle": "Vous devez d'abord approuver le contrat de Curvepool pour pouvoir staker vos tokens yCurve.",
 			"transaction": "Autorisation d'utilisation des tokens yCurve en cours"

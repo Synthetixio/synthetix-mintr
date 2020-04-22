@@ -38,9 +38,9 @@ const LPRewards = () => {
 				<>
 					<PageTitle>{t('lpRewards.intro.title')}</PageTitle>
 					<ButtonRow>
-						{POOLS.map(({ title, name }) => {
+						{POOLS.map(({ title, name }, i) => {
 							return (
-								<Button onClick={() => setCurrentPool(name)}>
+								<Button key={`button-${i}`} onClick={() => setCurrentPool(name)}>
 									<ButtonContainer>
 										<ActionImage src={`/images/${name}.svg`} big />
 										<H1>{t(title)}</H1>

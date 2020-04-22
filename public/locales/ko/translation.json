@@ -351,7 +351,8 @@
 				"stake": "토큰 스테이킹",
 				"claim": "보상 수령 신청",
 				"unstake": "토큰 스테이킹 해제",
-				"exit": "나가기: 스테이킹 해제 및 보상 수령 신청"
+				"exit": "나가기: 스테이킹 해제 및 보상 수령 신청",
+				"exit-old": "Exit old rewards pool"
 			}
 		}
 	},
@@ -366,7 +367,7 @@
 		}
 	},
 	"curvepool": {
-		"title": "iearn.finance sUSD LP Token 보상",
+		"title": "Curve Finance sUSD LP Token 보상",
 		"locked": {
 			"subtitle": "스테이킹하기 위해 yCurve 토큰을 전송하는 Curvepool 컨트랙트를 승인해주세요.",
 			"transaction": "yCurve 토큰을 승인 설정 해주세요."
