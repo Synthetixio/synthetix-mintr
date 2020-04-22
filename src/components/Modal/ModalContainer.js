@@ -1,21 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Cross } from '../Icons';
 
-const Popup = ({ children, handleClose }) => {
+import { hideModal } from '../../ducks/modal';
+
+const Modal = ({ children, hideModal }) => {
 	return (
-		<PopupWrapper>
+		<ModalWrapper>
 			<Nav>
-				<ButtonClose onClick={handleClose}>
+				<ButtonClose onClick={() => hideModal()}>
 					<Cross />
 				</ButtonClose>
 			</Nav>
 			{children}
-		</PopupWrapper>
+		</ModalWrapper>
 	);
 };
 
-const PopupWrapper = styled.div`
+const ModalWrapper = styled.div`
 	position: absolute;
 	left: 50%;
 	top: 50vh;
@@ -37,4 +40,8 @@ const ButtonClose = styled.button`
 	border: none;
 `;
 
-export default Popup;
+const mapDispatchToProps = {
+	hideModal,
+};
+
+export default connect(null, mapDispatchToProps)(Modal);

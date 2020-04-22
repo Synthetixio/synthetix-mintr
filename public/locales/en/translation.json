@@ -163,10 +163,11 @@
 			"action": {
 				"title": "Claim",
 				"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to collect two kinds of rewards: SNX staking rewards, and Synth exchange rewards generated on Synthetix.Exchange.",
+				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "Claimable periods:",
 					"period": "Period",
-					"status": "Claim status",
+					"status": "Your fee claim status",
 					"open": "Open",
 					"blocked": "Blocked"
 				},
@@ -406,15 +407,15 @@
 			"amount": "Amount"
 		},
 		"events": {
-			"minted": "Minted",
+			"issued": "Minted",
 			"burned": "Burned",
-			"claimedFees": "Claimed Rewards",
-			"exchanged": "Bought",
-			"traded": "Traded",
-			"sent": "Sent",
-			"deposited": "Deposited",
-			"withdrawn": "Withdrawn",
-			"sold": "Sold"
+			"exchanged": "Traded",
+			"deposit": "Deposited",
+			"cleared": "Sold",
+			"withdrawl": "Withdrawn",
+			"bought": "Bought",
+			"feesClaimed": "Claimed Rewards",
+			"sent": "Sent"
 		},
 		"buttons": {
 			"clearFilters": "Clear filters"

@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { withTranslation } from 'react-i18next';
-
-import { formatCurrency } from '../../helpers/formatters';
-
 import { SlidePage } from '../../components/ScreenSlider';
 import { ButtonPrimary } from '../../components/Button';
 import { PLarge, PageTitle, DataHeaderLarge } from '../../components/Typography';

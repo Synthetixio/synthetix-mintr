@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { Arrow } from '../Icons';
+import { Arrow } from '../../../components/Icons';
 
 const RANGE_SIZE = 10;
 
@@ -9,7 +9,7 @@ const getRange = currentIndex => {
 	return [...Array(RANGE_SIZE).keys()].map(i => i + currentIndex);
 };
 
-const Paginator = ({ currentPage, onPageChange, disabled }) => {
+const Paginator = ({ currentPage, onPageChange, disabled, lastPage }) => {
 	const [startIndex, setStartIndex] = useState(currentPage);
 	return (
 		<Wrapper disabled={disabled}>
@@ -23,11 +23,17 @@ const Paginator = ({ currentPage, onPageChange, disabled }) => {
 				<Arrow direction="left" />
 			</Button>
 			{getRange(startIndex).map(index => (
-				<Button key={index + 1} active={index === currentPage} onClick={() => onPageChange(index)}>
+				<Button
+					disabled={index >= lastPage}
+					key={index + 1}
+					active={index === currentPage}
+					onClick={() => onPageChange(index)}
+				>
 					{index + 1}
 				</Button>
 			))}
 			<Button
+				disabled={startIndex + RANGE_SIZE + 1 > lastPage}
 				onClick={() => {
 					setStartIndex(startIndex + 1);
 				}}
@@ -37,6 +43,11 @@ const Paginator = ({ currentPage, onPageChange, disabled }) => {
 		</Wrapper>
 	);
 };
+
+const disabled = css`
+	opacity: 0.6;
+	pointer-events: 'none';
+`;
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -48,8 +59,7 @@ const Wrapper = styled.div`
 		margin: 0 20px;
 	}
 	transition: opacity 0.1s ease-out;
-	opacity: ${props => (props.disabled ? 0.6 : 1)};
-	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+	${props => props.disabled && disabled}
 `;
 
 const Button = styled.button`
@@ -79,6 +89,9 @@ const Button = styled.button`
 			props.active
 				? props.theme.colorStyles.paginatorButtonBackgroundActive
 				: props.theme.colorStyles.paginatorButtonBackgroundHover};
+	}
+	:disabled {
+		${disabled}
 	}
 `;
 

@@ -116,18 +116,16 @@ const ActionImage = styled.img`
 
 const Details = styled.div`
 	display: flex;
-	margin-bottom: 48px;
 `;
 
 const Box = styled.div`
-	height: auto;
-	width: auto;
 	padding: 24px 40px;
 	margin: 0px 16px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
 	display: flex;
 	flex-direction: column;
+	flex: 1;
 `;
 
 const Amount = styled.span`
@@ -135,6 +133,7 @@ const Amount = styled.span`
 	font-family: 'apercu-medium';
 	font-size: 24px;
 	margin: 16px 0px 0px 0px;
+	white-space: nowrap;
 `;
 
 const Buttons = styled.div`

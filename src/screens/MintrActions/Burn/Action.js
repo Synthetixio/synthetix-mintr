@@ -21,6 +21,7 @@ const Action = ({
 	setTransferableAmount,
 	isFetchingGasLimit,
 	gasEstimateError,
+	gasLimit,
 	burnAmountToFixCRatio,
 	waitingPeriod,
 	onWaitingPeriodCheck,
@@ -130,7 +131,7 @@ const Action = ({
 					</Form>
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 					{renderSubmitButton()}
 				</Bottom>
 			</Container>

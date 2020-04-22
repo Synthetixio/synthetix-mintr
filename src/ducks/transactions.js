@@ -3,7 +3,7 @@ const HIDE_TRANSACTION = 'TRANSACTION/HIDE';
 const UPDATE_SUCCESS_QUEUE = 'TRANSACTION/UPDATE_SUCCESS_QUEUE';
 const CLEAR_SUCCESS_QUEUE = 'TRANSACTION/CLEAR_SUCCESS_QUEUE';
 
-const transactionDefault = {
+const defaultState = {
 	isWaitingForSuccess: false,
 	status: null,
 	hash: null,
@@ -14,15 +14,18 @@ const transactionDefault = {
 	synthDataIsFetched: null,
 	hasNotification: null,
 	info: null,
+	currentTransactions: [],
+	dataFetchers: {},
+	successQueue: [],
 };
 
-export default (state, action) => {
+export default (state = defaultState, action) => {
 	switch (action.type) {
 		case CREATE_TRANSACTION: {
 			const transactions = state.currentTransactions;
 			return {
 				...state,
-				currentTransactions: [...transactions, { ...transactionDefault, ...action.payload }],
+				currentTransactions: [...transactions, { ...defaultState, ...action.payload }],
 			};
 		}
 		case HIDE_TRANSACTION: {
@@ -52,45 +55,32 @@ export default (state, action) => {
 	}
 };
 
-export const createTransaction = (transaction, dispatch) => {
-	return dispatch({
+export const createTransaction = transaction => {
+	return {
 		type: CREATE_TRANSACTION,
 		payload: transaction,
-	});
+	};
 };
 
-export const hideTransaction = (hash, dispatch) => {
-	return dispatch({
+export const hideTransaction = hash => {
+	return {
 		type: HIDE_TRANSACTION,
 		payload: hash,
-	});
+	};
 };
 
-export const pushToSuccessQueue = (hash, dispatch) => {
-	return dispatch({
+export const pushToSuccessQueue = hash => {
+	return {
 		type: UPDATE_SUCCESS_QUEUE,
 		payload: hash,
-	});
+	};
 };
 
-export const clearSuccessQueue = dispatch => {
-	return dispatch({
+export const clearSuccessQueue = () => {
+	return {
 		type: CLEAR_SUCCESS_QUEUE,
-	});
+	};
 };
 
-// selectTransactionStatusOfFIrstCompleted () => {
-//   const completedTrans = transactions.filter(completed);
-//   return  completedTrasaction[0]
-//     ? completedTrasaction[0].trasactionStatus
-//     : null;
-
-// }
-
-// export const updateFetchers = (type, value, dispatch) => {
-//   return dispatch({
-//     type: ///,
-//     payload: {type, value}
-//   })
-
-// const updateTransactionStatus
+export const getSuccessQueue = state => state.transactions.successQueue;
+export const getCurrentTransactions = state => state.transactions.currentTransactions;

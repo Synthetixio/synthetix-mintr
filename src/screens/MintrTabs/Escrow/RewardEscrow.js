@@ -1,10 +1,12 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 
 import Spinner from '../../../components/Spinner';
@@ -20,27 +22,31 @@ import {
 } from '../../../components/Typography';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
+
 import ErrorMessage from '../../../components/ErrorMessage';
 import EscrowActions from '../../EscrowActions';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 
-const useGetGasEstimateError = () => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimateError = ({ setFetchingGasLimit, setGasLimit }) => {
 	const [error, setError] = useState(null);
+	const {
+		snxJS: { RewardEscrow },
+	} = snxJSConnector;
 	useEffect(() => {
 		const getGasEstimate = async () => {
 			setError(null);
-			fetchingGasLimit(dispatch);
-			let gasEstimate;
+			setFetchingGasLimit(true);
 			try {
-				gasEstimate = await snxJSConnector.snxJS.RewardEscrow.contract.estimate.vest();
+				const gasEstimate = await RewardEscrow.contract.estimate.vest();
+				setFetchingGasLimit(false);
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
+				setFetchingGasLimit(false);
 				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
 				setError(errorMessage);
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,13 +58,16 @@ const useGetVestingData = walletAddress => {
 	const [data, setData] = useState({});
 	useEffect(() => {
 		const getVestingData = async () => {
+			const {
+				snxJS: { RewardEscrow },
+			} = snxJSConnector;
 			try {
 				let schedule = [];
 				let total = 0;
 				let canVest = false;
 				const currentUnixTime = new Date().getTime();
 				setData({ loading: true });
-				const result = await snxJSConnector.snxJS.RewardEscrow.checkAccountSchedule(walletAddress);
+				const result = await RewardEscrow.checkAccountSchedule(walletAddress);
 				for (let i = 0; i < result.length; i += 2) {
 					const quantity = Number(bigNumberFormatter(result[i + 1]));
 					total += Number(quantity);
@@ -141,29 +150,31 @@ const VestingTable = ({ data }) => {
 	);
 };
 
-const RewardEscrow = ({ t, onPageChange }) => {
+const RewardEscrow = ({ onPageChange, walletDetails }) => {
+	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(null);
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-	} = useContext(Store);
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+	const { currentWallet } = walletDetails;
 	const vestingData = useGetVestingData(currentWallet);
 	const hasNoVestingSchedule = !vestingData.total || vestingData.total.length === 0;
-	const gasEstimateError = useGetGasEstimateError();
-
+	const gasEstimateError = useGetGasEstimateError({ setFetchingGasLimit, setGasLimit });
 	return (
 		<Fragment>
 			<EscrowActions
 				action={currentScenario}
 				onDestroy={() => setCurrentScenario(null)}
 				vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
+				gasLimit={gasLimit}
+				isFetchingGasLimit={isFetchingGasLimit}
 			/>
 
 			<PageTitle>{t('escrow.staking.title')}</PageTitle>
 			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
 			<VestingTable data={vestingData} />
-			{!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
+			{!hasNoVestingSchedule ? (
+				<TransactionPriceIndicator gasLimit={gasLimit} isFetchingGasLimit={isFetchingGasLimit} />
+			) : null}
 			<ErrorMessage message={t(gasEstimateError)} />
 			<ButtonRow>
 				<ButtonSecondary width="48%" onClick={() => onPageChange('tokenSaleVesting')}>
@@ -222,4 +233,10 @@ const ButtonRow = styled.div`
 	justify-content: space-between;
 `;
 
-export default withTranslation()(RewardEscrow);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RewardEscrow);

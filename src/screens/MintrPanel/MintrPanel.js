@@ -1,35 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Store } from '../../store';
-import { updateCurrentTab } from '../../ducks/ui';
+import { setCurrentTab, getCurrentTab } from '../../ducks/ui';
+import { getModalState } from '../../ducks/modal';
 
 import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
-import { TransactionSettingsPopup, DelegatePopup } from '../../components/Popup';
-
-const TabRow = () => {
-	const { t } = useTranslation();
-	const {
-		state: {
-			ui: { currentTab },
-		},
-		dispatch,
-	} = useContext(Store);
-	return ['home', 'depot', 'transactionsHistory', 'escrow', 'lpRewards'].map(tab => {
-		return (
-			<TabButton
-				key={tab}
-				isSelected={tab === currentTab}
-				onClick={() => updateCurrentTab(tab, dispatch)}
-			>
-				{/* i18next-extract-disable-next-line */}
-				{t(`mainNavigation.tabs.${tab}`)}
-			</TabButton>
-		);
-	});
-};
+import { GweiModal, DelegateModal } from '../../components/Modal';
+import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
 const renderScreen = screen => {
 	switch (screen) {
@@ -47,22 +27,28 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = () => {
-	const {
-		state: {
-			ui: { currentTab, transactionSettingsPopupIsVisible, delegationPopupIsVisible },
-		},
-	} = useContext(Store);
-
+const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setCurrentTab }) => {
+	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
-			<Overlay isVisible={transactionSettingsPopupIsVisible || delegationPopupIsVisible}></Overlay>
+			<Overlay isVisible={modalType}></Overlay>
 			<Header>
-				<TabRow />
+				{['home', 'depot', 'transactionsHistory', 'escrow', 'lpRewards'].map(tab => {
+					return (
+						<TabButton
+							key={tab}
+							isSelected={tab === currentTab}
+							onClick={() => setCurrentTab({ tab })}
+						>
+							{/* i18next-extract-disable-next-line */}
+							{t(`mainNavigation.tabs.${tab}`)}
+						</TabButton>
+					);
+				})}
 			</Header>
 			{renderScreen(currentTab)}
-			{transactionSettingsPopupIsVisible ? <TransactionSettingsPopup /> : null}
-			{delegationPopupIsVisible ? <DelegatePopup /> : null}
+			{modalType === MODAL_TYPES_TO_KEY.GWEI ? <GweiModal {...modalProps} /> : null}
+			{modalType === MODAL_TYPES_TO_KEY.DELEGATE ? <DelegateModal {...modalProps} /> : null}
 		</MainContainerWrapper>
 	);
 };
@@ -91,4 +77,13 @@ const Overlay = styled.div`
 	z-index: 1000;
 `;
 
-export default withTranslation()(MainContainer);
+const mapStateToProps = state => ({
+	currentTab: getCurrentTab(state),
+	modalState: getModalState(state),
+});
+
+const mapDispatchToProps = {
+	setCurrentTab,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

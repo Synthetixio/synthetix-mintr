@@ -406,15 +406,15 @@
 			"amount": "Montant"
 		},
 		"events": {
-			"minted": "Créé(s)",
+			"issued": "Créé(s)",
 			"burned": "Détruit(s)",
-			"claimedFees": "Récompenses réclamées",
-			"exchanged": "Acheté",
-			"traded": "Echangé",
-			"sent": "Envoyé",
-			"deposited": "Déposé",
-			"withdrawn": "Retiré",
-			"sold": "Vendu"
+			"exchanged": "Echangé",
+			"deposit": "Déposé",
+			"cleared": "Vendu",
+			"withdrawl": "Retiré",
+			"bought": "Acheté",
+			"feesClaimed": "Récompenses réclamées",
+			"sent": "Envoyé"
 		},
 		"buttons": {
 			"clearFilters": "Réinitialiser les filtres"

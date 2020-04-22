@@ -317,15 +317,15 @@
 			"amount": "金額"
 		},
 		"events": {
-			"minted": "已鑄造",
+			"issued": "已鑄造",
 			"burned": "已銷毀",
-			"claimedFees": "已申領的費用",
-			"exchanged": "已購買",
-			"traded": "已交易",
-			"sent": "已發送",
-			"deposited": "已存款",
-			"withdrawn": "已提款",
-			"sold": "已售出"
+			"exchanged": "已交易",
+			"deposit": "已存款",
+			"cleared": "已售出",
+			"withdrawl": "已提款",
+			"bought": "已購買",
+			"feesClaimed": "已申領的費用",
+			"sent": "已發送"
 		},
 		"buttons": {
 			"clearFilters": "清除篩選條件"

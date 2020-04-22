@@ -1,27 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { createTransaction } from '../../../../ducks/transactions';
+import { getCurrentGasPrice } from '../../../../ducks/network';
+
+import { TOKEN_ALLOWANCE_LIMIT } from '../../../../constants/network';
+
 import snxJSConnector from '../../../../helpers/snxJSConnector';
-import { Store } from '../../../../store';
-import { GWEI_UNIT } from '../../../../helpers/networkHelper';
 
 import { PageTitle, PLarge } from '../../../../components/Typography';
 import { ButtonPrimary, ButtonTertiary } from '../../../../components/Button';
 
-const ALLOWANCE_LIMIT = 100000000;
-
-const SetAllowance = ({ t, goBack }) => {
+const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
+	const { t } = useTranslation();
 	const [error, setError] = useState(null);
-	const {
-		state: {
-			network: {
-				settings: { gasPrice },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
 
 	const onUnlock = async () => {
 		const { parseEther } = snxJSConnector.utils;
@@ -31,26 +25,23 @@ const SetAllowance = ({ t, goBack }) => {
 
 			const gasEstimate = await uniswapContract.estimate.approve(
 				unipoolContract.address,
-				parseEther(ALLOWANCE_LIMIT.toString())
+				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
 			const transaction = await uniswapContract.approve(
 				unipoolContract.address,
-				parseEther(ALLOWANCE_LIMIT.toString()),
+				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit: Number(gasEstimate) + 10000,
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 				}
 			);
 			if (transaction) {
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: t('unipool.locked.transaction'),
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: t('unipool.locked.transaction'),
+					hasNotification: true,
+				});
 			}
 		} catch (e) {
 			setError(e.message);
@@ -104,4 +95,12 @@ const Error = styled.div`
 	margin-top: 40px;
 `;
 
-export default withTranslation()(SetAllowance);
+const mapStateToProps = state => ({
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetAllowance);

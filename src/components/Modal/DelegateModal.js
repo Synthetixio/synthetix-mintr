@@ -1,16 +1,17 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import zip from 'lodash/zip';
 import uniq from 'lodash/uniq';
 
-import { Store } from '../../store';
-import { toggleDelegationPopup } from '../../ducks/ui';
+import { getWalletDetails } from '../../ducks/wallet';
+import { getCurrentGasPrice } from '../../ducks/network';
+
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { GWEI_UNIT } from '../../helpers/networkHelper';
 import { parseBytes32String } from '../../helpers/formatters';
 
-import PopupContainer from './PopupContainer';
+import ModalContainer from './ModalContainer';
 import { PageTitle, PLarge, DataHeaderLarge, H5, ButtonTertiaryLabel } from '../Typography';
 import { ButtonPrimary } from '../Button';
 import { SimpleInput } from '../Input';
@@ -22,19 +23,10 @@ const BLOG_URL = 'https://blog.synthetix.io/a-guide-to-delegation';
 
 const normaliseGasLimit = amount => Number(amount) * (1 + GAS_LIMIT_BUFFER);
 
-const DelegationPopup = () => {
+const DelegateModal = ({ walletDetails: { currentWallet }, currentGasPrice }) => {
 	const { t } = useTranslation();
 	const [newAddress, setNewAddress] = useState('');
 	const [delegateAddresses, setDelegateAddresses] = useState([]);
-	const {
-		state: {
-			wallet: { currentWallet },
-			network: {
-				settings: { gasPrice },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
 
 	const TABLE_COLUMNS = [
 		t('delegation.popup.table.columns.walletAddress'),
@@ -115,7 +107,7 @@ const DelegationPopup = () => {
 			);
 			await DelegateApprovals.approveAllDelegatePowers(newAddress, {
 				gasLimit: normaliseGasLimit(gasEstimate),
-				gasPrice: gasPrice * GWEI_UNIT,
+				gasPrice: currentGasPrice.formattedPrice,
 			});
 		} catch (e) {
 			console.log(e);
@@ -130,7 +122,7 @@ const DelegationPopup = () => {
 			const gasEstimate = await DelegateApprovals.contract.estimate.removeAllDelegatePowers(addr);
 			await DelegateApprovals.removeAllDelegatePowers(addr, {
 				gasLimit: normaliseGasLimit(gasEstimate),
-				gasPrice: gasPrice * GWEI_UNIT,
+				gasPrice: currentGasPrice.formattedPrice,
 			});
 		} catch (e) {
 			console.log(e);
@@ -138,7 +130,7 @@ const DelegationPopup = () => {
 	};
 
 	return (
-		<PopupContainer handleClose={() => toggleDelegationPopup(false, dispatch)} margin="auto">
+		<ModalContainer>
 			<Wrapper>
 				<Intro>
 					<PageTitle>{t('delegation.popup.title')}</PageTitle>
@@ -194,7 +186,7 @@ const DelegationPopup = () => {
 					</TableWrapper>
 				</Box>
 			</Wrapper>
-		</PopupContainer>
+		</ModalContainer>
 	);
 };
 
@@ -270,4 +262,9 @@ const Link = styled.a`
 	text-decoration-color: ${props => props.theme.colorStyles.buttonTertiaryText};
 `;
 
-export default DelegationPopup;
+const mapStateToProps = state => ({
+	currentGasPrice: getCurrentGasPrice(state),
+	walletDetails: getWalletDetails(state),
+});
+
+export default connect(mapStateToProps, null)(DelegateModal);

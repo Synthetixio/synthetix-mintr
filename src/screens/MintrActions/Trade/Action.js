@@ -25,6 +25,7 @@ const Action = ({
 	gasEstimateError,
 	waitingPeriod,
 	onWaitingPeriodCheck,
+	gasLimit,
 }) => {
 	const onBaseAmountChange = amount => {
 		setBaseAmount(amount);
@@ -77,7 +78,11 @@ const Action = ({
 					<Bottom>
 						<Subtext>{t('network.tradingFee')} 0.3%</Subtext>
 						{/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
-						<TransactionPriceIndicator margin="8px 0" />
+						<TransactionPriceIndicator
+							isFetchingGasLimit={isFetchingGasLimit}
+							gasLimit={gasLimit}
+							style={{ margin: '8px 0' }}
+						/>
 						{waitingPeriod ? (
 							<RetryButtonWrapper>
 								<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">

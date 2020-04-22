@@ -382,15 +382,15 @@
 			"amount": "수량"
 		},
 		"events": {
-			"minted": "발행된 수량",
+			"issued": "발행된 수량",
 			"burned": "소각된 수량",
-			"claimedFees": "수령한 보상",
-			"exchanged": "구매 됨",
-			"traded": "교환 됨",
-			"sent": "전송 됨",
-			"deposited": "예치 됨",
-			"withdrawn": "인출 됨",
-			"sold": "판매 됨"
+			"exchanged": "교환 됨",
+			"deposit": "예치 됨",
+			"cleared": "판매 됨",
+			"withdrawl": "인출 됨",
+			"bought": "구매 됨",
+			"feesClaimed": "수령한 보상",
+			"sent": "전송 됨"
 		},
 		"buttons": {
 			"clearFilters": "필터 초기화"
