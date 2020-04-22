@@ -22,6 +22,7 @@ const Action = ({
 	setDepositAmount,
 	depositAmount,
 	hasAllowance,
+	gasLimit,
 }) => {
 	return (
 		<SlidePage>
@@ -56,7 +57,11 @@ const Action = ({
 					</Form>
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+					/>
 					{hasAllowance ? (
 						<ButtonPrimary
 							disabled={isFetchingGasLimit || gasEstimateError || !depositAmount}

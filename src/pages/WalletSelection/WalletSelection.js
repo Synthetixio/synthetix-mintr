@@ -1,16 +1,17 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
-import { withTranslation, useTranslation, Trans } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
 
-import { Store } from '../../store';
-import { updateCurrentPage } from '../../ducks/ui';
+import { setCurrentPage } from '../../ducks/ui';
 import {
 	updateWalletStatus,
 	updateWalletPaginatorIndex,
 	derivationPathChange,
+	getWalletDetails,
 } from '../../ducks/wallet';
 
 import { SimpleInput } from '../../components/Input';
@@ -37,13 +38,10 @@ const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
 	{ value: "44'/60'/", label: "Ethereum - Ledger Live - m/44'/60'" },
 ];
-const useGetWallets = (paginatorIndex, derivationPath) => {
-	const {
-		state: {
-			wallet: { availableWallets = [] },
-		},
-		dispatch,
-	} = useContext(Store);
+
+import { PAGES_BY_KEY } from '../../constants/ui';
+
+const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateWalletStatus) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 	useEffect(() => {
@@ -60,10 +58,10 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 						balances: [],
 					};
 				});
-				updateWalletStatus(
-					{ unlocked: true, availableWallets: [...availableWallets, ...nextWallets] },
-					dispatch
-				);
+				updateWalletStatus({
+					unlocked: true,
+					availableWallets: [...availableWallets, ...nextWallets],
+				});
 				setIsLoading(false);
 
 				const getBalanceForWallet = async wallet => {
@@ -82,23 +80,17 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 							ethBalance: bigNumberFormatter(balance.ethBalance),
 						};
 
-						updateWalletStatus(
-							{ availableWallets: [...availableWallets, ...nextWallets] },
-							dispatch
-						);
+						updateWalletStatus({ availableWallets: [...availableWallets, ...nextWallets] });
 					});
 				});
 			} catch (e) {
 				console.log(e);
 				setError(e.message);
-				updateWalletStatus(
-					{
-						unlocked: false,
-						unlockReason: 'ErrorWhileConnectingToHardwareWallet',
-						unlockMessage: e,
-					},
-					dispatch
-				);
+				updateWalletStatus({
+					unlocked: false,
+					unlockReason: 'ErrorWhileConnectingToHardwareWallet',
+					unlockMessage: e,
+				});
 			}
 		};
 		getWallets();
@@ -107,13 +99,9 @@ const useGetWallets = (paginatorIndex, derivationPath) => {
 	return { isLoading, error };
 };
 
-const Heading = ({ hasLoaded, error }) => {
-	const {
-		state: {
-			wallet: { walletType },
-		},
-	} = useContext(Store);
+const Heading = ({ hasLoaded, error, walletType }) => {
 	const { t } = useTranslation();
+
 	if (error) {
 		return (
 			<HeadingContent>
@@ -153,22 +141,32 @@ const BalanceOrSpinner = ({ value }) => (
 	</RightAlignedTableDataMedium>
 );
 
-const WalletConnection = ({ t }) => {
+const WalletConnection = ({
+	walletDetails,
+	setCurrentPage,
+	derivationPathChange,
+	updateWalletStatus,
+	updateWalletPaginatorIndex,
+}) => {
+	const { t } = useTranslation();
 	const {
-		state: {
-			wallet: {
-				derivationPath,
-				walletType,
-				walletPaginatorIndex = 0,
-				availableWallets = [],
-				networkName,
-				networkId,
-			},
-		},
-		dispatch,
-	} = useContext(Store);
-	const { isLoading, error } = useGetWallets(walletPaginatorIndex, derivationPath);
+		derivationPath,
+		walletType,
+		walletPaginatorIndex = 0,
+		availableWallets = [],
+		networkName,
+		networkId,
+	} = walletDetails;
+
+	const { isLoading, error } = useGetWallets(
+		walletPaginatorIndex,
+		derivationPath,
+		availableWallets,
+		updateWalletStatus
+	);
+
 	const isHardwareWallet = ['Ledger', 'Trezor'].includes(walletType);
+
 	const isLedger = walletType === 'Ledger';
 	const selectedDerivationPath = derivationPath
 		? LEDGER_DERIVATION_PATHS.find(path => path.value === derivationPath)
@@ -176,11 +174,15 @@ const WalletConnection = ({ t }) => {
 	return (
 		<OnBoardingPageContainer>
 			<Content>
-				<Heading hasLoaded={availableWallets.length > 0} error={error}></Heading>
+				<Heading
+					hasLoaded={availableWallets.length > 0}
+					error={error}
+					walletType={walletType}
+				></Heading>
 				{error ? (
 					<ErrorContainer>
 						<PMega>{error}</PMega>
-						<ButtonPrimaryMedium onClick={() => updateCurrentPage('landing', dispatch)}>
+						<ButtonPrimaryMedium onClick={() => setCurrentPage(PAGES_BY_KEY.LANDING)}>
 							{t('onboarding.walletSelection.error.retry')}
 						</ButtonPrimaryMedium>
 					</ErrorContainer>
@@ -200,7 +202,7 @@ const WalletConnection = ({ t }) => {
 											networkId,
 											derivationPath: option.value,
 										};
-										derivationPathChange(signerOptions, option.value, dispatch);
+										derivationPathChange(signerOptions, option.value);
 									}}
 								></SimpleSelect>
 							</SelectWrapper>
@@ -238,8 +240,8 @@ const WalletConnection = ({ t }) => {
 																if (isHardwareWallet) {
 																	snxJSConnector.signer.setAddressIndex(walletIndex);
 																}
-																updateWalletStatus({ currentWallet: wallet.address }, dispatch);
-																updateCurrentPage('main', dispatch);
+																updateWalletStatus({ currentWallet: wallet.address });
+																setCurrentPage(PAGES_BY_KEY.MAIN);
 															}}
 														>
 															<ListCell>
@@ -279,8 +281,8 @@ const WalletConnection = ({ t }) => {
 											onSubmit={e => {
 												e.preventDefault();
 												const walletAddress = e.target.walletAddress.value;
-												updateWalletStatus({ currentWallet: walletAddress }, dispatch);
-												updateCurrentPage('main', dispatch);
+												updateWalletStatus({ currentWallet: walletAddress });
+												setCurrentPage(PAGES_BY_KEY.MAIN);
 											}}
 										>
 											<AddWalletInput
@@ -302,7 +304,7 @@ const WalletConnection = ({ t }) => {
 							<WalletPaginator
 								disabled={isLoading || !isHardwareWallet}
 								currentIndex={walletPaginatorIndex}
-								onIndexChange={index => updateWalletPaginatorIndex(index, dispatch)}
+								onIndexChange={index => updateWalletPaginatorIndex(index)}
 							/>
 						) : null}
 					</BodyContent>
@@ -425,4 +427,15 @@ const LinkImg = styled.img`
 	height: 20px;
 `;
 
-export default withTranslation()(WalletConnection);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {
+	setCurrentPage,
+	derivationPathChange,
+	updateWalletPaginatorIndex,
+	updateWalletStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WalletConnection);

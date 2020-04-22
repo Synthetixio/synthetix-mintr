@@ -15,12 +15,12 @@ const getActionComponent = action => {
 	}
 };
 
-const EscrowActions = ({ action, onDestroy, vestAmount }) => {
+const EscrowActions = ({ action, ...rest }) => {
 	if (!action) return null;
 	const ActionComponent = getActionComponent(action);
 	return (
 		<Slider>
-			<ActionComponent onDestroy={onDestroy} vestAmount={vestAmount} />
+			<ActionComponent {...rest} />
 		</Slider>
 	);
 };

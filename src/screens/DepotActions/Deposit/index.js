@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
 import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
-import { createTransaction } from '../../../ducks/transactions';
 import errorMapper from '../../../helpers/errorMapper';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
+
+import { getWalletDetails } from '../../../ducks/wallet';
+import { getCurrentGasPrice } from '../../../ducks/network';
+import { createTransaction } from '../../../ducks/transactions';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -16,30 +18,39 @@ import { useTranslation } from 'react-i18next';
 
 const ALLOWANCE_LIMIT = 100000000;
 
-const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimate = (
+	depositAmount,
+	sUSDBalance,
+	minimumDepositAmount,
+	setFetchingGasLimit,
+	setGasLimit
+) => {
 	const { t } = useTranslation();
 	const [error, setError] = useState(null);
 	useEffect(() => {
 		if (!depositAmount) return;
 		const getGasEstimate = async () => {
+			const {
+				snxJS: { Depot },
+			} = snxJSConnector;
 			setError(null);
 			let gasEstimate = 0;
 			try {
 				if (depositAmount < minimumDepositAmount)
 					throw new Error('input.error.lowerThanMinDeposit');
 				if (!Number(depositAmount)) throw new Error('input.error.invalidAmount');
-				fetchingGasLimit(dispatch);
-				const Depot = snxJSConnector.snxJS.Depot;
+				setFetchingGasLimit(true);
 				gasEstimate = await Depot.contract.estimate.depositSynths(
 					snxJSConnector.utils.parseEther(depositAmount.toString())
 				);
+				setFetchingGasLimit(false);
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
+				setFetchingGasLimit(false);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,21 +58,29 @@ const useGetGasEstimate = (depositAmount, sUSDBalance, minimumDepositAmount) => 
 	return error;
 };
 
-const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
+const Deposit = ({
+	onDestroy,
+	sUSDBalance,
+	minimumDepositAmount,
+	walletDetails,
+	createTransaction,
+	currentGasPrice,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [depositAmount, setDepositAmount] = useState('');
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [hasAllowance, setAllowance] = useState(true);
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { isFetchingGasLimit, gasPrice, gasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
-	const gasEstimateError = useGetGasEstimate(depositAmount, sUSDBalance, minimumDepositAmount);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+
+	const gasEstimateError = useGetGasEstimate(
+		depositAmount,
+		sUSDBalance,
+		minimumDepositAmount,
+		setFetchingGasLimit,
+		setGasLimit
+	);
 
 	const fetchAllowance = useCallback(async () => {
 		try {
@@ -91,27 +110,26 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 	}, [currentWallet]);
 
 	const onDeposit = async () => {
+		const {
+			snxJS: { Depot },
+		} = snxJSConnector;
 		try {
 			handleNext(1);
-			const Depot = snxJSConnector.snxJS.Depot;
 			const transaction = await Depot.depositSynths(
 				snxJSConnector.utils.parseEther(depositAmount.toString()),
 				{
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				}
 			);
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Depositing ${formatCurrency(depositAmount, 2)} sUSD`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -134,7 +152,7 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 			);
 			await sUSDContract.approve(depotAddress, parseEther(ALLOWANCE_LIMIT.toString()), {
 				gasLimit: Number(gasEstimate) + 10000,
-				gasPrice: gasPrice * GWEI_UNIT,
+				gasPrice: currentGasPrice.formattedPrice,
 			});
 		} catch (e) {
 			console.log(e);
@@ -155,6 +173,7 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 		gasEstimateError,
 		hasAllowance,
 		onUnlock,
+		gasLimit,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
@@ -162,4 +181,13 @@ const Deposit = ({ onDestroy, sUSDBalance, minimumDepositAmount }) => {
 	));
 };
 
-export default Deposit;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Deposit);

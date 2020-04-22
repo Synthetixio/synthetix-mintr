@@ -15,8 +15,9 @@ const Action = ({
 	t,
 	onDestroy,
 	onWithdraw,
-	amountAvailable,
-	// isFetchingGasLimit,
+	availableAmount,
+	isFetchingGasLimit,
+	gasLimit,
 	gasEstimateError,
 }) => {
 	return (
@@ -30,14 +31,14 @@ const Action = ({
 						<ActionImage src="/images/actions/withdraw.svg" />
 						<H1>{t('depot.withdraw.action.title')}</H1>
 						<PLarge>{t('depot.withdraw.action.subtitle')}</PLarge>
-						<Amount>{formatCurrency(amountAvailable)}sUSD</Amount>
+						<Amount>{formatCurrency(availableAmount)}sUSD</Amount>
 					</Intro>
 					<ErrorMessage message={gasEstimateError} />
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 					<ButtonPrimary
-						// disabled={isFetchingGasLimit || gasEstimateError || !amountAvailable}
+						// disabled={isFetchingGasLimit || gasEstimateError || !availableAmount}
 						onClick={onWithdraw}
 						margin="auto"
 					>

@@ -23,6 +23,7 @@ const Action = ({
 	setSendAmount,
 	setSendDestination,
 	isFetchingGasLimit,
+	gasLimit,
 	gasEstimateError,
 	waitingPeriod,
 	onWaitingPeriodCheck,
@@ -76,7 +77,11 @@ const Action = ({
 					</Form>
 				</Middle>
 				<Bottom>
-					<TransactionPriceIndicator margin="5px 0" />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '5px 0' }}
+					/>
 					{waitingPeriod ? (
 						<RetryButtonWrapper>
 							<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">

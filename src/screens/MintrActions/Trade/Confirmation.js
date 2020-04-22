@@ -9,7 +9,16 @@ import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../../components
 import { formatCurrency } from '../../../helpers/formatters';
 import Spinner from '../../../components/Spinner';
 
-const Confirmation = ({ t, goBack, walletType, baseAmount, quoteAmount, baseSynth }) => {
+const Confirmation = ({
+	t,
+	goBack,
+	walletType,
+	baseAmount,
+	quoteAmount,
+	baseSynth,
+	gasLimit,
+	isFetchingGasLimit,
+}) => {
 	return (
 		<SlidePage>
 			<Container>
@@ -48,7 +57,12 @@ const Confirmation = ({ t, goBack, walletType, baseAmount, quoteAmount, baseSynt
 					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
-					<TransactionPriceIndicator />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+						canEdit={false}
+					/>
 				</Bottom>
 			</Container>
 		</SlidePage>

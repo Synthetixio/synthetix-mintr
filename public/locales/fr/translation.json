@@ -352,7 +352,8 @@
 				"stake": "Stake tokens",
 				"claim": "Réclamer récompenses",
 				"unstake": "Unstake tokens",
-				"exit": "Sortir: claim & unstake"
+				"exit": "Sortir: claim & unstake",
+				"exit-old": "Sortir de l'ancienne pool"
 			}
 		}
 	},
@@ -367,13 +368,13 @@
 		}
 	},
 	"curvepool": {
-		"title": "iearn.finance sUSD LP Token Rewards",
+		"title": "Curve Finance sUSD LP Token Rewards",
 		"locked": {
-			"subtitle": "Vous devez d'abord approuver le contrat de Curvepool pour pouvoir staker vos tokens yCurve.",
-			"transaction": "Autorisation d'utilisation des tokens yCurve en cours"
+			"subtitle": "Vous devez d'abord approuver le contrat de Curvepool pour pouvoir staker vos tokens Curve LP.",
+			"transaction": "Autorisation d'utilisation des tokens Curve LP en cours"
 		},
 		"unlocked": {
-			"subtitle": "Ici vous pouvez staker vos tokens yCurve, réclamer vos récompenses SNX, sortir complètement."
+			"subtitle": "Ici vous pouvez staker vos tokens Curve LP, réclamer vos récompenses SNX, sortir complètement."
 		}
 	},
 	"delegation": {
@@ -406,15 +407,15 @@
 			"amount": "Montant"
 		},
 		"events": {
-			"minted": "Créé(s)",
+			"issued": "Créé(s)",
 			"burned": "Détruit(s)",
-			"claimedFees": "Récompenses réclamées",
-			"exchanged": "Acheté",
-			"traded": "Echangé",
-			"sent": "Envoyé",
-			"deposited": "Déposé",
-			"withdrawn": "Retiré",
-			"sold": "Vendu"
+			"exchanged": "Echangé",
+			"deposit": "Déposé",
+			"cleared": "Vendu",
+			"withdrawl": "Retiré",
+			"bought": "Acheté",
+			"feesClaimed": "Récompenses réclamées",
+			"sent": "Envoyé"
 		},
 		"buttons": {
 			"clearFilters": "Réinitialiser les filtres"

@@ -23,6 +23,7 @@ const Action = ({
 	SNXPrice,
 	debtBalance,
 	snxBalance,
+	gasLimit,
 }) => {
 	return (
 		<SlidePage>
@@ -76,7 +77,11 @@ const Action = ({
 					</InfoRow>
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicatorNoTopMargin />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+					/>
 					<ButtonPrimary
 						disabled={isFetchingGasLimit || gasEstimateError}
 						onClick={onMint}
@@ -116,10 +121,6 @@ const Top = styled.div`
 const Bottom = styled.div`
 	height: auto;
 	margin-bottom: 64px;
-`;
-
-const TransactionPriceIndicatorNoTopMargin = styled(TransactionPriceIndicator)`
-	margin-top: 0;
 `;
 
 const InfoRow = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { formatCurrency } from '../../../helpers/formatters';
 
@@ -9,79 +9,27 @@ import TransactionPriceIndicator from '../../../components/TransactionPriceIndic
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
 import {
 	PLarge,
-	PMedium,
 	H1,
-	H5,
 	Subtext,
 	DataHeaderLarge,
-	DataLarge,
 	TableHeaderMedium,
+	H2,
 } from '../../../components/Typography';
-import { TableWrapper, Table, THead, TBody, TH, TR, TD } from '../../../components/ScheduleTable';
-import Skeleton from '../../../components/Skeleton';
+
 import Tooltip from '../../../components/Tooltip';
 
-const Periods = ({ state = {} }) => {
-	const { t } = useTranslation();
-	const { feesByPeriod = [], dataIsLoading } = state;
-	return (
-		<div>
-			<TableWrapper height="auto">
-				{dataIsLoading ? (
-					<Skeleton width={'100%'} height={'110px'} />
-				) : (
-					<Table cellSpacing="0">
-						<THead>
-							<TR>
-								<TH padding={'10px'}>
-									<TableHeaderMedium>sUSD</TableHeaderMedium>
-								</TH>
-								<TH padding={'10px'}>
-									<TableHeaderMedium>SNX</TableHeaderMedium>
-								</TH>
-								<TH padding={'10px'}>
-									<TableHeaderMedium>
-										{t('mintrActions.claim.action.table.period')}
-									</TableHeaderMedium>
-								</TH>
-							</TR>
-						</THead>
-						<TBody>
-							{feesByPeriod.map(({ fee, reward, closeIn }, i) => {
-								return (
-									<TR key={i}>
-										<TD padding={'0 10px'}>
-											<DataLarge>{formatCurrency(fee, 3)}</DataLarge>
-										</TD>
-										<TD padding={'0 10px'}>
-											<DataLarge>{formatCurrency(reward, 3)}</DataLarge>
-										</TD>
-										<TD style={{ whiteSpace: 'nowrap' }} padding={'0 20px'}>
-											<DataLarge>{closeIn}</DataLarge>
-										</TD>
-									</TR>
-								);
-							})}
-						</TBody>
-					</Table>
-				)}
-			</TableWrapper>
-		</div>
-	);
-};
-
 const Action = ({
-	t,
 	onDestroy,
 	onClaim,
 	onClaimHistory,
-	feesByPeriod,
+	closeIn,
 	feesAreClaimable,
 	feesAvailable,
-	dataIsLoading,
 	isFetchingGasLimit,
 	gasEstimateError,
+	gasLimit,
 }) => {
+	const { t } = useTranslation();
 	return (
 		<SlidePage>
 			<Container>
@@ -96,38 +44,39 @@ const Action = ({
 					<H1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</H1>
 					<Subtitle>{t('mintrActions.claim.action.subtitle')}</Subtitle>
 				</Intro>
-				<Middle>
-					<Schedule>
-						<Periods state={{ feesByPeriod, dataIsLoading }} />
-						<Status>
-							<PMedium width="100%">{t('mintrActions.claim.action.table.status')}</PMedium>
-							<State>
-								<Highlighted red={!feesAreClaimable} marginRight="8px">
-									{feesAreClaimable
-										? t('mintrActions.claim.action.table.open')
-										: t('mintrActions.claim.action.table.blocked')}
-								</Highlighted>
-								<Tooltip width={'250px'} content={t('tooltip.claim')} />
-							</State>
-						</Status>
-					</Schedule>
-					<Details>
-						<Box>
-							<DataHeaderLarge>{t('mintrActions.claim.action.tradingRewards')}</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0}
-							</Amount>
-						</Box>
-						<Box>
-							<DataHeaderLarge>{t('mintrActions.claim.action.stakingRewards')}</DataHeaderLarge>
-							<Amount>
-								{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0}
-							</Amount>
-						</Box>
-					</Details>
-				</Middle>
+				<BoxRow>
+					<Box>
+						<DataHeaderLarge>{t('mintrActions.claim.action.tradingRewards')}</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
+						</Amount>
+					</Box>
+					<Box>
+						<DataHeaderLarge>{t('mintrActions.claim.action.stakingRewards')}</DataHeaderLarge>
+						<Amount>
+							{feesAvailable && feesAvailable[1] ? formatCurrency(feesAvailable[1]) : 0} SNX
+						</Amount>
+					</Box>
+				</BoxRow>
+				<TimeLeftRow>
+					<TimeLeftHeading>{t('mintrActions.claim.action.timeLeft')}</TimeLeftHeading>
+					<StyledH2>{closeIn}</StyledH2>
+				</TimeLeftRow>
 				<Bottom>
-					<TransactionPriceIndicator style={{ margin: '0' }} />
+					<Status>
+						<Subtext>{t('mintrActions.claim.action.table.status')}:</Subtext>
+						<Highlighted red={!feesAreClaimable} marginRight="8px">
+							{feesAreClaimable
+								? t('mintrActions.claim.action.table.open')
+								: t('mintrActions.claim.action.table.blocked')}
+						</Highlighted>
+						<Tooltip width={'250px'} content={t('tooltip.claim')} />
+					</Status>
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+					/>
 					<ButtonPrimary
 						disabled={!feesAreClaimable || isFetchingGasLimit || gasEstimateError}
 						onClick={onClaim}
@@ -163,20 +112,10 @@ const Container = styled.div`
 	justify-content: space-around;
 `;
 
-const Middle = styled.div`
-	height: auto;
-	margin: 0 auto;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	@media (max-width: ${WrapTableBreakpoint}px) {
-		flex-direction: column;
-	}
-`;
+const Bottom = styled.div``;
 
-const Bottom = styled.div`
-	height: auto;
+const StyledH2 = styled(H2)`
+	margin-top: 14px;
 `;
 
 const Navigation = styled.div`
@@ -200,56 +139,40 @@ const ActionImage = styled.img`
 	}
 `;
 
-const Schedule = styled.div`
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	height: auto;
-	width: 60%;
-	margin: 8px 16px 8px 0px;
-	padding: 24px 16px 0 16px;
-	text-align: left;
-	@media (max-width: ${WrapTableBreakpoint}px) {
-		width: 100%;
-	}
-`;
-
 const Status = styled.div`
-	width: 100%;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-`;
-
-const State = styled.div`
-	display: flex;
-	text-align: right;
-	align-items: center;
-`;
-
-const Details = styled.div`
-	display: flex;
-	flex-direction: column;
-	width: 40%;
-	@media (max-width: ${WrapTableBreakpoint}px) {
-		flex-direction: row;
-		width: 100%;
-		justify-content: space-between;
-		> div {
-			width: calc(50% - 8px);
-			padding-top: 16px;
-			padding-bottom: 16px;
-		}
+	justify-content: center;
+	& > p {
+		margin: 0;
 	}
+`;
+
+const BoxRow = styled.div`
+	display: flex;
+`;
+
+const TimeLeftRow = styled.div`
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+`;
+
+const TimeLeftHeading = styled(TableHeaderMedium)`
+	text-transform: uppercase;
 `;
 
 const Box = styled.div`
-	height: auto;
-	width: auto;
+	flex: 1;
 	padding: 24px;
 	margin: 8px 0px;
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 2px;
 	display: flex;
 	flex-direction: column;
+	&:last-child {
+		margin-left: 32px;
+	}
 `;
 
 const Amount = styled.span`
@@ -260,6 +183,7 @@ const Amount = styled.span`
 `;
 
 const Highlighted = styled.span`
+	text-transform: uppercase;
 	font-family: 'apercu-bold';
 	margin: 0px 8px;
 	color: ${props =>
@@ -278,4 +202,4 @@ const Subtitle = styled(PLarge)`
 	}
 `;
 
-export default withTranslation()(Action);
+export default Action;

@@ -1,17 +1,18 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { SliderContext } from '../../../components/ScreenSlider';
-import { Store } from '../../../store';
 
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 import { bigNumberFormatter, shortenAddress, bytesFormatter } from '../../../helpers/formatters';
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import { useTranslation } from 'react-i18next';
 
 const useGetBalances = (walletAddress, setCurrentCurrency) => {
@@ -65,8 +66,14 @@ const useGetBalances = (walletAddress, setCurrentCurrency) => {
 	return data;
 };
 
-const useGetGasEstimate = (currency, amount, destination, waitingPeriod) => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimate = (
+	currency,
+	amount,
+	destination,
+	waitingPeriod,
+	setFetchingGasLimit,
+	setGasLimit
+) => {
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
 	useEffect(() => {
@@ -79,7 +86,7 @@ const useGetGasEstimate = (currency, amount, destination, waitingPeriod) => {
 				if (waitingPeriod) throw new Error(`Waiting period for ${currency.name} is still ongoing`);
 				if (!Number(amount)) throw new Error('input.error.invalidAmount');
 				const amountBN = snxJSConnector.utils.parseEther(amount.toString());
-				fetchingGasLimit(dispatch);
+				setFetchingGasLimit(true);
 				if (currency.name === 'SNX') {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
 						destination,
@@ -96,12 +103,13 @@ const useGetGasEstimate = (currency, amount, destination, waitingPeriod) => {
 						currency.name
 					].contract.estimate.transferAndSettle(destination, amountBN);
 				}
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,29 +130,25 @@ const sendTransaction = (currency, amount, destination, settings) => {
 	} else return snxJSConnector.snxJS[currency].transferAndSettle(destination, amount, settings);
 };
 
-const Send = ({ onDestroy }) => {
+const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [sendAmount, setSendAmount] = useState('');
 	const [sendDestination, setSendDestination] = useState('');
 	const [currentCurrency, setCurrentCurrency] = useState(null);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
 
 	const balances = useGetBalances(currentWallet, setCurrentCurrency);
 	const gasEstimateError = useGetGasEstimate(
 		currentCurrency,
 		sendAmount,
 		sendDestination,
-		waitingPeriod
+		waitingPeriod,
+		setFetchingGasLimit,
+		setGasLimit
 	);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
@@ -177,21 +181,18 @@ const Send = ({ onDestroy }) => {
 				currentCurrency.name,
 				realSendAmount,
 				sendDestination,
-				{ gasPrice: gasPrice * GWEI_UNIT, gasLimit }
+				{ gasPrice: currentGasPrice.formattedPrice, gasLimit }
 			);
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Sending ${Math.round(sendAmount, 3)} ${currentCurrency.name} to ${shortenAddress(
-							sendDestination
-						)}`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Sending ${Math.round(sendAmount, 3)} ${currentCurrency.name} to ${shortenAddress(
+						sendDestination
+					)}`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -224,6 +225,7 @@ const Send = ({ onDestroy }) => {
 		isFetchingGasLimit,
 		waitingPeriod,
 		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
+		gasLimit,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
@@ -231,4 +233,13 @@ const Send = ({ onDestroy }) => {
 	));
 };
 
-export default Send;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Send);

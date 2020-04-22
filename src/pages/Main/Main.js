@@ -1,32 +1,23 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import snxJSConnector from '../../helpers/snxJSConnector';
-import { getNetworkInfo } from '../../helpers/networkHelper';
-import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
-import { updateNetworkInfo } from '../../ducks/network';
-import { Store } from '../../store';
+import { fetchRates } from '../../ducks/rates';
+import { fetchGasPrices } from '../../ducks/network';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
-import SETHPoolRewardDistribution from '../../screens/SETHPoolRewardDistribution';
 
-const Main = () => {
-	const { dispatch } = useContext(Store);
+import { INTERVAL_TIMER } from '../../constants/ui';
+
+const Main = ({ fetchGasPrices, fetchRates }) => {
 	useEffect(() => {
-		const fetchNetworkInfo = async () => {
-			try {
-				const [networkInfo, ethPrice] = await Promise.all([
-					getNetworkInfo(),
-					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(bytesFormatter('ETH')),
-				]);
-				updateNetworkInfo(networkInfo, bigNumberFormatter(ethPrice), dispatch);
-			} catch (e) {
-				console.log('Error while trying to fetch network data', e);
-			}
+		const init = async () => {
+			fetchRates();
+			fetchGasPrices();
 		};
-		const fetchLoop = setInterval(fetchNetworkInfo, 5 * 60 * 1000);
-		fetchNetworkInfo();
+		init();
+		const fetchLoop = setInterval(init, INTERVAL_TIMER);
 		return () => clearInterval(fetchLoop);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -34,7 +25,7 @@ const Main = () => {
 	return (
 		<MainWrapper>
 			<Dashboard />
-			{window.location.pathname === '/multisig' ? <SETHPoolRewardDistribution /> : <MintrPanel />}
+			<MintrPanel />
 		</MainWrapper>
 	);
 };
@@ -44,4 +35,9 @@ const MainWrapper = styled.div`
 	width: 100%;
 `;
 
-export default Main;
+const mapDispatchToProps = {
+	fetchGasPrices,
+	fetchRates,
+};
+
+export default connect(null, mapDispatchToProps)(Main);

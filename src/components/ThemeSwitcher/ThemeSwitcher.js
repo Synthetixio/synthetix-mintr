@@ -1,18 +1,16 @@
 import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Switch from 'react-switch';
-import { Store } from '../../store';
 import { ThemeContext } from 'styled-components';
-import { toggleTheme } from '../../ducks/ui';
+import { toggleTheme, getCurrentTheme } from '../../ducks/ui';
+import { isLightTheme } from '../../styles/themes';
 
-import './ThemeSwitcher.css';
-
-const ThemeSwitcher = () => {
-	const { state, dispatch } = useContext(Store);
+const ThemeSwitcher = ({ currentTheme, toggleTheme }) => {
 	const theme = useContext(ThemeContext);
 	return (
 		<Switch
-			className={state.ui.themeIsDark ? 'dark' : 'light'}
+			className={isLightTheme(currentTheme) ? 'light' : 'dark'}
 			height={40}
 			width={70}
 			checkedIcon={
@@ -26,8 +24,8 @@ const ThemeSwitcher = () => {
 				</IconWrapper>
 			}
 			handleDiameter={24}
-			onChange={() => toggleTheme(!state.ui.themeIsDark, dispatch)}
-			checked={state.ui.themeIsDark}
+			onChange={() => toggleTheme()}
+			checked={!isLightTheme(currentTheme)}
 			offColor={theme.colorStyles.themeToggleBackgroundColor}
 			onColor={theme.colorStyles.themeToggleBackgroundColor}
 			onHandleColor={theme.colorStyles.themeToggleHandleColor}
@@ -46,4 +44,12 @@ const Icon = styled.img`
 	width: 25px;
 `;
 
-export default ThemeSwitcher;
+const mapStateToProps = state => ({
+	currentTheme: getCurrentTheme(state),
+});
+
+const mapDispatchToProps = {
+	toggleTheme,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ThemeSwitcher);

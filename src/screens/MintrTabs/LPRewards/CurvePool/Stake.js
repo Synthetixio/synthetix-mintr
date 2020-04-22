@@ -1,14 +1,13 @@
-/* eslint-disable */
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../../helpers/snxJSConnector';
-import { Store } from '../../../../store';
 
 import { bigNumberFormatter, formatCurrency } from '../../../../helpers/formatters';
 import TransactionPriceIndicator from '../../../../components/TransactionPriceIndicator';
-import { updateGasLimit } from '../../../../ducks/network';
+import { getWalletDetails } from '../../../../ducks/wallet';
 
 import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../../components/Typography';
 import DataBox from '../../../../components/DataBox';
@@ -19,7 +18,7 @@ import CurvepoolActions from '../../../CurvepoolActions';
 const TRANSACTION_DETAILS = {
 	stake: {
 		contractFunction: 'stake',
-		gasLimit: 150000,
+		gasLimit: 200000,
 	},
 	claim: {
 		contractFunction: 'getReward',
@@ -35,26 +34,24 @@ const TRANSACTION_DETAILS = {
 	},
 };
 
-const Stake = ({ t, goBack }) => {
-	const { curvepoolContract } = snxJSConnector;
+const Stake = ({ walletDetails, goBack }) => {
+	const { t } = useTranslation();
+	const { curvepoolContract, oldCurvepoolContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
+	const [gasLimit, setGasLimit] = useState(TRANSACTION_DETAILS.stake.gasLimit);
 	const [currentScenario, setCurrentScenario] = useState({});
-	const [withdrawAmount, setWithdrawAmount] = useState('');
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet } = walletDetails;
 
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
 		try {
 			const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
-			const [univ1Held, univ1Staked, rewards] = await Promise.all([
+			const [univ1Held, univ1Staked, rewards, oldUniv1Staked, oldRewards] = await Promise.all([
 				curveLPTokenContract.balanceOf(currentWallet),
 				curvepoolContract.balanceOf(currentWallet),
 				curvepoolContract.earned(currentWallet),
+				oldCurvepoolContract.balanceOf(currentWallet),
+				oldCurvepoolContract.earned(currentWallet),
 			]);
 			setBalances({
 				univ1Held: bigNumberFormatter(univ1Held),
@@ -62,8 +59,9 @@ const Stake = ({ t, goBack }) => {
 				univ1Staked: bigNumberFormatter(univ1Staked),
 				univ1StakedBN: univ1Staked,
 				rewards: bigNumberFormatter(rewards),
+				oldUniv1Staked: bigNumberFormatter(oldUniv1Staked),
+				oldRewards: bigNumberFormatter(oldRewards),
 			});
-			updateGasLimit(TRANSACTION_DETAILS.stake.gasLimit, dispatch);
 		} catch (e) {
 			console.log(e);
 		}
@@ -76,7 +74,7 @@ const Stake = ({ t, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
+		const { curvepoolContract } = snxJSConnector;
 
 		curvepoolContract.on('Staked', user => {
 			if (user === currentWallet) {
@@ -132,11 +130,11 @@ const Stake = ({ t, goBack }) => {
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.univ1Held) : 0} yCurve`}
+					body={`${balances ? formatCurrency(balances.univ1Held) : 0} Curve LP`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} yCurve`}
+					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} Curve LP`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
@@ -146,12 +144,13 @@ const Stake = ({ t, goBack }) => {
 			<ButtonBlock>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
 						disabled={!balances || !balances.univ1Held}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.univ1Held)} yCurve`,
+								amount: `${balances && formatCurrency(balances.univ1Held)} Curve LP`,
 								param: balances && balances.univ1HeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
@@ -160,6 +159,7 @@ const Stake = ({ t, goBack }) => {
 						{t('lpRewards.shared.buttons.stake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['claim'].gasLimit)}
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
@@ -175,12 +175,13 @@ const Stake = ({ t, goBack }) => {
 				</ButtonRow>
 				<ButtonRow>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['unstake'].gasLimit)}
 						disabled={!balances || !balances.univ1Staked}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve`,
+								amount: `${balances && formatCurrency(balances.univ1Staked)} Curve LP`,
 								param: balances && balances.univ1StakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
@@ -189,12 +190,14 @@ const Stake = ({ t, goBack }) => {
 						{t('lpRewards.shared.buttons.unstake')}
 					</ButtonAction>
 					<ButtonAction
+						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['exit'].gasLimit)}
 						disabled={!balances || (!balances.univ1Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve & ${balances &&
+								amount: `${balances &&
+									formatCurrency(balances.univ1Staked)} Curve LP & ${balances &&
 									formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
@@ -203,8 +206,25 @@ const Stake = ({ t, goBack }) => {
 						{t('lpRewards.shared.buttons.exit')}
 					</ButtonAction>
 				</ButtonRow>
+				<ButtonRow style={{ marginTop: '64px' }}>
+					<ButtonActionFullRow
+						disabled={!balances || (!balances.oldUniv1Staked && !balances.oldRewards)}
+						onClick={() =>
+							setCurrentScenario({
+								action: 'exit-old',
+								label: t('lpRewards.shared.actions.exiting'),
+								amount: `${balances &&
+									formatCurrency(balances.oldUniv1Staked)} Curve LP & ${balances &&
+									formatCurrency(balances.oldRewards)} SNX`,
+								...TRANSACTION_DETAILS['exit'],
+							})
+						}
+					>
+						{t('lpRewards.shared.buttons.exit-old')}
+					</ButtonActionFullRow>
+				</ButtonRow>
 			</ButtonBlock>
-			<TransactionPriceIndicator canEdit={true} />
+			<TransactionPriceIndicator gasLimit={gasLimit} canEdit={true} />
 		</Container>
 	);
 };
@@ -234,15 +254,29 @@ const ButtonBlock = styled.div`
 
 const ButtonRow = styled.div`
 	display: flex;
+	justify-content: center;
 	margin-bottom: 28px;
+	width: 100%;
 `;
 
 const ButtonAction = styled(ButtonPrimary)`
 	flex: 1;
 	width: 10px;
+	height: 64px;
 	&:first-child {
 		margin-right: 34px;
 	}
 `;
 
-export default withTranslation()(Stake);
+const ButtonActionFullRow = styled(ButtonAction)`
+	flex: none;
+	width: 50%;
+`;
+
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Stake);
