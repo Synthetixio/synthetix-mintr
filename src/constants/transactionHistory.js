@@ -8,8 +8,10 @@ export const TRANSACTION_EVENTS = [
 	'feesClaimed',
 	'exchanged',
 	'cleared',
+	'bought',
 	'deposit',
 	'withdrawl',
+	'removal',
 ];
 
 export const TRANSACTION_EVENTS_MAP = keyBy(TRANSACTION_EVENTS);

@@ -413,7 +413,7 @@
 			"deposit": "Deposited",
 			"cleared": "Sold",
 			"withdrawl": "Withdrawn",
-			"exchanged2": "Bought",
+			"bought": "Bought",
 			"feesClaimed": "Claimed Rewards",
 			"sent": "Sent"
 		},

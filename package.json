@@ -32,8 +32,8 @@
 		"react-switch": "^5.0.1",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
-		"synthetix-data": "^2.1.10",
-		"synthetix-js": "2.21.7-2",
+		"synthetix-data": "^2.1.11",
+		"synthetix-js": "^2.21.9",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {
