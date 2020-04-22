@@ -319,15 +319,15 @@
 			"amount": "Cantidad"
 		},
 		"events": {
-			"minted": "Acuñados",
+			"issued": "Acuñados",
 			"burned": "Quemados",
-			"claimedFees": "Recompensas reclamadas",
-			"exchanged": "Comprado",
-			"traded": "Comerciado",
-			"sent": "Enviado",
-			"deposited": "Depositado",
-			"withdrawn": "Retirado",
-			"sold": "Vendido"
+			"exchanged": "Comerciado",
+			"deposit": "Depositado",
+			"cleared": "Vendido",
+			"withdrawl": "Retirado",
+			"bought": "Comprado",
+			"feesClaimed": "Recompensas reclamadas",
+			"sent": "Enviado"
 		},
 		"buttons": {
 			"clearFilters": "Limpiar filtros"
