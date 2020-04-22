@@ -29,6 +29,10 @@ const getAmountForEventType = event => {
 			return `${formatCurrency(event.value)} sUSD`;
 		case TRANSACTION_EVENTS_MAP.feesClaimed:
 			return `${formatCurrency(event.value)} sUSD / ${formatCurrency(event.rewards)} SNX`;
+		case TRANSACTION_EVENTS_MAP.bought:
+			return `${formatCurrency(event.fromAmount)} ${event.fromCurrency} / ${formatCurrency(
+				event.toAmount
+			)} ${event.toCurrency}`;
 	}
 };
 

@@ -63,6 +63,7 @@ export const fetchTransactionHistory = walletAddress => async dispatch => {
 			exchanges,
 			depotActions,
 			clearedDeposits,
+			depotExchanges,
 		] = await Promise.all([
 			snxData.snx.issued({ account: walletAddress }),
 			snxData.snx.burned({ account: walletAddress }),
@@ -70,10 +71,11 @@ export const fetchTransactionHistory = walletAddress => async dispatch => {
 			snxData.exchanges.since({ fromAddress: walletAddress, minTimestamp: 0, max: 100 }),
 			snxData.depot.userActions({ user: walletAddress }),
 			snxData.depot.clearedDeposits({ toAddress: walletAddress }),
+			snxData.depot.exchanges({ from: walletAddress }),
 		]);
 
 		const mergedArray = flatten(
-			[issued, burned, feesClaimed, exchanges, clearedDeposits]
+			[issued, burned, feesClaimed, exchanges, clearedDeposits, depotExchanges]
 				.map((eventType, i) => {
 					return eventType.map(event => {
 						return event.type ? event : { type: TRANSACTION_EVENTS[i], ...event };

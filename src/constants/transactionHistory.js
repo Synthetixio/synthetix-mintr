@@ -8,6 +8,7 @@ export const TRANSACTION_EVENTS = [
 	'feesClaimed',
 	'exchanged',
 	'cleared',
+	'bought',
 	'deposit',
 	'withdrawl',
 ];
