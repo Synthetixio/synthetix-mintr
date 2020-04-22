@@ -17,6 +17,7 @@ import {
 } from '../../../ducks/depotHistory';
 import ExpandableTable from './ExpandableTable';
 import { getEtherscanAddressLink } from '../../../helpers/explorers';
+import { TRANSACTION_EVENTS_MAP } from '../../../constants/transactionHistory';
 
 import { PageTitle, PLarge, H2, H5, TableDataMedium } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
@@ -168,7 +169,12 @@ const Depot = ({
 								setCurrentTab({
 									tab: 'transactionsHistory',
 									params: {
-										filters: ['SynthDeposit', 'SynthWithdrawal', 'ClearedDeposit', 'Exchange'],
+										filters: [
+											TRANSACTION_EVENTS_MAP.deposit,
+											TRANSACTION_EVENTS_MAP.withdrawl,
+											TRANSACTION_EVENTS_MAP.cleared,
+											TRANSACTION_EVENTS_MAP.bought,
+										],
 									},
 								})
 							}
