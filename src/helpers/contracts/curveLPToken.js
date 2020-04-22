@@ -1,5 +1,5 @@
 export default {
-	address: '0x2b645a6A426f22fB7954dC15E583e3737B8d1434',
+	address: '0xC25a3A3b969415c80451098fa907EC722572917F',
 	abi: [
 		{
 			name: 'Transfer',
