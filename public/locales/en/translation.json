@@ -371,11 +371,11 @@
 	"curvepool": {
 		"title": "Curve Finance sUSD LP Token Rewards",
 		"locked": {
-			"subtitle": "First approve the Curvepool contract to transfer your yCurve tokens for staking.",
-			"transaction": "Setting yCurve token allowance"
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your yCurve tokens, claim SNX rewards, or exit completely."
+			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"delegation": {

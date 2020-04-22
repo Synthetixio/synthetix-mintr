@@ -8,7 +8,7 @@ import { PLarge, PageTitle, DataHeaderLarge } from '../../../components/Typograp
 import { formatCurrency } from '../../../helpers/formatters';
 import EtherScanBtn from '../../../components/EtherscanBtn';
 
-const Success = ({ t, amountAvailable, onDestroy, networkName, transactionHash }) => {
+const Success = ({ t, availableAmount, onDestroy, networkName, transactionHash }) => {
 	return (
 		<Fragment>
 			<Top>
@@ -20,7 +20,7 @@ const Success = ({ t, amountAvailable, onDestroy, networkName, transactionHash }
 				<Details>
 					<Box>
 						<DataHeaderLarge>{t('depot.withdraw.actionDescription')}</DataHeaderLarge>
-						<Amount>{formatCurrency(amountAvailable)} sUSD</Amount>
+						<Amount>{formatCurrency(availableAmount)} sUSD</Amount>
 					</Box>
 				</Details>
 			</Top>

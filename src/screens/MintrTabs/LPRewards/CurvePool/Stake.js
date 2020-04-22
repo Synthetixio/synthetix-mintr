@@ -130,11 +130,11 @@ const Stake = ({ walletDetails, goBack }) => {
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.univ1Held) : 0} yCurve`}
+					body={`${balances ? formatCurrency(balances.univ1Held) : 0} Curve LP`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} yCurve`}
+					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} Curve LP`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
@@ -150,7 +150,7 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.univ1Held)} yCurve`,
+								amount: `${balances && formatCurrency(balances.univ1Held)} Curve LP`,
 								param: balances && balances.univ1HeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
@@ -181,7 +181,7 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve`,
+								amount: `${balances && formatCurrency(balances.univ1Staked)} Curve LP`,
 								param: balances && balances.univ1StakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
@@ -196,7 +196,8 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} yCurve & ${balances &&
+								amount: `${balances &&
+									formatCurrency(balances.univ1Staked)} Curve LP & ${balances &&
 									formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
@@ -213,7 +214,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								action: 'exit-old',
 								label: t('lpRewards.shared.actions.exiting'),
 								amount: `${balances &&
-									formatCurrency(balances.oldUniv1Staked)} yCurve & ${balances &&
+									formatCurrency(balances.oldUniv1Staked)} Curve LP & ${balances &&
 									formatCurrency(balances.oldRewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})

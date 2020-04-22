@@ -44,7 +44,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 
 const Withdraw = ({
 	onDestroy,
-	amountAvailable,
+	availableAmount,
 	walletDetails,
 	createTransaction,
 	currentGasPrice,
@@ -69,7 +69,7 @@ const Withdraw = ({
 				createTransaction({
 					hash: transaction.hash,
 					status: 'pending',
-					info: `Withdrawing ${formatCurrency(amountAvailable)} sUSD`,
+					info: `Withdrawing ${formatCurrency(availableAmount)} sUSD`,
 					hasNotification: true,
 				});
 				handleNext(2);
@@ -87,7 +87,7 @@ const Withdraw = ({
 		onDestroy,
 		onWithdraw,
 		goBack: handlePrev,
-		amountAvailable,
+		availableAmount,
 		...transactionInfo,
 		walletType,
 		networkName,
