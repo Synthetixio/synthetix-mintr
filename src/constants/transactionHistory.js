@@ -11,6 +11,7 @@ export const TRANSACTION_EVENTS = [
 	'bought',
 	'deposit',
 	'withdrawl',
+	'removal',
 ];
 
 export const TRANSACTION_EVENTS_MAP = keyBy(TRANSACTION_EVENTS);
