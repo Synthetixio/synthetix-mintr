@@ -120,10 +120,7 @@ const Stake = ({ walletDetails, goBack }) => {
 			<PageTitle>{t('curvepool.title')}</PageTitle>
 			<PLarge>{t('curvepool.unlocked.subtitle')}</PLarge>
 			<PLarge>
-				<Link
-					href="https://blog.synthetix.io/susd-liquidity-trial-with-curve-iearn/"
-					target="_blank"
-				>
+				<Link href="https://blog.synthetix.io/new-curve-pool-launch/" target="_blank">
 					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
 				</Link>
 			</PLarge>
