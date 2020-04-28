@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import UniPool from './UniPool';
 import CurvePool from './CurvePool';
+import IEth from './IEth';
 
 import { H1, PageTitle } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
@@ -12,8 +13,14 @@ const POOLS = [
 	{
 		title: 'lpRewards.actions.unipool.title',
 		name: 'uniswap',
+		image: '/images/pools/uniswap.svg',
 	},
-	{ title: 'lpRewards.actions.curvepool.title', name: 'iearn' },
+	{
+		title: 'lpRewards.actions.curvepool.title',
+		name: 'iearn',
+		image: '/images/pools/iearn.svg',
+	},
+	{ title: 'lpRewards.actions.ieth.title', name: 'ieth', image: '/images/currencies/iETH.svg' },
 ];
 
 const LPRewards = () => {
@@ -27,6 +34,8 @@ const LPRewards = () => {
 				return <UniPool goBack={goBack} />;
 			case 'iearn':
 				return <CurvePool goBack={goBack} />;
+			case 'ieth':
+				return <IEth goBack={goBack} />;
 		}
 	};
 
@@ -38,12 +47,12 @@ const LPRewards = () => {
 				<>
 					<PageTitle>{t('lpRewards.intro.title')}</PageTitle>
 					<ButtonRow>
-						{POOLS.map(({ title, name }, i) => {
+						{POOLS.map(({ title, name, image }, i) => {
 							return (
 								<Button key={`button-${i}`} onClick={() => setCurrentPool(name)}>
 									<ButtonContainer>
-										<ActionImage src={`/images/${name}.svg`} big />
-										<H1>{t(title)}</H1>
+										<ActionImage src={image} big />
+										<StyledHeading>{t(title)}</StyledHeading>
 									</ButtonContainer>
 								</Button>
 							);
@@ -70,8 +79,8 @@ const Button = styled.button`
 		box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
 		transform: translateY(-2px);
 	}
-	&:first-child {
-		margin-right: 20px;
+	&:not(:first-child) {
+		margin-left: 20px;
 	}
 `;
 
@@ -89,6 +98,10 @@ const ButtonRow = styled.div`
 const ActionImage = styled.img`
 	height: ${props => (props.big ? '64px' : '48px')};
 	width: ${props => (props.big ? '64px' : '48px')};
+`;
+
+const StyledHeading = styled(H1)`
+	font-size: 22px;
 `;
 
 export default LPRewards;

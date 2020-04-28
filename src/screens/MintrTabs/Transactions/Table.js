@@ -72,7 +72,7 @@ const TableContainer = ({ data }) => {
 								<DataLarge>{getAmountForEventType(event)}</DataLarge>
 							</TD>
 							<TD style={{ textAlign: 'right' }}>
-								<DataLarge>{format(new Date(event.timestamp), 'd MMM yy | hh:mm')}</DataLarge>
+								<DataLarge>{format(new Date(event.timestamp), 'd MMM yy | HH:mm')}</DataLarge>
 							</TD>
 							<TD style={{ textAlign: 'right' }}>
 								<BorderlessButton href={getEtherscanTxLink('1', event.hash)} as="a" target="_blank">
