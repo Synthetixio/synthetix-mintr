@@ -54,7 +54,7 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 			</Navigation>
 			<TitleContainer>
-				<Logo src="/images/uniswap.svg" />
+				<Logo src="/images/pools/uniswap.svg" />
 				<PageTitle>{t('unipool.title')}</PageTitle>
 				<PLarge>{t('unipool.locked.subtitle')}</PLarge>
 			</TitleContainer>
@@ -66,7 +66,9 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 	);
 };
 
-const Logo = styled.img``;
+const Logo = styled.img`
+	width: 64px;
+`;
 
 const Navigation = styled.div`
 	display: flex;

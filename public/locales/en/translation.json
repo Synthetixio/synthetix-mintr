@@ -329,7 +329,8 @@
 			"unipool": {
 				"title": "Unipool"
 			},
-			"curvepool": { "title": "Curvepool" }
+			"curvepool": { "title": "Curvepool" },
+			"ieth": { "title": "iEth" }
 		},
 		"shared": {
 			"unlocked": {
@@ -366,6 +367,16 @@
 		},
 		"unlocked": {
 			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely."
 		}
 	},
 	"curvepool": {
