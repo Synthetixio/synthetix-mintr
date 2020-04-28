@@ -13,25 +13,31 @@ import { TOKEN_ALLOWANCE_LIMIT } from '../../../../constants/network';
 import { PageTitle, PLarge } from '../../../../components/Typography';
 import { ButtonPrimary, ButtonTertiary } from '../../../../components/Button';
 
+const GAS_LIMIT_BUFFER = 10000;
+
 const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 	const { t } = useTranslation();
 	const [error, setError] = useState(null);
 
 	const onUnlock = async () => {
-		const { parseEther } = snxJSConnector.utils;
-		const { curveLPTokenContract, curvepoolContract } = snxJSConnector;
+		const {
+			snxJS: { iETH },
+			utils: { parseEther },
+			iEthRewardsContract,
+		} = snxJSConnector;
 		try {
 			setError(null);
 
-			const gasEstimate = await curveLPTokenContract.estimate.approve(
-				curvepoolContract.address,
+			const gasEstimate = await iETH.contract.estimate.approve(
+				iEthRewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
-			const transaction = await curveLPTokenContract.approve(
-				curvepoolContract.address,
+
+			const transaction = await iETH.approve(
+				iEthRewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
-					gasLimit: Number(gasEstimate) + 10000,
+					gasLimit: Number(gasEstimate) + GAS_LIMIT_BUFFER,
 					gasPrice: currentGasPrice.formattedPrice,
 				}
 			);
@@ -39,7 +45,7 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 				createTransaction({
 					hash: transaction.hash,
 					status: 'pending',
-					info: t(`curvepool.locked.transaction`),
+					info: t(`ieth.locked.transaction`),
 					hasNotification: true,
 				});
 			}
@@ -54,9 +60,9 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 			</Navigation>
 			<TitleContainer>
-				<Logo src="/images/pools/iearn.svg" />
-				<PageTitle>{t('curvepool.title')}</PageTitle>
-				<PLarge>{t('curvepool.locked.subtitle')}</PLarge>
+				<Logo src="/images/currencies/iETH.svg" />
+				<PageTitle>{t('ieth.title')}</PageTitle>
+				<PLarge>{t('ieth.locked.subtitle')}</PLarge>
 			</TitleContainer>
 			<ButtonRow>
 				<ButtonPrimary onClick={onUnlock}>{t('lpRewards.shared.buttons.unlock')}</ButtonPrimary>
