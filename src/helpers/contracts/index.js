@@ -1,8 +1,12 @@
-import unipool from './unipool';
-import uniswap from './uniswap';
-import curvepool from './curvepool';
-import curveLPToken from './curveLPToken';
-import synthSummary from './synthSummary';
-import oldCurvepool from './oldCurvepool';
+import unipool from './uniswap/unipool';
+import uniswap from './uniswap/uniswap';
 
-export { unipool, uniswap, curvepool, curveLPToken, synthSummary, oldCurvepool };
+import curvepool from './curve/curvepool';
+import curveLPToken from './curve/curveLPToken';
+import oldCurvepool from './curve/oldCurvepool';
+
+import synthSummary from './synthSummary';
+
+import iEthRewards from './iEthRewards';
+
+export { unipool, uniswap, curvepool, curveLPToken, synthSummary, oldCurvepool, iEthRewards };
