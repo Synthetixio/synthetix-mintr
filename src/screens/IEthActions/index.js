@@ -9,33 +9,38 @@ import { getWalletDetails } from '../../ducks/wallet';
 import { createTransaction } from '../../ducks/transactions';
 import { getCurrentGasPrice } from '../../ducks/network';
 import errorMapper from '../../helpers/errorMapper';
+import { bigNumberFormatter } from '../../helpers/formatters';
+
+const addBufferToGasLimit = gasLimit => Math.round(Number(gasLimit) * 1.5);
 
 const SliderController = ({
 	amount,
 	label,
 	contractFunction,
-	gasLimit,
+	contractFunctionEstimate,
 	onDestroy,
-	param,
 	currentGasPrice,
 	createTransaction,
 	walletDetails,
 }) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
+	const [transactionSettings, setTransactionSettings] = useState({});
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const { walletType, networkName } = walletDetails;
+
 	useEffect(() => {
-		const { iEthRewardsContract } = snxJSConnector;
 		const run = async () => {
 			if (!hasLoaded) return;
 			try {
-				const transactionSettings = {
+				const gasEstimate = await contractFunctionEstimate();
+
+				const settings = {
 					gasPrice: currentGasPrice.formattedPrice,
-					gasLimit,
+					gasLimit: addBufferToGasLimit(gasEstimate),
 				};
-				const transaction = param
-					? await iEthRewardsContract[contractFunction](param, transactionSettings)
-					: await iEthRewardsContract[contractFunction](transactionSettings);
+				setTransactionSettings(settings);
+
+				const transaction = await contractFunction(settings);
 
 				if (transaction) {
 					setTransactionInfo({ transactionHash: transaction.hash });
@@ -64,7 +69,7 @@ const SliderController = ({
 		walletType,
 		amount,
 		label,
-		gasLimit,
+		gasLimit: transactionSettings.gasLimit,
 		...transactionInfo,
 		networkName,
 	};
@@ -72,12 +77,11 @@ const SliderController = ({
 };
 
 const IEthActions = props => {
-	if (!props.action) return null;
-	return (
+	return props.action ? (
 		<Slider>
 			<SliderController {...props} />
 		</Slider>
-	);
+	) : null;
 };
 
 const mapStateToProps = state => ({
