@@ -346,7 +346,8 @@
 				"staking": "Staking",
 				"claiming": "Claiming",
 				"unstaking": "Unstaking",
-				"exiting": "Unstaking & claiming"
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
 			},
 			"buttons": {
 				"unlock": "unlock",
@@ -355,7 +356,8 @@
 				"claim": "Claim rewards",
 				"unstake": "Unstake tokens",
 				"exit": "exit: claim & unstake",
-				"exit-old": "Exit old rewards pool"
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
 			}
 		}
 	},
@@ -376,7 +378,8 @@
 			"transaction": "Setting iETH allowance"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely."
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
 		}
 	},
 	"curvepool": {
