@@ -1,0 +1,76 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - react-dev-utils > inquirer > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > @babel/traverse > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > babel-plugin-styled-components > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > @babel/traverse > @babel/generator > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > babel-plugin-styled-components > @babel/helper-annotate-as-pure > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - react-select > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - styled-components > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > ethereumjs-vm > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - react-select > @emotion/core > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > json-rpc-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > json-rpc-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > synthetix > chainlink > chainlinkv0.5 > truffle-contract > truffle-interface-adapter > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-block-tracker > @babel/plugin-transform-runtime > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
+    - synthetix-js > @walletconnect/web3-provider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-04-30T23:51:18.135Z'
