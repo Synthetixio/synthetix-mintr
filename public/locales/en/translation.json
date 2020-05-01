@@ -290,6 +290,8 @@
 			"title": "Vest your SNX staking rewards in escrow",
 			"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here after they have been escrowed for 12 months.",
 			"total": "Total escrowed:",
+			"vested": "Total vested:",
+			"available": "Total available:",
 			"table": {
 				"none": "You have no escrowed SNX",
 				"title": "Vesting schedule",

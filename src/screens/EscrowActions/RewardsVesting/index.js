@@ -29,8 +29,12 @@ const RewardsVesting = ({
 	useLayoutEffect(() => {
 		const vest = async () => {
 			if (!hasLoaded) return;
+			const {
+				snxJS: { RewardEscrow },
+			} = snxJSConnector;
 			try {
-				const transaction = await snxJSConnector.snxJS.RewardEscrow.vest({
+				console.log('here');
+				const transaction = await RewardEscrow.vest({
 					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				});
@@ -42,7 +46,7 @@ const RewardsVesting = ({
 						info: 'Vesting',
 						hasNotification: true,
 					});
-					handleNext(1);
+					handleNext(2);
 				}
 			} catch (e) {
 				console.log(e);
@@ -52,7 +56,7 @@ const RewardsVesting = ({
 					...transactionInfo,
 					transactionError: errorMessage,
 				});
-				handleNext(1);
+				handleNext(2);
 			}
 		};
 		vest();
