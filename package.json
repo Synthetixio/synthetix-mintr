@@ -30,6 +30,7 @@
 		"react-responsive-carousel": "^3.1.51",
 		"react-select": "^3.0.4",
 		"react-switch": "^5.0.1",
+		"react-table": "^7.1.0",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
 		"synthetix-data": "^2.1.11",
