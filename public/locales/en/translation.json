@@ -199,6 +199,9 @@
 					"synthDebt": "Synth debt",
 					"netDebt": "Net debt"
 				},
+				"chart": {
+					"title": "Debt over time"
+				},
 				"table": {
 					"yourSynths": "Your synths",
 					"balance": "Balance"

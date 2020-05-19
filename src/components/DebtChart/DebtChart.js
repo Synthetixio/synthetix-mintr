@@ -6,8 +6,7 @@ const DebtChart = () => {
 };
 
 const Container = styled.div`
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	border-radius: 2px;
+	height: 172px;
 `;
 
 export default DebtChart;

@@ -8,6 +8,7 @@ import transactionHistory from './transactionHistory';
 import depotHistory from './depotHistory';
 import network from './network';
 import modal from './modal';
+import balances from './balances';
 
 export default combineReducers({
 	app,
@@ -19,4 +20,5 @@ export default combineReducers({
 	depotHistory,
 	network,
 	modal,
+	balances,
 });

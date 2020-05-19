@@ -50,7 +50,10 @@ const Track = ({ onDestroy }) => {
 							</BorderedContainer>
 						</GridColumn>
 						<GridColumn>
-							<DebtChart />
+							<ChartBorderedContainer>
+								<StyledSubtext>{t('mintrActions.track.action.chart.title')}</StyledSubtext>
+								<DebtChart />
+							</ChartBorderedContainer>
 						</GridColumn>
 					</Grid>
 					<TableBorderedContainer>
@@ -139,6 +142,11 @@ const StyledExternalLink = styled(ExternalLink)`
 
 const LinkArrow = styled.span`
 	font-size: 10px;
+`;
+
+const ChartBorderedContainer = styled(BorderedContainer)`
+	justify-content: flex-start;
+	align-items: flex-start;
 `;
 
 const TableBorderedContainer = styled(BorderedContainer)`

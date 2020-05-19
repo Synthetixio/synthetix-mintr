@@ -1,23 +1,9 @@
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
-import { bytesFormatter, parseBytes32String } from '../../helpers/formatters';
+import { bytesFormatter } from '../../helpers/formatters';
 
 const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
-
-const getBalances = async walletAddress => {
-	try {
-		const result = await Promise.all([
-			snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
-			snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
-			snxJSConnector.provider.getBalance(walletAddress),
-		]);
-		const [snx, susd, eth] = result.map(bigNumberFormatter);
-		return { snx, susd, eth };
-	} catch (e) {
-		console.log(e);
-	}
-};
 
 const convertFromSynth = (fromSynthRate, toSynthRate) => {
 	return fromSynthRate * (1 / toSynthRate);
@@ -128,50 +114,18 @@ const getEscrow = async walletAddress => {
 	}
 };
 
-const getSynths = async walletAddress => {
-	try {
-		const [balanceResults, totalBalanceResults] = await Promise.all([
-			snxJSConnector.synthSummaryUtilContract.synthsBalances(walletAddress),
-			snxJSConnector.synthSummaryUtilContract.totalSynthsInKey(
-				walletAddress,
-				bytesFormatter('sUSD')
-			),
-		]);
-
-		const [synthsKeys, synthsBalances] = balanceResults;
-
-		const balances = synthsKeys.map((key, i) => {
-			const synthName = parseBytes32String(key);
-			return {
-				synth: synthName,
-				balance: bigNumberFormatter(synthsBalances[i]),
-			};
-		});
-		return {
-			balances,
-			total: bigNumberFormatter(totalBalanceResults),
-		};
-	} catch (e) {
-		console.log(e);
-	}
-};
-
 export const fetchData = async walletAddress => {
-	const [balances, prices, rewardData, debtData, escrowData, synthData] = await Promise.all([
-		getBalances(walletAddress),
+	const [prices, rewardData, debtData, escrowData] = await Promise.all([
 		getPrices(),
 		getRewards(walletAddress),
 		getDebt(walletAddress),
 		getEscrow(walletAddress),
-		getSynths(walletAddress),
 	]).catch(e => console.log(e));
 
 	return {
-		balances,
 		prices,
 		rewardData,
 		debtData,
 		escrowData,
-		synthData,
 	};
 };

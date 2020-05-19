@@ -9,6 +9,7 @@ import { fetchData } from './fetchData';
 import { getWalletDetails } from '../../ducks/wallet';
 import { getSuccessQueue } from '../../ducks/transactions';
 import { showModal } from '../../ducks/modal';
+import { fetchBalances, getWalletBalances } from '../../ducks/balances';
 
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
@@ -108,7 +109,7 @@ const Charts = ({ state }) => {
 	);
 };
 
-const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) => {
+const getBalancePerAsset = (asset, { balances, prices, debtData }) => {
 	let balance,
 		usdValue = 0;
 	switch (asset) {
@@ -119,8 +120,8 @@ const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) =>
 			usdValue = balances[asset.toLowerCase()] * prices[asset.toLowerCase()];
 			break;
 		case 'Synths':
-			balance = synthData.total;
-			usdValue = synthData.total * prices.susd;
+			balance = balances.totalSynths;
+			usdValue = balances.totalSynths * prices.susd;
 			break;
 		case 'Debt':
 			balance = debtData.debtBalance;
@@ -148,6 +149,7 @@ const processTableData = (state, t) => {
 			? t(`dashboard.table.${dataType.toLowerCase()}`)
 			: dataType;
 		const { balance, usdValue } = getBalancePerAsset(dataType, state);
+
 		return {
 			rowLegend: (
 				<TableIconCell>
@@ -186,7 +188,7 @@ const BalanceTable = ({ state }) => {
 	);
 };
 
-const Dashboard = ({ walletDetails, successQueue, showModal }) => {
+const Dashboard = ({ walletDetails, successQueue, showModal, walletBalances, fetchBalances }) => {
 	const { t } = useTranslation();
 	const theme = useContext(ThemeContext);
 	const { currentWallet } = walletDetails;
@@ -195,11 +197,12 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 	const [data, setData] = useState({});
 	const loadData = useCallback(() => {
 		setDashboardIsLoading(true);
+		fetchBalances(currentWallet);
 		fetchData(currentWallet, successQueue).then(data => {
 			setData(data);
 			setDashboardIsLoading(false);
 		});
-	}, [currentWallet, successQueue]);
+	}, [currentWallet, successQueue, fetchBalances]);
 
 	useEffect(() => {
 		loadData();
@@ -211,7 +214,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 		};
 	}, [loadData]);
 
-	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
+	const { prices = {}, debtData = {}, escrowData = {} } = data;
 
 	return (
 		<DashboardWrapper>
@@ -252,7 +255,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 					</PricesContainer>
 					<Charts
 						state={{
-							balances,
+							balances: {},
 							debtData,
 							theme,
 							escrowData,
@@ -260,8 +263,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 					/>
 					<BalanceTable
 						state={{
-							balances,
-							synthData,
+							balances: walletBalances,
 							debtData,
 							prices,
 						}}
@@ -413,10 +415,12 @@ const CurrencyPrice = styled.div`
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	successQueue: getSuccessQueue(state),
+	walletBalances: getWalletBalances(state),
 });
 
 const mapDispatchToProps = {
 	showModal,
+	fetchBalances,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
