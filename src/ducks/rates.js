@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import snxJSConnector from '../helpers/snxJSConnector';
 import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
-import { bytesFormatter, bigNumberFormatter } from '../helpers/formatters';
+import { parseBytes32String, bytesFormatter } from '../helpers/formatters';
 
 export const appSlice = createSlice({
 	name: 'rates',
@@ -37,24 +37,36 @@ export const appSlice = createSlice({
 	},
 });
 
-const { setAppReady, fetchRatesRequest, fetchRatesFailure, fetchRatesSuccess } = appSlice.actions;
+const { fetchRatesRequest, fetchRatesFailure, fetchRatesSuccess } = appSlice.actions;
 
 const getRatesState = state => state.rates;
-export const getEthRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.ETH];
-export const getAppIsReady = state => getRatesState(state).isReady;
-export const getAppIsOnMaintenance = state => getRatesState(state).isOnMaintenance;
 
+export const getEthRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.ETH];
+export const getSNXRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.SNX];
+export const getRates = state => getRatesState(state).rates;
 export const fetchRates = () => async dispatch => {
+	const {
+		synthSummaryUtilContract,
+		snxJS: { ExchangeRates },
+	} = snxJSConnector;
+	dispatch(fetchRatesRequest());
 	try {
-		const { ExchangeRates } = snxJSConnector.snxJS;
-		dispatch(fetchRatesRequest());
-		const ethRate = await ExchangeRates.rateForCurrency(bytesFormatter(CRYPTO_CURRENCY_TO_KEY.ETH));
-		dispatch(fetchRatesSuccess({ [CRYPTO_CURRENCY_TO_KEY.ETH]: bigNumberFormatter(ethRate) }));
+		const [synthsRates, snxRate] = await Promise.all([
+			synthSummaryUtilContract.synthsRates(),
+			ExchangeRates.rateForCurrency(bytesFormatter(CRYPTO_CURRENCY_TO_KEY.SNX)),
+		]);
+		let exchangeRates = {
+			[CRYPTO_CURRENCY_TO_KEY.SNX]: snxRate / 1e18,
+		};
+		const [keys, rates] = synthsRates;
+		keys.forEach((key, i) => {
+			const synthName = parseBytes32String(key);
+			exchangeRates[synthName] = rates[i] / 1e18;
+		});
+		dispatch(fetchRatesSuccess(exchangeRates));
 	} catch (e) {
 		dispatch(fetchRatesFailure({ error: e.message }));
 	}
 };
-
-export { setAppReady };
 
 export default appSlice.reducer;

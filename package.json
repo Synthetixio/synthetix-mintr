@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"author": "Synthetix",
 	"dependencies": {
+		"@material-ui/core": "^4.9.14",
 		"@reduxjs/toolkit": "^1.2.5",
 		"@rehooks/component-size": "^1.0.3",
 		"browserslist": "^4.8.2",

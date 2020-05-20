@@ -142,7 +142,7 @@ const ReactTable = styled.div`
 				color: ${props => props.theme.colorStyles.tableBody};
 				font-size: 14px;
 				height: 40px;
-				&:last-child {
+				&:not(:first-child) {
 					justify-content: flex-end;
 				}
 			}
