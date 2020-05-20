@@ -143,7 +143,7 @@ const renderTooltip = (dataType, t) => {
 
 const processTableData = (state, t) => {
 	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
-		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType;
+		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'SNX' : dataType;
 		const assetName = ['Synths', 'Debt'].includes(dataType)
 			? t(`dashboard.table.${dataType.toLowerCase()}`)
 			: dataType;
