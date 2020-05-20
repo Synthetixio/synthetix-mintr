@@ -255,7 +255,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal, walletBalances, fet
 					</PricesContainer>
 					<Charts
 						state={{
-							balances: {},
+							balances: walletBalances,
 							debtData,
 							theme,
 							escrowData,
