@@ -6,8 +6,7 @@ import { SlidePage, SliderContent } from '../../../components/ScreenSlider';
 import { ButtonTertiary } from '../../../components/Button';
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import { ExternalLink, BorderedContainer } from '../../../styles/common';
-import Table from '../../../components/TableNew';
-import { TABLE_PALETTE } from '../../../components/TableNew/constants';
+import BalanceTable from './BalanceTable';
 
 import DebtChart from '../../../components/DebtChart';
 
@@ -57,33 +56,7 @@ const Track = ({ onDestroy }) => {
 						</GridColumn>
 					</Grid>
 					<TableBorderedContainer>
-						<Table
-							data={[
-								{ synth: 'sBTC', balance: 100, value: 100 },
-								{ synth: 'sETH', balance: 200, value: 200 },
-							]}
-							palette={TABLE_PALETTE.STRIPED}
-							columns={[
-								{
-									Header: t('mintrActions.track.action.table.yourSynths'),
-									accessor: 'synth',
-									// Cell: cellProps => 'test',
-									sortable: false,
-								},
-								{
-									Header: t('mintrActions.track.action.table.balance'),
-									accessor: 'balance',
-									// Cell: cellProps => 'test',
-									sortable: true,
-								},
-								{
-									Header: '$ USD',
-									accessor: 'value',
-									// Cell: cellProps => 'test',
-									sortable: true,
-								},
-							]}
-						/>
+						<BalanceTable />
 					</TableBorderedContainer>
 				</Body>
 			</SliderContent>

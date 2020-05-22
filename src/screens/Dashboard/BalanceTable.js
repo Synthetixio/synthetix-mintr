@@ -8,9 +8,9 @@ import { getWalletBalancesWithRates } from '../../ducks/balances';
 import { getRates } from '../../ducks/rates';
 
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
-import { TABLE_PALETTE } from '../../components/TableNew/constants';
+import { TABLE_PALETTE } from '../../components/Table/constants';
 
-import Table from '../../components/TableNew';
+import Table from '../../components/Table';
 import Tooltip from '../../components/Tooltip';
 import Box from './Box';
 import Skeleton from '../../components/Skeleton';
