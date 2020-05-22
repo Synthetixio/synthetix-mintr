@@ -109,7 +109,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 										<Skeleton height="22px" />
 									) : (
 										<CurrencyPrice>
-											1 {asset} = ${formatCurrency(rates[asset.toLowerCase()])} USD
+											1 {asset} = ${formatCurrency(rates[asset])} USD
 										</CurrencyPrice>
 									)}
 								</Asset>

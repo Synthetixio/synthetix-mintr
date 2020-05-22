@@ -1,61 +1,8 @@
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
-import { bytesFormatter } from '../../helpers/formatters';
+import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
 
-const bigNumberFormatter = value => Number(snxJSConnector.utils.formatEther(value));
-
-const convertFromSynth = (fromSynthRate, toSynthRate) => {
-	return fromSynthRate * (1 / toSynthRate);
-};
-
-// exported for tests
-export const getSusdInUsd = (synthRates, sethToEthRate) => {
-	const sEth = convertFromSynth(synthRates.susd, synthRates.seth);
-	const eth = sEth * sethToEthRate;
-	return eth * synthRates.seth;
-};
-const getSETHtoETH = async () => {
-	const sEthAddress = snxJSConnector.snxJS.sETH.contract.address;
-	const query = `query {
-		exchanges(where: {tokenAddress:"${sEthAddress}"}) {
-			price
-		}
-	}`;
-	const response = await fetch('https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap', {
-		method: 'POST',
-		body: JSON.stringify({ query, variables: null }),
-	}).then(x => x.json());
-	return (
-		response &&
-		response.data &&
-		response.data.exchanges &&
-		response.data.exchanges[0] &&
-		1 / response.data.exchanges[0].price
-	);
-};
-
-const getPrices = async () => {
-	try {
-		const synthsP = snxJSConnector.snxJS.ExchangeRates.ratesForCurrencies(
-			['SNX', 'sUSD', 'sETH'].map(bytesFormatter)
-		);
-		const sethToEthRateP = getSETHtoETH();
-		const [synths, sethToEthRate] = await Promise.all([synthsP, sethToEthRateP]);
-		const [snx, susd, seth] = synths.map(bigNumberFormatter);
-
-		const susdInUsd = getSusdInUsd(
-			{
-				susd,
-				seth,
-			},
-			sethToEthRate
-		);
-		return { snx, susd: susdInUsd, eth: seth };
-	} catch (e) {
-		console.log(e);
-	}
-};
 const getRewards = async walletAddress => {
 	try {
 		const [feesAreClaimable, currentFeePeriod, feePeriodDuration] = await Promise.all([
@@ -115,15 +62,13 @@ const getEscrow = async walletAddress => {
 };
 
 export const fetchData = async walletAddress => {
-	const [prices, rewardData, debtData, escrowData] = await Promise.all([
-		getPrices(),
+	const [rewardData, debtData, escrowData] = await Promise.all([
 		getRewards(walletAddress),
 		getDebt(walletAddress),
 		getEscrow(walletAddress),
 	]).catch(e => console.log(e));
 
 	return {
-		prices,
 		rewardData,
 		debtData,
 		escrowData,

@@ -40,7 +40,7 @@ const getBalance = (column, walletBalancesWithRates, debtData, rates) => {
 	} else {
 		return {
 			balance: debtData.debtBalance,
-			valueUSD: debtData.debtBalance * rates[CRYPTO_CURRENCY_TO_KEY.SNX],
+			valueUSD: debtData.debtBalance * rates[CRYPTO_CURRENCY_TO_KEY.sUSD],
 			tooltip: 'debt',
 		};
 	}
@@ -100,7 +100,7 @@ const BalanceTable = ({ walletBalancesWithRates, rates, debtData }) => {
 								Header: '$ USD',
 								accessor: 'valueUSD',
 								Cell: ({ value }) => {
-									return formatCurrency(value);
+									return `$${formatCurrency(value)}`;
 								},
 								sortable: false,
 							},
