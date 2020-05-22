@@ -1,12 +1,14 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.21.9",
+	"version": "2.21.13",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
 	"dependencies": {
+		"@material-ui/core": "^4.9.14",
 		"@reduxjs/toolkit": "^1.2.5",
 		"@rehooks/component-size": "^1.0.3",
+		"axios": "^0.19.2",
 		"browserslist": "^4.8.2",
 		"date-fns": "^2.0.1",
 		"ethers": "4.0.38",
@@ -27,13 +29,14 @@
 		"react-i18next": "^10.11.2",
 		"react-outside-click-handler": "^1.2.4",
 		"react-redux": "^7.2.0",
-		"react-responsive-carousel": "^3.1.51",
+		"react-responsive-carousel": "^3.2.7",
 		"react-select": "^3.0.4",
 		"react-switch": "^5.0.1",
+		"react-table": "^7.1.0",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
 		"synthetix-data": "^2.1.11",
-		"synthetix-js": "^2.21.9",
+		"synthetix-js": "^2.21.13-1",
 		"walletlink": "^1.0.0"
 	},
 	"scripts": {

@@ -4,20 +4,24 @@ import Burn from './Burn';
 import Claim from './Claim';
 import Trade from './Trade';
 import Send from './Transfer';
+import Track from './Track';
 import Slider from '../../components/ScreenSlider';
+import { ACTIONS_MAP } from '../../constants/actions';
 
 const getActionComponent = action => {
 	switch (action) {
-		case 'mint':
+		case ACTIONS_MAP.mint:
 			return Mint;
-		case 'burn':
+		case ACTIONS_MAP.burn:
 			return Burn;
-		case 'claim':
+		case ACTIONS_MAP.claim:
 			return Claim;
-		case 'trade':
+		case ACTIONS_MAP.trade:
 			return Trade;
-		case 'transfer':
+		case ACTIONS_MAP.transfer:
 			return Send;
+		case ACTIONS_MAP.track:
+			return Track;
 		default:
 			return;
 	}

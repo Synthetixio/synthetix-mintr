@@ -114,6 +114,10 @@
 			"transfer": {
 				"title": "Transfer",
 				"description": "Transfer SNX, Synths, or ETH"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
 			}
 		}
 	},
@@ -184,6 +188,24 @@
 			},
 			"complete": {
 				"title": "Claiming in progress!"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"totalSynths": "Total synths",
+					"synthDebt": "Synth debt",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {

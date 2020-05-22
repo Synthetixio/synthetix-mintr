@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { PageTitle, PLarge, H1, H2, PMega } from '../../../components/Typography';
+import { PageTitle, PLarge, H2 } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
 
 import MintrAction from '../../MintrActions';
+import { ACTIONS } from '../../../constants/actions';
 
 const initialScenario = null;
 
@@ -18,31 +19,23 @@ const actionLabelMapper = {
 		description: 'home.actions.transfer.description',
 		title: 'home.actions.transfer.title',
 	},
+	track: {
+		description: 'home.actions.track.description',
+		title: 'home.actions.track.title',
+	},
 };
 
-const Home = ({ t }) => {
+const Home = () => {
+	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
 			<PageTitle>{t('home.intro.title')}</PageTitle>
-			<ButtonRow margin="30px 0 40px 0">
-				{['mint', 'burn'].map(action => {
+			<ButtonRow>
+				{ACTIONS.map(action => {
 					return (
 						<Button key={action} onClick={() => setCurrentScenario(action)} big>
-							<ButtonContainer>
-								<ActionImage src={`/images/actions/${action}.svg`} big />
-								<H1>{t(actionLabelMapper[action].title)}</H1>
-								<PMega>{t(actionLabelMapper[action].description)}</PMega>
-							</ButtonContainer>
-						</Button>
-					);
-				})}
-			</ButtonRow>
-			<ButtonRow margin="0 0 40px 0">
-				{['claim', 'trade', 'transfer'].map(action => {
-					return (
-						<Button key={action} onClick={() => setCurrentScenario(action)}>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
 								<H2>{t(actionLabelMapper[action].title)}</H2>
@@ -76,17 +69,24 @@ const Button = styled.button`
 const ButtonContainer = styled.div`
 	padding: 10px;
 	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `;
 
 const ButtonRow = styled.div`
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 34px;
+	/* margin: 0 0 40px 0;
 	display: flex;
-	justify-content: space-between;
-	margin: ${props => (props.margin ? props.margin : 0)};
+	justify-content: space-between; */
 `;
 
 const ActionImage = styled.img`
-	height: ${props => (props.big ? '64px' : '48px')};
-	width: ${props => (props.big ? '64px' : '48px')};
+	height: 48px;
+	width: 48px;
 `;
 
-export default withTranslation()(Home);
+export default Home;

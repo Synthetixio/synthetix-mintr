@@ -1,11 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import snxData from 'synthetix-data';
-import flatten from 'lodash/flatten';
-import orderBy from 'lodash/orderBy';
 
 import { TRANSACTION_EVENTS_MAP } from '../constants/transactionHistory';
-
-const DEPOT_EVENTS = [TRANSACTION_EVENTS_MAP.cleared, TRANSACTION_EVENTS_MAP.bought];
 
 export const depotHistorySlice = createSlice({
 	name: 'depotHistory',
