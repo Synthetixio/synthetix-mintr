@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
@@ -82,4 +81,4 @@ const mapDispatchToProps = {
 	fetchAppStatus,
 };
 
-export default hot(connect(mapStateToProps, mapDispatchToProps)(Root));
+export default connect(mapStateToProps, mapDispatchToProps)(Root);
