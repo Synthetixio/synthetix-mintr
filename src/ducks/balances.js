@@ -110,12 +110,13 @@ export const fetchBalances = walletAddress => async dispatch => {
 				};
 			})
 			.filter(synth => synth.balance);
+
+		const sUSDBalance = synths.find(synth => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD);
 		dispatch(
 			fetchBalancesSuccess({
 				[CRYPTO_CURRENCY_TO_KEY.SNX]: bigNumberFormatter(snxBalanceResults),
 				[CRYPTO_CURRENCY_TO_KEY.ETH]: bigNumberFormatter(ethBalanceResults),
-				[CRYPTO_CURRENCY_TO_KEY.sUSD]:
-					synths.find(synth => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD) || 0,
+				[CRYPTO_CURRENCY_TO_KEY.sUSD]: sUSDBalance ? sUSDBalance.balance : 0,
 				synths,
 				totalSynths: bigNumberFormatter(totalSynthsBalanceResults),
 			})

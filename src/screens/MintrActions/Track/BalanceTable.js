@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { getWalletBalancesWithRates } from 'src/ducks/balances';
+import { getWalletBalancesWithRates } from 'ducks/balances';
 
-import Table from 'src/components/Table';
-import { TABLE_PALETTE } from 'src/components/Table/constants';
+import Table from 'components/Table';
+import { TABLE_PALETTE } from 'components/Table/constants';
 
-import { formatCurrencyWithSign, formatCurrency } from 'src/helpers/formatters';
+import { formatCurrencyWithSign, formatCurrency } from 'helpers/formatters';
 
-import { FlexDivCentered } from 'src/styles/common';
+import { FlexDivCentered } from 'styles/common';
 
 const BalanceTable = ({ walletBalancesWithRates }) => {
 	const { t } = useTranslation();
