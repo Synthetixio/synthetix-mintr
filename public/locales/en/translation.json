@@ -200,7 +200,12 @@
 					"netDebt": "Net debt"
 				},
 				"chart": {
-					"title": "Debt over time"
+					"title": "Debt over time",
+					"legend": {
+						"activeDebt": "Active Debt",
+						"issuanceDebt": "Mint and Burn Debt",
+						"netDebt": "Net Debt"
+					}
 				},
 				"table": {
 					"yourSynths": "Your synths",
