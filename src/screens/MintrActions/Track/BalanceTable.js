@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { getWalletBalancesWithRates } from 'ducks/balances';
@@ -12,8 +12,9 @@ import { formatCurrencyWithSign, formatCurrency } from 'helpers/formatters';
 
 import { FlexDivCentered } from 'styles/common';
 
-const BalanceTable = ({ walletBalancesWithRates }) => {
+const BalanceTable = ({ walletBalancesWithRates, currentWallet }) => {
 	const { t } = useTranslation();
+
 	return (
 		<Table
 			data={(walletBalancesWithRates && walletBalancesWithRates.synths) || []}

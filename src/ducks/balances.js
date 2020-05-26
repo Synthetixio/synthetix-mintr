@@ -1,5 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 import isEmpty from 'lodash/isEmpty';
+import orderBy from 'lodash/orderBy';
 import snxJSConnector from '../helpers/snxJSConnector';
 import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
 import { bytesFormatter, bigNumberFormatter, parseBytes32String } from '../helpers/formatters';
@@ -71,7 +72,7 @@ export const getWalletBalancesWithRates = createSelector(
 				});
 			}
 		});
-		return { ...balancesWithRates, synths: synthBalancesWithRates };
+		return { ...balancesWithRates, synths: orderBy(synthBalancesWithRates, 'valueUSD', 'desc') };
 	}
 );
 

@@ -44,6 +44,7 @@ const getRatesState = state => state.rates;
 
 export const getEthRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.ETH];
 export const getSNXRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.SNX];
+export const getSUSDRate = state => getRatesState(state).rates[CRYPTO_CURRENCY_TO_KEY.sUSD];
 export const getRates = state => getRatesState(state).rates;
 
 const fetchUniswapSETHRate = async () => {
