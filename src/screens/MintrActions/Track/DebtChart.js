@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ThemeContext } from 'styled-components';
+import numbro from 'numbro';
 import {
 	ResponsiveContainer,
 	LineChart,
@@ -57,17 +58,16 @@ const Chart = ({ data }) => {
 					interval="preserveEnd"
 					tick={{ fontSize: 12, fill: colorStyles.subtext, fontFamily: 'apercu-regular' }}
 					axisLine={false}
-					tickSize={0}
-					tickFormatter={tick => {
-						return format(new Date(tick), 'd MMM yy');
-					}}
+					tickLine={false}
+					tickFormatter={tick => format(new Date(tick), 'd MMM yy')}
 				/>
 				<YAxis
-					width={30}
+					width={35}
 					stroke="#E8E7FD"
 					domain={['auto', 'auto']}
 					tickLine={false}
 					strokeWidth={1}
+					tickFormatter={tick => numbro(tick).format({ average: true })}
 					tick={{ fontSize: 12, fill: colorStyles.subtext, fontFamily: 'apercu-regular' }}
 				/>
 				<Tooltip
@@ -79,27 +79,9 @@ const Chart = ({ data }) => {
 						borderColor: colorStyles.borders,
 					}}
 				/>
-				<Line
-					type="monotone"
-					dataKey="issuanceDebt"
-					stroke="#419EF8"
-					strokeWidth={2}
-					dot={{ fill: '#419EF8', stroke: colorStyles.borders, strokeWidth: 1 }}
-				/>
-				<Line
-					type="monotone"
-					dataKey="activeDebt"
-					stroke="#5C2AF5"
-					strokeWidth={2}
-					dot={{ fill: '#5C2AF5', stroke: colorStyles.borders, strokeWidth: 1 }}
-				/>
-				<Line
-					type="monotone"
-					dataKey="netDebt"
-					stroke="#5ABC92"
-					strokeWidth={2}
-					dot={{ fill: '#5ABC92', stroke: colorStyles.borders, strokeWidth: 1 }}
-				/>
+				<Line type="monotone" dataKey="issuanceDebt" stroke="#419EF8" strokeWidth={2} dot={false} />
+				<Line type="monotone" dataKey="activeDebt" stroke="#5C2AF5" strokeWidth={2} dot={false} />
+				<Line type="monotone" dataKey="netDebt" stroke="#5ABC92" strokeWidth={2} dot={false} />
 				<ReferenceLine y={0} isFront={false} strokeWidth={1} stroke={colorStyles.borders} />
 			</LineChart>
 		</ResponsiveContainer>

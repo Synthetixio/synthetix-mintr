@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { PageTitle, PLarge, H2 } from '../../../components/Typography';
-import PageContainer from '../../../components/PageContainer';
+import { getWalletDetails } from 'ducks/wallet';
+
+import { PageTitle, PLarge, H2 } from 'components/Typography';
+import PageContainer from 'components/PageContainer';
 
 import MintrAction from '../../MintrActions';
-import { ACTIONS } from '../../../constants/actions';
+import { ACTIONS } from 'constants/actions';
+import { isMainNet } from 'helpers/networkHelper';
 
 const initialScenario = null;
 
@@ -25,7 +29,7 @@ const actionLabelMapper = {
 	},
 };
 
-const Home = () => {
+const Home = ({ walletDetails: { networkId } }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	return (
@@ -35,7 +39,12 @@ const Home = () => {
 			<ButtonRow>
 				{ACTIONS.map(action => {
 					return (
-						<Button key={action} onClick={() => setCurrentScenario(action)} big>
+						<Button
+							disabled={action === 'track' && !isMainNet(networkId)}
+							key={action}
+							onClick={() => setCurrentScenario(action)}
+							big
+						>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
 								<H2>{t(actionLabelMapper[action].title)}</H2>
@@ -64,6 +73,9 @@ const Button = styled.button`
 		box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
 		transform: translateY(-2px);
 	}
+	&:disabled {
+		opacity: 0.5;
+	}
 `;
 
 const ButtonContainer = styled.div`
@@ -89,4 +101,8 @@ const ActionImage = styled.img`
 	width: 48px;
 `;
 
-export default Home;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+export default connect(mapStateToProps, null)(Home);

@@ -24,7 +24,7 @@ import { formatCurrencyWithSign, bytesFormatter } from 'helpers/formatters';
 import DebtChart from './DebtChart';
 import BalanceTable from './BalanceTable';
 
-const MIN_BLOCK = 8314597;
+const MIN_BLOCK = 8621868;
 
 const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }) => {
 	const { t } = useTranslation();
@@ -54,20 +54,17 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 				// We concat both the events and order them (asc)
 				const eventBlocks = orderBy(burnEventsMap.concat(mintEventsMap), 'block', 'asc');
 
-				// We set issuanceAggregation array, to store all the cumulative
+				// We set historicalIssuanceAggregation array, to store all the cumulative
 				// values of every mint and burns
-				const issuanceAggregation = [];
-				eventBlocks.forEach(event => {
+				const historicalIssuanceAggregation = [];
+				eventBlocks.forEach((event, i) => {
 					const multiplier = event.type === 'burn' ? -1 : 1;
-					const sum =
-						issuanceAggregation.length === 0
-							? event.value
-							: issuanceAggregation.reduce((a, b) => a + b.debt + multiplier * event.value, 0);
-					issuanceAggregation.push({
-						block: event.block,
-						timestamp: event.timestamp,
-						debt: sum,
-					});
+					const aggregation =
+						historicalIssuanceAggregation.length === 0
+							? multiplier * event.value
+							: multiplier * event.value + historicalIssuanceAggregation[i - 1];
+
+					historicalIssuanceAggregation.push(aggregation);
 				});
 
 				// Bottle neck to throttle the Infura requests
@@ -104,9 +101,9 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 				historicalDebt.forEach((debt, i) => {
 					historicalDebtAndIssuance.push({
 						timestamp: debt.timestamp,
-						issuanceDebt: issuanceAggregation[i].debt,
+						issuanceDebt: historicalIssuanceAggregation[i],
 						activeDebt: debt.debt,
-						netDebt: issuanceAggregation[i].debt - debt.debt,
+						netDebt: debt.debt - historicalIssuanceAggregation[i],
 					});
 				});
 
@@ -115,11 +112,14 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 				historicalDebtAndIssuance.push({
 					timestamp: new Date().getTime(),
 					activeDebt: currentDebt / 1e18,
-					issuanceDebt: last(issuanceAggregation).debt,
-					netDebt: last(issuanceAggregation).debt - currentDebt / 1e18,
+					issuanceDebt: last(historicalIssuanceAggregation),
+					netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
 				});
 				setHistoricalDebt(historicalDebtAndIssuance);
-				setDebtData(last(historicalDebtAndIssuance));
+				setDebtData({
+					synthDebt: currentDebt / 1e18,
+					netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
+				});
 			} catch (e) {
 				console.log(e);
 				setHistoricalDebt([]);
@@ -128,7 +128,9 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 		fetchEvents();
 	}, [currentWallet]);
 
-	const totalSynthsValue = (totalSynths && totalSynths * sUSDRate) || 0;
+	const totalSynthsValue = totalSynths ? totalSynths * sUSDRate : 0;
+	const activeDebtValue = debtData ? debtData.synthDebt * sUSDRate : 0;
+	const netDebtValue = debtData ? debtData.netDebt * sUSDRate : 0;
 
 	return (
 		<SlidePage>
@@ -156,17 +158,12 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 
 							<BorderedContainer>
 								<StyledSubtext>{t('mintrActions.track.action.data.synthDebt')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', debtData.activeDebt || 0)}</Amount>
+								<Amount>{formatCurrencyWithSign('$', activeDebtValue)}</Amount>
 							</BorderedContainer>
 
 							<BorderedContainer>
 								<StyledSubtext>{t('mintrActions.track.action.data.netDebt')}</StyledSubtext>
-								<Amount>
-									{formatCurrencyWithSign(
-										'$',
-										(debtData.netDebt && debtData.netDebt + totalSynthsValue) || 0
-									)}
-								</Amount>
+								<Amount>{formatCurrencyWithSign('$', netDebtValue)}</Amount>
 							</BorderedContainer>
 						</GridColumn>
 						<GridColumn>
