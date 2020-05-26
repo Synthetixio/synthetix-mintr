@@ -16,7 +16,9 @@ import { PLarge, H1, Subtext } from 'components/Typography';
 import { ExternalLink, BorderedContainer } from 'styles/common';
 
 import { getCurrentWallet } from 'ducks/wallet';
-import { INFURA_JSON_RPC_URLS } from 'helpers/networkHelper';
+import { getWalletBalances } from 'ducks/balances';
+import { getSUSDRate } from 'ducks/rates';
+import { INFURA_ARCHIVE_JSON_RPC_URL } from 'helpers/networkHelper';
 import { formatCurrencyWithSign, bytesFormatter } from 'helpers/formatters';
 
 import DebtChart from './DebtChart';
@@ -24,15 +26,17 @@ import BalanceTable from './BalanceTable';
 
 const MIN_BLOCK = 8314597;
 
-const Track = ({ onDestroy, currentWallet }) => {
+const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }) => {
 	const { t } = useTranslation();
 	const [historicalDebt, setHistoricalDebt] = useState([]);
+	const [debtData, setDebtData] = useState({});
 
 	useEffect(() => {
 		if (!currentWallet) return;
 		const { snxJS } = snxJSConnector;
 		const fetchEvents = async () => {
 			try {
+				// We get all the burn & mint events since block = MIN_BLOCK
 				const [burnEvents, mintEvents, currentDebt] = await Promise.all([
 					snxData.snx.burned({ account: currentWallet, max: 1000, minBlock: MIN_BLOCK }),
 					snxData.snx.issued({ account: currentWallet, max: 1000, minBlock: MIN_BLOCK }),
@@ -47,31 +51,39 @@ const Track = ({ onDestroy, currentWallet }) => {
 					return { ...event, type: 'mint' };
 				});
 
+				// We concat both the events and order them (asc)
 				const eventBlocks = orderBy(burnEventsMap.concat(mintEventsMap), 'block', 'asc');
 
-				const mintAndBurnAggregation = [];
+				// We set issuanceAggregation array, to store all the cumulative
+				// values of every mint and burns
+				const issuanceAggregation = [];
 				eventBlocks.forEach(event => {
 					const multiplier = event.type === 'burn' ? -1 : 1;
 					const sum =
-						mintAndBurnAggregation.length === 0
+						issuanceAggregation.length === 0
 							? event.value
-							: mintAndBurnAggregation.reduce((a, b) => a + b.debt + multiplier * event.value, 0);
-					mintAndBurnAggregation.push({
+							: issuanceAggregation.reduce((a, b) => a + b.debt + multiplier * event.value, 0);
+					issuanceAggregation.push({
 						block: event.block,
 						timestamp: event.timestamp,
 						debt: sum,
 					});
 				});
 
+				// Bottle neck to throttle the Infura requests
 				const limiter = new Bottleneck({
 					maxConcurrent: 30,
 					minTime: 7,
 				});
-				const provider = new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[1]);
-				const test = new SynthetixJs({ provider });
 
+				// We create new provider, using an archived infura node
+				const provider = new providers.JsonRpcProvider(INFURA_ARCHIVE_JSON_RPC_URL);
+				const archiveSNXJS = new SynthetixJs({ provider });
+
+				// For every transaction, we get the wallet debt balance
+				// at block = transaction.block
 				const getBalance = async transaction => {
-					const debt = await test.Synthetix.contract.debtBalanceOf(
+					const debt = await archiveSNXJS.Synthetix.contract.debtBalanceOf(
 						currentWallet,
 						bytesFormatter('sUSD'),
 						{
@@ -87,22 +99,27 @@ const Track = ({ onDestroy, currentWallet }) => {
 
 				const historicalDebt = await Promise.all(eventBlocks.map(limiter.wrap(getBalance)));
 
+				// We merge both active & issuance debt into an array
 				let historicalDebtAndIssuance = [];
 				historicalDebt.forEach((debt, i) => {
 					historicalDebtAndIssuance.push({
 						timestamp: debt.timestamp,
-						issuanceDebt: mintAndBurnAggregation[i].debt,
+						issuanceDebt: issuanceAggregation[i].debt,
 						activeDebt: debt.debt,
-						netDebt: mintAndBurnAggregation[i].debt - debt.debt,
+						netDebt: issuanceAggregation[i].debt - debt.debt,
 					});
 				});
+
+				// Last occurrence is the current state of the debt
+				// Issuance debt = last occurrence of the historicalDebtAndIssuance array
 				historicalDebtAndIssuance.push({
 					timestamp: new Date().getTime(),
 					activeDebt: currentDebt / 1e18,
-					issuanceDebt: last(mintAndBurnAggregation).debt,
-					netDebt: last(mintAndBurnAggregation).debt - currentDebt / 1e18,
+					issuanceDebt: last(issuanceAggregation).debt,
+					netDebt: last(issuanceAggregation).debt - currentDebt / 1e18,
 				});
 				setHistoricalDebt(historicalDebtAndIssuance);
+				setDebtData(last(historicalDebtAndIssuance));
 			} catch (e) {
 				console.log(e);
 				setHistoricalDebt([]);
@@ -110,6 +127,9 @@ const Track = ({ onDestroy, currentWallet }) => {
 		};
 		fetchEvents();
 	}, [currentWallet]);
+
+	const totalSynthsValue = (totalSynths && totalSynths * sUSDRate) || 0;
+
 	return (
 		<SlidePage>
 			<SliderContent>
@@ -131,17 +151,22 @@ const Track = ({ onDestroy, currentWallet }) => {
 						<GridColumn>
 							<BorderedContainer>
 								<StyledSubtext>{t('mintrActions.track.action.data.totalSynths')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', 1000000)}</Amount>
+								<Amount>{formatCurrencyWithSign('$', totalSynthsValue)}</Amount>
 							</BorderedContainer>
 
 							<BorderedContainer>
 								<StyledSubtext>{t('mintrActions.track.action.data.synthDebt')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', 1000000)}</Amount>
+								<Amount>{formatCurrencyWithSign('$', debtData.activeDebt || 0)}</Amount>
 							</BorderedContainer>
 
 							<BorderedContainer>
 								<StyledSubtext>{t('mintrActions.track.action.data.netDebt')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', 1000000)}</Amount>
+								<Amount>
+									{formatCurrencyWithSign(
+										'$',
+										(debtData.netDebt && debtData.netDebt + totalSynthsValue) || 0
+									)}
+								</Amount>
 							</BorderedContainer>
 						</GridColumn>
 						<GridColumn>
@@ -225,6 +250,8 @@ const TableBorderedContainer = styled(BorderedContainer)`
 
 const mapStateToProps = state => ({
 	currentWallet: getCurrentWallet(state),
+	balances: getWalletBalances(state),
+	sUSDRate: getSUSDRate(state),
 });
 
 export default connect(mapStateToProps, null)(Track);

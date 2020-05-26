@@ -25,6 +25,7 @@ export const DEFAULT_GAS_LIMIT = {
 };
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
+const INFURA_ARCHIVE_PROJECT_ID = process.env.REACT_APP_INFURA_ARCHIVE_PROJECT_ID;
 
 export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
@@ -33,6 +34,8 @@ export const INFURA_JSON_RPC_URLS = {
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
+export const INFURA_ARCHIVE_JSON_RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ARCHIVE_PROJECT_ID}`;
+
 export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger', 'Coinbase', 'WalletConnect'];
 
 export const hasWeb3 = () => {
@@ -40,7 +43,7 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	return await new Promise(function(resolve, reject) {
+	return await new Promise(function (resolve, reject) {
 		if (!window.web3) resolve({ name: 'MAINNET', networkId: '1' });
 		window.web3.version.getNetwork((err, networkId) => {
 			if (err) {
