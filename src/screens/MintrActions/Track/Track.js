@@ -103,7 +103,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 						timestamp: debt.timestamp,
 						issuanceDebt: historicalIssuanceAggregation[i],
 						activeDebt: debt.debt,
-						netDebt: debt.debt - historicalIssuanceAggregation[i],
+						netDebt: historicalIssuanceAggregation[i] - debt.debt,
 					});
 				});
 
@@ -113,12 +113,12 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 					timestamp: new Date().getTime(),
 					activeDebt: currentDebt / 1e18,
 					issuanceDebt: last(historicalIssuanceAggregation),
-					netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
+					netDebt: last(historicalIssuanceAggregation) - currentDebt / 1e18,
 				});
 				setHistoricalDebt(historicalDebtAndIssuance);
 				setDebtData({
 					synthDebt: currentDebt / 1e18,
-					netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
+					netDebt: last(historicalIssuanceAggregation) - currentDebt / 1e18,
 				});
 			} catch (e) {
 				console.log(e);
