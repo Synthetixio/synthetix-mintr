@@ -328,11 +328,14 @@
 			"title": "Please choose a pool"
 		},
 		"actions": {
-			"unipool": {
-				"title": "Unipool"
+			"unipoolSETH": {
+				"title": "Unipool sETH"
 			},
-			"curvepool": { "title": "Curvepool" },
-			"ieth": { "title": "iEth" }
+			"unipoolSXAU": {
+				"title": "Unipool sXAU"
+			},
+			"curvepool": { "title": "Curvepool sUSD" },
+			"ieth": { "title": "iETH" }
 		},
 		"shared": {
 			"unlocked": {
@@ -363,7 +366,7 @@
 			}
 		}
 	},
-	"unipool": {
+	"unipoolSETH": {
 		"title": "Uniswap sETH LP Token Rewards",
 		"locked": {
 			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
@@ -371,6 +374,16 @@
 		},
 		"unlocked": {
 			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"ieth": {

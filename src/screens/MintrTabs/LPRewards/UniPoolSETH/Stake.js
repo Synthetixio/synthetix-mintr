@@ -14,6 +14,7 @@ import DataBox from '../../../../components/DataBox';
 import { ButtonTertiary, ButtonPrimary } from '../../../../components/Button';
 
 import UnipoolActions from '../../../UnipoolActions';
+import { uniswapV1 } from '../../../../helpers/contracts';
 
 const TRANSACTION_DETAILS = {
 	stake: {
@@ -36,7 +37,7 @@ const TRANSACTION_DETAILS = {
 
 const Stake = ({ walletDetails, goBack }) => {
 	const { t } = useTranslation();
-	const { unipoolContract } = snxJSConnector;
+	const { unipoolSETHContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
 	const [gasLimit, setGasLimit] = useState(TRANSACTION_DETAILS.stake.gasLimit);
 	const [currentScenario, setCurrentScenario] = useState({});
@@ -45,11 +46,11 @@ const Stake = ({ walletDetails, goBack }) => {
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
 		try {
-			const { uniswapContract, unipoolContract } = snxJSConnector;
+			const { uniswapV1Contract, unipoolSETHContract } = snxJSConnector;
 			const [univ1Held, univ1Staked, rewards] = await Promise.all([
-				uniswapContract.balanceOf(currentWallet),
-				unipoolContract.balanceOf(currentWallet),
-				unipoolContract.earned(currentWallet),
+				uniswapV1Contract.balanceOf(currentWallet),
+				unipoolSETHContract.balanceOf(currentWallet),
+				unipoolSETHContract.earned(currentWallet),
 			]);
 			setBalances({
 				univ1Held: bigNumberFormatter(univ1Held),
@@ -70,21 +71,21 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { unipoolContract } = snxJSConnector;
+		const { unipoolSETHContract } = snxJSConnector;
 
-		unipoolContract.on('Staked', user => {
+		unipoolSETHContract.on('Staked', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('Withdrawn', user => {
+		unipoolSETHContract.on('Withdrawn', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('RewardPaid', user => {
+		unipoolSETHContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -92,9 +93,9 @@ const Stake = ({ walletDetails, goBack }) => {
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				unipoolContract.removeAllListeners('Staked');
-				unipoolContract.removeAllListeners('Withdrawn');
-				unipoolContract.removeAllListeners('RewardPaid');
+				unipoolSETHContract.removeAllListeners('Staked');
+				unipoolSETHContract.removeAllListeners('Withdrawn');
+				unipoolSETHContract.removeAllListeners('RewardPaid');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,13 +109,13 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${unipoolContract.address}`}
+					href={`https://etherscan.io/address/${unipoolSETHContract.address}`}
 				>
 					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
 			</Navigation>
-			<PageTitle>{t('unipool.title')}</PageTitle>
-			<PLarge>{t('unipool.unlocked.subtitle')}</PLarge>
+			<PageTitle>{t('unipoolSETH.title')}</PageTitle>
+			<PLarge>{t('unipoolSETH.unlocked.subtitle')}</PLarge>
 			<PLarge>
 				<Link href="https://blog.synthetix.io/new-uniswap-seth-lp-reward-system/" target="_blank">
 					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
