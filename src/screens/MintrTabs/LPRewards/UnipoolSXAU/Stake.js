@@ -36,7 +36,7 @@ const TRANSACTION_DETAILS = {
 
 const Stake = ({ walletDetails, goBack }) => {
 	const { t } = useTranslation();
-	const { unipoolContract } = snxJSConnector;
+	const { unipoolSXAUContract } = snxJSConnector;
 	const [balances, setBalances] = useState(null);
 	const [gasLimit, setGasLimit] = useState(TRANSACTION_DETAILS.stake.gasLimit);
 	const [currentScenario, setCurrentScenario] = useState({});
@@ -45,17 +45,17 @@ const Stake = ({ walletDetails, goBack }) => {
 	const fetchData = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
 		try {
-			const { uniswapContract, unipoolContract } = snxJSConnector;
-			const [univ1Held, univ1Staked, rewards] = await Promise.all([
-				uniswapContract.balanceOf(currentWallet),
-				unipoolContract.balanceOf(currentWallet),
-				unipoolContract.earned(currentWallet),
+			const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
+			const [univ2Held, univ2Staked, rewards] = await Promise.all([
+				uniswapV2Contract.balanceOf(currentWallet),
+				unipoolSXAUContract.balanceOf(currentWallet),
+				unipoolSXAUContract.earned(currentWallet),
 			]);
 			setBalances({
-				univ1Held: bigNumberFormatter(univ1Held),
-				univ1HeldBN: univ1Held,
-				univ1Staked: bigNumberFormatter(univ1Staked),
-				univ1StakedBN: univ1Staked,
+				univ2Held: bigNumberFormatter(univ2Held),
+				univ2HeldBN: univ2Held,
+				univ2Staked: bigNumberFormatter(univ2Staked),
+				univ2StakedBN: univ2Staked,
 				rewards: bigNumberFormatter(rewards),
 			});
 		} catch (e) {
@@ -70,21 +70,21 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { unipoolContract } = snxJSConnector;
+		const { unipoolSXAUContract } = snxJSConnector;
 
-		unipoolContract.on('Staked', user => {
+		unipoolSXAUContract.on('Staked', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('Withdrawn', user => {
+		unipoolSXAUContract.on('Withdrawn', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		unipoolContract.on('RewardPaid', user => {
+		unipoolSXAUContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -92,9 +92,9 @@ const Stake = ({ walletDetails, goBack }) => {
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				unipoolContract.removeAllListeners('Staked');
-				unipoolContract.removeAllListeners('Withdrawn');
-				unipoolContract.removeAllListeners('RewardPaid');
+				unipoolSXAUContract.removeAllListeners('Staked');
+				unipoolSXAUContract.removeAllListeners('Withdrawn');
+				unipoolSXAUContract.removeAllListeners('RewardPaid');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,26 +108,26 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${unipoolContract.address}`}
+					href={`https://etherscan.io/address/${unipoolSXAUContract.address}`}
 				>
 					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
 			</Navigation>
-			<PageTitle>{t('unipool.title')}</PageTitle>
-			<PLarge>{t('unipool.unlocked.subtitle')}</PLarge>
+			<PageTitle>{t('unipoolSXAU.title')}</PageTitle>
+			<PLarge>{t('unipoolSXAU.unlocked.subtitle')}</PLarge>
 			<PLarge>
-				<Link href="https://blog.synthetix.io/new-uniswap-seth-lp-reward-system/" target="_blank">
+				<Link href="https://blog.synthetix.io/uniswap-v2-sxau-trial/" target="_blank">
 					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
 				</Link>
 			</PLarge>
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.univ1Held) : 0} UNI-V1`}
+					body={`${balances ? formatCurrency(balances.univ2Held, 10) : 0} UNI-V2`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.univ1Staked) : 0} UNI-V1`}
+					body={`${balances ? formatCurrency(balances.univ2Staked, 10) : 0} UNI-V2`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
@@ -138,13 +138,14 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonRow>
 					<ButtonAction
 						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
-						disabled={!balances || !balances.univ1Held}
+						disabled={!balances || !balances.univ2Held}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.univ1Held)} UNI-V1`,
-								param: balances && balances.univ1HeldBN,
+								amount: `${balances && formatCurrency(balances.univ2Held, 10)} UNI-V2`,
+								param: balances && balances.univ2HeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
 						}
@@ -156,6 +157,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'claim',
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
@@ -169,13 +171,14 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonRow>
 					<ButtonAction
 						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['unstake'].gasLimit)}
-						disabled={!balances || !balances.univ1Staked}
+						disabled={!balances || !balances.univ2Staked}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1`,
-								param: balances && balances.univ1StakedBN,
+								amount: `${balances && formatCurrency(balances.univ2Staked, 10)} UNI-V2`,
+								param: balances && balances.univ2StakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
 						}
@@ -184,12 +187,14 @@ const Stake = ({ walletDetails, goBack }) => {
 					</ButtonAction>
 					<ButtonAction
 						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['exit'].gasLimit)}
-						disabled={!balances || (!balances.univ1Staked && !balances.rewards)}
+						disabled={!balances || (!balances.univ2Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1 & ${balances &&
+								amount: `${balances &&
+									formatCurrency(balances.univ2Staked, 10)} UNI-V2 & ${balances &&
 									formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
