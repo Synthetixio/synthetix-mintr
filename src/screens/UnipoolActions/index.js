@@ -22,13 +22,13 @@ const SliderController = ({
 	walletDetails,
 	currentGasPrice,
 	createTransaction,
+	contract,
 }) => {
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const { walletType, networkName } = walletDetails;
 
 	useEffect(() => {
-		const { unipoolContract } = snxJSConnector;
 		const run = async () => {
 			if (!hasLoaded) return;
 			try {
@@ -37,8 +37,8 @@ const SliderController = ({
 					gasLimit,
 				};
 				const transaction = param
-					? await unipoolContract[contractFunction](param, transactionSettings)
-					: await unipoolContract[contractFunction](transactionSettings);
+					? await snxJSConnector[contract][contractFunction](param, transactionSettings)
+					: await snxJSConnector[contract][contractFunction](transactionSettings);
 
 				if (transaction) {
 					setTransactionInfo({ transactionHash: transaction.hash });

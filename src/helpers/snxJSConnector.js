@@ -2,8 +2,10 @@ import { SynthetixJs } from 'synthetix-js';
 import { getEthereumNetwork, INFURA_JSON_RPC_URLS } from './networkHelper';
 import { ethers } from 'ethers';
 import {
-	unipool,
-	uniswap,
+	uniswapV1,
+	uniswapV2,
+	unipoolSETH,
+	unipoolSXAU,
 	curvepool,
 	curveLPToken,
 	synthSummary,
@@ -23,8 +25,18 @@ let snxJSConnector = {
 		this.utils = this.snxJS.utils;
 		this.ethersUtils = this.snxJS.ethers.utils;
 		if (this.signer) {
-			this.uniswapContract = new ethers.Contract(uniswap.address, uniswap.abi, this.signer);
-			this.unipoolContract = new ethers.Contract(unipool.address, unipool.abi, this.signer);
+			this.uniswapV1Contract = new ethers.Contract(uniswapV1.address, uniswapV1.abi, this.signer);
+			this.uniswapV2Contract = new ethers.Contract(uniswapV2.address, uniswapV2.abi, this.signer);
+			this.unipoolSETHContract = new ethers.Contract(
+				unipoolSETH.address,
+				unipoolSETH.abi,
+				this.signer
+			);
+			this.unipoolSXAUContract = new ethers.Contract(
+				unipoolSXAU.address,
+				unipoolSXAU.abi,
+				this.signer
+			);
 			this.curveLPTokenContract = new ethers.Contract(
 				curveLPToken.address,
 				curveLPToken.abi,
