@@ -123,11 +123,11 @@ const Stake = ({ walletDetails, goBack }) => {
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.univ2Held) : 0} UNI-V2`}
+					body={`${balances ? formatCurrency(balances.univ2Held, 10) : 0} UNI-V2`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.univ2Staked) : 0} UNI-V2`}
+					body={`${balances ? formatCurrency(balances.univ2Staked, 10) : 0} UNI-V2`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
@@ -144,7 +144,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'unipoolSXAUContract',
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.univ2Held)} UNI-V2`,
+								amount: `${balances && formatCurrency(balances.univ2Held, 10)} UNI-V2`,
 								param: balances && balances.univ2HeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
@@ -177,7 +177,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'unipoolSXAUContract',
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.univ2Staked)} UNI-V2`,
+								amount: `${balances && formatCurrency(balances.univ2Staked, 10)} UNI-V2`,
 								param: balances && balances.univ2StakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
@@ -193,7 +193,8 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'unipoolSXAUContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ2Staked)} UNI-V2 & ${balances &&
+								amount: `${balances &&
+									formatCurrency(balances.univ2Staked, 10)} UNI-V2 & ${balances &&
 									formatCurrency(balances.rewards)} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
