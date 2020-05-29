@@ -14,7 +14,6 @@ import DataBox from '../../../../components/DataBox';
 import { ButtonTertiary, ButtonPrimary } from '../../../../components/Button';
 
 import UnipoolActions from '../../../UnipoolActions';
-import { uniswapV1 } from '../../../../helpers/contracts';
 
 const TRANSACTION_DETAILS = {
 	stake: {
@@ -142,6 +141,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.univ1Held}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSETHContract',
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
 								amount: `${balances && formatCurrency(balances.univ1Held)} UNI-V1`,
@@ -157,6 +157,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSETHContract',
 								action: 'claim',
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
@@ -173,6 +174,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.univ1Staked}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSETHContract',
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
 								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1`,
@@ -188,6 +190,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || (!balances.univ1Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSETHContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
 								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1 & ${balances &&

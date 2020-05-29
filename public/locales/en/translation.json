@@ -377,7 +377,7 @@
 		}
 	},
 	"unipoolSXAU": {
-		"title": "Uniswap sETH LP Token Rewards",
+		"title": "Uniswap sXAU LP Token Rewards",
 		"locked": {
 			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
 			"transaction": "Setting Uni-V2 LP token allowance"

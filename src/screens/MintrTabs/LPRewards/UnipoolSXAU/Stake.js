@@ -141,6 +141,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.univ2Held}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
 								amount: `${balances && formatCurrency(balances.univ2Held)} UNI-V2`,
@@ -156,6 +157,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.rewards}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'claim',
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
@@ -172,6 +174,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || !balances.univ2Staked}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
 								amount: `${balances && formatCurrency(balances.univ2Staked)} UNI-V2`,
@@ -187,6 +190,7 @@ const Stake = ({ walletDetails, goBack }) => {
 						disabled={!balances || (!balances.univ2Staked && !balances.rewards)}
 						onClick={() =>
 							setCurrentScenario({
+								contract: 'unipoolSXAUContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
 								amount: `${balances && formatCurrency(balances.univ2Staked)} UNI-V2 & ${balances &&
