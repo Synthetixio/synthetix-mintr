@@ -28,7 +28,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 	return (
 		<TooltipWrapper>
-			<StyledH5>{format(new Date(label), 'MMM dd, h:mma')}</StyledH5>
+			<StyledH5>{format(new Date(label), 'MMM dd YYY, h:mma')}</StyledH5>
 			<Legend>
 				{payload.map(({ color, name, value }) => {
 					return (
