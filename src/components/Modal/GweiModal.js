@@ -27,8 +27,8 @@ const RatesData = ({ gasInfo }) => {
 							<DataHeaderLarge marginBottom="8px" style={{ textTransform: 'capitalize' }}>
 								{t(`transactionSettings.speed.${gas.speed.toLowerCase()}`)}
 							</DataHeaderLarge>
-							<DataLarge marginBottom="4px">${formatCurrency(gas.price)}</DataLarge>
-							<DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
+							<DataLarge marginBottom="4px">${formatCurrency(gas.transactionPrice)}</DataLarge>
+							<DataLarge marginBottom="4px">{`${gas.price} GWEI`}</DataLarge>
 							<DataLarge marginBottom="4px">
 								{gas.time} {t('transactionSettings.minutes')}
 							</DataLarge>
@@ -62,11 +62,11 @@ const GweiModal = ({
 
 	const gasInfo = networkPrices
 		? Object.keys(networkPrices).map(speed => {
-				const price = (networkPrices[speed] && networkPrices[speed].price) || 0;
+				const price = networkPrices[speed].price || 0;
 				return {
 					...networkPrices[speed],
 					speed,
-					price: getTransactionPrice(price, gasLimit, ethRate),
+					transactionPrice: getTransactionPrice(price, gasLimit, ethRate),
 				};
 		  })
 		: [];
