@@ -20,10 +20,13 @@ const UniPool = ({ goBack, walletDetails }) => {
 
 	const fetchAllowance = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
-		const { uniswapContract, unipoolContract } = snxJSConnector;
+		const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
 		try {
 			setIsLoading(true);
-			const allowance = await uniswapContract.allowance(currentWallet, unipoolContract.address);
+			const allowance = await uniswapV2Contract.allowance(
+				currentWallet,
+				unipoolSXAUContract.address
+			);
 			setAllowance(!!bigNumberFormatter(allowance));
 			setIsLoading(false);
 		} catch (e) {
@@ -41,17 +44,17 @@ const UniPool = ({ goBack, walletDetails }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { uniswapContract, unipoolContract } = snxJSConnector;
+		const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
 
-		uniswapContract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === unipoolContract.address) {
+		uniswapV2Contract.on('Approval', (owner, spender) => {
+			if (owner === currentWallet && spender === unipoolSXAUContract.address) {
 				setAllowance(true);
 			}
 		});
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				uniswapContract.removeAllListeners('Approval');
+				uniswapV2Contract.removeAllListeners('Approval');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps

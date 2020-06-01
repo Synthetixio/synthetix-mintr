@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import UniPool from './UniPool';
-import CurvePool from './CurvePool';
+import UnipoolSETH from './UniPoolSETH';
+import UniPoolSXAU from './UnipoolSXAU';
+import CurvePool from './CurvePoolSUSD';
 import IEth from './IEth';
 
 import { H1, PageTitle } from '../../../components/Typography';
@@ -11,9 +12,14 @@ import PageContainer from '../../../components/PageContainer';
 
 const POOLS = [
 	{
-		title: 'lpRewards.actions.unipool.title',
-		name: 'uniswap',
-		image: '/images/pools/uniswap.svg',
+		title: 'lpRewards.actions.unipoolSETH.title',
+		name: 'unipoolSETH',
+		image: '/images/pools/unipool-sETH.svg',
+	},
+	{
+		title: 'lpRewards.actions.unipoolSXAU.title',
+		name: 'unipoolSXAU',
+		image: '/images/pools/unipool-sXAU.svg',
 	},
 	{
 		title: 'lpRewards.actions.curvepool.title',
@@ -30,8 +36,10 @@ const LPRewards = () => {
 
 	const getPoolComponent = poolName => {
 		switch (poolName) {
-			case 'uniswap':
-				return <UniPool goBack={goBack} />;
+			case 'unipoolSETH':
+				return <UnipoolSETH goBack={goBack} />;
+			case 'unipoolSXAU':
+				return <UniPoolSXAU goBack={goBack} />;
 			case 'iearn':
 				return <CurvePool goBack={goBack} />;
 			case 'ieth':
@@ -65,10 +73,8 @@ const LPRewards = () => {
 };
 
 const Button = styled.button`
-	flex: 1;
 	cursor: pointer;
-	height: 352px;
-	max-width: 352px;
+	height: 250px;
 	background-color: ${props => props.theme.colorStyles.panelButton};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;
@@ -79,9 +85,6 @@ const Button = styled.button`
 		box-shadow: 0px 5px 10px 8px ${props => props.theme.colorStyles.shadow1};
 		transform: translateY(-2px);
 	}
-	&:not(:first-child) {
-		margin-left: 20px;
-	}
 `;
 
 const ButtonContainer = styled.div`
@@ -90,18 +93,20 @@ const ButtonContainer = styled.div`
 `;
 
 const ButtonRow = styled.div`
-	display: flex;
-	justify-content: space-between;
-	margin: ${props => (props.margin ? props.margin : 0)};
+	margin-top: 60px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 20px;
 `;
 
 const ActionImage = styled.img`
-	height: ${props => (props.big ? '64px' : '48px')};
-	width: ${props => (props.big ? '64px' : '48px')};
+	height: 64px;
+	width: 64px;
 `;
 
 const StyledHeading = styled(H1)`
 	font-size: 22px;
+	text-transform: none;
 `;
 
 export default LPRewards;
