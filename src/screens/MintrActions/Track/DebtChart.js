@@ -48,7 +48,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 const Chart = ({ data }) => {
 	const { colorStyles } = useContext(ThemeContext);
-
+	if (!data || data.length === 0) return null;
 	return (
 		<ResponsiveContainer width="100%" height={270}>
 			<LineChart margin={{ left: 0, top: 20, bottom: 0, right: 5 }} data={data}>
