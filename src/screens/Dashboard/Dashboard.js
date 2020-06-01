@@ -10,6 +10,7 @@ import { getWalletDetails } from '../../ducks/wallet';
 import { getSuccessQueue } from '../../ducks/transactions';
 import { showModal } from '../../ducks/modal';
 import { fetchBalances, getWalletBalances, getWalletBalancesWithRates } from '../../ducks/balances';
+import { getDebtStatusData } from 'ducks/debtStatus';
 import { getRates } from '../../ducks/rates';
 
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
@@ -26,25 +27,27 @@ import BarCharts from './BarCharts';
 
 const INTERVAL_TIMER = 5 * 60 * 1000;
 
-const CollRatios = ({ state }) => {
+const CollRatios = ({ debtStatusData = {} }) => {
 	const { t } = useTranslation();
-	const { debtData } = state;
-
 	return (
 		<Row margin="0 0 22px 0">
 			<Box>
-				{isEmpty(debtData) ? (
+				{isEmpty(debtStatusData) ? (
 					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
 				) : (
-					<Figure>{debtData.currentCRatio ? Math.round(100 / debtData.currentCRatio) : 0}%</Figure>
+					<Figure>
+						{debtStatusData.currentCRatio ? Math.round(100 / debtStatusData.currentCRatio) : 0}%
+					</Figure>
 				)}
 				<DataLarge>{t('dashboard.ratio.current')}</DataLarge>
 			</Box>
 			<Box>
-				{isEmpty(debtData) ? (
+				{isEmpty(debtStatusData) ? (
 					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
 				) : (
-					<Figure>{debtData.targetCRatio ? Math.round(100 / debtData.targetCRatio) : 0}%</Figure>
+					<Figure>
+						{debtStatusData.targetCRatio ? Math.round(100 / debtStatusData.targetCRatio) : 0}%
+					</Figure>
 				)}
 				<DataLarge>{t('dashboard.ratio.target')}</DataLarge>
 			</Box>
@@ -52,7 +55,14 @@ const CollRatios = ({ state }) => {
 	);
 };
 
-const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalances }) => {
+const Dashboard = ({
+	walletDetails,
+	successQueue,
+	showModal,
+	rates,
+	fetchBalances,
+	debtStatusData,
+}) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
 	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
@@ -76,7 +86,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 		};
 	}, [loadData]);
 
-	const { debtData = {}, escrowData = {} } = data;
+	const { escrowData = {} } = data;
 
 	return (
 		<DashboardWrapper>
@@ -98,7 +108,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 							</ButtonTertiary>
 						</ButtonContainer>
 					</ContainerHeader>
-					<CollRatios state={{ debtData }} />
+					<CollRatios debtStatusData={debtStatusData} />
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
@@ -115,8 +125,8 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 							);
 						})}
 					</PricesContainer>
-					<BarCharts debtData={debtData} escrowData={escrowData} />
-					<BalanceTable debtData={debtData} />
+					<BarCharts debtData={debtStatusData} escrowData={escrowData} />
+					<BalanceTable debtData={debtStatusData} />
 					<Row margin="18px 0 0 0 ">
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
@@ -236,6 +246,7 @@ const mapStateToProps = state => ({
 	walletBalances: getWalletBalances(state),
 	walletBalancesWithRates: getWalletBalancesWithRates(state),
 	rates: getRates(state),
+	debtStatusData: getDebtStatusData(state),
 });
 
 const mapDispatchToProps = {

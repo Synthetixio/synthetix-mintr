@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
-import { isDarkTheme, lightTheme, darkTheme } from '../../styles/themes';
+import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
 
-import { isMobileOrTablet } from '../../helpers/browserHelper';
+import { isMobileOrTablet } from 'helpers/browserHelper';
 
-import { getCurrentPage, getCurrentTheme } from '../../ducks/ui';
-import { setAppReady, fetchAppStatus, getAppIsOnMaintenance } from '../../ducks/app';
+import { setAppReady, fetchAppStatus, getAppIsOnMaintenance, getAppIsReady } from 'ducks/app';
+import { getCurrentPage, getCurrentTheme } from 'ducks/ui';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
+import { getCurrentWallet } from 'ducks/wallet';
 
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -14,11 +16,11 @@ import Main from '../Main';
 import MaintenanceMessage from '../MaintenanceMessage';
 import MobileLanding from '../MobileLanding';
 
-import NotificationCenter from '../../components/NotificationCenter';
-import snxJSConnector from '../../helpers/snxJSConnector';
-import { getEthereumNetwork } from '../../helpers/networkHelper';
+import NotificationCenter from 'components/NotificationCenter';
+import snxJSConnector from 'helpers/snxJSConnector';
+import { getEthereumNetwork } from 'helpers/networkHelper';
 
-import { PAGES_BY_KEY, INTERVAL_TIMER } from '../../constants/ui';
+import { PAGES_BY_KEY, INTERVAL_TIMER } from 'constants/ui';
 
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
@@ -33,8 +35,24 @@ const renderCurrentPage = currentPage => {
 	}
 };
 
-const Root = ({ currentPage, currentTheme, setAppReady, fetchAppStatus, appIsOnMaintenance }) => {
+const Root = ({
+	currentPage,
+	currentTheme,
+	setAppReady,
+	fetchAppStatus,
+	appIsOnMaintenance,
+	appIsReady,
+	fetchDebtStatusRequest,
+	currentWallet,
+}) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
+
+	useEffect(() => {
+		if (appIsReady && currentWallet) {
+			fetchDebtStatusRequest();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appIsReady, currentWallet]);
 
 	useEffect(() => {
 		let intervalId;
@@ -74,11 +92,14 @@ const mapStateToProps = state => ({
 	currentPage: getCurrentPage(state),
 	currentTheme: getCurrentTheme(state),
 	appIsOnMaintenance: getAppIsOnMaintenance(state),
+	appIsReady: getAppIsReady(state),
+	currentWallet: getCurrentWallet(state),
 });
 
 const mapDispatchToProps = {
 	setAppReady,
 	fetchAppStatus,
+	fetchDebtStatusRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);

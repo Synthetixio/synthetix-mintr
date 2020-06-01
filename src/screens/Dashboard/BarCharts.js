@@ -15,21 +15,23 @@ const Charts = ({ walletBalances, debtData, escrowData }) => {
 	const snxBalance = walletBalances[CRYPTO_CURRENCY_TO_KEY.SNX];
 	const snxLocked =
 		snxBalance &&
+		debtData &&
 		debtData.currentCRatio &&
 		debtData.targetCRatio &&
 		snxBalance * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
 
 	const totalEscrow = escrowData.reward + escrowData.tokenSale;
+	const transferable = debtData ? debtData.transferable : 0;
 
 	const chartData = [
 		[
 			{
 				label: t('dashboard.holdings.locked'),
-				value: snxBalance - debtData.transferable,
+				value: snxBalance - transferable,
 			},
 			{
 				label: t('dashboard.holdings.transferable'),
-				value: debtData.transferable,
+				value: transferable,
 			},
 		],
 		[

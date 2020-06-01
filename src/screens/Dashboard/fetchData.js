@@ -1,7 +1,7 @@
 import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
-import { bytesFormatter, bigNumberFormatter } from '../../helpers/formatters';
+import { bigNumberFormatter } from '../../helpers/formatters';
 
 const getRewards = async walletAddress => {
 	try {
@@ -25,26 +25,6 @@ const getRewards = async walletAddress => {
 	}
 };
 
-const getDebt = async walletAddress => {
-	try {
-		const result = await Promise.all([
-			snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
-			snxJSConnector.snxJS.Synthetix.collateralisationRatio(walletAddress),
-			snxJSConnector.snxJS.Synthetix.transferableSynthetix(walletAddress),
-			snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
-		]);
-		const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
-		return {
-			targetCRatio,
-			currentCRatio,
-			transferable,
-			debtBalance,
-		};
-	} catch (e) {
-		console.log(e);
-	}
-};
-
 const getEscrow = async walletAddress => {
 	try {
 		const results = await Promise.all([
@@ -62,15 +42,13 @@ const getEscrow = async walletAddress => {
 };
 
 export const fetchData = async walletAddress => {
-	const [rewardData, debtData, escrowData] = await Promise.all([
+	const [rewardData, escrowData] = await Promise.all([
 		getRewards(walletAddress),
-		getDebt(walletAddress),
 		getEscrow(walletAddress),
 	]).catch(e => console.log(e));
 
 	return {
 		rewardData,
-		debtData,
 		escrowData,
 	};
 };
