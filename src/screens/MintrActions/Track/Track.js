@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { SynthetixJs } from 'synthetix-js';
-import { providers } from 'ethers';
 import orderBy from 'lodash/orderBy';
 import last from 'lodash/last';
-import Bottleneck from 'bottleneck';
 import snxData from 'synthetix-data';
 import snxJSConnector from 'helpers/snxJSConnector';
 
@@ -18,28 +15,25 @@ import { ExternalLink, BorderedContainer } from 'styles/common';
 import { getCurrentWallet } from 'ducks/wallet';
 import { getWalletBalances } from 'ducks/balances';
 import { getSUSDRate } from 'ducks/rates';
-import { INFURA_ARCHIVE_JSON_RPC_URL } from 'helpers/networkHelper';
 import { formatCurrencyWithSign, bytesFormatter } from 'helpers/formatters';
 
 import DebtChart from './DebtChart';
 import BalanceTable from './BalanceTable';
 
-const MIN_BLOCK = 8621868;
-
 const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }) => {
 	const { t } = useTranslation();
-	const [historicalDebt, setHistoricalDebt] = useState([]);
 	const [debtData, setDebtData] = useState({});
+	const [historicalDebt, setHistoricalDebt] = useState([]);
 
 	useEffect(() => {
 		if (!currentWallet) return;
 		const { snxJS } = snxJSConnector;
 		const fetchEvents = async () => {
 			try {
-				// We get all the burn & mint events since block = MIN_BLOCK
-				const [burnEvents, mintEvents, currentDebt] = await Promise.all([
-					snxData.snx.burned({ account: currentWallet, max: 1000, minBlock: MIN_BLOCK }),
-					snxData.snx.issued({ account: currentWallet, max: 1000, minBlock: MIN_BLOCK }),
+				const [burnEvents, mintEvents, debtHistory, currentDebt] = await Promise.all([
+					snxData.snx.burned({ account: currentWallet, max: 1000 }),
+					snxData.snx.issued({ account: currentWallet, max: 1000 }),
+					snxData.snx.debtSnapshot({ account: currentWallet, max: 1000 }),
 					snxJS.Synthetix.debtBalanceOf(currentWallet, bytesFormatter('sUSD')),
 				]);
 
@@ -67,43 +61,14 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 					historicalIssuanceAggregation.push(aggregation);
 				});
 
-				// Bottle neck to throttle the Infura requests
-				const limiter = new Bottleneck({
-					maxConcurrent: 30,
-					minTime: 7,
-				});
-
-				// We create new provider, using an archived infura node
-				const provider = new providers.JsonRpcProvider(INFURA_ARCHIVE_JSON_RPC_URL);
-				const archiveSNXJS = new SynthetixJs({ provider });
-
-				// For every transaction, we get the wallet debt balance
-				// at block = transaction.block
-				const getBalance = async transaction => {
-					const debt = await archiveSNXJS.Synthetix.contract.debtBalanceOf(
-						currentWallet,
-						bytesFormatter('sUSD'),
-						{
-							blockTag: transaction.block,
-						}
-					);
-					return {
-						timestamp: transaction.timestamp,
-						block: transaction.block,
-						debt: debt / 1e18,
-					};
-				};
-
-				const historicalDebt = await Promise.all(eventBlocks.map(limiter.wrap(getBalance)));
-
 				// We merge both active & issuance debt into an array
 				let historicalDebtAndIssuance = [];
-				historicalDebt.forEach((debt, i) => {
+				debtHistory.reverse().forEach((debtSnapshot, i) => {
 					historicalDebtAndIssuance.push({
-						timestamp: debt.timestamp,
+						timestamp: debtSnapshot.timestamp,
 						issuanceDebt: historicalIssuanceAggregation[i],
-						activeDebt: debt.debt,
-						netDebt: historicalIssuanceAggregation[i] - debt.debt,
+						activeDebt: debtSnapshot.debtBalanceOf,
+						netDebt: historicalIssuanceAggregation[i] - debtSnapshot.debtBalanceOf,
 					});
 				});
 
@@ -115,14 +80,15 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 					issuanceDebt: last(historicalIssuanceAggregation),
 					netDebt: last(historicalIssuanceAggregation) - currentDebt / 1e18,
 				});
+
 				setHistoricalDebt(historicalDebtAndIssuance);
+
 				setDebtData({
 					synthDebt: currentDebt / 1e18,
 					netDebt: last(historicalIssuanceAggregation) - currentDebt / 1e18,
 				});
 			} catch (e) {
 				console.log(e);
-				setHistoricalDebt([]);
 			}
 		};
 		fetchEvents();
@@ -242,7 +208,7 @@ const ChartBorderedContainer = styled(BorderedContainer)`
 
 const TableBorderedContainer = styled(BorderedContainer)`
 	margin-top: 18px;
-	height: 268px;
+	height: 248px;
 `;
 
 const mapStateToProps = state => ({
