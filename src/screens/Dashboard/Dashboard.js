@@ -54,7 +54,6 @@ const CollRatios = ({ state }) => {
 
 const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalances }) => {
 	const { t } = useTranslation();
-
 	const { currentWallet } = walletDetails;
 	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
 	const [data, setData] = useState({});
