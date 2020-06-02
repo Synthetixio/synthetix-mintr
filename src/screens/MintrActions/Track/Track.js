@@ -114,6 +114,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 					<PLarge>
 						{t('mintrActions.track.action.subtitle')}
 						<StyledExternalLink href="https://www.zapper.fi/">
+							{' '}
 							Zapper.fi <LinkArrow>↗</LinkArrow>
 						</StyledExternalLink>
 					</PLarge>
