@@ -4,7 +4,7 @@ import { addSeconds, formatDistanceToNow } from 'date-fns';
 import snxJSConnector from '../../../helpers/snxJSConnector';
 
 import { SliderContext } from '../../../components/ScreenSlider';
-import { setCurrentTab } from '../../../ducks/ui';
+import { setCurrentTab, getCurrentTheme } from '../../../ducks/ui';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
@@ -95,7 +95,14 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 	return error;
 };
 
-const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, setCurrentTab }) => {
+const Claim = ({
+	onDestroy,
+	walletDetails,
+	currentGasPrice,
+	createTransaction,
+	setCurrentTab,
+	currentTheme,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { currentWallet, walletType, networkName } = walletDetails;
@@ -161,6 +168,7 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 		isFetchingGasLimit,
 		networkName,
 		gasLimit,
+		theme: currentTheme,
 	};
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
 		<SlideContent key={i} {...props} />
@@ -170,6 +178,7 @@ const Claim = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, s
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	currentTheme: getCurrentTheme(state),
 });
 
 const mapDispatchToProps = {

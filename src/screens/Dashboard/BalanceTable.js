@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import isEmpty from 'lodash/isEmpty';
 
 import { getWalletBalancesWithRates } from '../../ducks/balances';
+import { getCurrentTheme } from '../../ducks/ui';
 import { getRates } from '../../ducks/rates';
 
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
@@ -21,10 +22,10 @@ import { Info } from '../../components/Icons';
 const TABLE_COLUMNS = ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'];
 const AGGREGATED_COLUMNS = ['Synths', 'Debt'];
 
-const renderTooltip = (tooltip, t) => {
+const renderTooltip = (tooltip, t, mode) => {
 	if (!tooltip) return;
 	return (
-		<Tooltip title={t(`tooltip.${tooltip}Balance`)} placement="top">
+		<Tooltip mode={mode} title={t(`tooltip.${tooltip}Balance`)} placement="top">
 			<IconContainer>
 				<Info />
 			</IconContainer>
@@ -59,11 +60,10 @@ const mapBalanceData = (waitingForData, walletBalancesWithRates, rates, debtData
 	});
 };
 
-const BalanceTable = ({ walletBalancesWithRates, rates, debtData }) => {
+const BalanceTable = ({ walletBalancesWithRates, rates, debtData, currentTheme }) => {
 	const { t } = useTranslation();
 	const waitingForData = isEmpty(walletBalancesWithRates) || isEmpty(rates) || isEmpty(debtData);
 	const data = mapBalanceData(waitingForData, walletBalancesWithRates, rates, debtData);
-
 	return (
 		<Box style={{ marginTop: '16px' }} full={true}>
 			<BoxInner>
@@ -82,7 +82,7 @@ const BalanceTable = ({ walletBalancesWithRates, rates, debtData }) => {
 										<FlexDivCentered>
 											<CurrencyIcon src={`/images/currencies/${original.icon}.svg`} />
 											{t(value)}
-											{renderTooltip(original.tooltip, t)}
+											{renderTooltip(original.tooltip, t, currentTheme)}
 										</FlexDivCentered>
 									);
 								},
@@ -131,6 +131,7 @@ const IconContainer = styled.div`
 
 const mapStateToProps = state => ({
 	walletBalancesWithRates: getWalletBalancesWithRates(state),
+	currentTheme: getCurrentTheme(state),
 	rates: getRates(state),
 });
 
