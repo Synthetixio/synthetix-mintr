@@ -65,13 +65,13 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 					historicalIssuanceAggregation.push(aggregation);
 				});
 
-				// We merge both active & issuance debt into an array
+				// We merge both actual & issuance debt into an array
 				let historicalDebtAndIssuance = [];
 				debtHistory.reverse().forEach((debtSnapshot, i) => {
 					historicalDebtAndIssuance.push({
 						timestamp: debtSnapshot.timestamp,
 						issuanceDebt: historicalIssuanceAggregation[i],
-						activeDebt: debtSnapshot.debtBalanceOf,
+						actualDebt: debtSnapshot.debtBalanceOf,
 						// netDebt: debtSnapshot.debtBalanceOf - historicalIssuanceAggregation[i],
 					});
 				});
@@ -80,7 +80,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 				// Issuance debt = last occurrence of the historicalDebtAndIssuance array
 				historicalDebtAndIssuance.push({
 					timestamp: new Date().getTime(),
-					activeDebt: currentDebt / 1e18,
+					actualDebt: currentDebt / 1e18,
 					issuanceDebt: last(historicalIssuanceAggregation),
 					// netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
 				});
@@ -88,7 +88,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 				setHistoricalDebt(historicalDebtAndIssuance);
 				setDebtData({
 					mintAndBurnDebt: last(historicalIssuanceAggregation),
-					activeDebt: currentDebt / 1e18,
+					actualDebt: currentDebt / 1e18,
 					// netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
 				});
 			} catch (e) {
@@ -99,7 +99,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 	}, [currentWallet]);
 
 	const mintAndBurnDebtValue = debtData ? debtData.mintAndBurnDebt * sUSDRate : 0;
-	const activeDebtValue = debtData ? debtData.activeDebt * sUSDRate : 0;
+	const actualDebtValue = debtData ? debtData.actualDebt * sUSDRate : 0;
 	const totalSynthsValue = totalSynths ? totalSynths * sUSDRate : 0;
 	// const netDebtValue = debtData ? debtData.netDebt * sUSDRate : 0;
 
@@ -129,8 +129,8 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, 
 							</BorderedContainer>
 
 							<BorderedContainer>
-								<StyledSubtext>{t('mintrActions.track.action.data.activeDebt')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', activeDebtValue)}</Amount>
+								<StyledSubtext>{t('mintrActions.track.action.data.actualDebt')}</StyledSubtext>
+								<Amount>{formatCurrencyWithSign('$', actualDebtValue)}</Amount>
 							</BorderedContainer>
 
 							<BorderedContainer>

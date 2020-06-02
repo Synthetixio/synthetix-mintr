@@ -196,7 +196,7 @@
 				"subtitle": "Track your debt over time, with charts via",
 				"data": {
 					"issuedDebt": "Issued debt",
-					"activeDebt": "Active debt",
+					"actualDebt": "Actual debt",
 					"totalSynths": "Total Synths",
 					"netDebt": "Net debt"
 				},
@@ -574,6 +574,6 @@
 		"claim": "To claim rewards, you must be within 1% of the Target Collateralization Ratio. If you are below this figure, you will be blocked from claiming rewards until you burn enough sUSD.",
 		"debtBalance": "Your debt begins as the amount of sUSD you initially mint, and fluctuates according to gains or losses made by other Synth holders. Any time someone holds a Synth that appreciates in value, that gain is distributed proportionally between all the staked SNX holders’ debts. To unlock all your staked SNX, you must first pay off your debt.",
 		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button.",
-		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Active debt:</2> This displays your total debt over time."
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time."
 	}
 }
