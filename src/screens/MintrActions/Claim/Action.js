@@ -29,6 +29,7 @@ const Action = ({
 	isFetchingGasLimit,
 	gasEstimateError,
 	gasLimit,
+	theme,
 }) => {
 	const { t } = useTranslation();
 	return (
@@ -71,7 +72,7 @@ const Action = ({
 								? t('mintrActions.claim.action.table.open')
 								: t('mintrActions.claim.action.table.blocked')}
 						</Highlighted>
-						<Tooltip title={t(`tooltip.claim`)} placement="top">
+						<Tooltip mode={theme} title={t(`tooltip.claim`)} placement="top">
 							<IconContainer>
 								<Info />
 							</IconContainer>
