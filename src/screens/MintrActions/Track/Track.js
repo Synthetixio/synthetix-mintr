@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import orderBy from 'lodash/orderBy';
 import last from 'lodash/last';
 import snxData from 'synthetix-data';
 import snxJSConnector from 'helpers/snxJSConnector';
 
+import Tooltip from 'components/Tooltip';
 import { SlidePage, SliderContent } from 'components/ScreenSlider';
 import { ButtonTertiary } from 'components/Button';
 import { PLarge, H1, Subtext } from 'components/Typography';
-import { ExternalLink, BorderedContainer } from 'styles/common';
+import { ExternalLink, BorderedContainer, FlexDivCentered, Strong } from 'styles/common';
 
 import { getCurrentWallet } from 'ducks/wallet';
 import { getWalletBalances } from 'ducks/balances';
 import { getSUSDRate } from 'ducks/rates';
+import { getCurrentTheme } from 'ducks/ui';
 import { formatCurrencyWithSign, bytesFormatter } from 'helpers/formatters';
 
 import DebtChart from './DebtChart';
 import BalanceTable from './BalanceTable';
 
-const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }) => {
+import { Info } from 'components/Icons';
+
+const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate, currentTheme }) => {
 	const { t } = useTranslation();
 	const [debtData, setDebtData] = useState({});
 	const [historicalDebt, setHistoricalDebt] = useState([]);
@@ -83,7 +87,8 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 
 				setHistoricalDebt(historicalDebtAndIssuance);
 				setDebtData({
-					synthDebt: currentDebt / 1e18,
+					mintAndBurnDebt: last(historicalIssuanceAggregation),
+					activeDebt: currentDebt / 1e18,
 					netDebt: currentDebt / 1e18 - last(historicalIssuanceAggregation),
 				});
 			} catch (e) {
@@ -93,8 +98,8 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 		fetchEvents();
 	}, [currentWallet]);
 
-	const totalSynthsValue = totalSynths ? totalSynths * sUSDRate : 0;
-	const activeDebtValue = debtData ? debtData.synthDebt * sUSDRate : 0;
+	const mintAndBurnDebtValue = debtData ? debtData.mintAndBurnDebt * sUSDRate : 0;
+	const activeDebtValue = debtData ? debtData.activeDebt * sUSDRate : 0;
 	const netDebtValue = debtData ? debtData.netDebt * sUSDRate : 0;
 
 	return (
@@ -107,7 +112,7 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 					<ActionImage src="/images/actions/track.svg" />
 					<StyledH1>{t('mintrActions.track.action.title')}</StyledH1>
 					<PLarge>
-						{t('mintrActions.track.action.subtitle')}{' '}
+						{t('mintrActions.track.action.subtitle')}
 						<StyledExternalLink href="https://www.zapper.fi/">
 							Zapper.fi <LinkArrow>↗</LinkArrow>
 						</StyledExternalLink>
@@ -117,12 +122,12 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 					<Grid>
 						<GridColumn>
 							<BorderedContainer>
-								<StyledSubtext>{t('mintrActions.track.action.data.totalSynths')}</StyledSubtext>
-								<Amount>{formatCurrencyWithSign('$', totalSynthsValue)}</Amount>
+								<StyledSubtext>{t('mintrActions.track.action.data.mintAndBurnDebt')}</StyledSubtext>
+								<Amount>{formatCurrencyWithSign('$', mintAndBurnDebtValue)}</Amount>
 							</BorderedContainer>
 
 							<BorderedContainer>
-								<StyledSubtext>{t('mintrActions.track.action.data.synthDebt')}</StyledSubtext>
+								<StyledSubtext>{t('mintrActions.track.action.data.activeDebt')}</StyledSubtext>
 								<Amount>{formatCurrencyWithSign('$', activeDebtValue)}</Amount>
 							</BorderedContainer>
 
@@ -133,7 +138,23 @@ const Track = ({ onDestroy, currentWallet, balances: { totalSynths }, sUSDRate }
 						</GridColumn>
 						<GridColumn>
 							<ChartBorderedContainer>
-								<StyledSubtext>{t('mintrActions.track.action.chart.title')}</StyledSubtext>
+								<FlexDivCentered>
+									<StyledSubtext>{t('mintrActions.track.action.chart.title')}</StyledSubtext>
+									<Tooltip
+										mode={currentTheme}
+										title={
+											<Trans
+												i18nKey="tooltip.track"
+												components={[<Strong />, <br />, <Strong />, <br />, <Strong />]}
+											></Trans>
+										}
+										placement="top"
+									>
+										<TooltipIconContainer>
+											<Info />
+										</TooltipIconContainer>
+									</Tooltip>
+								</FlexDivCentered>
 								<DebtChart data={historicalDebt} />
 							</ChartBorderedContainer>
 						</GridColumn>
@@ -210,10 +231,17 @@ const TableBorderedContainer = styled(BorderedContainer)`
 	height: 248px;
 `;
 
+const TooltipIconContainer = styled.div`
+	margin-left: 10px;
+	width: 23px;
+	height: 23px;
+`;
+
 const mapStateToProps = state => ({
 	currentWallet: getCurrentWallet(state),
 	balances: getWalletBalances(state),
 	sUSDRate: getSUSDRate(state),
+	currentTheme: getCurrentTheme(state),
 });
 
 export default connect(mapStateToProps, null)(Track);

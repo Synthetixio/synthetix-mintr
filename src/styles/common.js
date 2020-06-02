@@ -32,3 +32,7 @@ export const FlexDiv = styled.div`
 export const FlexDivCentered = styled(FlexDiv)`
 	align-items: center;
 `;
+
+export const Strong = styled.strong`
+	font-family: 'apercu-bold';
+`;
