@@ -7,7 +7,6 @@ import { isEmpty } from 'lodash';
 import { formatCurrency } from '../../helpers/formatters';
 import { fetchData } from './fetchData';
 import { getWalletDetails } from '../../ducks/wallet';
-import { getSuccessQueue } from '../../ducks/transactions';
 import { showModal } from '../../ducks/modal';
 import { fetchBalances, getWalletBalances, getWalletBalancesWithRates } from '../../ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
@@ -20,7 +19,6 @@ import Header from '../../components/Header';
 import { ButtonTertiary } from '../../components/Button';
 import { DataLarge, H5, Figure, ButtonTertiaryLabel } from '../../components/Typography';
 import Skeleton from '../../components/Skeleton';
-import { MicroSpinner } from '../../components/Spinner';
 import BalanceTable from './BalanceTable';
 import Box from './Box';
 import BarCharts from './BarCharts';
@@ -55,26 +53,16 @@ const CollRatios = ({ debtStatusData = {} }) => {
 	);
 };
 
-const Dashboard = ({
-	walletDetails,
-	successQueue,
-	showModal,
-	rates,
-	fetchBalances,
-	debtStatusData,
-}) => {
+const Dashboard = ({ walletDetails, showModal, rates, fetchBalances, debtStatusData }) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
-	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
 	const [data, setData] = useState({});
 	const loadData = useCallback(() => {
-		setDashboardIsLoading(true);
 		fetchBalances(currentWallet);
-		fetchData(currentWallet, successQueue).then(data => {
+		fetchData(currentWallet).then(data => {
 			setData(data);
-			setDashboardIsLoading(false);
 		});
-	}, [currentWallet, successQueue, fetchBalances]);
+	}, [currentWallet, fetchBalances]);
 
 	useEffect(() => {
 		loadData();
@@ -98,13 +86,6 @@ const Dashboard = ({
 						<ButtonContainer>
 							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
 								{t('dashboard.buttons.delegate')}
-							</ButtonTertiary>
-							<ButtonTertiary
-								disabled={dashboardIsLoading}
-								style={{ minWidth: '102px' }}
-								onClick={() => loadData()}
-							>
-								{dashboardIsLoading ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
 							</ButtonTertiary>
 						</ButtonContainer>
 					</ContainerHeader>
@@ -242,7 +223,6 @@ const CurrencyPrice = styled.div`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	successQueue: getSuccessQueue(state),
 	walletBalances: getWalletBalances(state),
 	walletBalancesWithRates: getWalletBalancesWithRates(state),
 	rates: getRates(state),

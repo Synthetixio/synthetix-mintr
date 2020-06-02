@@ -5,6 +5,7 @@ import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
 
 import { isMobileOrTablet } from 'helpers/browserHelper';
 
+import GlobalEventsGate from '../../gates/GlobalEventsGate';
 import { setAppReady, fetchAppStatus, getAppIsOnMaintenance, getAppIsReady } from 'ducks/app';
 import { getCurrentPage, getCurrentTheme } from 'ducks/ui';
 import { fetchDebtStatusRequest } from 'ducks/debtStatus';
@@ -74,10 +75,15 @@ const Root = ({
 
 	return (
 		<ThemeProvider theme={themeStyle}>
-			<RootWrapper>
-				{appIsOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
-				<NotificationCenter></NotificationCenter>
-			</RootWrapper>
+			{appIsReady && (
+				<>
+					<GlobalEventsGate />
+					<RootWrapper>
+						{appIsOnMaintenance ? <MaintenanceMessage /> : renderCurrentPage(currentPage)}
+						<NotificationCenter></NotificationCenter>
+					</RootWrapper>
+				</>
+			)}
 		</ThemeProvider>
 	);
 };
