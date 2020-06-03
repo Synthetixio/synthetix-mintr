@@ -17,7 +17,7 @@ import { H5 } from 'components/Typography';
 import { formatCurrency } from 'helpers/formatters';
 
 const LEGEND_LABELS = {
-	activeDebt: 'mintrActions.track.action.data.activeDebt',
+	actualDebt: 'mintrActions.track.action.data.actualDebt',
 	issuanceDebt: 'mintrActions.track.action.data.issuedDebt',
 	// netDebt: 'mintrActions.track.action.chart.legend.netDebt',
 };
@@ -80,7 +80,7 @@ const Chart = ({ data }) => {
 					}}
 				/>
 				<Line type="monotone" dataKey="issuanceDebt" stroke="#419EF8" strokeWidth={2} dot={false} />
-				<Line type="monotone" dataKey="activeDebt" stroke="#5C2AF5" strokeWidth={2} dot={false} />
+				<Line type="monotone" dataKey="actualDebt" stroke="#5C2AF5" strokeWidth={2} dot={false} />
 				{/* <Line type="monotone" dataKey="netDebt" stroke="#5ABC92" strokeWidth={2} dot={false} /> */}
 				<ReferenceLine y={0} isFront={false} strokeWidth={1} stroke={colorStyles.borders} />
 			</LineChart>
