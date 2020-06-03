@@ -1,4 +1,4 @@
-import React, { useEffect, FC } from 'react';
+import { useEffect, FC } from 'react';
 import { connect } from 'react-redux';
 
 import { RootState } from 'ducks/types';
@@ -77,7 +77,4 @@ const mapDispatchToProps: DispatchProps = {
 	fetchDebtStatusRequest,
 };
 
-export default connect<StateProps, DispatchProps, undefined, RootState>(
-	mapStateToProps,
-	mapDispatchToProps
-)(GlobalEventsGate);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalEventsGate);
