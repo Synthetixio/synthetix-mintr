@@ -437,7 +437,7 @@
 	"balancerSNX": {
 		"title": "Balancer SNX/USDC Pool Token Rewards",
 		"locked": {
-			"subtitle": "First approve the Balancer Pool contract to transfer your BAL tokens for staking.",
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
 			"transaction": "Setting Balancer BPT token allowance"
 		},
 		"unlocked": {
