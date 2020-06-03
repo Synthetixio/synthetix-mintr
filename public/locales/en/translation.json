@@ -352,13 +352,14 @@
 		},
 		"actions": {
 			"unipoolSETH": {
-				"title": "Unipool sETH"
+				"title": "UNIPOOL sETH"
 			},
 			"unipoolSXAU": {
-				"title": "Unipool sXAU"
+				"title": "UNIPOOL sXAU"
 			},
-			"curvepool": { "title": "Curvepool sUSD" },
-			"ieth": { "title": "iETH" }
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"}
 		},
 		"shared": {
 			"unlocked": {
@@ -386,6 +387,9 @@
 				"exit": "exit: claim & unstake",
 				"exit-old": "Exit old rewards pool",
 				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
 			}
 		}
 	},
