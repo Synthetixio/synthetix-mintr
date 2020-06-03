@@ -438,10 +438,10 @@
 		"title": "Balancer SNX/USDC Pool Token Rewards",
 		"locked": {
 			"subtitle": "First approve the Balancer Pool contract to transfer your BAL tokens for staking.",
-			"transaction": "Setting Balancer BAL token allowance"
+			"transaction": "Setting Balancer BPT token allowance"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your Balancer (BAL) tokens, claim SNX rewards, or exit completely."
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"delegation": {

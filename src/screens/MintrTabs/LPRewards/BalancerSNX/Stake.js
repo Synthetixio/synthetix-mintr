@@ -123,11 +123,11 @@ const Stake = ({ walletDetails, goBack }) => {
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.balHeld, 2) : 0} BAL`}
+					body={`${balances ? formatCurrency(balances.balHeld, 2) : 0} BPT`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.balStaked, 2) : 0} BAL`}
+					body={`${balances ? formatCurrency(balances.balStaked, 2) : 0} BPT`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
@@ -144,7 +144,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'balancerSNXRewardsContract',
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.balHeld, 10)} BAL`,
+								amount: `${balances && formatCurrency(balances.balHeld, 2)} BPT`,
 								param: balances && balances.balHeldBN,
 								...TRANSACTION_DETAILS['stake'],
 							})
@@ -177,7 +177,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'balancerSNXRewardsContract',
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.balStaked, 10)} BAL`,
+								amount: `${balances && formatCurrency(balances.balStaked, 2)} BPT`,
 								param: balances && balances.balStakedBN,
 								...TRANSACTION_DETAILS['unstake'],
 							})
@@ -193,7 +193,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'balancerSNXRewardsContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.balStaked, 10)} BAL & ${
+								amount: `${balances && formatCurrency(balances.balStaked, 2)} BPT & ${
 									balances && formatCurrency(balances.rewards)
 								} SNX`,
 								...TRANSACTION_DETAILS['exit'],
