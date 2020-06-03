@@ -12,7 +12,7 @@ import {
 	oldCurvepool,
 	iEthRewards,
 	balancerpool,
-	balancerRewardsSNX,
+	balancerSNXRewards,
 } from './contracts';
 
 let snxJSConnector = {
@@ -60,9 +60,9 @@ let snxJSConnector = {
 				balancerpool.abi,
 				this.signer
 			);
-			this.balancerRewardsSNXContract = new ethers.Contract(
-				balancerRewardsSNX.address,
-				balancerRewardsSNX.abi,
+			this.balancerSNXRewardsContract = new ethers.Contract(
+				balancerSNXRewards.address,
+				balancerSNXRewards.abi,
 				this.signer
 			);
 		}

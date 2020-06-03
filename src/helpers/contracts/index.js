@@ -8,7 +8,7 @@ import curveLPToken from './curve/curveLPToken';
 import oldCurvepool from './curve/oldCurvepool';
 
 import balancerpool from './balancer/balancerpool';
-import balancerRewardsSNX from './balancer/balancerRewardsSNX';
+import balancerSNXRewards from './balancer/balancerSNXRewards';
 
 import synthSummary from './synthSummary';
 
@@ -25,5 +25,5 @@ export {
 	oldCurvepool,
 	iEthRewards,
 	balancerpool,
-	balancerRewardsSNX,
+	balancerSNXRewards,
 };

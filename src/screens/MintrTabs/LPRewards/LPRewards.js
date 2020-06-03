@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import range from 'lodash/range';
 
 import UnipoolSETH from './UniPoolSETH';
 import UniPoolSXAU from './UnipoolSXAU';
@@ -45,44 +44,50 @@ const POOLS_SECONDARY = [
 		title: 'lpRewards.actions.balancer.title',
 		name: 'balancer',
 		image: '/images/pools/balancer.svg',
-		contract: 'balancerRewardsSNXContract',
+		contract: 'balancerSNXRewardsContract',
 	},
 ];
-
-// We are harcoding the addresses here because not every
-// contract is in the RewardsDistribution contract
-const HARDCODED_REWARDS = {
-	'0x8302FE9F0C509a996573D3Cc5B0D5D51e4FDD5eC': 8000, //sXAU
-	'0xc746bc860781dc90bbfcd381d6a058dc16357f8d': 16000, //iETH
-	'0xFBaEdde70732540cE2B11A8AC58Eb2dC0D69dE10': 8000, //Balancer
-};
 
 const LPRewards = () => {
 	const { t } = useTranslation();
 	const [currentPool, setCurrentPool] = useState(null);
-	const [distributions, setDistributions] = useState(HARDCODED_REWARDS);
+	const [distributions, setDistributions] = useState({});
 	const goBack = () => setCurrentPool(null);
 
 	useEffect(() => {
 		const {
-			snxJS: { RewardsDistribution },
+			unipoolSXAUContract,
+			unipoolSETHContract,
+			curvepoolContract,
+			iEthRewardsContract,
+			balancerSNXRewardsContract,
 		} = snxJSConnector;
+
 		const getRewardsAmount = async () => {
 			try {
-				const distributionsCount = await RewardsDistribution.distributionsLength();
-				const rewardsDistribution = await Promise.all(
-					range(Number(distributionsCount)).map(RewardsDistribution.distributions)
+				const contracts = [
+					unipoolSXAUContract,
+					unipoolSETHContract,
+					curvepoolContract,
+					iEthRewardsContract,
+					balancerSNXRewardsContract,
+				];
+				const rewardsData = await Promise.all(
+					contracts.map(contract => Promise.all([contract.DURATION(), contract.rewardRate()]))
 				);
-				let rewardsDistributionMapping = {};
-				rewardsDistribution.forEach(
-					({ amount, destination }) => (rewardsDistributionMapping[destination] = amount / 1e18)
-				);
-				setDistributions({ ...distributions, ...rewardsDistributionMapping });
+				let contractRewards = {};
+				rewardsData.forEach(([duration, rate], i) => {
+					contractRewards[contracts[i].address] = Math.trunc(Number(duration) * (rate / 1e18));
+				});
+				setDistributions(contractRewards);
 			} catch (e) {
 				console.log(e);
+				setDistributions({});
 			}
 		};
+
 		getRewardsAmount();
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
