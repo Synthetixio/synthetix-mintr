@@ -434,6 +434,16 @@
 			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
 		}
 	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BAL tokens for staking.",
+			"transaction": "Setting Balancer BAL token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BAL) tokens, claim SNX rewards, or exit completely."
+		}
+	},
 	"delegation": {
 		"popup": {
 			"title": "Delegate wallet addresses",

@@ -6,6 +6,7 @@ import UnipoolSETH from './UniPoolSETH';
 import UniPoolSXAU from './UnipoolSXAU';
 import CurvePool from './CurvePoolSUSD';
 import IEth from './IEth';
+import BalancerSNX from './BalancerSNX';
 
 import { H1, PageTitle, Subtext, DataLarge } from '../../../components/Typography';
 import PageContainer from '../../../components/PageContainer';
@@ -42,8 +43,8 @@ const POOLS_SECONDARY = [
 	},
 	{
 		title: 'lpRewards.actions.balancer.title',
-		name: 'balancer',
-		image: '/images/pools/balancer.svg',
+		name: 'balancerSNX',
+		image: '/images/pools/balancer-SNX.svg',
 		contract: 'balancerSNXRewardsContract',
 	},
 ];
@@ -85,9 +86,7 @@ const LPRewards = () => {
 				setDistributions({});
 			}
 		};
-
 		getRewardsAmount();
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -101,6 +100,8 @@ const LPRewards = () => {
 				return <CurvePool goBack={goBack} />;
 			case 'ieth':
 				return <IEth goBack={goBack} />;
+			case 'balancerSNX':
+				return <BalancerSNX goBack={goBack} />;
 			default:
 				return null;
 		}
