@@ -11,12 +11,14 @@ import {
 	synthSummary,
 	oldCurvepool,
 	iEthRewards,
+	balancerpool,
+	balancerSNXRewards,
 } from './contracts';
 
 let snxJSConnector = {
 	initialized: false,
 	signers: SynthetixJs.signers,
-	setContractSettings: function(contractSettings) {
+	setContractSettings: function (contractSettings) {
 		this.initialized = true;
 		this.snxJS = new SynthetixJs(contractSettings);
 		this.synths = this.snxJS.contractSettings.synths;
@@ -51,6 +53,16 @@ let snxJSConnector = {
 			this.iEthRewardsContract = new ethers.Contract(
 				iEthRewards.address,
 				iEthRewards.abi,
+				this.signer
+			);
+			this.balancerpoolContract = new ethers.Contract(
+				balancerpool.address,
+				balancerpool.abi,
+				this.signer
+			);
+			this.balancerSNXRewardsContract = new ethers.Contract(
+				balancerSNXRewards.address,
+				balancerSNXRewards.abi,
 				this.signer
 			);
 		}

@@ -352,13 +352,14 @@
 		},
 		"actions": {
 			"unipoolSETH": {
-				"title": "Unipool sETH"
+				"title": "UNIPOOL sETH"
 			},
 			"unipoolSXAU": {
-				"title": "Unipool sXAU"
+				"title": "UNIPOOL sXAU"
 			},
-			"curvepool": { "title": "Curvepool sUSD" },
-			"ieth": { "title": "iETH" }
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"}
 		},
 		"shared": {
 			"unlocked": {
@@ -386,6 +387,9 @@
 				"exit": "exit: claim & unstake",
 				"exit-old": "Exit old rewards pool",
 				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
 			}
 		}
 	},
@@ -428,6 +432,16 @@
 		},
 		"unlocked": {
 			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BAL tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"delegation": {
