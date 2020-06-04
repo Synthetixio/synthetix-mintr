@@ -22,9 +22,6 @@ const Box = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	&:not(:first-child) {
-		margin-left: 16px;
-	}
 `;
 
 const Amount = styled.span`

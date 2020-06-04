@@ -114,6 +114,10 @@
 			"transfer": {
 				"title": "Transfer",
 				"description": "Transfer SNX, Synths, or ETH"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
 			}
 		}
 	},
@@ -184,6 +188,25 @@
 			},
 			"complete": {
 				"title": "Claiming in progress!"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {
@@ -329,13 +352,14 @@
 		},
 		"actions": {
 			"unipoolSETH": {
-				"title": "Unipool sETH"
+				"title": "UNIPOOL sETH"
 			},
 			"unipoolSXAU": {
-				"title": "Unipool sXAU"
+				"title": "UNIPOOL sXAU"
 			},
-			"curvepool": { "title": "Curvepool sUSD" },
-			"ieth": { "title": "iETH" }
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"}
 		},
 		"shared": {
 			"unlocked": {
@@ -363,6 +387,9 @@
 				"exit": "exit: claim & unstake",
 				"exit-old": "Exit old rewards pool",
 				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
 			}
 		}
 	},
@@ -405,6 +432,16 @@
 		},
 		"unlocked": {
 			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"delegation": {
@@ -550,6 +587,7 @@
 	"tooltip": {
 		"claim": "To claim rewards, you must be within 1% of the Target Collateralization Ratio. If you are below this figure, you will be blocked from claiming rewards until you burn enough sUSD.",
 		"debtBalance": "Your debt begins as the amount of sUSD you initially mint, and fluctuates according to gains or losses made by other Synth holders. Any time someone holds a Synth that appreciates in value, that gain is distributed proportionally between all the staked SNX holders’ debts. To unlock all your staked SNX, you must first pay off your debt.",
-		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button."
+		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button.",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time."
 	}
 }

@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
 
@@ -9,17 +9,20 @@ import { fetchData } from './fetchData';
 import { getWalletDetails } from '../../ducks/wallet';
 import { getSuccessQueue } from '../../ducks/transactions';
 import { showModal } from '../../ducks/modal';
+import { fetchBalances, getWalletBalances, getWalletBalancesWithRates } from '../../ducks/balances';
+import { getRates } from '../../ducks/rates';
 
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
 import Header from '../../components/Header';
-import BarChart from '../../components/BarChart';
-import Table from '../../components/Table';
+
 import { ButtonTertiary } from '../../components/Button';
-import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components/Typography';
-import Tooltip from '../../components/Tooltip';
+import { DataLarge, H5, Figure, ButtonTertiaryLabel } from '../../components/Typography';
 import Skeleton from '../../components/Skeleton';
 import { MicroSpinner } from '../../components/Spinner';
+import BalanceTable from './BalanceTable';
+import Box from './Box';
+import BarCharts from './BarCharts';
 
 const INTERVAL_TIMER = 5 * 60 * 1000;
 
@@ -49,157 +52,19 @@ const CollRatios = ({ state }) => {
 	);
 };
 
-const Charts = ({ state }) => {
+const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalances }) => {
 	const { t } = useTranslation();
-	const { balances, debtData, escrowData } = state;
-	const snxLocked =
-		balances.snx &&
-		debtData.currentCRatio &&
-		debtData.targetCRatio &&
-		balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
-
-	const totalEscrow = escrowData.reward + escrowData.tokenSale;
-
-	const chartData = [
-		[
-			{
-				label: t('dashboard.holdings.locked'),
-				value: balances.snx - debtData.transferable,
-			},
-			{
-				label: t('dashboard.holdings.transferable'),
-				value: debtData.transferable,
-			},
-		],
-		[
-			{
-				label: t('dashboard.holdings.staking'),
-				value: snxLocked,
-			},
-			{
-				label: t('dashboard.holdings.nonStaking'),
-				value: balances.snx - snxLocked,
-			},
-		],
-		[
-			{
-				label: t('dashboard.holdings.escrowed'),
-				value: totalEscrow,
-			},
-			{
-				label: t('dashboard.holdings.nonEscrowed'),
-				value: balances.snx - totalEscrow,
-			},
-		],
-	];
-
-	return (
-		<Box full={true}>
-			<BoxInner>
-				<BoxHeading>
-					<H6 style={{ textTransform: 'uppercase' }}>{t('dashboard.holdings.title')}</H6>
-					<H6>{formatCurrency(balances.snx) || 0} SNX</H6>
-				</BoxHeading>
-				{chartData.map((data, i) => {
-					return <BarChart key={i} data={data} />;
-				})}
-			</BoxInner>
-		</Box>
-	);
-};
-
-const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) => {
-	let balance,
-		usdValue = 0;
-	switch (asset) {
-		case 'SNX':
-		case 'sUSD':
-		case 'ETH':
-			balance = balances[asset.toLowerCase()];
-			usdValue = balances[asset.toLowerCase()] * prices[asset.toLowerCase()];
-			break;
-		case 'Synths':
-			balance = synthData.total;
-			usdValue = synthData.total * prices.susd;
-			break;
-		case 'Debt':
-			balance = debtData.debtBalance;
-			usdValue = debtData.debtBalance * prices.susd;
-			break;
-		default:
-			break;
-	}
-	return { balance, usdValue };
-};
-
-const renderTooltip = (dataType, t) => {
-	if (!['Synths', 'Debt'].includes(dataType)) return;
-	return (
-		<TooltipWrapper>
-			<Tooltip content={t(`tooltip.${dataType.toLowerCase()}Balance`)} />
-		</TooltipWrapper>
-	);
-};
-
-const processTableData = (state, t) => {
-	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
-		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'SNX' : dataType;
-		const assetName = ['Synths', 'Debt'].includes(dataType)
-			? t(`dashboard.table.${dataType.toLowerCase()}`)
-			: dataType;
-		const { balance, usdValue } = getBalancePerAsset(dataType, state);
-		return {
-			rowLegend: (
-				<TableIconCell>
-					<CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
-					{assetName}
-					{renderTooltip(dataType, t)}
-				</TableIconCell>
-			),
-			balance: balance ? formatCurrency(balance) : 0,
-			usdValue: `$${usdValue ? formatCurrency(usdValue) : 0}`,
-		};
-	});
-};
-
-const BalanceTable = ({ state }) => {
-	const { t } = useTranslation();
-	const data = processTableData(state, t);
-	const waitingForData = Object.values(state).some(value => isEmpty(value));
-	return (
-		<Box style={{ marginTop: '16px' }} full={true}>
-			<BoxInner>
-				{waitingForData ? (
-					<Skeleton width={'100%'} height={'242px'} />
-				) : (
-					<Table
-						header={[
-							{ key: 'rowLegend', value: '' },
-							{ key: 'balance', value: t('dashboard.table.balance') },
-							{ key: 'usdValue', value: '$ usd' },
-						]}
-						data={data}
-					/>
-				)}
-			</BoxInner>
-		</Box>
-	);
-};
-
-const Dashboard = ({ walletDetails, successQueue, showModal }) => {
-	const { t } = useTranslation();
-	const theme = useContext(ThemeContext);
 	const { currentWallet } = walletDetails;
-
 	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
 	const [data, setData] = useState({});
 	const loadData = useCallback(() => {
 		setDashboardIsLoading(true);
+		fetchBalances(currentWallet);
 		fetchData(currentWallet, successQueue).then(data => {
 			setData(data);
 			setDashboardIsLoading(false);
 		});
-	}, [currentWallet, successQueue]);
+	}, [currentWallet, successQueue, fetchBalances]);
 
 	useEffect(() => {
 		loadData();
@@ -211,7 +76,7 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 		};
 	}, [loadData]);
 
-	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
+	const { debtData = {}, escrowData = {} } = data;
 
 	return (
 		<DashboardWrapper>
@@ -239,33 +104,19 @@ const Dashboard = ({ walletDetails, successQueue, showModal }) => {
 							return (
 								<Asset key={asset}>
 									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
-									{isEmpty(prices) ? (
+									{isEmpty(rates) ? (
 										<Skeleton height="22px" />
 									) : (
 										<CurrencyPrice>
-											1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
+											1 {asset} = ${formatCurrency(rates[asset])} USD
 										</CurrencyPrice>
 									)}
 								</Asset>
 							);
 						})}
 					</PricesContainer>
-					<Charts
-						state={{
-							balances,
-							debtData,
-							theme,
-							escrowData,
-						}}
-					/>
-					<BalanceTable
-						state={{
-							balances,
-							synthData,
-							debtData,
-							prices,
-						}}
-					/>
+					<BarCharts debtData={debtData} escrowData={escrowData} />
+					<BalanceTable debtData={debtData} />
 					<Row margin="18px 0 0 0 ">
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
@@ -336,28 +187,6 @@ const Row = styled.div`
 	padding: ${props => (props.padding ? props.padding : 0)};
 `;
 
-const Box = styled.div`
-	border-radius: 2px;
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	width: ${props => (props.full ? '100%' : '240px')};
-	height: ${props => (props.full ? '100%' : '96px')};
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-`;
-
-const BoxInner = styled.div`
-	padding: 24px;
-	width: 100%;
-`;
-
-const BoxHeading = styled.div`
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
-`;
-
 const Link = styled.a`
 	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
 	text-transform: uppercase;
@@ -374,15 +203,6 @@ const CurrencyIcon = styled.img`
 	width: 22px;
 	height: 22px;
 	margin-right: 5px;
-`;
-
-const TableIconCell = styled.div`
-	display: flex;
-	align-items: center;
-`;
-
-const TooltipWrapper = styled.div`
-	margin-left: 10px;
 `;
 
 const PricesContainer = styled.div`
@@ -413,10 +233,14 @@ const CurrencyPrice = styled.div`
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	successQueue: getSuccessQueue(state),
+	walletBalances: getWalletBalances(state),
+	walletBalancesWithRates: getWalletBalancesWithRates(state),
+	rates: getRates(state),
 });
 
 const mapDispatchToProps = {
 	showModal,
+	fetchBalances,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

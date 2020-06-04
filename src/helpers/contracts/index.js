@@ -7,6 +7,9 @@ import curvepool from './curve/curvepool';
 import curveLPToken from './curve/curveLPToken';
 import oldCurvepool from './curve/oldCurvepool';
 
+import balancerpool from './balancer/balancerpool';
+import balancerSNXRewards from './balancer/balancerSNXRewards';
+
 import synthSummary from './synthSummary';
 
 import iEthRewards from './iEthRewards';
@@ -21,4 +24,6 @@ export {
 	synthSummary,
 	oldCurvepool,
 	iEthRewards,
+	balancerpool,
+	balancerSNXRewards,
 };

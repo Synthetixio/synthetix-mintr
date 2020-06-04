@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import snxJSConnector from '../../helpers/snxJSConnector';
 import Slider, { SliderContext } from '../../components/ScreenSlider';
 
 import Confirmation from './Confirmation';
@@ -9,7 +8,6 @@ import { getWalletDetails } from '../../ducks/wallet';
 import { createTransaction } from '../../ducks/transactions';
 import { getCurrentGasPrice } from '../../ducks/network';
 import errorMapper from '../../helpers/errorMapper';
-import { bigNumberFormatter } from '../../helpers/formatters';
 
 const addBufferToGasLimit = gasLimit => Math.round(Number(gasLimit) * 1.5);
 
