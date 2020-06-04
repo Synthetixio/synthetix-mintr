@@ -37,13 +37,13 @@ jobs:
           at: .
       - run: npm run lint
 
-  test:
-    <<: *env_defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run: npm test
+  # test:
+  #   <<: *env_defaults
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #         at: .
+  #     - run: npm test
 
 workflows:
   version: 2
@@ -54,6 +54,6 @@ workflows:
       - lint:
           requires:
             - build
-      - test:
-          requires:
-            - build
+      # - test:
+      #     requires:
+      #       - build

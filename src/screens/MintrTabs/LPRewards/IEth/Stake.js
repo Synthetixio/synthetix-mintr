@@ -279,8 +279,6 @@ const ButtonRow = styled.div`
 	width: 100%;
 `;
 
-const SettleLabel = styled.div``;
-
 const ButtonAction = styled(ButtonPrimary)`
 	flex: 1;
 	width: 10px;

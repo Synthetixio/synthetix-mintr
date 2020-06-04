@@ -17,6 +17,7 @@ import {
 } from '../../../components/Typography';
 
 import Tooltip from '../../../components/Tooltip';
+import { Info } from '../../../components/Icons';
 
 const Action = ({
 	onDestroy,
@@ -28,6 +29,7 @@ const Action = ({
 	isFetchingGasLimit,
 	gasEstimateError,
 	gasLimit,
+	theme,
 }) => {
 	const { t } = useTranslation();
 	return (
@@ -70,7 +72,11 @@ const Action = ({
 								? t('mintrActions.claim.action.table.open')
 								: t('mintrActions.claim.action.table.blocked')}
 						</Highlighted>
-						<Tooltip width={'250px'} content={t('tooltip.claim')} />
+						<Tooltip mode={theme} title={t(`tooltip.claim`)} placement="top">
+							<IconContainer>
+								<Info />
+							</IconContainer>
+						</Tooltip>
 					</Status>
 					<TransactionPriceIndicator
 						isFetchingGasLimit={isFetchingGasLimit}
@@ -193,6 +199,12 @@ const Highlighted = styled.span`
 const Note = styled.div`
 	margin-top: 16px;
 	max-width: 420px;
+`;
+
+const IconContainer = styled.div`
+	margin-left: 10px;
+	width: 23px;
+	height: 23px;
 `;
 
 const Subtitle = styled(PLarge)`
