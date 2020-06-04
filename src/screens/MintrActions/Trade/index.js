@@ -115,6 +115,7 @@ const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice })
 	const [baseSynth, setBaseSynth] = useState(null);
 	const [baseAmount, setBaseAmount] = useState('');
 	const [quoteAmount, setQuoteAmount] = useState('');
+	const [feeRate, setFeeRate] = useState(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const { currentWallet, walletType, networkName } = walletDetails;
@@ -148,6 +149,25 @@ const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice })
 	useEffect(() => {
 		getMaxSecsLeftInWaitingPeriod();
 	}, [getMaxSecsLeftInWaitingPeriod]);
+
+	useEffect(() => {
+		const getFeeRateForExchange = async () => {
+			if (!baseSynth) return;
+			try {
+				const {
+					snxJS: { Exchanger },
+				} = snxJSConnector;
+				const feeRateForExchange = await Exchanger.feeRateForExchange(
+					bytesFormatter(baseSynth.name),
+					bytesFormatter('sUSD')
+				);
+				setFeeRate(100 * bigNumberFormatter(feeRateForExchange));
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getFeeRateForExchange();
+	}, [baseSynth]);
 
 	const onTrade = async () => {
 		try {
@@ -208,6 +228,7 @@ const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice })
 		gasEstimateError,
 		waitingPeriod,
 		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
+		feeRate,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
