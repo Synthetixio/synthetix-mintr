@@ -1,29 +1,6 @@
-import { addSeconds } from 'date-fns';
 import snxJSConnector from '../../helpers/snxJSConnector';
 
 import { bigNumberFormatter } from '../../helpers/formatters';
-
-const getRewards = async walletAddress => {
-	try {
-		const [feesAreClaimable, currentFeePeriod, feePeriodDuration] = await Promise.all([
-			snxJSConnector.snxJS.FeePool.isFeesClaimable(walletAddress),
-			snxJSConnector.snxJS.FeePool.recentFeePeriods(0),
-			snxJSConnector.snxJS.FeePool.feePeriodDuration(),
-		]);
-
-		const currentPeriodStart =
-			currentFeePeriod && currentFeePeriod.startTime
-				? new Date(parseInt(currentFeePeriod.startTime * 1000))
-				: null;
-		const currentPeriodEnd =
-			currentPeriodStart && feePeriodDuration
-				? addSeconds(currentPeriodStart, feePeriodDuration)
-				: null;
-		return { feesAreClaimable, currentPeriodEnd };
-	} catch (e) {
-		console.log(e);
-	}
-};
 
 const getEscrow = async walletAddress => {
 	try {
@@ -42,13 +19,9 @@ const getEscrow = async walletAddress => {
 };
 
 export const fetchData = async walletAddress => {
-	const [rewardData, escrowData] = await Promise.all([
-		getRewards(walletAddress),
-		getEscrow(walletAddress),
-	]).catch(e => console.log(e));
-
+	const [escrowData] = await Promise.all([getEscrow(walletAddress)]).catch(e => console.log(e));
+	console.log(escrowData);
 	return {
-		rewardData,
 		escrowData,
 	};
 };

@@ -1,81 +1,31 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
 
-import { formatCurrency } from '../../helpers/formatters';
-import { fetchData } from './fetchData';
-import { getWalletDetails } from '../../ducks/wallet';
-import { showModal } from '../../ducks/modal';
-import { fetchBalances, getWalletBalances, getWalletBalancesWithRates } from '../../ducks/balances';
+import { formatCurrency } from 'helpers/formatters';
+import { getWalletDetails } from 'ducks/wallet';
+import { showModal } from 'ducks/modal';
+import { getWalletBalances, getWalletBalancesWithRates } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
-import { getRates } from '../../ducks/rates';
+import { getRates } from 'ducks/rates';
+import { getTotalEscrowedBalance } from 'ducks/escrow';
 
-import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
+import { MODAL_TYPES_TO_KEY } from 'constants/modal';
 
-import Header from '../../components/Header';
+import Header from 'components/Header';
 
-import { ButtonTertiary } from '../../components/Button';
-import { DataLarge, H5, Figure, ButtonTertiaryLabel } from '../../components/Typography';
-import Skeleton from '../../components/Skeleton';
+import { ButtonTertiary } from 'components/Button';
+import { H5, ButtonTertiaryLabel } from 'components/Typography';
+import Skeleton from 'components/Skeleton';
 import BalanceTable from './BalanceTable';
-import Box from './Box';
 import BarCharts from './BarCharts';
+import CollRatios from './CollRatios';
 
-const INTERVAL_TIMER = 5 * 60 * 1000;
-
-const CollRatios = ({ debtStatusData = {} }) => {
-	const { t } = useTranslation();
-	return (
-		<Row margin="0 0 22px 0">
-			<Box>
-				{isEmpty(debtStatusData) ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>
-						{debtStatusData.currentCRatio ? Math.round(100 / debtStatusData.currentCRatio) : 0}%
-					</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.current')}</DataLarge>
-			</Box>
-			<Box>
-				{isEmpty(debtStatusData) ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>
-						{debtStatusData.targetCRatio ? Math.round(100 / debtStatusData.targetCRatio) : 0}%
-					</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.target')}</DataLarge>
-			</Box>
-		</Row>
-	);
-};
-
-const Dashboard = ({ walletDetails, showModal, rates, fetchBalances, debtStatusData }) => {
+const Dashboard = ({ walletDetails, showModal, rates, debtStatusData, totalEscrowedBalances }) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
-	const [data, setData] = useState({});
-	const loadData = useCallback(() => {
-		fetchBalances(currentWallet);
-		fetchData(currentWallet).then(data => {
-			setData(data);
-		});
-	}, [currentWallet, fetchBalances]);
-
-	useEffect(() => {
-		loadData();
-		const intervalId = setInterval(() => {
-			loadData();
-		}, INTERVAL_TIMER);
-		return () => {
-			clearInterval(intervalId);
-		};
-	}, [loadData]);
-
-	const { escrowData = {} } = data;
-
 	return (
 		<DashboardWrapper>
 			<Header currentWallet={currentWallet} />
@@ -106,7 +56,7 @@ const Dashboard = ({ walletDetails, showModal, rates, fetchBalances, debtStatusD
 							);
 						})}
 					</PricesContainer>
-					<BarCharts debtData={debtStatusData} escrowData={escrowData} />
+					<BarCharts debtData={debtStatusData} totalEscrow={totalEscrowedBalances} />
 					<BalanceTable debtData={debtStatusData} />
 					<Row margin="18px 0 0 0 ">
 						<Link href="https://synthetix.exchange" target="_blank">
@@ -227,11 +177,11 @@ const mapStateToProps = state => ({
 	walletBalancesWithRates: getWalletBalancesWithRates(state),
 	rates: getRates(state),
 	debtStatusData: getDebtStatusData(state),
+	totalEscrowedBalances: getTotalEscrowedBalance(state),
 });
 
 const mapDispatchToProps = {
 	showModal,
-	fetchBalances,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

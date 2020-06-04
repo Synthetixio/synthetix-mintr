@@ -29,8 +29,10 @@ const initialState: DebtStatusSlice = {
 	fetchError: null,
 };
 
+const sliceName = 'debtStatus';
+
 export const debtStatusSlice = createSlice({
-	name: 'debtStatus',
+	name: sliceName,
 	initialState,
 	reducers: {
 		fetchDebtStatusRequest: state => {
@@ -60,7 +62,7 @@ export const {
 	fetchDebtStatusSuccess,
 } = debtStatusSlice.actions;
 
-const getDebtState = (state: RootState) => state.debtStatus;
+const getDebtState = (state: RootState) => state[sliceName];
 export const getDebtStatusData = (state: RootState) => getDebtState(state).debtStatusData;
 
 function* fetchDebtStatus() {

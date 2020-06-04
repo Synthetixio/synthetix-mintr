@@ -10,6 +10,7 @@ import network from './network';
 import modal from './modal';
 import balances from './balances';
 import debtStatus from './debtStatus';
+import escrow from './escrow';
 
 export default combineReducers({
 	app,
@@ -23,4 +24,5 @@ export default combineReducers({
 	modal,
 	balances,
 	debtStatus,
+	escrow,
 });

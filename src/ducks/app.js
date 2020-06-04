@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import snxJSConnector from '../helpers/snxJSConnector';
+// import snxJSConnector from '../helpers/snxJSConnector';
 
 export const appSlice = createSlice({
 	name: 'app',
@@ -38,9 +38,9 @@ export const appSlice = createSlice({
 
 const {
 	setAppReady,
-	fetchAppStatusRequest,
-	fetchAppStatusFailure,
-	fetchAppStatusSuccess,
+	// fetchAppStatusRequest,
+	// fetchAppStatusFailure,
+	// fetchAppStatusSuccess,
 } = appSlice.actions;
 
 const getAppState = state => state.app;
@@ -48,17 +48,17 @@ const getAppState = state => state.app;
 export const getAppIsReady = state => getAppState(state).isReady;
 export const getAppIsOnMaintenance = state => getAppState(state).isOnMaintenance;
 
-export const fetchAppStatus = () => async dispatch => {
-	if (process.env.REACT_APP_CONTEXT !== 'production') return;
-	try {
-		const { DappMaintenance } = snxJSConnector.snxJS;
-		dispatch(fetchAppStatusRequest());
-		const isOnMaintenance = await DappMaintenance.isPausedMintr();
-		dispatch(fetchAppStatusSuccess(isOnMaintenance));
-	} catch (e) {
-		dispatch(fetchAppStatusFailure({ error: e.message }));
-	}
-};
+// export const fetchAppStatus = () => async dispatch => {
+// 	if (process.env.REACT_APP_CONTEXT !== 'production') return;
+// 	try {
+// 		const { DappMaintenance } = snxJSConnector.snxJS;
+// 		dispatch(fetchAppStatusRequest());
+// 		const isOnMaintenance = await DappMaintenance.isPausedMintr();
+// 		dispatch(fetchAppStatusSuccess(isOnMaintenance));
+// 	} catch (e) {
+// 		dispatch(fetchAppStatusFailure({ error: e.message }));
+// 	}
+// };
 
 export { setAppReady };
 

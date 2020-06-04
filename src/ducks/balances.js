@@ -1,10 +1,12 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { takeLatest, put, select } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import snxJSConnector from '../helpers/snxJSConnector';
 import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
 import { bytesFormatter, bigNumberFormatter, parseBytes32String } from '../helpers/formatters';
 import { getRates } from './rates';
+import { getCurrentWallet } from './wallet';
 
 export const balancesSlice = createSlice({
 	name: 'balances',
@@ -37,7 +39,11 @@ export const balancesSlice = createSlice({
 	},
 });
 
-const { fetchBalancesRequest, fetchBalancesFailure, fetchBalancesSuccess } = balancesSlice.actions;
+export const {
+	fetchBalancesRequest,
+	fetchBalancesFailure,
+	fetchBalancesSuccess,
+} = balancesSlice.actions;
 
 const getBalanceState = state => state.balances;
 export const getWalletBalances = state => getBalanceState(state).balances;
@@ -76,55 +82,62 @@ export const getWalletBalancesWithRates = createSelector(
 	}
 );
 
-export const fetchBalances = walletAddress => async dispatch => {
-	try {
-		if (!walletAddress) throw new Error('wallet address is needed');
-		const {
-			synthSummaryUtilContract,
-			snxJS: { Synthetix },
-			provider,
-		} = snxJSConnector;
-		dispatch(fetchBalancesRequest());
-		const [
-			synthBalanceResults,
-			totalSynthsBalanceResults,
-			snxBalanceResults,
-			ethBalanceResults,
-		] = await Promise.all([
-			synthSummaryUtilContract.synthsBalances(walletAddress),
-			synthSummaryUtilContract.totalSynthsInKey(
-				walletAddress,
-				bytesFormatter(CRYPTO_CURRENCY_TO_KEY.sUSD)
-			),
-			Synthetix.collateral(walletAddress),
-			provider.getBalance(walletAddress),
-		]);
+function* fetchBalances() {
+	const currentWallet = yield select(getCurrentWallet);
+	if (!currentWallet != null) {
+		try {
+			const {
+				synthSummaryUtilContract,
+				snxJS: { Synthetix },
+				provider,
+			} = snxJSConnector;
+			const [
+				synthBalanceResults,
+				totalSynthsBalanceResults,
+				snxBalanceResults,
+				ethBalanceResults,
+			] = yield Promise.all([
+				synthSummaryUtilContract.synthsBalances(currentWallet),
+				synthSummaryUtilContract.totalSynthsInKey(
+					currentWallet,
+					bytesFormatter(CRYPTO_CURRENCY_TO_KEY.sUSD)
+				),
+				Synthetix.collateral(currentWallet),
+				provider.getBalance(currentWallet),
+			]);
 
-		const [synthsKeys, synthsBalances] = synthBalanceResults;
+			const [synthsKeys, synthsBalances] = synthBalanceResults;
 
-		const synths = synthsKeys
-			.map((key, i) => {
-				const synthName = parseBytes32String(key);
-				return {
-					name: synthName,
-					balance: bigNumberFormatter(synthsBalances[i]),
-				};
-			})
-			.filter(synth => synth.balance);
+			const synths = synthsKeys
+				.map((key, i) => {
+					const synthName = parseBytes32String(key);
+					return {
+						name: synthName,
+						balance: bigNumberFormatter(synthsBalances[i]),
+					};
+				})
+				.filter(synth => synth.balance);
 
-		const sUSDBalance = synths.find(synth => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD);
-		dispatch(
-			fetchBalancesSuccess({
-				[CRYPTO_CURRENCY_TO_KEY.SNX]: bigNumberFormatter(snxBalanceResults),
-				[CRYPTO_CURRENCY_TO_KEY.ETH]: bigNumberFormatter(ethBalanceResults),
-				[CRYPTO_CURRENCY_TO_KEY.sUSD]: sUSDBalance ? sUSDBalance.balance : 0,
-				synths,
-				totalSynths: bigNumberFormatter(totalSynthsBalanceResults),
-			})
-		);
-	} catch (e) {
-		dispatch(fetchBalancesFailure({ error: e.message }));
+			const sUSDBalance = synths.find(synth => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD);
+			yield put(
+				fetchBalancesSuccess({
+					[CRYPTO_CURRENCY_TO_KEY.SNX]: bigNumberFormatter(snxBalanceResults),
+					[CRYPTO_CURRENCY_TO_KEY.ETH]: bigNumberFormatter(ethBalanceResults),
+					[CRYPTO_CURRENCY_TO_KEY.sUSD]: sUSDBalance ? sUSDBalance.balance : 0,
+					synths,
+					totalSynths: bigNumberFormatter(totalSynthsBalanceResults),
+				})
+			);
+		} catch (e) {
+			yield put(fetchBalancesFailure({ error: e.message }));
+			return false;
+		}
 	}
-};
+	return false;
+}
+
+export function* watchFetchBalances() {
+	yield takeLatest(fetchBalancesRequest.type, fetchBalances);
+}
 
 export default balancesSlice.reducer;

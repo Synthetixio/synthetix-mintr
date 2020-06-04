@@ -10,7 +10,7 @@ import { getWalletBalances } from '../../ducks/balances';
 import { formatCurrency } from '../../helpers/formatters';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 
-const Charts = ({ walletBalances, debtData, escrowData }) => {
+const Charts = ({ walletBalances, debtData, totalEscrow = 0 }) => {
 	const { t } = useTranslation();
 	const snxBalance = walletBalances[CRYPTO_CURRENCY_TO_KEY.SNX];
 	const snxLocked =
@@ -20,7 +20,6 @@ const Charts = ({ walletBalances, debtData, escrowData }) => {
 		debtData.targetCRatio &&
 		snxBalance * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
 
-	const totalEscrow = escrowData.reward + escrowData.tokenSale;
 	const transferable = debtData ? debtData.transferable : 0;
 
 	const chartData = [
