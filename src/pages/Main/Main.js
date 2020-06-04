@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { fetchRates } from '../../ducks/rates';
-import { fetchGasPrices } from '../../ducks/network';
 
 import Dashboard from '../../screens/Dashboard';
 import MintrPanel from '../../screens/MintrPanel';
@@ -14,7 +13,6 @@ const Main = ({ fetchGasPrices, fetchRates }) => {
 	useEffect(() => {
 		const init = async () => {
 			fetchRates();
-			fetchGasPrices();
 		};
 		init();
 		const fetchLoop = setInterval(init, INTERVAL_TIMER);
@@ -36,7 +34,6 @@ const MainWrapper = styled.div`
 `;
 
 const mapDispatchToProps = {
-	fetchGasPrices,
 	fetchRates,
 };
 

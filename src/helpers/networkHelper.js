@@ -56,7 +56,7 @@ export async function getEthereumNetwork() {
 	});
 }
 
-export const getNetworkSpeed = async () => {
+export const getNetworkSpeeds = async () => {
 	const result = await fetch(URLS.ETH_GAS_STATION);
 	const networkInfo = await result.json();
 	return {
@@ -74,6 +74,8 @@ export const getNetworkSpeed = async () => {
 		},
 	};
 };
+
+export const formatGasPrice = gasPrice => gasPrice * GWEI_UNIT;
 
 export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
 	if (!gasPrice || !gasLimit) return 0;

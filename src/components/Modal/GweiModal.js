@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
-import { setGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
+import { setCurrentGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
 import { hideModal } from '../../ducks/modal';
 import { getEthRate } from '../../ducks/rates';
 
@@ -51,15 +51,16 @@ const renderTooltipContent = (gasPrice, transactionPrice) => {
 
 const GweiModal = ({
 	networkPrices,
-	setGasPrice,
+	setCurrentGasPrice,
 	hideModal,
 	currentGasPrice,
 	gasLimit,
 	ethRate,
 }) => {
 	const { t } = useTranslation();
-	const [gasPriceSettings, setGasPriceSettings] = useState(currentGasPrice.price);
-
+	const [gasPriceSettings, setGasPriceSettings] = useState(
+		currentGasPrice ? currentGasPrice.price : null
+	);
 	const gasInfo = networkPrices
 		? Object.keys(networkPrices).map(speed => {
 				const price = networkPrices[speed].price || 0;
@@ -105,7 +106,7 @@ const GweiModal = ({
 				<ButtonWrapper>
 					<ButtonPrimary
 						onClick={() => {
-							setGasPrice(gasPriceSettings);
+							setCurrentGasPrice({ gasPrice: gasPriceSettings });
 							hideModal();
 						}}
 					>
@@ -185,7 +186,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	setGasPrice,
+	setCurrentGasPrice,
 	hideModal,
 };
 

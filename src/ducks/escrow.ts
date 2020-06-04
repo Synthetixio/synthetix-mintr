@@ -6,7 +6,7 @@ import { getCurrentWallet } from './wallet';
 import { RootState } from './types';
 import { getEscrowData } from 'dataFetcher';
 
-export type EscrowSlice = {
+export type EscrowSliceState = {
 	escrowedBalances: EscrowedBalances | null;
 	isFetching: boolean;
 	isFetched: boolean;
@@ -19,7 +19,7 @@ export type EscrowedBalances = {
 	tokenSale: number;
 };
 
-const initialState: EscrowSlice = {
+const initialState: EscrowSliceState = {
 	escrowedBalances: null,
 	isFetching: false,
 	isFetched: false,
@@ -70,6 +70,7 @@ function* fetchEscrowedBalances() {
 		try {
 			const escrowedBalances = yield getEscrowData(currentWallet);
 			yield put(fetchEscrowSuccess({ escrowedBalances }));
+			return true;
 		} catch (e) {
 			yield put(fetchEscrowFailure({ error: e.message }));
 			return false;

@@ -7,6 +7,7 @@ import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { fetchEscrowRequest } from 'ducks/escrow';
 import { getCurrentWallet } from 'ducks/wallet';
 import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchGasPricesRequest } from 'ducks/network';
 
 import App from './App';
 
@@ -25,6 +26,7 @@ const Root = ({
 	currentWallet,
 	fetchEscrowRequest,
 	fetchBalancesRequest,
+	fetchGasPricesRequest,
 }) => {
 	useEffect(() => {
 		if (appIsReady && currentWallet) {
@@ -34,6 +36,11 @@ const Root = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appIsReady, currentWallet]);
+
+	useEffect(() => {
+		fetchGasPricesRequest();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appIsReady]);
 
 	useEffect(() => {
 		let intervalId;
@@ -66,6 +73,7 @@ const mapDispatchToProps = {
 	fetchDebtStatusRequest,
 	fetchEscrowRequest,
 	fetchBalancesRequest,
+	fetchGasPricesRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Root);
