@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import { isDarkTheme, lightTheme, darkTheme } from '../../styles/themes';
@@ -6,7 +6,7 @@ import { isDarkTheme, lightTheme, darkTheme } from '../../styles/themes';
 import { isMobileOrTablet } from '../../helpers/browserHelper';
 
 import { getCurrentPage, getCurrentTheme } from '../../ducks/ui';
-import { setAppReady, fetchAppStatus, getAppIsOnMaintenance } from '../../ducks/app';
+import { setAppReady, fetchAppStatus, getAppIsReady } from '../../ducks/app';
 
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -18,7 +18,7 @@ import NotificationCenter from '../../components/NotificationCenter';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { getEthereumNetwork } from '../../helpers/networkHelper';
 
-import { PAGES_BY_KEY, INTERVAL_TIMER } from '../../constants/ui';
+import { PAGES_BY_KEY } from '../../constants/ui';
 
 const renderCurrentPage = currentPage => {
 	if (isMobileOrTablet()) return <MobileLanding />;
@@ -33,26 +33,50 @@ const renderCurrentPage = currentPage => {
 	}
 };
 
-const Root = ({ currentPage, currentTheme, setAppReady, fetchAppStatus, appIsOnMaintenance }) => {
+const Root = ({ currentPage, currentTheme, setAppReady, fetchAppStatus, appIsReady }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
+	const [appIsOnMaintenance, setAppIsOnMaintenance] = useState(false);
 
 	useEffect(() => {
-		let intervalId;
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
 			snxJSConnector.setContractSettings({ networkId });
 			setAppReady();
-			fetchAppStatus();
-			intervalId = setInterval(() => {
-				fetchAppStatus();
-			}, INTERVAL_TIMER);
 		};
 		init();
-		return () => {
-			clearInterval(intervalId);
-		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => {
+		const startSystemStatusListeners = async () => {
+			if (!appIsReady) return;
+			const {
+				snxJS: { SystemStatus },
+			} = snxJSConnector;
+			try {
+				const isSystemUpgrading = await SystemStatus.isSystemUpgrading();
+				if (Number(isSystemUpgrading)) setAppIsOnMaintenance(true);
+				SystemStatus.contract.on('SystemSuspended', reason => {
+					if (Number(reason) === 1) setAppIsOnMaintenance(true);
+				});
+				SystemStatus.contract.on('SystemResumed', () => {
+					setAppIsOnMaintenance(false);
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		startSystemStatusListeners();
+
+		return () => {
+			if (!appIsReady) return;
+			const {
+				snxJS: { SystemStatus },
+			} = snxJSConnector;
+			SystemStatus.contract.removeAllListeners('SystemSuspended');
+			SystemStatus.contract.removeAllListeners('SystemResumed');
+		};
+	}, [appIsReady]);
 
 	return (
 		<ThemeProvider theme={themeStyle}>
@@ -73,7 +97,7 @@ const RootWrapper = styled('div')`
 const mapStateToProps = state => ({
 	currentPage: getCurrentPage(state),
 	currentTheme: getCurrentTheme(state),
-	appIsOnMaintenance: getAppIsOnMaintenance(state),
+	appIsReady: getAppIsReady(state),
 });
 
 const mapDispatchToProps = {
