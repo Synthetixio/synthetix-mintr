@@ -5,7 +5,6 @@ export const appSlice = createSlice({
 	name: 'app',
 	initialState: {
 		isReady: false,
-		isOnMaintenance: false,
 		isFetching: false,
 		isFetched: false,
 		isRefreshing: false,
@@ -46,19 +45,6 @@ const {
 const getAppState = state => state.app;
 
 export const getAppIsReady = state => getAppState(state).isReady;
-export const getAppIsOnMaintenance = state => getAppState(state).isOnMaintenance;
-
-// export const fetchAppStatus = () => async dispatch => {
-// 	if (process.env.REACT_APP_CONTEXT !== 'production') return;
-// 	try {
-// 		const { DappMaintenance } = snxJSConnector.snxJS;
-// 		dispatch(fetchAppStatusRequest());
-// 		const isOnMaintenance = await DappMaintenance.isPausedMintr();
-// 		dispatch(fetchAppStatusSuccess(isOnMaintenance));
-// 	} catch (e) {
-// 		dispatch(fetchAppStatusFailure({ error: e.message }));
-// 	}
-// };
 
 export { setAppReady };
 

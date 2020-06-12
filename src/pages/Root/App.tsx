@@ -8,7 +8,6 @@ import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
 import { PAGES_BY_KEY, INTERVAL_TIMER } from 'constants/ui';
 import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
-import { getAppIsOnMaintenance } from 'ducks/app';
 
 import MaintenancePage from '../MaintenanceMessage';
 import NotificationCenter from 'components/NotificationCenter';
@@ -41,10 +40,10 @@ const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
 type StateProps = {
 	currentTheme: string;
 	currentPage: string;
-	appIsOnMaintenance: boolean;
 };
 
 type AppProps = StateProps & {
+	appIsOnMaintenance: boolean;
 	appIsReady: boolean;
 };
 
@@ -69,7 +68,6 @@ const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaint
 const mapStateToProps = (state: RootState) => ({
 	currentTheme: getCurrentTheme(state),
 	currentPage: getCurrentPage(state),
-	appIsOnMaintenance: getAppIsOnMaintenance(state),
 });
 
 export default connect<StateProps, null, undefined, RootState>(mapStateToProps, null)(App);

@@ -9,7 +9,7 @@ import MintrPanel from '../../screens/MintrPanel';
 
 import { INTERVAL_TIMER } from '../../constants/ui';
 
-const Main = ({ fetchGasPrices, fetchRates }) => {
+const Main = ({ fetchRates }) => {
 	useEffect(() => {
 		const init = async () => {
 			fetchRates();
