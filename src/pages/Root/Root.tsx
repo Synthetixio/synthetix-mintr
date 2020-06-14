@@ -7,6 +7,7 @@ import { fetchEscrowRequest } from 'ducks/escrow';
 import { getCurrentWallet } from 'ducks/wallet';
 import { fetchBalancesRequest } from 'ducks/balances';
 import { fetchGasPricesRequest } from 'ducks/network';
+import { fetchRatesRequest } from 'ducks/rates';
 import { RootState } from 'ducks/types';
 
 import App from './App';
@@ -26,6 +27,7 @@ const mapDispatchToProps = {
 	fetchBalancesRequest,
 	fetchGasPricesRequest,
 	fetchAppStatusRequest,
+	fetchRatesRequest,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -40,10 +42,12 @@ const Root: FC<PropsFromRedux> = ({
 	fetchBalancesRequest,
 	fetchGasPricesRequest,
 	fetchAppStatusRequest,
+	fetchRatesRequest,
 }) => {
 	useEffect(() => {
 		if (appIsReady) {
 			fetchGasPricesRequest();
+			fetchRatesRequest();
 		}
 		if (appIsReady && currentWallet) {
 			fetchDebtStatusRequest();

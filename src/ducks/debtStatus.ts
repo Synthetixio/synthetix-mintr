@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { takeLatest, put, select } from 'redux-saga/effects';
-import snxJSConnector from '../helpers/snxJSConnector';
 
 import { getCurrentWallet } from './wallet';
 import { RootState } from './types';

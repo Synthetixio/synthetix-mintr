@@ -5,6 +5,7 @@ import { watchFetchEscrowRequest } from './escrow';
 import { watchFetchBalances } from './balances';
 import { watchFetchNetworkRequest } from './network';
 import { watchFetchSystemStatusRequest } from './app';
+import { watchFetchRatesRequest } from './rates';
 
 const rootSaga = function* () {
 	yield all([
@@ -13,6 +14,7 @@ const rootSaga = function* () {
 		watchFetchBalances(),
 		watchFetchNetworkRequest(),
 		watchFetchSystemStatusRequest(),
+		watchFetchRatesRequest(),
 	]);
 };
 
