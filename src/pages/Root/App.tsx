@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
-import { RootState } from 'ducks/types';
 import GlobalEventsGate from 'gates/GlobalEventsGate';
+import { RootState } from 'ducks/types';
+import { getAppIsOnMaintenance } from 'ducks/app';
 import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
-import { PAGES_BY_KEY, INTERVAL_TIMER } from 'constants/ui';
+import { PAGES_BY_KEY } from 'constants/ui';
 import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
 
@@ -17,6 +18,15 @@ import Main from '../Main';
 import MobileLanding from '../MobileLanding';
 
 import MainLayout from './components/MainLayout';
+
+const mapStateToProps = (state: RootState) => ({
+	currentTheme: getCurrentTheme(state),
+	currentPage: getCurrentPage(state),
+	appIsOnMaintenance: getAppIsOnMaintenance(state),
+});
+
+const connector = connect(mapStateToProps, null);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type CurrentPageProps = {
 	isOnMaintenance: boolean;
@@ -37,15 +47,9 @@ const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
 	}
 };
 
-type StateProps = {
-	currentTheme: string;
-	currentPage: string;
-};
-
-type AppProps = StateProps & {
-	appIsOnMaintenance: boolean;
+type AppProps = {
 	appIsReady: boolean;
-};
+} & PropsFromRedux;
 
 const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaintenance }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
@@ -65,9 +69,4 @@ const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaint
 	);
 };
 
-const mapStateToProps = (state: RootState) => ({
-	currentTheme: getCurrentTheme(state),
-	currentPage: getCurrentPage(state),
-});
-
-export default connect<StateProps, null, undefined, RootState>(mapStateToProps, null)(App);
+export default connector(App) as any;

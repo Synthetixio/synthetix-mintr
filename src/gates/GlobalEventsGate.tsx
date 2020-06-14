@@ -1,9 +1,10 @@
 import { useEffect, FC } from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { RootState } from 'ducks/types';
 import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { getCurrentWallet } from 'ducks/wallet';
+import { setSystemUpgrading } from 'ducks/app';
 
 import snxJSConnector from 'helpers/snxJSConnector';
 import {
@@ -11,19 +12,26 @@ import {
 	FEEPOOL_EVENTS,
 	EXCHANGE_EVENTS,
 	TRANSFER_EVENTS,
+	SYSTEM_STATUS_EVENTS,
 } from 'constants/events';
 
-type StateProps = {
-	currentWallet: string;
+const mapStateToProps = (state: RootState) => ({
+	currentWallet: getCurrentWallet(state),
+});
+
+const mapDispatchToProps = {
+	fetchDebtStatusRequest,
+	setSystemUpgrading,
 };
 
-type DispatchProps = {
-	fetchDebtStatusRequest: typeof fetchDebtStatusRequest;
-};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
-type GlobalEventsGateProps = StateProps & DispatchProps;
-
-const GlobalEventsGate: FC<GlobalEventsGateProps> = ({ fetchDebtStatusRequest, currentWallet }) => {
+const GlobalEventsGate: FC<PropsFromRedux> = ({
+	fetchDebtStatusRequest,
+	currentWallet,
+	setSystemUpgrading,
+}) => {
 	useEffect(() => {
 		if (!currentWallet) return;
 		const {
@@ -64,17 +72,26 @@ const GlobalEventsGate: FC<GlobalEventsGateProps> = ({ fetchDebtStatusRequest, c
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
+
+	useEffect(() => {
+		const {
+			//@ts-ignore
+			snxJS: { SystemStatus },
+		} = snxJSConnector;
+		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
+			setSystemUpgrading({ reason });
+		});
+		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, (reason: number) => {
+			setSystemUpgrading({ reason });
+		});
+		return () => {
+			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
+				SystemStatus.contract.removeAllListeners(event)
+			);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	return null;
 };
 
-const mapStateToProps = (state: RootState): StateProps => {
-	return {
-		currentWallet: getCurrentWallet(state),
-	};
-};
-
-const mapDispatchToProps: DispatchProps = {
-	fetchDebtStatusRequest,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GlobalEventsGate);
+export default connector(GlobalEventsGate);

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { takeLatest, put, select } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import { getNetworkSpeeds, formatGasPrice } from '../helpers/networkHelper';
-import { GWEI_UNIT } from '../constants/network';
 
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { RootState } from './types';
