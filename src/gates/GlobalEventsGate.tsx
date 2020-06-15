@@ -127,10 +127,12 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 			snxJS: { SystemStatus, ExchangeRates },
 		} = snxJSConnector;
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
-			setSystemUpgrading({ reason });
+			console.log('system suspended', Number(reason));
+			setSystemUpgrading({ reason: true });
 		});
-		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, (reason: number) => {
-			setSystemUpgrading({ reason });
+		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
+			console.log('system resumed');
+			setSystemUpgrading({ reason: false });
 		});
 		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
 			console.log('rates update');

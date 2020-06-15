@@ -14,6 +14,8 @@ import App from './App';
 
 import snxJSConnector from 'helpers/snxJSConnector';
 import { getEthereumNetwork } from 'helpers/networkHelper';
+import useInterval from 'hooks/useInterval';
+import { INTERVAL_TIMER } from 'constants/ui';
 
 const mapStateToProps = (state: RootState) => ({
 	appIsReady: getAppIsReady(state),
@@ -48,15 +50,25 @@ const Root: FC<PropsFromRedux> = ({
 		if (appIsReady) {
 			fetchGasPricesRequest();
 			fetchRatesRequest();
+			fetchAppStatusRequest();
 		}
 		if (appIsReady && currentWallet) {
 			fetchDebtStatusRequest();
 			fetchEscrowRequest();
 			fetchBalancesRequest();
-			fetchAppStatusRequest();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appIsReady, currentWallet]);
+
+	useInterval(() => {
+		if (appIsReady && currentWallet) {
+			console.log('interval refreshing');
+			fetchGasPricesRequest();
+			fetchRatesRequest();
+			fetchDebtStatusRequest();
+			fetchBalancesRequest();
+		}
+	}, INTERVAL_TIMER);
 
 	useEffect(() => {
 		const init = async () => {

@@ -10,7 +10,7 @@ export type AppSliceState = {
 	isFetched: boolean;
 	isRefreshing: boolean;
 	fetchError: string | null;
-	isSystemUpgrading: number;
+	isSystemUpgrading: boolean;
 };
 
 const initialState: AppSliceState = {
@@ -19,7 +19,7 @@ const initialState: AppSliceState = {
 	isFetched: false,
 	isRefreshing: false,
 	fetchError: null,
-	isSystemUpgrading: 0,
+	isSystemUpgrading: false,
 };
 
 const sliceName = 'app';
@@ -43,13 +43,13 @@ export const appSlice = createSlice({
 			state.isFetching = false;
 			state.isRefreshing = false;
 		},
-		fetchAppStatusSuccess: (state, action: PayloadAction<{ reason: number }>) => {
+		fetchAppStatusSuccess: (state, action: PayloadAction<{ reason: boolean }>) => {
 			state.isSystemUpgrading = action.payload.reason;
 			state.isFetching = false;
 			state.isRefreshing = false;
 			state.isFetched = true;
 		},
-		setSystemUpgrading: (state, action: PayloadAction<{ reason: number }>) => {
+		setSystemUpgrading: (state, action: PayloadAction<{ reason: boolean }>) => {
 			state.isSystemUpgrading = action.payload.reason;
 		},
 	},
