@@ -106,3 +106,50 @@ export const getExchangeRates = async () => {
 	});
 	return exchangeRates;
 };
+
+export const getBalances = async (walletAddress: string) => {
+	const {
+		// @ts-ignore
+		synthSummaryUtilContract,
+		// @ts-ignore
+		snxJS: { Synthetix },
+		// @ts-ignore
+		provider,
+	} = snxJSConnector;
+	const [
+		synthBalanceResults,
+		totalSynthsBalanceResults,
+		snxBalanceResults,
+		ethBalanceResults,
+	] = await Promise.all([
+		synthSummaryUtilContract.synthsBalances(walletAddress),
+		synthSummaryUtilContract.totalSynthsInKey(
+			walletAddress,
+			bytesFormatter(CRYPTO_CURRENCY_TO_KEY.sUSD)
+		),
+		Synthetix.collateral(walletAddress),
+		provider.getBalance(walletAddress),
+	]);
+
+	const [synthsKeys, synthsBalances] = synthBalanceResults;
+
+	const synths = synthsKeys
+		.map((key: string, i: number) => {
+			return {
+				name: parseBytes32String(key),
+				balance: bigNumberFormatter(synthsBalances[i]),
+			};
+		})
+		.filter((synth: any) => synth.balance);
+
+	const sUSDBalance = synths.find((synth: any) => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD);
+	return {
+		crypto: {
+			[CRYPTO_CURRENCY_TO_KEY.SNX]: bigNumberFormatter(snxBalanceResults),
+			[CRYPTO_CURRENCY_TO_KEY.ETH]: bigNumberFormatter(ethBalanceResults),
+			[CRYPTO_CURRENCY_TO_KEY.sUSD]: sUSDBalance ? sUSDBalance.balance : 0,
+		},
+		synths,
+		totalSynths: bigNumberFormatter(totalSynthsBalanceResults),
+	};
+};

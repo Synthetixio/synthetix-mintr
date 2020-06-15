@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash';
 import { formatCurrency } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import { showModal } from 'ducks/modal';
-import { getWalletBalances, getWalletBalancesWithRates } from 'ducks/balances';
+import { getWalletBalances } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
 import { getRates } from 'ducks/rates';
 import { getTotalEscrowedBalance } from 'ducks/escrow';
@@ -174,7 +174,6 @@ const CurrencyPrice = styled.div`
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	walletBalances: getWalletBalances(state),
-	walletBalancesWithRates: getWalletBalancesWithRates(state),
 	rates: getRates(state),
 	debtStatusData: getDebtStatusData(state),
 	totalEscrowedBalances: getTotalEscrowedBalance(state),

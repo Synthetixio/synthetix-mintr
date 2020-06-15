@@ -5,6 +5,7 @@ import { RootState } from 'ducks/types';
 import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { getCurrentWallet } from 'ducks/wallet';
 import { setSystemUpgrading } from 'ducks/app';
+import { fetchRatesRequest } from 'ducks/rates';
 
 import snxJSConnector from 'helpers/snxJSConnector';
 import {
@@ -13,6 +14,7 @@ import {
 	EXCHANGE_EVENTS,
 	TRANSFER_EVENTS,
 	SYSTEM_STATUS_EVENTS,
+	EXCHANGE_RATES_EVENTS,
 } from 'constants/events';
 
 const mapStateToProps = (state: RootState) => ({
@@ -76,7 +78,7 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		const {
 			//@ts-ignore
-			snxJS: { SystemStatus },
+			snxJS: { SystemStatus, ExchangeRates },
 		} = snxJSConnector;
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
 			setSystemUpgrading({ reason });
@@ -84,9 +86,13 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, (reason: number) => {
 			setSystemUpgrading({ reason });
 		});
+		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, fetchRatesRequest);
 		return () => {
 			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
 				SystemStatus.contract.removeAllListeners(event)
+			);
+			Object.values(EXCHANGE_RATES_EVENTS).forEach(event =>
+				ExchangeRates.contract.removeAllListeners(event)
 			);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
