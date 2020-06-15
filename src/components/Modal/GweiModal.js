@@ -91,7 +91,7 @@ const GweiModal = ({
 				<SliderWrapper>
 					<Slider
 						min={0}
-						max={50}
+						max={80}
 						value={gasPriceSettings}
 						tooltipRenderer={() =>
 							renderTooltipContent(
