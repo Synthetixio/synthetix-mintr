@@ -10,9 +10,9 @@ import { getWalletBalances } from '../../ducks/balances';
 import { formatCurrency } from '../../helpers/formatters';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 
-const Charts = ({ walletBalances, debtData, totalEscrow = 0 }) => {
+const Charts = ({ walletBalances: { crypto }, debtData, totalEscrow = 0 }) => {
 	const { t } = useTranslation();
-	const snxBalance = walletBalances[CRYPTO_CURRENCY_TO_KEY.SNX];
+	const snxBalance = (crypto && crypto[CRYPTO_CURRENCY_TO_KEY.SNX]) || 0;
 	const snxLocked =
 		snxBalance &&
 		debtData &&

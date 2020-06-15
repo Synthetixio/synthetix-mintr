@@ -23,3 +23,11 @@ export const SYSTEM_STATUS_EVENTS = {
 export const EXCHANGE_RATES_EVENTS = {
 	RATES_UPDATED: 'RatesUpdated',
 };
+
+export const REWARD_ESCROW_EVENTS = {
+	VESTED: 'Vested',
+};
+
+export const SYNTHETIX_ESCROW_EVENTS = {
+	VESTED: 'Vested',
+};

@@ -38,6 +38,7 @@ const CollRatios = ({ debtStatusData = {} }) => {
 
 const StyledFlexDivCentered = styled(FlexDivCentered)`
 	margin: 0 0 22px 0;
+	justify-content: space-between;
 `;
 
 export default CollRatios;

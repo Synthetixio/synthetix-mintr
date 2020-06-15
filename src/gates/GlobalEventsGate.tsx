@@ -6,6 +6,8 @@ import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { getCurrentWallet } from 'ducks/wallet';
 import { setSystemUpgrading } from 'ducks/app';
 import { fetchRatesRequest } from 'ducks/rates';
+import { fetchEscrowRequest } from 'ducks/escrow';
+import { fetchBalancesRequest } from 'ducks/balances';
 
 import snxJSConnector from 'helpers/snxJSConnector';
 import {
@@ -15,6 +17,8 @@ import {
 	TRANSFER_EVENTS,
 	SYSTEM_STATUS_EVENTS,
 	EXCHANGE_RATES_EVENTS,
+	REWARD_ESCROW_EVENTS,
+	SYNTHETIX_ESCROW_EVENTS,
 } from 'constants/events';
 
 const mapStateToProps = (state: RootState) => ({
@@ -24,6 +28,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = {
 	fetchDebtStatusRequest,
 	setSystemUpgrading,
+	fetchEscrowRequest,
+	fetchBalancesRequest,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -33,36 +39,70 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 	fetchDebtStatusRequest,
 	currentWallet,
 	setSystemUpgrading,
+	fetchEscrowRequest,
+	fetchBalancesRequest,
 }) => {
 	useEffect(() => {
 		if (!currentWallet) return;
 		const {
 			//@ts-ignore
-			snxJS: { sUSD, FeePool, Synthetix },
+			snxJS: { sUSD, FeePool, Synthetix, RewardEscrow, SynthetixEscrow },
 		} = snxJSConnector;
+
 		sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
-			console.log('issued');
-			if (account === currentWallet) fetchDebtStatusRequest();
+			if (account === currentWallet) {
+				console.log('issued');
+				fetchDebtStatusRequest();
+				fetchBalancesRequest();
+			}
 		});
 		sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
-			console.log('burned');
-			if (account === currentWallet) fetchDebtStatusRequest();
+			if (account === currentWallet) {
+				console.log('burned');
+				fetchDebtStatusRequest();
+				fetchBalancesRequest();
+			}
 		});
 		FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
-			console.log('claimed');
-			if (account === currentWallet) fetchDebtStatusRequest();
+			if (account === currentWallet) {
+				console.log('claimed');
+				fetchBalancesRequest();
+				fetchDebtStatusRequest();
+				fetchEscrowRequest();
+			}
 		});
 		Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
-			console.log('synth exchange');
-			if (address === currentWallet) fetchDebtStatusRequest();
+			if (address === currentWallet) {
+				console.log('synth exchange');
+				fetchBalancesRequest();
+				fetchDebtStatusRequest();
+			}
 		});
 		Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			console.log('SNX transfer');
-			if (address === currentWallet) fetchDebtStatusRequest();
+			if (address === currentWallet) {
+				console.log('SNX transfer');
+				fetchBalancesRequest();
+				fetchDebtStatusRequest();
+			}
 		});
 		sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			console.log('sUSD transfer');
-			if (address === currentWallet) fetchDebtStatusRequest();
+			if (address === currentWallet) {
+				console.log('sUSD transfer');
+				fetchBalancesRequest();
+				fetchDebtStatusRequest();
+			}
+		});
+		SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
+			if (address === currentWallet) {
+				console.log('Token sale vest');
+				fetchEscrowRequest();
+			}
+		});
+		RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
+			if (address === currentWallet) {
+				console.log('Token sale vest');
+				fetchEscrowRequest();
+			}
 		});
 
 		return () => {
@@ -71,6 +111,12 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 			Object.values(EXCHANGE_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
 			Object.values(TRANSFER_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
 			Object.values(TRANSFER_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
+			Object.values(SYNTHETIX_ESCROW_EVENTS).forEach(event =>
+				SynthetixEscrow.contract.removeAllListeners(event)
+			);
+			Object.values(REWARD_ESCROW_EVENTS).forEach(event =>
+				RewardEscrow.contract.removeAllListeners(event)
+			);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
@@ -86,7 +132,10 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, (reason: number) => {
 			setSystemUpgrading({ reason });
 		});
-		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, fetchRatesRequest);
+		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
+			console.log('rates update');
+			fetchRatesRequest();
+		});
 		return () => {
 			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
 				SystemStatus.contract.removeAllListeners(event)
