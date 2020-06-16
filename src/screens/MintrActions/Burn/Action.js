@@ -92,7 +92,11 @@ const Action = ({
 								{t('button.burnMax')}
 							</AmountButton>
 							<AmountButton
-								disabled={maxBurnAmount === 0 || burnAmountToFixCRatio === 0}
+								disabled={
+									maxBurnAmount === 0 ||
+									burnAmountToFixCRatio === 0 ||
+									burnAmountToFixCRatio > maxBurnAmount
+								}
 								onClick={() => {
 									setBurnAmount(burnAmountToFixCRatio);
 									onBurn({ burnToTarget: true });
