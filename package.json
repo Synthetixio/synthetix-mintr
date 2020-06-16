@@ -43,7 +43,7 @@
 		"styled-system": "^5.1.0",
 		"synthetix-data": "2.1.13",
 		"synthetix-js": "^2.22.4-1",
-		"typescript": "^3.7.5"
+		"typescript": "3.7.5"
 	},
 	"devDependencies": {
 		"@types/history": "^4.7.5",

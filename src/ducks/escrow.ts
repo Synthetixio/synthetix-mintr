@@ -58,7 +58,7 @@ export const { fetchEscrowRequest, fetchEscrowFailure, fetchEscrowSuccess } = es
 const getEscrowState = (state: RootState) => state[sliceName];
 export const getEscrowedBalances = (state: RootState) => getEscrowState(state).escrowedBalances;
 export const getTotalEscrowedBalance = createSelector(getEscrowedBalances, escrowedBalances => {
-	if (!escrowedBalances) return;
+	if (!escrowedBalances) return null;
 	const { stakingRewards, tokenSale } = escrowedBalances;
 	return stakingRewards + tokenSale;
 });
@@ -69,7 +69,6 @@ function* fetchEscrowedBalances() {
 		try {
 			const escrowedBalances = yield getEscrowData(currentWallet);
 			yield put(fetchEscrowSuccess({ escrowedBalances }));
-			return true;
 		} catch (e) {
 			yield put(fetchEscrowFailure({ error: e.message }));
 			return false;

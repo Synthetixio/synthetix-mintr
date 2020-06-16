@@ -47,11 +47,6 @@ const Root: FC<PropsFromRedux> = ({
 	fetchRatesRequest,
 }) => {
 	useEffect(() => {
-		if (appIsReady) {
-			fetchGasPricesRequest();
-			fetchRatesRequest();
-			fetchAppStatusRequest();
-		}
 		if (appIsReady && currentWallet) {
 			fetchDebtStatusRequest();
 			fetchEscrowRequest();
@@ -60,9 +55,17 @@ const Root: FC<PropsFromRedux> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appIsReady, currentWallet]);
 
+	useEffect(() => {
+		if (appIsReady) {
+			fetchGasPricesRequest();
+			fetchRatesRequest();
+			fetchAppStatusRequest();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appIsReady]);
+
 	useInterval(() => {
 		if (appIsReady && currentWallet) {
-			console.log('interval refreshing');
 			fetchGasPricesRequest();
 			fetchRatesRequest();
 			fetchDebtStatusRequest();

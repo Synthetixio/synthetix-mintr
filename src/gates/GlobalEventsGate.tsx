@@ -51,21 +51,18 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 
 		sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
 			if (account === currentWallet) {
-				console.log('issued');
 				fetchDebtStatusRequest();
 				fetchBalancesRequest();
 			}
 		});
 		sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
 			if (account === currentWallet) {
-				console.log('burned');
 				fetchDebtStatusRequest();
 				fetchBalancesRequest();
 			}
 		});
 		FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
 			if (account === currentWallet) {
-				console.log('claimed');
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 				fetchEscrowRequest();
@@ -73,34 +70,29 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		});
 		Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
 			if (address === currentWallet) {
-				console.log('synth exchange');
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 			}
 		});
 		Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
 			if (address === currentWallet) {
-				console.log('SNX transfer');
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 			}
 		});
 		sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
 			if (address === currentWallet) {
-				console.log('sUSD transfer');
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 			}
 		});
 		SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
 			if (address === currentWallet) {
-				console.log('Token sale vest');
 				fetchEscrowRequest();
 			}
 		});
 		RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
 			if (address === currentWallet) {
-				console.log('Token sale vest');
 				fetchEscrowRequest();
 			}
 		});
@@ -127,15 +119,12 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 			snxJS: { SystemStatus, ExchangeRates },
 		} = snxJSConnector;
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
-			console.log('system suspended', Number(reason));
 			setSystemUpgrading({ reason: true });
 		});
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
-			console.log('system resumed');
 			setSystemUpgrading({ reason: false });
 		});
 		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
-			console.log('rates update');
 			fetchRatesRequest();
 		});
 		return () => {

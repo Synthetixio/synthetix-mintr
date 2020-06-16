@@ -38,12 +38,13 @@ const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
 	if (isOnMaintenance) return <MaintenancePage />;
 	switch (page) {
 		case PAGES_BY_KEY.LANDING:
-		default:
 			return <Landing />;
 		case PAGES_BY_KEY.WALLET_SELECTION:
 			return <WalletSelection />;
 		case PAGES_BY_KEY.MAIN:
 			return <Main />;
+		default:
+			return <Landing />;
 	}
 };
 

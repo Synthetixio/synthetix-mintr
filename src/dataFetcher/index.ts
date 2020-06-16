@@ -1,4 +1,5 @@
 import axios from 'axios';
+import get from 'lodash/get';
 import snxJSConnector from 'helpers/snxJSConnector';
 
 import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
@@ -60,14 +61,8 @@ const fetchUniswapSETHRate = async () => {
 			JSON.stringify({ query, variables: null })
 		);
 
-		return (
-			(response.data &&
-				response.data.data &&
-				response.data.data.exchanges &&
-				response.data.data.exchanges[0] &&
-				1 / response.data.data.exchanges[0].price) ||
-			DEFAULT_RATE
-		);
+		const uniswapRate = get(response, 'data.data.exchanges[0].price');
+		return uniswapRate ? 1 / uniswapRate : DEFAULT_RATE;
 	} catch (e) {
 		// if we can't get the sETH/ETH rate, then default it to 1:1
 		return DEFAULT_RATE;

@@ -10,9 +10,16 @@ import { RootState } from './types';
 
 export type Balances = Record<string, number>;
 
-export type SynthBalances = Array<Balances>;
+export type CurrencyKey = string;
 
-export type BalancesSliceState = {
+export type BalanceWithRates = {
+	balance: number;
+	valueUSD: number;
+};
+
+type SynthBalances = Balances[];
+
+type BalancesSliceState = {
 	crypto: Balances | null;
 	synths: SynthBalances | null;
 	totalSynths: number | null;
@@ -21,6 +28,9 @@ export type BalancesSliceState = {
 	isRefreshing: boolean;
 	fetchError: string | null;
 };
+
+type CryptoBalanceWithRates = Record<CurrencyKey, BalanceWithRates>;
+type SynthsBalanceWithRates = BalanceWithRates & { name: string };
 
 const initialState: BalancesSliceState = {
 	crypto: null,
@@ -70,7 +80,7 @@ export const {
 	fetchBalancesSuccess,
 } = balancesSlice.actions;
 
-const getBalanceState = (state: RootState) => state.balances;
+const getBalanceState = (state: RootState) => state[sliceName];
 export const getWalletBalances = (state: RootState) => {
 	const { crypto, synths, totalSynths } = getBalanceState(state);
 	return { crypto, synths, totalSynths };
@@ -82,9 +92,9 @@ export const getWalletBalancesWithRates = createSelector(
 	(rates, balances) => {
 		const { crypto, synths, totalSynths } = balances;
 		if (!rates || isEmpty(rates) || !crypto || !synths || !totalSynths) return null;
-		let cryptoBalanceWithRates: any = {};
+		let cryptoBalanceWithRates: CryptoBalanceWithRates = {};
 
-		Object.keys(crypto as Balances).forEach(currencyName => {
+		Object.keys(crypto as Balances).forEach((currencyName: CurrencyKey) => {
 			const balance = crypto[currencyName];
 			cryptoBalanceWithRates[currencyName] = {
 				balance,
@@ -92,10 +102,10 @@ export const getWalletBalancesWithRates = createSelector(
 			};
 		});
 
-		const synthsBalanceWithRates = orderBy(
+		const synthsBalanceWithRates: SynthsBalanceWithRates[] = orderBy(
 			synths.map(({ balance, name }) => {
 				return {
-					name,
+					name: name.toString(),
 					balance,
 					valueUSD: balance * rates[name],
 				};
@@ -104,7 +114,7 @@ export const getWalletBalancesWithRates = createSelector(
 			'desc'
 		);
 
-		const totalSynthsBalanceWithRates = {
+		const totalSynthsBalanceWithRates: BalanceWithRates = {
 			balance: totalSynths,
 			valueUSD: totalSynths * rates[CRYPTO_CURRENCY_TO_KEY.sUSD],
 		};
@@ -123,7 +133,6 @@ function* fetchBalances() {
 	try {
 		const balances = yield getBalances(currentWallet);
 		yield put(fetchBalancesSuccess({ ...balances }));
-		return true;
 	} catch (e) {
 		yield put(fetchBalancesFailure({ error: e.message }));
 		return false;
