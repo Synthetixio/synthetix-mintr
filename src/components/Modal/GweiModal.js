@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../helpers/formatters';
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
-import { setGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
+import { setCurrentGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
 import { hideModal } from '../../ducks/modal';
 import { getEthRate } from '../../ducks/rates';
 
@@ -27,8 +27,8 @@ const RatesData = ({ gasInfo }) => {
 							<DataHeaderLarge marginBottom="8px" style={{ textTransform: 'capitalize' }}>
 								{t(`transactionSettings.speed.${gas.speed.toLowerCase()}`)}
 							</DataHeaderLarge>
-							<DataLarge marginBottom="4px">${formatCurrency(gas.price)}</DataLarge>
-							<DataLarge marginBottom="4px">{gas.gwei} GWEI</DataLarge>
+							<DataLarge marginBottom="4px">${formatCurrency(gas.transactionPrice)}</DataLarge>
+							<DataLarge marginBottom="4px">{`${gas.price} GWEI`}</DataLarge>
 							<DataLarge marginBottom="4px">
 								{gas.time} {t('transactionSettings.minutes')}
 							</DataLarge>
@@ -51,22 +51,23 @@ const renderTooltipContent = (gasPrice, transactionPrice) => {
 
 const GweiModal = ({
 	networkPrices,
-	setGasPrice,
+	setCurrentGasPrice,
 	hideModal,
 	currentGasPrice,
 	gasLimit,
 	ethRate,
 }) => {
 	const { t } = useTranslation();
-	const [gasPriceSettings, setGasPriceSettings] = useState(currentGasPrice.price);
-
+	const [gasPriceSettings, setGasPriceSettings] = useState(
+		currentGasPrice ? currentGasPrice.price : null
+	);
 	const gasInfo = networkPrices
 		? Object.keys(networkPrices).map(speed => {
-				const price = (networkPrices[speed] && networkPrices[speed].price) || 0;
+				const price = networkPrices[speed].price || 0;
 				return {
 					...networkPrices[speed],
 					speed,
-					price: getTransactionPrice(price, gasLimit, ethRate),
+					transactionPrice: getTransactionPrice(price, gasLimit, ethRate),
 				};
 		  })
 		: [];
@@ -90,7 +91,7 @@ const GweiModal = ({
 				<SliderWrapper>
 					<Slider
 						min={0}
-						max={50}
+						max={80}
 						value={gasPriceSettings}
 						tooltipRenderer={() =>
 							renderTooltipContent(
@@ -105,7 +106,7 @@ const GweiModal = ({
 				<ButtonWrapper>
 					<ButtonPrimary
 						onClick={() => {
-							setGasPrice(gasPriceSettings);
+							setCurrentGasPrice({ gasPrice: gasPriceSettings });
 							hideModal();
 						}}
 					>
@@ -185,7 +186,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	setGasPrice,
+	setCurrentGasPrice,
 	hideModal,
 };
 

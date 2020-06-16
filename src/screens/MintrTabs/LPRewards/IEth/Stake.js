@@ -211,8 +211,9 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH & ${balances &&
-									formatCurrency(balances.rewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH & ${
+									balances && formatCurrency(balances.rewards)
+								} SNX`,
 								contractFunction: transactionSettings =>
 									iEthRewardsContract.exit(transactionSettings),
 								contractFunctionEstimate: () => iEthRewardsContract.estimate.exit(),

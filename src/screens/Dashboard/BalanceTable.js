@@ -49,20 +49,25 @@ const getBalance = (column, walletBalancesWithRates, debtData, rates) => {
 
 const mapBalanceData = (waitingForData, walletBalancesWithRates, rates, debtData) => {
 	if (waitingForData) return [];
+	const balances = { ...walletBalancesWithRates.crypto, ...walletBalancesWithRates };
 	return TABLE_COLUMNS.map(column => {
 		return {
 			name: AGGREGATED_COLUMNS.includes(column)
 				? `dashboard.table.${column.toLowerCase()}`
 				: column,
 			icon: AGGREGATED_COLUMNS.includes(column) ? 'snx' : column,
-			...getBalance(column, walletBalancesWithRates, debtData, rates),
+			...getBalance(column, balances, debtData, rates),
 		};
 	});
 };
 
 const BalanceTable = ({ walletBalancesWithRates, rates, debtData, currentTheme }) => {
 	const { t } = useTranslation();
-	const waitingForData = isEmpty(walletBalancesWithRates) || isEmpty(rates) || isEmpty(debtData);
+	const waitingForData =
+		!walletBalancesWithRates ||
+		isEmpty(walletBalancesWithRates) ||
+		isEmpty(rates) ||
+		isEmpty(debtData);
 	const data = mapBalanceData(waitingForData, walletBalancesWithRates, rates, debtData);
 	return (
 		<Box style={{ marginTop: '16px' }} full={true}>

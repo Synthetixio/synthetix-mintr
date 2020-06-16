@@ -193,8 +193,9 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'unipoolSETHContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1 & ${balances &&
-									formatCurrency(balances.rewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.univ1Staked)} UNI-V1 & ${
+									balances && formatCurrency(balances.rewards)
+								} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
 						}
