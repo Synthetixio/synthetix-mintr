@@ -205,7 +205,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 			if (await Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
 				throw new Error('Waiting period for sUSD is still ongoing');
 
-			if (!(await Issuer.canBurnSynths(currentWallet)))
+			if (!burnToTarget && !(await Issuer.canBurnSynths(currentWallet)))
 				throw new Error('Waiting period to burn is still ongoing');
 
 			handleNext(1);
