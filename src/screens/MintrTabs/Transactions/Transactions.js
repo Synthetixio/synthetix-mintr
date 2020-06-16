@@ -30,17 +30,18 @@ const filterTransactions = (transactions, filters) => {
 	const { events, dates, amount } = filters;
 	return transactions.filter(t => {
 		if (events.length > 0) {
-			if (!events.includes(t.type)) return;
+			if (!events.includes(t.type)) return null;
 		}
 
 		if (dates.from) {
-			if (!isWithinInterval(new Date(t.timestamp), { start: dates.from, end: dates.to })) return;
+			if (!isWithinInterval(new Date(t.timestamp), { start: dates.from, end: dates.to }))
+				return null;
 		}
 
 		if (!isNaN(amount.from) && !isNaN(amount.to)) {
-			if (t.value < amount.from || t.value > amount.to) return;
-			if (t.amount < amount.from || t.amount > amount.to) return;
-			if (t.fromAmount < amount.from || t.fromAmount > amount.to) return;
+			if (t.value < amount.from || t.value > amount.to) return null;
+			if (t.amount < amount.from || t.amount > amount.to) return null;
+			if (t.fromAmount < amount.from || t.fromAmount > amount.to) return null;
 		}
 
 		return true;
