@@ -21,6 +21,7 @@ import { Globe } from '../../components/Icons';
 import { LanguageDropdown } from '../../components/Dropdown';
 
 import { PAGES_BY_KEY } from '../../constants/ui';
+import { ExternalLink } from 'styles/common';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './carousel.css';
@@ -183,6 +184,11 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					>
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
+					<ExternalLink
+						href={`https://github.com/Synthetixio/synthetix-mintr/releases/tag/v${process.env.REACT_APP_VERSION}`}
+					>
+						<VersionLabel>v{process.env.REACT_APP_VERSION}</VersionLabel>
+					</ExternalLink>
 				</BottomLinks>
 			</WalletConnectContainer>
 		</LandingPageContainer>
@@ -332,6 +338,14 @@ const RoundButton = styled.button`
 
 const LanguageButtonWrapper = styled.div`
 	position: relative;
+`;
+
+const VersionLabel = styled.div`
+	text-align: right;
+	font-size: 12px;
+	margin-top: 5px;
+	color: ${props => props.theme.colorStyles.body};
+	text-decoration: underline;
 `;
 
 const mapStateToProps = state => ({
