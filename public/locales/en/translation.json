@@ -248,8 +248,8 @@
 	},
 	"depot": {
 		"intro": {
-			"title": "Depot:",
-			"subtitle": "Deposit sUSD into a queue to be sold on Synthetix.Exchange for ETH. You can withdraw your sUSD at any time while waiting. Note: minimum deposit is 50 sUSD."
+			"title": "Available for sale:",
+			"subtitle": "Deposit sUSD into a queue to be sold for ETH. You can withdraw your sUSD at any time while waiting. Note: minimum deposit is 50 sUSD."
 		},
 		"table": {
 			"title": "Recent activity:",
