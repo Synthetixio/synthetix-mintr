@@ -23,6 +23,8 @@ const codeToLang = code => {
 			return 'Chinese (Traditional)';
 		case 'ko':
 			return 'Korean';
+		default:
+			return 'English';
 	}
 };
 

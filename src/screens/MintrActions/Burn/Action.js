@@ -92,8 +92,14 @@ const Action = ({
 								{t('button.burnMax')}
 							</AmountButton>
 							<AmountButton
+								disabled={
+									maxBurnAmount === 0 ||
+									burnAmountToFixCRatio === 0 ||
+									burnAmountToFixCRatio > maxBurnAmount
+								}
 								onClick={() => {
 									setBurnAmount(burnAmountToFixCRatio);
+									onBurn({ burnToTarget: true });
 								}}
 								width="66%"
 							>
@@ -218,6 +224,10 @@ const AmountButton = styled.button`
 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
 	cursor: pointer;
 	white-space: no-wrap;
+	&:disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
 `;
 
 const RetryButtonWrapper = styled.div`

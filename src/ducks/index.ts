@@ -9,6 +9,8 @@ import depotHistory from './depotHistory';
 import network from './network';
 import modal from './modal';
 import balances from './balances';
+import debtStatus from './debtStatus';
+import escrow from './escrow';
 
 export default combineReducers({
 	app,
@@ -21,4 +23,6 @@ export default combineReducers({
 	network,
 	modal,
 	balances,
+	debtStatus,
+	escrow,
 });

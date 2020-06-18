@@ -1,6 +1,6 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.22.4",
+	"version": "2.22.4-1",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
@@ -38,11 +38,12 @@
 		"react-switch": "^5.0.1",
 		"react-table": "^7.1.0",
 		"recharts": "^1.8.5",
+		"redux-saga": "^1.1.3",
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
 		"synthetix-data": "2.1.13",
-		"synthetix-js": "2.22.4",
-		"typescript": "^3.7.5"
+		"synthetix-js": "^2.22.4-1",
+		"typescript": "3.7.5"
 	},
 	"devDependencies": {
 		"@types/history": "^4.7.5",
@@ -54,6 +55,7 @@
 		"@types/react-router-dom": "^5.1.3",
 		"@types/react-table": "^7.0.16",
 		"@types/styled-components": "^5.0.1",
+		"@typescript-eslint/parser": "^3.3.0",
 		"eslint-config-prettier": "^6.10.1",
 		"eslint-import-resolver-typescript": "^2.0.0",
 		"eslint-plugin-prettier": "^3.1.3",
@@ -66,8 +68,8 @@
 	},
 	"scripts": {
 		"clean-install": "rm ./package-lock.json && rm -rf node_modules/* && npm i",
-		"start": "react-scripts --max-old-space-size=4096 start",
-		"build": "react-scripts --max-old-space-size=4096 build",
+		"start": "REACT_APP_VERSION=$npm_package_version react-scripts --max-old-space-size=4096 start",
+		"build": "REACT_APP_VERSION=$npm_package_version react-scripts --max-old-space-size=4096 build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"tsc": "tsc --noemit",

@@ -112,6 +112,8 @@ const Dropdown = ({ type, data, onSelect, selected }) => {
 			return <CalendarFilter {...props} />;
 		case 'range':
 			return <RangeFilter {...props} />;
+		default:
+			return null;
 	}
 };
 
@@ -163,6 +165,8 @@ const SelectedValue = ({ type, data, selected }) => {
 		case 'range':
 			text = `${formatCurrency(selected.from)} → ${formatCurrency(selected.to)}`;
 			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
+		default:
+			return null;
 	}
 };
 

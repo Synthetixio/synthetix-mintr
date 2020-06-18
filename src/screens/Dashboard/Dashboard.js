@@ -1,83 +1,31 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
 
-import { formatCurrency } from '../../helpers/formatters';
-import { fetchData } from './fetchData';
-import { getWalletDetails } from '../../ducks/wallet';
-import { getSuccessQueue } from '../../ducks/transactions';
-import { showModal } from '../../ducks/modal';
-import { fetchBalances, getWalletBalances, getWalletBalancesWithRates } from '../../ducks/balances';
-import { getRates } from '../../ducks/rates';
+import { formatCurrency } from 'helpers/formatters';
+import { getWalletDetails } from 'ducks/wallet';
+import { showModal } from 'ducks/modal';
+import { getWalletBalances } from 'ducks/balances';
+import { getDebtStatusData } from 'ducks/debtStatus';
+import { getRates } from 'ducks/rates';
+import { getTotalEscrowedBalance } from 'ducks/escrow';
 
-import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
+import { MODAL_TYPES_TO_KEY } from 'constants/modal';
 
-import Header from '../../components/Header';
+import Header from 'components/Header';
 
-import { ButtonTertiary } from '../../components/Button';
-import { DataLarge, H5, Figure, ButtonTertiaryLabel } from '../../components/Typography';
-import Skeleton from '../../components/Skeleton';
-import { MicroSpinner } from '../../components/Spinner';
+import { ButtonTertiary } from 'components/Button';
+import { H5, ButtonTertiaryLabel } from 'components/Typography';
+import Skeleton from 'components/Skeleton';
 import BalanceTable from './BalanceTable';
-import Box from './Box';
 import BarCharts from './BarCharts';
+import CollRatios from './CollRatios';
 
-const INTERVAL_TIMER = 5 * 60 * 1000;
-
-const CollRatios = ({ state }) => {
-	const { t } = useTranslation();
-	const { debtData } = state;
-
-	return (
-		<Row margin="0 0 22px 0">
-			<Box>
-				{isEmpty(debtData) ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>{debtData.currentCRatio ? Math.round(100 / debtData.currentCRatio) : 0}%</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.current')}</DataLarge>
-			</Box>
-			<Box>
-				{isEmpty(debtData) ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>{debtData.targetCRatio ? Math.round(100 / debtData.targetCRatio) : 0}%</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.target')}</DataLarge>
-			</Box>
-		</Row>
-	);
-};
-
-const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalances }) => {
+const Dashboard = ({ walletDetails, showModal, rates, debtStatusData, totalEscrowedBalances }) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
-	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
-	const [data, setData] = useState({});
-	const loadData = useCallback(() => {
-		setDashboardIsLoading(true);
-		fetchBalances(currentWallet);
-		fetchData(currentWallet, successQueue).then(data => {
-			setData(data);
-			setDashboardIsLoading(false);
-		});
-	}, [currentWallet, successQueue, fetchBalances]);
-
-	useEffect(() => {
-		loadData();
-		const intervalId = setInterval(() => {
-			loadData();
-		}, INTERVAL_TIMER);
-		return () => {
-			clearInterval(intervalId);
-		};
-	}, [loadData]);
-
-	const { debtData = {}, escrowData = {} } = data;
-
 	return (
 		<DashboardWrapper>
 			<Header currentWallet={currentWallet} />
@@ -89,16 +37,9 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
 								{t('dashboard.buttons.delegate')}
 							</ButtonTertiary>
-							<ButtonTertiary
-								disabled={dashboardIsLoading}
-								style={{ minWidth: '102px' }}
-								onClick={() => loadData()}
-							>
-								{dashboardIsLoading ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
-							</ButtonTertiary>
 						</ButtonContainer>
 					</ContainerHeader>
-					<CollRatios state={{ debtData }} />
+					<CollRatios debtStatusData={debtStatusData} />
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
@@ -115,8 +56,8 @@ const Dashboard = ({ walletDetails, successQueue, showModal, rates, fetchBalance
 							);
 						})}
 					</PricesContainer>
-					<BarCharts debtData={debtData} escrowData={escrowData} />
-					<BalanceTable debtData={debtData} />
+					<BarCharts debtData={debtStatusData} totalEscrow={totalEscrowedBalances} />
+					<BalanceTable debtData={debtStatusData} />
 					<Row margin="18px 0 0 0 ">
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
@@ -232,15 +173,14 @@ const CurrencyPrice = styled.div`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	successQueue: getSuccessQueue(state),
 	walletBalances: getWalletBalances(state),
-	walletBalancesWithRates: getWalletBalancesWithRates(state),
 	rates: getRates(state),
+	debtStatusData: getDebtStatusData(state),
+	totalEscrowedBalances: getTotalEscrowedBalance(state),
 });
 
 const mapDispatchToProps = {
 	showModal,
-	fetchBalances,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

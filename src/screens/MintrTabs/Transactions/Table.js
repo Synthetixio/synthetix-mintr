@@ -33,6 +33,8 @@ const getAmountForEventType = event => {
 			return `${formatCurrency(event.fromAmount)} ${event.fromCurrency} / ${formatCurrency(
 				event.toAmount
 			)} ${event.toCurrency}`;
+		default:
+			return null;
 	}
 };
 
