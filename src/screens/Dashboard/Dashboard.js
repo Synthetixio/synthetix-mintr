@@ -7,14 +7,19 @@ import { isEmpty } from 'lodash';
 import { formatCurrency } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import { showModal } from 'ducks/modal';
-import { getWalletBalances } from 'ducks/balances';
-import { getDebtStatusData } from 'ducks/debtStatus';
+import { getWalletBalances, fetchBalancesRequest, getIsFetchingBalances } from 'ducks/balances';
+import {
+	getDebtStatusData,
+	fetchDebtStatusRequest,
+	getIsFetchingBDebtData,
+} from 'ducks/debtStatus';
 import { getRates } from 'ducks/rates';
-import { getTotalEscrowedBalance } from 'ducks/escrow';
+import { getTotalEscrowedBalance, fetchEscrowRequest, getIsFetchingEscrowData } from 'ducks/escrow';
 
 import { MODAL_TYPES_TO_KEY } from 'constants/modal';
 
 import Header from 'components/Header';
+import { MicroSpinner } from 'components/Spinner';
 
 import { ButtonTertiary } from 'components/Button';
 import { H5, ButtonTertiaryLabel } from 'components/Typography';
@@ -23,9 +28,22 @@ import BalanceTable from './BalanceTable';
 import BarCharts from './BarCharts';
 import CollRatios from './CollRatios';
 
-const Dashboard = ({ walletDetails, showModal, rates, debtStatusData, totalEscrowedBalances }) => {
+const Dashboard = ({
+	walletDetails,
+	showModal,
+	rates,
+	debtStatusData,
+	totalEscrowedBalances,
+	fetchEscrowRequest,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
+	isFetchingBalances,
+	isFetchingDebtData,
+	isFetchingEscrowData,
+}) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
+	const isDashboardRefreshing = isFetchingBalances || isFetchingDebtData || isFetchingEscrowData;
 	return (
 		<DashboardWrapper>
 			<Header currentWallet={currentWallet} />
@@ -36,6 +54,17 @@ const Dashboard = ({ walletDetails, showModal, rates, debtStatusData, totalEscro
 						<ButtonContainer>
 							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
 								{t('dashboard.buttons.delegate')}
+							</ButtonTertiary>
+							<ButtonTertiary
+								disabled={isDashboardRefreshing}
+								style={{ minWidth: '102px' }}
+								onClick={() => {
+									fetchDebtStatusRequest();
+									fetchBalancesRequest();
+									fetchEscrowRequest();
+								}}
+							>
+								{isDashboardRefreshing ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
 							</ButtonTertiary>
 						</ButtonContainer>
 					</ContainerHeader>
@@ -177,10 +206,16 @@ const mapStateToProps = state => ({
 	rates: getRates(state),
 	debtStatusData: getDebtStatusData(state),
 	totalEscrowedBalances: getTotalEscrowedBalance(state),
+	isFetchingBalances: getIsFetchingBalances(state),
+	isFetchingDebtData: getIsFetchingBDebtData(state),
+	isFetchingEscrowData: getIsFetchingEscrowData(state),
 });
 
 const mapDispatchToProps = {
 	showModal,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
+	fetchEscrowRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

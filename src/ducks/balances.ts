@@ -81,6 +81,7 @@ export const {
 } = balancesSlice.actions;
 
 const getBalanceState = (state: RootState) => state[sliceName];
+export const getIsFetchingBalances = (state: RootState) => getBalanceState(state).isFetching;
 export const getWalletBalances = (state: RootState) => {
 	const { crypto, synths, totalSynths } = getBalanceState(state);
 	return { crypto, synths, totalSynths };
