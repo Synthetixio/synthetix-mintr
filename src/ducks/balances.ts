@@ -91,7 +91,7 @@ export const getWalletBalancesWithRates = createSelector(
 	getWalletBalances,
 	(rates, balances) => {
 		const { crypto, synths, totalSynths } = balances;
-		if (!rates || isEmpty(rates) || !crypto || !synths || !totalSynths) return null;
+		if (!rates || !crypto || !synths || totalSynths === null) return null;
 		let cryptoBalanceWithRates: CryptoBalanceWithRates = {};
 
 		Object.keys(crypto as Balances).forEach((currencyName: CurrencyKey) => {
