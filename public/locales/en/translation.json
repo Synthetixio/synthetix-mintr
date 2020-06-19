@@ -359,7 +359,8 @@
 			},
 			"curvepool": { "title": "CURVEPOOL sUSD" },
 			"ieth": { "title": "iETH" },
-			"balancer": {"title": "BALANCER SNX"}
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
 		},
 		"shared": {
 			"unlocked": {

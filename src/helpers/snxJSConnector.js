@@ -13,6 +13,8 @@ import {
 	iEthRewards,
 	balancerpool,
 	balancerSNXRewards,
+	curveSBTC,
+	sBTCRewards,
 } from './contracts';
 
 let snxJSConnector = {
@@ -63,6 +65,12 @@ let snxJSConnector = {
 			this.balancerSNXRewardsContract = new ethers.Contract(
 				balancerSNXRewards.address,
 				balancerSNXRewards.abi,
+				this.signer
+			);
+			this.curveSBTCContract = new ethers.Contract(curveSBTC.address, curveSBTC.abi, this.signer);
+			this.sBTCRewardsContract = new ethers.Contract(
+				sBTCRewards.address,
+				sBTCRewards.abi,
 				this.signer
 			);
 		}
