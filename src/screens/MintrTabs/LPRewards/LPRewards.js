@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 import UnipoolSETH from './UniPoolSETH';
 import UniPoolSXAU from './UnipoolSXAU';
-import CurvePool from './CurvePoolSUSD';
+import CurvePoolSUSD from './CurvePoolSUSD';
+import CurvePoolSBTC from './CurvePoolSBTC';
 import IEth from './IEth';
 import BalancerSNX from './BalancerSNX';
 
@@ -25,6 +26,12 @@ const POOLS_MAJOR = [
 		name: 'unipoolSXAU',
 		image: '/images/pools/unipool-sXAU.svg',
 		contract: 'unipoolSXAUContract',
+	},
+	{
+		title: 'lpRewards.actions.curvepoolSBTC.title',
+		name: 'curvepoolSBTC',
+		image: '/images/pools/iearn-sBTC.svg',
+		contract: 'sBTCRewardsContract',
 	},
 ];
 
@@ -97,7 +104,9 @@ const LPRewards = () => {
 			case 'unipoolSXAU':
 				return <UniPoolSXAU goBack={goBack} />;
 			case 'iearn':
-				return <CurvePool goBack={goBack} />;
+				return <CurvePoolSUSD goBack={goBack} />;
+			case 'curvepoolSBTC':
+				return <CurvePoolSBTC goBack={goBack} />;
 			case 'ieth':
 				return <IEth goBack={goBack} />;
 			case 'balancerSNX':
@@ -116,7 +125,7 @@ const LPRewards = () => {
 					<PageTitle>{t('lpRewards.intro.title')}</PageTitle>
 					{[POOLS_MAJOR, POOLS_SECONDARY].map((pools, i) => {
 						return (
-							<ButtonRow key={`pool-${i}`} large={i === 0}>
+							<ButtonRow key={`pool-${i}`}>
 								{pools.map(({ title, name, image, contract }, i) => {
 									const distribution = distributions[snxJSConnector[contract].address] || 0;
 									return (
@@ -127,7 +136,14 @@ const LPRewards = () => {
 													<StyledHeading>{t(title)}</StyledHeading>
 												</ButtonHeading>
 												<StyledSubtext>{t('lpRewards.shared.info.weeklyRewards')}:</StyledSubtext>
-												<StyledDataLarge>{formatCurrency(distribution, 0)} SNX</StyledDataLarge>
+												{name === 'curvepoolSBTC' ? (
+													<DistributionRow>
+														<StyledDataLarge>10,000 SNX</StyledDataLarge>
+														<StyledDataLarge>25,000 REN</StyledDataLarge>
+													</DistributionRow>
+												) : (
+													<StyledDataLarge>{formatCurrency(distribution, 0)} SNX</StyledDataLarge>
+												)}
 											</ButtonContainer>
 										</Button>
 									);
@@ -168,7 +184,7 @@ const ButtonHeading = styled.div`
 const ButtonRow = styled.div`
 	margin-top: 20px;
 	display: grid;
-	grid-template-columns: ${props => (props.large ? `repeat(2, 1fr)` : `repeat(3, 1fr)`)};
+	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 20px;
 `;
 
@@ -186,6 +202,15 @@ const StyledDataLarge = styled(DataLarge)`
 	color: ${props => props.theme.colorStyles.body};
 	font-size: 22px;
 `;
+
+const DistributionRow = styled.div`
+	display: flex;
+	flex-direction: column;
+	& > :not(:first-child) {
+		margin-top: 10px;
+	}
+`;
+
 const StyledSubtext = styled(Subtext)`
 	text-transform: uppercase;
 	margin: 28px 0 12px 0;
