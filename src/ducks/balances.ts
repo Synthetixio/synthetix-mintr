@@ -1,6 +1,5 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { takeLatest, put, select } from 'redux-saga/effects';
-import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
 import { getRates } from './rates';
