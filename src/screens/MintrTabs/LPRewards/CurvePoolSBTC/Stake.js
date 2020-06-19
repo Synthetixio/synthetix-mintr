@@ -244,11 +244,6 @@ const ButtonAction = styled(ButtonPrimary)`
 	}
 `;
 
-const ButtonActionFullRow = styled(ButtonAction)`
-	flex: none;
-	width: 50%;
-`;
-
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 });
