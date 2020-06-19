@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 import UnipoolSETH from './UniPoolSETH';
 import UniPoolSXAU from './UnipoolSXAU';
-import CurvePool from './CurvePoolSUSD';
+import CurvePoolSUSD from './CurvePoolSUSD';
+import CurvePoolSBTC from './CurvePoolSBTC';
 import IEth from './IEth';
 import BalancerSNX from './BalancerSNX';
 
@@ -103,7 +104,9 @@ const LPRewards = () => {
 			case 'unipoolSXAU':
 				return <UniPoolSXAU goBack={goBack} />;
 			case 'iearn':
-				return <CurvePool goBack={goBack} />;
+				return <CurvePoolSUSD goBack={goBack} />;
+			case 'curvepoolSBTC':
+				return <CurvePoolSBTC goBack={goBack} />;
 			case 'ieth':
 				return <IEth goBack={goBack} />;
 			case 'balancerSNX':

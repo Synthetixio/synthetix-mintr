@@ -435,6 +435,16 @@
 			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
 		}
 	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
 	"balancerSNX": {
 		"title": "Balancer SNX/USDC Pool Token Rewards",
 		"locked": {
