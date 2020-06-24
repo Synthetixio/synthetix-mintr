@@ -1,6 +1,5 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { takeLatest, put, select } from 'redux-saga/effects';
-import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
 import { getRates } from './rates';
@@ -81,6 +80,7 @@ export const {
 } = balancesSlice.actions;
 
 const getBalanceState = (state: RootState) => state[sliceName];
+export const getIsFetchingBalances = (state: RootState) => getBalanceState(state).isFetching;
 export const getWalletBalances = (state: RootState) => {
 	const { crypto, synths, totalSynths } = getBalanceState(state);
 	return { crypto, synths, totalSynths };
@@ -91,7 +91,7 @@ export const getWalletBalancesWithRates = createSelector(
 	getWalletBalances,
 	(rates, balances) => {
 		const { crypto, synths, totalSynths } = balances;
-		if (!rates || isEmpty(rates) || !crypto || !synths || !totalSynths) return null;
+		if (!rates || !crypto || !synths || totalSynths === null) return null;
 		let cryptoBalanceWithRates: CryptoBalanceWithRates = {};
 
 		Object.keys(crypto as Balances).forEach((currencyName: CurrencyKey) => {
