@@ -116,7 +116,7 @@ const Stake = ({ walletDetails, goBack }) => {
 			<PageTitle>{t('balancerSNX.title')}</PageTitle>
 			<PLarge>{t('balancerSNX.unlocked.subtitle')}</PLarge>
 			<PLarge>
-				<Link href="https://blog.synthetix.io/uniswap-v2-sxau-trial/" target="_blank">
+				<Link href="https://blog.synthetix.io/balancer-snx-usdc-liquidity-trial/" target="_blank">
 					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
 				</Link>
 			</PLarge>
