@@ -57,6 +57,8 @@ export const { fetchEscrowRequest, fetchEscrowFailure, fetchEscrowSuccess } = es
 
 const getEscrowState = (state: RootState) => state[sliceName];
 export const getEscrowedBalances = (state: RootState) => getEscrowState(state).escrowedBalances;
+export const getIsFetchingEscrowData = (state: RootState) => getEscrowState(state).isFetching;
+
 export const getTotalEscrowedBalance = createSelector(getEscrowedBalances, escrowedBalances => {
 	if (!escrowedBalances) return null;
 	const { stakingRewards, tokenSale } = escrowedBalances;

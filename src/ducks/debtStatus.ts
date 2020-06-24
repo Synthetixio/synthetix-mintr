@@ -63,6 +63,7 @@ export const {
 
 const getDebtState = (state: RootState) => state[sliceName];
 export const getDebtStatusData = (state: RootState) => getDebtState(state).debtStatusData;
+export const getIsFetchingBDebtData = (state: RootState) => getDebtState(state).isFetching;
 
 function* fetchDebtStatus() {
 	const currentWallet = yield select(getCurrentWallet);
