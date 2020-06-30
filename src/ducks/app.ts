@@ -73,7 +73,7 @@ function* fetchSystemStatus() {
 		snxJS: { SystemStatus },
 	} = snxJSConnector;
 	try {
-		const isSystemUpgrading = yield SystemStatus.isSystemUpgrading();
+		yield SystemStatus.isSystemUpgrading();
 		// yield put(fetchAppStatusSuccess({ reason: isSystemUpgrading }));
 		return true;
 	} catch (e) {
