@@ -22,7 +22,7 @@ const TRANSACTION_DETAILS = {
 	},
 	claim: {
 		contractFunction: 'getReward',
-		gasLimit: 800000,
+		gasLimit: 200000,
 	},
 	unstake: {
 		contractFunction: 'withdraw',
@@ -30,7 +30,7 @@ const TRANSACTION_DETAILS = {
 	},
 	exit: {
 		contractFunction: 'exit',
-		gasLimit: 925000,
+		gasLimit: 250000,
 	},
 };
 
