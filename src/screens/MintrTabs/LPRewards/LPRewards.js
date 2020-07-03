@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -9,8 +10,15 @@ import CurvePoolSBTC from './CurvePoolSBTC';
 import IEth from './IEth';
 import BalancerSNX from './BalancerSNX';
 
-import { H1, PageTitle, Subtext, DataLarge } from '../../../components/Typography';
-import PageContainer from '../../../components/PageContainer';
+import { getCurrentTheme } from 'ducks/ui';
+
+import PageContainer from 'components/PageContainer';
+import { Info } from 'components/Icons';
+import Tooltip from 'components/Tooltip';
+
+import { FlexDivCentered } from 'styles/common';
+import { H1, PageTitle, Subtext, DataLarge, PMedium } from 'components/Typography';
+
 import snxJSConnector from 'helpers/snxJSConnector';
 import { formatCurrency } from 'helpers/formatters';
 
@@ -56,7 +64,7 @@ const POOLS_SECONDARY = [
 	},
 ];
 
-const LPRewards = () => {
+const LPRewards = ({ currentTheme }) => {
 	const { t } = useTranslation();
 	const [currentPool, setCurrentPool] = useState(null);
 	const [distributions, setDistributions] = useState({});
@@ -141,8 +149,23 @@ const LPRewards = () => {
 														<StyledDataLarge>10,000 SNX</StyledDataLarge>
 														<StyledDataLarge>25,000 REN</StyledDataLarge>
 													</DistributionRow>
-												) : (
+												) : !['unipoolSETH', 'unipoolSXAU', 'balancerSNX'].includes(name) ? (
 													<StyledDataLarge>{formatCurrency(distribution, 0)} SNX</StyledDataLarge>
+												) : (
+													<CompletedLabel>
+														<CompletedLabelHeading>
+															{t('lpRewards.intro.completed')}
+														</CompletedLabelHeading>
+														<Tooltip
+															mode={currentTheme}
+															title={t('tooltip.poolCompleted')}
+															placement="top"
+														>
+															<TooltipIconContainer>
+																<Info />
+															</TooltipIconContainer>
+														</Tooltip>
+													</CompletedLabel>
 												)}
 											</ButtonContainer>
 										</Button>
@@ -156,6 +179,19 @@ const LPRewards = () => {
 		</PageContainer>
 	);
 };
+
+const CompletedLabel = styled(FlexDivCentered)`
+	justify-content: center;
+	border-radius: 1000px;
+	background-color: ${props => props.theme.colorStyles.borders};
+	padding: 4px 15px;
+`;
+
+const CompletedLabelHeading = styled(PMedium)`
+	margin: 0;
+	font-size: 14px;
+	text-transform: uppercase;
+`;
 
 const Button = styled.button`
 	cursor: pointer;
@@ -216,4 +252,14 @@ const StyledSubtext = styled(Subtext)`
 	margin: 28px 0 12px 0;
 `;
 
-export default LPRewards;
+const TooltipIconContainer = styled.div`
+	margin-left: 6px;
+	width: 23px;
+	height: 23px;
+`;
+
+const mapStateToProps = state => ({
+	currentTheme: getCurrentTheme(state),
+});
+
+export default connect(mapStateToProps, null)(LPRewards);
