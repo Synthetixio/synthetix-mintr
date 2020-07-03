@@ -138,7 +138,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonRow>
 					<ButtonAction
 						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
-						disabled={!balances || !balances.univ1Held}
+						disabled={true}
 						onClick={() =>
 							setCurrentScenario({
 								contract: 'unipoolSETHContract',
