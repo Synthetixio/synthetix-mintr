@@ -11,7 +11,12 @@ import { setCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus, getWalletDetails } from '../../ducks/wallet';
 import { getCurrentTheme } from '../../ducks/ui';
 
-import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+import {
+	hasWeb3,
+	SUPPORTED_WALLETS,
+	onMetamaskAccountChange,
+	SUPPORTED_WALLETS_MAP,
+} from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 import Logo from '../../components/Logo';
@@ -33,10 +38,10 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 		const walletStatus = await connectToWallet({ wallet, derivationPath });
 		updateWalletStatus({ ...walletStatus, availableWallets: [] });
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
-			if (walletStatus.walletType === 'Metamask') {
+			if (walletStatus.walletType === SUPPORTED_WALLETS_MAP.METAMASK) {
 				onMetamaskAccountChange(async () => {
 					const address = await snxJSConnector.signer.getNextAddresses();
-					const signer = new snxJSConnector.signers['Metamask']({});
+					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK]({});
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,
