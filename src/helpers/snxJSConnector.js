@@ -1,5 +1,10 @@
 import { SynthetixJs } from 'synthetix-js';
-import { getEthereumNetwork, INFURA_JSON_RPC_URLS } from './networkHelper';
+import {
+	getEthereumNetwork,
+	INFURA_JSON_RPC_URLS,
+	SUPPORTED_WALLETS_MAP,
+	PORTIS_APP_ID,
+} from './networkHelper';
 import { ethers } from 'ethers';
 import {
 	uniswapV1,
@@ -83,6 +88,10 @@ let snxJSConnector = {
 };
 
 const connectToMetamask = async (networkId, networkName) => {
+	const walletState = {
+		walletType: SUPPORTED_WALLETS_MAP.METAMASK,
+		unlocked: false,
+	};
 	try {
 		// Otherwise we enable ethereum if needed (modern browsers)
 		if (window.ethereum) {
@@ -92,25 +101,23 @@ const connectToMetamask = async (networkId, networkName) => {
 		const accounts = await snxJSConnector.signer.getNextAddresses();
 		if (accounts && accounts.length > 0) {
 			return {
+				...walletState,
 				currentWallet: accounts[0],
-				walletType: 'Metamask',
 				unlocked: true,
 				networkId,
 				networkName: networkName.toLowerCase(),
 			};
 		} else {
 			return {
-				walletType: 'Metamask',
-				unlocked: false,
-				unlockReason: 'MetamaskNoAccounts',
+				...walletState,
+				unlockReason: 'Please connect to Metamask',
 			};
 		}
 		// We updateWalletStatus with all the infos
 	} catch (e) {
 		console.log(e);
 		return {
-			walletType: 'Metamask',
-			unlocked: false,
+			...walletState,
 			unlockReason: 'ErrorWhileConnectingToMetamask',
 			unlockMessage: e,
 		};
@@ -118,20 +125,23 @@ const connectToMetamask = async (networkId, networkName) => {
 };
 
 const connectToCoinbase = async (networkId, networkName) => {
+	const walletState = {
+		walletType: SUPPORTED_WALLETS_MAP.COINBASE,
+		unlocked: false,
+	};
 	try {
 		const accounts = await snxJSConnector.signer.getNextAddresses();
 		if (accounts && accounts.length > 0) {
 			return {
+				...walletState,
 				currentWallet: accounts[0],
-				walletType: 'Coinbase',
 				unlocked: true,
 				networkId: 1,
 				networkName: networkName.toLowerCase(),
 			};
 		} else {
 			return {
-				walletType: 'Coinbase',
-				unlocked: false,
+				...walletState,
 				unlockReason: 'CoinbaseNoAccounts',
 			};
 		}
@@ -139,8 +149,7 @@ const connectToCoinbase = async (networkId, networkName) => {
 	} catch (e) {
 		console.log(e);
 		return {
-			walletType: 'Coinbase',
-			unlocked: false,
+			...walletState,
 			unlockReason: 'ErrorWhileConnectingToCoinbase',
 			unlockMessage: e,
 		};
@@ -157,13 +166,17 @@ const connectToHardwareWallet = (networkId, networkName, walletType) => {
 };
 
 const connectToWalletConnect = async (networkId, networkName) => {
+	const walletState = {
+		walletType: SUPPORTED_WALLETS_MAP.WALLET_CONNECT,
+		unlocked: false,
+	};
 	try {
 		await snxJSConnector.signer.provider._web3Provider.enable();
 		const accounts = await snxJSConnector.signer.getNextAddresses();
 		if (accounts && accounts.length > 0) {
 			return {
+				...walletState,
 				currentWallet: accounts[0],
-				walletType: 'WalletConnect',
 				unlocked: true,
 				networkId,
 				networkName: networkName.toLowerCase(),
@@ -172,20 +185,44 @@ const connectToWalletConnect = async (networkId, networkName) => {
 	} catch (e) {
 		console.log(e);
 		return {
-			walletType: 'WalletConnect',
-			unlocked: false,
+			...walletState,
 			unlockReason: 'ErrorWhileConnectingToWalletConnect',
 			unlockMessage: e,
 		};
 	}
 };
 
-const getSignerConfig = ({ type, networkId, derivationPath }) => {
-	if (type === 'Ledger') {
+const connectToPortis = async (networkId, networkName) => {
+	const walletState = {
+		walletType: SUPPORTED_WALLETS_MAP.PORTIS,
+		unlocked: false,
+	};
+	try {
+		const accounts = await snxJSConnector.signer.getNextAddresses();
+		if (accounts && accounts.length > 0) {
+			return {
+				...walletState,
+				currentWallet: accounts[0],
+				unlocked: true,
+				networkId,
+				networkName: networkName.toLowerCase(),
+			};
+		}
+	} catch (e) {
+		console.log(e);
+		return {
+			...walletState,
+			unlockError: e.message,
+		};
+	}
+};
+
+const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
+	if (type === SUPPORTED_WALLETS_MAP.LEDGER) {
 		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
 		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
 	}
-	if (type === 'Coinbase') {
+	if (type === SUPPORTED_WALLETS_MAP.COINBASE) {
 		return {
 			appName: 'Mintr',
 			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
@@ -193,19 +230,24 @@ const getSignerConfig = ({ type, networkId, derivationPath }) => {
 			networkId,
 		};
 	}
-
-	if (type === 'WalletConnect') {
+	if (type === SUPPORTED_WALLETS_MAP.WALLET_CONNECT) {
 		return {
 			infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+		};
+	}
+	if (type === SUPPORTED_WALLETS_MAP.PORTIS) {
+		return {
+			networkName: networkName.toLowerCase(),
+			appId: PORTIS_APP_ID,
 		};
 	}
 
 	return {};
 };
 
-export const setSigner = ({ type, networkId, derivationPath }) => {
+export const setSigner = ({ type, networkId, derivationPath, networkName }) => {
 	const signer = new snxJSConnector.signers[type](
-		getSignerConfig({ type, networkId, derivationPath })
+		getSignerConfig({ type, networkId, derivationPath, networkName })
 	);
 
 	snxJSConnector.setContractSettings({
@@ -223,18 +265,20 @@ export const connectToWallet = async ({ wallet, derivationPath }) => {
 			unlockReason: 'NetworkNotSupported',
 		};
 	}
-	setSigner({ type: wallet, networkId, derivationPath });
+	setSigner({ type: wallet, networkId, derivationPath, networkName: name });
 
 	switch (wallet) {
-		case 'Metamask':
+		case SUPPORTED_WALLETS_MAP.METAMASK:
 			return connectToMetamask(networkId, name);
-		case 'Coinbase':
+		case SUPPORTED_WALLETS_MAP.COINBASE:
 			return connectToCoinbase(networkId, name);
-		case 'Trezor':
-		case 'Ledger':
+		case SUPPORTED_WALLETS_MAP.TREZOR:
+		case SUPPORTED_WALLETS_MAP.LEDGER:
 			return connectToHardwareWallet(networkId, name, wallet);
-		case 'WalletConnect':
+		case SUPPORTED_WALLETS_MAP.WALLET_CONNECT:
 			return connectToWalletConnect(networkId, name);
+		case SUPPORTED_WALLETS_MAP.PORTIS:
+			return connectToPortis(networkId, name);
 		default:
 			return {};
 	}

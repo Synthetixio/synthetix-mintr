@@ -34,9 +34,20 @@ export const INFURA_JSON_RPC_URLS = {
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
+export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
+
 export const INFURA_ARCHIVE_JSON_RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ARCHIVE_PROJECT_ID}`;
 
-export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger', 'Coinbase', 'WalletConnect'];
+export const SUPPORTED_WALLETS_MAP = {
+	METAMASK: 'Metamask',
+	TREZOR: 'Trezor',
+	LEDGER: 'Ledger',
+	COINBASE: 'Coinbase',
+	WALLET_CONNECT: 'WalletConnect',
+	PORTIS: 'Portis',
+};
+
+export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const hasWeb3 = () => {
 	return window.web3;
