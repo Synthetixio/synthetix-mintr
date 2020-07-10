@@ -11,60 +11,10 @@ import { SliderContext } from '../../../components/ScreenSlider';
 import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
+import { getWalletBalancesToArray } from '../../../ducks/balances';
 import { getWalletDetails } from '../../../ducks/wallet';
-import { bigNumberFormatter, shortenAddress, bytesFormatter } from '../../../helpers/formatters';
+import { shortenAddress, bytesFormatter } from '../../../helpers/formatters';
 import { useTranslation } from 'react-i18next';
-
-const useGetBalances = (walletAddress, setCurrentCurrency) => {
-	const [data, setData] = useState([]);
-	useEffect(() => {
-		const getBalances = async () => {
-			try {
-				const [transferable, ethBalance] = await Promise.all([
-					snxJSConnector.snxJS.Synthetix.transferableSynthetix(walletAddress),
-					snxJSConnector.provider.getBalance(walletAddress),
-				]);
-				let walletBalances = [
-					{
-						name: 'SNX',
-						balance: bigNumberFormatter(transferable),
-						rawBalance: transferable,
-					},
-					{
-						name: 'ETH',
-						balance: bigNumberFormatter(ethBalance),
-						rawBalance: ethBalance,
-					},
-				];
-
-				const synthList = snxJSConnector.synths
-					.filter(({ asset }) => asset)
-					.map(({ name }) => name);
-
-				const balanceResults = await Promise.all(
-					synthList.map(synth => snxJSConnector.snxJS[synth].balanceOf(walletAddress))
-				);
-
-				balanceResults.forEach((synthBalance, index) => {
-					const balance = bigNumberFormatter(synthBalance);
-					if (balance && balance > 0)
-						walletBalances.push({
-							name: synthList[index],
-							rawBalance: synthBalance,
-							balance,
-						});
-				});
-				setData(walletBalances);
-				setCurrentCurrency(walletBalances[0]);
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getBalances();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [walletAddress]);
-	return data;
-};
 
 const useGetGasEstimate = (
 	currency,
@@ -85,7 +35,10 @@ const useGetGasEstimate = (
 				if (amount > currency.balance) throw new Error('input.error.balanceTooLow');
 				if (waitingPeriod) throw new Error(`Waiting period for ${currency.name} is still ongoing`);
 				if (!Number(amount)) throw new Error('input.error.invalidAmount');
-				const amountBN = snxJSConnector.utils.parseEther(amount.toString());
+				const amountBN =
+					amount === currency.balance
+						? currency.balanceBN
+						: snxJSConnector.utils.parseEther(amount.toString());
 				setFetchingGasLimit(true);
 				if (currency.name === 'SNX') {
 					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
@@ -130,7 +83,7 @@ const sendTransaction = (currency, amount, destination, settings) => {
 	} else return snxJSConnector.snxJS[currency].transferAndSettle(destination, amount, settings);
 };
 
-const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) => {
+const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, walletBalances }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [sendAmount, setSendAmount] = useState('');
 	const [sendDestination, setSendDestination] = useState('');
@@ -141,7 +94,6 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 
-	const balances = useGetBalances(currentWallet, setCurrentCurrency);
 	const gasEstimateError = useGetGasEstimate(
 		currentCurrency,
 		sendAmount,
@@ -150,6 +102,12 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 		setFetchingGasLimit,
 		setGasLimit
 	);
+
+	useEffect(() => {
+		if (walletBalances && walletBalances.length > 0) {
+			setCurrentCurrency(walletBalances ? walletBalances[0] : null);
+		}
+	}, [walletBalances]);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
 		if (!currentCurrency) return;
@@ -170,11 +128,16 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 		getMaxSecsLeftInWaitingPeriod();
 	}, [getMaxSecsLeftInWaitingPeriod]);
 
+	const handleCurrencyChange = synth => {
+		setSendAmount('');
+		setCurrentCurrency(synth);
+	};
+
 	const onSend = async () => {
 		try {
 			const realSendAmount =
 				sendAmount === currentCurrency.balance
-					? currentCurrency.rawBalance
+					? currentCurrency.balanceBN
 					: snxJSConnector.utils.parseEther(sendAmount.toString());
 			handleNext(1);
 			const transaction = await sendTransaction(
@@ -216,9 +179,9 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 		setSendDestination,
 		...transactionInfo,
 		goBack: handlePrev,
-		balances,
+		walletBalances,
 		currentCurrency,
-		onCurrentCurrencyChange: synth => setCurrentCurrency(synth),
+		onCurrentCurrencyChange: handleCurrencyChange,
 		walletType,
 		networkName,
 		gasEstimateError,
@@ -236,6 +199,7 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	walletBalances: getWalletBalancesToArray(state),
 });
 
 const mapDispatchToProps = {
