@@ -54,17 +54,24 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	return await new Promise(function (resolve, reject) {
-		if (!window.web3) resolve({ name: 'MAINNET', networkId: '1' });
-		window.web3.version.getNetwork((err, networkId) => {
-			if (err) {
-				reject(err);
-			} else {
-				const name = SUPPORTED_NETWORKS[networkId];
-				resolve({ name, networkId });
-			}
-		});
-	});
+	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
+	let networkId = 1;
+	try {
+		if (window.web3?.eth?.net) {
+			networkId = await window.web3.eth.net.getId();
+			return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
+		} else if (window.web3?.version?.network) {
+			networkId = Number(window.web3.version.network);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		} else if (window.ethereum?.networkVersion) {
+			networkId = Number(window.ethereum?.networkVersion);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		}
+		return { name: 'MAINNET', networkId };
+	} catch (e) {
+		console.log(e);
+		return { name: 'MAINNET', networkId };
+	}
 }
 
 export const getNetworkSpeeds = async () => {
