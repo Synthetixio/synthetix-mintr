@@ -133,11 +133,25 @@ export const getBalances = async (walletAddress: string) => {
 			return {
 				name: parseBytes32String(key),
 				balance: bigNumberFormatter(synthsBalances[i]),
+				balanceBN: synthsBalances[i],
 			};
 		})
 		.filter((synth: any) => synth.balance);
 
 	const sUSDBalance = synths.find((synth: any) => synth.name === CRYPTO_CURRENCY_TO_KEY.sUSD);
+	const cryptoToArray = [
+		{
+			name: CRYPTO_CURRENCY_TO_KEY.SNX,
+			balance: bigNumberFormatter(snxBalanceResults),
+			balanceBN: snxBalanceResults,
+		},
+		{
+			name: CRYPTO_CURRENCY_TO_KEY.ETH,
+			balance: bigNumberFormatter(ethBalanceResults),
+			balanceBN: ethBalanceResults,
+		},
+	];
+	const all = synths.concat(cryptoToArray);
 	return {
 		crypto: {
 			[CRYPTO_CURRENCY_TO_KEY.SNX]: bigNumberFormatter(snxBalanceResults),
@@ -146,5 +160,6 @@ export const getBalances = async (walletAddress: string) => {
 		},
 		synths,
 		totalSynths: bigNumberFormatter(totalSynthsBalanceResults),
+		all,
 	};
 };

@@ -15,7 +15,7 @@ const Action = ({
 	t,
 	onDestroy,
 	onSend,
-	balances,
+	walletBalances,
 	currentCurrency,
 	onCurrentCurrencyChange,
 	sendAmount,
@@ -57,7 +57,7 @@ const Action = ({
 							disabled={!currentCurrency}
 							onChange={e => setSendAmount(e.target.value)}
 							onSynthChange={onCurrentCurrencyChange}
-							synths={balances}
+							synths={walletBalances}
 							currentSynth={currentCurrency}
 							value={sendAmount}
 							placeholder="0.00"

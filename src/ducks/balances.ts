@@ -21,6 +21,7 @@ type SynthBalances = Balances[];
 type BalancesSliceState = {
 	crypto: Balances | null;
 	synths: SynthBalances | null;
+	all: SynthBalances | null;
 	totalSynths: number | null;
 	isFetching: boolean;
 	isFetched: boolean;
@@ -34,6 +35,7 @@ type SynthsBalanceWithRates = BalanceWithRates & { name: string };
 const initialState: BalancesSliceState = {
 	crypto: null,
 	synths: null,
+	all: null,
 	totalSynths: null,
 	isFetching: false,
 	isFetched: false,
@@ -61,10 +63,16 @@ export const balancesSlice = createSlice({
 		},
 		fetchBalancesSuccess: (
 			state,
-			action: PayloadAction<{ crypto: Balances; synths: SynthBalances; totalSynths: number }>
+			action: PayloadAction<{
+				crypto: Balances;
+				synths: SynthBalances;
+				totalSynths: number;
+				all: SynthBalances;
+			}>
 		) => {
 			state.crypto = action.payload.crypto;
 			state.synths = action.payload.synths;
+			state.all = action.payload.all;
 			state.totalSynths = action.payload.totalSynths;
 			state.isFetching = false;
 			state.isRefreshing = false;
@@ -86,6 +94,7 @@ export const getWalletBalances = (state: RootState) => {
 	return { crypto, synths, totalSynths };
 };
 
+export const getWalletBalancesToArray = (state: RootState) => getBalanceState(state).all;
 export const getWalletBalancesWithRates = createSelector(
 	getRates,
 	getWalletBalances,
