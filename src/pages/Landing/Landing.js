@@ -11,7 +11,12 @@ import { setCurrentPage } from '../../ducks/ui';
 import { updateWalletStatus, getWalletDetails } from '../../ducks/wallet';
 import { getCurrentTheme } from '../../ducks/ui';
 
-import { hasWeb3, SUPPORTED_WALLETS, onMetamaskAccountChange } from '../../helpers/networkHelper';
+import {
+	hasWeb3,
+	SUPPORTED_WALLETS,
+	onMetamaskAccountChange,
+	SUPPORTED_WALLETS_MAP,
+} from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
 import Logo from '../../components/Logo';
@@ -21,6 +26,7 @@ import { Globe } from '../../components/Icons';
 import { LanguageDropdown } from '../../components/Dropdown';
 
 import { PAGES_BY_KEY } from '../../constants/ui';
+import { ExternalLink } from 'styles/common';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './carousel.css';
@@ -32,10 +38,10 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 		const walletStatus = await connectToWallet({ wallet, derivationPath });
 		updateWalletStatus({ ...walletStatus, availableWallets: [] });
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
-			if (walletStatus.walletType === 'Metamask') {
+			if (walletStatus.walletType === SUPPORTED_WALLETS_MAP.METAMASK) {
 				onMetamaskAccountChange(async () => {
 					const address = await snxJSConnector.signer.getNextAddresses();
-					const signer = new snxJSConnector.signers['Metamask']({});
+					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK]({});
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,
@@ -183,6 +189,11 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					>
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
+					<ExternalLink
+						href={`https://github.com/Synthetixio/synthetix-mintr/releases/tag/v${process.env.REACT_APP_VERSION}`}
+					>
+						<VersionLabel>v{process.env.REACT_APP_VERSION}</VersionLabel>
+					</ExternalLink>
 				</BottomLinks>
 			</WalletConnectContainer>
 		</LandingPageContainer>
@@ -332,6 +343,14 @@ const RoundButton = styled.button`
 
 const LanguageButtonWrapper = styled.div`
 	position: relative;
+`;
+
+const VersionLabel = styled.div`
+	text-align: right;
+	font-size: 12px;
+	margin-top: 5px;
+	color: ${props => props.theme.colorStyles.body};
+	text-decoration: underline;
 `;
 
 const mapStateToProps = state => ({

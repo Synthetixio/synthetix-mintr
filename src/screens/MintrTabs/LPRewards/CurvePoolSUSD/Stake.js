@@ -193,9 +193,9 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances &&
-									formatCurrency(balances.univ1Staked)} Curve LP & ${balances &&
-									formatCurrency(balances.rewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.univ1Staked)} Curve LP & ${
+									balances && formatCurrency(balances.rewards)
+								} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
 						}
@@ -210,9 +210,9 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'exit-old',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances &&
-									formatCurrency(balances.oldUniv1Staked)} Curve LP & ${balances &&
-									formatCurrency(balances.oldRewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.oldUniv1Staked)} Curve LP & ${
+									balances && formatCurrency(balances.oldRewards)
+								} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
 						}

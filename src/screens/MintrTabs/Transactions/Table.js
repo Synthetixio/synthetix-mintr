@@ -33,6 +33,8 @@ const getAmountForEventType = event => {
 			return `${formatCurrency(event.fromAmount)} ${event.fromCurrency} / ${formatCurrency(
 				event.toAmount
 			)} ${event.toCurrency}`;
+		default:
+			return null;
 	}
 };
 
@@ -75,7 +77,7 @@ const TableContainer = ({ data }) => {
 								<DataLarge>{format(new Date(event.timestamp), 'd MMM yy | HH:mm')}</DataLarge>
 							</TD>
 							<TD style={{ textAlign: 'right' }}>
-								<BorderlessButton href={getEtherscanTxLink('1', event.hash)} as="a" target="_blank">
+								<BorderlessButton href={getEtherscanTxLink(1, event.hash)} as="a" target="_blank">
 									{t('button.navigation.view')}
 								</BorderlessButton>
 							</TD>

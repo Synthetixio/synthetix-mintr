@@ -211,8 +211,9 @@ const Stake = ({ walletDetails, goBack }) => {
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH & ${balances &&
-									formatCurrency(balances.rewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH & ${
+									balances && formatCurrency(balances.rewards)
+								} SNX`,
 								contractFunction: transactionSettings =>
 									iEthRewardsContract.exit(transactionSettings),
 								contractFunctionEstimate: () => iEthRewardsContract.estimate.exit(),
@@ -278,8 +279,6 @@ const ButtonRow = styled.div`
 	margin-bottom: 28px;
 	width: 100%;
 `;
-
-const SettleLabel = styled.div``;
 
 const ButtonAction = styled(ButtonPrimary)`
 	flex: 1;
