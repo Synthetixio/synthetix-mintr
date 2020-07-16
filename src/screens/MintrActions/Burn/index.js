@@ -197,7 +197,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 		setFetchingGasLimit,
 		setGasLimit
 	);
-	const onBurn = async () => {
+	const onBurn = async ({ burnToTarget = false }) => {
 		const {
 			snxJS: { Synthetix, Issuer },
 		} = snxJSConnector;
@@ -205,18 +205,25 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 			if (await Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
 				throw new Error('Waiting period for sUSD is still ongoing');
 
-			if (!(await Issuer.canBurnSynths(currentWallet)))
+			if (!burnToTarget && !(await Issuer.canBurnSynths(currentWallet)))
 				throw new Error('Waiting period to burn is still ongoing');
 
 			handleNext(1);
-			const amountToBurn =
-				burnAmount === maxBurnAmount
-					? maxBurnAmountBN
-					: snxJSConnector.utils.parseEther(burnAmount.toString());
-			const transaction = await snxJSConnector.snxJS.Synthetix.burnSynths(amountToBurn, {
-				gasPrice: currentGasPrice.formattedPrice,
-				gasLimit,
-			});
+			let transaction;
+
+			if (burnToTarget) {
+				transaction = await Synthetix.burnSynthsToTarget();
+			} else {
+				const amountToBurn =
+					burnAmount === maxBurnAmount
+						? maxBurnAmountBN
+						: snxJSConnector.utils.parseEther(burnAmount.toString());
+				transaction = await Synthetix.burnSynths(amountToBurn, {
+					gasPrice: currentGasPrice.formattedPrice,
+					gasLimit,
+				});
+			}
+
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
 				createTransaction({

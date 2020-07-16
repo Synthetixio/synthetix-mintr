@@ -1,6 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import reducers from '../ducks';
+
+import reducers from 'ducks';
+import rootSaga from 'ducks/sagas';
+import createSagaMiddleware from 'redux-saga';
 
 export function persistState(reducerModule, update) {
 	try {
@@ -32,8 +35,17 @@ export function getPersistedState(reducerModule) {
 	return {};
 }
 
+const sagaMiddleware = createSagaMiddleware();
+
+const middleware = [thunk, sagaMiddleware];
+
 const finalCreateStore = compose(
-	applyMiddleware(thunk),
+	applyMiddleware(...middleware),
 	window.devToolsExtension ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
 )(createStore);
-export default finalCreateStore(reducers);
+
+const store = finalCreateStore(reducers);
+
+sagaMiddleware.run(rootSaga);
+
+export default store;

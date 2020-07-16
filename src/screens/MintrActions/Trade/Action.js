@@ -26,6 +26,7 @@ const Action = ({
 	waitingPeriod,
 	onWaitingPeriodCheck,
 	gasLimit,
+	feeRate,
 }) => {
 	const onBaseAmountChange = amount => {
 		setBaseAmount(amount);
@@ -76,7 +77,9 @@ const Action = ({
 						</Form>
 					</Top>
 					<Bottom>
-						<Subtext>{t('network.tradingFee')} 0.3%</Subtext>
+						<Subtext>
+							{t('network.tradingFee')} {feeRate}%
+						</Subtext>
 						{/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
 						<TransactionPriceIndicator
 							isFetchingGasLimit={isFetchingGasLimit}

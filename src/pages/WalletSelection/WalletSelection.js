@@ -5,6 +5,7 @@ import snxJSConnector from '../../helpers/snxJSConnector';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
+import { PAGES_BY_KEY } from '../../constants/ui';
 
 import { setCurrentPage } from '../../ducks/ui';
 import {
@@ -38,8 +39,6 @@ const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
 	{ value: "44'/60'/", label: "Ethereum - Ledger Live - m/44'/60'" },
 ];
-
-import { PAGES_BY_KEY } from '../../constants/ui';
 
 const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateWalletStatus) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -276,7 +275,7 @@ const WalletConnection = ({
 												})}
 										</ListBody>
 									</List>
-									{location.href.includes('walletAddress') && (
+									{window.location.href.includes('walletAddress') && (
 										<AddWalletForm
 											onSubmit={e => {
 												e.preventDefault();

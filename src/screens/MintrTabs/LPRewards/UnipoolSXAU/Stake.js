@@ -138,7 +138,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonRow>
 					<ButtonAction
 						onMouseEnter={() => setGasLimit(TRANSACTION_DETAILS['stake'].gasLimit)}
-						disabled={!balances || !balances.univ2Held}
+						disabled={true}
 						onClick={() =>
 							setCurrentScenario({
 								contract: 'unipoolSXAUContract',
@@ -193,9 +193,9 @@ const Stake = ({ walletDetails, goBack }) => {
 								contract: 'unipoolSXAUContract',
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances &&
-									formatCurrency(balances.univ2Staked, 10)} UNI-V2 & ${balances &&
-									formatCurrency(balances.rewards)} SNX`,
+								amount: `${balances && formatCurrency(balances.univ2Staked, 10)} UNI-V2 & ${
+									balances && formatCurrency(balances.rewards)
+								} SNX`,
 								...TRANSACTION_DETAILS['exit'],
 							})
 						}

@@ -1,0 +1,7 @@
+.recharts-layer.recharts-cartesian-axis-tick line {
+	fill: invisible;
+}
+
+.recharts-cartesian-axis-tick-line {
+	fill: red;
+}

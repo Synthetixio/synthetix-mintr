@@ -9,7 +9,7 @@ import { ButtonTertiary } from '../Button';
 import { PMedium } from '../Typography';
 import { NotificationSpinner } from '../Spinner';
 
-import { pushToSuccessQueue, hideTransaction } from '../../ducks/transactions';
+import { hideTransaction } from '../../ducks/transactions';
 import { getWalletDetails } from '../../ducks/wallet';
 
 const StatusImage = ({ status }) => {
@@ -30,18 +30,13 @@ const getStatusSentence = status => {
 	}
 };
 
-const useGetTransactionTicket = (transaction, pushToSuccessQueue) => {
+const useGetTransactionTicket = transaction => {
 	const [data, setData] = useState(transaction.status);
 
 	useEffect(() => {
 		const getTransactionTicket = async () => {
 			const status = await snxJSConnector.utils.waitForTransaction(transaction.hash);
 			setData(status ? 'success' : 'error');
-			if (status) {
-				setTimeout(() => {
-					pushToSuccessQueue(transaction.hash);
-				}, 8000);
-			}
 			return () => setData(null);
 		};
 		getTransactionTicket();
@@ -50,11 +45,11 @@ const useGetTransactionTicket = (transaction, pushToSuccessQueue) => {
 	return data;
 };
 
-const Notification = ({ transaction, walletDetails, hideTransaction, pushToSuccessQueue }) => {
+const Notification = ({ transaction, walletDetails, hideTransaction }) => {
 	const { t } = useTranslation();
 	const { networkName } = walletDetails;
 
-	const status = useGetTransactionTicket(transaction, pushToSuccessQueue);
+	const status = useGetTransactionTicket(transaction);
 	return (
 		<NotificationWrapper>
 			<LeftBlock>
@@ -151,7 +146,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	pushToSuccessQueue,
 	hideTransaction,
 };
 

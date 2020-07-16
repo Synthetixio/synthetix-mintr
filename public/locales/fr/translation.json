@@ -225,7 +225,7 @@
 	"depot": {
 		"intro": {
 			"title": "Dépot:",
-			"subtitle": "Déposez des sUSD pour être vendus contre des ETH sur Synthetix.Exchange. Vous pouvez récupérer vos sUSD à n'importe quel moment tant qu'ils sont en attente. Note : dépot minimum de 50 sUSD."
+			"subtitle": "Déposez des sUSD pour être vendus contre des ETH. Vous pouvez récupérer vos sUSD à n'importe quel moment tant qu'ils sont en attente. Note : dépot minimum de 50 sUSD."
 		},
 		"table": {
 			"title": "Activité récente:",

@@ -1,7 +1,5 @@
 const CREATE_TRANSACTION = 'TRANSACTION/CREATE';
 const HIDE_TRANSACTION = 'TRANSACTION/HIDE';
-const UPDATE_SUCCESS_QUEUE = 'TRANSACTION/UPDATE_SUCCESS_QUEUE';
-const CLEAR_SUCCESS_QUEUE = 'TRANSACTION/CLEAR_SUCCESS_QUEUE';
 
 const defaultState = {
 	isWaitingForSuccess: false,
@@ -16,7 +14,6 @@ const defaultState = {
 	info: null,
 	currentTransactions: [],
 	dataFetchers: {},
-	successQueue: [],
 };
 
 export default (state = defaultState, action) => {
@@ -38,18 +35,6 @@ export default (state = defaultState, action) => {
 				currentTransactions: transactions,
 			};
 		}
-		case UPDATE_SUCCESS_QUEUE: {
-			return {
-				...state,
-				successQueue: [...state.successQueue, action.payload],
-			};
-		}
-		case CLEAR_SUCCESS_QUEUE: {
-			return {
-				...state,
-				successQueue: [],
-			};
-		}
 		default:
 			return state;
 	}
@@ -69,18 +54,4 @@ export const hideTransaction = hash => {
 	};
 };
 
-export const pushToSuccessQueue = hash => {
-	return {
-		type: UPDATE_SUCCESS_QUEUE,
-		payload: hash,
-	};
-};
-
-export const clearSuccessQueue = () => {
-	return {
-		type: CLEAR_SUCCESS_QUEUE,
-	};
-};
-
-export const getSuccessQueue = state => state.transactions.successQueue;
 export const getCurrentTransactions = state => state.transactions.currentTransactions;
