@@ -38,15 +38,17 @@
         "title": "Ошибка",
         "subtitle": "Mintr не смог подключиться к вашему кошельку.",
         "retry": "Повторить"
-      }
+      },
+      "addWallet": {
+				"placeholder": "Wallet address",
+				"buttonText": "Add"
+			}
     }
   },
   "dashboard": {
     "header": {
-      "support": "Поддержка",
-      "onLabel": "Темная",
-      "offLabel": "Светлая"
-    },
+      "support": "Поддержка"
+     },
     "sections": {
       "wallet": "Детали вашего кошелька:"
     },
@@ -76,6 +78,7 @@
       "exchange": "Перейти на Synthetix.Exchange",
       "synthetixDashboard": "Смотреть цены на панели Synthetix",
       "refresh": "Обновить"
+      "delegate": "Delegate"
     }
   },
   "mainNavigation": {
@@ -84,6 +87,7 @@
       "depot": "Депо",
       "transactionsHistory": "Транзакции",
       "escrow": "Условное депонирование"
+      "lpRewards": "LP rewards"
     }
   },
   "home": {
@@ -110,7 +114,11 @@
       "transfer": {
         "title": "Отправить",
         "description": "Отправляйте SNX, Синты или ETH"
-      }
+      },
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
+			}
     }
   },
   "mintrActions": {
@@ -119,6 +127,8 @@
         "title": "Выпустить",
         "subtitle": "Выпустите sUSD используя ваши SNX токены. У Вас появится Залоговый Коэффициент и долг, который позволит зарабатывать вознаграждения.",
         "instruction": "Подтвердите или введите сумму для выпуска:",
+        "staking": "Staking",
+				"estimateCRatio": "Estimated C-Ratio",
         "buttons": {
           "mint": "Выпустить"
         }
@@ -142,6 +152,7 @@
         },
         "buttons": {
           "burn": "Сжечь"
+          "waitingPeriod": "Burn synths unlocked in"
         }
       },
       "confirmation": {
@@ -156,6 +167,7 @@
       "action": {
         "title": "Получить",
         "subtitle": "Если вы используете SNX и выпускаете sUSD, то можете получать два типа вознаграждений: SNX вознаграждения за участие в системе, и комиссионые вознаграждения сгенерированные на бирже Synthetix.Exchange.",
+        "timeLeft": "Time left to claim",
         "table": {
           "title": "Периоды выплат:",
           "period": "Период",
@@ -178,6 +190,25 @@
         "title": "Выплата в процессе!"
       }
     },
+    "track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
+			}
+		},
     "trade": {
       "action": {
         "title": "Обменять",
@@ -245,7 +276,8 @@
         "subtitle": "Доступная сумма:",
         "instruction": "Введите сумму депозита:",
         "buttons": {
-          "deposit": "Разместить"
+          "deposit": "Разместить",
+					"unlock": "Unlock"
         }
       },
       "complete": {
@@ -312,6 +344,139 @@
       "actionDescription": "Сбор:"
     }
   },
+  "lpRewards": {
+		"intro": {
+			"title": "Please choose a pool",
+			"completed": "Completed"
+		},
+		"actions": {
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
+			},
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
+		},
+		"shared": {
+			"unlocked": {
+				"link": "See blog post",
+				"complete": "Transaction in progress!"
+			},
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
+			},
+			"buttons": {
+				"unlock": "unlock",
+				"goToContract": "Go to contract",
+				"stake": "Stake tokens",
+				"claim": "Claim rewards",
+				"unstake": "Unstake tokens",
+				"exit": "exit: claim & unstake",
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
+			}
+		}
+	},
+	"unipoolSETH": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
+		}
+	},
+	"curvepool": {
+		"title": "Curve Finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
+		}
+	},  
   "transactions": {
     "filters": {
       "type": "Тип",
@@ -319,15 +484,15 @@
       "amount": "Сумма"
     },
     "events": {
-      "minted": "Выпущено",
-      "burned": "Сожжено",
-      "claimedFees": "Получено вознаграждений",
-      "exchanged": "Куплено",
-      "traded": "Обмен",
-      "sent": "Отправлено",
-      "deposited": "Размещено на продажу",
-      "withdrawn": "Снято с продажи",
-      "sold": "Продано"
+      "issued": "Minted",
+			"burned": "Burned",
+			"exchanged": "Traded",
+			"deposit": "Deposited",
+			"cleared": "Sold",
+			"withdrawl": "Withdrawn",
+			"bought": "Bought",
+			"feesClaimed": "Claimed Rewards",
+			"sent": "Sent"
     },
     "buttons": {
       "clearFilters": "Сбросить фильтры"
@@ -400,6 +565,9 @@
     "list": {
       "placeholder": "Поиск синта..."
     },
+    "address": {
+			"placeholder": "e.g. 0x3b18a4..."
+		},
     "error": {
       "notEnoughToMint": "В данный момент вы не можете выпустить столько sUSD",
       "gasEstimate": "Ошибка при оценке газа",
@@ -429,5 +597,7 @@
     "claim": "Чтобы получать вознаграждения, вы должны удерживать Залоговый Коэффициент не более -1% от целевого значения. Если коэффициент ниже этого значения, то получение вознаграждений будет закрыто, пока вы не сожжете нужное количество sUSD.",
     "debtBalance": "Ваш долг равен количеству изначально выпущенных sUSD и далее будет колебаться в соответствии с прибылью или потерями других владельцев Синтов. Когда кто-то держит Синт, цена которого повышается, то прибыль пропорционально распределяется в качестве долга всех участников системы. Чтобы разблокировать используемые SNX, вы должны прежде всего выплатить ваш долг.",
     "synthsBalance": "Синты - это синтетические активы в системе Synthetix, включая sUSD, sBTC, iBTC, и другие активы представленные на Synthetix.Exchange. Данная цифра - общая стоимость всех Синтов в этом кошельке. Если вам нужно конвертировать некоторые Синты обратно в sUSD, нажмите ОБМЕНЯТЬ."
+    "track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
   }
 }
