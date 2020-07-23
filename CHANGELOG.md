@@ -1,5 +1,16 @@
 # Changelog
 
+## 23 July 2020
+
+### Added
+
+- Switched from Netlify to Vercel for faster build times.
+
+### Changed
+
+- Fixed the bug that caused "Transfer max" to fail.
+- sUSD price is now taken from the sUSD/USDC pool in Curve.
+
 ## 4 June 2020
 
 ### Added

@@ -25,7 +25,6 @@ export const DEFAULT_GAS_LIMIT = {
 };
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
-const INFURA_ARCHIVE_PROJECT_ID = process.env.REACT_APP_INFURA_ARCHIVE_PROJECT_ID;
 
 export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
@@ -35,8 +34,6 @@ export const INFURA_JSON_RPC_URLS = {
 };
 
 export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
-
-export const INFURA_ARCHIVE_JSON_RPC_URL = `https://mainnet.infura.io/v3/${INFURA_ARCHIVE_PROJECT_ID}`;
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',

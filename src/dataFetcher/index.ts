@@ -1,15 +1,14 @@
-import axios from 'axios';
-import get from 'lodash/get';
 import snxJSConnector from 'helpers/snxJSConnector';
 
 import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
 import { bigNumberFormatter, bytesFormatter, parseBytes32String } from 'helpers/formatters';
 
+const DEFAULT_SUSD_RATE = 1;
+
 export const getDebtStatus = async (walletAddress: string) => {
 	const {
-		// @ts-ignore
 		snxJS: { SynthetixState, Synthetix },
-	} = snxJSConnector;
+	} = snxJSConnector as any;
 	const result = await Promise.all([
 		SynthetixState.issuanceRatio(),
 		Synthetix.collateralisationRatio(walletAddress),
@@ -27,9 +26,8 @@ export const getDebtStatus = async (walletAddress: string) => {
 
 export const getEscrowData = async (walletAddress: string) => {
 	const {
-		// @ts-ignore
 		snxJS: { RewardEscrow, SynthetixEscrow },
-	} = snxJSConnector;
+	} = snxJSConnector as any;
 	const results = await Promise.all([
 		RewardEscrow.totalEscrowedAccountBalance(walletAddress),
 		SynthetixEscrow.balanceOf(walletAddress),
@@ -41,46 +39,37 @@ export const getEscrowData = async (walletAddress: string) => {
 	};
 };
 
-const fetchUniswapSETHRate = async () => {
-	const {
-		// @ts-ignore
-		snxJS: { sETH },
-	} = snxJSConnector;
-	const DEFAULT_RATE = 1;
+const fetchCurveSUSDRate = async () => {
+	const { curveSUSDSwapContract, utils } = snxJSConnector as any;
+	const usdcContractNumber = 1;
+	const susdContractNumber = 3;
+	const susdAmount = 10000;
 
 	try {
-		const sETHAddress = sETH.contract.address;
-		const query = `query {
-			exchanges(where: {tokenAddress:"${sETHAddress}"}) {
-				price
-			}
-		}`;
-
-		const response = await axios.post(
-			'https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap',
-			JSON.stringify({ query, variables: null })
+		const unformattedExchangeAmount = await curveSUSDSwapContract.get_dy_underlying(
+			susdContractNumber,
+			usdcContractNumber,
+			utils.parseEther(susdAmount.toString())
 		);
-
-		const uniswapRate = get(response, 'data.data.exchanges[0].price');
-		return uniswapRate ? 1 / uniswapRate : DEFAULT_RATE;
+		return unformattedExchangeAmount
+			? unformattedExchangeAmount / 1e6 / susdAmount
+			: DEFAULT_SUSD_RATE;
 	} catch (e) {
-		// if we can't get the sETH/ETH rate, then default it to 1:1
-		return DEFAULT_RATE;
+		// if we can't get the sUSD rate from Curve, then default it to 1:1
+		return DEFAULT_SUSD_RATE;
 	}
 };
 
 export const getExchangeRates = async () => {
 	const {
-		// @ts-ignore
 		synthSummaryUtilContract,
-		// @ts-ignore
 		snxJS: { ExchangeRates },
-	} = snxJSConnector;
+	} = snxJSConnector as any;
 
-	const [synthsRates, snxRate, uniswapSETHRate] = await Promise.all([
+	const [synthsRates, snxRate, curveSUSDRate] = await Promise.all([
 		synthSummaryUtilContract.synthsRates(),
 		ExchangeRates.rateForCurrency(bytesFormatter(CRYPTO_CURRENCY_TO_KEY.SNX)),
-		fetchUniswapSETHRate(),
+		fetchCurveSUSDRate(),
 	]);
 
 	let exchangeRates = {
@@ -91,7 +80,7 @@ export const getExchangeRates = async () => {
 		const synthName = parseBytes32String(key);
 		const rate = rates[i] / 1e18;
 		if (synthName === CRYPTO_CURRENCY_TO_KEY.sUSD) {
-			exchangeRates[CRYPTO_CURRENCY_TO_KEY.sUSD] = uniswapSETHRate;
+			exchangeRates[CRYPTO_CURRENCY_TO_KEY.sUSD] = curveSUSDRate;
 		} else if (synthName === CRYPTO_CURRENCY_TO_KEY.sETH) {
 			exchangeRates[CRYPTO_CURRENCY_TO_KEY.sETH] = rate;
 			exchangeRates[CRYPTO_CURRENCY_TO_KEY.ETH] = rate;
@@ -104,13 +93,10 @@ export const getExchangeRates = async () => {
 
 export const getBalances = async (walletAddress: string) => {
 	const {
-		// @ts-ignore
 		synthSummaryUtilContract,
-		// @ts-ignore
 		snxJS: { Synthetix },
-		// @ts-ignore
 		provider,
-	} = snxJSConnector;
+	} = snxJSConnector as any;
 	const [
 		synthBalanceResults,
 		totalSynthsBalanceResults,

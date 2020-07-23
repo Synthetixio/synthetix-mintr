@@ -8,6 +8,7 @@ import curveLPToken from './curve/curveLPToken';
 import oldCurvepool from './curve/oldCurvepool';
 import curveSBTC from './curve/curve-sBTC';
 import sBTCRewards from './curve/sBTC-rewards';
+import curveSUSDSwapContract from './curve/curve-sUSD-swap-contract';
 
 import balancerpool from './balancer/balancerpool';
 import balancerSNXRewards from './balancer/balancerSNXRewards';
@@ -30,4 +31,5 @@ export {
 	balancerSNXRewards,
 	curveSBTC,
 	sBTCRewards,
+	curveSUSDSwapContract,
 };
