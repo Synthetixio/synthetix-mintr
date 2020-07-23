@@ -15,7 +15,7 @@
 			},
 			"howStakeSnx": {
 				"title": "Que doivent faire les stakers de SNX?",
-				"description": "Tous les Synths doivent être soutenus par des SNX stakés avec un ratio de collatéralisation de 800%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en générant des Synths (minting) pour le réduire. En faisant de la sorte, ces derniers seront en mesure de récupérer des récompenses hebdomadaires."
+				"description": "Tous les Synths doivent être soutenus par des SNX stakés avec un ratio de collatéralisation de 750%. Les stakers de SNX doivent gérer leur propre ratio pour être au dessus de ce chiffre, soit en détruisant des Synths pour augmenter leur ratio, soit en générant des Synths (minting) pour le réduire. En faisant de la sorte, ces derniers seront en mesure de récupérer des récompenses hebdomadaires."
 			},
 			"risks": {
 				"title": "Quels sont les risques?",
@@ -87,7 +87,7 @@
 			"depot": "Dépot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Tiers de confiance",
-			"unipool": "UniPool"
+			"lpRewards": "Récompenses LP"
 		}
 	},
 	"home": {
@@ -114,6 +114,10 @@
 			"transfer": {
 				"title": "Transférer",
 				"description": "Transférer vos SNX, Synths, ou ETH"
+			},
+			"track": {
+				"title": "Traquer",
+				"description": "Traquer l'évolution de votre dette au fil du temps"
 			}
 		}
 	},
@@ -163,6 +167,7 @@
 			"action": {
 				"title": "Réclamer",
 				"subtitle": "Si vous avez staké vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liée au staking, et récompense de SNX générée par les échanges de Synths faits sur Synthetix.Exchange.",
+				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "Périodes de réclamation:",
 					"period": "Période",
@@ -183,6 +188,25 @@
 			},
 			"complete": {
 				"title": "Réclamation en cours!"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Traquer",
+				"subtitle": "Traquer l'évolution de votre dette au fil du temps via",
+				"data": {
+					"issuedDebt": "Dette créée",
+					"actualDebt": "Dette réelle",
+					"totalSynths": "Total Synths",
+					"netDebt": "Dette nette"
+				},
+				"chart": {
+					"title": "Evolution de la dette"
+				},
+				"table": {
+					"yourSynths": "Vos synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {
@@ -253,7 +277,7 @@
 				"instruction": "Entrer le montant à déposer:",
 				"buttons": {
 					"deposit": "Déposer maintenant",
-					"unlock": "Dévérouiller"
+					"unlock": "Dévérouiller",
 				}
 			},
 			"complete": {
@@ -289,6 +313,8 @@
 			"title": "Débloquer vos SNX stockés en tiers de confiance",
 			"subtitle": "Si vous avez staké vos SNX et créé du sUSD, vous pouvez recevoir des récompenses hebdomadaires, que vous pouvez débloquer ici après 12 mois.",
 			"total": "Montant total bloqué:",
+			"vested": "Total bloqué:",
+			"available": "Total disponible:",
 			"table": {
 				"none": "Aucun de vos SNX ne sont actuellement stockés en tiers de confiance",
 				"title": "Calendrier",
@@ -322,13 +348,20 @@
 	},
 	"lpRewards": {
 		"intro": {
-			"title": "Merci de choisir une pool"
+			"title": "Merci de choisir une pool",
+			"completed": "Terminé"
 		},
 		"actions": {
-			"unipool": {
-				"title": "Unipool"
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
 			},
-			"curvepool": { "title": "Curvepool" }
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "Curvepool" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
 		},
 		"shared": {
 			"unlocked": {
@@ -344,7 +377,8 @@
 				"staking": "Staking",
 				"claiming": "Réclamation",
 				"unstaking": "Unstaking",
-				"exiting": "Unstaking & claiming"
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
 			},
 			"buttons": {
 				"unlock": "dévérouiller",
@@ -353,11 +387,15 @@
 				"claim": "Réclamer récompenses",
 				"unstake": "Unstake tokens",
 				"exit": "Sortir: claim & unstake",
-				"exit-old": "Sortir de l'ancienne pool"
+				"exit-old": "Sortir de l'ancienne pool",
+				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Récompenses hebdomadaires"
 			}
 		}
 	},
-	"unipool": {
+	"unipoolSETH": {
 		"title": "Uniswap sETH LP Token Rewards",
 		"locked": {
 			"subtitle": "Vous devez d'abord approuver le contrat d'Unipool pour pouvoir staker vos tokens sETH UNI-V1.",
@@ -365,6 +403,27 @@
 		},
 		"unlocked": {
 			"subtitle": "Ici vous pouvez staker vos tokens UNI-V1 Liquidity Provider (LP), réclamer vos récompenses SNX, sortir complètement."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "Vous devez d'abord approuver le contrat d'Unipool pour pouvoir staker vos tokens sXAU UNI-V2.",
+			"transaction": "Autorisation d'utilisation des tokens Uni-V2 LP en cours"
+		},
+		"unlocked": {
+			"subtitle": "Ici vous pouvez staker vos tokens UNI-V2 Liquidity Provider (LP), réclamer vos récompenses SNX, sortir complètement."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "Vous devez d'abord approuver le contrat iEthRewards pour pouvoir staker vos iETH.",
+			"transaction": "Autorisation d'utilisation des iETH en cours"
+		},
+		"unlocked": {
+			"subtitle": "Ici vous pouvez staker vos iETH, réclamer vos récompenses SNX, sortir complètement.",
+			"settle-info": "You need to settle before being able to stake your iETH."
 		}
 	},
 	"curvepool": {
@@ -375,6 +434,26 @@
 		},
 		"unlocked": {
 			"subtitle": "Ici vous pouvez staker vos tokens Curve LP, réclamer vos récompenses SNX, sortir complètement."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
 		}
 	},
 	"delegation": {
@@ -520,6 +599,8 @@
 	"tooltip": {
 		"claim": "Pour réclamer vos récompenses vous devez être dans les 1% du ratio de collatéralisation cible. Si vous êtes en dessous de ce chiffre, vous ne pourrez pas récupérer vos récompenses. Vous pouvez détruire des sUSD pour rétablir votre ratio.",
 		"debtBalance": "Votre dette est initialisée en fonction du montant de sUSD créés, et fluctue selon les gains et les pertes faits par les autres posesseurs de Synths. Chaque fois qu'une personne détient un Synth qui prend de la valeur, ce gain est redistribué proportionnellement entre toutes les dettes des détenteurs de SNX stakés. Pour dévérouiller tout vos SNX stakés, vous devez d'abord payer votre dette.",
-		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange. Ce chiffre est la valeur totale de tout les Synths contenus dans ce portefeuille. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger."
+		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange. Ce chiffre est la valeur totale de tout les Synths contenus dans ce portefeuille. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger.",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}
 }
