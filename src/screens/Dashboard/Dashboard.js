@@ -1,205 +1,49 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import { withTranslation, useTranslation } from 'react-i18next';
+import React from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { isEmpty } from 'lodash';
 
-import { Store } from '../../store';
+import { formatCurrency } from 'helpers/formatters';
+import { getWalletDetails } from 'ducks/wallet';
+import { showModal } from 'ducks/modal';
+import { getWalletBalances, fetchBalancesRequest, getIsFetchingBalances } from 'ducks/balances';
+import {
+	getDebtStatusData,
+	fetchDebtStatusRequest,
+	getIsFetchingBDebtData,
+} from 'ducks/debtStatus';
+import { getRates } from 'ducks/rates';
+import { getTotalEscrowedBalance, fetchEscrowRequest, getIsFetchingEscrowData } from 'ducks/escrow';
 
-import { formatCurrency } from '../../helpers/formatters';
-import { fetchData } from './fetchData';
+import { MODAL_TYPES_TO_KEY } from 'constants/modal';
 
-import Header from '../../components/Header';
-import BarChart from '../../components/BarChart';
-import Table from '../../components/Table';
-import { ButtonTertiary } from '../../components/Button';
-import { DataLarge, H5, H6, Figure, ButtonTertiaryLabel } from '../../components/Typography';
-import Tooltip from '../../components/Tooltip';
-import Skeleton from '../../components/Skeleton';
+import Header from 'components/Header';
+import { MicroSpinner } from 'components/Spinner';
 
-const CollRatios = ({ state }) => {
+import { ButtonTertiary } from 'components/Button';
+import { H5, ButtonTertiaryLabel } from 'components/Typography';
+import Skeleton from 'components/Skeleton';
+import BalanceTable from './BalanceTable';
+import BarCharts from './BarCharts';
+import CollRatios from './CollRatios';
+
+const Dashboard = ({
+	walletDetails,
+	showModal,
+	rates,
+	debtStatusData,
+	totalEscrowedBalances,
+	fetchEscrowRequest,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
+	isFetchingBalances,
+	isFetchingDebtData,
+	isFetchingEscrowData,
+}) => {
 	const { t } = useTranslation();
-	const { debtData, dashboardIsLoading } = state;
-	return (
-		<Row margin="0 0 22px 0">
-			<Box>
-				{dashboardIsLoading ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>{debtData.currentCRatio ? Math.round(100 / debtData.currentCRatio) : 0}%</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.current')}</DataLarge>
-			</Box>
-			<Box>
-				{dashboardIsLoading ? (
-					<Skeleton style={{ marginBottom: '8px' }} height="25px" />
-				) : (
-					<Figure>{debtData.targetCRatio ? Math.round(100 / debtData.targetCRatio) : 0}%</Figure>
-				)}
-				<DataLarge>{t('dashboard.ratio.target')}</DataLarge>
-			</Box>
-		</Row>
-	);
-};
-
-const Charts = ({ state }) => {
-	const { t } = useTranslation();
-	const { balances, debtData, escrowData } = state;
-	const snxLocked =
-		balances.snx &&
-		debtData.currentCRatio &&
-		debtData.targetCRatio &&
-		balances.snx * Math.min(1, debtData.currentCRatio / debtData.targetCRatio);
-
-	const totalEscrow = escrowData.reward + escrowData.tokenSale;
-
-	const chartData = [
-		[
-			{
-				label: t('dashboard.holdings.locked'),
-				value: balances.snx - debtData.transferable,
-			},
-			{
-				label: t('dashboard.holdings.transferable'),
-				value: debtData.transferable,
-			},
-		],
-		[
-			{
-				label: t('dashboard.holdings.staking'),
-				value: snxLocked,
-			},
-			{
-				label: t('dashboard.holdings.nonStaking'),
-				value: balances.snx - snxLocked,
-			},
-		],
-		[
-			{
-				label: t('dashboard.holdings.escrowed'),
-				value: totalEscrow,
-			},
-			{
-				label: t('dashboard.holdings.nonEscrowed'),
-				value: balances.snx - totalEscrow,
-			},
-		],
-	];
-
-	return (
-		<Box full={true}>
-			<BoxInner>
-				<BoxHeading>
-					<H6 style={{ textTransform: 'uppercase' }}>{t('dashboard.holdings.title')}</H6>
-					<H6>{formatCurrency(balances.snx) || 0} SNX</H6>
-				</BoxHeading>
-				{chartData.map((data, i) => {
-					return <BarChart key={i} data={data} />;
-				})}
-			</BoxInner>
-		</Box>
-	);
-};
-
-const getBalancePerAsset = (asset, { balances, prices, debtData, synthData }) => {
-	let balance,
-		usdValue = 0;
-	switch (asset) {
-		case 'SNX':
-		case 'sUSD':
-		case 'ETH':
-			balance = balances[asset.toLowerCase()];
-			usdValue = balances[asset.toLowerCase()] * prices[asset.toLowerCase()];
-			break;
-		case 'Synths':
-			balance = synthData.total;
-			usdValue = synthData.total * prices.susd;
-			break;
-		case 'Debt':
-			balance = debtData.debtBalance;
-			usdValue = debtData.debtBalance * prices.susd;
-			break;
-		default:
-			break;
-	}
-	return { balance, usdValue };
-};
-
-const renderTooltip = (dataType, t) => {
-	if (!['Synths', 'Debt'].includes(dataType)) return;
-	return (
-		<TooltipWrapper>
-			<Tooltip content={t(`tooltip.${dataType.toLowerCase()}Balance`)} />
-		</TooltipWrapper>
-	);
-};
-
-const processTableData = (state, t) => {
-	return ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'].map(dataType => {
-		const iconName = ['Synths', 'Debt'].includes(dataType) ? 'snx' : dataType.toLowerCase();
-		const assetName = ['Synths', 'Debt'].includes(dataType)
-			? t(`dashboard.table.${dataType.toLowerCase()}`)
-			: dataType;
-		const { balance, usdValue } = getBalancePerAsset(dataType, state);
-		return {
-			rowLegend: (
-				<TableIconCell>
-					<CurrencyIcon src={`/images/currencies/${iconName}.svg`} />
-					{assetName}
-					{renderTooltip(dataType, t)}
-				</TableIconCell>
-			),
-			balance: balance ? formatCurrency(balance) : 0,
-			usdValue: `$${usdValue ? formatCurrency(usdValue) : 0}`,
-		};
-	});
-};
-
-const BalanceTable = ({ state }) => {
-	const { t } = useTranslation();
-	const { dashboardIsLoading } = state;
-	const data = processTableData(state, t);
-	return (
-		<Box style={{ marginTop: '16px' }} full={true}>
-			<BoxInner>
-				{dashboardIsLoading ? (
-					<Skeleton width={'100%'} height={'242px'} />
-				) : (
-					<Table
-						header={[
-							{ key: 'rowLegend', value: '' },
-							{ key: 'balance', value: t('dashboard.table.balance') },
-							{ key: 'usdValue', value: '$ usd' },
-						]}
-						data={data}
-					/>
-				)}
-			</BoxInner>
-		</Box>
-	);
-};
-
-const Dashboard = ({ t }) => {
-	const theme = useContext(ThemeContext);
-	const {
-		state: {
-			wallet: { currentWallet },
-			transactions: { successQueue },
-		},
-	} = useContext(Store);
-
-	const [dashboardIsLoading, setDashboardIsLoading] = useState(true);
-	const [data, setData] = useState({});
-	const loadData = useCallback(() => {
-		setDashboardIsLoading(true);
-		fetchData(currentWallet, successQueue).then(data => {
-			setData(data);
-			setDashboardIsLoading(false);
-		});
-	}, [currentWallet, successQueue]);
-
-	useEffect(() => loadData(), [loadData]);
-
-	const { balances = {}, prices = {}, debtData = {}, synthData = {}, escrowData = {} } = data;
-
+	const { currentWallet } = walletDetails;
+	const isDashboardRefreshing = isFetchingBalances || isFetchingDebtData || isFetchingEscrowData;
 	return (
 		<DashboardWrapper>
 			<Header currentWallet={currentWallet} />
@@ -207,45 +51,42 @@ const Dashboard = ({ t }) => {
 				<Container>
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
-						<ButtonTertiary onClick={() => loadData()}>
-							{t('dashboard.buttons.refresh')}
-						</ButtonTertiary>
+						<ButtonContainer>
+							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
+								{t('dashboard.buttons.delegate')}
+							</ButtonTertiary>
+							<ButtonTertiary
+								disabled={isDashboardRefreshing}
+								style={{ minWidth: '102px' }}
+								onClick={() => {
+									fetchDebtStatusRequest();
+									fetchBalancesRequest();
+									fetchEscrowRequest();
+								}}
+							>
+								{isDashboardRefreshing ? <MicroSpinner /> : t('dashboard.buttons.refresh')}
+							</ButtonTertiary>
+						</ButtonContainer>
 					</ContainerHeader>
-					<CollRatios state={{ debtData, dashboardIsLoading }} />
+					<CollRatios debtStatusData={debtStatusData} />
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
 								<Asset key={asset}>
 									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />
-									{dashboardIsLoading ? (
+									{isEmpty(rates) ? (
 										<Skeleton height="22px" />
 									) : (
 										<CurrencyPrice>
-											1 {asset} = ${formatCurrency(prices[asset.toLowerCase()])} USD
+											1 {asset} = ${formatCurrency(rates[asset])} USD
 										</CurrencyPrice>
 									)}
 								</Asset>
 							);
 						})}
 					</PricesContainer>
-					<Charts
-						state={{
-							balances,
-							debtData,
-							theme,
-							dashboardIsLoading,
-							escrowData,
-						}}
-					/>
-					<BalanceTable
-						state={{
-							balances,
-							synthData,
-							debtData,
-							prices,
-							dashboardIsLoading,
-						}}
-					/>
+					<BarCharts debtData={debtStatusData} totalEscrow={totalEscrowedBalances} />
+					<BalanceTable debtData={debtStatusData} />
 					<Row margin="18px 0 0 0 ">
 						<Link href="https://synthetix.exchange" target="_blank">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
@@ -275,7 +116,6 @@ const DashboardWrapper = styled('div')`
 		color: ${props => props.theme.colorStyles.body};
 		margin: 0;
 	}
-	// transition: all ease-out 0.5s;
 	flex-shrink: 0;
 	border-right: 1px solid ${props => props.theme.colorStyles.borders};
 	padding-bottom: 40px;
@@ -291,6 +131,14 @@ const Container = styled.div`
 	border-radius: ${props => (props.curved ? '40px' : '5px')};
 	padding: ${props => (props.curved ? '15px' : '32px 24px')};
 	margin: ${props => (props.curved ? '16px 0' : '0')};
+`;
+
+const ButtonContainer = styled.div`
+	display: flex;
+	align-items: center;
+	& > button + button {
+		margin-left: 10px;
+	}
 `;
 
 const ContainerHeader = styled.div`
@@ -309,29 +157,6 @@ const Row = styled.div`
 	padding: ${props => (props.padding ? props.padding : 0)};
 `;
 
-const Box = styled.div`
-	border-radius: 2px;
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	width: ${props => (props.full ? '100%' : '240px')};
-	height: ${props => (props.full ? '100%' : '96px')};
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-`;
-
-const BoxInner = styled.div`
-	padding: 24px;
-	width: 100%;
-`;
-
-const BoxHeading = styled.div`
-	witdh: 100%;
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 1px solid ${props => props.theme.colorStyles.borders};
-`;
-
 const Link = styled.a`
 	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
 	text-transform: uppercase;
@@ -348,15 +173,6 @@ const CurrencyIcon = styled.img`
 	width: 22px;
 	height: 22px;
 	margin-right: 5px;
-`;
-
-const TableIconCell = styled.div`
-	display: flex;
-	align-items: center;
-`;
-
-const TooltipWrapper = styled.div`
-	margin-left: 10px;
 `;
 
 const PricesContainer = styled.div`
@@ -378,10 +194,28 @@ const Asset = styled.div`
 
 const CurrencyPrice = styled.div`
 	font-size: 16px;
-	font-family: 'apercu-medium';
+	font-family: 'apercu-medium', sans-serif;
 	margin-left: 4px;
 	align-items: center;
 	color: ${props => props.theme.colorStyles.body};
 `;
 
-export default withTranslation()(Dashboard);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	walletBalances: getWalletBalances(state),
+	rates: getRates(state),
+	debtStatusData: getDebtStatusData(state),
+	totalEscrowedBalances: getTotalEscrowedBalance(state),
+	isFetchingBalances: getIsFetchingBalances(state),
+	isFetchingDebtData: getIsFetchingBDebtData(state),
+	isFetchingEscrowData: getIsFetchingEscrowData(state),
+});
+
+const mapDispatchToProps = {
+	showModal,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
+	fetchEscrowRequest,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

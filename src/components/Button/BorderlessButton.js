@@ -18,7 +18,7 @@ const BorderlessButton = ({
 };
 
 const Button = styled.button`
-	font-family: 'apercu-bold';
+	font-family: 'apercu-bold', sans-serif;
 	text-transform: uppercase;
 	border: none;
 	background-color: transparent;

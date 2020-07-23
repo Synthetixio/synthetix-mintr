@@ -4,10 +4,11 @@ import { SlidePage } from '../../../components/ScreenSlider';
 import { withTranslation } from 'react-i18next';
 
 import { ButtonPrimary, ButtonTertiary } from '../../../components/Button';
-import { PLarge, H1, HyperlinkSmall } from '../../../components/Typography';
+import { PLarge, H1, HyperlinkSmall, Subtext } from '../../../components/Typography';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
+import { formatCurrency, secondsToTime } from '../../../helpers/formatters';
 
 const Action = ({
 	t,
@@ -20,8 +21,52 @@ const Action = ({
 	setTransferableAmount,
 	isFetchingGasLimit,
 	gasEstimateError,
+	gasLimit,
 	burnAmountToFixCRatio,
+	waitingPeriod,
+	onWaitingPeriodCheck,
+	issuanceDelay,
+	onIssuanceDelayCheck,
+	sUSDBalance,
 }) => {
+	const renderSubmitButton = () => {
+		if (issuanceDelay) {
+			return (
+				<RetryButtonWrapper>
+					<ButtonPrimary onClick={onIssuanceDelayCheck} margin="auto">
+						Retry
+					</ButtonPrimary>
+					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+						There is a waiting period after minting before you can burn. Please wait{' '}
+						{secondsToTime(issuanceDelay)} before attempting to burn sUSD.
+					</Subtext>
+				</RetryButtonWrapper>
+			);
+		} else if (waitingPeriod) {
+			return (
+				<RetryButtonWrapper>
+					<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">
+						Retry
+					</ButtonPrimary>
+					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+						There is a waiting period after completing a trade. Please wait{' '}
+						{secondsToTime(waitingPeriod)} before attempting to burn sUSD.
+					</Subtext>
+				</RetryButtonWrapper>
+			);
+		} else {
+			return (
+				<ButtonPrimary
+					disabled={isFetchingGasLimit || gasEstimateError || sUSDBalance === 0}
+					onClick={onBurn}
+					margin="auto"
+				>
+					{t('mintrActions.burn.action.buttons.burn')}
+				</ButtonPrimary>
+			);
+		}
+	};
+
 	const [snxInputIsVisible, toggleSnxInput] = useState(false);
 	return (
 		<SlidePage>
@@ -47,14 +92,24 @@ const Action = ({
 								{t('button.burnMax')}
 							</AmountButton>
 							<AmountButton
+								disabled={
+									maxBurnAmount === 0 ||
+									burnAmountToFixCRatio === 0 ||
+									burnAmountToFixCRatio > maxBurnAmount
+								}
 								onClick={() => {
 									setBurnAmount(burnAmountToFixCRatio);
+									onBurn({ burnToTarget: true });
 								}}
 								width="66%"
 							>
 								{t('button.fixCRatio')}
 							</AmountButton>
 						</ButtonRow>
+						<SubtextRow>
+							<Subtext>${formatCurrency(maxBurnAmount)}</Subtext>
+							<Subtext>${formatCurrency(burnAmountToFixCRatio)}</Subtext>
+						</SubtextRow>
 						<Input
 							singleSynth={'sUSD'}
 							onChange={e => setBurnAmount(e.target.value)}
@@ -82,14 +137,8 @@ const Action = ({
 					</Form>
 				</Top>
 				<Bottom>
-					<TransactionPriceIndicator />
-					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError}
-						onClick={onBurn}
-						margin="auto"
-					>
-						{t('mintrActions.burn.action.buttons.burn')}
-					</ButtonPrimary>
+					<TransactionPriceIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
+					{renderSubmitButton()}
 				</Bottom>
 			</Container>
 		</SlidePage>
@@ -148,7 +197,7 @@ const Form = styled.div`
 
 const ButtonToggleInput = styled.button`
 	border: none;
-	margin: 30px 0;
+	margin: 10px 0;
 	cursor: pointer;
 	background-color: transparent;
 `;
@@ -157,7 +206,11 @@ const ButtonRow = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 16px;
+`;
+
+const SubtextRow = styled.div`
+	display: flex;
+	justify-content: space-between;
 `;
 
 const AmountButton = styled.button`
@@ -171,6 +224,14 @@ const AmountButton = styled.button`
 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
 	cursor: pointer;
 	white-space: no-wrap;
+	&:disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+`;
+
+const RetryButtonWrapper = styled.div`
+	position: relative;
 `;
 
 export default withTranslation()(Action);

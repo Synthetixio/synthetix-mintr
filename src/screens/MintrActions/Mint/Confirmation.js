@@ -8,8 +8,18 @@ import { ButtonTertiary } from '../../../components/Button';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import { PLarge, PageTitle, DataHeaderLarge, Subtext } from '../../../components/Typography';
 import Spinner from '../../../components/Spinner';
+import { getStakingAmount } from './mint-helpers';
 
-const Confirmation = ({ t, goBack, walletType, mintAmount, issuanceRatio, SNXPrice }) => {
+const Confirmation = ({
+	t,
+	goBack,
+	walletType,
+	mintAmount,
+	issuanceRatio,
+	SNXPrice,
+	isFetchingGasLimit,
+	gasLimit,
+}) => {
 	return (
 		<SlidePage>
 			<Container>
@@ -38,7 +48,12 @@ const Confirmation = ({ t, goBack, walletType, mintAmount, issuanceRatio, SNXPri
 								{t('mintrActions.mint.confirmation.subActionDescription')}
 							</DataHeaderLarge>
 							<Amount>
-								{issuanceRatio ? formatCurrency(mintAmount / issuanceRatio / SNXPrice) : '--'} SNX
+								{getStakingAmount({
+									issuanceRatio,
+									mintAmount,
+									SNXPrice,
+								})}
+								{' SNX'}
 							</Amount>
 						</Box>
 					</Details>
@@ -48,7 +63,12 @@ const Confirmation = ({ t, goBack, walletType, mintAmount, issuanceRatio, SNXPri
 					<Subtext>{t('transactionProcessing.confirmation.loading')}</Subtext>
 				</Loading>
 				<Bottom>
-					<TransactionPriceIndicator canEdit={false} />
+					<TransactionPriceIndicator
+						isFetchingGasLimit={isFetchingGasLimit}
+						gasLimit={gasLimit}
+						style={{ margin: '0' }}
+						canEdit={false}
+					/>
 				</Bottom>
 			</Container>
 		</SlidePage>

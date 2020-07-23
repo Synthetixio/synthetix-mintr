@@ -39,7 +39,7 @@
 				"subtitle": "Mintr couldn't access your wallet.",
 				"retry": "Retry"
 			},
-			"addWallet":{
+			"addWallet": {
 				"placeholder": "Wallet address",
 				"buttonText": "Add"
 			}
@@ -77,7 +77,8 @@
 		"buttons": {
 			"exchange": "Go to Synthetix.Exchange",
 			"synthetixDashboard": "View prices on Dashboard",
-			"refresh": "Refresh"
+			"refresh": "Refresh",
+			"delegate": "Delegate"
 		}
 	},
 	"mainNavigation": {
@@ -85,7 +86,8 @@
 			"home": "Home",
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
-			"escrow": "Escrow"
+			"escrow": "Escrow",
+			"lpRewards": "LP rewards"
 		}
 	},
 	"home": {
@@ -112,6 +114,10 @@
 			"transfer": {
 				"title": "Transfer",
 				"description": "Transfer SNX, Synths, or ETH"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
 			}
 		}
 	},
@@ -121,6 +127,8 @@
 				"title": "Mint",
 				"subtitle": "Mint sUSD by staking your SNX. This gives you a Collateralization Ratio and a debt, allowing you to earn staking rewards.",
 				"instruction": "Confirm or enter amount to mint:",
+				"staking": "Staking",
+				"estimateCRatio": "Estimated C-Ratio",
 				"buttons": {
 					"mint": "Mint now"
 				}
@@ -143,7 +151,8 @@
 					"button": "View transferable SNX"
 				},
 				"buttons": {
-					"burn": "Burn now"
+					"burn": "Burn now",
+					"waitingPeriod": "Burn synths unlocked in"
 				}
 			},
 			"confirmation": {
@@ -158,10 +167,11 @@
 			"action": {
 				"title": "Claim",
 				"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to collect two kinds of rewards: SNX staking rewards, and Synth exchange rewards generated on Synthetix.Exchange.",
+				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "Claimable periods:",
 					"period": "Period",
-					"status": "Claim status",
+					"status": "Your fee claim status",
 					"open": "Open",
 					"blocked": "Blocked"
 				},
@@ -171,13 +181,32 @@
 					"claim": "Claim now",
 					"history": "Claim History"
 				},
-				"note": "Note: if not collected within two periods, your rewards will be forfeited and rolled over into the fee pool."
+				"note": "Note: if not collected within 7 days, your rewards will be forfeited and rolled over into the fee pool."
 			},
 			"confirmation": {
 				"actionDescription": "Claiming:"
 			},
 			"complete": {
 				"title": "Claiming in progress!"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {
@@ -219,8 +248,8 @@
 	},
 	"depot": {
 		"intro": {
-			"title": "Depot:",
-			"subtitle": "Deposit sUSD into a queue to be sold on Synthetix.Exchange for ETH. You can withdraw your sUSD at any time while waiting. Note: minimum deposit is 50 sUSD."
+			"title": "Available for sale:",
+			"subtitle": "Deposit sUSD into a queue to be sold for ETH. You can withdraw your sUSD at any time while waiting. Note: minimum deposit is 50 sUSD."
 		},
 		"table": {
 			"title": "Recent activity:",
@@ -247,7 +276,8 @@
 				"subtitle": "Amount available:",
 				"instruction": "Enter deposit amount:",
 				"buttons": {
-					"deposit": "Deposit now"
+					"deposit": "Deposit now",
+					"unlock": "Unlock"
 				}
 			},
 			"complete": {
@@ -283,6 +313,8 @@
 			"title": "Vest your SNX staking rewards in escrow",
 			"subtitle": "If you have staked your SNX and minted sUSD, you are eligible to receive SNX staking rewards, which you can vest here after they have been escrowed for 12 months.",
 			"total": "Total escrowed:",
+			"vested": "Total vested:",
+			"available": "Total available:",
 			"table": {
 				"none": "You have no escrowed SNX",
 				"title": "Vesting schedule",
@@ -314,6 +346,139 @@
 			"actionDescription": "Vesting:"
 		}
 	},
+	"lpRewards": {
+		"intro": {
+			"title": "Please choose a pool",
+			"completed": "Completed"
+		},
+		"actions": {
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
+			},
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
+		},
+		"shared": {
+			"unlocked": {
+				"link": "See blog post",
+				"complete": "Transaction in progress!"
+			},
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
+			},
+			"buttons": {
+				"unlock": "unlock",
+				"goToContract": "Go to contract",
+				"stake": "Stake tokens",
+				"claim": "Claim rewards",
+				"unstake": "Unstake tokens",
+				"exit": "exit: claim & unstake",
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
+			}
+		}
+	},
+	"unipoolSETH": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
+		}
+	},
+	"curvepool": {
+		"title": "Curve Finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
+		}
+	},
 	"transactions": {
 		"filters": {
 			"type": "Type",
@@ -321,15 +486,15 @@
 			"amount": "Amount"
 		},
 		"events": {
-			"minted": "Minted",
+			"issued": "Minted",
 			"burned": "Burned",
-			"claimedFees": "Claimed Rewards",
-			"exchanged": "Bought",
-			"traded": "Traded",
-			"sent": "Sent",
-			"deposited": "Deposited",
-			"withdrawn": "Withdrawn",
-			"sold": "Sold"
+			"exchanged": "Traded",
+			"deposit": "Deposited",
+			"cleared": "Sold",
+			"withdrawl": "Withdrawn",
+			"bought": "Bought",
+			"feesClaimed": "Claimed Rewards",
+			"sent": "Sent"
 		},
 		"buttons": {
 			"clearFilters": "Clear filters"
@@ -342,6 +507,7 @@
 	"transactionSettings": {
 		"priceIndicator": "Ethereum network fees:",
 		"title": "Set gas price",
+		"placeholder": "Add gas price (GWEI)",
 		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
 		"minutes": "mins",
 		"speed": {
@@ -402,6 +568,9 @@
 		"list": {
 			"placeholder": "Search for a synth..."
 		},
+		"address": {
+			"placeholder": "e.g. 0x3b18a4..."
+		},
 		"error": {
 			"notEnoughToMint": "You cannot currently mint that much sUSD",
 			"gasEstimate": "Error while getting gas estimate",
@@ -430,6 +599,8 @@
 	"tooltip": {
 		"claim": "To claim rewards, you must be within 1% of the Target Collateralization Ratio. If you are below this figure, you will be blocked from claiming rewards until you burn enough sUSD.",
 		"debtBalance": "Your debt begins as the amount of sUSD you initially mint, and fluctuates according to gains or losses made by other Synth holders. Any time someone holds a Synth that appreciates in value, that gain is distributed proportionally between all the staked SNX holders’ debts. To unlock all your staked SNX, you must first pay off your debt.",
-		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button."
+		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button.",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}
 }

@@ -1,0 +1,606 @@
+{
+	"onboarding": {
+		"slides": {
+			"welcome": {
+				"title": "欢迎使用 Mintr!",
+				"description": "Mintr 是为 SNX 持有者开发的 dApp。如果您之前从未使用过 Mintr，请先阅读我们的简要介绍。"
+			},
+			"whatIsSynthetix": {
+				"title": "什么是 Synthetix?",
+				"description": "Synthetix 是一个建立在以太坊上的去中心化合成资产发行协议。这些合成的资产（Synths）来自于抵押 Synthetix Network Token（SNX），且可以直接用 Synthetix.Exchange 交易所上的 Synthetix 智能合约在彼此间直接交易。"
+			},
+			"whyStakeSnx": {
+				"title": "为什么要抵押 SNX?",
+				"description": "SNX 持有人可以收到两种奖励。第一，持有人可以收到新增代币奖励，这些代币来自于通胀的货币政策。第二，Synth 的交易奖励，这些奖励来自于 Synthetix.Exchange 交易所的合成资产交易费。"
+			},
+			"howStakeSnx": {
+				"title": "SNX 持有人需要做什么？",
+				"description": "所有合成资产都由抵押的 SNX 来支撑其价值，抵押率现在为 750%。SNX 持有者需要自行管理自己的抵押率（包括销毁合成资产以增加抵押率，或铸造新的合成资产以降低抵押率），使其超过750%。做到这些，持有人即可领取每周奖励。"
+			},
+			"risks": {
+				"title": "有什么风险？",
+				"description": "所有 SNX 持有人在抵押时，都会产生一笔“债务”。一开始，债务是他们初始铸造的 sUSD 数量，接下来，债务将随着其他合成资产持有人的收益和损失而波动。当有人持有的合成资产增值时，那部分收益将按比例来自于所有 SNX 持有人的债务。每个持有人都必须付清他们的债务，才能解锁他们抵押的 SNX。"
+			}
+		},
+		"walletConnection": {
+			"title": "请连接存有 SNX 的钱包以继续："
+		},
+		"walletSelection": {
+			"success": {
+				"title": "选择钱包",
+				"subtitle": "请选择您要连接到 Mintr 的钱包"
+			},
+			"loading": {
+				"connectInstructions": "请按照您设备上的指示解锁您的钱包。",
+				"connectVia": "由 {{walletType}} 连接"
+			},
+			"error": {
+				"title": "错误",
+				"subtitle": "Mintr 不能访问您的钱包。",
+				"retry": "重试"
+			},
+			"addWallet": {
+				"placeholder": "Wallet address",
+				"buttonText": "Add"
+			}
+		}
+	},
+	"dashboard": {
+		"header": {
+			"support": "支持"
+		},
+		"sections": {
+			"wallet": "您的钱包详情："
+		},
+		"rewards": {
+			"open": "剩余奖励倒计时",
+			"blocked": "申领奖励 <1>停止</1>"
+		},
+		"ratio": {
+			"current": "当前抵押率",
+			"target": "抵押率目标"
+		},
+		"holdings": {
+			"title": "总 SNX:",
+			"locked": "已锁定",
+			"transferable": "可转账",
+			"staking": "已抵押",
+			"nonStaking": "未抵押",
+			"escrowed": "已托管",
+			"nonEscrowed": "未托管"
+		},
+		"table": {
+			"debt": "债务",
+			"synths": "合成资产",
+			"balance": "余额"
+		},
+		"buttons": {
+			"exchange": "前往 Synthetix.Exchange",
+			"synthetixDashboard": "查看 Synthetix Dashboard",
+			"refresh": "刷新",
+			"delegate": "Delegate"
+		}
+	},
+	"mainNavigation": {
+		"tabs": {
+			"home": "主页",
+			"depot": "仓库",
+			"transactionsHistory": "交易记录",
+			"escrow": "托管",
+			"lpRewards": "LP rewards"
+		}
+	},
+	"home": {
+		"intro": {
+			"title": "您想如何操作？"
+		},
+		"actions": {
+			"mint": {
+				"title": "铸造",
+				"description": "抵押 SNX 来铸造 sUSD"
+			},
+			"burn": {
+				"title": "销毁",
+				"description": "销毁 sUSD 来解锁抵押的 SNX"
+			},
+			"claim": {
+				"title": "申领",
+				"description": "申领 SNX 新增代币奖励和 Synth 交易奖励"
+			},
+			"trade": {
+				"title": "交易",
+				"description": "交易合成资产与 sUSD"
+			},
+			"transfer": {
+				"title": "转帐",
+				"description": "SNX，合成资产，或 ETH 转账"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
+			}
+		}
+	},
+	"mintrActions": {
+		"mint": {
+			"action": {
+				"title": "铸造",
+				"subtitle": "抵押您的 SNX 来铸造 sUSD。抵押产生的抵押率和债务记录，将使您赚取奖励。",
+				"instruction": "直接确认或手动输入您要铸造的数量：",
+				"staking": "Staking",
+				"estimateCRatio": "Estimated C-Ratio",
+				"buttons": {
+					"mint": "开始铸造"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "铸造中",
+				"subActionDescription": "正在抵押"
+			},
+			"complete": {
+				"title": "铸造正在进行中"
+			}
+		},
+		"burn": {
+			"action": {
+				"title": "销毁",
+				"subtitle": "销毁 sUSD 来解锁您抵押的 SNX。这将增加您的抵押率，并减少您的债务，使您能转账未托管的 SNX。",
+				"instruction": "直接确认或手动输入您要销毁的数量：",
+				"transferrable": {
+					"title": "解锁的 SNX",
+					"button": "查看可解锁的 SNX"
+				},
+				"buttons": {
+					"burn": "开始销毁",
+					"waitingPeriod": "Burn synths unlocked in"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "销毁中",
+				"subActionDescription": "正在解锁"
+			},
+			"complete": {
+				"title": "销毁正在进行中"
+			}
+		},
+		"claim": {
+			"action": {
+				"title": "申领",
+				"subtitle": "如果您抵押了 SNX 并铸造了 sUSD，您就有资格获得两种奖励：SNX 新增代币奖励，和 Synthetix.Exchange 产生的 Synth 交易奖励",
+				"timeLeft": "Time left to claim",
+				"table": {
+					"title": "申领周期：",
+					"period": "周期",
+					"status": "申领状态",
+					"open": "开放申领",
+					"blocked": "停止"
+				},
+				"tradingRewards": "您的 Synth 交易奖励：",
+				"stakingRewards": "您的 SNX 新增代币奖励：",
+				"buttons": {
+					"claim": "开始申领",
+					"history": "申领记录"
+				},
+				"note": "如果7天内不领取，你的奖励将会被回收到手续费池。"
+			},
+			"confirmation": {
+				"actionDescription": "正在申领："
+			},
+			"complete": {
+				"title": "申领正在进行中"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
+			}
+		},
+		"trade": {
+			"action": {
+				"title": "交易",
+				"subtitle": "交易您的合成资产和 sUSD。使用 Synthetix.Exchange dApp 来交易所有 Synth 种类。",
+				"buttons": {
+					"trade": "开始交易",
+					"exchange": "打开 Synthetix.Exchange"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "正在交易：",
+				"subActionDescription": "您将收到："
+			},
+			"complete": {
+				"title": "交易正在进行中"
+			}
+		},
+		"send": {
+			"action": {
+				"title": "转帐",
+				"subtitle": "转移 ETH, SNX 或 Synths。",
+				"available": "可转账数量：",
+				"amountInstruction": "输入数量：",
+				"walletInstruction": "输入收款地址：",
+				"buttons": {
+					"send": "开始转帐"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "正在转账：",
+				"subActionDescription": "收款地址："
+			},
+			"complete": {
+				"title": "转账正在进行中"
+			}
+		}
+	},
+	"depot": {
+		"intro": {
+			"title": "仓库：",
+			"subtitle": "Synthetix.Exchange 将会把存在这里的 sUSD 卖出换成 ETH。您可以在排队中的任何时间取出您的 sUSD。最小存款为 50 sUSD。"
+		},
+		"table": {
+			"title": "最近活动:",
+			"type": "类型",
+			"activity": "活动",
+			"remaining": "剩余",
+			"amount": "数量",
+			"rate": "比率",
+			"timeDate": "时间 | 日期",
+			"details": "详情",
+			"deposit": "存款",
+			"soldByDepot": "已卖出"
+		},
+		"buttons": {
+			"available": "可用数量：",
+			"more": "查看更多",
+			"contract": "查看智能合约",
+			"deposit": "存款",
+			"withdraw": "取款"
+		},
+		"deposit": {
+			"action": {
+				"title": "存款",
+				"subtitle": "可用数量：",
+				"instruction": "输入存款数量：",
+				"buttons": {
+					"deposit": "开始存款",
+					"unlock": "Unlock"
+				}
+			},
+			"complete": {
+				"title": "存款正在进行"
+			},
+			"actionDescription": "正在存款："
+		},
+		"withdraw": {
+			"action": {
+				"title": "取款",
+				"subtitle": "可用数量：",
+				"buttons": {
+					"withdraw": "开始取款"
+				}
+			},
+			"complete": {
+				"title": "取款正在进行"
+			},
+			"actionDescription": "正在存款："
+		}
+	},
+	"escrow": {
+		"type": {
+			"staking": "正在抵押",
+			"token": "代币销售"
+		},
+		"buttons": {
+			"vest": "开始领取",
+			"viewTokenSale": "查看代币销售托管",
+			"viewRewards": "查看奖励托管"
+		},
+		"staking": {
+			"title": "领取您在抵押中的 SNX 新增代币奖励",
+			"subtitle": "如果您抵押 SNX 并铸造了 sUSD，您就有资格领取 SNX 新增代币奖励，托管 12 个月之后，您可以在这里领取。",
+			"total": "共计托管：",
+			"vested": "Total vested:",
+			"available": "Total available:",
+			"table": {
+				"none": "您没有托管的 SNX",
+				"title": "领取时间表",
+				"date": "领取日期",
+				"quantity": "数量"
+			}
+		},
+		"tokenSale": {
+			"title": "领取您在代币销售中托管的 SNX",
+			"subtitle": "如果您代币销售中的 SNX 仍在托管，您可以在这里领取。",
+			"total": "领取共计：",
+			"table": {
+				"title": "领取时间表",
+				"period": "领取周期",
+				"interval": "间隔",
+				"number": "间隔数量",
+				"months": "月",
+				"vested": "已领取",
+				"date": "领取日期",
+				"quantity": "数量",
+				"none": "您没有托管的 SNX"
+			}
+		},
+		"confirmation": {
+			"actionDescription": "正在领取："
+		},
+		"complete": {
+			"title": "领取正在进行",
+			"actionDescription": "正在领取："
+		}
+	},
+	"lpRewards": {
+		"intro": {
+			"title": "Please choose a pool",
+			"completed": "Completed"
+		},
+		"actions": {
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
+			},
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
+		},
+		"shared": {
+			"unlocked": {
+				"link": "See blog post",
+				"complete": "Transaction in progress!"
+			},
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
+			},
+			"buttons": {
+				"unlock": "unlock",
+				"goToContract": "Go to contract",
+				"stake": "Stake tokens",
+				"claim": "Claim rewards",
+				"unstake": "Unstake tokens",
+				"exit": "exit: claim & unstake",
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
+			}
+		}
+	},
+	"unipoolSETH": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
+		}
+	},
+	"curvepool": {
+		"title": "Curve Finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
+		}
+	},
+	"transactions": {
+		"filters": {
+			"type": "交易类型",
+			"date": "日期",
+			"amount": "金额"
+		},
+		"events": {
+			"issued": "已铸造",
+			"burned": "已销毁",
+			"exchanged": "已交易",
+			"deposit": "已存款",
+			"cleared": "已售出",
+			"withdrawl": "已取款",
+			"bought": "已购买",
+			"feesClaimed": "已申领的费用",
+			"sent": "已发送"
+		},
+		"buttons": {
+			"clearFilters": "取消过滤器"
+		},
+		"inputs": {
+			"from": "从：",
+			"to": "至："
+		}
+	},
+	"transactionSettings": {
+		"priceIndicator": "以太坊网络费用：",
+		"title": "设定 gas price",
+		"placeholder": "Add gas price (GWEI)",
+		"subtitle": "调整下方的 gas price (GWEI) 来设置交易速度。",
+		"minutes": "分钟",
+		"speed": {
+			"slow": "慢",
+			"average": "适中",
+			"fast": "快"
+		},
+		"button": {
+			"submit": "提交"
+		}
+	},
+	"transactionProcessing": {
+		"confirmation": {
+			"title": "请确认转账",
+			"subtitle": "请按照您 <1>walletType</1> 钱包上的提示来继续。",
+			"loading": "等待用户操作..."
+		},
+		"complete": {
+			"subtitle": "您的转账已经被广播到以太坊网络。您现在可以关闭这个窗口，转账将在后台完成。"
+		},
+		"error": {
+			"title": "什么事情不对劲...",
+			"subtitle": "错误代码:",
+			"type": {
+				"userDenied": "用户拒绝交易签名",
+				"generic": "错误"
+			}
+		}
+	},
+	"notification": {
+		"status": {
+			"pending": "转账正在进行",
+			"success": "转账完成",
+			"error": "发生错误..."
+		}
+	},
+	"button": {
+		"max": "全部",
+		"burnMax": "全部销毁",
+		"fixCRatio": "调整至目标抵押率",
+		"edit": "编辑",
+		"havingTrouble": "有问题？",
+		"whatIsSynthetix": "什么是 Synthetix?",
+		"previous": "上一页",
+		"next": "下一页",
+		"startOver": "重新再来",
+		"navigation": {
+			"cancel": "取消",
+			"back": "后退",
+			"close": "关闭",
+			"etherscan": "在 Etherscan 上查看",
+			"view": "查看",
+			"finish": "完成并返回",
+			"ok": "好"
+		}
+	},
+	"input": {
+		"list": {
+			"placeholder": "查找一个 Synth..."
+		},
+		"address": {
+			"placeholder": "e.g. 0x3b18a4..."
+		},
+		"error": {
+			"notEnoughToMint": "您现在无法铸造那么多 sUSD",
+			"gasEstimate": "预估 gas 失败",
+			"invalidAmount": "无效的数量",
+			"notEnoughToBurn": "您没有足够的 sUSD 来销毁。您可以在 dex.ag 上找到最优汇率以购买更多 sUSD。",
+			"balanceTooLow": "您的余额太低",
+			"lowerThanMinDeposit": "数量低于最低存款额"
+		}
+	},
+	"general": {
+		"noData": "无数据"
+	},
+	"network": {
+		"gas": "以太坊网络费用 (Gas):",
+		"tradingFee": "Synth 交易费用：",
+		"speed": "预计转账时间："
+	},
+	"maintenance": {
+		"title": "Mintr 正在升级，现在暂停服务。",
+		"subtitle": "抱歉给您带来不便，我们很快回来。"
+	},
+	"mobileLanding": {
+		"title": "Mintr 现在无法在手机和平板上使用。",
+		"subtitle": "我们期望在接下来几个月内上线一个移动版。"
+	},
+	"tooltip": {
+		"claim": "要申领奖励，您的抵押率不能低于目标抵押率超过 10%。如果您的抵押率不够，奖励领取将被关闭，直到您销毁足够的 sUSD。",
+		"debtBalance": "一开始，您的债务等于初始铸造的 sUSD 数量，接下来，债务将随着其他合成资产持有人的收益和损失而波动。当有人持有的合成资产增值时，那部分收益将按比例来自于所有 SNX 持有人的债务。要解锁所有您抵押的 SNX，您需要首先还清您的债务。",
+		"synthsBalance": "Synth 是在 Synthetix 的系统中的合成资产，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成资产。这个数字是此钱包中所有合成资产的价值总和。如果您希望把它们换回 sUSD，请点击交易按钮。",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
+	}
+}

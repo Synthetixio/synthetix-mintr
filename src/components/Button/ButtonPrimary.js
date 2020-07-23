@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { ButtonPrimaryLabel, ButtonPrimaryLabelMedium } from '../Typography';
 
-export const ButtonPrimary = ({ children, onClick, disabled, width, height }) => {
+export const ButtonPrimary = ({ children, onClick, disabled, width, height, ...rest }) => {
 	return (
-		<Button onClick={onClick} disabled={disabled} width={width} height={height}>
+		<Button onClick={onClick} disabled={disabled} width={width} height={height} {...rest}>
 			<ButtonPrimaryLabel>{children}</ButtonPrimaryLabel>
 		</Button>
 	);
@@ -27,12 +27,12 @@ const Button = styled.button`
 	cursor: pointer;
 	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
 	transition: all ease-in 0.1s;
-	&:hover:not(:disabled) {
-		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
-	}
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
+	}
+	&:hover:not(:disabled) {
+		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
 	}
 `;
 

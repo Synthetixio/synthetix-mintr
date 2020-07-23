@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -8,27 +7,31 @@ import { format } from 'date-fns';
 
 import { formatCurrency } from '../../helpers/formatters';
 
-import { ButtonTertiaryLabel, InputTextSmall, InputLabelSmall, DataLarge } from '../Typography';
+import { ButtonTertiaryLabel, InputLabelSmall, DataLarge } from '../Typography';
 const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
 	const { t } = useTranslation();
 	const handleSelect = element => {
-		if (selected.includes(element.key)) {
-			return onSelect(selected.filter(s => s !== element.key));
+		if (selected.includes(element)) {
+			return onSelect(selected.filter(s => s !== element));
 		} else {
-			return onSelect([element.key, ...selected]);
+			return onSelect([element, ...selected]);
 		}
 	};
 	return (
 		<SelectContainer autoWidth>
 			<List>
-				{data.map(element => {
+				{data.map(event => {
 					return (
-						<ListElement onClick={() => handleSelect(element)}>
+						<ListElement key={`li-${event}`} onClick={() => handleSelect(event)}>
 							<ListElementInner>
-								<input type="checkbox" checked={selected.includes(element.key)}></input>
-								<ListElementIcon src={`/images/actions/${element.icon}`}></ListElementIcon>
+								<input
+									type="checkbox"
+									onChange={() => null}
+									checked={selected.includes(event)}
+								></input>
+								<ListElementIcon src={`/images/transactions/${event}.svg`}></ListElementIcon>
 								<ListElementLabel style={{ whiteSpace: 'nowrap' }}>
-									{t(element.label)}
+									{t(`transactions.events.${event}`)}
 								</ListElementLabel>
 							</ListElementInner>
 						</ListElement>
@@ -39,7 +42,7 @@ const DropdownSelect = ({ data = [], onSelect, selected = [] }) => {
 	);
 };
 
-const CalendarFilter = ({ data = [], onSelect, selected }) => {
+const CalendarFilter = ({ onSelect }) => {
 	return (
 		<SelectContainer autoWidth>
 			<Calendar
@@ -51,7 +54,7 @@ const CalendarFilter = ({ data = [], onSelect, selected }) => {
 	);
 };
 
-const RangeFilter = ({ data = [], onSelect, selected }) => {
+const RangeFilter = ({ onSelect, selected }) => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useState(selected);
 	let updateTimeout;
@@ -109,6 +112,8 @@ const Dropdown = ({ type, data, onSelect, selected }) => {
 			return <CalendarFilter {...props} />;
 		case 'range':
 			return <RangeFilter {...props} />;
+		default:
+			return null;
 	}
 };
 
@@ -138,16 +143,19 @@ const Select = ({ placeholder, type = 'select', data = null, onSelect, selected 
 const SelectedValue = ({ type, data, selected }) => {
 	let text;
 	switch (type) {
-		case 'select':
-			const elements = data.filter(d => selected.includes(d.key));
+		case 'select': {
+			const elements = data.filter(event => selected.includes(event));
 			return (
 				<span>
-					{elements.map(e => (
-						<ListElementIcon src={`/images/actions/${e.icon}`} key={e.label}></ListElementIcon>
+					{elements.map(event => (
+						<ListElementIcon
+							src={`/images/transactions/${event}.svg`}
+							key={event}
+						></ListElementIcon>
 					))}
 				</span>
 			);
-
+		}
 		case 'calendar':
 			text = `${format(new Date(selected.from), 'dd-MM-yy')} → ${format(
 				new Date(selected.to),
@@ -157,6 +165,8 @@ const SelectedValue = ({ type, data, selected }) => {
 		case 'range':
 			text = `${formatCurrency(selected.from)} → ${formatCurrency(selected.to)}`;
 			return <ButtonTertiaryLabel>{text}</ButtonTertiaryLabel>;
+		default:
+			return null;
 	}
 };
 
@@ -214,7 +224,7 @@ const ListElement = styled.li`
 	}
 `;
 
-const ListElementInner = styled.li`
+const ListElementInner = styled.div`
 	display: flex;
 	align-items: center;
 `;
@@ -235,8 +245,6 @@ const RangeContainer = styled.div`
 	padding: 16px 24px;
 `;
 
-const Label = styled.label``;
-
 const Input = styled.input`
 	height: 32px;
 	margin: 8px 0 25px 0;
@@ -246,10 +254,10 @@ const Input = styled.input`
 	background-color: ${props => props.theme.colorStyles.panels};
 	color: ${props => props.theme.colorStyles.heading};
 	width: 100%;
-	-moz-appearance: textfield;
+	appearance: textfield;
 	&::-webkit-outer-spin-button,
 	&::-webkit-inner-spin-button {
-		-webkit-appearance: none;
+		appearance: none;
 		margin: 0;
 	}
 `;

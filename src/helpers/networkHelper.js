@@ -1,5 +1,9 @@
 import throttle from 'lodash/throttle';
-export const GWEI_UNIT = 1000000000;
+import invert from 'lodash/invert';
+
+import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
+import { URLS } from '../constants/urls';
+import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
 
 export const SUPPORTED_NETWORKS = {
 	1: 'MAINNET',
@@ -7,6 +11,8 @@ export const SUPPORTED_NETWORKS = {
 	4: 'RINKEBY',
 	42: 'KOVAN',
 };
+
+export const SUPPORTED_NETWORKS_MAP = invert(SUPPORTED_NETWORKS);
 
 export const DEFAULT_GAS_LIMIT = {
 	mint: 2200000,
@@ -27,50 +33,64 @@ export const INFURA_JSON_RPC_URLS = {
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
-export const SUPPORTED_WALLETS = ['Metamask', 'Trezor', 'Ledger', 'Coinbase'];
+export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
+
+export const SUPPORTED_WALLETS_MAP = {
+	METAMASK: 'Metamask',
+	TREZOR: 'Trezor',
+	LEDGER: 'Ledger',
+	COINBASE: 'Coinbase',
+	WALLET_CONNECT: 'WalletConnect',
+	PORTIS: 'Portis',
+};
+
+export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const hasWeb3 = () => {
 	return window.web3;
 };
 
 export async function getEthereumNetwork() {
-	return await new Promise(function(resolve, reject) {
-		if (!window.web3) resolve({ name: 'MAINNET', networkId: '1' });
-		window.web3.version.getNetwork((err, networkId) => {
-			if (err) {
-				reject(err);
-			} else {
-				const name = SUPPORTED_NETWORKS[networkId];
-				resolve({ name, networkId });
-			}
-		});
-	});
+	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
+	let networkId = 1;
+	try {
+		if (window.web3?.eth?.net) {
+			networkId = await window.web3.eth.net.getId();
+			return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
+		} else if (window.web3?.version?.network) {
+			networkId = Number(window.web3.version.network);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		} else if (window.ethereum?.networkVersion) {
+			networkId = Number(window.ethereum?.networkVersion);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		}
+		return { name: 'MAINNET', networkId };
+	} catch (e) {
+		console.log(e);
+		return { name: 'MAINNET', networkId };
+	}
 }
 
-export const getNetworkInfo = async () => {
-	const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+export const getNetworkSpeeds = async () => {
+	const result = await fetch(URLS.ETH_GAS_STATION);
 	const networkInfo = await result.json();
 	return {
-		slow: {
-			gwei: networkInfo.safeLow / 10,
+		[NETWORK_SPEEDS_TO_KEY.SLOW]: {
+			price: networkInfo.safeLow / 10,
 			time: networkInfo.safeLowWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.safeLow / 10, gasLimit, ethPrice),
 		},
-		average: {
-			gwei: networkInfo.average / 10,
+		[NETWORK_SPEEDS_TO_KEY.AVERAGE]: {
+			price: networkInfo.average / 10,
 			time: networkInfo.avgWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.average / 10, gasLimit, ethPrice),
 		},
-		fast: {
-			gwei: networkInfo.fast / 10,
+		[NETWORK_SPEEDS_TO_KEY.FAST]: {
+			price: networkInfo.fast / 10,
 			time: networkInfo.fastWait,
-			getPrice: (ethPrice, gasLimit) =>
-				getTransactionPrice(networkInfo.fast / 10, gasLimit, ethPrice),
 		},
 	};
 };
+
+export const formatGasPrice = gasPrice => gasPrice * GWEI_UNIT;
 
 export const getTransactionPrice = (gasPrice, gasLimit, ethPrice) => {
 	if (!gasPrice || !gasLimit) return 0;
@@ -88,3 +108,8 @@ export function onMetamaskNetworkChange(cb) {
 	const listener = throttle(cb, 1000);
 	window.ethereum.on('networkChanged', listener);
 }
+
+export const addBufferToGasLimit = gasLimit =>
+	Math.round(Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE));
+
+export const isMainNet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.MAINNET);

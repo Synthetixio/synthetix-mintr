@@ -2,30 +2,17 @@ import React, { useRef, useState, useLayoutEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 import ScreenSliderContext from './Context';
+import useComponentSize from '@rehooks/component-size';
 
-const useSizeElement = () => {
-	const elementRef = useRef(null);
-	const [width, setWidth] = useState(0);
-
-	useLayoutEffect(() => {
-		setWidth(elementRef.current.clientWidth);
-	}, []);
-
-	return { width, elementRef };
-};
-
-const useSliding = () => {
+const useSliding = containerWidth => {
 	const containerRef = useRef(null);
-	const [containerWidth, setContainerWidth] = useState(0);
 	const [distance, setDistance] = useState(0);
 	const [hasLoaded, setHasLoading] = useState(false);
 
 	useLayoutEffect(() => {
-		const containerWidth = containerRef.current.clientWidth;
-		setContainerWidth(containerWidth);
 		setDistance(-containerWidth);
 		setHasLoading(true);
-	}, []);
+	}, [containerWidth]);
 
 	const handlePrev = count => {
 		setDistance(distance + count * containerWidth);
@@ -49,11 +36,10 @@ const useSliding = () => {
 };
 
 const ScreenSlider = ({ children, isVisible }) => {
-	const { width, elementRef } = useSizeElement();
-	const { slideProps, containerRef, handleNext, handlePrev, hasLoaded } = useSliding(
-		width,
-		React.Children.count(children)
-	);
+	const elementRef = useRef(null);
+	const size = useComponentSize(elementRef);
+
+	const { slideProps, containerRef, handleNext, handlePrev, hasLoaded } = useSliding(size.width);
 	const contextValue = {
 		elementRef,
 		handleNext,

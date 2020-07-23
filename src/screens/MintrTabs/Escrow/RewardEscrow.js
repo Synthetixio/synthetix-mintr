@@ -1,176 +1,143 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useCallback } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { format } from 'date-fns';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
-import { formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
+import { bigNumberFormatter } from '../../../helpers/formatters';
 
-import Spinner from '../../../components/Spinner';
-import { TableHeader, TableWrapper, Table, TBody, TR, TD } from '../../../components/ScheduleTable';
-import {
-	PageTitle,
-	PLarge,
-	H5,
-	DataLarge,
-	TableHeaderMedium,
-	DataHeaderLarge,
-	DataMega,
-} from '../../../components/Typography';
+import { PageTitle, PLarge } from '../../../components/Typography';
 import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
 
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
+
 import ErrorMessage from '../../../components/ErrorMessage';
 import EscrowActions from '../../EscrowActions';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
+import ScheduleTable from './ScheduleTable';
 
-const useGetGasEstimateError = () => {
-	const { dispatch } = useContext(Store);
-	const [error, setError] = useState(null);
-	useEffect(() => {
-		const getGasEstimate = async () => {
-			setError(null);
-			fetchingGasLimit(dispatch);
-			let gasEstimate;
-			try {
-				gasEstimate = await snxJSConnector.snxJS.RewardEscrow.contract.estimate.vest();
-			} catch (e) {
-				console.log(e);
-				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
-				setError(errorMessage);
-			}
-			updateGasLimit(Number(gasEstimate), dispatch);
-		};
-		getGasEstimate();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-	return error;
-};
-
-const useGetVestingData = walletAddress => {
-	const [data, setData] = useState({});
-	useEffect(() => {
-		const getVestingData = async () => {
-			try {
-				let schedule = [];
-				let total = 0;
-				let canVest = false;
-				const currentUnixTime = new Date().getTime();
-				setData({ loading: true });
-				const result = await snxJSConnector.snxJS.RewardEscrow.checkAccountSchedule(walletAddress);
-				for (let i = 0; i < result.length; i += 2) {
-					const quantity = Number(bigNumberFormatter(result[i + 1]));
-					total += Number(quantity);
-					if (!result[i].isZero() && quantity) {
-						if (result[i] * 1000 < currentUnixTime) {
-							canVest = true;
-						}
-						schedule.push({
-							date: new Date(Number(result[i]) * 1000),
-							quantity,
-						});
-					}
-				}
-				setData({ schedule, total, loading: false, canVest });
-			} catch (e) {
-				console.log(e);
-				setData({ loading: false });
-			}
-		};
-		getVestingData();
-	}, [walletAddress]);
-	return data;
-};
-
-const VestingTable = ({ data }) => {
+const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 	const { t } = useTranslation();
-	if (data.loading) {
-		return (
-			<TablePlaceholder>
-				<Spinner />
-			</TablePlaceholder>
-		);
-	}
-
-	if (!data.total || data.total.length === 0) {
-		return (
-			<TablePlaceholder>
-				<PLarge>{t('escrow.staking.table.none')}</PLarge>
-			</TablePlaceholder>
-		);
-	}
-	return (
-		<ScheduleWrapper>
-			<H5>{t('escrow.staking.table.title')}</H5>
-			<TableHeader>
-				<TableHeaderMedium>{t('escrow.staking.table.date')}</TableHeaderMedium>
-				<TableHeaderMedium>SNX {t('escrow.staking.table.quantity')}</TableHeaderMedium>
-			</TableHeader>
-			<TableWrapper>
-				<Table cellSpacing="0">
-					<TBody>
-						{data && data.schedule
-							? data.schedule.map((row, i) => {
-									return (
-										<TR key={i}>
-											<TD>
-												<DataLarge>{format(row.date, 'dd MMMM yyyy')}</DataLarge>
-											</TD>
-											<TD>
-												<DataLarge>{formatCurrency(row.quantity)}</DataLarge>
-											</TD>
-										</TR>
-									);
-							  })
-							: null}
-					</TBody>
-				</Table>
-			</TableWrapper>
-			<RightBlock>
-				<DataBlock>
-					<DataHeaderLarge style={{ textTransform: 'uppercase' }}>
-						{t('escrow.staking.total')}
-					</DataHeaderLarge>
-					<DataMegaEscrow>
-						{data && data.total ? formatCurrency(data.total) : '--'} SNX
-					</DataMegaEscrow>
-				</DataBlock>
-			</RightBlock>
-		</ScheduleWrapper>
-	);
-};
-
-const RewardEscrow = ({ t, onPageChange }) => {
 	const [currentScenario, setCurrentScenario] = useState(null);
-	const {
-		state: {
-			wallet: { currentWallet },
-		},
-	} = useContext(Store);
-	const vestingData = useGetVestingData(currentWallet);
-	const hasNoVestingSchedule = !vestingData.total || vestingData.total.length === 0;
-	const gasEstimateError = useGetGasEstimateError();
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [vestingData, setVestingData] = useState({});
+	const [gasLimit, setGasLimit] = useState(0);
+	const [error, setError] = useState(null);
+
+	const hasNoVestingSchedule = !vestingData.totalEscrowed || vestingData.totalEscrowed.length === 0;
+
+	const fetchVestingData = useCallback(async () => {
+		if (!currentWallet) return;
+		const {
+			snxJS: { RewardEscrow },
+		} = snxJSConnector;
+		try {
+			let schedule = [];
+
+			let canVest = 0;
+			const currentUnixTime = new Date().getTime();
+
+			setVestingData({ loading: true });
+
+			const [accountSchedule, totalEscrowed, totalVested] = await Promise.all([
+				RewardEscrow.checkAccountSchedule(currentWallet),
+				RewardEscrow.totalEscrowedAccountBalance(currentWallet),
+				RewardEscrow.totalVestedAccountBalance(currentWallet),
+			]);
+			for (let i = 0; i < accountSchedule.length; i += 2) {
+				const quantity = Number(bigNumberFormatter(accountSchedule[i + 1]));
+
+				if (!accountSchedule[i].isZero() && quantity) {
+					if (accountSchedule[i] * 1000 < currentUnixTime) {
+						canVest += quantity;
+					}
+					schedule.push({
+						date: new Date(Number(accountSchedule[i]) * 1000),
+						quantity,
+					});
+				}
+			}
+
+			setVestingData({
+				schedule,
+				loading: false,
+				canVest,
+				totalEscrowed: bigNumberFormatter(totalEscrowed),
+				totalVested: bigNumberFormatter(totalVested),
+			});
+		} catch (e) {
+			console.log(e);
+			setVestingData({ loading: false });
+		}
+	}, [currentWallet]);
+
+	const fetchGasLimit = useCallback(async () => {
+		setError(null);
+		setFetchingGasLimit(true);
+		const {
+			snxJS: { RewardEscrow },
+		} = snxJSConnector;
+		try {
+			const gasEstimate = await RewardEscrow.contract.estimate.vest();
+			setFetchingGasLimit(false);
+			setGasLimit(addBufferToGasLimit(gasEstimate));
+		} catch (e) {
+			console.log(e);
+			setFetchingGasLimit(false);
+			const errorMessage = (e && e.message) || 'error.type.gasEstimate';
+			setError(errorMessage);
+		}
+	}, []);
+
+	useEffect(() => {
+		fetchVestingData();
+		fetchGasLimit();
+	}, [fetchVestingData, fetchGasLimit]);
+
+	useEffect(() => {
+		if (!currentWallet) return;
+		const {
+			snxJS: { RewardEscrow },
+		} = snxJSConnector;
+
+		RewardEscrow.contract.on('Vested', beneficiary => {
+			if (currentWallet === beneficiary) {
+				fetchVestingData();
+				fetchGasLimit();
+			}
+		});
+		return () => {
+			if (snxJSConnector.initialized) {
+				RewardEscrow.contract.removeAllListeners('Vested');
+			}
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentWallet]);
 
 	return (
 		<Fragment>
 			<EscrowActions
 				action={currentScenario}
 				onDestroy={() => setCurrentScenario(null)}
-				vestAmount={!hasNoVestingSchedule ? vestingData.total : 0}
+				vestAmount={vestingData.canVest}
+				gasLimit={gasLimit}
+				isFetchingGasLimit={isFetchingGasLimit}
 			/>
 
 			<PageTitle>{t('escrow.staking.title')}</PageTitle>
 			<PLarge>{t('escrow.staking.subtitle')}</PLarge>
-			<VestingTable data={vestingData} />
-			{!hasNoVestingSchedule ? <TransactionPriceIndicator /> : null}
-			<ErrorMessage message={t(gasEstimateError)} />
+			<ScheduleTable {...vestingData} />
+
+			<TransactionPriceIndicator gasLimit={gasLimit} isFetchingGasLimit={isFetchingGasLimit} />
+
+			<ErrorMessage message={t(error)} />
 			<ButtonRow>
 				<ButtonSecondary width="48%" onClick={() => onPageChange('tokenSaleVesting')}>
 					{t('escrow.buttons.viewTokenSale')}
 				</ButtonSecondary>
 				<ButtonPrimary
-					disabled={hasNoVestingSchedule || gasEstimateError || !vestingData.canVest}
+					disabled={hasNoVestingSchedule || error || !vestingData.canVest}
 					onClick={() => setCurrentScenario('rewardsVesting')}
 					width="48%"
 				>
@@ -181,45 +148,17 @@ const RewardEscrow = ({ t, onPageChange }) => {
 	);
 };
 
-const ScheduleWrapper = styled.div`
-	width: 100%;
-	margin-top: 50px;
-`;
-
-const RightBlock = styled.div`
+const ButtonRow = styled.div`
 	margin-top: 40px;
 	display: flex;
-	justify-content: flex-end;
-	width: 100%;
-`;
-
-const TablePlaceholder = styled.div`
-	height: 650px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`;
-
-const DataBlock = styled.div`
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	border-radius: 2px;
-	width: 338px;
-	height: 88px;
-	padding: 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-direction: column;
-`;
-
-const DataMegaEscrow = styled(DataMega)`
-	color: ${props => props.theme.colorStyles.escrowNumberBig};
-`;
-
-const ButtonRow = styled.div`
-	display: flex;
 	width: 100%;
 	justify-content: space-between;
 `;
 
-export default withTranslation()(RewardEscrow);
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RewardEscrow);

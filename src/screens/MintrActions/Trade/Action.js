@@ -8,6 +8,7 @@ import { ButtonPrimary, ButtonTertiary, ButtonMax } from '../../../components/Bu
 import { PLarge, H1, Subtext } from '../../../components/Typography';
 import Input from '../../../components/Input';
 import ErrorMessage from '../../../components/ErrorMessage';
+import { secondsToTime } from '../../../helpers/formatters';
 
 const Action = ({
 	t,
@@ -22,6 +23,10 @@ const Action = ({
 	setQuoteAmount,
 	isFetchingGasLimit,
 	gasEstimateError,
+	waitingPeriod,
+	onWaitingPeriodCheck,
+	gasLimit,
+	feeRate,
 }) => {
 	const onBaseAmountChange = amount => {
 		setBaseAmount(amount);
@@ -42,46 +47,66 @@ const Action = ({
 						{t('mintrActions.trade.action.buttons.exchange')}↗
 					</ButtonTertiary>
 				</Navigation>
-				<Top>
-					<Intro>
-						<ActionImage src="/images/actions/trade.svg" big />
-						<H1>{t('mintrActions.trade.action.title')}</H1>
-						<PLarge>{t('mintrActions.trade.action.subtitle')}</PLarge>
-					</Intro>
-					<Form>
-						<Input
-							isDisabled={!synthBalances}
-							synths={synthBalances}
-							onSynthChange={onBaseSynthChange}
-							value={baseAmount}
-							onChange={e => onBaseAmountChange(e.target.value)}
-							placeholder="0.00"
-							currentSynth={baseSynth}
-							rightComponent={<ButtonMax onClick={() => onBaseAmountChange(baseSynth.balance)} />}
+				<Inner>
+					<Top>
+						<Intro>
+							<ActionImage src="/images/actions/trade.svg" big />
+							<H1>{t('mintrActions.trade.action.title')}</H1>
+							<PLarge>{t('mintrActions.trade.action.subtitle')}</PLarge>
+						</Intro>
+						<Form>
+							<Input
+								isDisabled={!synthBalances}
+								synths={synthBalances}
+								onSynthChange={onBaseSynthChange}
+								value={baseAmount}
+								onChange={e => onBaseAmountChange(e.target.value)}
+								placeholder="0.00"
+								currentSynth={baseSynth}
+								rightComponent={<ButtonMax onClick={() => onBaseAmountChange(baseSynth.balance)} />}
+							/>
+							<ErrorMessage message={gasEstimateError} />
+							<PLarge>↓</PLarge>
+							<Input
+								isDisabled={!synthBalances}
+								singleSynth={'sUSD'}
+								placeholder="0.00"
+								value={quoteAmount}
+								onChange={e => onQuoteAmountChange(e.target.value)}
+							/>
+						</Form>
+					</Top>
+					<Bottom>
+						<Subtext>
+							{t('network.tradingFee')} {feeRate}%
+						</Subtext>
+						{/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
+						<TransactionPriceIndicator
+							isFetchingGasLimit={isFetchingGasLimit}
+							gasLimit={gasLimit}
+							style={{ margin: '8px 0' }}
 						/>
-						<ErrorMessage message={gasEstimateError} />
-						<PLarge>↓</PLarge>
-						<Input
-							isDisabled={!synthBalances}
-							singleSynth={'sUSD'}
-							placeholder="0.00"
-							value={quoteAmount}
-							onChange={e => onQuoteAmountChange(e.target.value)}
-						/>
-					</Form>
-				</Top>
-				<Bottom>
-					<Subtext>{t('network.tradingFee')} 0.5%</Subtext>
-					{/* <Subtext>RATE: 1.00 sUSD = 0.00004 sBTC </Subtext> */}
-					<TransactionPriceIndicator />
-					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError}
-						onClick={() => onTrade(baseAmount, quoteAmount)}
-						margin="auto"
-					>
-						{t('mintrActions.trade.action.buttons.trade')}
-					</ButtonPrimary>
-				</Bottom>
+						{waitingPeriod ? (
+							<RetryButtonWrapper>
+								<ButtonPrimary onClick={onWaitingPeriodCheck} margin="auto">
+									Retry
+								</ButtonPrimary>
+								<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
+									There is a waiting period after completing a trade. Please wait approximately{' '}
+									{secondsToTime(waitingPeriod)} before attempting to trade Synths.
+								</Subtext>
+							</RetryButtonWrapper>
+						) : (
+							<ButtonPrimary
+								disabled={isFetchingGasLimit || gasEstimateError}
+								onClick={onTrade}
+								margin="auto"
+							>
+								{t('mintrActions.trade.action.buttons.trade')}
+							</ButtonPrimary>
+						)}
+					</Bottom>
+				</Inner>
 			</Container>
 		</SlidePage>
 	);
@@ -99,11 +124,14 @@ const Container = styled.div`
 	box-shadow: 0px 5px 10px 5px ${props => props.theme.colorStyles.shadow1};
 	margin-bottom: 20px;
 	padding: 0 64px;
+`;
+
+const Inner = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	justify-content: space-around;
+	justify-content: center;
 `;
 
 const Top = styled.div`
@@ -134,11 +162,12 @@ const ActionImage = styled.img`
 `;
 
 const Form = styled.div`
-	margin: 0px 0px 24px 0px;
-	height: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	margin: 0px auto 24px auto;
+	width: 400px;
+`;
+
+const RetryButtonWrapper = styled.div`
+	position: relative;
 `;
 
 export default withTranslation()(Action);

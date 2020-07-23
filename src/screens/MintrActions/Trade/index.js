@@ -1,18 +1,20 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { Store } from '../../../store';
+import { addBufferToGasLimit } from '../../../helpers/networkHelper';
+
 import { SliderContext } from '../../../components/ScreenSlider';
 import { createTransaction } from '../../../ducks/transactions';
-import { updateGasLimit, fetchingGasLimit } from '../../../ducks/network';
+import { getCurrentGasPrice } from '../../../ducks/network';
+import { getWalletDetails } from '../../../ducks/wallet';
 
 import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../helpers/formatters';
 
-import { GWEI_UNIT } from '../../../helpers/networkHelper';
 import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
 
@@ -66,8 +68,14 @@ const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 	return data;
 };
 
-const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
-	const { dispatch } = useContext(Store);
+const useGetGasEstimate = (
+	baseSynth,
+	baseAmount,
+	currentWallet,
+	waitingPeriod,
+	setFetchingGasLimit,
+	setGasLimit
+) => {
 	const [error, setError] = useState(null);
 	const { t } = useTranslation();
 	useEffect(() => {
@@ -76,8 +84,9 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 			setError(null);
 			let gasEstimate;
 			try {
-				fetchingGasLimit(dispatch);
+				setFetchingGasLimit(true);
 				if (!Number(baseAmount)) throw new Error('input.error.invalidAmount');
+				if (waitingPeriod) throw new Error(`Waiting period for ${baseSynth.name} is still ongoing`);
 				const amountToExchange =
 					baseAmount === baseSynth.balance
 						? baseSynth.rawBalance
@@ -85,39 +94,80 @@ const useGetGasEstimate = (baseSynth, baseAmount, currentWallet) => {
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.exchange(
 					bytesFormatter(baseSynth.name),
 					amountToExchange,
-					bytesFormatter('sUSD'),
-					currentWallet
+					bytesFormatter('sUSD')
 				);
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setError(t(errorMessage));
 			}
-			updateGasLimit(Number(gasEstimate), dispatch);
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [baseSynth, baseAmount, currentWallet]);
+	}, [baseSynth, baseAmount, currentWallet, waitingPeriod]);
 	return error;
 };
 
-const Trade = ({ onDestroy }) => {
+const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [baseSynth, setBaseSynth] = useState(null);
 	const [baseAmount, setBaseAmount] = useState('');
 	const [quoteAmount, setQuoteAmount] = useState('');
+	const [feeRate, setFeeRate] = useState(0);
+	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const {
-		state: {
-			wallet: { currentWallet, walletType, networkName },
-			network: {
-				settings: { gasPrice, gasLimit, isFetchingGasLimit },
-			},
-		},
-		dispatch,
-	} = useContext(Store);
+	const { currentWallet, walletType, networkName } = walletDetails;
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+
 	const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
-	const gasEstimateError = useGetGasEstimate(baseSynth, baseAmount, currentWallet);
+	const gasEstimateError = useGetGasEstimate(
+		baseSynth,
+		baseAmount,
+		currentWallet,
+		waitingPeriod,
+		setFetchingGasLimit,
+		setGasLimit
+	);
+
+	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
+		if (!baseSynth || !baseAmount) return;
+		try {
+			const maxSecsLeftInWaitingPeriod = await snxJSConnector.snxJS.Exchanger.maxSecsLeftInWaitingPeriod(
+				currentWallet,
+				bytesFormatter(baseSynth.name)
+			);
+			setWaitingPeriod(Number(maxSecsLeftInWaitingPeriod));
+		} catch (e) {
+			console.log(e);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [baseSynth, baseAmount]);
+
+	useEffect(() => {
+		getMaxSecsLeftInWaitingPeriod();
+	}, [getMaxSecsLeftInWaitingPeriod]);
+
+	useEffect(() => {
+		const getFeeRateForExchange = async () => {
+			if (!baseSynth) return;
+			try {
+				const {
+					snxJS: { Exchanger },
+				} = snxJSConnector;
+				const feeRateForExchange = await Exchanger.feeRateForExchange(
+					bytesFormatter(baseSynth.name),
+					bytesFormatter('sUSD')
+				);
+				setFeeRate(100 * bigNumberFormatter(feeRateForExchange));
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getFeeRateForExchange();
+	}, [baseSynth]);
 
 	const onTrade = async () => {
 		try {
@@ -130,25 +180,22 @@ const Trade = ({ onDestroy }) => {
 				bytesFormatter(baseSynth.name),
 				amountToExchange,
 				bytesFormatter('sUSD'),
-				currentWallet,
 				{
-					gasPrice: gasPrice * GWEI_UNIT,
+					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				}
 			);
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction(
-					{
-						hash: transaction.hash,
-						status: 'pending',
-						info: `Exchanging ${formatCurrency(baseAmount, 3)} ${
-							baseSynth.name
-						} to ${formatCurrency(quoteAmount, 3)} sUSD`,
-						hasNotification: true,
-					},
-					dispatch
-				);
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Exchanging ${formatCurrency(baseAmount, 3)} ${baseSynth.name} to ${formatCurrency(
+						quoteAmount,
+						3
+					)} sUSD`,
+					hasNotification: true,
+				});
 				handleNext(2);
 			}
 		} catch (e) {
@@ -177,7 +224,11 @@ const Trade = ({ onDestroy }) => {
 		...transactionInfo,
 		onBaseSynthChange: synth => setBaseSynth(synth),
 		isFetchingGasLimit,
+		gasLimit,
 		gasEstimateError,
+		waitingPeriod,
+		onWaitingPeriodCheck: () => getMaxSecsLeftInWaitingPeriod(),
+		feeRate,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
@@ -185,4 +236,13 @@ const Trade = ({ onDestroy }) => {
 	));
 };
 
-export default Trade;
+const mapStateToProps = state => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+});
+
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Trade);
