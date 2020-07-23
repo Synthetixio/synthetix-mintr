@@ -15,7 +15,7 @@
 			},
 			"howStakeSnx": {
 				"title": "SNX 抵押人需要做什麽？",
-				"description": "所有合成資產都由抵押的 SNX 來支撐其價值，現在的抵押率為 800%。SNX 持有者需要自行管理自己的抵押率（包括銷毀合成資產以增加抵押率，或鑄造新的合成資產以降低抵押率），使其超過750%。做到這些，持有人即可領取每周獎勵。"
+				"description": "所有合成資產都由抵押的 SNX 來支撐其價值，現在的抵押率為 750%。SNX 持有者需要自行管理自己的抵押率（包括銷毀合成資產以增加抵押率，或鑄造新的合成資產以降低抵押率），使其超過750%。做到這些，持有人即可領取每周獎勵。"
 			},
 			"risks": {
 				"title": "有什麽風險？",
@@ -38,6 +38,10 @@
 				"title": "錯誤",
 				"subtitle": "Mintr 不能存取您的錢包。",
 				"retry": "重試"
+			},
+			"addWallet": {
+				"placeholder": "Wallet address",
+				"buttonText": "Add"
 			}
 		}
 	},
@@ -73,7 +77,8 @@
 		"buttons": {
 			"exchange": "前往 Synthetix.Exchange",
 			"synthetixDashboard": "查看 Synthetix Dashboard",
-			"refresh": "重新整理"
+			"refresh": "重新整理",
+			"delegate": "Delegate"
 		}
 	},
 	"mainNavigation": {
@@ -81,7 +86,8 @@
 			"home": "主頁",
 			"depot": "倉庫",
 			"transactionsHistory": "交易記錄",
-			"escrow": "托管"
+			"escrow": "托管",
+			"lpRewards": "LP rewards"
 		}
 	},
 	"home": {
@@ -108,6 +114,10 @@
 			"transfer": {
 				"title": "轉帳",
 				"description": "SNX，合成資產，或 ETH 轉帳"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
 			}
 		}
 	},
@@ -117,6 +127,8 @@
 				"title": "鑄造",
 				"subtitle": "抵押您的 SNX 來鑄造 sUSD。抵押產生的抵押率和債務，將使您賺取獎勵。",
 				"instruction": "直接確認或手動輸入您要鑄造的數量：",
+				"staking": "Staking",
+				"estimateCRatio": "Estimated C-Ratio",
 				"buttons": {
 					"mint": "開始鑄造"
 				}
@@ -154,6 +166,7 @@
 			"action": {
 				"title": "申領",
 				"subtitle": "如果您抵押了 SNX 並鑄造了 sUSD，您就有資格獲得兩種獎勵：SNX 抵押獎勵，和 Synthetix.Exchange 產生的 Synth 交易獎勵",
+				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "申領周期：",
 					"period": "周期",
@@ -174,6 +187,25 @@
 			},
 			"complete": {
 				"title": "申領正在進行中"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {
@@ -243,7 +275,8 @@
 				"subtitle": "可用數量：",
 				"instruction": "輸入存款數量：",
 				"buttons": {
-					"deposit": "開始存款"
+					"deposit": "開始存款",
+					"unlock": "Unlock"
 				}
 			},
 			"complete": {
@@ -279,6 +312,8 @@
 			"title": "領取您在抵押中的 SNX 抵押獎勵",
 			"subtitle": "如果您抵押 SNX 並鑄造了 sUSD，您就有資格領取 SNX 抵押獎勵，托管 12 個月之後，您可以在這裏領取。",
 			"total": "共計托管：",
+			"vested": "Total vested:",
+			"available": "Total available:",
 			"table": {
 				"none": "您沒有托管的 SNX",
 				"title": "領取時間表",
@@ -310,6 +345,139 @@
 			"actionDescription": "正在領取："
 		}
 	},
+	"lpRewards": {
+		"intro": {
+			"title": "Please choose a pool",
+			"completed": "Completed"
+		},
+		"actions": {
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
+			},
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
+		},
+		"shared": {
+			"unlocked": {
+				"link": "See blog post",
+				"complete": "Transaction in progress!"
+			},
+			"data": {
+				"balance": "Your balance",
+				"staked": "Currently staked",
+				"rewardsAvailable": "Rewards available"
+			},
+			"actions": {
+				"staking": "Staking",
+				"claiming": "Claiming",
+				"unstaking": "Unstaking",
+				"exiting": "Unstaking & claiming",
+				"settling": "Settling"
+			},
+			"buttons": {
+				"unlock": "unlock",
+				"goToContract": "Go to contract",
+				"stake": "Stake tokens",
+				"claim": "Claim rewards",
+				"unstake": "Unstake tokens",
+				"exit": "exit: claim & unstake",
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
+			},
+			"info": {
+				"weeklyRewards": "Weekly rewards"
+			}
+		}
+	},
+	"unipoolSETH": {
+		"title": "Uniswap sETH LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
+		}
+	},
+	"curvepool": {
+		"title": "Curve Finance sUSD LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
+		}
+	},
 	"transactions": {
 		"filters": {
 			"type": "交易類型",
@@ -338,6 +506,7 @@
 	"transactionSettings": {
 		"priceIndicator": "以太坊網絡費用：",
 		"title": "設定 gas price",
+		"placeholder": "Add gas price (GWEI)",
 		"subtitle": "調整下方的 gas price (GWEI) 來設置交易速度。",
 		"minutes": "分鐘",
 		"speed": {
@@ -398,6 +567,9 @@
 		"list": {
 			"placeholder": "查找一個 Synth..."
 		},
+		"address": {
+			"placeholder": "e.g. 0x3b18a4..."
+		},
 		"error": {
 			"notEnoughToMint": "您現在無法鑄造那麽多 sUSD",
 			"gasEstimate": "預估 gas 失敗",
@@ -426,6 +598,8 @@
 	"tooltip": {
 		"claim": "要申領獎勵，您的抵押率不能低於目標抵押率 1%。如果您的抵押率不夠，獎勵領取將被關閉，直到您銷毀足夠的 sUSD。",
 		"debtBalance": "一開始，您的債務等於初始鑄造的 sUSD 數量，接下來，債務將隨著其他合成資產持有人的收益和損失而波動。當有人持有的合成資產增值時，那部分收益將按比例分佈至所有 SNX 持有人的債務。要解鎖所有您抵押的 SNX，您需要首先還清您的債務。",
-		"synthsBalance": "Synth 是在 Synthetix 的系統中的合成資產，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成資產。這個數字是此錢包中所有合成資產的價值總和。如果您希望把它們換回 sUSD，請點擊交易按鈕。"
+		"synthsBalance": "Synth 是在 Synthetix 的系統中的合成資產，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成資產。這個數字是此錢包中所有合成資產的價值總和。如果您希望把它們換回 sUSD，請點擊交易按鈕。",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}
 }

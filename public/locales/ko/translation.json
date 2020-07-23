@@ -15,7 +15,7 @@
 			},
 			"howStakeSnx": {
 				"title": "SNX를 스테이킹하려면 어떻게 해야하나요?",
-				"description": "모든 신스(인공 자산)은 담보로써 스테이킹된 SNX를 필요로 하며, 담보 비율은 800% 입니다. SNX를 스테이킹한 이들은 담보 비율이 이보다 높게 유지될 수 있도록 관리해야하며, 담보 비율을 높이기 위해선, 자신이 발행한 신스(인공 자산)들을 소각시킴으로써 가능하며, 담보 비율을 낮추기 위해선 신스(인공 자산)들을 발행하여 낮출 수 있습니다. 이를 통해 담보 비율이 올바르게 유지되면, 주 마다 보상을 얻을 수 있습니다."
+				"description": "모든 신스(인공 자산)은 담보로써 스테이킹된 SNX를 필요로 하며, 담보 비율은 750% 입니다. SNX를 스테이킹한 이들은 담보 비율이 이보다 높게 유지될 수 있도록 관리해야하며, 담보 비율을 높이기 위해선, 자신이 발행한 신스(인공 자산)들을 소각시킴으로써 가능하며, 담보 비율을 낮추기 위해선 신스(인공 자산)들을 발행하여 낮출 수 있습니다. 이를 통해 담보 비율이 올바르게 유지되면, 주 마다 보상을 얻을 수 있습니다."
 			},
 			"risks": {
 				"title": "스테이킹하는 사람들이 지게되는 리스크는 어떤 게 있나요?",
@@ -77,7 +77,8 @@
 		"buttons": {
 			"exchange": "Synthetix.Exchange로 이동",
 			"synthetixDashboard": "대시보드에서 가격 확인",
-			"refresh": "새로 고침"
+			"refresh": "새로 고침",
+			"delegate": "Delegate"
 		}
 	},
 	"mainNavigation": {
@@ -113,6 +114,10 @@
 			"transfer": {
 				"title": "전송",
 				"description": "SNX, 신스(Synths), 혹은 ETH 전송하기"
+			},
+			"track": {
+				"title": "Track",
+				"description": "Track your debt over time"
 			}
 		}
 	},
@@ -162,6 +167,7 @@
 			"action": {
 				"title": "보상 수령",
 				"subtitle": "만약 여러분들이 SNX를 스테이킹하셨거나, sUSD를 발행하셨다면, 두 종류의 보상을 받으실 수 있습니다: SNX 스테이킹 보상 및 Synthetix.Exchange에서 발생한 신스(Synth) 거래 보상",
+				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "수령 신청 가능 기간:",
 					"period": "기간",
@@ -182,6 +188,25 @@
 			},
 			"complete": {
 				"title": "보상 수령이 진행 중입니다!"
+			}
+		},
+		"track": {
+			"action": {
+				"title": "Track",
+				"subtitle": "Track your debt over time, with charts via",
+				"data": {
+					"issuedDebt": "Issued debt",
+					"actualDebt": "Actual debt",
+					"totalSynths": "Total Synths",
+					"netDebt": "Net debt"
+				},
+				"chart": {
+					"title": "Debt over time"
+				},
+				"table": {
+					"yourSynths": "Your synths",
+					"balance": "Balance"
+				}
 			}
 		},
 		"trade": {
@@ -288,6 +313,8 @@
 			"title": "여러분의 SNX 스테이킹 보상을 에스크로에 귀속하기",
 			"subtitle": "만약 여러분이 SNX를 스테이킹하고 sUSD를 발행하셨다면, SNX 스테이킹 보상을 받으실 수 있습니다. 스테이킹 보상을 여기 에스크로에 12월 간 귀속시키실 수 있습니다.",
 			"total": "에스크로에 귀속된 총 수량:",
+			"vested": "Total vested:",
+			"available": "Total available:",
 			"table": {
 				"none": "에스크로에 귀속된 SNX가 없습니다.",
 				"title": "귀속 일정",
@@ -321,13 +348,20 @@
 	},
 	"lpRewards": {
 		"intro": {
-			"title": "풀(Pool)을 선택해주세요"
+			"title": "풀(Pool)을 선택해주세요",
+			"completed": "Completed"
 		},
 		"actions": {
-			"unipool": {
-				"title": "Unipool"
+			"unipoolSETH": {
+				"title": "UNIPOOL sETH"
 			},
-			"curvepool": { "title": "Curvepool" }
+			"unipoolSXAU": {
+				"title": "UNIPOOL sXAU"
+			},
+			"curvepool": { "title": "CURVEPOOL sUSD" },
+			"ieth": { "title": "iETH" },
+			"balancer": {"title": "BALANCER SNX"},
+			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
 		},
 		"shared": {
 			"unlocked": {
@@ -343,7 +377,8 @@
 				"staking": "스테이킹",
 				"claiming": "보상 수령",
 				"unstaking": "스테이킹 해제",
-				"exiting": "스테이킹 해제 & 보상 수령"
+				"exiting": "스테이킹 해제 & 보상 수령",
+				"settling": "Settling"
 			},
 			"buttons": {
 				"unlock": "잠금 해제",
@@ -352,18 +387,40 @@
 				"claim": "보상 수령 신청",
 				"unstake": "토큰 스테이킹 해제",
 				"exit": "나가기: 스테이킹 해제 및 보상 수령 신청",
-				"exit-old": "Exit old rewards pool"
+				"exit-old": "Exit old rewards pool",
+				"settle": "Settle"
 			}
 		}
 	},
-	"unipool": {
-		"title": "Uniswap sETH LP 토큰 보상",
+	"unipoolSETH": {
+		"title": "Uniswap sETH LP Token Rewards",
 		"locked": {
-			"subtitle": "여러분의 sETH UNI-V1 토큰을 스테이킹하기 위해 승인해주세요.",
-			"transaction": "UNI-V1 토큰을 승인 설정 해주세요."
+			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
+			"transaction": "Setting Uni-V1 LP token allowance"
 		},
 		"unlocked": {
-			"subtitle": "이 곳에서 여러분들의 UNI-V1 유동성 공급 (LP) 토큰을 스테이킹하여 SNX 보상을 받을 수도, 혹은 종료할 수도 있습니다."
+			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"unipoolSXAU": {
+		"title": "Uniswap sXAU LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
+			"transaction": "Setting Uni-V2 LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"ieth": {
+		"title": "iETH Rewards",
+		"locked": {
+			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
+			"transaction": "Setting iETH allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iETH."
 		}
 	},
 	"curvepool": {
@@ -374,6 +431,49 @@
 		},
 		"unlocked": {
 			"subtitle": "이 곳에서 여러분들의 Curve LP 토큰을 스테이킹하여 SNX 보상을 받을 수도, 혹은 종료할 수도 있습니다."
+		}
+	},
+	"curvepoolSBTC": {
+		"title": "Curve Tokenised BTC LP Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
+			"transaction": "Setting Curve LP token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+		}
+	},
+	"balancerSNX": {
+		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"locked": {
+			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
+			"transaction": "Setting Balancer BPT token allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+		}
+	},
+	"delegation": {
+		"popup": {
+			"title": "Delegate wallet addresses",
+			"link": "See blog post",
+			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"input": {
+				"label": "Enter new wallet address to delegate:"
+			},
+			"table": {
+				"title": "Manage wallet addresses",
+				"columns": {
+					"walletAddress": "Wallet address",
+					"actions": "actions"
+				},
+				"cells": {
+					"removeAllPowers": "Remove all powers"
+				}
+			},
+			"buttons": {
+				"add": "Add"
+			}
 		}
 	},
 	"transactions": {
@@ -404,6 +504,7 @@
 	"transactionSettings": {
 		"priceIndicator": "이더리움 네트워크 수수료:",
 		"title": "가스 가격 설정",
+		"placeholder": "Add gas price (GWEI)",
 		"subtitle": "전송 속도 설정을 위해 가스(GWEI) 가격을 설정해주세요.",
 		"minutes": "분",
 		"speed": {
@@ -464,6 +565,9 @@
 		"list": {
 			"placeholder": "신스(Synth)를 찾는 중..."
 		},
+		"address": {
+			"placeholder": "e.g. 0x3b18a4..."
+		},
 		"error": {
 			"notEnoughToMint": "현재 해당 수량 만큼 sUSD를 발행할 수 없습니다.",
 			"gasEstimate": "가스 측정 중 에러가 발생했습니다.",
@@ -492,6 +596,8 @@
 	"tooltip": {
 		"claim": "보상을 수령하기 위해서는 목표 담보 비율의 1% 내로 담보 비율을 유지하셔야 합니다. 만약 이 수치보다 낮다면, 충분한 양의 sUSD를 소각하여 담보 비율을 맞추실 때 까지 보상 수령이 불가능 해집니다.",
 		"debtBalance": "부채는 여러분이 초기에 발행한 sUSD의 수량과 동일하게 시작되며, 신스(인공 자산)를 보유하고 있는 이들이 얻는 손실과 이득에 따라서 변동됩니다. 거래자들이 보유한 신스(인공 자산)의 가치가 오르게 되면, 그로 인한 수익이 일부분 스테이킹된 SNX 홀더들의 부채에 분배됩니다. 예치자들은 자신들이 스테이킹한 SNX를 잠금 해제 하기 위해서, 자신들의 부채를 먼저 갚아야할 의무가 있습니다.",
-		"synthsBalance": "신스(Synth)는 신테틱스 시스템에 존재하는 인공 자산들이며, sUSD, sBTC, iBTC, 등 다른 모든 자산들을 Synthetix.Exchange에서 거래하실 수 있습니다. 이 수치는 이 지갑에 보유하고 있는 모든 신스(Synths)들의 총 가치입니다. 만약 신스(Synth)들을 sUSD로 교환하고 싶으시다면, '교환' 버튼을 눌러주시기 바랍니다."
+		"synthsBalance": "신스(Synth)는 신테틱스 시스템에 존재하는 인공 자산들이며, sUSD, sBTC, iBTC, 등 다른 모든 자산들을 Synthetix.Exchange에서 거래하실 수 있습니다. 이 수치는 이 지갑에 보유하고 있는 모든 신스(Synths)들의 총 가치입니다. 만약 신스(Synth)들을 sUSD로 교환하고 싶으시다면, '교환' 버튼을 눌러주시기 바랍니다.",
+		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}
 }
