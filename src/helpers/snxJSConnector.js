@@ -20,6 +20,7 @@ import {
 	balancerSNXRewards,
 	curveSBTC,
 	sBTCRewards,
+	curveSUSDSwapContract,
 } from './contracts';
 
 let snxJSConnector = {
@@ -82,6 +83,11 @@ let snxJSConnector = {
 		this.synthSummaryUtilContract = new ethers.Contract(
 			synthSummary.addresses[contractSettings.networkId],
 			synthSummary.abi,
+			this.provider
+		);
+		this.curveSUSDSwapContract = new ethers.Contract(
+			curveSUSDSwapContract.address,
+			curveSUSDSwapContract.abi,
 			this.provider
 		);
 	},
