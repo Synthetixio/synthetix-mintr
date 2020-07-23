@@ -55,7 +55,7 @@ const mapBalanceData = (waitingForData, walletBalancesWithRates, rates, debtData
 			name: AGGREGATED_COLUMNS.includes(column)
 				? `dashboard.table.${column.toLowerCase()}`
 				: column,
-			icon: AGGREGATED_COLUMNS.includes(column) ? 'snx' : column,
+			icon: AGGREGATED_COLUMNS.includes(column) ? 'SNX' : column,
 			...getBalance(column, balances, debtData, rates),
 		};
 	});
