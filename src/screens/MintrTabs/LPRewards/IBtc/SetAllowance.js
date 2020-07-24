@@ -6,32 +6,38 @@ import { useTranslation } from 'react-i18next';
 import { createTransaction } from '../../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../../ducks/network';
 
-import { TOKEN_ALLOWANCE_LIMIT } from '../../../../constants/network';
-
 import snxJSConnector from '../../../../helpers/snxJSConnector';
+
+import { TOKEN_ALLOWANCE_LIMIT } from '../../../../constants/network';
 
 import { PageTitle, PLarge } from '../../../../components/Typography';
 import { ButtonPrimary, ButtonTertiary } from '../../../../components/Button';
+
+const GAS_LIMIT_BUFFER = 10000;
 
 const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 	const { t } = useTranslation();
 	const [error, setError] = useState(null);
 
 	const onUnlock = async () => {
-		const { parseEther } = snxJSConnector.utils;
-		const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
+		const {
+			snxJS: { iBTC },
+			utils: { parseEther },
+			iBtcRewardsContract,
+		} = snxJSConnector;
 		try {
 			setError(null);
 
-			const gasEstimate = await uniswapV2Contract.estimate.approve(
-				unipoolSXAUContract.address,
+			const gasEstimate = await iBTC.contract.estimate.approve(
+				iBtcRewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
-			const transaction = await uniswapV2Contract.approve(
-				unipoolSXAUContract.address,
+
+			const transaction = await iBTC.approve(
+				iBtcRewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
-					gasLimit: Number(gasEstimate) + 10000,
+					gasLimit: Number(gasEstimate) + GAS_LIMIT_BUFFER,
 					gasPrice: currentGasPrice.formattedPrice,
 				}
 			);
@@ -39,7 +45,7 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 				createTransaction({
 					hash: transaction.hash,
 					status: 'pending',
-					info: t('unipoolSXAU.locked.transaction'),
+					info: t(`ibtc.locked.transaction`),
 					hasNotification: true,
 				});
 			}
@@ -54,9 +60,9 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 			</Navigation>
 			<TitleContainer>
-				<Logo src="/images/pools/unipool-sXAU.svg" />
-				<PageTitle>{t('unipoolSXAU.title')}</PageTitle>
-				<PLarge>{t('unipoolSXAU.locked.subtitle')}</PLarge>
+				<Logo src="/images/currencies/iBTC.svg" />
+				<PageTitle>{t('ibtc.title')}</PageTitle>
+				<PLarge>{t('ibtc.locked.subtitle')}</PLarge>
 			</TitleContainer>
 			<ButtonRow>
 				<ButtonPrimary onClick={onUnlock}>{t('lpRewards.shared.buttons.unlock')}</ButtonPrimary>
