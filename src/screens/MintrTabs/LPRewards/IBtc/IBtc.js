@@ -13,20 +13,20 @@ import Spinner from '../../../../components/Spinner';
 import SetAllowance from './SetAllowance';
 import Stake from './Stake';
 
-const UniPool = ({ goBack, walletDetails }) => {
+const IBtc = ({ goBack, walletDetails }) => {
 	const [hasAllowance, setAllowance] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const { currentWallet } = walletDetails;
 
 	const fetchAllowance = useCallback(async () => {
 		if (!snxJSConnector.initialized) return;
-		const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
+		const {
+			snxJS: { iBTC },
+			iBtcRewardsContract,
+		} = snxJSConnector;
 		try {
 			setIsLoading(true);
-			const allowance = await uniswapV2Contract.allowance(
-				currentWallet,
-				unipoolSXAUContract.address
-			);
+			const allowance = await iBTC.allowance(currentWallet, iBtcRewardsContract.address);
 			setAllowance(!!bigNumberFormatter(allowance));
 			setIsLoading(false);
 		} catch (e) {
@@ -44,17 +44,20 @@ const UniPool = ({ goBack, walletDetails }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { uniswapV2Contract, unipoolSXAUContract } = snxJSConnector;
+		const {
+			snxJS: { iBTC },
+			iBtcRewardsContract,
+		} = snxJSConnector;
 
-		uniswapV2Contract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === unipoolSXAUContract.address) {
+		iBTC.contract.on('Approval', (owner, spender) => {
+			if (owner === currentWallet && spender === iBtcRewardsContract.address) {
 				setAllowance(true);
 			}
 		});
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				uniswapV2Contract.removeAllListeners('Approval');
+				iBTC.contract.removeAllListeners('Approval');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,4 +86,4 @@ const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 });
 
-export default connect(mapStateToProps, {})(UniPool);
+export default connect(mapStateToProps, {})(IBtc);
