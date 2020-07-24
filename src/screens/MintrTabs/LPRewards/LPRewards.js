@@ -84,7 +84,6 @@ const LPRewards = ({ currentTheme }) => {
 				const contracts = [
 					curvepoolContract,
 					iEthRewardsContract,
-					iBtcRewardsContract,
 					unipoolSETHContract,
 					balancerSNXRewardsContract,
 				];
@@ -95,6 +94,7 @@ const LPRewards = ({ currentTheme }) => {
 				rewardsData.forEach(([duration, rate], i) => {
 					contractRewards[contracts[i].address] = Math.trunc(Number(duration) * (rate / 1e18));
 				});
+				contractRewards[iBtcRewardsContract.address] = 16000;
 				setDistributions(contractRewards);
 			} catch (e) {
 				console.log(e);
