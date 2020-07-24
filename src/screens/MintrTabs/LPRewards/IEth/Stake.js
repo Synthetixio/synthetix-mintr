@@ -28,6 +28,7 @@ const Stake = ({ walletDetails, goBack }) => {
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 	const {
+		iEth2RewardsContract,
 		iEthRewardsContract,
 		snxJS: { Exchanger, Synthetix },
 	} = snxJSConnector;
@@ -37,13 +38,22 @@ const Stake = ({ walletDetails, goBack }) => {
 		try {
 			const {
 				snxJS: { iETH, Exchanger },
-				iEthRewardsContract,
+				iEth2RewardsContract,
 			} = snxJSConnector;
-			const [iETHBalance, iETHStaked, rewards, settlementOwing] = await Promise.all([
+			const [
+				iETHBalance,
+				iETHStaked,
+				rewards,
+				settlementOwing,
+				iETHStakedOld,
+				rewardsOld,
+			] = await Promise.all([
 				iETH.balanceOf(currentWallet),
+				iEth2RewardsContract.balanceOf(currentWallet),
+				iEth2RewardsContract.earned(currentWallet),
+				Exchanger.settlementOwing(currentWallet, bytesFormatter('iETH')),
 				iEthRewardsContract.balanceOf(currentWallet),
 				iEthRewardsContract.earned(currentWallet),
-				Exchanger.settlementOwing(currentWallet, bytesFormatter('iETH')),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
@@ -54,7 +64,9 @@ const Stake = ({ walletDetails, goBack }) => {
 				iETHBalanceBN: iETHBalance,
 				iETHStaked: bigNumberFormatter(iETHStaked),
 				iETHStakedBN: iETHStaked,
+				iETHStakedOld: bigNumberFormatter(iETHStakedOld),
 				rewards: bigNumberFormatter(rewards),
+				rewardsOld: bigNumberFormatter(rewardsOld),
 				needsToSettle: reclaimAmount || rebateAmount,
 			});
 		} catch (e) {
@@ -69,9 +81,15 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { iEthRewardsContract } = snxJSConnector;
+		const { iEth2RewardsContract } = snxJSConnector;
 
-		iEthRewardsContract.on('Staked', user => {
+		iEth2RewardsContract.on('Staked', user => {
+			if (user === currentWallet) {
+				fetchData();
+			}
+		});
+
+		iEth2RewardsContract.on('Withdrawn', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -83,7 +101,7 @@ const Stake = ({ walletDetails, goBack }) => {
 			}
 		});
 
-		iEthRewardsContract.on('RewardPaid', user => {
+		iEth2RewardsContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -103,9 +121,10 @@ const Stake = ({ walletDetails, goBack }) => {
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				iEthRewardsContract.removeAllListeners('Staked');
+				iEth2RewardsContract.removeAllListeners('Staked');
+				iEth2RewardsContract.removeAllListeners('Withdrawn');
 				iEthRewardsContract.removeAllListeners('Withdrawn');
-				iEthRewardsContract.removeAllListeners('RewardPaid');
+				iEth2RewardsContract.removeAllListeners('RewardPaid');
 				Synthetix.contract.removeAllListeners('ExchangeReclaim');
 				Synthetix.contract.removeAllListeners('ExchangeRebate');
 			}
@@ -121,7 +140,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${iEthRewardsContract.address}`}
+					href={`https://etherscan.io/address/${iEth2RewardsContract.address}`}
 				>
 					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
@@ -146,6 +165,12 @@ const Stake = ({ walletDetails, goBack }) => {
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
 					body={`${balances ? formatCurrency(balances.rewards) : 0} SNX`}
 				/>
+				{balances && balances.iETHStakedOld ? (
+					<DataBox
+						heading={t('lpRewards.shared.data.stakedOldContract')}
+						body={`${balances ? formatCurrency(balances.iETHStakedOld) : 0} iETH`}
+					/>
+				) : null}
 			</BoxRow>
 			<ButtonBlock>
 				<ButtonRow>
@@ -157,12 +182,12 @@ const Stake = ({ walletDetails, goBack }) => {
 								label: t('lpRewards.shared.actions.staking'),
 								amount: `${balances && formatCurrency(balances.iETHBalance)} iETH`,
 								contractFunction: transactionSettings =>
-									iEthRewardsContract.stake(
+									iEth2RewardsContract.stake(
 										balances && balances.iETHBalanceBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iEthRewardsContract.estimate.stake(balances && balances.iETHBalanceBN),
+									iEth2RewardsContract.estimate.stake(balances && balances.iETHBalanceBN),
 							})
 						}
 					>
@@ -176,8 +201,8 @@ const Stake = ({ walletDetails, goBack }) => {
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
 								contractFunction: transactionSettings =>
-									iEthRewardsContract.getReward(transactionSettings),
-								contractFunctionEstimate: () => iEthRewardsContract.estimate.getReward(),
+									iEth2RewardsContract.getReward(transactionSettings),
+								contractFunctionEstimate: () => iEth2RewardsContract.estimate.getReward(),
 							})
 						}
 					>
@@ -194,12 +219,12 @@ const Stake = ({ walletDetails, goBack }) => {
 								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH`,
 								param: balances && balances.iETHStakedBN,
 								contractFunction: transactionSettings =>
-									iEthRewardsContract.withdraw(
+									iEth2RewardsContract.withdraw(
 										balances && balances.iETHStakedBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iEthRewardsContract.estimate.withdraw(balances && balances.iETHStakedBN),
+									iEth2RewardsContract.estimate.withdraw(balances && balances.iETHStakedBN),
 							})
 						}
 					>
@@ -215,14 +240,35 @@ const Stake = ({ walletDetails, goBack }) => {
 									balances && formatCurrency(balances.rewards)
 								} SNX`,
 								contractFunction: transactionSettings =>
-									iEthRewardsContract.exit(transactionSettings),
-								contractFunctionEstimate: () => iEthRewardsContract.estimate.exit(),
+									iEth2RewardsContract.exit(transactionSettings),
+								contractFunctionEstimate: () => iEth2RewardsContract.estimate.exit(),
 							})
 						}
 					>
 						{t('lpRewards.shared.buttons.exit')}
 					</ButtonAction>
 				</ButtonRow>
+
+				{balances && balances.iETHStakedOld ? (
+					<ButtonRow>
+						<ButtonActionFullRow
+							onClick={() =>
+								setCurrentScenario({
+									action: 'migrate',
+									label: t('lpRewards.shared.actions.exiting'),
+									amount: `${balances && formatCurrency(balances.iETHStakedOld)} iETH & ${
+										(balances && formatCurrency(balances.rewardsOld)) || 0
+									} SNX`,
+									contractFunction: transactionSettings =>
+										iEthRewardsContract.exit(transactionSettings),
+									contractFunctionEstimate: () => iEthRewardsContract.estimate.exit(),
+								})
+							}
+						>
+							{t('lpRewards.shared.buttons.exit-old')}
+						</ButtonActionFullRow>
+					</ButtonRow>
+				) : null}
 
 				{balances && balances.needsToSettle ? (
 					<ButtonRowBottom>
@@ -297,7 +343,7 @@ const ButtonActionFullRow = styled(ButtonAction)`
 const ButtonRowBottom = styled(ButtonRow)`
 	flex-direction: column;
 	align-items: center;
-	margin-top: 64px;
+	margin-top: 50px;
 `;
 
 const mapStateToProps = state => ({

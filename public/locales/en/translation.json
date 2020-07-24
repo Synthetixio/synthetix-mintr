@@ -372,6 +372,7 @@
 			"data": {
 				"balance": "Your balance",
 				"staked": "Currently staked",
+				"stakedOldContract": "Staked v1",
 				"rewardsAvailable": "Rewards available"
 			},
 			"actions": {
