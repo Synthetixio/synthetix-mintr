@@ -15,6 +15,7 @@ import balancerSNXRewards from './balancer/balancerSNXRewards';
 import synthSummary from './synthSummary';
 
 import iEthRewards from './iEthRewards';
+import iEth2Rewards from './iEth2Rewards';
 import iBtcRewards from './iBtcRewards';
 
 export {
@@ -32,4 +33,5 @@ export {
 	curveSBTC,
 	sBTCRewards,
 	curveSUSDSwapContract,
+	iEth2Rewards,
 };
