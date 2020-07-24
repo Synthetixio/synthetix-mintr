@@ -10,7 +10,6 @@ import {
 	uniswapV1,
 	uniswapV2,
 	unipoolSETH,
-	unipoolSXAU,
 	curvepool,
 	curveLPToken,
 	synthSummary,
@@ -21,6 +20,7 @@ import {
 	curveSBTC,
 	sBTCRewards,
 	curveSUSDSwapContract,
+	iBtcRewards,
 } from './contracts';
 
 let snxJSConnector = {
@@ -42,11 +42,6 @@ let snxJSConnector = {
 				unipoolSETH.abi,
 				this.signer
 			);
-			this.unipoolSXAUContract = new ethers.Contract(
-				unipoolSXAU.address,
-				unipoolSXAU.abi,
-				this.signer
-			);
 			this.curveLPTokenContract = new ethers.Contract(
 				curveLPToken.address,
 				curveLPToken.abi,
@@ -61,6 +56,11 @@ let snxJSConnector = {
 			this.iEthRewardsContract = new ethers.Contract(
 				iEthRewards.address,
 				iEthRewards.abi,
+				this.signer
+			);
+			this.iBtcRewardsContract = new ethers.Contract(
+				iBtcRewards.address,
+				iBtcRewards.abi,
 				this.signer
 			);
 			this.balancerpoolContract = new ethers.Contract(
