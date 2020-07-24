@@ -360,6 +360,7 @@
 			},
 			"curvepool": { "title": "CURVEPOOL sUSD" },
 			"ieth": { "title": "iETH" },
+			"ibtc": { "title": "iBTC" },
 			"balancer": {"title": "BALANCER SNX"},
 			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
 		},
@@ -371,6 +372,7 @@
 			"data": {
 				"balance": "Your balance",
 				"staked": "Currently staked",
+				"stakedOldContract": "Staked v1",
 				"rewardsAvailable": "Rewards available"
 			},
 			"actions": {
@@ -424,6 +426,17 @@
 		"unlocked": {
 			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
 			"settle-info": "You need to settle before being able to stake your iETH."
+		}
+	},
+	"ibtc": {
+		"title": "iBTC Rewards",
+		"locked": {
+			"subtitle": "First approve the iBtcRewards contract to transfer your iBTC synths for staking.",
+			"transaction": "Setting iBTC allowance"
+		},
+		"unlocked": {
+			"subtitle": "Here you can stake your iBTC synths, claim SNX rewards, or exit completely.",
+			"settle-info": "You need to settle before being able to stake your iBTC."
 		}
 	},
 	"curvepool": {
