@@ -39,7 +39,7 @@ const POOLS_MAJOR = [
 		title: 'lpRewards.actions.ieth.title',
 		name: 'ieth',
 		image: '/images/currencies/iETH.svg',
-		contract: 'iEthRewardsContract',
+		contract: 'iEth2RewardsContract',
 	},
 ];
 
@@ -74,19 +74,14 @@ const LPRewards = ({ currentTheme }) => {
 		const {
 			unipoolSETHContract,
 			curvepoolContract,
-			iEthRewardsContract,
+			iEth2RewardsContract,
 			iBtcRewardsContract,
 			balancerSNXRewardsContract,
 		} = snxJSConnector;
 
 		const getRewardsAmount = async () => {
 			try {
-				const contracts = [
-					curvepoolContract,
-					iEthRewardsContract,
-					unipoolSETHContract,
-					balancerSNXRewardsContract,
-				];
+				const contracts = [curvepoolContract, unipoolSETHContract, balancerSNXRewardsContract];
 				const rewardsData = await Promise.all(
 					contracts.map(contract => Promise.all([contract.DURATION(), contract.rewardRate()]))
 				);
@@ -95,6 +90,7 @@ const LPRewards = ({ currentTheme }) => {
 					contractRewards[contracts[i].address] = Math.trunc(Number(duration) * (rate / 1e18));
 				});
 				contractRewards[iBtcRewardsContract.address] = 16000;
+				contractRewards[iEth2RewardsContract.address] = 20000;
 				setDistributions(contractRewards);
 			} catch (e) {
 				console.log(e);
