@@ -175,7 +175,8 @@ const Stake = ({ walletDetails, goBack }) => {
 			<ButtonBlock>
 				<ButtonRow>
 					<ButtonAction
-						disabled={!balances || !balances.iETHBalance || balances.needsToSettle}
+						// disabled={!balances || !balances.iETHBalance || balances.needsToSettle}
+						disabled={true}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'stake',
