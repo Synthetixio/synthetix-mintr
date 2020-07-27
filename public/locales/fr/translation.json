@@ -371,7 +371,9 @@
 			"data": {
 				"balance": "Votre balance",
 				"staked": "Actuellement stakés",
-				"rewardsAvailable": "Récompenses disponibles"
+				"stakedOldContract": "Staked v1",
+				"rewardsAvailable": "Récompenses disponibles",
+				"rewardsAvailableOldContract": "Récompenses (précédent)"
 			},
 			"actions": {
 				"staking": "Staking",
@@ -388,6 +390,7 @@
 				"unstake": "Unstake tokens",
 				"exit": "Sortir: claim & unstake",
 				"exit-old": "Sortir de l'ancienne pool",
+				"claim-old": "Claim old rewards pool",
 				"settle": "Settle"
 			},
 			"info": {
