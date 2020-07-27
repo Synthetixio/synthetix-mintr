@@ -36,7 +36,7 @@ export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
 
 const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY;
 
-const ETH_GAS_STATION_URL = 'https://ethgasstation.info/json/ethgasAPI.json';
+const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`;
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
