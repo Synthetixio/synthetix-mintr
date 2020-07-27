@@ -81,16 +81,25 @@ const LPRewards = ({ currentTheme }) => {
 
 		const getRewardsAmount = async () => {
 			try {
-				const contracts = [curvepoolContract, unipoolSETHContract, balancerSNXRewardsContract];
+				const contracts = [
+					curvepoolContract,
+					unipoolSETHContract,
+					balancerSNXRewardsContract,
+					iEth2RewardsContract,
+					iBtcRewardsContract,
+				];
 				const rewardsData = await Promise.all(
-					contracts.map(contract => Promise.all([contract.DURATION(), contract.rewardRate()]))
+					contracts.map(contract => {
+						const getDuration = contract.DURATION || contract.rewardsDuration;
+						return Promise.all([getDuration(), contract.rewardRate()]);
+					})
 				);
 				let contractRewards = {};
 				rewardsData.forEach(([duration, rate], i) => {
-					contractRewards[contracts[i].address] = Math.trunc(Number(duration) * (rate / 1e18));
+					const durationInWeeks = Number(duration) / 3600 / 24 / 7;
+					contractRewards[contracts[i].address] =
+						Math.trunc(Number(duration) * (rate / 1e18)) / durationInWeeks;
 				});
-				contractRewards[iBtcRewardsContract.address] = 16000;
-				contractRewards[iEth2RewardsContract.address] = 20000;
 				setDistributions(contractRewards);
 			} catch (e) {
 				console.log(e);
