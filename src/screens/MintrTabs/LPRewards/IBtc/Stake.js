@@ -18,7 +18,7 @@ import { PageTitle, PLarge, ButtonTertiaryLabel } from '../../../../components/T
 import DataBox from '../../../../components/DataBox';
 import { ButtonTertiary, ButtonPrimary } from '../../../../components/Button';
 
-import IEthActions from '../../../IEthActions';
+import IBtcActions from '../../../IBtcActions';
 
 const DEFAULT_GAS_LIMIT = 300000;
 
@@ -28,8 +28,7 @@ const Stake = ({ walletDetails, goBack }) => {
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 	const {
-		iEth2RewardsContract,
-		iEthRewardsContract,
+		iBtcRewardsContract,
 		snxJS: { Exchanger, Synthetix },
 	} = snxJSConnector;
 
@@ -37,27 +36,25 @@ const Stake = ({ walletDetails, goBack }) => {
 		if (!snxJSConnector.initialized) return;
 		try {
 			const {
-				snxJS: { iETH, Exchanger },
-				iEth2RewardsContract,
+				snxJS: { iBTC, Exchanger },
+				iBtcRewardsContract,
 			} = snxJSConnector;
-			const [iETHBalance, iETHStaked, rewards, settlementOwing, rewardsOld] = await Promise.all([
-				iETH.balanceOf(currentWallet),
-				iEth2RewardsContract.balanceOf(currentWallet),
-				iEth2RewardsContract.earned(currentWallet),
-				Exchanger.settlementOwing(currentWallet, bytesFormatter('iETH')),
-				iEthRewardsContract.earned(currentWallet),
+			const [iBTCBalance, iBTCStaked, rewards, settlementOwing] = await Promise.all([
+				iBTC.balanceOf(currentWallet),
+				iBtcRewardsContract.balanceOf(currentWallet),
+				iBtcRewardsContract.earned(currentWallet),
+				Exchanger.settlementOwing(currentWallet, bytesFormatter('iBTC')),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
 			const rebateAmount = Number(settlementOwing.rebateAmount);
 
 			setBalances({
-				iETHBalance: bigNumberFormatter(iETHBalance),
-				iETHBalanceBN: iETHBalance,
-				iETHStaked: bigNumberFormatter(iETHStaked),
-				iETHStakedBN: iETHStaked,
+				iBTCBalance: bigNumberFormatter(iBTCBalance),
+				iBTCBalanceBN: iBTCBalance,
+				iBTCStaked: bigNumberFormatter(iBTCStaked),
+				iBTCStakedBN: iBTCStaked,
 				rewards: bigNumberFormatter(rewards),
-				rewardsOld: bigNumberFormatter(rewardsOld),
 				needsToSettle: reclaimAmount || rebateAmount,
 			});
 		} catch (e) {
@@ -72,50 +69,43 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { iEth2RewardsContract } = snxJSConnector;
+		const { iBtcRewardsContract } = snxJSConnector;
 
-		iEth2RewardsContract.on('Staked', user => {
+		iBtcRewardsContract.on('Staked', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		iEth2RewardsContract.on('Withdrawn', user => {
+		iBtcRewardsContract.on('Withdrawn', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		iEthRewardsContract.on('RewardPaid', user => {
-			if (user === currentWallet) {
-				fetchData();
-			}
-		});
-
-		iEth2RewardsContract.on('RewardPaid', user => {
+		iBtcRewardsContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
 		Synthetix.contract.on('ExchangeReclaim', (account, currencyKey) => {
-			if (account === currentWallet && parseBytes32String(currencyKey) === 'iETH') {
+			if (account === currentWallet && parseBytes32String(currencyKey) === 'iBTC') {
 				fetchData();
 			}
 		});
 
 		Synthetix.contract.on('ExchangeRebate', (account, currencyKey) => {
-			if (account === currentWallet && parseBytes32String(currencyKey) === 'iETH') {
+			if (account === currentWallet && parseBytes32String(currencyKey) === 'iBTC') {
 				fetchData();
 			}
 		});
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				iEth2RewardsContract.removeAllListeners('Staked');
-				iEth2RewardsContract.removeAllListeners('Withdrawn');
-				iEthRewardsContract.removeAllListeners('Withdrawn');
-				iEth2RewardsContract.removeAllListeners('RewardPaid');
+				iBtcRewardsContract.removeAllListeners('Staked');
+				iBtcRewardsContract.removeAllListeners('Withdrawn');
+				iBtcRewardsContract.removeAllListeners('RewardPaid');
 				Synthetix.contract.removeAllListeners('ExchangeReclaim');
 				Synthetix.contract.removeAllListeners('ExchangeRebate');
 			}
@@ -125,19 +115,19 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	return (
 		<Container>
-			<IEthActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
+			<IBtcActions {...currentScenario} onDestroy={() => setCurrentScenario({})} />
 			<Navigation>
 				<ButtonTertiary onClick={goBack}>{t('button.navigation.back')}</ButtonTertiary>
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${iEth2RewardsContract.address}`}
+					href={`https://etherscan.io/address/${iBtcRewardsContract.address}`}
 				>
 					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
 			</Navigation>
-			<PageTitle>{t('ieth.title')}</PageTitle>
-			<PLarge>{t('ieth.unlocked.subtitle')}</PLarge>
+			<PageTitle>{t('ibtc.title')}</PageTitle>
+			<PLarge>{t('ibtc.unlocked.subtitle')}</PLarge>
 			<PLarge>
 				<Link href="https://blog.synthetix.io/neutral-debt-pool-incentive-trial/" target="_blank">
 					<ButtonTertiaryLabel>{t('lpRewards.shared.unlocked.link')}</ButtonTertiaryLabel>
@@ -146,39 +136,33 @@ const Stake = ({ walletDetails, goBack }) => {
 			<BoxRow>
 				<DataBox
 					heading={t('lpRewards.shared.data.balance')}
-					body={`${balances ? formatCurrency(balances.iETHBalance) : 0} iETH`}
+					body={`${balances ? formatCurrency(balances.iBTCBalance) : 0} iBTC`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.staked')}
-					body={`${balances ? formatCurrency(balances.iETHStaked) : 0} iETH`}
+					body={`${balances ? formatCurrency(balances.iBTCStaked) : 0} iBTC`}
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
 					body={`${balances ? formatCurrency(balances.rewards) : 0} SNX`}
 				/>
-				{balances && balances.rewardsOld ? (
-					<DataBox
-						heading={t('lpRewards.shared.data.rewardsAvailableOldContract')}
-						body={`${formatCurrency(balances.rewardsOld)} SNX`}
-					/>
-				) : null}
 			</BoxRow>
 			<ButtonBlock>
 				<ButtonRow>
 					<ButtonAction
-						disabled={!balances || !balances.iETHBalance || balances.needsToSettle}
+						disabled={!balances || !balances.iBTCBalance || balances.needsToSettle}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'stake',
 								label: t('lpRewards.shared.actions.staking'),
-								amount: `${balances && formatCurrency(balances.iETHBalance)} iETH`,
+								amount: `${balances && formatCurrency(balances.iBTCBalance)} iBTC`,
 								contractFunction: transactionSettings =>
-									iEth2RewardsContract.stake(
-										balances && balances.iETHBalanceBN,
+									iBtcRewardsContract.stake(
+										balances && balances.iBTCBalanceBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iEth2RewardsContract.estimate.stake(balances && balances.iETHBalanceBN),
+									iBtcRewardsContract.estimate.stake(balances && balances.iBTCBalanceBN),
 							})
 						}
 					>
@@ -192,8 +176,8 @@ const Stake = ({ walletDetails, goBack }) => {
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
 								contractFunction: transactionSettings =>
-									iEth2RewardsContract.getReward(transactionSettings),
-								contractFunctionEstimate: () => iEth2RewardsContract.estimate.getReward(),
+									iBtcRewardsContract.getReward(transactionSettings),
+								contractFunctionEstimate: () => iBtcRewardsContract.estimate.getReward(),
 							})
 						}
 					>
@@ -202,37 +186,37 @@ const Stake = ({ walletDetails, goBack }) => {
 				</ButtonRow>
 				<ButtonRow>
 					<ButtonAction
-						disabled={!balances || !balances.iETHStaked}
+						disabled={!balances || !balances.iBTCStaked}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'unstake',
 								label: t('lpRewards.shared.actions.unstaking'),
-								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH`,
-								param: balances && balances.iETHStakedBN,
+								amount: `${balances && formatCurrency(balances.iBTCStaked)} iBTC`,
+								param: balances && balances.iBTCStakedBN,
 								contractFunction: transactionSettings =>
-									iEth2RewardsContract.withdraw(
-										balances && balances.iETHStakedBN,
+									iBtcRewardsContract.withdraw(
+										balances && balances.iBTCStakedBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iEth2RewardsContract.estimate.withdraw(balances && balances.iETHStakedBN),
+									iBtcRewardsContract.estimate.withdraw(balances && balances.iBTCStakedBN),
 							})
 						}
 					>
 						{t('lpRewards.shared.buttons.unstake')}
 					</ButtonAction>
 					<ButtonAction
-						disabled={!balances || !balances.iETHStaked}
+						disabled={!balances || !balances.iBTCStaked}
 						onClick={() =>
 							setCurrentScenario({
 								action: 'exit',
 								label: t('lpRewards.shared.actions.exiting'),
-								amount: `${balances && formatCurrency(balances.iETHStaked)} iETH & ${
+								amount: `${balances && formatCurrency(balances.iBTCStaked)} iBTC & ${
 									balances && formatCurrency(balances.rewards)
 								} SNX`,
 								contractFunction: transactionSettings =>
-									iEth2RewardsContract.exit(transactionSettings),
-								contractFunctionEstimate: () => iEth2RewardsContract.estimate.exit(),
+									iBtcRewardsContract.exit(transactionSettings),
+								contractFunctionEstimate: () => iBtcRewardsContract.estimate.exit(),
 							})
 						}
 					>
@@ -240,38 +224,19 @@ const Stake = ({ walletDetails, goBack }) => {
 					</ButtonAction>
 				</ButtonRow>
 
-				{balances && balances.rewardsOld ? (
-					<ButtonRow>
-						<ButtonActionFullRow
-							onClick={() =>
-								setCurrentScenario({
-									action: 'claim',
-									label: t('lpRewards.shared.actions.claiming'),
-									amount: `${(balances && formatCurrency(balances.rewardsOld)) || 0} SNX`,
-									contractFunction: transactionSettings =>
-										iEthRewardsContract.getReward(transactionSettings),
-									contractFunctionEstimate: () => iEthRewardsContract.estimate.getReward(),
-								})
-							}
-						>
-							{t('lpRewards.shared.buttons.claim-old')}
-						</ButtonActionFullRow>
-					</ButtonRow>
-				) : null}
-
 				{balances && balances.needsToSettle ? (
 					<ButtonRowBottom>
-						<PLarge>{t('ieth.unlocked.settle-info')}</PLarge>
+						<PLarge>{t('ibtc.unlocked.settle-info')}</PLarge>
 						<ButtonActionFullRow
 							onClick={() =>
 								setCurrentScenario({
 									action: 'settle',
 									label: t('lpRewards.shared.actions.settling'),
-									amount: 'iETH',
+									amount: 'iBTC',
 									contractFunction: transactionSettings =>
-										Exchanger.settle(currentWallet, bytesFormatter('iETH'), transactionSettings),
+										Exchanger.settle(currentWallet, bytesFormatter('iBTC'), transactionSettings),
 									contractFunctionEstimate: () =>
-										Exchanger.contract.estimate.settle(currentWallet, bytesFormatter('iETH')),
+										Exchanger.contract.estimate.settle(currentWallet, bytesFormatter('iBTC')),
 								})
 							}
 						>
@@ -332,7 +297,7 @@ const ButtonActionFullRow = styled(ButtonAction)`
 const ButtonRowBottom = styled(ButtonRow)`
 	flex-direction: column;
 	align-items: center;
-	margin-top: 50px;
+	margin-top: 64px;
 `;
 
 const mapStateToProps = state => ({

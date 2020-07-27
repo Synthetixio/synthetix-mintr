@@ -1,9 +1,10 @@
 export default {
-	address: '0x8302FE9F0C509a996573D3Cc5B0D5D51e4FDD5eC',
+	address: '0xE5Ea1DDA3299C0b133a93A47eF9F5536C6892AcE',
 	abi: [
 		{
 			inputs: [
 				{ internalType: 'address', name: '_owner', type: 'address' },
+				{ internalType: 'address', name: '_rewardsDistribution', type: 'address' },
 				{ internalType: 'address', name: '_rewardsToken', type: 'address' },
 				{ internalType: 'address', name: '_stakingToken', type: 'address' },
 			],
@@ -28,6 +29,15 @@ export default {
 		},
 		{
 			anonymous: false,
+			inputs: [
+				{ indexed: false, internalType: 'address', name: 'token', type: 'address' },
+				{ indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+			],
+			name: 'Recovered',
+			type: 'event',
+		},
+		{
+			anonymous: false,
 			inputs: [{ indexed: false, internalType: 'uint256', name: 'reward', type: 'uint256' }],
 			name: 'RewardAdded',
 			type: 'event',
@@ -39,6 +49,12 @@ export default {
 				{ indexed: false, internalType: 'uint256', name: 'reward', type: 'uint256' },
 			],
 			name: 'RewardPaid',
+			type: 'event',
+		},
+		{
+			anonymous: false,
+			inputs: [{ indexed: false, internalType: 'uint256', name: 'newDuration', type: 'uint256' }],
+			name: 'RewardsDurationUpdated',
 			type: 'event',
 		},
 		{
@@ -58,15 +74,6 @@ export default {
 			],
 			name: 'Withdrawn',
 			type: 'event',
-		},
-		{
-			constant: true,
-			inputs: [],
-			name: 'DURATION',
-			outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-			payable: false,
-			stateMutability: 'view',
-			type: 'function',
 		},
 		{
 			constant: false,
@@ -111,6 +118,15 @@ export default {
 			outputs: [],
 			payable: false,
 			stateMutability: 'nonpayable',
+			type: 'function',
+		},
+		{
+			constant: true,
+			inputs: [],
+			name: 'getRewardForDuration',
+			outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+			payable: false,
+			stateMutability: 'view',
 			type: 'function',
 		},
 		{
@@ -177,6 +193,18 @@ export default {
 			type: 'function',
 		},
 		{
+			constant: false,
+			inputs: [
+				{ internalType: 'address', name: 'tokenAddress', type: 'address' },
+				{ internalType: 'uint256', name: 'tokenAmount', type: 'uint256' },
+			],
+			name: 'recoverERC20',
+			outputs: [],
+			payable: false,
+			stateMutability: 'nonpayable',
+			type: 'function',
+		},
+		{
 			constant: true,
 			inputs: [],
 			name: 'rewardPerToken',
@@ -224,6 +252,15 @@ export default {
 		{
 			constant: true,
 			inputs: [],
+			name: 'rewardsDuration',
+			outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+			payable: false,
+			stateMutability: 'view',
+			type: 'function',
+		},
+		{
+			constant: true,
+			inputs: [],
 			name: 'rewardsToken',
 			outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
 			payable: false,
@@ -234,6 +271,15 @@ export default {
 			constant: false,
 			inputs: [{ internalType: 'address', name: '_rewardsDistribution', type: 'address' }],
 			name: 'setRewardsDistribution',
+			outputs: [],
+			payable: false,
+			stateMutability: 'nonpayable',
+			type: 'function',
+		},
+		{
+			constant: false,
+			inputs: [{ internalType: 'uint256', name: '_rewardsDuration', type: 'uint256' }],
+			name: 'setRewardsDuration',
 			outputs: [],
 			payable: false,
 			stateMutability: 'nonpayable',

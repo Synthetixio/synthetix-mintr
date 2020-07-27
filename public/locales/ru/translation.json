@@ -371,6 +371,7 @@
 			"data":{
 				 "balance":"Ваш баланс",
 				 "staked":"Сейчас используется",
+
 				 "stakedOldContract": "Использовано v1",
 				 "rewardsAvailable":"Доступные вознаграждения",
 				 "rewardsAvailableOldContract": "Вознаграждения (предыдущие)"

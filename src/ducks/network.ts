@@ -5,6 +5,8 @@ import { getNetworkSpeeds, formatGasPrice } from '../helpers/networkHelper';
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { RootState } from './types';
 
+const DEFAULT_GAS_PRICE = 30;
+
 export type NetworkSliceState = {
 	isFetching: boolean;
 	isFetched: boolean;
@@ -28,7 +30,11 @@ const initialState: NetworkSliceState = {
 	isRefreshing: false,
 	fetchError: null,
 	networkSpeeds: null,
-	currentGasPrice: null,
+	currentGasPrice: {
+		price: DEFAULT_GAS_PRICE,
+		formattedPrice: formatGasPrice(DEFAULT_GAS_PRICE),
+		time: 0,
+	},
 };
 
 const sliceName = 'network';

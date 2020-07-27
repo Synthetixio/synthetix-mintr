@@ -2,7 +2,6 @@ import throttle from 'lodash/throttle';
 import invert from 'lodash/invert';
 
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
-import { URLS } from '../constants/urls';
 import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
 
 export const SUPPORTED_NETWORKS = {
@@ -34,6 +33,10 @@ export const INFURA_JSON_RPC_URLS = {
 };
 
 export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
+
+const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY;
+
+const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`;
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
@@ -72,7 +75,7 @@ export async function getEthereumNetwork() {
 }
 
 export const getNetworkSpeeds = async () => {
-	const result = await fetch(URLS.ETH_GAS_STATION);
+	const result = await fetch(ETH_GAS_STATION_URL);
 	const networkInfo = await result.json();
 	return {
 		[NETWORK_SPEEDS_TO_KEY.SLOW]: {

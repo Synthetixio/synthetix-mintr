@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import UnipoolSETH from './UniPoolSETH';
-import UniPoolSXAU from './UnipoolSXAU';
 import CurvePoolSUSD from './CurvePoolSUSD';
 import CurvePoolSBTC from './CurvePoolSBTC';
 import IEth from './IEth';
+import IBtc from './IBtc';
 import BalancerSNX from './BalancerSNX';
 
 import { getCurrentTheme } from 'ducks/ui';
@@ -24,26 +24,11 @@ import { formatCurrency } from 'helpers/formatters';
 
 const POOLS_MAJOR = [
 	{
-		title: 'lpRewards.actions.unipoolSETH.title',
-		name: 'unipoolSETH',
-		image: '/images/pools/unipool-sETH.svg',
-		contract: 'unipoolSETHContract',
-	},
-	{
-		title: 'lpRewards.actions.unipoolSXAU.title',
-		name: 'unipoolSXAU',
-		image: '/images/pools/unipool-sXAU.svg',
-		contract: 'unipoolSXAUContract',
-	},
-	{
 		title: 'lpRewards.actions.curvepoolSBTC.title',
 		name: 'curvepoolSBTC',
 		image: '/images/pools/iearn-sBTC.svg',
 		contract: 'sBTCRewardsContract',
 	},
-];
-
-const POOLS_SECONDARY = [
 	{
 		title: 'lpRewards.actions.curvepool.title',
 		name: 'iearn',
@@ -54,7 +39,22 @@ const POOLS_SECONDARY = [
 		title: 'lpRewards.actions.ieth.title',
 		name: 'ieth',
 		image: '/images/currencies/iETH.svg',
-		contract: 'iEthRewardsContract',
+		contract: 'iEth2RewardsContract',
+	},
+];
+
+const POOLS_SECONDARY = [
+	{
+		title: 'lpRewards.actions.ibtc.title',
+		name: 'ibtc',
+		image: '/images/currencies/iBTC.svg',
+		contract: 'iBtcRewardsContract',
+	},
+	{
+		title: 'lpRewards.actions.unipoolSETH.title',
+		name: 'unipoolSETH',
+		image: '/images/pools/unipool-sETH.svg',
+		contract: 'unipoolSETHContract',
 	},
 	{
 		title: 'lpRewards.actions.balancer.title',
@@ -72,28 +72,33 @@ const LPRewards = ({ currentTheme }) => {
 
 	useEffect(() => {
 		const {
-			unipoolSXAUContract,
 			unipoolSETHContract,
 			curvepoolContract,
-			iEthRewardsContract,
+			iEth2RewardsContract,
+			iBtcRewardsContract,
 			balancerSNXRewardsContract,
 		} = snxJSConnector;
 
 		const getRewardsAmount = async () => {
 			try {
 				const contracts = [
-					unipoolSXAUContract,
-					unipoolSETHContract,
 					curvepoolContract,
-					iEthRewardsContract,
+					unipoolSETHContract,
 					balancerSNXRewardsContract,
+					iEth2RewardsContract,
+					iBtcRewardsContract,
 				];
 				const rewardsData = await Promise.all(
-					contracts.map(contract => Promise.all([contract.DURATION(), contract.rewardRate()]))
+					contracts.map(contract => {
+						const getDuration = contract.DURATION || contract.rewardsDuration;
+						return Promise.all([getDuration(), contract.rewardRate()]);
+					})
 				);
 				let contractRewards = {};
 				rewardsData.forEach(([duration, rate], i) => {
-					contractRewards[contracts[i].address] = Math.trunc(Number(duration) * (rate / 1e18));
+					const durationInWeeks = Number(duration) / 3600 / 24 / 7;
+					contractRewards[contracts[i].address] =
+						Math.trunc(Number(duration) * (rate / 1e18)) / durationInWeeks;
 				});
 				setDistributions(contractRewards);
 			} catch (e) {
@@ -109,14 +114,14 @@ const LPRewards = ({ currentTheme }) => {
 		switch (poolName) {
 			case 'unipoolSETH':
 				return <UnipoolSETH goBack={goBack} />;
-			case 'unipoolSXAU':
-				return <UniPoolSXAU goBack={goBack} />;
 			case 'iearn':
 				return <CurvePoolSUSD goBack={goBack} />;
 			case 'curvepoolSBTC':
 				return <CurvePoolSBTC goBack={goBack} />;
 			case 'ieth':
 				return <IEth goBack={goBack} />;
+			case 'ibtc':
+				return <IBtc goBack={goBack} />;
 			case 'balancerSNX':
 				return <BalancerSNX goBack={goBack} />;
 			default:

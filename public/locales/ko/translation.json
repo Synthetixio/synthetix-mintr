@@ -371,7 +371,9 @@
 			"data": {
 				"balance": "잔액",
 				"staked": "현재 스테이킹된 수량",
-				"rewardsAvailable": "수령 가능한 보상"
+				"stakedOldContract": "Staked v1",
+				"rewardsAvailable": "수령 가능한 보상",
+				"rewardsAvailableOldContract": "Rewards (previous)"
 			},
 			"actions": {
 				"staking": "스테이킹",
@@ -388,6 +390,7 @@
 				"unstake": "토큰 스테이킹 해제",
 				"exit": "나가기: 스테이킹 해제 및 보상 수령 신청",
 				"exit-old": "Exit old rewards pool",
+				"claim-old": "Claim old rewards pool",
 				"settle": "Settle"
 			}
 		}
