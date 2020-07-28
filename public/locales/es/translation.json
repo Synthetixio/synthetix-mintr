@@ -401,7 +401,7 @@
 	"unipoolSETH": {
 		"title": "Recompensas Uniswap sETH LP Token",
 		"locked": {
-			"subtitle": "Primero apruebe el contrato de Unipool que transfiere sus sXAU UNI-V1 tokens para invertir.",
+			"subtitle": "Primero apruebe el contrato de Unipool que transfiere sus sETH UNI-V1 tokens para invertir.",
 			"transaction": "Estableciendo permisos de Uni-V1 LP token"
 		},
 		"unlocked": {
