@@ -40,8 +40,8 @@
 				"retry": "Повторить"
 			},
 			"addWallet": {
-				"placeholder": "Wallet address",
-				"buttonText": "Add"
+				"placeholder": "Адрес кошелька",
+				"buttonText": "Добавить"
 			}
 		}
 	},
@@ -127,8 +127,8 @@
 				"title": "Выпустить",
 				"subtitle": "Выпустите sUSD используя ваши SNX токены. У Вас появится Залоговый Коэффициент и долг, который позволит зарабатывать вознаграждения.",
 				"instruction": "Подтвердите или введите сумму для выпуска:",
-				"staking": "Staking",
-				"estimateCRatio": "Estimated C-Ratio",
+				"staking": "Используется",
+				"estimateCRatio": "Ожидаемое C-Ratio",
 				"buttons": {
 					"mint": "Выпустить"
 				}
@@ -167,7 +167,7 @@
 			"action": {
 				"title": "Получить",
 				"subtitle": "Если вы используете SNX и выпускаете sUSD, то можете получать два типа вознаграждений: SNX вознаграждения за участие в системе, и комиссионые вознаграждения сгенерированные на бирже Synthetix.Exchange.",
-				"timeLeft": "Time left to claim",
+				"timeLeft": "Осталось времени до получения",
 				"table": {
 					"title": "Периоды выплат:",
 					"period": "Период",
@@ -313,8 +313,8 @@
 			"title": "Заберите ваши условно-депонированные SNX вознаграждения",
 			"subtitle": "Если вы поддерживаете систему используя SNX и выпуская sUSD, то можете получать SNX вознаграждения. Вы можете забрать эти токены по истечению срока условного депонирования - 12 месяцев.",
 			"total": "Всего депонировано:",
-			"vested": "Total vested:",
-			"available": "Total available:",
+			"vested": "Всего собрано:",
+			"available": "Всего доступно:",
 			"table": {
 				"none": "У вас нет депонированных SNX",
 				"title": "Расписание сбора",
@@ -371,9 +371,10 @@
 			"data":{
 				 "balance":"Ваш баланс",
 				 "staked":"Сейчас используется",
-				 "stakedOldContract": "Staked v1",
+
+				 "stakedOldContract": "Использовано v1",
 				 "rewardsAvailable":"Доступные вознаграждения",
-				 "rewardsAvailableOldContract": "Rewards (previous)"
+				 "rewardsAvailableOldContract": "Вознаграждения (предыдущие)"
 			},
 			"actions":{
 				 "staking":"Использование",
@@ -390,7 +391,7 @@
 				 "unstake":"Разблокировать токены",
 				 "exit":"выйти: получить и разблокировать",
 				 "exit-old":"Выйти из старых пулов вознаграждений",
-				 "claim-old": "Claim old rewards pool",
+				 "claim-old": "Получить вознаграждения старого пула",
 				 "settle":"Урегулировать"
 			},
 			"info":{
@@ -510,7 +511,7 @@
 	"transactionSettings": {
 		"priceIndicator": "Комиссия сети Ethereum:",
 		"title": "Установите цену газа",
-		"placeholder": "Add gas price (GWEI)",
+		"placeholder": "Добавьте цену газа (GWEI)",
 		"subtitle": "Установите цену газа (GWEI), чтобы задать скорость транзакции.",
 		"minutes": "мин.",
 		"speed": {
@@ -572,7 +573,7 @@
 			"placeholder": "Поиск синта..."
 		},
 		"address": {
-			"placeholder": "e.g. 0x3b18a4..."
+			"placeholder": "например 0x3b18a4..."
 		},
 		"error": {
 			"notEnoughToMint": "В данный момент вы не можете выпустить столько sUSD",
