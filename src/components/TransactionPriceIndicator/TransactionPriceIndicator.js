@@ -24,8 +24,6 @@ const TransactionPriceIndicator = ({
 	...style
 }) => {
 	const { t } = useTranslation();
-	console.log('gasLimit', gasLimit)
-	console.log('ethRate', ethRate)
 	return (
 		<Container {...style}>
 			<Block>
