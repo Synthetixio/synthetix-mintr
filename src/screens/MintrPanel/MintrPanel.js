@@ -8,7 +8,7 @@ import { getModalState } from '../../ducks/modal';
 
 import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
-import { GweiModal, DelegateModal } from '../../components/Modal';
+import { DelegateModal } from '../../components/Modal';
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
 
 const renderScreen = screen => {
@@ -47,7 +47,6 @@ const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setC
 				})}
 			</Header>
 			{renderScreen(currentTab)}
-			{modalType === MODAL_TYPES_TO_KEY.GWEI ? <GweiModal {...modalProps} /> : null}
 			{modalType === MODAL_TYPES_TO_KEY.DELEGATE ? <DelegateModal {...modalProps} /> : null}
 		</MainContainerWrapper>
 	);
