@@ -2,7 +2,7 @@
 	"onboarding": {
 		"slides": {
 			"welcome": {
-				"title": "Mintr에 오신 걸 환영합니다!",
+				"title": "Mintr에 오신 걸 환영합니다! 테스트 중",
 				"description": "Mintr은 SNX 홀더를 위한 디앱입니다. 만약 Mintr을 사용해보신 적이 없으시다면, Mintr 가이드를 먼저 읽어주세요."
 			},
 			"whatIsSynthetix": {
