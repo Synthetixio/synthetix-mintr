@@ -1,6 +1,6 @@
 import keyBy from 'lodash/keyBy';
 
-export const PAGINATION_INDEX = 10;
+export const PAGINATION_INDEX = 8;
 
 export const TRANSACTION_EVENTS = [
 	'issued',

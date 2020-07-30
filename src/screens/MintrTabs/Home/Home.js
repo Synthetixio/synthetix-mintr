@@ -40,7 +40,7 @@ const Home = ({ walletDetails: { networkId } }) => {
 				{ACTIONS.map(action => {
 					return (
 						<Button
-							disabled={(action === 'track' && !isMainNet(networkId)) || action === 'trade'}
+							disabled={action === 'track' && !isMainNet(networkId)}
 							key={action}
 							onClick={() => setCurrentScenario(action)}
 							big
