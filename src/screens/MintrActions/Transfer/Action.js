@@ -11,6 +11,8 @@ import TransactionPriceIndicator from '../../../components/TransactionPriceIndic
 import ErrorMessage from '../../../components/ErrorMessage';
 import { secondsToTime } from '../../../helpers/formatters';
 
+import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
+
 const Action = ({
 	t,
 	onDestroy,
@@ -27,6 +29,7 @@ const Action = ({
 	gasEstimateError,
 	waitingPeriod,
 	onWaitingPeriodCheck,
+	debtStatusData,
 }) => {
 	return (
 		<SlidePage>
@@ -44,7 +47,11 @@ const Action = ({
 						<Box>
 							<DataHeaderLarge>{t('mintrActions.send.action.available')}</DataHeaderLarge>
 							<Amount>
-								{formatCurrency(currentCurrency && currentCurrency.balance) || 0}{' '}
+								{formatCurrency(
+									CRYPTO_CURRENCY_TO_KEY.SNX === (currentCurrency?.name ?? '')
+										? debtStatusData?.transferable ?? 0
+										: currentCurrency?.balance ?? 0
+								)}{' '}
 								{currentCurrency && currentCurrency.name}
 							</Amount>
 						</Box>
@@ -63,7 +70,13 @@ const Action = ({
 							placeholder="0.00"
 							rightComponent={
 								<ButtonMax
-									onClick={() => setSendAmount((currentCurrency && currentCurrency.balance) || 0)}
+									onClick={() => {
+										if (CRYPTO_CURRENCY_TO_KEY.SNX === currentCurrency.name) {
+											setSendAmount(debtStatusData ? debtStatusData.transferable : 0);
+										} else {
+											setSendAmount((currentCurrency && currentCurrency.balance) || 0);
+										}
+									}}
 								/>
 							}
 						/>

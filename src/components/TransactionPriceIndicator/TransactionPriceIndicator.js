@@ -10,8 +10,7 @@ import { getEthRate } from '../../ducks/rates';
 import { Subtext } from '../Typography';
 import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
-
-import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
+import GasMenu from '../GasMenu';
 
 import { getTransactionPrice } from '../../helpers/networkHelper';
 
@@ -42,15 +41,7 @@ const TransactionPriceIndicator = ({
 								  )} / ${currentGasPrice.price} GWEI`
 								: 0}
 						</Subtext>
-						{canEdit ? (
-							<Button
-								onClick={() =>
-									showModal({ modalType: MODAL_TYPES_TO_KEY.GWEI, modalProps: { gasLimit } })
-								}
-							>
-								{t('button.edit')}
-							</Button>
-						) : null}
+						{canEdit ? <GasMenu /> : null}
 					</Fragment>
 				)}
 			</Block>
@@ -69,19 +60,6 @@ const Block = styled.div`
 	display: flex;
 	justify-content: center;
 	white-space: nowrap;
-`;
-
-const Button = styled.button`
-	font-family: 'apercu-bold', sans-serif;
-	border: none;
-	background-color: transparent;
-	font-size: 15px;
-	text-transform: uppercase;
-	cursor: pointer;
-	color: ${props => props.theme.colorStyles.hyperlink};
-	:hover {
-		text-decoration: underline;
-	}
 `;
 
 const mapStateToProps = state => ({

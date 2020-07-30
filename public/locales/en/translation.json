@@ -358,11 +358,21 @@
 			"unipoolSXAU": {
 				"title": "UNIPOOL sXAU"
 			},
-			"curvepool": { "title": "CURVEPOOL sUSD" },
-			"ieth": { "title": "iETH" },
-			"ibtc": { "title": "iBTC" },
-			"balancer": {"title": "BALANCER SNX"},
-			"curvepoolSBTC": {"title": "CURVEPOOL sBTC"}
+			"curvepool": {
+				"title": "CURVEPOOL sUSD"
+			},
+			"ieth": {
+				"title": "iETH"
+			},
+			"ibtc": {
+				"title": "iBTC"
+			},
+			"balancer": {
+				"title": "BALANCER SNX"
+			},
+			"curvepoolSBTC": {
+				"title": "CURVEPOOL sBTC"
+			}
 		},
 		"shared": {
 			"unlocked": {
@@ -522,7 +532,7 @@
 	"transactionSettings": {
 		"priceIndicator": "Ethereum network fees:",
 		"title": "Set gas price",
-		"placeholder": "Add gas price (GWEI)",
+		"placeholder": "CUSTOM",
 		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
 		"minutes": "mins",
 		"speed": {

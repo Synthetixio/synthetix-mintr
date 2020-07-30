@@ -9,10 +9,11 @@ import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import errorMapper from '../../../helpers/errorMapper';
-import { createTransaction } from '../../../ducks/transactions';
-import { getCurrentGasPrice } from '../../../ducks/network';
-import { getWalletBalancesToArray } from '../../../ducks/balances';
-import { getWalletDetails } from '../../../ducks/wallet';
+import { createTransaction } from 'ducks/transactions';
+import { getCurrentGasPrice } from 'ducks/network';
+import { getWalletBalancesToArray } from 'ducks/balances';
+import { getWalletDetails } from 'ducks/wallet';
+import { getDebtStatusData } from 'ducks/debtStatus';
 import { shortenAddress, bytesFormatter } from '../../../helpers/formatters';
 import { useTranslation } from 'react-i18next';
 
@@ -83,7 +84,14 @@ const sendTransaction = (currency, amount, destination, settings) => {
 	} else return snxJSConnector.snxJS[currency].transferAndSettle(destination, amount, settings);
 };
 
-const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, walletBalances }) => {
+const Send = ({
+	onDestroy,
+	walletDetails,
+	currentGasPrice,
+	createTransaction,
+	walletBalances,
+	debtStatusData,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [sendAmount, setSendAmount] = useState('');
 	const [sendDestination, setSendDestination] = useState('');
@@ -192,7 +200,7 @@ const Send = ({ onDestroy, walletDetails, currentGasPrice, createTransaction, wa
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
-		<SlideContent key={i} {...props} />
+		<SlideContent debtStatusData={debtStatusData} key={i} {...props} />
 	));
 };
 
@@ -200,6 +208,7 @@ const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
 	walletBalances: getWalletBalancesToArray(state),
+	debtStatusData: getDebtStatusData(state),
 });
 
 const mapDispatchToProps = {
