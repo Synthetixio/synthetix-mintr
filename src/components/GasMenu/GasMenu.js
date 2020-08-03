@@ -12,7 +12,7 @@ const MAX_GAS_MULTIPLE = 1.5;
 const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 	const { t } = useTranslation();
 	const [dropdownVisible, setDropdownVisible] = useState(false);
-	const [customGasPrice, setCustomGasPrice] = useState(null);
+	const [customGasPrice, setCustomGasPrice] = useState('');
 	const [errorMessage, setErrorMessage] = useState(null);
 
 	const fastPrice = networkPrices?.FAST?.price ?? 0;
@@ -22,9 +22,10 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 	}, [fastPrice]);
 
 	useEffect(() => {
-		if (customGasPrice != null) {
-			const exceedsLimit = customGasPrice > gasPriceLimit;
-			const newGasPrice = exceedsLimit ? gasPriceLimit : customGasPrice;
+		if (customGasPrice) {
+			const customGasPriceNum = Number(customGasPrice);
+			const exceedsLimit = customGasPriceNum > gasPriceLimit;
+			const newGasPrice = exceedsLimit ? gasPriceLimit : Math.max(0, customGasPriceNum);
 			setCurrentGasPrice({ gasPrice: newGasPrice });
 			setErrorMessage(
 				exceedsLimit
@@ -45,10 +46,7 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 									type="number"
 									step=".01"
 									placeholder={t('transactionSettings.placeholder')}
-									onChange={e => {
-										const newPrice = Number(e.target.value) || 0;
-										setCustomGasPrice(newPrice);
-									}}
+									onChange={e => setCustomGasPrice(e.target.value)}
 									value={customGasPrice}
 								/>
 							</ListElement>
@@ -56,7 +54,6 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 							{networkPrices && networkPrices.SLOW ? (
 								<>
 									<HoverListElement
-										isActive={networkPrices.SLOW.price === currentGasPrice.price}
 										onClick={() => {
 											setCurrentGasPrice({ gasPrice: networkPrices.SLOW.price });
 											setDropdownVisible(false);
@@ -66,7 +63,6 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 										<div>{networkPrices.SLOW.price}</div>
 									</HoverListElement>
 									<HoverListElement
-										isActive={networkPrices.AVERAGE.price === currentGasPrice.price}
 										onClick={() => {
 											setCurrentGasPrice({ gasPrice: networkPrices.AVERAGE.price });
 											setDropdownVisible(false);
@@ -76,7 +72,6 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 										<div>{networkPrices.AVERAGE.price}</div>
 									</HoverListElement>
 									<HoverListElement
-										isActive={networkPrices.FAST.price === currentGasPrice.price}
 										onClick={() => {
 											setCurrentGasPrice({ gasPrice: networkPrices.FAST.price });
 											setDropdownVisible(false);
@@ -162,8 +157,7 @@ const ListElement = styled.li`
 	justify-content: space-around;
 	cursor: pointer;
 	color: ${props => props.theme.colorStyles.subtext};
-	background-color: ${props =>
-		props.isActive ? props.theme.colorStyles.accentDark : props.theme.colorStyles.panels};
+	background-color: ${props => props.theme.colorStyles.panels};
 `;
 const HoverListElement = styled(ListElement)`
 	&:hover {
