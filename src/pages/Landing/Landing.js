@@ -26,6 +26,7 @@ import { Globe } from '../../components/Icons';
 import { LanguageDropdown } from '../../components/Dropdown';
 
 import { PAGES_BY_KEY } from '../../constants/ui';
+import { LINKS } from 'constants/links';
 import { ExternalLink } from 'styles/common';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -178,7 +179,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					})}
 				</Wallets>
 				<BottomLinks>
-					<Link href="https://help.synthetix.io/hc/en-us" target="_blank">
+					<Link href={LINKS.Support} target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
 					<Link
