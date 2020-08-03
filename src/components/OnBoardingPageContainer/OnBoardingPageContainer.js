@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ButtonTertiary } from '../../components/Button';
 import Logo from '../../components/Logo';
 import { withTranslation } from 'react-i18next';
+import { LINKS } from 'constants/links';
 
 const OnBoardingPageContainer = ({ t, children }) => {
 	return (
@@ -13,7 +14,7 @@ const OnBoardingPageContainer = ({ t, children }) => {
 					{/* <Network>{networkName}</Network> */}
 				</HeaderBlock>
 				<HeaderBlock>
-					<ButtonTertiary as="a" href="https://help.synthetix.io/hc/en-us" target="_blank">
+					<ButtonTertiary as="a" href={LINKS.Support} target="_blank">
 						{t('button.havingTrouble')}
 					</ButtonTertiary>
 					<ButtonTertiary
