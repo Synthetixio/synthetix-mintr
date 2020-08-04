@@ -533,6 +533,7 @@
 		"priceIndicator": "Ethereum network fees:",
 		"title": "Set gas price",
 		"placeholder": "CUSTOM",
+		"gas-exceeds-limit": "MAX IS {{gasPrice}}",
 		"subtitle": "Adjust the gas price (GWEI) below to set the transaction speed.",
 		"minutes": "mins",
 		"speed": {
