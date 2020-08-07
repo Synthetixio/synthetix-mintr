@@ -112,10 +112,10 @@ const Send = ({
 	);
 
 	useEffect(() => {
-		if (walletBalances && walletBalances.length > 0) {
+		if (currentCurrency == null && walletBalances && walletBalances.length > 0) {
 			setCurrentCurrency(walletBalances ? walletBalances[0] : null);
 		}
-	}, [walletBalances]);
+	}, [walletBalances, currentCurrency]);
 
 	const getMaxSecsLeftInWaitingPeriod = useCallback(async () => {
 		if (!currentCurrency) return;
