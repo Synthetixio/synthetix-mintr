@@ -7,7 +7,7 @@
 			},
 			"whatIsSynthetix": {
 				"title": "什麽是 Synthetix?",
-				"description": "Synthetix 是一個建立在以太坊上的去中心化合成資產發行協議。這些合成的資產（Synths）來自於抵押 Synthetix Network Token（SNX），且可以直接用 Synthetix.Exchange 交易所上的 Synthetix 智能合約在彼此間交易。"
+				"description": "Synthetix 是一個建立在以太坊上的去中心化合成資產發行協議。這些合成資產（Synths）來自於抵押 Synthetix Network Token（SNX），且可以直接用 Synthetix.Exchange 交易所上的 Synthetix 智能合約在彼此間交易。"
 			},
 			"whyStakeSnx": {
 				"title": "為什麽要抵押 SNX?",
@@ -32,7 +32,7 @@
 			},
 			"loading": {
 				"connectInstructions": "請按照您設備上的指示解鎖您的錢包。",
-				"connectVia": "由 {{walletType}} 連接"
+				"connectVia": "連接{{walletType}}"
 			},
 			"error": {
 				"title": "錯誤",
@@ -54,7 +54,7 @@
 		},
 		"rewards": {
 			"open": "剩餘獎勵倒數計時",
-			"blocked": "申領獎勵 <1>停止</1>"
+			"blocked": "領取獎勵 <1>停止</1>"
 		},
 		"ratio": {
 			"current": "當前抵押率",
@@ -78,7 +78,7 @@
 			"exchange": "前往 Synthetix.Exchange",
 			"synthetixDashboard": "查看 Synthetix Dashboard",
 			"refresh": "重新整理",
-			"delegate": "Delegate"
+			"delegate": "錢包代理"
 		}
 	},
 	"mainNavigation": {
@@ -87,7 +87,7 @@
 			"depot": "倉庫",
 			"transactionsHistory": "交易記錄",
 			"escrow": "托管",
-			"lpRewards": "LP rewards"
+			"lpRewards": "流量供應商獎勵"
 		}
 	},
 	"home": {
@@ -105,7 +105,7 @@
 			},
 			"claim": {
 				"title": "申領",
-				"description": "申領 SNX 抵押獎勵和 Synth 交易獎勵"
+				"description": "領取 SNX 抵押獎勵和 Synth 交易獎勵"
 			},
 			"trade": {
 				"title": "交易",
@@ -116,8 +116,8 @@
 				"description": "SNX，合成資產，或 ETH 轉帳"
 			},
 			"track": {
-				"title": "Track",
-				"description": "Track your debt over time"
+				"title": "追蹤",
+				"description": "追蹤歷史債務紀錄"
 			}
 		}
 	},
@@ -127,8 +127,8 @@
 				"title": "鑄造",
 				"subtitle": "抵押您的 SNX 來鑄造 sUSD。抵押產生的抵押率和債務，將使您賺取獎勵。",
 				"instruction": "直接確認或手動輸入您要鑄造的數量：",
-				"staking": "Staking",
-				"estimateCRatio": "Estimated C-Ratio",
+				"staking": "抵押中",
+				"estimateCRatio": "C-Ratio預測值",
 				"buttons": {
 					"mint": "開始鑄造"
 				}
@@ -152,7 +152,7 @@
 				},
 				"buttons": {
 					"burn": "開始銷毀",
-					"waitingPeriod": "Burn synths unlocked in"
+					"waitingPeriod": "銷毀已解鎖的 synths"
 				}
 			},
 			"confirmation": {
@@ -167,7 +167,7 @@
 			"action": {
 				"title": "申領",
 				"subtitle": "如果您抵押了 SNX 並鑄造了 sUSD，您就有資格獲得兩種獎勵：SNX 抵押獎勵，和 Synthetix.Exchange 產生的 Synth 交易獎勵",
-				"timeLeft": "Time left to claim",
+				"timeLeft": "申領倒計時",
 				"table": {
 					"title": "申領周期：",
 					"period": "周期",
@@ -184,7 +184,7 @@
 				"note": "如果7天內不領取，你的獎勵將會被回收到手續費池。"
 			},
 			"confirmation": {
-				"actionDescription": "正在申領："
+				"actionDescription": "正在領取獎勵："
 			},
 			"complete": {
 				"title": "申領正在進行中"
@@ -192,20 +192,20 @@
 		},
 		"track": {
 			"action": {
-				"title": "Track",
-				"subtitle": "Track your debt over time, with charts via",
+				"title": "追蹤",
+				"subtitle": "追蹤歷史債務。圖標提供：",
 				"data": {
-					"issuedDebt": "Issued debt",
-					"actualDebt": "Actual debt",
-					"totalSynths": "Total Synths",
-					"netDebt": "Net debt"
+					"issuedDebt": "總鑄造",
+					"actualDebt": "實際債務",
+					"totalSynths": "Synths總量",
+					"netDebt": "淨債務"
 				},
 				"chart": {
-					"title": "Debt over time"
+					"title": "歷史債務"
 				},
 				"table": {
-					"yourSynths": "Your synths",
-					"balance": "Balance"
+					"yourSynths": "你的 synths",
+					"balance": "餘額"
 				}
 			}
 		},
@@ -266,7 +266,7 @@
 		"buttons": {
 			"available": "可用數量：",
 			"more": "查看更多",
-			"contract": "查看智能合約",
+			"contract": "查看合約",
 			"deposit": "存款",
 			"withdraw": "提領"
 		},
@@ -277,7 +277,7 @@
 				"instruction": "輸入存款數量：",
 				"buttons": {
 					"deposit": "開始存款",
-					"unlock": "Unlock"
+					"unlock": "解鎖"
 				}
 			},
 			"complete": {
@@ -305,16 +305,16 @@
 			"token": "代幣銷售"
 		},
 		"buttons": {
-			"vest": "開始領取",
+			"vest": "vest",
 			"viewTokenSale": "查看代幣銷售托管",
 			"viewRewards": "查看獎勵托管"
 		},
 		"staking": {
 			"title": "領取您在抵押中的 SNX 抵押獎勵",
 			"subtitle": "如果您抵押 SNX 並鑄造了 sUSD，您就有資格領取 SNX 抵押獎勵，托管 12 個月之後，您可以在這裏領取。",
-			"total": "共計托管：",
+			"total": "總共托管:",
 			"vested": "Total vested:",
-			"available": "Total available:",
+			"available": "總共可用:",
 			"table": {
 				"none": "您沒有托管的 SNX",
 				"title": "領取時間表",
@@ -348,8 +348,8 @@
 	},
 	"lpRewards": {
 		"intro": {
-			"title": "Please choose a pool",
-			"completed": "Completed"
+			"title": "請選擇交易池",
+			"completed": "完成"
 		},
 		"actions": {
 			"unipoolSETH": {
@@ -365,120 +365,120 @@
 		},
 		"shared": {
 			"unlocked": {
-				"link": "See blog post",
-				"complete": "Transaction in progress!"
+				"link": "閱讀詳情",
+				"complete": "交易進行中!"
 			},
 			"data": {
-				"balance": "Your balance",
-				"staked": "Currently staked",
-				"stakedOldContract": "Staked v1",
-				"rewardsAvailable": "Rewards available",
-				"rewardsAvailableOldContract": "Rewards (previous)"
+				"balance": "你的餘額",
+				"staked": "目前已抵押",
+				"stakedOldContract": "已抵押（舊合約）",
+				"rewardsAvailable": "可提領獎勵",
+				"rewardsAvailableOldContract": "獎勵（舊合約）"
 			},
 			"actions": {
-				"staking": "Staking",
-				"claiming": "Claiming",
-				"unstaking": "Unstaking",
-				"exiting": "Unstaking & claiming",
-				"settling": "Settling"
+				"staking": "抵押中",
+				"claiming": "申領中",
+				"unstaking": "提領抵押",
+				"exiting": "提領抵押 + 領取獎勵",
+				"settling": "清算中"
 			},
 			"buttons": {
-				"unlock": "unlock",
-				"goToContract": "Go to contract",
-				"stake": "Stake tokens",
-				"claim": "Claim rewards",
-				"unstake": "Unstake tokens",
-				"exit": "exit: claim & unstake",
-				"exit-old": "Exit old rewards pool",
-				"claim-old": "Claim old rewards pool",
-				"settle": "Settle"
+				"unlock": "解鎖",
+				"goToContract": "前往合約",
+				"stake": "抵押代幣",
+				"claim": "領取獎勵",
+				"unstake": "取消抵押代幣",
+				"exit": "退出: 提領抵押與獎勵",
+				"exit-old": "退出 v1",
+				"claim-old": "領取v1 獎勵",
+				"settle": "清算"
 			},
 			"info": {
-				"weeklyRewards": "Weekly rewards"
+				"weeklyRewards": "每週獎勵"
 			}
 		}
 	},
 	"unipoolSETH": {
-		"title": "Uniswap sETH LP Token Rewards",
+		"title": "Uniswap sETH LP代幣獎勵",
 		"locked": {
-			"subtitle": "First approve the Unipool contract to transfer your sETH UNI-V1 tokens for staking.",
-			"transaction": "Setting Uni-V1 LP token allowance"
+			"subtitle": "授權 Unipool 合約動用你的 sETH UNI-V1 代幣以進行抵押",
+			"transaction": "正在授權 Uni-V1 LP 交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your UNI-V1 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+			"subtitle": "你可以抵押更多 UNI-V1 LP 代幣, 領取 SNX 獎勵或退出。"
 		}
 	},
 	"unipoolSXAU": {
-		"title": "Uniswap sXAU LP Token Rewards",
+		"title": "Uniswap sXAU LP 代幣獎勵",
 		"locked": {
-			"subtitle": "First approve the Unipool contract to transfer your sXAU UNI-V2 tokens for staking.",
-			"transaction": "Setting Uni-V2 LP token allowance"
+			"subtitle": "授權 Unipool 合約動用你的 sXAU UNI-V2 代幣以進行抵押。",
+			"transaction": "正在授權 Uni-V2 LP 交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your UNI-V2 Liquidity Provider (LP) tokens, claim SNX rewards, or exit completely."
+			"subtitle": "你可以抵押更多 UNI-V2 LP 代幣, 領取 SNX 獎勵或退出。"
 		}
 	},
 	"ieth": {
-		"title": "iETH Rewards",
+		"title": "iETH 獎勵",
 		"locked": {
-			"subtitle": "First approve the iEthRewards contract to transfer your iETH synths for staking.",
-			"transaction": "Setting iETH allowance"
+			"subtitle": "授權 iEthRewards 合約移動你的 iETH 資產以進行抵押",
+			"transaction": "正在授權 iETH 交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your iETH synths, claim SNX rewards, or exit completely.",
-			"settle-info": "You need to settle before being able to stake your iETH."
+			"subtitle": "你可以抵押更多 iETH 資產, 領取 SNX 獎勵或退出。",
+			"settle-info": "在抵押 iETH 前，您必須先進行清算"
 		}
 	},
 	"curvepool": {
-		"title": "Curve Finance sUSD LP Token Rewards",
+		"title": "Curve Finance sUSD LP 代幣獎勵",
 		"locked": {
-			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
-			"transaction": "Setting Curve LP token allowance"
+			"subtitle": "授權 Curvepool 合約移動你的 Curve LP 代幣以進行抵押。",
+			"transaction": "正在授權 Curve LP 代幣交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your Curve LP tokens, claim SNX rewards, or exit completely."
+			"subtitle": "你可以抵押更多 Curve LP 代幣, 領取 SNX 獎勵或退出。"
 		}
 	},
 	"curvepoolSBTC": {
-		"title": "Curve Tokenised BTC LP Token Rewards",
+		"title": "Curve Tokenised BTC LP 代幣獎勵",
 		"locked": {
-			"subtitle": "First approve the Curvepool contract to transfer your Curve LP tokens for staking.",
-			"transaction": "Setting Curve LP token allowance"
+			"subtitle": "授權 Curvepool 合約移動你的 Curve LP 代幣以進行抵押。",
+			"transaction": "正在授權 Curve LP 代幣交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your Curve LP tokens, claim BPT rewards, or exit completely."
+			"subtitle": "你可以抵押更多 Curve LP 代幣, 領取 SNX 獎勵或退出。"
 		}
 	},
 	"balancerSNX": {
-		"title": "Balancer SNX/USDC Pool Token Rewards",
+		"title": "Balancer SNX/USDC Pool 代幣獎勵",
 		"locked": {
-			"subtitle": "First approve the Balancer Pool contract to transfer your BPT tokens for staking.",
-			"transaction": "Setting Balancer BPT token allowance"
+			"subtitle": "授權 Balancer Pool 合約移動你的 BPT 代幣以進行抵押。",
+			"transaction": "正在授權 BPT 代幣交易"
 		},
 		"unlocked": {
-			"subtitle": "Here you can stake your Balancer (BPT) tokens, claim SNX rewards, or exit completely."
+			"subtitle": "你可以抵押更多 Balancer (BPT) 代幣, 領取 SNX 獎勵或退出。"
 		}
 	},
 	"delegation": {
 		"popup": {
-			"title": "Delegate wallet addresses",
-			"link": "See blog post",
-			"description": "Delegation enables a wallet to execute functions on behalf of another wallet: mint, burn, claim, and exchange, but not transfer.",
+			"title": "代理地址",
+			"link": "閱讀詳情",
+			"description": "錢包代理將授權別的地址為你進行多種操作，包括: 鑄造, 銷毀, 提領獎勵以及交易, 但無法進行直接轉帳.",
 			"input": {
-				"label": "Enter new wallet address to delegate:"
+				"label": "輸入要授權代理的錢包地址："
 			},
 			"table": {
-				"title": "Manage wallet addresses",
+				"title": "管理錢包地址",
 				"columns": {
-					"walletAddress": "Wallet address",
-					"actions": "actions"
+					"walletAddress": "錢包地址",
+					"actions": "授權操作"
 				},
 				"cells": {
-					"removeAllPowers": "Remove all powers"
+					"removeAllPowers": "移除所有授權"
 				}
 			},
 			"buttons": {
-				"add": "Add"
+				"add": "新增"
 			}
 		}
 	},
@@ -496,7 +496,7 @@
 			"cleared": "已售出",
 			"withdrawl": "已提款",
 			"bought": "已購買",
-			"feesClaimed": "已申領的費用",
+			"feesClaimed": "已領取獎勵",
 			"sent": "已發送"
 		},
 		"buttons": {
@@ -510,7 +510,7 @@
 	"transactionSettings": {
 		"priceIndicator": "以太坊網絡費用：",
 		"title": "設定 gas price",
-		"placeholder": "Add gas price (GWEI)",
+		"placeholder": "調高 gas price (GWEI)",
 		"subtitle": "調整下方的 gas price (GWEI) 來設置交易速度。",
 		"minutes": "分鐘",
 		"speed": {
@@ -569,10 +569,10 @@
 	},
 	"input": {
 		"list": {
-			"placeholder": "查找一個 Synth..."
+			"placeholder": "搜尋 Synth..."
 		},
 		"address": {
-			"placeholder": "e.g. 0x3b18a4..."
+			"placeholder": "地址如： 0x3b18a4..."
 		},
 		"error": {
 			"notEnoughToMint": "您現在無法鑄造那麽多 sUSD",
@@ -603,7 +603,7 @@
 		"claim": "要申領獎勵，您的抵押率不能低於目標抵押率 1%。如果您的抵押率不夠，獎勵領取將被關閉，直到您銷毀足夠的 sUSD。",
 		"debtBalance": "一開始，您的債務等於初始鑄造的 sUSD 數量，接下來，債務將隨著其他合成資產持有人的收益和損失而波動。當有人持有的合成資產增值時，那部分收益將按比例分佈至所有 SNX 持有人的債務。要解鎖所有您抵押的 SNX，您需要首先還清您的債務。",
 		"synthsBalance": "Synth 是在 Synthetix 的系統中的合成資產，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成資產。這個數字是此錢包中所有合成資產的價值總和。如果您希望把它們換回 sUSD，請點擊交易按鈕。",
-		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
-		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
+		"track": "<0>Issued debt:</0> 你所有鑄造和銷毀的總和, 顯示 C-Ratio 如何影響你的債務.<1 /><2>Actual debt:</2> 你的歷史總債務.",
+		"poolCompleted": "計畫結束，請領取的的獎勵以及所有抵押的代幣。"
 	}
 }
