@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../../helpers/snxJSConnector';
+import useInterval from 'hooks/useInterval';
 
 import {
 	bigNumberFormatter,
@@ -25,6 +26,7 @@ const DEFAULT_GAS_LIMIT = 300000;
 const Stake = ({ walletDetails, goBack }) => {
 	const { t } = useTranslation();
 	const [balances, setBalances] = useState(null);
+	const [computedRewards, setComputedRewards] = useState(null);
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 	const {
@@ -40,12 +42,22 @@ const Stake = ({ walletDetails, goBack }) => {
 				snxJS: { iETH, Exchanger },
 				iEth2RewardsContract,
 			} = snxJSConnector;
-			const [iETHBalance, iETHStaked, rewards, settlementOwing, rewardsOld] = await Promise.all([
+			const [
+				iETHBalance,
+				iETHStaked,
+				rewards,
+				settlementOwing,
+				rewardsOld,
+				rewardRate,
+				rewardForDuration,
+			] = await Promise.all([
 				iETH.balanceOf(currentWallet),
 				iEth2RewardsContract.balanceOf(currentWallet),
 				iEth2RewardsContract.earned(currentWallet),
 				Exchanger.settlementOwing(currentWallet, bytesFormatter('iETH')),
 				iEthRewardsContract.earned(currentWallet),
+				iEth2RewardsContract.rewardRate(),
+				iEth2RewardsContract.getRewardForDuration(),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
@@ -59,12 +71,22 @@ const Stake = ({ walletDetails, goBack }) => {
 				rewards: bigNumberFormatter(rewards),
 				rewardsOld: bigNumberFormatter(rewardsOld),
 				needsToSettle: reclaimAmount || rebateAmount,
+				rewardRate: bigNumberFormatter(rewardRate),
+				rewardForDuration: bigNumberFormatter(rewardForDuration),
 			});
 		} catch (e) {
 			console.log(e);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet, snxJSConnector.initialized]);
+
+	useInterval(() => {
+		if (!balances) return;
+		const { iETHStaked, rewards, rewardRate, rewardForDuration } = balances;
+		const rewarForAccount = (iETHStaked * rewardRate) / rewardForDuration;
+		const initialRewards = computedRewards || rewards;
+		setComputedRewards(initialRewards + rewarForAccount);
+	}, 1000);
 
 	useEffect(() => {
 		fetchData();
@@ -154,7 +176,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
-					body={`${balances ? formatCurrency(balances.rewards) : 0} SNX`}
+					body={`${computedRewards ? formatCurrency(computedRewards, 6) : 0} SNX`}
 				/>
 				{balances && balances.rewardsOld ? (
 					<DataBox
