@@ -87,7 +87,7 @@
 			"depot": "倉庫",
 			"transactionsHistory": "交易記錄",
 			"escrow": "托管",
-			"lpRewards": "流量供應商獎勵"
+			"lpRewards": "流動性提供者獎勵"
 		}
 	},
 	"home": {
@@ -128,7 +128,7 @@
 				"subtitle": "抵押您的 SNX 來鑄造 sUSD。抵押產生的抵押率和債務，將使您賺取獎勵。",
 				"instruction": "直接確認或手動輸入您要鑄造的數量：",
 				"staking": "抵押中",
-				"estimateCRatio": "C-Ratio預測值",
+				"estimateCRatio": "抵押比率預估值",
 				"buttons": {
 					"mint": "開始鑄造"
 				}
@@ -195,9 +195,9 @@
 				"title": "追蹤",
 				"subtitle": "追蹤歷史債務。圖標提供：",
 				"data": {
-					"issuedDebt": "總鑄造",
+					"issuedDebt": "已發行債務",
 					"actualDebt": "實際債務",
-					"totalSynths": "Synths總量",
+					"totalSynths": "衍生品總量",
 					"netDebt": "淨債務"
 				},
 				"chart": {
@@ -380,7 +380,7 @@
 				"claiming": "申領中",
 				"unstaking": "提領抵押",
 				"exiting": "提領抵押 + 領取獎勵",
-				"settling": "清算中"
+				"settling": "結算中"
 			},
 			"buttons": {
 				"unlock": "解鎖",
@@ -391,7 +391,7 @@
 				"exit": "退出: 提領抵押與獎勵",
 				"exit-old": "退出 v1",
 				"claim-old": "領取v1 獎勵",
-				"settle": "清算"
+				"settle": "結算"
 			},
 			"info": {
 				"weeklyRewards": "每週獎勵"
@@ -399,7 +399,7 @@
 		}
 	},
 	"unipoolSETH": {
-		"title": "Uniswap sETH LP代幣獎勵",
+		"title": "Uniswap sETH 流動性提供者代幣獎勵",
 		"locked": {
 			"subtitle": "授權 Unipool 合約動用你的 sETH UNI-V1 代幣以進行抵押",
 			"transaction": "正在授權 Uni-V1 LP 交易"
@@ -409,7 +409,7 @@
 		}
 	},
 	"unipoolSXAU": {
-		"title": "Uniswap sXAU LP 代幣獎勵",
+		"title": "Uniswap sXAU 流動性提供者代幣獎勵",
 		"locked": {
 			"subtitle": "授權 Unipool 合約動用你的 sXAU UNI-V2 代幣以進行抵押。",
 			"transaction": "正在授權 Uni-V2 LP 交易"
@@ -430,7 +430,7 @@
 		}
 	},
 	"curvepool": {
-		"title": "Curve Finance sUSD LP 代幣獎勵",
+		"title": "Curve Finance sUSD 流動性提供者代幣獎勵",
 		"locked": {
 			"subtitle": "授權 Curvepool 合約移動你的 Curve LP 代幣以進行抵押。",
 			"transaction": "正在授權 Curve LP 代幣交易"
@@ -440,7 +440,7 @@
 		}
 	},
 	"curvepoolSBTC": {
-		"title": "Curve Tokenised BTC LP 代幣獎勵",
+		"title": "Curve Tokenised BTC 流動性提供者代幣獎勵",
 		"locked": {
 			"subtitle": "授權 Curvepool 合約移動你的 Curve LP 代幣以進行抵押。",
 			"transaction": "正在授權 Curve LP 代幣交易"
@@ -461,7 +461,7 @@
 	},
 	"delegation": {
 		"popup": {
-			"title": "代理地址",
+			"title": "代理錢包地址",
 			"link": "閱讀詳情",
 			"description": "錢包代理將授權別的地址為你進行多種操作，包括: 鑄造, 銷毀, 提領獎勵以及交易, 但無法進行直接轉帳.",
 			"input": {
