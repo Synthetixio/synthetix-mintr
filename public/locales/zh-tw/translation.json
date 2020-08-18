@@ -53,7 +53,7 @@
 			"wallet": "您的錢包詳情："
 		},
 		"rewards": {
-			"open": "剩餘獎勵倒數計時",
+			"open": "未領取獎勵",
 			"blocked": "領取獎勵 <1>停止</1>"
 		},
 		"ratio": {
@@ -167,7 +167,7 @@
 			"action": {
 				"title": "申領",
 				"subtitle": "如果您抵押了 SNX 並鑄造了 sUSD，您就有資格獲得兩種獎勵：SNX 抵押獎勵，和 Synthetix.Exchange 產生的 Synth 交易獎勵",
-				"timeLeft": "申領倒計時",
+				"timeLeft": "申領獎勵倒數計時",
 				"table": {
 					"title": "申領周期：",
 					"period": "周期",
