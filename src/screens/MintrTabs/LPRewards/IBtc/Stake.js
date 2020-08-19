@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../../helpers/snxJSConnector';
+import useInterval from 'hooks/useInterval';
 
 import {
 	bigNumberFormatter,
@@ -25,6 +26,7 @@ const DEFAULT_GAS_LIMIT = 300000;
 const Stake = ({ walletDetails, goBack }) => {
 	const { t } = useTranslation();
 	const [balances, setBalances] = useState(null);
+	const [computedRewards, setComputedRewards] = useState(null);
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 	const {
@@ -39,11 +41,20 @@ const Stake = ({ walletDetails, goBack }) => {
 				snxJS: { iBTC, Exchanger },
 				iBtcRewardsContract,
 			} = snxJSConnector;
-			const [iBTCBalance, iBTCStaked, rewards, settlementOwing] = await Promise.all([
+			const [
+				iBTCBalance,
+				iBTCStaked,
+				rewards,
+				settlementOwing,
+				rewardRate,
+				rewardForDuration,
+			] = await Promise.all([
 				iBTC.balanceOf(currentWallet),
 				iBtcRewardsContract.balanceOf(currentWallet),
 				iBtcRewardsContract.earned(currentWallet),
 				Exchanger.settlementOwing(currentWallet, bytesFormatter('iBTC')),
+				iBtcRewardsContract.rewardRate(),
+				iBtcRewardsContract.getRewardForDuration(),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
@@ -56,12 +67,22 @@ const Stake = ({ walletDetails, goBack }) => {
 				iBTCStakedBN: iBTCStaked,
 				rewards: bigNumberFormatter(rewards),
 				needsToSettle: reclaimAmount || rebateAmount,
+				rewardRate: bigNumberFormatter(rewardRate),
+				rewardForDuration: bigNumberFormatter(rewardForDuration),
 			});
 		} catch (e) {
 			console.log(e);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet, snxJSConnector.initialized]);
+
+	useInterval(() => {
+		if (!balances) return;
+		const { iBTCStaked, rewards, rewardRate, rewardForDuration } = balances;
+		const rewardForAccount = (iBTCStaked * rewardRate) / rewardForDuration;
+		const initialRewards = computedRewards || rewards;
+		setComputedRewards(initialRewards + rewardForAccount);
+	}, 1000);
 
 	useEffect(() => {
 		fetchData();
@@ -71,16 +92,12 @@ const Stake = ({ walletDetails, goBack }) => {
 		if (!currentWallet) return;
 		const { iBtcRewardsContract } = snxJSConnector;
 
-		iBtcRewardsContract.on('Staked', user => {
-			if (user === currentWallet) {
-				fetchData();
-			}
+		iBtcRewardsContract.on('Staked', () => {
+			fetchData();
 		});
 
-		iBtcRewardsContract.on('Withdrawn', user => {
-			if (user === currentWallet) {
-				fetchData();
-			}
+		iBtcRewardsContract.on('Withdrawn', () => {
+			fetchData();
 		});
 
 		iBtcRewardsContract.on('RewardPaid', user => {
@@ -144,7 +161,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				/>
 				<DataBox
 					heading={t('lpRewards.shared.data.rewardsAvailable')}
-					body={`${balances ? formatCurrency(balances.rewards) : 0} SNX`}
+					body={`${computedRewards ? formatCurrency(computedRewards, 6) : 0} SNX`}
 				/>
 			</BoxRow>
 			<ButtonBlock>

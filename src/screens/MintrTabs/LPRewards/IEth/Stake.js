@@ -83,9 +83,9 @@ const Stake = ({ walletDetails, goBack }) => {
 	useInterval(() => {
 		if (!balances) return;
 		const { iETHStaked, rewards, rewardRate, rewardForDuration } = balances;
-		const rewarForAccount = (iETHStaked * rewardRate) / rewardForDuration;
+		const rewardForAccount = (iETHStaked * rewardRate) / rewardForDuration;
 		const initialRewards = computedRewards || rewards;
-		setComputedRewards(initialRewards + rewarForAccount);
+		setComputedRewards(initialRewards + rewardForAccount);
 	}, 1000);
 
 	useEffect(() => {
@@ -96,16 +96,12 @@ const Stake = ({ walletDetails, goBack }) => {
 		if (!currentWallet) return;
 		const { iEth2RewardsContract } = snxJSConnector;
 
-		iEth2RewardsContract.on('Staked', user => {
-			if (user === currentWallet) {
-				fetchData();
-			}
+		iEth2RewardsContract.on('Staked', () => {
+			fetchData();
 		});
 
-		iEth2RewardsContract.on('Withdrawn', user => {
-			if (user === currentWallet) {
-				fetchData();
-			}
+		iEth2RewardsContract.on('Withdrawn', () => {
+			fetchData();
 		});
 
 		iEthRewardsContract.on('RewardPaid', user => {
