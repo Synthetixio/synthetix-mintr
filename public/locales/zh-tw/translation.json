@@ -104,7 +104,7 @@
 				"description": "銷毀 sUSD 來解鎖抵押的 SNX"
 			},
 			"claim": {
-				"title": "申領",
+				"title": "領取",
 				"description": "領取 SNX 抵押獎勵和 Synth 交易獎勵"
 			},
 			"trade": {
@@ -165,29 +165,29 @@
 		},
 		"claim": {
 			"action": {
-				"title": "申領",
+				"title": "領取獎勵",
 				"subtitle": "如果您抵押了 SNX 並鑄造了 sUSD，您就有資格獲得兩種獎勵：SNX 抵押獎勵，和 Synthetix.Exchange 產生的 Synth 交易獎勵",
-				"timeLeft": "申領獎勵倒數計時",
+				"timeLeft": "領取獎勵倒數計時",
 				"table": {
-					"title": "申領周期：",
+					"title": "領取周期：",
 					"period": "周期",
-					"status": "申領狀態",
-					"open": "開放申領",
+					"status": "領取狀態",
+					"open": "開放領取",
 					"blocked": "停止"
 				},
 				"tradingRewards": "您的 Synth 交易獎勵：",
 				"stakingRewards": "您的 SNX 抵押：",
 				"buttons": {
-					"claim": "開始申領",
-					"history": "申領記錄"
+					"claim": "開始領取",
+					"history": "領取記錄"
 				},
 				"note": "如果7天內不領取，你的獎勵將會被回收到手續費池。"
 			},
 			"confirmation": {
-				"actionDescription": "正在領取獎勵："
+				"actionDescription": "領取獎勵："
 			},
 			"complete": {
-				"title": "申領正在進行中"
+				"title": "領取中"
 			}
 		},
 		"track": {
@@ -313,7 +313,7 @@
 			"title": "領取您在抵押中的 SNX 抵押獎勵",
 			"subtitle": "如果您抵押 SNX 並鑄造了 sUSD，您就有資格領取 SNX 抵押獎勵，托管 12 個月之後，您可以在這裏領取。",
 			"total": "總共托管:",
-			"vested": "Total vested:",
+			"vested": "總共既得獎勵",
 			"available": "總共可用:",
 			"table": {
 				"none": "您沒有托管的 SNX",
@@ -377,7 +377,7 @@
 			},
 			"actions": {
 				"staking": "抵押中",
-				"claiming": "申領中",
+				"claiming": "領取中",
 				"unstaking": "提領抵押",
 				"exiting": "提領抵押 + 領取獎勵",
 				"settling": "結算中"
@@ -600,7 +600,7 @@
 		"subtitle": "我們期望在接下來幾個月內上線一個移動版，敬請期待。"
 	},
 	"tooltip": {
-		"claim": "要申領獎勵，您的抵押率不能低於目標抵押率 1%。如果您的抵押率不夠，獎勵領取將被關閉，直到您銷毀足夠的 sUSD。",
+		"claim": "要領取獎勵，您的抵押率不能低於目標抵押率 1%。如果您的抵押率不夠，獎勵領取將被關閉，直到您銷毀足夠的 sUSD。",
 		"debtBalance": "一開始，您的債務等於初始鑄造的 sUSD 數量，接下來，債務將隨著其他合成資產持有人的收益和損失而波動。當有人持有的合成資產增值時，那部分收益將按比例分佈至所有 SNX 持有人的債務。要解鎖所有您抵押的 SNX，您需要首先還清您的債務。",
 		"synthsBalance": "Synth 是在 Synthetix 的系統中的合成資產，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成資產。這個數字是此錢包中所有合成資產的價值總和。如果您希望把它們換回 sUSD，請點擊交易按鈕。",
 		"track": "<0>Issued debt:</0> 你所有鑄造和銷毀的總和, 顯示 C-Ratio 如何影響你的債務.<1 /><2>Actual debt:</2> 你的歷史總債務.",
