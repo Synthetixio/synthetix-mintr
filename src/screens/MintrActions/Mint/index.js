@@ -128,6 +128,7 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 					status: 'pending',
 					info: `Minting ${formatCurrency(mintAmount)} sUSD`,
 					hasNotification: true,
+					type: 'mint',
 				});
 				handleNext(2);
 			}
