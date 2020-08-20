@@ -568,6 +568,11 @@
 			"pending": "Transaction in progress",
 			"success": "Transaction complete!",
 			"error": "An error occurred..."
+		},
+		"curve": {
+			"heading": "Earn rewards with your sUSD at Curve",
+			"description": "Deposit your sUSD to receive CRV and SNX rewards",
+			"action": "Visit"
 		}
 	},
 	"button": {
