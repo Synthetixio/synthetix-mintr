@@ -64,6 +64,8 @@ const POOLS_SECONDARY = [
 	},
 ];
 
+const POOLS_COMPLETED = ['unipoolSETH', 'balancerSNX'];
+
 const LPRewards = ({ currentTheme }) => {
 	const { t } = useTranslation();
 	const [currentPool, setCurrentPool] = useState(null);
@@ -71,34 +73,24 @@ const LPRewards = ({ currentTheme }) => {
 	const goBack = () => setCurrentPool(null);
 
 	useEffect(() => {
-		const {
-			unipoolSETHContract,
-			curvepoolContract,
-			iEth2RewardsContract,
-			iBtcRewardsContract,
-			balancerSNXRewardsContract,
-		} = snxJSConnector;
+		const { curvepoolContract, iEth2RewardsContract, iBtcRewardsContract } = snxJSConnector;
 
 		const getRewardsAmount = async () => {
 			try {
-				const contracts = [
-					curvepoolContract,
-					unipoolSETHContract,
-					balancerSNXRewardsContract,
-					iEth2RewardsContract,
-					iBtcRewardsContract,
-				];
+				const contracts = [curvepoolContract, iEth2RewardsContract, iBtcRewardsContract];
 				const rewardsData = await Promise.all(
 					contracts.map(contract => {
 						const getDuration = contract.DURATION || contract.rewardsDuration;
-						return Promise.all([getDuration(), contract.rewardRate()]);
+						return Promise.all([getDuration(), contract.rewardRate(), contract.periodFinish()]);
 					})
 				);
 				let contractRewards = {};
-				rewardsData.forEach(([duration, rate], i) => {
+				rewardsData.forEach(([duration, rate, periodFinish], i) => {
 					const durationInWeeks = Number(duration) / 3600 / 24 / 7;
-					contractRewards[contracts[i].address] =
-						Math.trunc(Number(duration) * (rate / 1e18)) / durationInWeeks;
+					const isPeriodFinished = new Date().getTime() > Number(periodFinish) * 1000;
+					contractRewards[contracts[i].address] = isPeriodFinished
+						? 0
+						: Math.trunc(Number(duration) * (rate / 1e18)) / durationInWeeks;
 				});
 				setDistributions(contractRewards);
 			} catch (e) {
@@ -154,7 +146,7 @@ const LPRewards = ({ currentTheme }) => {
 														<StyledDataLarge>10,000 SNX</StyledDataLarge>
 														<StyledDataLarge>25,000 REN</StyledDataLarge>
 													</DistributionRow>
-												) : !['unipoolSETH', 'unipoolSXAU', 'balancerSNX'].includes(name) ? (
+												) : !POOLS_COMPLETED.includes(name) ? (
 													<StyledDataLarge>{formatCurrency(distribution, 0)} SNX</StyledDataLarge>
 												) : (
 													<CompletedLabel>
