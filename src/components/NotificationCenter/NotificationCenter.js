@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { getCurrentTransactions } from '../../ducks/transactions';
 
-import Notification from './Notification';
+import Notification from './TransactionNotification';
 
 const NotificationCenter = ({ currentTransactions }) => {
 	if (!currentTransactions) return null;
