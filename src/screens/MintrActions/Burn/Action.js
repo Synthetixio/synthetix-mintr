@@ -33,7 +33,15 @@ const Action = ({
 		if (issuanceDelay) {
 			return (
 				<RetryButtonWrapper>
-					<ButtonPrimary onClick={onIssuanceDelayCheck} margin="auto">
+					<ButtonPrimary
+						onClick={() => {
+							onIssuanceDelayCheck();
+							if (waitingPeriod) {
+								onWaitingPeriodCheck();
+							}
+						}}
+						margin="auto"
+					>
 						Retry
 					</ButtonPrimary>
 					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { getCurrentTransactions } from '../../ducks/transactions';
 
-import Notification from './Notification';
+import TransactionNotification from './TransactionNotification';
 
 const NotificationCenter = ({ currentTransactions }) => {
 	if (!currentTransactions) return null;
@@ -12,7 +12,7 @@ const NotificationCenter = ({ currentTransactions }) => {
 		<NotificationCenterWrapper>
 			{currentTransactions.reverse().map(transaction => {
 				if (transaction.hasNotification) {
-					return <Notification key={transaction.hash} transaction={transaction} />;
+					return <TransactionNotification key={transaction.hash} transaction={transaction} />;
 				}
 				return null;
 			})}
