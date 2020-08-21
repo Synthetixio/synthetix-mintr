@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-
 import { useTranslation } from 'react-i18next';
+
 import snxJSConnector from '../../helpers/snxJSConnector';
+import { getEtherscanTxLink } from 'helpers/explorers';
 
 import { hideTransaction } from '../../ducks/transactions';
 import { getWalletDetails } from '../../ducks/wallet';
@@ -23,7 +24,7 @@ const getStatusSentence = status => {
 
 const TransactionNotification = ({ transaction, walletDetails, hideTransaction }) => {
 	const { t } = useTranslation();
-	const { networkName } = walletDetails;
+	const { networkId } = walletDetails;
 	const [status, setStatus] = useState(transaction.status);
 	const [curveNotificationIsHidden, setCurveNotificationIsHidden] = useState(false);
 
@@ -42,9 +43,7 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 			icon={'/images/success.svg'}
 			heading={t(getStatusSentence(status))}
 			description={transaction.info}
-			link={`https:${networkName === 'mainnet' ? '' : networkName + '.'}etherscan.io/tx/${
-				transaction.hash
-			}`}
+			link={getEtherscanTxLink(networkId, transaction.hash)}
 			linkLabel={t('button.navigation.view')}
 			onClose={() => hideTransaction(transaction.hash)}
 		/>,

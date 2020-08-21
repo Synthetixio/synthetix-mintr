@@ -50,6 +50,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					maxBurnAmount = debt;
 					maxBurnAmountBN = results[0];
 				}
+
 				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
 				setData({
 					issuanceRatio,
@@ -229,7 +230,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 				createTransaction({
 					hash: transaction.hash,
 					status: 'pending',
-					info: `Burning ${formatCurrency(burnAmount)} sUSD`,
+					info: `Burning ${formatCurrency(burnToTarget ? burnAmountToFixCRatio : burnAmount)} sUSD`,
 					hasNotification: true,
 				});
 				handleNext(2);
