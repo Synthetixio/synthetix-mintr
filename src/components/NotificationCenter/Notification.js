@@ -8,7 +8,6 @@ import { PMedium } from '../Typography';
 
 const Notification = ({ isPending, icon, heading, description, link, linkLabel, onClose }) => {
 	const { t } = useTranslation();
-	console.log(link);
 	return (
 		<NotificationWrapper>
 			<LeftBlock>
