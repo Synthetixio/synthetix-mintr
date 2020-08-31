@@ -24,12 +24,6 @@ import { formatCurrency } from 'helpers/formatters';
 
 const POOLS_MAJOR = [
 	{
-		title: 'lpRewards.actions.curvepoolSBTC.title',
-		name: 'curvepoolSBTC',
-		image: '/images/pools/iearn-sBTC.svg',
-		contract: 'sBTCRewardsContract',
-	},
-	{
 		title: 'lpRewards.actions.curvepool.title',
 		name: 'iearn',
 		image: '/images/pools/iearn.svg',
@@ -41,14 +35,20 @@ const POOLS_MAJOR = [
 		image: '/images/currencies/iETH.svg',
 		contract: 'iEth2RewardsContract',
 	},
-];
-
-const POOLS_SECONDARY = [
 	{
 		title: 'lpRewards.actions.ibtc.title',
 		name: 'ibtc',
 		image: '/images/currencies/iBTC.svg',
 		contract: 'iBtcRewardsContract',
+	},
+];
+
+const POOLS_SECONDARY = [
+	{
+		title: 'lpRewards.actions.curvepoolSBTC.title',
+		name: 'curvepoolSBTC',
+		image: '/images/pools/iearn-sBTC.svg',
+		contract: 'sBTCRewardsContract',
 	},
 	{
 		title: 'lpRewards.actions.unipoolSETH.title',
@@ -64,7 +64,7 @@ const POOLS_SECONDARY = [
 	},
 ];
 
-const POOLS_COMPLETED = ['unipoolSETH', 'balancerSNX'];
+const POOLS_COMPLETED = ['curvepoolSBTC', 'unipoolSETH', 'balancerSNX'];
 
 const LPRewards = ({ currentTheme }) => {
 	const { t } = useTranslation();
@@ -141,12 +141,7 @@ const LPRewards = ({ currentTheme }) => {
 													<StyledHeading>{t(title)}</StyledHeading>
 												</ButtonHeading>
 												<StyledSubtext>{t('lpRewards.shared.info.weeklyRewards')}:</StyledSubtext>
-												{name === 'curvepoolSBTC' ? (
-													<DistributionRow>
-														<StyledDataLarge>10,000 SNX</StyledDataLarge>
-														<StyledDataLarge>25,000 REN</StyledDataLarge>
-													</DistributionRow>
-												) : !POOLS_COMPLETED.includes(name) ? (
+												{!POOLS_COMPLETED.includes(name) ? (
 													<StyledDataLarge>{formatCurrency(distribution, 0)} SNX</StyledDataLarge>
 												) : (
 													<CompletedLabel>
