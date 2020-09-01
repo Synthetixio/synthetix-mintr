@@ -61,7 +61,7 @@ const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaint
 				<>
 					<GlobalEventsGate />
 					<MainLayout>
-						<CurrentPage isOnMaintenance={appIsOnMaintenance} page={currentPage} />
+						<CurrentPage isOnMaintenance={true} page={currentPage} />
 						<NotificationCenter />
 					</MainLayout>
 				</>
