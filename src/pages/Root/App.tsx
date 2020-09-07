@@ -18,6 +18,7 @@ import Main from '../Main';
 import MobileLanding from '../MobileLanding';
 
 import MainLayout from './components/MainLayout';
+import L2Onboarding from 'pages/L2Onboarding/L2Onboarding';
 
 const mapStateToProps = (state: RootState) => ({
 	currentTheme: getCurrentTheme(state),
@@ -43,6 +44,8 @@ const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
 			return <WalletSelection />;
 		case PAGES_BY_KEY.MAIN:
 			return <Main />;
+		case PAGES_BY_KEY.L2ONBOARDING:
+			return <L2Onboarding />;
 		default:
 			return <Landing />;
 	}
@@ -54,7 +57,6 @@ type AppProps = {
 
 const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaintenance }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
-
 	return (
 		<ThemeProvider theme={themeStyle}>
 			{appIsReady && (

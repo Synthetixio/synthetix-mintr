@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Dashboard from 'screens/Dashboard';
 import MintrPanel from 'screens/MintrPanel';
-import { L2Banner } from 'components/Banner/L2Banner';
+import L2Banner from 'components/Banner/L2Banner';
 
 const Main: FC = () => (
 	<MainWrapper>
