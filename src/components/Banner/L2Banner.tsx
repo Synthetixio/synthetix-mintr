@@ -18,6 +18,7 @@ const ContainerBanner = styled.div`
 	align-items: center;
 	padding: 2px;
 	width: 100%;
+	/* @TODO: Copy over Clem's theme documents for the respective colors */
 	background: linear-gradient(90deg, #0885fe, #4e3cbd);
 	color: white;
 	cursor: pointer;
