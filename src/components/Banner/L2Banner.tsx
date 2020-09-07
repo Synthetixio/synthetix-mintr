@@ -2,10 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { PMedium } from '../Typography';
 import { ReactComponent as DiagonalArrow } from '../../assets/images/Banner/DiagonalArrow.svg';
+import { setCurrentPage } from '../../ducks/ui';
+import { PAGES_BY_KEY } from '../../constants/ui';
+import { connect } from 'react-redux';
 
-export const L2Banner: React.FC = () => {
+interface L2BannerProps {
+	setCurrentPage: Function;
+}
+const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage }) => {
 	return (
-		<ContainerBanner>
+		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
 			<StyledPMedium>Save on gas fees by staking on l2. Click here to move to l2!</StyledPMedium>
 			<DiagonalArrow />
 		</ContainerBanner>
@@ -29,3 +35,11 @@ const StyledPMedium = styled(PMedium)`
 	text-transform: uppercase;
 	margin-right: 4px;
 `;
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+	setCurrentPage,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(L2Banner);
