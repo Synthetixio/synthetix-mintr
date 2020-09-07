@@ -19,7 +19,7 @@ import { formatCurrency } from '../../helpers/formatters';
 import { FlexDivCentered } from '../../styles/common';
 import { Info } from '../../components/Icons';
 
-const TABLE_COLUMNS = ['SNX', 'sUSD', 'ETH', 'Synths', 'Debt'];
+const TABLE_COLUMNS = ['SNX', 'sUSD', 'ETH', 'Debt'];
 const AGGREGATED_COLUMNS = ['Synths', 'Debt'];
 
 const renderTooltip = (tooltip, t, mode) => {

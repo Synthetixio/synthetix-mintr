@@ -52,9 +52,6 @@ const Dashboard = ({
 					<ContainerHeader>
 						<H5 mb={0}>{t('dashboard.sections.wallet')}</H5>
 						<ButtonContainer>
-							<ButtonTertiary onClick={() => showModal({ modalType: MODAL_TYPES_TO_KEY.DELEGATE })}>
-								{t('dashboard.buttons.delegate')}
-							</ButtonTertiary>
 							<ButtonTertiary
 								disabled={isDashboardRefreshing}
 								style={{ minWidth: '102px' }}
@@ -87,18 +84,6 @@ const Dashboard = ({
 					</PricesContainer>
 					<BarCharts debtData={debtStatusData} totalEscrow={totalEscrowedBalances} />
 					<BalanceTable debtData={debtStatusData} />
-					<Row margin="18px 0 0 0 ">
-						<Link href="https://synthetix.exchange" target="_blank">
-							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
-						</Link>
-						<Link
-							href="https://dashboard.synthetix.io"
-							target="_blank"
-							style={{ marginLeft: '5px' }}
-						>
-							<ButtonTertiaryLabel>{t('dashboard.buttons.synthetixDashboard')}</ButtonTertiaryLabel>
-						</Link>
-					</Row>
 				</Container>
 			</Content>
 		</DashboardWrapper>

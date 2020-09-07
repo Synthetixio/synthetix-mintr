@@ -18,15 +18,6 @@ const actionLabelMapper = {
 	mint: { description: 'home.actions.mint.description', title: 'home.actions.mint.title' },
 	burn: { description: 'home.actions.burn.description', title: 'home.actions.burn.title' },
 	claim: { description: 'home.actions.claim.description', title: 'home.actions.claim.title' },
-	trade: { description: 'home.actions.trade.description', title: 'home.actions.trade.title' },
-	transfer: {
-		description: 'home.actions.transfer.description',
-		title: 'home.actions.transfer.title',
-	},
-	track: {
-		description: 'home.actions.track.description',
-		title: 'home.actions.track.title',
-	},
 };
 
 const Home = ({ walletDetails: { networkId } }) => {

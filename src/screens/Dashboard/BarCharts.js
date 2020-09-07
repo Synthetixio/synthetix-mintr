@@ -10,7 +10,7 @@ import { getWalletBalances } from '../../ducks/balances';
 import { formatCurrency } from '../../helpers/formatters';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 
-const Charts = ({ walletBalances: { crypto }, debtData, totalEscrow = 0 }) => {
+const Charts = ({ walletBalances: { crypto }, debtData }) => {
 	const { t } = useTranslation();
 	const snxBalance = (crypto && crypto[CRYPTO_CURRENCY_TO_KEY.SNX]) || 0;
 	const snxLocked =
@@ -41,16 +41,6 @@ const Charts = ({ walletBalances: { crypto }, debtData, totalEscrow = 0 }) => {
 			{
 				label: t('dashboard.holdings.nonStaking'),
 				value: snxBalance - snxLocked,
-			},
-		],
-		[
-			{
-				label: t('dashboard.holdings.escrowed'),
-				value: totalEscrow,
-			},
-			{
-				label: t('dashboard.holdings.nonEscrowed'),
-				value: snxBalance - totalEscrow,
 			},
 		],
 	];
