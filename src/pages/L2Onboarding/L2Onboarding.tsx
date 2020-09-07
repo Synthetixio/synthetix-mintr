@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { ReactComponent as CloseIcon } from '../../assets/images/close-icon.svg';
 import DashboardHeaderButton from '../../components/Button/HeaderButton';
-import { setCurrentPage } from '../../ducks/ui';
+import { setCurrentPage, getCurrentTheme } from '../../ducks/ui';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
+import { l2darkTheme, l2lightTheme, isDarkTheme } from '../../styles/l2';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
+	currentTheme: 'dark' | 'light';
 }
 
-export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage }) => {
+export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, currentTheme }) => {
+	const themeStyle = isDarkTheme(currentTheme) ? l2darkTheme : l2lightTheme;
 	const [step, setStep] = useState<number>(0);
 	return (
-		<ContainerPage>
-			<StyledHeaderRow>
-				<StyledCloseIcon onClick={() => setCurrentPage(PAGES_BY_KEY.MAIN)} />
-				<DashboardHeaderButton onClick={() => {}}>READ THE BLOG POST</DashboardHeaderButton>
-			</StyledHeaderRow>
-		</ContainerPage>
+		<ThemeProvider theme={themeStyle}>
+			<ContainerPage>
+				<StyledHeaderRow>
+					<StyledCloseIcon onClick={() => setCurrentPage(PAGES_BY_KEY.MAIN)} />
+					<DashboardHeaderButton onClick={() => {}}>READ THE BLOG POST</DashboardHeaderButton>
+				</StyledHeaderRow>
+			</ContainerPage>
+		</ThemeProvider>
 	);
 };
 
@@ -38,7 +43,9 @@ const StyledHeaderRow = styled.div`
 	justify-content: space-between;
 `;
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state: any) => ({
+	currentTheme: getCurrentTheme(state),
+});
 
 const mapDispatchToProps = {
 	setCurrentPage,
