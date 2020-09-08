@@ -1,35 +1,47 @@
 import React, { useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 import { ReactComponent as CloseIcon } from '../../assets/images/close-icon.svg';
-import DashboardHeaderButton from '../../components/Button/HeaderButton';
-import { setCurrentPage, getCurrentTheme } from '../../ducks/ui';
+import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
-import { l2darkTheme, l2lightTheme, isDarkTheme } from '../../styles/l2';
+import { fontFamilies } from 'styles/themes';
+import { Welcome } from './Welcome';
+import { Burn } from './Burn';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
-	currentTheme: 'dark' | 'light';
 }
 
-export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, currentTheme }) => {
-	const themeStyle = isDarkTheme(currentTheme) ? l2darkTheme : l2lightTheme;
-	const [step, setStep] = useState<number>(0);
+export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage }) => {
+	const [step, setStep] = useState<number>(1);
+	const returnStep = () => {
+		switch (step) {
+			case 0:
+				return <Welcome onNext={() => setStep(1)} />;
+			case 1:
+				return <Burn onComplete={() => setStep(2)} />;
+			case 2:
+				break;
+			default:
+				return;
+		}
+	};
 	return (
-		<ThemeProvider theme={themeStyle}>
-			<ContainerPage>
-				<StyledHeaderRow>
-					<StyledCloseIcon onClick={() => setCurrentPage(PAGES_BY_KEY.MAIN)} />
-					<DashboardHeaderButton onClick={() => {}}>READ THE BLOG POST</DashboardHeaderButton>
-				</StyledHeaderRow>
-			</ContainerPage>
-		</ThemeProvider>
+		<ContainerPage>
+			<StyledHeaderRow>
+				<StyledCloseIcon onClick={() => setCurrentPage(PAGES_BY_KEY.MAIN)} />
+				<Button onClick={() => {}}>READ THE BLOG POST</Button>
+			</StyledHeaderRow>
+			{returnStep()}
+		</ContainerPage>
 	);
 };
 
 const ContainerPage = styled.div`
 	width: 100%;
+	height: 100vh;
 	padding: 48px;
+	background: #020b29;
 `;
 
 const StyledCloseIcon = styled(CloseIcon)`
@@ -43,9 +55,17 @@ const StyledHeaderRow = styled.div`
 	justify-content: space-between;
 `;
 
-const mapStateToProps = (state: any) => ({
-	currentTheme: getCurrentTheme(state),
-});
+const Button = styled.button`
+	font-family: ${fontFamilies.regular};
+	text-transform: uppercase;
+	width: 159px;
+	height: 32px;
+	background: #282862;
+	color: #cacaf1;
+	border: none;
+`;
+
+const mapStateToProps = (state: any) => ({});
 
 const mapDispatchToProps = {
 	setCurrentPage,
