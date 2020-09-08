@@ -1,37 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
 import { fontFamilies } from 'styles/themes';
-import { Stepper } from './components/Stepper';
+import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
 import { StatBox } from './components/StatBox';
 import { CTAButton } from './components/CTAButton';
+import { Stepper } from './components/Stepper';
 
-interface BurnProps {
+interface DepositProps {
 	onComplete: Function;
 }
 
-export const Burn: React.FC<BurnProps> = ({ onComplete }) => {
+export const Deposit: React.FC<DepositProps> = ({ onComplete }) => {
 	return (
 		<PageContainer>
-			<Stepper activeIndex={0} />
+			<Stepper activeIndex={3} />
 			<Icon>
-				<BurnIcon />
+				<SendIcon />
 			</Icon>
-			<Header>Burn all L1 debt</Header>
+			<Header>Deposit all SNX</Header>
 			<Subtext>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam
 				magnis duis fermentum.
 			</Subtext>
 			<ContainerStats>
-				<StatBox multiple subtext={'BURNING:'} content={'5,000.00 sUSD'} />
-				<StatBox multiple subtext={'UNLOCKING:'} content={'5,000.00 sUSD'} />
+				<StatBox multiple subtext={'DEPOSITING:'} content={'5,000.00 SNX'} />
 			</ContainerStats>
 			<GasStat>
 				<StatText>GAS: $0.083 / SPEED: ~5:24 mins</StatText>
 				<EditButton>EDIT</EditButton>
 			</GasStat>
 			<CTAButton
-				copy="BURN NOW"
+				copy="DEPOSIT NOW"
 				handleClick={() => {
 					onComplete();
 				}}

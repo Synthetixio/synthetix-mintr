@@ -7,13 +7,21 @@ import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
 import { Welcome } from './Welcome';
 import { Burn } from './Burn';
+import { Deposit } from './Deposit';
+import { Metamask } from './Metamask';
+import { Success } from './Success';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
 }
 
 export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage }) => {
-	const [step, setStep] = useState<number>(1);
+	const [step, setStep] = useState<number>(0);
+
+	const handleFinish = () => {
+		// Direct to Mintr.io
+	};
+
 	const returnStep = () => {
 		switch (step) {
 			case 0:
@@ -21,9 +29,13 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage }) =>
 			case 1:
 				return <Burn onComplete={() => setStep(2)} />;
 			case 2:
-				break;
+				return <Deposit onComplete={() => setStep(3)} />;
+			case 3:
+				return <Metamask onComplete={() => setStep(4)} />;
+			case 4:
+				return <Success onComplete={() => handleFinish()} />;
 			default:
-				return;
+				return <Welcome onNext={() => setStep(1)} />;
 		}
 	};
 	return (
