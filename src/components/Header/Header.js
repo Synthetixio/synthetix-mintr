@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 
 import { shortenAddress } from '../../helpers/formatters';
 
 import { getWalletDetails } from '../../ducks/wallet';
 
 import { WalletStatusButton } from '../Button';
-import ThemeSwitcher from '../ThemeSwitcher';
 
 import { setCurrentPage } from '../../ducks/ui';
 import { Globe, SupportBubble } from '../Icons';
@@ -20,15 +18,14 @@ import { PAGES_BY_KEY } from '../../constants/ui';
 import { LINKS } from 'constants/links';
 
 const Header = ({ walletDetails, setCurrentPage }) => {
-	const { t } = useTranslation();
-	const { currentWallet, networkName } = walletDetails;
+	const { currentWallet } = walletDetails;
 
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	return (
 		<HeaderWrapper>
 			<HeaderBlock>
 				<SmallLogo />
-				<Network>{networkName}</Network>
+				<Network>OVM</Network>
 			</HeaderBlock>
 			<HeaderBlock>
 				<WalletStatusButton onClick={() => setCurrentPage(PAGES_BY_KEY.WALLET_SELECTION)}>
@@ -47,10 +44,6 @@ const Header = ({ walletDetails, setCurrentPage }) => {
 						position={{ left: 0 }}
 					/>
 				</LanguageButtonWrapper>
-				<ThemeSwitcher
-					onLabel={t('dashboard.header.onLabel')}
-					offLabel={t('dashboard.header.offLabel')}
-				/>
 			</HeaderBlock>
 		</HeaderWrapper>
 	);

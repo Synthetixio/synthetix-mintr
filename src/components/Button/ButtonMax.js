@@ -13,7 +13,7 @@ const ButtonMax = ({ t, onClick }) => {
 };
 
 const Button = styled.button`
-	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
 	font-size: 14px;
 	height: 32px;
 	width: 56px;
@@ -27,7 +27,7 @@ const Button = styled.button`
 	transition: all ease-in 0.1s;
 	text-transform: uppercase;
 	&:hover {
-		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
+		background: linear-gradient(130.52deg, #f4c625 -8.54%, #e652e9 101.04%);
 	}
 `;
 

@@ -19,8 +19,10 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {})(Logo);
 
 const Link = styled.a`
-	width: 120px;
 	margin-right: 18px;
+	width: 149px;
+	display: flex;
+	align-items: center;
 `;
 const LogoImg = styled.img`
 	width: 100%;

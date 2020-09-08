@@ -35,7 +35,7 @@ const Action = ({
 				<Top>
 					<Intro>
 						<ActionImage src="/images/actions/mint.svg" big />
-						<H1>{t('mintrActions.mint.action.title')}</H1>
+						<StyledH1>{t('mintrActions.mint.action.title')}</StyledH1>
 						<PLarge>{t('mintrActions.mint.action.subtitle')}</PLarge>
 					</Intro>
 
@@ -114,6 +114,10 @@ const Container = styled.div`
 	justify-content: space-around;
 `;
 
+const StyledH1 = styled(H1)`
+	margin-top: 0;
+`;
+
 const Top = styled.div`
 	height: auto;
 `;
@@ -136,7 +140,7 @@ const Navigation = styled.div`
 	width: 100%;
 	display: flex;
 	text-align: left;
-	padding: 20px 0;
+	padding: 20px 0 0 0;
 `;
 
 const Intro = styled.div`
@@ -145,9 +149,8 @@ const Intro = styled.div`
 `;
 
 const ActionImage = styled.img`
-	height: ${props => (props.big ? '64px' : '48px')};
-	width: ${props => (props.big ? '64px' : '48px')};
-	margin-bottom: 8px;
+	height: 164px;
+	width: 164px;
 `;
 
 const Form = styled.div`

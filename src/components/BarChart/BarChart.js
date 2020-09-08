@@ -38,7 +38,7 @@ const Container = styled.div`
 		border-bottom-left-radius: 2px;
 	}
 	& > :last-child {
-		background-color: ${props => props.theme.colorStyles.accentDark};
+		background: linear-gradient(99.09deg, #3130af 0%, #5834b2 100%);
 		border-top-right-radius: 2px;
 		border-bottom-right-radius: 2px;
 	}

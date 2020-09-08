@@ -25,14 +25,14 @@ const Button = styled.button`
 	text-transform: uppercase;
 	border: none;
 	cursor: pointer;
-	background-color: ${props => props.theme.colorStyles.buttonPrimaryBg};
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
 	transition: all ease-in 0.1s;
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
 	&:hover:not(:disabled) {
-		background-color: ${props => props.theme.colorStyles.buttonPrimaryBgFocus};
+		background: linear-gradient(130.52deg, #f4c625 -8.54%, #e652e9 101.04%);
 	}
 `;
 

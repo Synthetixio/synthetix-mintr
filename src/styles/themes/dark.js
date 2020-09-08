@@ -22,7 +22,7 @@ export default {
 	simpleSelectHoveredOption: COLORS.dark4,
 
 	menu: COLORS.dark2,
-	panelButton: COLORS.dark3,
+	panelButton: COLORS.dark2,
 	panelButtonHover: COLORS.dark4,
 
 	accentDark: COLORS.dark7,

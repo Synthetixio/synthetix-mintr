@@ -13,7 +13,7 @@ const ButtonSecondary = ({
 }) => {
 	return (
 		<Button height={height} width={width} target={target} href={href} as={as} onClick={onClick}>
-			<ButtonSecondaryLabel>{children}</ButtonSecondaryLabel>
+			<GradientText>{children}</GradientText>
 		</Button>
 	);
 };
@@ -26,14 +26,30 @@ const Button = styled.button`
 	align-items: center;
 	height: ${props => (props.height ? props.height : '72px')};
 	border-radius: 5px;
+	border: solid 3px transparent;
+	background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px ${props => props.theme.colorStyles.panels} inset;
 	text-transform: uppercase;
-	border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg};
+	/* border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg}; */
 	cursor: pointer;
 	background-color: transparent;
 	transition: all ease-in 0.1s;
 	&:hover {
-		background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
+		background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),linear-gradient(130.52deg, #f4c625 -8.54%, #e652e9 101.04%);;
 	}
+	`;
+
+const GradientText = styled(ButtonSecondaryLabel)`
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	background-clip: text;
+	background-size: 100%;
+	background-repeat: repeat;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-background-clip: text;
+	-moz-text-fill-color: transparent;
 `;
 
 export default ButtonSecondary;

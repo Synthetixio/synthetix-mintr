@@ -19,6 +19,10 @@
 	margin: 0 8px;
 }
 
+.carousel .control-dots .dot {
+	background: #282862;
+}
+
 .carousel .control-dots .dot.selected {
-	background: #727cff;
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
 }

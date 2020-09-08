@@ -37,13 +37,10 @@ const Action = ({
 			<Container>
 				<Navigation>
 					<ButtonTertiary onClick={onDestroy}>{t('button.navigation.cancel')}</ButtonTertiary>
-					<ButtonTertiary onClick={onClaimHistory}>
-						{t('mintrActions.claim.action.buttons.history')} ↗
-					</ButtonTertiary>
 				</Navigation>
 				<Intro>
 					<ActionImage src="/images/actions/claim.svg" big />
-					<H1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</H1>
+					<StyledH1 m={'10px 0'}>{t('mintrActions.claim.action.title')}</StyledH1>
 					<Subtitle>{t('mintrActions.claim.action.subtitle')}</Subtitle>
 				</Intro>
 				<BoxRow>
@@ -120,6 +117,10 @@ const Container = styled.div`
 
 const Bottom = styled.div``;
 
+const StyledH1 = styled(H1)`
+	margin-top: 0;
+`;
+
 const StyledH2 = styled(H2)`
 	margin-top: 14px;
 `;
@@ -128,7 +129,7 @@ const Navigation = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	padding: 20px 0;
+	padding: 20px 0 0 0;
 `;
 
 const Intro = styled.div`
@@ -137,12 +138,8 @@ const Intro = styled.div`
 `;
 
 const ActionImage = styled.img`
-	height: ${props => (props.big ? '64px' : '48px')};
-	width: ${props => (props.big ? '64px' : '48px')};
-	@media (max-width: ${WrapTableBreakpoint}px) {
-		width: 48px;
-		height: 48px;
-	}
+	height: 164px;
+	width: 164px;
 `;
 
 const Status = styled.div`

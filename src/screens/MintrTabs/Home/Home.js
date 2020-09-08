@@ -7,6 +7,8 @@ import { getWalletDetails } from 'ducks/wallet';
 
 import { PageTitle, PLarge, H2 } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
+import Tooltip from 'components/Tooltip';
+import { Info } from 'components/Icons';
 
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
@@ -26,6 +28,16 @@ const Home = ({ walletDetails: { networkId } }) => {
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
+			<InfoBanner>
+				<InfoBannerCountdown>
+					Withdraw funds from L1 in:<Countdown>3 days 22 hours</Countdown>
+				</InfoBannerCountdown>
+				<Tooltip mode={null} title={'tooltip content'} placement="top">
+					<IconContainer>
+						<Info />
+					</IconContainer>
+				</Tooltip>
+			</InfoBanner>
 			<PageTitle>{t('home.intro.title')}</PageTitle>
 			<ButtonRow>
 				{ACTIONS.map(action => {
@@ -38,7 +50,7 @@ const Home = ({ walletDetails: { networkId } }) => {
 						>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
-								<H2>{t(actionLabelMapper[action].title)}</H2>
+								<StyledH2>{t(actionLabelMapper[action].title)}</StyledH2>
 								<PLarge>{t(actionLabelMapper[action].description)}</PLarge>
 							</ButtonContainer>
 						</Button>
@@ -48,6 +60,38 @@ const Home = ({ walletDetails: { networkId } }) => {
 		</PageContainer>
 	);
 };
+
+const InfoBanner = styled.div`
+	border: 1px solid ${props => props.theme.colorStyles.borders};
+	border-radius: 5px;
+	padding: 10px 16px;
+	margin-bottom: 16px;
+	display: flex;
+	flex-direction: row;
+	border-radius: 20px;
+	margin-bottom: 42px;
+	color: #ffffff;
+	text-transform: uppercase;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const InfoBannerCountdown = styled.div`
+	display: flex;
+`;
+
+const Countdown = styled.div`
+	margin-left: 5px;
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	background-clip: text;
+	background-size: 100%;
+	background-repeat: repeat;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-background-clip: text;
+	-moz-text-fill-color: transparent;
+`;
 
 const Button = styled.button`
 	flex: 1;
@@ -69,27 +113,31 @@ const Button = styled.button`
 	}
 `;
 
+const StyledH2 = styled(H2)`
+	margin-top: 0;
+`;
+
 const ButtonContainer = styled.div`
 	padding: 10px;
 	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	height: 100%;
 `;
 
 const ButtonRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 34px;
-	/* margin: 0 0 40px 0;
-	display: flex;
-	justify-content: space-between; */
 `;
 
 const ActionImage = styled.img`
-	height: 48px;
-	width: 48px;
+	height: 164px;
+	width: 164px;
+`;
+
+const IconContainer = styled.div`
+	margin-left: 10px;
+	width: 23px;
+	height: 23px;
 `;
 
 const mapStateToProps = state => ({

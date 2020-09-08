@@ -40,11 +40,7 @@ const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-k
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
-	TREZOR: 'Trezor',
-	LEDGER: 'Ledger',
 	COINBASE: 'Coinbase',
-	WALLET_CONNECT: 'WalletConnect',
-	PORTIS: 'Portis',
 };
 
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);

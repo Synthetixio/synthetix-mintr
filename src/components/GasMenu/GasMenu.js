@@ -108,7 +108,7 @@ const EditText = styled.div`
 	font-size: 15px;
 	text-transform: uppercase;
 	cursor: pointer;
-	color: ${props => props.theme.colorStyles.hyperlink};
+	color: #00e2df;
 	:hover {
 		text-decoration: underline;
 	}

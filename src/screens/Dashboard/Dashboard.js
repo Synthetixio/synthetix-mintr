@@ -16,13 +16,11 @@ import {
 import { getRates } from 'ducks/rates';
 import { getTotalEscrowedBalance, fetchEscrowRequest, getIsFetchingEscrowData } from 'ducks/escrow';
 
-import { MODAL_TYPES_TO_KEY } from 'constants/modal';
-
 import Header from 'components/Header';
 import { MicroSpinner } from 'components/Spinner';
 
 import { ButtonTertiary } from 'components/Button';
-import { H5, ButtonTertiaryLabel } from 'components/Typography';
+import { H5 } from 'components/Typography';
 import Skeleton from 'components/Skeleton';
 import BalanceTable from './BalanceTable';
 import BarCharts from './BarCharts';
@@ -131,27 +129,6 @@ const ContainerHeader = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 20px;
-`;
-
-const Row = styled.div`
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin: ${props => (props.margin ? props.margin : 0)};
-	padding: ${props => (props.padding ? props.padding : 0)};
-`;
-
-const Link = styled.a`
-	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
-	text-transform: uppercase;
-	text-decoration: none;
-	cursor: pointer;
-	padding: 16px 20px;
-	width: 50%;
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	border-radius: 2px;
-	text-align: center;
 `;
 
 const CurrencyIcon = styled.img`

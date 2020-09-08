@@ -7,7 +7,7 @@ export function getStakingAmount({ issuanceRatio, mintAmount, SNXPrice }) {
 }
 
 export function estimateCRatio({ SNXPrice, debtBalance, snxBalance, mintAmount }) {
-	if (isNil(SNXPrice) || isNil(debtBalance) || isNil(snxBalance)) {
+	if (isNil(SNXPrice) || isNil(debtBalance) || isNil(snxBalance) || !mintAmount) {
 		return 0;
 	}
 
