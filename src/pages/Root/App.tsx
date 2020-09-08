@@ -35,20 +35,21 @@ type CurrentPageProps = {
 };
 
 const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
-	if (isMobileOrTablet()) return <MobileLanding />;
-	if (isOnMaintenance) return <MaintenancePage />;
-	switch (page) {
-		case PAGES_BY_KEY.LANDING:
-			return <Landing />;
-		case PAGES_BY_KEY.WALLET_SELECTION:
-			return <WalletSelection />;
-		case PAGES_BY_KEY.MAIN:
-			return <Main />;
-		case PAGES_BY_KEY.L2ONBOARDING:
-			return <L2Onboarding />;
-		default:
-			return <Landing />;
-	}
+	return <L2Onboarding />;
+	// if (isMobileOrTablet()) return <MobileLanding />;
+	// if (isOnMaintenance) return <MaintenancePage />;
+	// switch (page) {
+	// 	case PAGES_BY_KEY.LANDING:
+	// 		return <Landing />;
+	// 	case PAGES_BY_KEY.WALLET_SELECTION:
+	// 		return <WalletSelection />;
+	// 	case PAGES_BY_KEY.MAIN:
+	// 		return <Main />;
+	// 	case PAGES_BY_KEY.L2ONBOARDING:
+	// 		return <L2Onboarding />;
+	// 	default:
+	// 		return <Landing />;
+	// }
 };
 
 type AppProps = {
