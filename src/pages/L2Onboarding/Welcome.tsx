@@ -5,7 +5,7 @@ import { ReactComponent as WelcomeText } from '../../assets/images/welcome-text.
 import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
 import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
 import { ReactComponent as MetamaskIcon } from '../../assets/images/metamask.svg';
-import { CTAButton } from './components/CTAButton';
+import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 
 interface WelcomeProps {
 	onNext: Function;
