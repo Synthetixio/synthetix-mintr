@@ -198,6 +198,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 		setFetchingGasLimit,
 		setGasLimit
 	);
+
 	const onBurn = async ({ burnToTarget = false }) => {
 		const {
 			snxJS: { Synthetix, Issuer },

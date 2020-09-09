@@ -6,7 +6,7 @@ import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
 import { Welcome } from './Welcome';
-import { Burn } from './Burn';
+import Burn from './Burn';
 import { Deposit } from './Deposit';
 import { Metamask } from './Metamask';
 import { Success } from './Success';
@@ -16,7 +16,7 @@ interface L2OnboardingProps {
 }
 
 export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage }) => {
-	const [step, setStep] = useState<number>(0);
+	const [step, setStep] = useState<number>(1);
 
 	const handleFinish = () => {
 		// Direct to Mintr.io

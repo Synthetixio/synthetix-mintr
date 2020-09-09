@@ -5,10 +5,15 @@ import { fontFamilies } from 'styles/themes';
 interface CTAButtonProps {
 	copy: string;
 	handleClick: Function;
+	disabled?: boolean;
 }
 
-export const CTAButton: React.FC<CTAButtonProps> = ({ copy, handleClick }) => {
-	return <Button onClick={() => handleClick()}>{copy}</Button>;
+export const CTAButton: React.FC<CTAButtonProps> = ({ copy, handleClick, disabled = false }) => {
+	return (
+		<Button disabled={disabled} onClick={() => handleClick()}>
+			{copy}
+		</Button>
+	);
 };
 
 const Button = styled.button`

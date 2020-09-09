@@ -2,12 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
 
-interface GasSettingsProps {}
+interface GasSettingsProps {
+	currentGasPrice?: any;
+}
 
-export const GasSettings: React.FC<GasSettingsProps> = ({}) => {
+export const GasSettings: React.FC<GasSettingsProps> = ({ currentGasPrice }) => {
+	console.log(currentGasPrice);
 	return (
 		<GasStat>
-			<StatText>GAS: $0.083 / SPEED: ~5:24 mins</StatText>
+			<StatText>
+				GAS: ${currentGasPrice.price} / SPEED: ~{currentGasPrice.time} mins
+			</StatText>
 			<EditButton>EDIT</EditButton>
 		</GasStat>
 	);

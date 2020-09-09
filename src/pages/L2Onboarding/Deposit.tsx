@@ -21,7 +21,7 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete }) => {
 				icon={<SendIcon />}
 			/>
 			<ContainerStats>
-				<StatBox multiple subtext={'DEPOSITING:'} content={'5,000.00 SNX'} />
+				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={'5,000.00'} />
 			</ContainerStats>
 			<GasSettings />
 			<CTAButton
