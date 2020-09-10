@@ -14,6 +14,7 @@ import { useGetDebtData } from './hooks/useGetDebtData';
 import { getCurrentGasPrice } from 'ducks/network';
 import { getWalletBalances } from 'ducks/balances';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
+import ErrorMessage from 'components/ErrorMessage';
 
 interface DepositProps {
 	onComplete: Function;
@@ -44,11 +45,9 @@ export const Deposit: React.FC<DepositProps> = ({
 		setFetchingGasLimit,
 		setGasLimit
 	);
-
 	const getSNXBalance = useCallback(async () => {
-		console.log(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
 		setSNXBalance(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
-	}, []);
+	}, [walletBalances]);
 
 	useEffect(() => {
 		getSNXBalance();
@@ -63,6 +62,9 @@ export const Deposit: React.FC<DepositProps> = ({
 			/>
 			<ContainerStats>
 				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={snxBalance.toString()} />
+			</ContainerStats>
+			<ContainerStats>
+				<ErrorMessage message={gasEstimateError} />
 			</ContainerStats>
 			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			<CTAButton
