@@ -22,7 +22,7 @@ export const Stepper: React.FC<StepperProps> = ({ activeIndex }) => {
 		<ContainerStepper>
 			{steps.map((step, i) => (
 				<Section key={i}>
-					<Label active={activeIndex && activeIndex === i}>{step.title}</Label>
+					<Label active={activeIndex === i}>{step.title}</Label>
 					{i !== steps.length - 1 && <Bar />}
 				</Section>
 			))}

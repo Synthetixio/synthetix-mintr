@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
@@ -6,12 +6,54 @@ import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';
 import { GasSettings } from 'components/L2Onboarding/GasSettings';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
+import GasIndicator from 'components/L2Onboarding/GasIndicator';
+import { useGetGasEstimate } from './hooks/useGetGasEstimate';
+import { getWalletDetails } from 'ducks/wallet';
+import { connect } from 'react-redux';
+import { bytesFormatter } from 'helpers/formatters';
+import { useGetDebtData } from './hooks/useGetDebtData';
+import { getCurrentGasPrice } from 'ducks/network';
+import { getWalletBalances } from 'ducks/balances';
+import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 
 interface DepositProps {
 	onComplete: Function;
+	walletDetails: any;
+	currentGasPrice: any;
+	walletBalances: any;
 }
 
-export const Deposit: React.FC<DepositProps> = ({ onComplete }) => {
+export const Deposit: React.FC<DepositProps> = ({
+	onComplete,
+	walletDetails,
+	currentGasPrice,
+	walletBalances,
+}) => {
+	const { currentWallet } = walletDetails;
+	const [snxBalance, setSNXBalance] = useState<number>(0);
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasLimit, setGasLimit] = useState(0);
+	const sUSDBytes = bytesFormatter('sUSD');
+	const debtData = useGetDebtData(currentWallet, sUSDBytes);
+	const gasEstimateError = useGetGasEstimate(
+		debtData.sUSDBalance,
+		debtData.maxBurnAmount,
+		debtData.maxBurnAmountBN,
+		debtData.sUSDBalance,
+		null,
+		null,
+		setFetchingGasLimit,
+		setGasLimit
+	);
+
+	const getSNXBalance = useCallback(async () => {
+		console.log(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
+		setSNXBalance(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
+	}, []);
+
+	useEffect(() => {
+		getSNXBalance();
+	}, [getSNXBalance]);
 	return (
 		<PageContainer>
 			<Stepper activeIndex={3} />
@@ -21,9 +63,9 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete }) => {
 				icon={<SendIcon />}
 			/>
 			<ContainerStats>
-				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={'5,000.00'} />
+				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={snxBalance.toString()} />
 			</ContainerStats>
-			<GasSettings />
+			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			<CTAButton
 				copy="DEPOSIT NOW"
 				handleClick={() => {
@@ -46,3 +88,13 @@ const ContainerStats = styled.div`
 	display: flex;
 	margin: 16px 0px;
 `;
+
+const mapStateToProps = (state: any) => ({
+	walletDetails: getWalletDetails(state),
+	currentGasPrice: getCurrentGasPrice(state),
+	walletBalances: getWalletBalances(state),
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Deposit);

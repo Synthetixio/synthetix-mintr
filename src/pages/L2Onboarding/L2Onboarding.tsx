@@ -6,7 +6,7 @@ import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
 import { Welcome } from './Welcome';
-import { Deposit } from './Deposit';
+import Deposit from './Deposit';
 import { Metamask } from './Metamask';
 import { Success } from './Success';
 import Burn from './Burn';
