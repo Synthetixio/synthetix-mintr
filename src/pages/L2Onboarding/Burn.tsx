@@ -310,13 +310,13 @@ const Burn: React.FC<BurnProps> = ({ onComplete, walletDetails, currentGasPrice 
 						multiple
 						subtext={'BURNING:'}
 						tokenName="sUSD"
-						content={`${debtData.sUSDBalance}`}
+						content={`${debtData.sUSDBalance ?? 0}`}
 					/>
 					<StatBox
 						multiple
 						subtext={'UNLOCKING:'}
 						tokenName="SNX"
-						content={`${transferableAmount}`}
+						content={`${transferableAmount ?? 0}`}
 					/>
 				</ContainerStats>
 				<ContainerStats>
