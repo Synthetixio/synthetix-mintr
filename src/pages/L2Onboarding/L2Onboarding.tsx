@@ -16,6 +16,7 @@ import { bytesFormatter, bigNumberFormatter } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import Spinner from '../../components/Spinner';
+import { getWalletBalancesWithRates } from 'ducks/balances';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
@@ -77,7 +78,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 						</Center>
 					);
 				} else {
-					if (sufficientBalance) {
+					if (!sufficientBalance) {
 						return <Burn onComplete={() => setStep(2)} />;
 					} else {
 						return <BurnIntermediary totalsUSDDebt={debtData.sUSDBalance} />;
@@ -142,6 +143,7 @@ const Button = styled.button`
 
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
+	walletBalancesWithRates: getWalletBalancesWithRates(state),
 });
 
 const mapDispatchToProps = {

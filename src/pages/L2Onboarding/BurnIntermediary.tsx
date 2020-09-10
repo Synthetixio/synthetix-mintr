@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { Stepper } from 'components/L2Onboarding/Stepper';
@@ -8,17 +8,31 @@ import { ReactComponent as DEXAG } from '../../assets/images/dx-ag.svg';
 import { fontFamilies } from 'styles/themes';
 import { connect } from 'react-redux';
 import { setRedirectToTrade } from '../../ducks/ui';
+import { getWalletBalancesWithRates } from 'ducks/balances';
 
 interface BurnIntermediaryProps {
 	totalsUSDDebt: number;
 	setRedirectToTrade: Function;
+	walletBalancesWithRates: any;
 }
 
 const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	totalsUSDDebt,
 	setRedirectToTrade,
+	walletBalancesWithRates,
 }) => {
-	const synthUSDBalance = 1000;
+	const [usdValueOfSynths, setUSDValueOfSynths] = useState<number>(0);
+	const calculateUSDSumOfSynths = useCallback(() => {
+		const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
+		const sumOfSynths = balances.reduce((a, b) => {
+			return a + b;
+		});
+		setUSDValueOfSynths(sumOfSynths);
+	}, [walletBalancesWithRates]);
+
+	useEffect(() => {
+		calculateUSDSumOfSynths();
+	}, [calculateUSDSumOfSynths]);
 	const handleRedirectToTrade = () => {
 		setRedirectToTrade(true);
 	};
@@ -26,7 +40,7 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 		{
 			icon: <TradeIcon />,
 			title: 'TRADE SYNTHS',
-			subtitle: `Balance: $${synthUSDBalance}`,
+			subtitle: `Balance: $${usdValueOfSynths} USD`,
 			onClick: () => handleRedirectToTrade(),
 			link: null,
 		},
@@ -139,7 +153,9 @@ const ButtonSubtext = styled.p`
 	color: #cacaf1;
 `;
 
-const mapStateToProps = (state: any) => ({});
+const mapStateToProps = (state: any) => ({
+	walletBalancesWithRates: getWalletBalancesWithRates(state),
+});
 
 const mapDispatchToProps = {
 	setRedirectToTrade,
