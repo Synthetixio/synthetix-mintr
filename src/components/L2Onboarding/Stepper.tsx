@@ -21,10 +21,10 @@ export const Stepper: React.FC<StepperProps> = ({ activeIndex }) => {
 	return (
 		<ContainerStepper>
 			{steps.map((step, i) => (
-				<>
+				<Section key={i}>
 					<Label active={activeIndex && activeIndex === i}>{step.title}</Label>
 					{i !== steps.length - 1 && <Bar />}
-				</>
+				</Section>
 			))}
 		</ContainerStepper>
 	);
@@ -32,8 +32,12 @@ export const Stepper: React.FC<StepperProps> = ({ activeIndex }) => {
 
 const ContainerStepper = styled.div`
 	display: flex;
-	justify-content: space-evenly;
+`;
+
+const Section = styled.div`
+	display: flex;
 	align-items: center;
+	justify-content: space-evenly;
 `;
 
 const Label = styled.p<any>`

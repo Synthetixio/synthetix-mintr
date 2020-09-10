@@ -35,7 +35,7 @@ type CurrentPageProps = {
 };
 
 const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
-	// if (isMobileOrTablet()) return <MobileLanding />;
+	if (isMobileOrTablet()) return <MobileLanding />;
 	if (isOnMaintenance) return <MaintenancePage />;
 	switch (page) {
 		case PAGES_BY_KEY.LANDING:
