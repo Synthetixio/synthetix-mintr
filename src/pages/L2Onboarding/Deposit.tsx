@@ -4,7 +4,6 @@ import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';
-import { GasSettings } from 'components/L2Onboarding/GasSettings';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import { useGetGasEstimate } from './hooks/useGetGasEstimate';
