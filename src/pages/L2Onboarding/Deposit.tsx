@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
-import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
@@ -15,6 +14,7 @@ import { getCurrentGasPrice } from 'ducks/network';
 import { getWalletBalances } from 'ducks/balances';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 import ErrorMessage from 'components/ErrorMessage';
+import { ButtonPrimary } from 'components/Button';
 
 interface DepositProps {
 	onComplete: Function;
@@ -68,11 +68,12 @@ export const Deposit: React.FC<DepositProps> = ({
 			</ContainerStats>
 			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			<CTAButton
-				copy="DEPOSIT NOW"
-				handleClick={() => {
+				onClick={() => {
 					onComplete();
 				}}
-			/>
+			>
+				Deposit now
+			</CTAButton>
 		</PageContainer>
 	);
 };
@@ -90,12 +91,15 @@ const ContainerStats = styled.div`
 	margin: 16px 0px;
 `;
 
+const CTAButton = styled(ButtonPrimary)`
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	border: 1px solid #ff8fc5;
+`;
+
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
 	walletBalances: getWalletBalances(state),
 });
 
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Deposit);
+export default connect(mapStateToProps, null)(Deposit);

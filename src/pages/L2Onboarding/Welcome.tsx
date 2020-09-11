@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
 import { ReactComponent as BurnIcon } from '../../assets/images/L2/burn.svg';
 import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
-import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import MetamaskPng from '../../assets/images/L2/metamask.png';
+import { ButtonPrimary } from 'components/Button';
 
 interface WelcomeProps {
 	onNext: Function;
@@ -47,7 +47,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			<ContainerSteps>
 				{steps.map(({ icon, title, copy }, i) => returnStepBox(icon, title, copy, i))}
 			</ContainerSteps>
-			<CTAButton copy="GET STARTED" handleClick={() => onNext()} />
+			<CTAButton onClick={() => onNext()}>Get Started</CTAButton>
 		</PageContainer>
 	);
 };
@@ -127,4 +127,9 @@ const GradientText = styled.p`
 	-webkit-text-fill-color: transparent;
 	-moz-background-clip: text;
 	-moz-text-fill-color: transparent;
+`;
+
+const CTAButton = styled(ButtonPrimary)`
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	border: 1px solid #ff8fc5;
 `;
