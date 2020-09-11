@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
-import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
-import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
+import { ReactComponent as BurnIcon } from '../../assets/images/L2/burn.svg';
+import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
-import MetamaskPng from '../../assets/images/metamask.png';
+import MetamaskPng from '../../assets/images/L2/metamask.png';
 
 interface WelcomeProps {
 	onNext: Function;

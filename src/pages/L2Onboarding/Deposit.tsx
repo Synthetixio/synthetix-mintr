@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
+import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as DiagonalArrow } from '../../assets/images/Banner/DiagonalArrow.svg';
+import { ReactComponent as DiagonalArrow } from '../../assets/images/L2/DiagonalArrow.svg';
 import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from '../../constants/ui';
 import { connect } from 'react-redux';
+import { fontFamilies } from 'styles/themes';
 
 interface L2BannerProps {
 	setCurrentPage: Function;
@@ -17,7 +18,6 @@ const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage }) => {
 	);
 };
 
-/* Harcoded styles because it does not exist within l2 app*/
 const ContainerBanner = styled.div`
 	display: flex;
 	justify-content: center;
@@ -31,16 +31,14 @@ const ContainerBanner = styled.div`
 const StyledPMedium = styled.p`
 	font-size: 14px;
 	line-height: 16px;
-	font-family: 'apercu-regular';
+	font-family: ${fontFamilies.regular};
 	color: white;
 	text-transform: uppercase;
 	margin-right: 4px;
 `;
 
-const mapStateToProps = () => ({});
-
 const mapDispatchToProps = {
 	setCurrentPage,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(L2Banner);
+export default connect(null, mapDispatchToProps)(L2Banner);

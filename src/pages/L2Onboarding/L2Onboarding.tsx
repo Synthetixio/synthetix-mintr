@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as CloseIcon } from '../../assets/images/close-icon.svg';
+import { ReactComponent as CloseIcon } from '../../assets/images/L2/close-icon.svg';
 import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';

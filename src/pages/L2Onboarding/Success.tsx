@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as SuccessIcon } from '../../assets/images/success.svg';
+import { ReactComponent as SuccessIcon } from '../../assets/images/L2/success.svg';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';

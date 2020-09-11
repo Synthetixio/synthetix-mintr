@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as MetamaskIcon } from '../../assets/images/metamask.svg';
+import { ReactComponent as MetamaskIcon } from '../../assets/images/L2/metamask.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';

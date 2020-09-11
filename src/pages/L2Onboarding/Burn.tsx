@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
+import { ReactComponent as BurnIcon } from '../../assets/images/L2/burn.svg';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';
-import { CTAButton } from '../../components/L2Onboarding/CTAButton';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { connect } from 'react-redux';
 import { getWalletDetails } from 'ducks/wallet';
@@ -18,6 +17,7 @@ import { Subtext } from 'components/Typography';
 import { useGetDebtData } from './hooks/useGetDebtData';
 import { useGetGasEstimate } from './hooks/useGetGasEstimate';
 import { ISSUANCE_EVENTS } from 'constants/events';
+import { ButtonPrimary } from 'components/Button';
 
 interface BurnProps {
 	onComplete: Function;
@@ -146,14 +146,15 @@ const Burn: React.FC<BurnProps> = ({ onComplete, walletDetails, currentGasPrice 
 			return (
 				<RetryButtonWrapper>
 					<CTAButton
-						copy="RETRY"
-						handleClick={() => {
+						onClick={() => {
 							getIssuanceDelay();
 							if (waitingPeriod) {
 								getMaxSecsLeftInWaitingPeriod();
 							}
 						}}
-					/>
+					>
+						Retry
+					</CTAButton>
 					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
 						There is a waiting period after minting before you can burn. Please wait{' '}
 						{secondsToTime(issuanceDelay)} before attempting to burn sUSD.
@@ -163,7 +164,7 @@ const Burn: React.FC<BurnProps> = ({ onComplete, walletDetails, currentGasPrice 
 		} else if (waitingPeriod) {
 			return (
 				<RetryButtonWrapper>
-					<CTAButton copy="RETRY" handleClick={getMaxSecsLeftInWaitingPeriod} />
+					<CTAButton onClick={getMaxSecsLeftInWaitingPeriod}>Retry</CTAButton>
 					<Subtext style={{ position: 'absolute', fontSize: '12px' }}>
 						There is a waiting period after completing a trade. Please wait{' '}
 						{secondsToTime(waitingPeriod)} before attempting to burn sUSD.
@@ -174,9 +175,10 @@ const Burn: React.FC<BurnProps> = ({ onComplete, walletDetails, currentGasPrice 
 			return (
 				<CTAButton
 					disabled={isFetchingGasLimit || gasEstimateError || debtData.sUSDBalance === 0}
-					copy="BURN"
-					handleClick={onBurn}
-				/>
+					onClick={onBurn}
+				>
+					Burn
+				</CTAButton>
 			);
 		}
 	};
@@ -233,11 +235,14 @@ const RetryButtonWrapper = styled.div`
 	position: relative;
 `;
 
+const CTAButton = styled(ButtonPrimary)`
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	border: 1px solid #ff8fc5;
+`;
+
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
 });
 
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Burn);
+export default connect(mapStateToProps, null)(Burn);
