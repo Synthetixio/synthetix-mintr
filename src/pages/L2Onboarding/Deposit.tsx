@@ -4,15 +4,10 @@ import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { StatBox } from '../../components/L2Onboarding/StatBox';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
-import GasIndicator from 'components/L2Onboarding/GasIndicator';
-import { useGetGasEstimate } from './hooks/useGetGasEstimate';
 import { getWalletDetails } from 'ducks/wallet';
 import { connect } from 'react-redux';
-import { bytesFormatter } from 'helpers/formatters';
-import { useGetDebtData } from './hooks/useGetDebtData';
 import { getWalletBalances } from 'ducks/balances';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
-import ErrorMessage from 'components/ErrorMessage';
 import { ButtonPrimary } from 'components/Button';
 
 interface DepositProps {
@@ -22,22 +17,7 @@ interface DepositProps {
 }
 
 export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, walletBalances }) => {
-	const { currentWallet } = walletDetails;
 	const [snxBalance, setSNXBalance] = useState<number>(0);
-	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
-	const [gasLimit, setGasLimit] = useState(0);
-	const sUSDBytes = bytesFormatter('sUSD');
-	const debtData = useGetDebtData(currentWallet, sUSDBytes);
-	const gasEstimateError = useGetGasEstimate(
-		debtData.sUSDBalance,
-		debtData.maxBurnAmount,
-		debtData.maxBurnAmountBN,
-		debtData.sUSDBalance,
-		null,
-		null,
-		setFetchingGasLimit,
-		setGasLimit
-	);
 
 	useEffect(() => {
 		const getSNXBalance = async () => {
@@ -45,6 +25,7 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, wal
 		};
 		getSNXBalance();
 	}, [walletBalances]);
+
 	return (
 		<PageContainer>
 			<Stepper activeIndex={3} />
@@ -56,10 +37,10 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, wal
 			<ContainerStats>
 				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={snxBalance.toString()} />
 			</ContainerStats>
-			<ContainerStats>
+			{/* <ContainerStats>
 				<ErrorMessage message={gasEstimateError} />
 			</ContainerStats>
-			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
+			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} /> */}
 			<CTAButton
 				onClick={() => {
 					onComplete();

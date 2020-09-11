@@ -7,39 +7,146 @@ import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { connect } from 'react-redux';
 import { getWalletDetails } from 'ducks/wallet';
 import { getCurrentGasPrice } from 'ducks/network';
-import { bytesFormatter, secondsToTime } from 'helpers/formatters';
+import { bytesFormatter, secondsToTime, bigNumberFormatter } from 'helpers/formatters';
 import snxJSConnector from 'helpers/snxJSConnector';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
 import { addSeconds, differenceInSeconds } from 'date-fns';
 import errorMapper from 'helpers/errorMapper';
 import { Subtext } from 'components/Typography';
-import { useGetDebtData } from './hooks/useGetDebtData';
-import { useGetGasEstimate } from './hooks/useGetGasEstimate';
 import { ISSUANCE_EVENTS } from 'constants/events';
 import { ButtonPrimary } from 'components/Button';
+import { useTranslation } from 'react-i18next';
+import { addBufferToGasLimit } from 'helpers/networkHelper';
 
 interface BurnProps {
 	onComplete: Function;
 	walletDetails: any;
 	currentGasPrice: any;
+	currentsUSDBalance: number;
 }
 
-const Burn: React.FC<BurnProps> = ({ onComplete, walletDetails, currentGasPrice }) => {
+const useGetDebtData = (walletAddress: string, sUSDBytes: string) => {
+	const [data, setData] = useState<any>({});
+	const SNXBytes = bytesFormatter('SNX');
+	useEffect(() => {
+		const getDebtData = async () => {
+			try {
+				const results = await Promise.all([
+					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
+					snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
+					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
+					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
+					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
+					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
+				]);
+				const [
+					debt,
+					sUSDBalance,
+					issuanceRatio,
+					SNXPrice,
+					totalRewardEscrow,
+					totalTokenSaleEscrow,
+					issuableSynths,
+				] = results.map(bigNumberFormatter);
+				let maxBurnAmount, maxBurnAmountBN;
+				if (debt > sUSDBalance) {
+					maxBurnAmount = sUSDBalance;
+					maxBurnAmountBN = results[1];
+				} else {
+					maxBurnAmount = debt;
+					maxBurnAmountBN = results[0];
+				}
+
+				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
+				setData({
+					issuanceRatio,
+					sUSDBalance,
+					maxBurnAmount,
+					maxBurnAmountBN,
+					SNXPrice,
+					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
+					debtEscrow: Math.max(escrowBalance * SNXPrice * issuanceRatio + debt - issuableSynths, 0),
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getDebtData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [walletAddress]);
+	return data;
+};
+
+const Burn: React.FC<BurnProps> = ({
+	onComplete,
+	walletDetails,
+	currentGasPrice,
+	currentsUSDBalance,
+}) => {
 	const [transferableAmount, setTransferableAmount] = useState<number>(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
 	const { currentWallet, walletType } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { t } = useTranslation();
 	const sUSDBytes = bytesFormatter('sUSD');
 	const debtData = useGetDebtData(currentWallet, sUSDBytes);
+
+	const useGetGasEstimate = (
+		burnAmount,
+		maxBurnAmount,
+		maxBurnAmountBN,
+		sUSDBalance,
+		waitingPeriod,
+		issuanceDelay,
+		setFetchingGasLimit,
+		setGasLimit
+	) => {
+		const [error, setError] = useState(null);
+		useEffect(() => {
+			const getGasEstimate = async () => {
+				setError(null);
+				let gasEstimate;
+				try {
+					if (burnAmount === 0) throw new Error('You have no debt to burn');
+					if (waitingPeriod) throw new Error('Waiting period for sUSD is still ongoing');
+					if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
+					if (burnAmount > sUSDBalance || maxBurnAmount === 0)
+						throw new Error('input.error.notEnoughToBurn');
+					setFetchingGasLimit(true);
+
+					let amountToBurn;
+					if (burnAmount && maxBurnAmount) {
+						amountToBurn =
+							burnAmount === maxBurnAmount
+								? maxBurnAmountBN
+								: snxJSConnector.utils.parseEther(burnAmount.toString());
+					} else amountToBurn = 0;
+					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
+						amountToBurn
+					);
+					setGasLimit(addBufferToGasLimit(gasEstimate));
+				} catch (e) {
+					console.log(e);
+					const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+					setError(t(errorMessage));
+				}
+				setFetchingGasLimit(false);
+			};
+			getGasEstimate();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [burnAmount, maxBurnAmount, waitingPeriod, issuanceDelay]);
+		return error;
+	};
 
 	const gasEstimateError = useGetGasEstimate(
 		debtData.sUSDBalance,
 		debtData.maxBurnAmount,
 		debtData.maxBurnAmountBN,
-		debtData.sUSDBalance,
+		currentsUSDBalance,
 		waitingPeriod,
 		issuanceDelay,
 		setFetchingGasLimit,

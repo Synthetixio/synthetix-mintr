@@ -11,30 +11,33 @@ import { Metamask } from './Metamask';
 import { Success } from './Success';
 import Burn from './Burn';
 import BurnIntermediary from './BurnIntermediary';
-import { useGetDebtData } from './hooks/useGetDebtData';
-import { bytesFormatter, bigNumberFormatter } from 'helpers/formatters';
+import { bigNumberFormatter } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import Spinner from '../../components/Spinner';
 import { getWalletBalancesWithRates } from 'ducks/balances';
+import { getDebtStatusData } from 'ducks/debtStatus';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
 	walletDetails: any;
+	debtDataStatus: any;
 }
 
-export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, walletDetails }) => {
+export const L2Onboarding: React.FC<L2OnboardingProps> = ({
+	setCurrentPage,
+	walletDetails,
+	debtDataStatus,
+}) => {
 	const [step, setStep] = useState<number>(0);
 	const [sufficientBalance, setSufficientBalance] = useState<boolean | string>('');
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
 	const { currentWallet } = walletDetails;
-	const sUSDBytes = bytesFormatter('sUSD');
-	const debtData = useGetDebtData(currentWallet, sUSDBytes);
 
 	const validateAvailableBalance = useCallback(() => {
-		if (debtData.sUSDBalance !== null) {
-			if (sUSDBalance >= debtData.sUSDBalance) {
+		if (debtDataStatus.debtBalance !== null) {
+			if (sUSDBalance >= debtDataStatus.debtBalance) {
 				setSufficientBalance(true);
 				setCheckingBalances(false);
 			} else {
@@ -42,7 +45,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 				setCheckingBalances(false);
 			}
 		}
-	}, [debtData, sUSDBalance]);
+	}, [debtDataStatus, sUSDBalance]);
 
 	useEffect(() => {
 		const fetchDepotData = async () => {
@@ -54,12 +57,10 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 			}
 		};
 		fetchDepotData();
-		if (debtData) {
-			validateAvailableBalance();
-		}
+		validateAvailableBalance();
 		const refreshInterval = setInterval(validateAvailableBalance, 5000);
 		return () => clearInterval(refreshInterval);
-	}, [validateAvailableBalance, debtData, currentWallet]);
+	}, [validateAvailableBalance, debtDataStatus, currentWallet]);
 
 	const handleFinish = () => {
 		// Direct to Mintr.io
@@ -77,11 +78,10 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 						</Center>
 					);
 				} else {
-					// @TODO: If debt balance is zero show message saying that theres no debt
 					if (sufficientBalance) {
-						return <Burn onComplete={() => setStep(2)} />;
+						return <Burn onComplete={() => setStep(2)} currentsUSDBalance={sUSDBalance} />;
 					} else {
-						return <BurnIntermediary totalsUSDDebt={debtData.sUSDBalance} />;
+						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} />;
 					}
 				}
 			case 2:
@@ -144,6 +144,7 @@ const Button = styled.button`
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
 	walletBalancesWithRates: getWalletBalancesWithRates(state),
+	debtDataStatus: getDebtStatusData(state),
 });
 
 const mapDispatchToProps = {
