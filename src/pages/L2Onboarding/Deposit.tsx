@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
@@ -10,7 +10,6 @@ import { getWalletDetails } from 'ducks/wallet';
 import { connect } from 'react-redux';
 import { bytesFormatter } from 'helpers/formatters';
 import { useGetDebtData } from './hooks/useGetDebtData';
-import { getCurrentGasPrice } from 'ducks/network';
 import { getWalletBalances } from 'ducks/balances';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 import ErrorMessage from 'components/ErrorMessage';
@@ -19,16 +18,10 @@ import { ButtonPrimary } from 'components/Button';
 interface DepositProps {
 	onComplete: Function;
 	walletDetails: any;
-	currentGasPrice: any;
 	walletBalances: any;
 }
 
-export const Deposit: React.FC<DepositProps> = ({
-	onComplete,
-	walletDetails,
-	currentGasPrice,
-	walletBalances,
-}) => {
+export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, walletBalances }) => {
 	const { currentWallet } = walletDetails;
 	const [snxBalance, setSNXBalance] = useState<number>(0);
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
@@ -45,13 +38,13 @@ export const Deposit: React.FC<DepositProps> = ({
 		setFetchingGasLimit,
 		setGasLimit
 	);
-	const getSNXBalance = useCallback(async () => {
-		setSNXBalance(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
-	}, [walletBalances]);
 
 	useEffect(() => {
+		const getSNXBalance = async () => {
+			setSNXBalance(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
+		};
 		getSNXBalance();
-	}, [getSNXBalance]);
+	}, [walletBalances]);
 	return (
 		<PageContainer>
 			<Stepper activeIndex={3} />
@@ -98,7 +91,6 @@ const CTAButton = styled(ButtonPrimary)`
 
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
-	currentGasPrice: getCurrentGasPrice(state),
 	walletBalances: getWalletBalances(state),
 });
 
