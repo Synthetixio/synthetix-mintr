@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { getWalletDetails } from 'ducks/wallet';
-import { getRedirectToTrade, setRedirectToTrade } from 'ducks/ui';
 
 import { PageTitle, PLarge, H2 } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
@@ -30,19 +29,11 @@ const actionLabelMapper = {
 	},
 };
 
-const Home = ({ walletDetails: { networkId }, redirectToTrade, setRedirectToTrade }) => {
+const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(
 		redirectToTrade ? 'trade' : initialScenario
 	);
-
-	useEffect(() => {
-		if (redirectToTrade) {
-			setRedirectToTrade(false);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [redirectToTrade]);
-
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
@@ -102,9 +93,6 @@ const ButtonRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 34px;
-	/* margin: 0 0 40px 0;
-	display: flex;
-	justify-content: space-between; */
 `;
 
 const ActionImage = styled.img`
@@ -114,11 +102,6 @@ const ActionImage = styled.img`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
-	redirectToTrade: getRedirectToTrade(state),
 });
 
-const mapDispatchToProps = {
-	setRedirectToTrade,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, null)(Home);
