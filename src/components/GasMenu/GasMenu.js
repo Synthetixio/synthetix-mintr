@@ -9,7 +9,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 
 const MAX_GAS_MULTIPLE = 1.5;
 
-const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
+const GasMenu = ({ networkPrices, setCurrentGasPrice, cyan }) => {
 	const { t } = useTranslation();
 	const [dropdownVisible, setDropdownVisible] = useState(false);
 	const [customGasPrice, setCustomGasPrice] = useState('');
@@ -55,7 +55,10 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 								<>
 									<HoverListElement
 										onClick={() => {
-											setCurrentGasPrice({ gasPrice: networkPrices.SLOW.price });
+											setCurrentGasPrice({
+												gasPrice: networkPrices.SLOW.price,
+												time: networkPrices.SLOW.time,
+											});
 											setDropdownVisible(false);
 										}}
 									>
@@ -64,7 +67,10 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 									</HoverListElement>
 									<HoverListElement
 										onClick={() => {
-											setCurrentGasPrice({ gasPrice: networkPrices.AVERAGE.price });
+											setCurrentGasPrice({
+												gasPrice: networkPrices.AVERAGE.price,
+												time: networkPrices.AVERAGE.time,
+											});
 											setDropdownVisible(false);
 										}}
 									>
@@ -73,7 +79,10 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 									</HoverListElement>
 									<HoverListElement
 										onClick={() => {
-											setCurrentGasPrice({ gasPrice: networkPrices.FAST.price });
+											setCurrentGasPrice({
+												gasPrice: networkPrices.FAST.price,
+												time: networkPrices.FAST.time,
+											});
 											setDropdownVisible(false);
 										}}
 									>
@@ -85,7 +94,9 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 						</List>
 					</SelectContainer>
 				) : null}
-				<EditText onClick={() => setDropdownVisible(!dropdownVisible)}>{t('button.edit')}</EditText>
+				<EditText cyan={cyan} onClick={() => setDropdownVisible(!dropdownVisible)}>
+					{t('button.edit')}
+				</EditText>
 			</GasMenuWrapper>
 		</OutsideClickHandler>
 	);
@@ -108,7 +119,7 @@ const EditText = styled.div`
 	font-size: 15px;
 	text-transform: uppercase;
 	cursor: pointer;
-	color: ${props => props.theme.colorStyles.hyperlink};
+	color: ${props => (props.cyan ? '#00e2df' : props.theme.colorStyles.hyperlink)};
 	:hover {
 		text-decoration: underline;
 	}

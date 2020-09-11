@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -8,13 +8,12 @@ import { showModal } from '../../ducks/modal';
 import { getEthRate } from '../../ducks/rates';
 
 import { formatCurrency } from '../../helpers/formatters';
-import { NETWORK_SPEEDS_TO_KEY } from '../../constants/network';
 
 import { MicroSpinner } from '../Spinner';
-import GasMenu from './GasMenu';
 
-import { getTransactionPrice, getNetworkSpeeds } from '../../helpers/networkHelper';
+import { getTransactionPrice } from '../../helpers/networkHelper';
 import { fontFamilies } from 'styles/themes';
+import GasMenu from 'components/GasMenu';
 
 const TransactionPriceIndicator = ({
 	canEdit = true,
@@ -25,27 +24,7 @@ const TransactionPriceIndicator = ({
 	ethRate,
 	...style
 }) => {
-	const [selectedSpeed, setSelectedSpeed] = useState<any>(NETWORK_SPEEDS_TO_KEY.AVERAGE);
-	const [estimatedTime, setEstimatedTime] = useState<number>(0);
 	// const { t } = useTranslation();
-	const returnEstTime = useCallback(async () => {
-		const networkSpeeds = await getNetworkSpeeds();
-		switch (selectedSpeed) {
-			case NETWORK_SPEEDS_TO_KEY.SLOW:
-				setEstimatedTime(networkSpeeds[NETWORK_SPEEDS_TO_KEY.SLOW].time);
-				break;
-			case NETWORK_SPEEDS_TO_KEY.AVERAGE:
-				setEstimatedTime(networkSpeeds[NETWORK_SPEEDS_TO_KEY.AVERAGE].time);
-				break;
-			case NETWORK_SPEEDS_TO_KEY.FAST:
-				setEstimatedTime(networkSpeeds[NETWORK_SPEEDS_TO_KEY.FAST].time);
-				break;
-		}
-	}, [selectedSpeed]);
-
-	useEffect(() => {
-		returnEstTime();
-	}, [returnEstTime]);
 	return (
 		<Container {...style}>
 			<Block>
@@ -57,10 +36,10 @@ const TransactionPriceIndicator = ({
 							{currentGasPrice
 								? ` GAS: $${formatCurrency(
 										getTransactionPrice(currentGasPrice.price, gasLimit, ethRate)
-								  )} / ~ SPEED ${estimatedTime} mins`
+								  )} / ~ SPEED ${currentGasPrice.time} mins`
 								: 0}
 						</StatText>
-						<GasMenu setSelectedSpeed={setSelectedSpeed} />
+						<GasMenu cyan={true} />
 					</GasStat>
 				)}
 			</Block>
@@ -90,6 +69,7 @@ const StatText = styled.p`
 	font-family: ${fontFamilies.regular};
 	font-size: 14px;
 	line-height: 24px;
+	padding-top: 16px;
 	text-align: center;
 	letter-spacing: 0.175px;
 	color: #cacaf1;

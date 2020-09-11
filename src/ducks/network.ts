@@ -65,12 +65,12 @@ export const networkSlice = createSlice({
 			state.isRefreshing = false;
 			state.isFetched = true;
 		},
-		setCurrentGasPrice: (state, action: PayloadAction<{ gasPrice: number }>) => {
-			const { gasPrice } = action.payload;
+		setCurrentGasPrice: (state, action: PayloadAction<{ gasPrice: number; time: number }>) => {
+			const { gasPrice, time } = action.payload;
 			state.currentGasPrice = {
 				price: gasPrice,
 				formattedPrice: formatGasPrice(gasPrice),
-				time: null,
+				time: time,
 			};
 		},
 	},

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
+import { FlexDiv } from 'styles/common';
 
 interface StatBoxProps {
 	subtext: string;
@@ -13,10 +14,10 @@ export const StatBox: React.FC<StatBoxProps> = ({ subtext, content, multiple, to
 	return (
 		<Container multiple>
 			<Subtext>{subtext}</Subtext>
-			<Flex>
+			<FlexDiv>
 				<Content>{content}</Content>
 				<Token>{tokenName}</Token>
-			</Flex>
+			</FlexDiv>
 		</Container>
 	);
 };
@@ -69,10 +70,4 @@ const Token = styled.p`
 	color: #ffffff;
 	width: 50px;
 	margin: 8px;
-`;
-
-const Flex = styled.div`
-	display: flex;
-	width: 100%;
-	justify-content: center;
 `;
