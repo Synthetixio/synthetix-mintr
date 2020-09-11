@@ -78,7 +78,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 						</Center>
 					);
 				} else {
-					if (sufficientBalance) {
+					if (!sufficientBalance) {
 						return <Burn onComplete={() => setStep(2)} />;
 					} else {
 						return <BurnIntermediary totalsUSDDebt={debtData.sUSDBalance} />;

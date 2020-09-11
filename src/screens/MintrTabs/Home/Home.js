@@ -11,6 +11,7 @@ import PageContainer from 'components/PageContainer';
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
 import { isMainNet } from 'helpers/networkHelper';
+import { getRedirectToTrade } from 'ducks/ui';
 
 const initialScenario = null;
 
@@ -102,6 +103,7 @@ const ActionImage = styled.img`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
+	redirectToTrade: getRedirectToTrade(state),
 });
 
 export default connect(mapStateToProps, null)(Home);
