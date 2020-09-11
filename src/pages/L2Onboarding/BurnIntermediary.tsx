@@ -35,10 +35,21 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	}, [walletBalancesWithRates]);
 
 	useEffect(() => {
+		const calculateUSDSumOfSynths = () => {
+			const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
+			if (balances > 0) {
+				const sumOfSynths = balances.reduce((a, b) => {
+					return a + b;
+				});
+				setUSDValueOfSynths(sumOfSynths);
+			} else {
+				setUSDValueOfSynths(0);
+			}
+		};
 		if (walletBalancesWithRates) {
 			calculateUSDSumOfSynths();
 		}
-	}, [calculateUSDSumOfSynths]);
+	}, [calculateUSDSumOfSynths, walletBalancesWithRates]);
 	const handleRedirectToTrade = () => {
 		setRedirectToTrade(true);
 	};

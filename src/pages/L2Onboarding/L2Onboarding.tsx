@@ -32,15 +32,6 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 	const sUSDBytes = bytesFormatter('sUSD');
 	const debtData = useGetDebtData(currentWallet, sUSDBytes);
 
-	const fetchDepotData = useCallback(async () => {
-		try {
-			const sUsdWalletBalance = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
-			setSUSDBalance(bigNumberFormatter(sUsdWalletBalance));
-		} catch (e) {
-			console.log(e);
-		}
-	}, [currentWallet]);
-
 	const validateAvailableBalance = useCallback(() => {
 		if (debtData.sUSDBalance !== null) {
 			if (sUSDBalance >= debtData.sUSDBalance) {
@@ -54,13 +45,21 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 	}, [debtData, sUSDBalance]);
 
 	useEffect(() => {
+		const fetchDepotData = async () => {
+			try {
+				const sUsdWalletBalance = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
+				setSUSDBalance(bigNumberFormatter(sUsdWalletBalance));
+			} catch (e) {
+				console.log(e);
+			}
+		};
 		fetchDepotData();
 		if (debtData) {
 			validateAvailableBalance();
 		}
 		const refreshInterval = setInterval(validateAvailableBalance, 5000);
 		return () => clearInterval(refreshInterval);
-	}, [fetchDepotData, validateAvailableBalance, debtData]);
+	}, [validateAvailableBalance, debtData, currentWallet]);
 
 	const handleFinish = () => {
 		// Direct to Mintr.io
@@ -78,7 +77,8 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 						</Center>
 					);
 				} else {
-					if (!sufficientBalance) {
+					// @TODO: If debt balance is zero show message saying that theres no debt
+					if (sufficientBalance) {
 						return <Burn onComplete={() => setStep(2)} />;
 					} else {
 						return <BurnIntermediary totalsUSDDebt={debtData.sUSDBalance} />;
