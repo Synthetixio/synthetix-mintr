@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
-import { ReactComponent as WelcomeText } from '../../assets/images/welcome-text.svg';
 import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
 import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
 import { ReactComponent as MetamaskIcon } from '../../assets/images/metamask.svg';
@@ -39,7 +38,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 	);
 	return (
 		<PageContainer>
-			<WelcomeText />
+			<GradientText>WELCOME TO</GradientText>
 			<Header>MINTR on L2</Header>
 			<Subtitle>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam
@@ -115,4 +114,17 @@ const Icon = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const GradientText = styled.p`
+	font-family: ${fontFamilies.regular};
+	font-size: 20px;
+	background: linear-gradient(130.52deg, #f49e25 -8.54%, #e652e9 101.04%);
+	background-clip: text;
+	background-size: 100%;
+	background-repeat: repeat;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-background-clip: text;
+	-moz-text-fill-color: transparent;
 `;
