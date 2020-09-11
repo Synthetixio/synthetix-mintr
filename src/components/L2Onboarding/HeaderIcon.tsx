@@ -35,6 +35,7 @@ const Subtext = styled.p`
 	letter-spacing: 0.2px;
 	color: #cacaf1;
 	width: 600px;
+	height: 100px;
 `;
 
 const Icon = styled.div`
