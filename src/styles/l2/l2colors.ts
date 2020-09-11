@@ -1,4 +1,4 @@
-interface IL2Colors {
+interface ILayer2Colors {
 	brand: {
 		yellow: string;
 		green: string;
@@ -37,7 +37,7 @@ interface IL2Colors {
 	};
 }
 
-const L2Colors: IL2Colors = {
+const Layer2Colors: ILayer2Colors = {
 	brand: {
 		yellow: '#935DFF',
 		green: '#935DFF',
@@ -76,4 +76,4 @@ const L2Colors: IL2Colors = {
 	},
 };
 
-export default L2Colors;
+export default Layer2Colors;
