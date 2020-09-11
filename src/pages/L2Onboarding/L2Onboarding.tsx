@@ -42,7 +42,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({ setCurrentPage, wall
 	}, [currentWallet]);
 
 	const validateAvailableBalance = useCallback(() => {
-		if (debtData.sUSDBalance) {
+		if (debtData.sUSDBalance !== null) {
 			if (sUSDBalance >= debtData.sUSDBalance) {
 				setSufficientBalance(true);
 				setCheckingBalances(false);

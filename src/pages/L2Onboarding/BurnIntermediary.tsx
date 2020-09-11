@@ -24,10 +24,14 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	const [usdValueOfSynths, setUSDValueOfSynths] = useState<number>(0);
 	const calculateUSDSumOfSynths = useCallback(() => {
 		const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
-		const sumOfSynths = balances.reduce((a, b) => {
-			return a + b;
-		});
-		setUSDValueOfSynths(sumOfSynths);
+		if (balances > 0) {
+			const sumOfSynths = balances.reduce((a, b) => {
+				return a + b;
+			});
+			setUSDValueOfSynths(sumOfSynths);
+		} else {
+			setUSDValueOfSynths(0);
+		}
 	}, [walletBalancesWithRates]);
 
 	useEffect(() => {
