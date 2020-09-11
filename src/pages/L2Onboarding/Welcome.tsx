@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { fontFamilies } from 'styles/themes';
 import { ReactComponent as BurnIcon } from '../../assets/images/burn.svg';
 import { ReactComponent as SendIcon } from '../../assets/images/send.svg';
-import { ReactComponent as MetamaskIcon } from '../../assets/images/metamask.svg';
 import { CTAButton } from '../../components/L2Onboarding/CTAButton';
+import MetamaskPng from '../../assets/images/metamask.png';
 
 interface WelcomeProps {
 	onNext: Function;
@@ -23,13 +23,13 @@ export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			copy: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
 		},
 		{
-			icon: <MetamaskIcon />,
+			icon: <img src={MetamaskPng} alt="metamask-icon" />,
 			title: 'STEP 3: SWITCH TO METAMASK ',
 			copy: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
 		},
 	];
 
-	const returnStepBox = (icon: object, title: string, copy: string, key: number) => (
+	const returnStepBox = (icon: JSX.Element, title: string, copy: string, key: number) => (
 		<ContainerIcons key={key}>
 			<Icon>{icon}</Icon>
 			<StepTitle>{title}</StepTitle>
