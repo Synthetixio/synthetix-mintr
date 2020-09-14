@@ -394,6 +394,7 @@ const WalletConnectionPMega = styled(PMega)`
 	font-family: 'apercu-medium', sans-serif;
 	text-align: center;
 	line-height: 32px;
+	margin-top: 6px;
 `;
 
 const fadeIn = keyframes`
