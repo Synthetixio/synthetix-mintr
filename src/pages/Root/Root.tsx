@@ -12,7 +12,7 @@ import { RootState } from 'ducks/types';
 
 import App from './App';
 
-import snxJSConnector from 'helpers/snxJSConnector';
+import snxJSConnector, { getProvider } from 'helpers/snxJSConnector';
 import { getEthereumNetwork } from 'helpers/networkHelper';
 import useInterval from 'hooks/useInterval';
 import { INTERVAL_TIMER } from 'constants/ui';
@@ -76,7 +76,8 @@ const Root: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
-			snxJSConnector.setContractSettings({ networkId });
+			const provider = getProvider({ networkId });
+			snxJSConnector.setContractSettings({ networkId, provider });
 			setAppReady();
 		};
 		init();
