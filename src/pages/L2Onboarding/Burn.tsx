@@ -15,9 +15,9 @@ import { addSeconds, differenceInSeconds } from 'date-fns';
 import errorMapper from 'helpers/errorMapper';
 import { Subtext } from 'components/Typography';
 import { ISSUANCE_EVENTS } from 'constants/events';
-import { ButtonPrimary } from 'components/Button';
 import { useTranslation } from 'react-i18next';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
+import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 
 interface BurnProps {
 	onComplete: Function;
@@ -340,11 +340,6 @@ const ContainerStats = styled.div`
 
 const RetryButtonWrapper = styled.div`
 	position: relative;
-`;
-
-const CTAButton = styled(ButtonPrimary)`
-	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
-	border: 1px solid #ff8fc5;
 `;
 
 const mapStateToProps = (state: any) => ({

@@ -8,7 +8,7 @@ import { getWalletDetails } from 'ducks/wallet';
 import { connect } from 'react-redux';
 import { getWalletBalances } from 'ducks/balances';
 import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
-import { ButtonPrimary } from 'components/Button';
+import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 
 interface DepositProps {
 	onComplete: Function;
@@ -63,11 +63,6 @@ const PageContainer = styled.div`
 const ContainerStats = styled.div`
 	display: flex;
 	margin: 16px 0px;
-`;
-
-const CTAButton = styled(ButtonPrimary)`
-	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
-	border: 1px solid #ff8fc5;
 `;
 
 const mapStateToProps = (state: any) => ({
