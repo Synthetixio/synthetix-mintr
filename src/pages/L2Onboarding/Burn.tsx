@@ -7,7 +7,7 @@ import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { connect } from 'react-redux';
 import { getWalletDetails } from 'ducks/wallet';
 import { getCurrentGasPrice } from 'ducks/network';
-import { bytesFormatter, secondsToTime, bigNumberFormatter } from 'helpers/formatters';
+import { bytesFormatter, secondsToTime } from 'helpers/formatters';
 import snxJSConnector from 'helpers/snxJSConnector';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -18,72 +18,22 @@ import { ISSUANCE_EVENTS } from 'constants/events';
 import { useTranslation } from 'react-i18next';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
+import { getDebtStatusData } from 'ducks/debtStatus';
 
 interface BurnProps {
 	onComplete: Function;
 	walletDetails: any;
 	currentGasPrice: any;
 	currentsUSDBalance: number;
+	debtData: any;
 }
-
-const useGetDebtData = (walletAddress: string, sUSDBytes: string) => {
-	const [data, setData] = useState<any>({});
-	const SNXBytes = bytesFormatter('SNX');
-	useEffect(() => {
-		const getDebtData = async () => {
-			try {
-				const results = await Promise.all([
-					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
-					snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
-					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
-					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
-					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
-					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
-					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
-				]);
-				const [
-					debt,
-					sUSDBalance,
-					issuanceRatio,
-					SNXPrice,
-					totalRewardEscrow,
-					totalTokenSaleEscrow,
-					issuableSynths,
-				] = results.map(bigNumberFormatter);
-				let maxBurnAmount, maxBurnAmountBN;
-				if (debt > sUSDBalance) {
-					maxBurnAmount = sUSDBalance;
-					maxBurnAmountBN = results[1];
-				} else {
-					maxBurnAmount = debt;
-					maxBurnAmountBN = results[0];
-				}
-
-				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
-				setData({
-					issuanceRatio,
-					sUSDBalance,
-					maxBurnAmount,
-					maxBurnAmountBN,
-					SNXPrice,
-					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
-					debtEscrow: Math.max(escrowBalance * SNXPrice * issuanceRatio + debt - issuableSynths, 0),
-				});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getDebtData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [walletAddress]);
-	return data;
-};
 
 const Burn: React.FC<BurnProps> = ({
 	onComplete,
 	walletDetails,
 	currentGasPrice,
 	currentsUSDBalance,
+	debtData,
 }) => {
 	const [transferableAmount, setTransferableAmount] = useState<number>(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
@@ -92,13 +42,9 @@ const Burn: React.FC<BurnProps> = ({
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 	const { t } = useTranslation();
-	const sUSDBytes = bytesFormatter('sUSD');
-	const debtData = useGetDebtData(currentWallet, sUSDBytes);
 
 	const useGetGasEstimate = (
 		burnAmount,
-		maxBurnAmount,
-		maxBurnAmountBN,
 		sUSDBalance,
 		waitingPeriod,
 		issuanceDelay,
@@ -109,23 +55,14 @@ const Burn: React.FC<BurnProps> = ({
 		useEffect(() => {
 			const getGasEstimate = async () => {
 				setError(null);
-				let gasEstimate;
 				try {
 					if (burnAmount === 0) throw new Error('You have no debt to burn');
 					if (waitingPeriod) throw new Error('Waiting period for sUSD is still ongoing');
 					if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
-					if (burnAmount > sUSDBalance || maxBurnAmount === 0)
-						throw new Error('input.error.notEnoughToBurn');
+					if (burnAmount > sUSDBalance) throw new Error('input.error.notEnoughToBurn');
 					setFetchingGasLimit(true);
-
-					let amountToBurn;
-					if (burnAmount && maxBurnAmount) {
-						amountToBurn =
-							burnAmount === maxBurnAmount
-								? maxBurnAmountBN
-								: snxJSConnector.utils.parseEther(burnAmount.toString());
-					} else amountToBurn = 0;
-					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
+					const amountToBurn = snxJSConnector.utils.parseEther(burnAmount.toString());
+					const gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
 						amountToBurn
 					);
 					setGasLimit(addBufferToGasLimit(gasEstimate));
@@ -137,15 +74,12 @@ const Burn: React.FC<BurnProps> = ({
 				setFetchingGasLimit(false);
 			};
 			getGasEstimate();
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [burnAmount, maxBurnAmount, waitingPeriod, issuanceDelay]);
+		}, [burnAmount, waitingPeriod, issuanceDelay, setFetchingGasLimit, sUSDBalance, setGasLimit]);
 		return error;
 	};
 
 	const gasEstimateError = useGetGasEstimate(
-		debtData.sUSDBalance,
-		debtData.maxBurnAmount,
-		debtData.maxBurnAmountBN,
+		debtData.debtBalance,
 		currentsUSDBalance,
 		waitingPeriod,
 		issuanceDelay,
@@ -200,12 +134,7 @@ const Burn: React.FC<BurnProps> = ({
 	}, [getMaxSecsLeftInWaitingPeriod, getIssuanceDelay]);
 
 	const setMaxTransferableAmount = useCallback(() => {
-		const amountNB = Number(debtData.sUSDBalance);
-		setTransferableAmount(
-			amountNB
-				? Math.max((amountNB - debtData.debtEscrow) / debtData.issuanceRatio / debtData.SNXPrice, 0)
-				: 0
-		);
+		setTransferableAmount(debtData.transferable);
 	}, [debtData]);
 
 	useEffect(() => {
@@ -225,10 +154,7 @@ const Burn: React.FC<BurnProps> = ({
 
 			let transaction;
 
-			const amountToBurn =
-				debtData.sUSDBalance === debtData.maxBurnAmount
-					? debtData.maxBurnAmountBN
-					: snxJSConnector.utils.parseEther(debtData.sUSDBalance.toString());
+			const amountToBurn = snxJSConnector.utils.parseEther(debtData.debtBalance.toString());
 			transaction = await Synthetix.burnSynths(amountToBurn, {
 				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
@@ -281,7 +207,7 @@ const Burn: React.FC<BurnProps> = ({
 		} else {
 			return (
 				<CTAButton
-					disabled={isFetchingGasLimit || gasEstimateError || debtData.sUSDBalance === 0}
+					disabled={isFetchingGasLimit || gasEstimateError || debtData.debtBalance === 0}
 					onClick={onBurn}
 				>
 					Burn
@@ -290,39 +216,35 @@ const Burn: React.FC<BurnProps> = ({
 		}
 	};
 
-	if (debtData) {
-		return (
-			<PageContainer>
-				<Stepper activeIndex={0} />
-				<HeaderIcon
-					title="Burn all L1 debt"
-					subtext="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam magnis duis fermentum."
-					icon={<BurnIcon />}
+	return (
+		<PageContainer>
+			<Stepper activeIndex={0} />
+			<HeaderIcon
+				title="Burn all L1 debt"
+				subtext="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam magnis duis fermentum."
+				icon={<BurnIcon />}
+			/>
+			<ContainerStats>
+				<StatBox
+					multiple
+					subtext={'BURNING:'}
+					tokenName="sUSD"
+					content={`${debtData.debtBalance ?? 0}`}
 				/>
-				<ContainerStats>
-					<StatBox
-						multiple
-						subtext={'BURNING:'}
-						tokenName="sUSD"
-						content={`${debtData.sUSDBalance ?? 0}`}
-					/>
-					<StatBox
-						multiple
-						subtext={'UNLOCKING:'}
-						tokenName="SNX"
-						content={`${transferableAmount ?? 0}`}
-					/>
-				</ContainerStats>
-				<ContainerStats>
-					<ErrorMessage message={gasEstimateError} />
-				</ContainerStats>
-				<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
-				{renderSubmitButton()}
-			</PageContainer>
-		);
-	} else {
-		return null;
-	}
+				<StatBox
+					multiple
+					subtext={'UNLOCKING:'}
+					tokenName="SNX"
+					content={`${transferableAmount ?? 0}`}
+				/>
+			</ContainerStats>
+			<ContainerStats>
+				<ErrorMessage message={gasEstimateError} />
+			</ContainerStats>
+			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
+			{renderSubmitButton()}
+		</PageContainer>
+	);
 };
 
 const PageContainer = styled.div`
@@ -345,6 +267,7 @@ const RetryButtonWrapper = styled.div`
 const mapStateToProps = (state: any) => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	debtData: getDebtStatusData(state),
 });
 
 export default connect(mapStateToProps, null)(Burn);
