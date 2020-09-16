@@ -27,7 +27,7 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 				const results = await Promise.all([
 					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
 					snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
-					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+					snxJSConnector.snxJS.SystemSettings.issuanceRatio(),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
 					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
 					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),

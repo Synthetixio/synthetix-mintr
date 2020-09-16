@@ -39,6 +39,7 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 	}, []);
 	let notifications = [
 		<Notification
+			key={1}
 			isPending={status === 'pending'}
 			icon={'/images/success.svg'}
 			heading={t(getStatusSentence(status))}
@@ -49,19 +50,19 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 		/>,
 	];
 
-	if (transaction.type === 'mint' && !curveNotificationIsHidden) {
-		notifications.unshift(
-			<Notification
-				isPending={false}
-				icon={'/images/currencies/sUSD.svg'}
-				heading={t('notification.curve.heading')}
-				description={t('notification.curve.description')}
-				link={'https://www.curve.fi/susdv2/deposit'}
-				linkLabel={t('notification.curve.action')}
-				onClose={() => setCurveNotificationIsHidden(true)}
-			/>
-		);
-	}
+	// if (transaction.type === 'mint' && !curveNotificationIsHidden) {
+	// 	notifications.unshift(
+	// 		<Notification
+	// 			isPending={false}
+	// 			icon={'/images/currencies/sUSD.svg'}
+	// 			heading={t('notification.curve.heading')}
+	// 			description={t('notification.curve.description')}
+	// 			link={'https://www.curve.fi/susdv2/deposit'}
+	// 			linkLabel={t('notification.curve.action')}
+	// 			onClose={() => setCurveNotificationIsHidden(true)}
+	// 		/>
+	// 	);
+	// }
 
 	return notifications;
 };

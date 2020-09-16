@@ -5,24 +5,8 @@ import {
 	SUPPORTED_WALLETS_MAP,
 	PORTIS_APP_ID,
 } from './networkHelper';
-import { ethers } from 'ethers';
-import {
-	uniswapV1,
-	uniswapV2,
-	unipoolSETH,
-	curvepool,
-	curveLPToken,
-	synthSummary,
-	oldCurvepool,
-	iEthRewards,
-	iEth2Rewards,
-	balancerpool,
-	balancerSNXRewards,
-	curveSBTC,
-	sBTCRewards,
-	curveSUSDSwapContract,
-	iBtcRewards,
-} from './contracts';
+
+import { providers, Wallet } from 'ethers';
 
 let snxJSConnector = {
 	initialized: false,
@@ -35,67 +19,6 @@ let snxJSConnector = {
 		this.provider = this.snxJS.contractSettings.provider;
 		this.utils = this.snxJS.utils;
 		this.ethersUtils = this.snxJS.ethers.utils;
-		if (this.signer) {
-			this.uniswapV1Contract = new ethers.Contract(uniswapV1.address, uniswapV1.abi, this.signer);
-			this.uniswapV2Contract = new ethers.Contract(uniswapV2.address, uniswapV2.abi, this.signer);
-			this.unipoolSETHContract = new ethers.Contract(
-				unipoolSETH.address,
-				unipoolSETH.abi,
-				this.signer
-			);
-			this.curveLPTokenContract = new ethers.Contract(
-				curveLPToken.address,
-				curveLPToken.abi,
-				this.signer
-			);
-			this.curvepoolContract = new ethers.Contract(curvepool.address, curvepool.abi, this.signer);
-			this.oldCurvepoolContract = new ethers.Contract(
-				oldCurvepool.address,
-				curvepool.abi,
-				this.signer
-			);
-			this.iEthRewardsContract = new ethers.Contract(
-				iEthRewards.address,
-				iEthRewards.abi,
-				this.signer
-			);
-			this.iEth2RewardsContract = new ethers.Contract(
-				iEth2Rewards.address,
-				iEth2Rewards.abi,
-				this.signer
-			);
-			this.iBtcRewardsContract = new ethers.Contract(
-				iBtcRewards.address,
-				iBtcRewards.abi,
-				this.signer
-			);
-			this.balancerpoolContract = new ethers.Contract(
-				balancerpool.address,
-				balancerpool.abi,
-				this.signer
-			);
-			this.balancerSNXRewardsContract = new ethers.Contract(
-				balancerSNXRewards.address,
-				balancerSNXRewards.abi,
-				this.signer
-			);
-			this.curveSBTCContract = new ethers.Contract(curveSBTC.address, curveSBTC.abi, this.signer);
-			this.sBTCRewardsContract = new ethers.Contract(
-				sBTCRewards.address,
-				sBTCRewards.abi,
-				this.signer
-			);
-		}
-		this.synthSummaryUtilContract = new ethers.Contract(
-			synthSummary.addresses[contractSettings.networkId],
-			synthSummary.abi,
-			this.provider
-		);
-		this.curveSUSDSwapContract = new ethers.Contract(
-			curveSUSDSwapContract.address,
-			curveSUSDSwapContract.abi,
-			this.provider
-		);
 	},
 };
 
@@ -106,15 +29,15 @@ const connectToMetamask = async (networkId, networkName) => {
 	};
 	try {
 		// Otherwise we enable ethereum if needed (modern browsers)
-		if (window.ethereum) {
-			window.ethereum.autoRefreshOnNetworkChange = true;
-			await window.ethereum.enable();
-		}
-		const accounts = await snxJSConnector.signer.getNextAddresses();
-		if (accounts && accounts.length > 0) {
+		// if (window.ethereum) {
+		// 	window.ethereum.autoRefreshOnNetworkChange = true;
+		// 	await window.ethereum.enable();
+		// }
+		// const accounts = await snxJSConnector.signer.getNextAddresses();
+		if (snxJSConnector.signer.address) {
 			return {
 				...walletState,
-				currentWallet: accounts[0],
+				currentWallet: snxJSConnector.signer.address,
 				unlocked: true,
 				networkId,
 				networkName: networkName.toLowerCase(),
@@ -257,14 +180,27 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 	return {};
 };
 
-export const setSigner = ({ type, networkId, derivationPath, networkName }) => {
-	const signer = new snxJSConnector.signers[type](
-		getSignerConfig({ type, networkId, derivationPath, networkName })
+export const setSigner = async ({ type, networkId, derivationPath, networkName }) => {
+	const provider = new providers.JsonRpcProvider('https://rinkeby.optimism.io');
+
+	const signer = new snxJSConnector.signers['PrivateKey'](
+		provider,
+		networkId,
+		process.env.REACT_APP_WALLET_PK
+		// getSignerConfig({ type, networkId, derivationPath, networkName })
 	);
 
+	// console.log(wallet);
+	// console.log(networkId);
+	// console.log(signer.provider);
+
+	// wallet.getNextAddresses = () => new Promise(resolve => resolve([wallet.address]));
+	// console.log(await wallet.getNextAddresses());
+	// console.log(wallet);
 	snxJSConnector.setContractSettings({
 		networkId,
 		signer,
+		provider,
 	});
 };
 

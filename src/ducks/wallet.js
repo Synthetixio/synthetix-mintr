@@ -47,6 +47,7 @@ export const derivationPathChange = (signerOptions, derivationPath) => {
 	return setDerivationPath(derivationPath);
 };
 export const updateWalletStatus = walletStatus => {
+	console.log(walletStatus);
 	return {
 		type: UPDATE_WALLET_STATUS,
 		payload: {

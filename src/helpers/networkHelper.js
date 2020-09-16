@@ -50,24 +50,25 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
-	let networkId = 1;
-	try {
-		if (window.web3?.eth?.net) {
-			networkId = await window.web3.eth.net.getId();
-			return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
-		} else if (window.web3?.version?.network) {
-			networkId = Number(window.web3.version.network);
-			return { name: SUPPORTED_NETWORKS[networkId], networkId };
-		} else if (window.ethereum?.networkVersion) {
-			networkId = Number(window.ethereum?.networkVersion);
-			return { name: SUPPORTED_NETWORKS[networkId], networkId };
-		}
-		return { name: 'MAINNET', networkId };
-	} catch (e) {
-		console.log(e);
-		return { name: 'MAINNET', networkId };
-	}
+	return { name: 'OVM', networkId: 108 };
+	// if (!window.web3) return { name: 'MAINNET', networkId: 1 };
+	// let networkId = 1;
+	// try {
+	// 	if (window.web3?.eth?.net) {
+	// 		networkId = await window.web3.eth.net.getId();
+	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
+	// 	} else if (window.web3?.version?.network) {
+	// 		networkId = Number(window.web3.version.network);
+	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId };
+	// 	} else if (window.ethereum?.networkVersion) {
+	// 		networkId = Number(window.ethereum?.networkVersion);
+	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId };
+	// 	}
+	// 	return { name: 'MAINNET', networkId };
+	// } catch (e) {
+	// 	console.log(e);
+	// 	return { name: 'MAINNET', networkId };
+	// }
 }
 
 export const getNetworkSpeeds = async () => {

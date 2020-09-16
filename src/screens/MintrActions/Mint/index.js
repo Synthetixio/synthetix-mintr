@@ -24,7 +24,7 @@ const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 				const results = await Promise.all([
 					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress, sUSDBytes),
 					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
-					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+					snxJSConnector.snxJS.SystemSettings.issuanceRatio(),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
 					snxJSConnector.snxJS.Synthetix.collateral(walletAddress),
 				]);
@@ -66,8 +66,9 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 						snxJSConnector.utils.parseEther(mintAmount.toString())
 					);
 				}
+				console.log(addBufferToGasLimit(gasEstimate));
 				setFetchingGasLimit(false);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				setGasLimit(5000000);
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);
@@ -104,7 +105,7 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 
 	const onMint = async () => {
 		const transactionSettings = {
-			gasPrice: currentGasPrice.formattedPrice,
+			gasPrice: 0,
 			gasLimit,
 		};
 		try {
@@ -120,6 +121,7 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 					snxJSConnector.utils.parseEther(mintAmount.toString()),
 					transactionSettings
 				);
+				console.log(transaction);
 			}
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });

@@ -7,14 +7,15 @@ const DEFAULT_SUSD_RATE = 1;
 
 export const getDebtStatus = async (walletAddress: string) => {
 	const {
-		snxJS: { SynthetixState, Synthetix },
+		snxJS: { SystemSettings, Synthetix },
 	} = snxJSConnector as any;
 	const result = await Promise.all([
-		SynthetixState.issuanceRatio(),
+		SystemSettings.issuanceRatio(),
 		Synthetix.collateralisationRatio(walletAddress),
 		Synthetix.transferableSynthetix(walletAddress),
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
 	]);
+	console.log('here');
 	const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
 	return {
 		targetCRatio,
@@ -62,12 +63,11 @@ const fetchCurveSUSDRate = async () => {
 
 export const getExchangeRates = async () => {
 	const {
-		synthSummaryUtilContract,
-		snxJS: { ExchangeRates },
+		snxJS: { ExchangeRates, SynthUtil },
 	} = snxJSConnector as any;
 
 	const [synthsRates, snxRate, curveSUSDRate] = await Promise.all([
-		synthSummaryUtilContract.synthsRates(),
+		SynthUtil.synthsRates(),
 		ExchangeRates.rateForCurrency(bytesFormatter(CRYPTO_CURRENCY_TO_KEY.SNX)),
 		fetchCurveSUSDRate(),
 	]);
@@ -93,8 +93,7 @@ export const getExchangeRates = async () => {
 
 export const getBalances = async (walletAddress: string) => {
 	const {
-		synthSummaryUtilContract,
-		snxJS: { Synthetix },
+		snxJS: { Synthetix, SynthUtil },
 		provider,
 	} = snxJSConnector as any;
 	const [
@@ -103,11 +102,8 @@ export const getBalances = async (walletAddress: string) => {
 		snxBalanceResults,
 		ethBalanceResults,
 	] = await Promise.all([
-		synthSummaryUtilContract.synthsBalances(walletAddress),
-		synthSummaryUtilContract.totalSynthsInKey(
-			walletAddress,
-			bytesFormatter(CRYPTO_CURRENCY_TO_KEY.sUSD)
-		),
+		SynthUtil.synthsBalances(walletAddress),
+		SynthUtil.totalSynthsInKey(walletAddress, bytesFormatter(CRYPTO_CURRENCY_TO_KEY.sUSD)),
 		Synthetix.collateral(walletAddress),
 		provider.getBalance(walletAddress),
 	]);
@@ -137,6 +133,7 @@ export const getBalances = async (walletAddress: string) => {
 			balanceBN: ethBalanceResults,
 		},
 	];
+
 	const all = synths.concat(cryptoToArray);
 	return {
 		crypto: {
