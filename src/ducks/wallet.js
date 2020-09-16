@@ -47,12 +47,13 @@ export const derivationPathChange = (signerOptions, derivationPath) => {
 	return setDerivationPath(derivationPath);
 };
 export const updateWalletStatus = walletStatus => {
+	let payload = walletStatus;
+	if (walletStatus.currentWallet) {
+		payload.currentWallet = getAddress(walletStatus.currentWallet);
+	}
 	return {
 		type: UPDATE_WALLET_STATUS,
-		payload: {
-			...walletStatus,
-			currentWallet: walletStatus.currentWallet ? getAddress(walletStatus.currentWallet) : null,
-		},
+		payload,
 	};
 };
 

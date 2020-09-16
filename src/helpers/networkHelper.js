@@ -11,6 +11,13 @@ export const SUPPORTED_NETWORKS = {
 	42: 'KOVAN',
 };
 
+export const NETWORK_NAMES = {
+	1: 'HOMESTEAD',
+	3: 'ROPSTEN',
+	4: 'RINKEBY',
+	42: 'KOVAN',
+};
+
 export const SUPPORTED_NETWORKS_MAP = invert(SUPPORTED_NETWORKS);
 
 export const DEFAULT_GAS_LIMIT = {
@@ -23,7 +30,7 @@ export const DEFAULT_GAS_LIMIT = {
 	sendSynth: 150000,
 };
 
-const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
+export const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,

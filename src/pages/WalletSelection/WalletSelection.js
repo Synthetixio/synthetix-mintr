@@ -34,7 +34,7 @@ import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 import { H1, PMega, TableHeaderMedium, TableDataMedium } from '../../components/Typography';
 import { ButtonPrimaryMedium } from '../../components/Button';
 
-const WALLET_PAGE_SIZE = 5;
+const WALLET_PAGE_SIZE = 15;
 const LEDGER_DERIVATION_PATHS = [
 	{ value: "44'/60'/0'/", label: "Ethereum - m/44'/60'/0'" },
 	{ value: "44'/60'/", label: "Ethereum - Ledger Live - m/44'/60'" },
@@ -328,7 +328,7 @@ const HeadingContent = styled.div`
 `;
 
 const BodyContent = styled.div`
-	margin: 50px auto 0 auto;
+	margin: 20px auto 0 auto;
 	max-width: 1400px;
 	display: flex;
 	justify-content: center;
@@ -350,6 +350,7 @@ const ErrorImg = styled.img`
 
 const ErrorHeading = styled.div`
 	display: flex;
+	align-items: center;
 `;
 const NoMarginMicroSpinner = styled(MicroSpinner)`
 	margin: 0px;
@@ -379,19 +380,21 @@ const Content = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-top: 50px;
+	margin-top: 20px;
 `;
 
 const WalletConnectionH1 = styled(H1)`
 	text-transform: none;
-	font-size: 48px;
+	margin: 0;
+	font-size: 30px;
 `;
 
 const WalletConnectionPMega = styled(PMega)`
-	font-size: 22px;
+	font-size: 18px;
 	font-family: 'apercu-medium', sans-serif;
 	text-align: center;
 	line-height: 32px;
+	margin-top: 6px;
 `;
 
 const fadeIn = keyframes`
@@ -404,7 +407,6 @@ const fadeIn = keyframes`
 `;
 
 const ListContainer = styled.div`
-	height: 350px;
 	width: 100%;
 	display: flex;
 	align-items: center;
