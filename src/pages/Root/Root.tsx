@@ -76,13 +76,7 @@ const Root: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
-			console.log(window);
-			const { ethereum } = window as any;
-			const p = new providers.Web3Provider(ethereum);
-			console.log(p);
-			console.log(await p.getSigner().getAddress());
 			const provider = new providers.JsonRpcProvider('https://rinkeby.optimism.io');
-
 			snxJSConnector.setContractSettings({ networkId, provider });
 			setAppReady();
 		};

@@ -6,8 +6,6 @@ import {
 	PORTIS_APP_ID,
 } from './networkHelper';
 
-import { providers, Wallet } from 'ethers';
-
 let snxJSConnector = {
 	initialized: false,
 	signers: SynthetixJs.signers,
@@ -29,15 +27,15 @@ const connectToMetamask = async (networkId, networkName) => {
 	};
 	try {
 		// Otherwise we enable ethereum if needed (modern browsers)
-		// if (window.ethereum) {
-		// 	window.ethereum.autoRefreshOnNetworkChange = true;
-		// 	await window.ethereum.enable();
-		// }
-		// const accounts = await snxJSConnector.signer.getNextAddresses();
-		if (snxJSConnector.signer.address) {
+		if (window.ethereum) {
+			window.ethereum.autoRefreshOnNetworkChange = true;
+			await window.ethereum.enable();
+		}
+		const accounts = await snxJSConnector.signer.getNextAddresses();
+		if (accounts && accounts.length > 0) {
 			return {
 				...walletState,
-				currentWallet: snxJSConnector.signer.address,
+				currentWallet: accounts[0],
 				unlocked: true,
 				networkId,
 				networkName: networkName.toLowerCase(),
@@ -181,26 +179,14 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 };
 
 export const setSigner = async ({ type, networkId, derivationPath, networkName }) => {
-	const provider = new providers.JsonRpcProvider('https://rinkeby.optimism.io');
-
-	const signer = new snxJSConnector.signers['PrivateKey'](
-		provider,
-		networkId,
-		process.env.REACT_APP_WALLET_PK
-		// getSignerConfig({ type, networkId, derivationPath, networkName })
+	const signer = new snxJSConnector.signers[type](
+		getSignerConfig({ type, networkId, derivationPath, networkName })
 	);
 
-	// console.log(wallet);
-	// console.log(networkId);
-	// console.log(signer.provider);
-
-	// wallet.getNextAddresses = () => new Promise(resolve => resolve([wallet.address]));
-	// console.log(await wallet.getNextAddresses());
-	// console.log(wallet);
 	snxJSConnector.setContractSettings({
 		networkId,
 		signer,
-		provider,
+		provider: signer.provider,
 	});
 };
 

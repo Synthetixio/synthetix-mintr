@@ -15,7 +15,6 @@ export const getDebtStatus = async (walletAddress: string) => {
 		Synthetix.transferableSynthetix(walletAddress),
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
 	]);
-	console.log('here');
 	const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
 	return {
 		targetCRatio,

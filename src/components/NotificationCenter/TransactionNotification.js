@@ -26,8 +26,6 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 	const { t } = useTranslation();
 	const { networkId } = walletDetails;
 	const [status, setStatus] = useState(transaction.status);
-	const [curveNotificationIsHidden, setCurveNotificationIsHidden] = useState(false);
-
 	useEffect(() => {
 		const getTransactionTicket = async () => {
 			const status = await snxJSConnector.utils.waitForTransaction(transaction.hash);
@@ -37,7 +35,8 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 		getTransactionTicket();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	let notifications = [
+
+	return (
 		<Notification
 			key={1}
 			isPending={status === 'pending'}
@@ -47,24 +46,8 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 			link={getEtherscanTxLink(networkId, transaction.hash)}
 			linkLabel={t('button.navigation.view')}
 			onClose={() => hideTransaction(transaction.hash)}
-		/>,
-	];
-
-	// if (transaction.type === 'mint' && !curveNotificationIsHidden) {
-	// 	notifications.unshift(
-	// 		<Notification
-	// 			isPending={false}
-	// 			icon={'/images/currencies/sUSD.svg'}
-	// 			heading={t('notification.curve.heading')}
-	// 			description={t('notification.curve.description')}
-	// 			link={'https://www.curve.fi/susdv2/deposit'}
-	// 			linkLabel={t('notification.curve.action')}
-	// 			onClose={() => setCurveNotificationIsHidden(true)}
-	// 		/>
-	// 	);
-	// }
-
-	return notifications;
+		/>
+	);
 };
 
 const mapStateToProps = state => ({
