@@ -66,9 +66,8 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 						snxJSConnector.utils.parseEther(mintAmount.toString())
 					);
 				}
-				console.log(addBufferToGasLimit(gasEstimate));
 				setFetchingGasLimit(false);
-				setGasLimit(5000000);
+				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);

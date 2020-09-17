@@ -217,7 +217,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 				setGasLimit(addBufferToGasLimit(burnToTargetGasLimit));
 				transaction = await Synthetix.burnSynthsToTarget({
 					gasLimit: addBufferToGasLimit(burnToTargetGasLimit),
-					gasPrice: currentGasPrice.formattedPrice,
+					gasPrice: 0,
 				});
 			} else {
 				const amountToBurn =
@@ -225,7 +225,7 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 						? maxBurnAmountBN
 						: snxJSConnector.utils.parseEther(burnAmount.toString());
 				transaction = await Synthetix.burnSynths(amountToBurn, {
-					gasPrice: currentGasPrice.formattedPrice,
+					gasPrice: 0,
 					gasLimit,
 				});
 			}
