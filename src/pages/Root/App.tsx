@@ -11,6 +11,7 @@ import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
 
 import MaintenancePage from '../MaintenanceMessage';
+import Soonthetix from '../Soonthetix';
 import NotificationCenter from 'components/NotificationCenter';
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -34,6 +35,7 @@ type CurrentPageProps = {
 };
 
 const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page }) => {
+	return <Soonthetix />;
 	if (isMobileOrTablet()) return <MobileLanding />;
 	if (isOnMaintenance) return <MaintenancePage />;
 	switch (page) {
