@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { setCurrentGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
 import ErrorMessage from '../../components/ErrorMessage';
 
-const MAX_GAS_MULTIPLE = 1.5;
+const MAX_GAS_MULTIPLE = 3;
 
 const GasMenu = ({ networkPrices, setCurrentGasPrice, currentGasPrice }) => {
 	const { t } = useTranslation();
