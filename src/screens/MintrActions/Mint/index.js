@@ -67,7 +67,7 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 					);
 				}
 				setFetchingGasLimit(false);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				setGasLimit(addBufferToGasLimit(4000000));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);

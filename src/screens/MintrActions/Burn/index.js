@@ -106,7 +106,8 @@ const useGetGasEstimate = (
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
 					amountToBurn
 				);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				console.log('GAS LIMIT', addBufferToGasLimit(gasEstimate));
+				setGasLimit(addBufferToGasLimit(4000000));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';

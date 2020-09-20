@@ -76,7 +76,7 @@ const Root: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
-			const provider = new providers.JsonRpcProvider('https://rinkeby.optimism.io');
+			const provider = new providers.JsonRpcProvider('https://goerli.optimism.io');
 			snxJSConnector.setContractSettings({ networkId, provider });
 			setAppReady();
 		};
