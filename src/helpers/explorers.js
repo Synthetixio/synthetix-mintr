@@ -4,7 +4,7 @@ const getEtherScanBaseURL = networkId => {
 	const network = SUPPORTED_NETWORKS[networkId];
 
 	if (networkId === 108) {
-		return 'https://swanky-idea.surge.sh';
+		return 'https://l2-explorer.surge.sh';
 	}
 	if (isMainNet(networkId) || network == null) {
 		return 'https://etherscan.io';

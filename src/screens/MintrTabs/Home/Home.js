@@ -28,7 +28,7 @@ const Home = ({ walletDetails: { networkId } }) => {
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
-			<InfoBanner>
+			{/* <InfoBanner>
 				<InfoBannerCountdown>
 					Withdraw funds from L1 in:<Countdown>3 days 22 hours</Countdown>
 				</InfoBannerCountdown>
@@ -37,7 +37,7 @@ const Home = ({ walletDetails: { networkId } }) => {
 						<Info />
 					</IconContainer>
 				</Tooltip>
-			</InfoBanner>
+			</InfoBanner> */}
 			<PageTitle>{t('home.intro.title')}</PageTitle>
 			<ButtonRow>
 				{ACTIONS.map(action => {
