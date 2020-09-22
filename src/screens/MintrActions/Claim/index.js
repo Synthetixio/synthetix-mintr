@@ -81,7 +81,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 				setFetchingGasLimit(true);
 				const gasEstimate = await FeePool.contract.estimate.claimFees();
 				setFetchingGasLimit(false);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				setGasLimit(addBufferToGasLimit(4000000));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);
@@ -119,7 +119,7 @@ const Claim = ({
 			} = snxJSConnector;
 			handleNext(1);
 			const transaction = await FeePool.claimFees({
-				gasPrice: currentGasPrice.formattedPrice,
+				gasPrice: 0,
 				gasLimit,
 			});
 			if (transaction) {

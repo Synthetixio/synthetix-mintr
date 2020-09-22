@@ -59,9 +59,7 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 
 const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 	const { t } = useTranslation();
-	const imageStyle = {
-		width: '440px',
-	};
+
 	return (
 		<CarouselContainer>
 			<Carousel
@@ -77,7 +75,6 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						style={{ marginTop: '20px', ...imageStyle }}
 						src={`/images/onboarding/welcome-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>

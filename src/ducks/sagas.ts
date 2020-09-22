@@ -4,7 +4,7 @@ import { watchFetchDebtStatusRequest } from './debtStatus';
 import { watchFetchEscrowRequest } from './escrow';
 import { watchFetchBalances } from './balances';
 import { watchFetchNetworkRequest } from './network';
-import { watchFetchSystemStatusRequest } from './app';
+// import { watchFetchSystemStatusRequest } from './app';
 import { watchFetchRatesRequest } from './rates';
 
 const rootSaga = function* () {
@@ -13,7 +13,7 @@ const rootSaga = function* () {
 		watchFetchEscrowRequest(),
 		watchFetchBalances(),
 		watchFetchNetworkRequest(),
-		watchFetchSystemStatusRequest(),
+		// watchFetchSystemStatusRequest(),
 		watchFetchRatesRequest(),
 	]);
 };

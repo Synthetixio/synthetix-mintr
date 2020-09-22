@@ -50,6 +50,7 @@ const Root: FC<PropsFromRedux> = ({
 		if (appIsReady && currentWallet) {
 			fetchDebtStatusRequest();
 			fetchEscrowRequest();
+			fetchRatesRequest();
 			fetchBalancesRequest();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,7 +59,6 @@ const Root: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		if (appIsReady) {
 			fetchGasPricesRequest();
-			fetchRatesRequest();
 			fetchAppStatusRequest();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,8 +76,8 @@ const Root: FC<PropsFromRedux> = ({
 	useEffect(() => {
 		const init = async () => {
 			const { networkId } = await getEthereumNetwork();
-			const provider = new providers.JsonRpcProvider('https://goerli.optimism.io');
-			snxJSConnector.setContractSettings({ networkId, provider });
+			// const provider = new providers.JsonRpcProvider('https://goerli.optimism.io');
+			// snxJSConnector.setContractSettings({ networkId, provider });
 			setAppReady();
 		};
 		init();

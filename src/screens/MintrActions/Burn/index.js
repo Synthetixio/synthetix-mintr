@@ -215,9 +215,9 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 
 			if (burnToTarget) {
 				const burnToTargetGasLimit = await Synthetix.contract.estimate.burnSynthsToTarget();
-				setGasLimit(addBufferToGasLimit(burnToTargetGasLimit));
+				setGasLimit(addBufferToGasLimit(4000000));
 				transaction = await Synthetix.burnSynthsToTarget({
-					gasLimit: addBufferToGasLimit(burnToTargetGasLimit),
+					gasLimit: addBufferToGasLimit(4000000),
 					gasPrice: 0,
 				});
 			} else {

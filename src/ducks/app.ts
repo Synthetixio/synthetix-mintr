@@ -67,23 +67,23 @@ const getAppState = (state: RootState) => state.app;
 export const getAppIsReady = (state: RootState) => getAppState(state).isReady;
 export const getAppIsOnMaintenance = (state: RootState) => !!getAppState(state).isSystemUpgrading;
 
-function* fetchSystemStatus() {
-	const {
-		// @ts-ignore
-		snxJS: { SystemStatus },
-	} = snxJSConnector;
-	try {
-		const isSystemUpgrading = yield SystemStatus.isSystemUpgrading();
-		yield put(fetchAppStatusSuccess({ reason: isSystemUpgrading }));
-		return true;
-	} catch (e) {
-		yield put(fetchAppStatusFailure({ error: e.message }));
-		return false;
-	}
-}
+// function* fetchSystemStatus() {
+// 	const {
+// 		// @ts-ignore
+// 		snxJS: { SystemStatus },
+// 	} = snxJSConnector;
+// 	try {
+// 		const isSystemUpgrading = yield SystemStatus.isSystemUpgrading();
+// 		yield put(fetchAppStatusSuccess({ reason: isSystemUpgrading }));
+// 		return true;
+// 	} catch (e) {
+// 		yield put(fetchAppStatusFailure({ error: e.message }));
+// 		return false;
+// 	}
+// }
 
-export function* watchFetchSystemStatusRequest() {
-	yield takeLatest(fetchAppStatusRequest.type, fetchSystemStatus);
-}
+// export function* watchFetchSystemStatusRequest() {
+// yield takeLatest(fetchAppStatusRequest.type, fetchSystemStatus);
+// }
 
 export default appSlice.reducer;
