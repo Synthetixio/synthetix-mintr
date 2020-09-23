@@ -40,12 +40,20 @@ const Stake = ({ walletDetails, goBack }) => {
 				snxJS: { iETH, Exchanger },
 				iEth4RewardsContract,
 			} = snxJSConnector;
-			const [iETHBalance, iETHStaked, rewards, settlementOwing, rewardsOld] = await Promise.all([
+			const [
+				iETHBalance,
+				iETHStaked,
+				rewards,
+				settlementOwing,
+				rewardsOld,
+				stakedOld,
+			] = await Promise.all([
 				iETH.balanceOf(currentWallet),
 				iEth4RewardsContract.balanceOf(currentWallet),
 				iEth4RewardsContract.earned(currentWallet),
 				Exchanger.settlementOwing(currentWallet, bytesFormatter('iETH')),
 				iEth2RewardsContract.earned(currentWallet),
+				iEth2RewardsContract.balanceOf(currentWallet),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
@@ -59,6 +67,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				rewards: bigNumberFormatter(rewards),
 				rewardsOld: bigNumberFormatter(rewardsOld),
 				needsToSettle: reclaimAmount || rebateAmount,
+				stakedOld: bigNumberFormatter(stakedOld),
 			});
 		} catch (e) {
 			console.log(e);
@@ -240,21 +249,23 @@ const Stake = ({ walletDetails, goBack }) => {
 					</ButtonAction>
 				</ButtonRow>
 
-				{balances && balances.rewardsOld ? (
+				{balances && balances.stakedOld ? (
 					<ButtonRow>
 						<ButtonActionFullRow
 							onClick={() =>
 								setCurrentScenario({
-									action: 'claim',
+									action: 'exit',
 									label: t('lpRewards.shared.actions.claiming'),
-									amount: `${(balances && formatCurrency(balances.rewardsOld)) || 0} SNX`,
+									amount: `${balances && formatCurrency(balances.stakedOld)} iETH & ${
+										balances && formatCurrency(balances.rewardsOld)
+									} SNX`,
 									contractFunction: transactionSettings =>
-										iEth2RewardsContract.getReward(transactionSettings),
-									contractFunctionEstimate: () => iEth2RewardsContract.estimate.getReward(),
+										iEth2RewardsContract.exit(transactionSettings),
+									contractFunctionEstimate: () => iEth2RewardsContract.estimate.exit(),
 								})
 							}
 						>
-							{t('lpRewards.shared.buttons.claim-old')}
+							{t('lpRewards.shared.buttons.exit-old')}
 						</ButtonActionFullRow>
 					</ButtonRow>
 				) : null}
