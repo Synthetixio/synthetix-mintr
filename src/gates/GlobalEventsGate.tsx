@@ -74,28 +74,28 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 				fetchDebtStatusRequest();
 			}
 		});
-		Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			if (address === currentWallet) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-		sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			if (address === currentWallet) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-		SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
-			if (address === currentWallet) {
-				fetchEscrowRequest();
-			}
-		});
-		RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
-			if (address === currentWallet) {
-				fetchEscrowRequest();
-			}
-		});
+		// Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchBalancesRequest();
+		// 		fetchDebtStatusRequest();
+		// 	}
+		// });
+		// sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchBalancesRequest();
+		// 		fetchDebtStatusRequest();
+		// 	}
+		// });
+		// SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchEscrowRequest();
+		// 	}
+		// });
+		// RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchEscrowRequest();
+		// 	}
+		// });
 
 		return () => {
 			Object.values(ISSUANCE_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
@@ -124,9 +124,9 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
 			setSystemUpgrading({ reason: false });
 		});
-		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
-			fetchRatesRequest();
-		});
+		// ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
+		// 	fetchRatesRequest();
+		// });
 		return () => {
 			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
 				SystemStatus.contract.removeAllListeners(event)
