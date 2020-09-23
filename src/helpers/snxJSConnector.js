@@ -18,6 +18,7 @@ import {
 	oldCurvepool,
 	iEthRewards,
 	iEth2Rewards,
+	iEth4Rewards,
 	balancerpool,
 	balancerSNXRewards,
 	curveSBTC,
@@ -64,6 +65,11 @@ let snxJSConnector = {
 			this.iEth2RewardsContract = new ethers.Contract(
 				iEth2Rewards.address,
 				iEth2Rewards.abi,
+				this.signer
+			);
+			this.iEth4RewardsContract = new ethers.Contract(
+				iEth4Rewards.address,
+				iEth4Rewards.abi,
 				this.signer
 			);
 			this.iBtcRewardsContract = new ethers.Contract(

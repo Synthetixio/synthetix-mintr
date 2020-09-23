@@ -23,18 +23,18 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 		const {
 			snxJS: { iETH },
 			utils: { parseEther },
-			iEth2RewardsContract,
+			iEth4RewardsContract,
 		} = snxJSConnector;
 		try {
 			setError(null);
 
 			const gasEstimate = await iETH.contract.estimate.approve(
-				iEth2RewardsContract.address,
+				iEth4RewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
 
 			const transaction = await iETH.approve(
-				iEth2RewardsContract.address,
+				iEth4RewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit: Number(gasEstimate) + GAS_LIMIT_BUFFER,

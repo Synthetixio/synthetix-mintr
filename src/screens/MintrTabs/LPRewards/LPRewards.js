@@ -33,7 +33,7 @@ const POOLS_MAJOR = [
 		title: 'lpRewards.actions.ieth.title',
 		name: 'ieth',
 		image: '/images/currencies/iETH.svg',
-		contract: 'iEth2RewardsContract',
+		contract: 'iEth4RewardsContract',
 	},
 	{
 		title: 'lpRewards.actions.ibtc.title',
@@ -64,7 +64,7 @@ const POOLS_SECONDARY = [
 	},
 ];
 
-const POOLS_COMPLETED = ['curvepoolSBTC', 'unipoolSETH', 'balancerSNX'];
+const POOLS_COMPLETED = ['ibtc', 'curvepoolSBTC', 'unipoolSETH', 'balancerSNX'];
 
 const LPRewards = ({ currentTheme }) => {
 	const { t } = useTranslation();
@@ -73,11 +73,11 @@ const LPRewards = ({ currentTheme }) => {
 	const goBack = () => setCurrentPool(null);
 
 	useEffect(() => {
-		const { curvepoolContract, iEth2RewardsContract, iBtcRewardsContract } = snxJSConnector;
+		const { curvepoolContract, iEth4RewardsContract, iBtcRewardsContract } = snxJSConnector;
 
 		const getRewardsAmount = async () => {
 			try {
-				const contracts = [curvepoolContract, iEth2RewardsContract, iBtcRewardsContract];
+				const contracts = [curvepoolContract, iEth4RewardsContract, iBtcRewardsContract];
 				const rewardsData = await Promise.all(
 					contracts.map(contract => {
 						const getDuration = contract.DURATION || contract.rewardsDuration;
