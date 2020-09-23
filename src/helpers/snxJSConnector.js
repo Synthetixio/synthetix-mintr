@@ -183,10 +183,13 @@ export const setSigner = async ({ type, networkId, derivationPath, networkName }
 		getSignerConfig({ type, networkId, derivationPath, networkName })
 	);
 
+	const provider = signer._optimism;
+	provider._ethereum = null;
+	console.log('haha', signer._optimism);
 	snxJSConnector.setContractSettings({
 		networkId,
 		signer,
-		provider: signer.provider,
+		provider,
 	});
 };
 
