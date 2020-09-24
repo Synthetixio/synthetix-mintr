@@ -46,6 +46,7 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,
+						provider: signer.provider,
 					});
 					if (address && address[0]) {
 						updateWalletStatus({ currentWallet: address[0] });
@@ -161,9 +162,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 					{SUPPORTED_WALLETS.map(wallet => {
 						const noMetamask = wallet === 'Metamask' && !hasWeb3();
+						const disabled = wallet === 'Coinbase';
 						return (
 							<Button
-								disabled={noMetamask}
+								disabled={noMetamask || disabled}
 								key={wallet}
 								onClick={onWalletClick({
 									wallet,

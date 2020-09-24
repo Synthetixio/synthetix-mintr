@@ -44,12 +44,12 @@ const Action = ({
 					<Subtitle>{t('mintrActions.claim.action.subtitle')}</Subtitle>
 				</Intro>
 				<BoxRow>
-					<Box>
+					{/* <Box>
 						<DataHeaderLarge>{t('mintrActions.claim.action.tradingRewards')}</DataHeaderLarge>
 						<Amount>
 							{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
 						</Amount>
-					</Box>
+					</Box> */}
 					<Box>
 						<DataHeaderLarge>{t('mintrActions.claim.action.stakingRewards')}</DataHeaderLarge>
 						<Amount>
@@ -173,9 +173,9 @@ const Box = styled.div`
 	border-radius: 2px;
 	display: flex;
 	flex-direction: column;
-	&:last-child {
+	/* &:last-child {
 		margin-left: 32px;
-	}
+	} */
 `;
 
 const Amount = styled.span`

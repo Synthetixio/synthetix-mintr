@@ -28,14 +28,14 @@ const Confirmation = ({ t, goBack, walletType, feesAvailable, isFetchingGasLimit
 						</PLarge>
 					</Intro>
 					<Details>
-						<Box>
+						{/* <Box>
 							<DataHeaderLarge>
 								{t('mintrActions.claim.confirmation.actionDescription')}
 							</DataHeaderLarge>
 							<Amount>
 								{feesAvailable && feesAvailable[0] ? formatCurrency(feesAvailable[0]) : 0} sUSD
 							</Amount>
-						</Box>
+						</Box> */}
 						<Box>
 							<DataHeaderLarge>
 								{t('mintrActions.claim.confirmation.actionDescription')}
