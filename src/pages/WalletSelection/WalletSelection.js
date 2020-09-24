@@ -33,6 +33,7 @@ import OnBoardingPageContainer from '../../components/OnBoardingPageContainer';
 
 import { H1, PMega, TableHeaderMedium, TableDataMedium } from '../../components/Typography';
 import { ButtonPrimaryMedium } from '../../components/Button';
+import { getEtherscanAddressLink } from 'helpers/explorers';
 
 const WALLET_PAGE_SIZE = 5;
 const LEDGER_DERIVATION_PATHS = [
@@ -262,9 +263,7 @@ const WalletConnection = ({
 																}}
 															>
 																<Link
-																	href={`https://${
-																		networkName === 'mainnet' ? '' : networkName + '.'
-																	}etherscan.io/address/${wallet.address}`}
+																	href={getEtherscanAddressLink(420, wallet.address)}
 																	target="_blank"
 																>
 																	<LinkImg width="20" src="/images/etherscan-logo.png" />

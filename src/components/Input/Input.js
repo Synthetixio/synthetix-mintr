@@ -16,12 +16,13 @@ const Input = ({
 	singleSynth = false,
 	onSynthChange,
 	isDisabled = false,
+	currency = 'sUSD',
 }) => {
 	return (
 		<InputWrapper disabled={isDisabled}>
 			<L2InputInner>
 				<InputAmount>
-					<CurrencyLabel>sUSD</CurrencyLabel>
+					<CurrencyLabel>{currency}</CurrencyLabel>
 					<InputElement value={value} onChange={onChange} placeholder={placeholder} type="text" />
 				</InputAmount>
 				<RightComponentWrapper>{rightComponent}</RightComponentWrapper>
