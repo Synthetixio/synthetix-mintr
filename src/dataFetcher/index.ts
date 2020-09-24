@@ -95,7 +95,6 @@ export const getBalances = async (walletAddress: string) => {
 		snxJS: { Synthetix, SynthUtil },
 		provider,
 	} = snxJSConnector as any;
-	console.log('test', provider);
 	const [
 		synthBalanceResults,
 		totalSynthsBalanceResults,

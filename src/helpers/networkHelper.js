@@ -50,7 +50,7 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	return { name: 'OVM', networkId: 108 };
+	return { name: 'OVM', networkId: 420 };
 	// if (!window.web3) return { name: 'MAINNET', networkId: 1 };
 	// let networkId = 1;
 	// try {

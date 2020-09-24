@@ -65,7 +65,7 @@ const Dashboard = ({
 					</ContainerHeader>
 					<CollRatios debtStatusData={debtStatusData} />
 					<PricesContainer>
-						{['SNX', 'ETH'].map(asset => {
+						{['SNX'].map(asset => {
 							return (
 								<Asset key={asset}>
 									<CurrencyIcon src={`/images/currencies/${asset}.svg`} />

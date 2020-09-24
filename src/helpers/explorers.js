@@ -3,7 +3,7 @@ import { SUPPORTED_NETWORKS, isMainNet } from './networkHelper';
 const getEtherScanBaseURL = networkId => {
 	const network = SUPPORTED_NETWORKS[networkId];
 
-	if (networkId === 108) {
+	if (networkId === 420) {
 		return 'https://l2-explorer.surge.sh';
 	}
 	if (isMainNet(networkId) || network == null) {
