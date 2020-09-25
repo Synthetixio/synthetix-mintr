@@ -18,7 +18,7 @@ import {
 	SUPPORTED_WALLETS_MAP,
 } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
-import { H1, H2, PMega, ButtonTertiaryLabel } from '../../components/Typography';
+import { H1, H2, PMega, PSmall, ButtonTertiaryLabel } from '../../components/Typography';
 import Logo from '../../components/Logo';
 
 import { Globe } from '../../components/Icons';
@@ -162,10 +162,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 					{SUPPORTED_WALLETS.map(wallet => {
 						const noMetamask = wallet === 'Metamask' && !hasWeb3();
-						const disabled = wallet === 'Coinbase';
+						const isCoinbase = wallet === 'Coinbase';
 						return (
 							<Button
-								disabled={noMetamask || disabled}
+								disabled={noMetamask || isCoinbase}
 								key={wallet}
 								onClick={onWalletClick({
 									wallet,
@@ -175,7 +175,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 								})}
 							>
 								<Icon src={`images/wallets/${wallet.toLowerCase()}.svg`} />
-								<WalletConnectionH2>{wallet}</WalletConnectionH2>
+								<div>
+									<WalletConnectionH2>{wallet}</WalletConnectionH2>
+									{isCoinbase ? <StyledPSmall>(Coming soon)</StyledPSmall> : null}
+								</div>
 							</Button>
 						);
 					})}
@@ -184,12 +187,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<Link href={LINKS.Support} target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
-					<Link
-						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
-							i18n.language === 'zh-CN' ? '_mandarin' : ''
-						}.pdf`}
-						target="_blank"
-					>
+					<Link href={'https://docs.synthetix.io/litepaper/'} target="_blank">
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 					<ExternalLink
@@ -206,6 +204,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 const LandingPageContainer = styled.div`
 	height: 100vh;
 	display: flex;
+`;
+
+const StyledPSmall = styled(PSmall)`
+	margin: 0;
 `;
 
 const OnboardingContainer = styled.div`
