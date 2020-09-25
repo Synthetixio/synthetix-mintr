@@ -530,7 +530,7 @@
 		}
 	},
 	"transactionSettings": {
-		"priceIndicator": "Ethereum network fees:",
+		"priceIndicator": "Optimistic Ethereum network fees:",
 		"title": "Set gas price",
 		"placeholder": "CUSTOM",
 		"gas-exceeds-limit": "MAX IS {{gasPrice}}",
@@ -552,7 +552,7 @@
 			"loading": "Waiting for user response..."
 		},
 		"complete": {
-			"subtitle": "Your transaction has been broadcast to the Ethereum network. You may close this window as the transaction will complete in the background."
+			"subtitle": "Your transaction has been broadcast to the Optimistic Ethereum network. You may close this window as the transaction will complete in the background."
 		},
 		"error": {
 			"title": "Something went wrong...",
@@ -589,7 +589,7 @@
 			"cancel": "Cancel",
 			"back": "Go back",
 			"close": "Close",
-			"etherscan": "View on Etherscan",
+			"etherscan": "View in Block Explorer",
 			"view": "View",
 			"finish": "Finish & return home",
 			"ok": "OK"
@@ -615,7 +615,7 @@
 		"noData": "No data"
 	},
 	"network": {
-		"gas": "Ethereum network fees (Gas):",
+		"gas": "Optimistic Ethereum network fees:",
 		"tradingFee": "Synth exchange fee:",
 		"speed": "Estimated transaction speed:"
 	},

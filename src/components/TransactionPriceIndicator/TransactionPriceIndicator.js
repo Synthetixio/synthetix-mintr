@@ -35,13 +35,14 @@ const TransactionPriceIndicator = ({
 				) : (
 					<Fragment>
 						<Subtext>
-							{currentGasPrice
+							{/* {currentGasPrice
 								? `$${formatCurrency(
 										getTransactionPrice(currentGasPrice.price, gasLimit, ethRate)
 								  )} / ${currentGasPrice.price} GWEI`
-								: 0}
+								: 0} */}
+							$0.00/0 GWEI
 						</Subtext>
-						{canEdit ? <GasMenu /> : null}
+						{/* {canEdit ? <GasMenu /> : null} */}
 					</Fragment>
 				)}
 			</Block>

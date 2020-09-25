@@ -83,7 +83,7 @@ const Action = ({
 						style={{ margin: '0' }}
 					/>
 					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError}
+						disabled={isFetchingGasLimit || gasEstimateError || !mintAmount}
 						onClick={onMint}
 						margin="auto"
 					>
@@ -99,8 +99,8 @@ const Container = styled.div`
 	width: 100%;
 	height: 850px;
 	max-width: 720px;
+	overflow-y: auto;
 	margin: 0 auto;
-	overflow: hidden;
 	background-color: ${props => props.theme.colorStyles.panels};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;

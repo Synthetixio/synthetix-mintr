@@ -46,6 +46,7 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,
+						provider: signer.provider,
 					});
 					if (address && address[0]) {
 						updateWalletStatus({ currentWallet: address[0] });
@@ -59,9 +60,7 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 
 const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 	const { t } = useTranslation();
-	const imageStyle = {
-		width: '440px',
-	};
+
 	return (
 		<CarouselContainer>
 			<Carousel
@@ -77,7 +76,6 @@ const OnBoardingCarousel = ({ pageIndex, setPageIndex, currentTheme }) => {
 					<OnboardingH1>{t('onboarding.slides.welcome.title')}</OnboardingH1>
 					<OnboardingPMega>{t('onboarding.slides.welcome.description')}</OnboardingPMega>
 					<OnboardingIllustration
-						style={{ marginTop: '20px', ...imageStyle }}
 						src={`/images/onboarding/welcome-${currentTheme ? 'dark' : 'light'}.png`}
 					/>
 				</CarouselSlide>
@@ -164,9 +162,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 					{SUPPORTED_WALLETS.map(wallet => {
 						const noMetamask = wallet === 'Metamask' && !hasWeb3();
+						const disabled = wallet === 'Coinbase';
 						return (
 							<Button
-								disabled={noMetamask}
+								disabled={noMetamask || disabled}
 								key={wallet}
 								onClick={onWalletClick({
 									wallet,

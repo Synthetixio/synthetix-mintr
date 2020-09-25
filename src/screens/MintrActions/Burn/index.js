@@ -106,7 +106,8 @@ const useGetGasEstimate = (
 				gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
 					amountToBurn
 				);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
@@ -214,9 +215,8 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 
 			if (burnToTarget) {
 				const burnToTargetGasLimit = await Synthetix.contract.estimate.burnSynthsToTarget();
-				setGasLimit(addBufferToGasLimit(burnToTargetGasLimit));
 				transaction = await Synthetix.burnSynthsToTarget({
-					gasLimit: addBufferToGasLimit(burnToTargetGasLimit),
+					gasLimit: Number(burnToTargetGasLimit),
 					gasPrice: 0,
 				});
 			} else {

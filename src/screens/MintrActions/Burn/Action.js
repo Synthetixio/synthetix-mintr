@@ -130,6 +130,7 @@ const Action = ({
 								<PLarge>{t('mintrActions.burn.action.transferrable.title')}</PLarge>
 								<Input
 									singleSynth={'SNX'}
+									currency="SNX"
 									onChange={e => setTransferableAmount(e.target.value)}
 									value={transferableAmount}
 									placeholder="0.00"
@@ -157,8 +158,8 @@ const Container = styled.div`
 	width: 100%;
 	height: 850px;
 	max-width: 720px;
+	overflow-y: auto;
 	margin: 0 auto;
-	overflow: hidden;
 	background-color: ${props => props.theme.colorStyles.panels};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 5px;

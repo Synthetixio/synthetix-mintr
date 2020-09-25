@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { getWalletDetails } from 'ducks/wallet';
 
-import { PageTitle, PLarge, H2 } from 'components/Typography';
+import { PageTitle, PLarge, H2, H4, PSmall } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
 import Tooltip from 'components/Tooltip';
 import { Info } from 'components/Icons';
@@ -13,6 +13,7 @@ import { Info } from 'components/Icons';
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
 import { isMainNet } from 'helpers/networkHelper';
+import snxJSConnector from 'helpers/snxJSConnector';
 
 const initialScenario = null;
 
@@ -22,13 +23,68 @@ const actionLabelMapper = {
 	claim: { description: 'home.actions.claim.description', title: 'home.actions.claim.title' },
 };
 
+const DEFAULT_GAS_LIMIT = 8000000;
+
 const Home = ({ walletDetails: { networkId } }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
+	const [isMintSupplyDisabled, setIsMintSupplyDisabled] = useState(true);
+	const [isCloseFeePeriodDisabled, setIsCloseFeePeriodDisabled] = useState(true);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const {
+				snxJS: { SupplySchedule, FeePool },
+			} = snxJSConnector;
+			try {
+				const [isMintable, feePeriodDuration, recentFeePeriods] = await Promise.all([
+					SupplySchedule.isMintable(),
+					FeePool.feePeriodDuration(),
+					FeePool.recentFeePeriods(0),
+				]);
+				const now = Math.ceil(new Date().getTime() / 1000);
+				const startTime = Number(recentFeePeriods.startTime);
+				const duration = Number(feePeriodDuration);
+
+				setIsMintSupplyDisabled(!isMintable);
+				setIsCloseFeePeriodDisabled(now <= duration + startTime);
+			} catch (e) {
+				console.log(e);
+				setIsMintSupplyDisabled(true);
+				setIsCloseFeePeriodDisabled(true);
+			}
+		};
+		fetchData();
+	}, []);
+
+	const onMintSupply = async () => {
+		const {
+			snxJS: { Synthetix },
+		} = snxJSConnector;
+		try {
+			const tx = await Synthetix.mint({ gasLimit: DEFAULT_GAS_LIMIT, gasPrice: 0 });
+			console.log(tx);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const onCloseFeePeriod = async () => {
+		const {
+			snxJS: { FeePool },
+		} = snxJSConnector;
+		try {
+			const tx = await FeePool.closeCurrentFeePeriod({ gasLimit: DEFAULT_GAS_LIMIT, gasPrice: 0 });
+			console.log(tx);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
-			<InfoBanner>
+			{/* <InfoBanner>
 				<InfoBannerCountdown>
 					Withdraw funds from L1 in:<Countdown>3 days 22 hours</Countdown>
 				</InfoBannerCountdown>
@@ -37,7 +93,7 @@ const Home = ({ walletDetails: { networkId } }) => {
 						<Info />
 					</IconContainer>
 				</Tooltip>
-			</InfoBanner>
+			</InfoBanner> */}
 			<PageTitle>{t('home.intro.title')}</PageTitle>
 			<ButtonRow>
 				{ACTIONS.map(action => {
@@ -57,9 +113,37 @@ const Home = ({ walletDetails: { networkId } }) => {
 					);
 				})}
 			</ButtonRow>
+
+			<ButtonRowSmall>
+				<ButtonSmall onClick={onMintSupply} disabled={isMintSupplyDisabled}>
+					<ButtonContainerSmall>
+						<StyledImage src="/images/actions/inflate.svg" />
+						<StyledH4>Mint the weekly SNX supply</StyledH4>
+						<StyledPSmall>Inflate the SNX supply to mint this week's staking rewards</StyledPSmall>
+					</ButtonContainerSmall>
+				</ButtonSmall>
+				<ButtonSmall onClick={onCloseFeePeriod} disabled={isCloseFeePeriodDisabled}>
+					<ButtonContainerSmall>
+						<StyledImage style={{ height: '58px' }} src="/images/actions/close.svg" />
+						<StyledH4>Close the current fee period</StyledH4>
+						<StyledPSmall>
+							Allow stakers to claim their staking rewards by closing the fee period
+						</StyledPSmall>
+					</ButtonContainerSmall>
+				</ButtonSmall>
+			</ButtonRowSmall>
 		</PageContainer>
 	);
 };
+
+const StyledPSmall = styled(PLarge)`
+	margin-top: 0;
+	font-size: 14px;
+`;
+
+const StyledImage = styled.img`
+	height: 60px;
+`;
 
 const InfoBanner = styled.div`
 	border: 1px solid ${props => props.theme.colorStyles.borders};
@@ -113,8 +197,19 @@ const Button = styled.button`
 	}
 `;
 
+const ButtonSmall = styled(Button)`
+	height: auto;
+	max-width: 100%;
+`;
+
 const StyledH2 = styled(H2)`
 	margin-top: 0;
+`;
+
+const StyledH4 = styled(H4)`
+	font-size: 16px;
+	margin-bottom: 6px;
+	text-transform: none;
 `;
 
 const ButtonContainer = styled.div`
@@ -123,10 +218,19 @@ const ButtonContainer = styled.div`
 	height: 100%;
 `;
 
+const ButtonContainerSmall = styled.div`
+	padding: 20px;
+`;
+
 const ButtonRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 34px;
+`;
+
+const ButtonRowSmall = styled(ButtonRow)`
+	grid-template-columns: repeat(2, 1fr);
+	margin-top: 34px;
 `;
 
 const ActionImage = styled.img`

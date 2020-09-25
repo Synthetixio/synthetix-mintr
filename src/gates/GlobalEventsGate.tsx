@@ -46,7 +46,7 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		if (!currentWallet) return;
 		const {
 			//@ts-ignore
-			snxJS: { sUSD, FeePool, Synthetix, RewardEscrow, SynthetixEscrow },
+			snxJS: { sUSD, FeePool, Synthetix, RewardEscrow, SynthetixEscrow, ExchangeRates },
 		} = snxJSConnector;
 
 		sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
@@ -96,6 +96,9 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 				fetchEscrowRequest();
 			}
 		});
+		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
+			fetchRatesRequest();
+		});
 
 		return () => {
 			Object.values(ISSUANCE_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
@@ -113,30 +116,28 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
 
-	useEffect(() => {
-		const {
-			//@ts-ignore
-			snxJS: { SystemStatus, ExchangeRates },
-		} = snxJSConnector;
-		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
-			setSystemUpgrading({ reason: true });
-		});
-		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
-			setSystemUpgrading({ reason: false });
-		});
-		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
-			fetchRatesRequest();
-		});
-		return () => {
-			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
-				SystemStatus.contract.removeAllListeners(event)
-			);
-			Object.values(EXCHANGE_RATES_EVENTS).forEach(event =>
-				ExchangeRates.contract.removeAllListeners(event)
-			);
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	// useEffect(() => {
+	// 	const {
+	// 		//@ts-ignore
+	// 		snxJS: { SystemStatus, ExchangeRates },
+	// 	} = snxJSConnector;
+	// 	SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
+	// 		setSystemUpgrading({ reason: true });
+	// 	});
+	// 	SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
+	// 		setSystemUpgrading({ reason: false });
+	// 	});
+
+	// 	return () => {
+	// 		Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
+	// 			SystemStatus.contract.removeAllListeners(event)
+	// 		);
+	// 		Object.values(EXCHANGE_RATES_EVENTS).forEach(event =>
+	// 			ExchangeRates.contract.removeAllListeners(event)
+	// 		);
+	// 	};
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
 	return null;
 };
 

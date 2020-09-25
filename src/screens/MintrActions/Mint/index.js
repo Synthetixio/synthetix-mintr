@@ -67,7 +67,7 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 					);
 				}
 				setFetchingGasLimit(false);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				setGasLimit(Number(gasEstimate));
 			} catch (e) {
 				console.log(e);
 				setFetchingGasLimit(false);
@@ -120,7 +120,6 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 					snxJSConnector.utils.parseEther(mintAmount.toString()),
 					transactionSettings
 				);
-				console.log(transaction);
 			}
 			if (transaction) {
 				setTransactionInfo({ transactionHash: transaction.hash });
