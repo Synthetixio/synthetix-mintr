@@ -116,14 +116,20 @@ const Home = ({ walletDetails: { networkId } }) => {
 
 			<ButtonRowSmall>
 				<ButtonSmall onClick={onMintSupply} disabled={isMintSupplyDisabled}>
-					<StyledImage src="/images/actions/inflate.svg" />
-					<StyledH4>Mint the weekly SNX supply</StyledH4>
-					<StyledPSmall>Inflate the SNX supply to reward all stakers for minting sUSD</StyledPSmall>
+					<ButtonContainerSmall>
+						<StyledImage src="/images/actions/inflate.svg" />
+						<StyledH4>Mint the weekly SNX supply</StyledH4>
+						<StyledPSmall>Inflate the SNX supply to mint this week's staking rewards</StyledPSmall>
+					</ButtonContainerSmall>
 				</ButtonSmall>
 				<ButtonSmall onClick={onCloseFeePeriod} disabled={isCloseFeePeriodDisabled}>
-					<StyledImage src="/images/actions/close.svg" />
-					<StyledH4>Close the current fee period</StyledH4>
-					<StyledPSmall>To allow all stakers to claim their fees</StyledPSmall>
+					<ButtonContainerSmall>
+						<StyledImage style={{ height: '58px' }} src="/images/actions/close.svg" />
+						<StyledH4>Close the current fee period</StyledH4>
+						<StyledPSmall>
+							Allow stakers to claim their staking rewards by closing the fee period
+						</StyledPSmall>
+					</ButtonContainerSmall>
 				</ButtonSmall>
 			</ButtonRowSmall>
 		</PageContainer>
@@ -136,7 +142,7 @@ const StyledPSmall = styled(PLarge)`
 `;
 
 const StyledImage = styled.img`
-	/* height: 80px; */
+	height: 60px;
 `;
 
 const InfoBanner = styled.div`
@@ -202,7 +208,7 @@ const StyledH2 = styled(H2)`
 
 const StyledH4 = styled(H4)`
 	font-size: 16px;
-	margin: 0 0 6px 0;
+	margin-bottom: 6px;
 	text-transform: none;
 `;
 
@@ -210,6 +216,10 @@ const ButtonContainer = styled.div`
 	padding: 10px;
 	margin: 0 auto;
 	height: 100%;
+`;
+
+const ButtonContainerSmall = styled.div`
+	padding: 20px;
 `;
 
 const ButtonRow = styled.div`
