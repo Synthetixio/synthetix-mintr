@@ -23,6 +23,8 @@ const actionLabelMapper = {
 	claim: { description: 'home.actions.claim.description', title: 'home.actions.claim.title' },
 };
 
+const DEFAULT_GAS_LIMIT = 8000000;
+
 const Home = ({ walletDetails: { networkId } }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
@@ -38,10 +40,14 @@ const Home = ({ walletDetails: { networkId } }) => {
 				const [isMintable, feePeriodDuration, recentFeePeriods] = await Promise.all([
 					SupplySchedule.isMintable(),
 					FeePool.feePeriodDuration(),
-					FeePool.recentFeePeriods(),
+					FeePool.recentFeePeriods(0),
 				]);
-				console.log(feePeriodDuration, recentFeePeriods);
+				const now = Math.ceil(new Date().getTime() / 1000);
+				const startTime = Number(recentFeePeriods.startTime);
+				const duration = Number(feePeriodDuration);
+
 				setIsMintSupplyDisabled(!isMintable);
+				setIsCloseFeePeriodDisabled(now <= duration + startTime);
 			} catch (e) {
 				console.log(e);
 				setIsMintSupplyDisabled(true);
@@ -51,8 +57,29 @@ const Home = ({ walletDetails: { networkId } }) => {
 		fetchData();
 	}, []);
 
-	const onMintSupply = async () => {};
-	const onCloseFeePeriod = async () => {};
+	const onMintSupply = async () => {
+		const {
+			snxJS: { Synthetix },
+		} = snxJSConnector;
+		try {
+			const tx = await Synthetix.mint({ gasLimit: DEFAULT_GAS_LIMIT, gasPrice: 0 });
+			console.log(tx);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const onCloseFeePeriod = async () => {
+		const {
+			snxJS: { FeePool },
+		} = snxJSConnector;
+		try {
+			const tx = await FeePool.closeCurrentFeePeriod({ gasLimit: DEFAULT_GAS_LIMIT, gasPrice: 0 });
+			console.log(tx);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	return (
 		<PageContainer>
@@ -89,10 +116,12 @@ const Home = ({ walletDetails: { networkId } }) => {
 
 			<ButtonRowSmall>
 				<ButtonSmall onClick={onMintSupply} disabled={isMintSupplyDisabled}>
+					<StyledImage src="/images/actions/inflate.svg" />
 					<StyledH4>Mint the weekly SNX supply</StyledH4>
 					<StyledPSmall>Inflate the SNX supply to reward all stakers for minting sUSD</StyledPSmall>
 				</ButtonSmall>
 				<ButtonSmall onClick={onCloseFeePeriod} disabled={isCloseFeePeriodDisabled}>
+					<StyledImage src="/images/actions/close.svg" />
 					<StyledH4>Close the current fee period</StyledH4>
 					<StyledPSmall>To allow all stakers to claim their fees</StyledPSmall>
 				</ButtonSmall>
@@ -104,6 +133,10 @@ const Home = ({ walletDetails: { networkId } }) => {
 const StyledPSmall = styled(PLarge)`
 	margin-top: 0;
 	font-size: 14px;
+`;
+
+const StyledImage = styled.img`
+	/* height: 80px; */
 `;
 
 const InfoBanner = styled.div`
@@ -168,8 +201,8 @@ const StyledH2 = styled(H2)`
 `;
 
 const StyledH4 = styled(H4)`
-	font-size: 14px;
-	margin-bottom: 6px;
+	font-size: 16px;
+	margin: 0 0 6px 0;
 	text-transform: none;
 `;
 
