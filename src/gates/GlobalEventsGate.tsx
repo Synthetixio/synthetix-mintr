@@ -68,50 +68,50 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 				fetchEscrowRequest();
 			}
 		});
-		Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
-			if (address === currentWallet) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-		Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			if (address === currentWallet) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-		sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-			if (address === currentWallet) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-		SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
-			if (address === currentWallet) {
-				fetchEscrowRequest();
-			}
-		});
-		RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
-			if (address === currentWallet) {
-				fetchEscrowRequest();
-			}
-		});
-		ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
-			fetchRatesRequest();
-		});
+		// Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchBalancesRequest();
+		// 		fetchDebtStatusRequest();
+		// 	}
+		// });
+		// Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchBalancesRequest();
+		// 		fetchDebtStatusRequest();
+		// 	}
+		// });
+		// sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchBalancesRequest();
+		// 		fetchDebtStatusRequest();
+		// 	}
+		// });
+		// SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchEscrowRequest();
+		// 	}
+		// });
+		// RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
+		// 	if (address === currentWallet) {
+		// 		fetchEscrowRequest();
+		// 	}
+		// });
+		// ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
+		// 	fetchRatesRequest();
+		// });
 
 		return () => {
 			Object.values(ISSUANCE_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
 			Object.values(FEEPOOL_EVENTS).forEach(event => FeePool.contract.removeAllListeners(event));
 			Object.values(EXCHANGE_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
-			Object.values(TRANSFER_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
-			Object.values(TRANSFER_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
-			Object.values(SYNTHETIX_ESCROW_EVENTS).forEach(event =>
-				SynthetixEscrow.contract.removeAllListeners(event)
-			);
-			Object.values(REWARD_ESCROW_EVENTS).forEach(event =>
-				RewardEscrow.contract.removeAllListeners(event)
-			);
+			// Object.values(TRANSFER_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
+			// Object.values(TRANSFER_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
+			// Object.values(SYNTHETIX_ESCROW_EVENTS).forEach(event =>
+			// 	SynthetixEscrow.contract.removeAllListeners(event)
+			// );
+			// Object.values(REWARD_ESCROW_EVENTS).forEach(event =>
+			// 	RewardEscrow.contract.removeAllListeners(event)
+			// );
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
