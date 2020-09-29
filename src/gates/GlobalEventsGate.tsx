@@ -5,7 +5,6 @@ import { RootState } from 'ducks/types';
 import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { getCurrentWallet } from 'ducks/wallet';
 import { setSystemUpgrading } from 'ducks/app';
-import { fetchRatesRequest } from 'ducks/rates';
 import { fetchEscrowRequest } from 'ducks/escrow';
 import { fetchBalancesRequest } from 'ducks/balances';
 
@@ -20,6 +19,7 @@ import {
 	REWARD_ESCROW_EVENTS,
 	SYNTHETIX_ESCROW_EVENTS,
 } from 'constants/events';
+import useWindowFocus from 'hooks/useWindowFocus';
 
 const mapStateToProps = (state: RootState) => ({
 	currentWallet: getCurrentWallet(state),
@@ -42,6 +42,7 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 	fetchEscrowRequest,
 	fetchBalancesRequest,
 }) => {
+	const isFocused = useWindowFocus();
 	useEffect(() => {
 		if (!currentWallet) return;
 		const {
@@ -50,52 +51,30 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		} = snxJSConnector;
 
 		sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
-			if (account === currentWallet) {
+			if (account === currentWallet && isFocused) {
 				fetchDebtStatusRequest();
 				fetchBalancesRequest();
 			}
 		});
 		sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
-			if (account === currentWallet) {
+			if (account === currentWallet && isFocused) {
 				fetchDebtStatusRequest();
 				fetchBalancesRequest();
 			}
 		});
 		FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
-			if (account === currentWallet) {
+			if (account === currentWallet && isFocused) {
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 				fetchEscrowRequest();
 			}
 		});
 		Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
-			if (address === currentWallet) {
+			if (address === currentWallet && isFocused) {
 				fetchBalancesRequest();
 				fetchDebtStatusRequest();
 			}
 		});
-		// Synthetix.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-		// 	if (address === currentWallet) {
-		// 		fetchBalancesRequest();
-		// 		fetchDebtStatusRequest();
-		// 	}
-		// });
-		// sUSD.contract.on(TRANSFER_EVENTS.TRANSFER, (address: string) => {
-		// 	if (address === currentWallet) {
-		// 		fetchBalancesRequest();
-		// 		fetchDebtStatusRequest();
-		// 	}
-		// });
-		// SynthetixEscrow.contract.on(SYNTHETIX_ESCROW_EVENTS.VESTED, (address: string) => {
-		// 	if (address === currentWallet) {
-		// 		fetchEscrowRequest();
-		// 	}
-		// });
-		// RewardEscrow.contract.on(REWARD_ESCROW_EVENTS.VESTED, (address: string) => {
-		// 	if (address === currentWallet) {
-		// 		fetchEscrowRequest();
-		// 	}
-		// });
 
 		return () => {
 			Object.values(ISSUANCE_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
@@ -111,7 +90,7 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 			);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentWallet]);
+	}, [currentWallet, isFocused]);
 
 	useEffect(() => {
 		const {
@@ -124,9 +103,6 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
 			setSystemUpgrading({ reason: false });
 		});
-		// ExchangeRates.contract.on(EXCHANGE_RATES_EVENTS.RATES_UPDATED, () => {
-		// 	fetchRatesRequest();
-		// });
 		return () => {
 			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
 				SystemStatus.contract.removeAllListeners(event)
