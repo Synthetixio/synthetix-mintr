@@ -6,14 +6,26 @@ import { NotificationSpinner } from '../Spinner';
 import { ButtonTertiary } from '../Button';
 import { PMedium } from '../Typography';
 
-const Notification = ({ isPending, icon, heading, description, link, linkLabel, onClose }) => {
+const Notification = ({
+	isPending,
+	icon,
+	heading,
+	description,
+	link,
+	linkLabel,
+	onClose,
+	confirmationTime,
+}) => {
 	const { t } = useTranslation();
 	return (
 		<NotificationWrapper>
 			<LeftBlock>
 				{isPending ? <NotificationSpinner isSmall={true} /> : <StatusImageWrapper src={icon} />}
 				<InfoBlock>
-					<NotificationHeading>{heading}</NotificationHeading>
+					<NotificationHeading>
+						{heading}
+						{confirmationTime ? ` (${confirmationTime}ms)` : null}
+					</NotificationHeading>
 					<NotificationDescription>{description}</NotificationDescription>
 				</InfoBlock>
 			</LeftBlock>

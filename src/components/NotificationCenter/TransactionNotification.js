@@ -26,9 +26,12 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 	const { t } = useTranslation();
 	const { networkId } = walletDetails;
 	const [status, setStatus] = useState(transaction.status);
+	const [confirmationTime, setConfirmationTime] = useState(0);
 	useEffect(() => {
 		const getTransactionTicket = async () => {
+			const now = Date.now();
 			const status = await snxJSConnector.utils.waitForTransaction(transaction.hash);
+			setConfirmationTime(Date.now() - now);
 			setStatus(status ? 'success' : 'error');
 			return () => setStatus(null);
 		};
@@ -42,6 +45,7 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 			isPending={status === 'pending'}
 			icon={'/images/success.svg'}
 			heading={t(getStatusSentence(status))}
+			confirmationTime={confirmationTime}
 			description={transaction.info}
 			link={getEtherscanTxLink(networkId, transaction.hash)}
 			linkLabel={t('button.navigation.view')}
