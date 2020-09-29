@@ -44,39 +44,39 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 }) => {
 	const isFocused = useWindowFocus();
 	useEffect(() => {
-		if (!currentWallet) return;
+		console.log('isFocused first', isFocused);
 		const {
 			//@ts-ignore
 			snxJS: { sUSD, FeePool, Synthetix, RewardEscrow, SynthetixEscrow },
 		} = snxJSConnector;
 
-		sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
-			if (account === currentWallet && isFocused) {
-				fetchDebtStatusRequest();
-				fetchBalancesRequest();
-			}
-		});
-		sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
-			if (account === currentWallet && isFocused) {
-				fetchDebtStatusRequest();
-				fetchBalancesRequest();
-			}
-		});
-		FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
-			if (account === currentWallet && isFocused) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-				fetchEscrowRequest();
-			}
-		});
-		Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
-			if (address === currentWallet && isFocused) {
-				fetchBalancesRequest();
-				fetchDebtStatusRequest();
-			}
-		});
-
-		return () => {
+		if (isFocused && currentWallet) {
+			sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
+				if (account === currentWallet) {
+					fetchDebtStatusRequest();
+					fetchBalancesRequest();
+				}
+			});
+			sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
+				if (account === currentWallet) {
+					fetchDebtStatusRequest();
+					fetchBalancesRequest();
+				}
+			});
+			FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
+				if (account === currentWallet) {
+					fetchBalancesRequest();
+					fetchDebtStatusRequest();
+					fetchEscrowRequest();
+				}
+			});
+			Synthetix.contract.on(EXCHANGE_EVENTS.SYNTH_EXCHANGE, (address: string) => {
+				if (address === currentWallet) {
+					fetchBalancesRequest();
+					fetchDebtStatusRequest();
+				}
+			});
+		} else {
 			Object.values(ISSUANCE_EVENTS).forEach(event => sUSD.contract.removeAllListeners(event));
 			Object.values(FEEPOOL_EVENTS).forEach(event => FeePool.contract.removeAllListeners(event));
 			Object.values(EXCHANGE_EVENTS).forEach(event => Synthetix.contract.removeAllListeners(event));
@@ -88,31 +88,33 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 			Object.values(REWARD_ESCROW_EVENTS).forEach(event =>
 				RewardEscrow.contract.removeAllListeners(event)
 			);
-		};
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet, isFocused]);
 
 	useEffect(() => {
+		console.log('isFocused second', isFocused);
 		const {
 			//@ts-ignore
 			snxJS: { SystemStatus, ExchangeRates },
 		} = snxJSConnector;
-		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
-			setSystemUpgrading({ reason: true });
-		});
-		SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
-			setSystemUpgrading({ reason: false });
-		});
-		return () => {
+		if (isFocused) {
+			SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_SUSPENDED, (reason: number) => {
+				setSystemUpgrading({ reason: true });
+			});
+			SystemStatus.contract.on(SYSTEM_STATUS_EVENTS.SYSTEM_RESUMED, () => {
+				setSystemUpgrading({ reason: false });
+			});
+		} else {
 			Object.values(SYSTEM_STATUS_EVENTS).forEach(event =>
 				SystemStatus.contract.removeAllListeners(event)
 			);
 			Object.values(EXCHANGE_RATES_EVENTS).forEach(event =>
 				ExchangeRates.contract.removeAllListeners(event)
 			);
-		};
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [isFocused]);
 	return null;
 };
 

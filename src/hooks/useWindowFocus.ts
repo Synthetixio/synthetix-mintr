@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 const useWindowFocus = () => {
 	const [focused, setFocused] = useState(false);
+	console.log('useWindowFocus focused?', focused);
 
 	useEffect(() => {
 		// First render
