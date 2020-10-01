@@ -97,7 +97,7 @@ const BalanceTable = ({ walletBalancesWithRates, rates, debtData, currentTheme }
 								Header: t('mintrActions.track.action.table.balance'),
 								accessor: 'balance',
 								Cell: ({ value }) => {
-									return formatCurrency(value);
+									return formatCurrency(value, value < 1 ? 4 : 2);
 								},
 								sortable: false,
 							},
@@ -105,7 +105,7 @@ const BalanceTable = ({ walletBalancesWithRates, rates, debtData, currentTheme }
 								Header: '$ USD',
 								accessor: 'valueUSD',
 								Cell: ({ value }) => {
-									return `$${formatCurrency(value)}`;
+									return `$${formatCurrency(value, value < 1 ? 4 : 2)}`;
 								},
 								sortable: false,
 							},
