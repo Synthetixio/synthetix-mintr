@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { Stepper } from 'components/L2Onboarding/Stepper';
 import { ReactComponent as BurnErrorIcon } from '../../assets/images/L2/burn-error.svg';
@@ -9,6 +10,7 @@ import { fontFamilies } from 'styles/themes';
 import { connect } from 'react-redux';
 import { setRedirectToTrade } from '../../ducks/ui';
 import { getWalletBalancesWithRates } from 'ducks/balances';
+import OneInchCard from 'screens/MintrActions/Migrate/OneInchCard';
 
 interface BurnIntermediaryProps {
 	totalsUSDDebt: number;
@@ -22,6 +24,7 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	walletBalancesWithRates,
 }) => {
 	const [usdValueOfSynths, setUSDValueOfSynths] = useState<number>(0);
+	const [showOneInchCard, setShowOneInchCard] = useState<boolean>(false);
 	const calculateUSDSumOfSynths = useCallback(() => {
 		const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
 		if (balances > 0) {
@@ -52,48 +55,45 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	const handleRedirectToTrade = () => {
 		setRedirectToTrade(true);
 	};
-	const buttons = [
-		{
-			icon: <TradeIcon />,
-			title: 'TRADE SYNTHS',
-			subtitle: `Balance: $${usdValueOfSynths} USD`,
-			onClick: () => handleRedirectToTrade(),
-			link: null,
-		},
-		{
-			icon: <DEXAG />,
-			title: 'BUY sUSD',
-			subtitle: 'from your favourite decentralized exchange',
-			onClick: null,
-			link: 'https://dex.ag/',
-		},
-	];
+
 	return (
 		<PageContainer>
 			<Stepper activeIndex={0} />
 			<HeaderIcon
 				title="Burn all L1 debt"
-				subtext="You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via Curve or Uniswap."
+				subtext={
+					showOneInchCard
+						? 'Before you can burn all your debt, you need to buy sUSD.'
+						: 'You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via Curve or Uniswap.'
+				}
 				icon={<BurnErrorIcon />}
 			/>
-			<Flex>
-				<Subtitle>REQUIRED AMOUNT:</Subtitle>
-				<Subtext>{totalsUSDDebt} sUSD</Subtext>
-			</Flex>
-			<Flex>
-				{buttons.map((button, i) => (
-					<ContainerButton
-						onClick={button.onClick && button.onClick}
-						href={button.link && button.link}
-						target="_blank"
-						key={i}
-					>
-						<ButtonIcon>{button.icon}</ButtonIcon>
-						<ButtonTitle>{button.title}</ButtonTitle>
-						<ButtonSubtext>{button.subtitle}</ButtonSubtext>
-					</ContainerButton>
-				))}
-			</Flex>
+			{!!showOneInchCard ? (
+				<OneInchCard />
+			) : (
+				<>
+					<Flex>
+						<Subtitle>REQUIRED AMOUNT:</Subtitle>
+						<Subtext>{totalsUSDDebt} sUSD</Subtext>
+					</Flex>
+					<Flex>
+						<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
+							<ButtonIcon>
+								<TradeIcon />
+							</ButtonIcon>
+							<ButtonTitle>TRADE SYNTHS</ButtonTitle>
+							<ButtonSubtext>`Balance: $${usdValueOfSynths} USD`</ButtonSubtext>
+						</ContainerButton>
+						<ContainerButton onClick={() => setShowOneInchCard(true)} href={null} target="_blank">
+							<ButtonIcon>
+								<DEXAG />
+							</ButtonIcon>
+							<ButtonTitle>BUY sUSD</ButtonTitle>
+							<ButtonSubtext>from your favourite decentralized exchange</ButtonSubtext>
+						</ContainerButton>
+					</Flex>
+				</>
+			)}
 		</PageContainer>
 	);
 };
