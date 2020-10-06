@@ -159,21 +159,21 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 		return {
 			appName: 'Mintr',
 			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
-			jsonRpcUrl: INFURA_JSON_RPC_URLS[networkId],
+			jsonRpcUrl: 'https://goerli.optimism.io',
 			networkId,
 		};
 	}
-	if (type === SUPPORTED_WALLETS_MAP.WALLET_CONNECT) {
-		return {
-			infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-		};
-	}
-	if (type === SUPPORTED_WALLETS_MAP.PORTIS) {
-		return {
-			networkName: networkName.toLowerCase(),
-			appId: PORTIS_APP_ID,
-		};
-	}
+	// if (type === SUPPORTED_WALLETS_MAP.WALLET_CONNECT) {
+	// 	return {
+	// 		infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+	// 	};
+	// }
+	// if (type === SUPPORTED_WALLETS_MAP.PORTIS) {
+	// 	return {
+	// 		networkName: networkName.toLowerCase(),
+	// 		appId: PORTIS_APP_ID,
+	// 	};
+	// }
 
 	return {};
 };
