@@ -44,7 +44,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 			networkId: networkId,
 		});
 		setNotify(notify);
-	}, [notify, networkId]);
+	}, [networkId]);
 
 	const validateAvailableBalance = useCallback(() => {
 		if (!debtDataStatus) return;
@@ -91,9 +91,15 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 					);
 				} else {
 					if (sufficientBalance) {
-						return <Burn onComplete={() => setStep(2)} currentsUSDBalance={sUSDBalance} />;
+						return (
+							<Burn
+								onComplete={() => setStep(2)}
+								currentsUSDBalance={sUSDBalance}
+								notify={notify}
+							/>
+						);
 					} else {
-						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} />;
+						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} notify={notify} />;
 					}
 				}
 			case 2:
