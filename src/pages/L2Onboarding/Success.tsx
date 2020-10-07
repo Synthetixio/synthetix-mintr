@@ -15,11 +15,11 @@ export const Success: React.FC<SuccessProps> = ({ onComplete }) => {
 			<Stepper />
 			<HeaderIcon
 				title="Switch to L2 complete!"
-				subtext="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam
-				magnis duis fermentum."
+				subtext="Your SNX has now been migrated to L2 from L1, for increased transaction speed and reduced gas costs. "
 				icon={<SuccessIcon />}
 			/>
 			<CTAButton
+				style={{ margin: 48 }}
 				onClick={() => {
 					onComplete();
 				}}
