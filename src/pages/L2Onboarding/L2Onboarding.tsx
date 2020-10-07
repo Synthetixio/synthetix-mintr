@@ -17,6 +17,7 @@ import snxJSConnector from '../../helpers/snxJSConnector';
 import Spinner from '../../components/Spinner';
 import { getWalletBalancesWithRates } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
+import Notify from 'bnc-notify';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
@@ -33,7 +34,17 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	const [sufficientBalance, setSufficientBalance] = useState<boolean | string>('');
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
-	const { currentWallet } = walletDetails;
+	const [notify, setNotify] = useState(null);
+	const { currentWallet, networkId } = walletDetails;
+
+	useEffect(() => {
+		// @TODO: Replace with correct prod key
+		const notify = Notify({
+			dappId: '4e6901c8-10da-420c-9b5e-316fad480172',
+			networkId: networkId,
+		});
+		setNotify(notify);
+	}, [notify, networkId]);
 
 	const validateAvailableBalance = useCallback(() => {
 		if (!debtDataStatus) return;
