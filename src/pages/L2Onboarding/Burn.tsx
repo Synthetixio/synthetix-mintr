@@ -244,9 +244,11 @@ const Burn: React.FC<BurnProps> = ({
 					content={`${transferableAmount ?? 0}`}
 				/>
 			</ContainerStats>
-			<ContainerStats style={{ margin: 0 }}>
-				<ErrorMessage message={gasEstimateError} />
-			</ContainerStats>
+			{gasEstimateError && (
+				<ContainerStats style={{ margin: 0 }}>
+					<ErrorMessage message={gasEstimateError} />
+				</ContainerStats>
+			)}
 			<ContainerStats style={{ margin: 0 }}>
 				<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			</ContainerStats>
