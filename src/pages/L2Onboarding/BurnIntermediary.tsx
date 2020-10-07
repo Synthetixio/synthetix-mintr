@@ -1,99 +1,85 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { Stepper } from 'components/L2Onboarding/Stepper';
 import { ReactComponent as BurnErrorIcon } from '../../assets/images/L2/burn-error.svg';
 import { ReactComponent as TradeIcon } from '../../assets/images/L2/trade-swap.svg';
-import { ReactComponent as DEXAG } from '../../assets/images/L2/dx-ag.svg';
+import { ReactComponent as OneInchIcon } from '../../assets/images/L2/1inch.svg';
 import { fontFamilies } from 'styles/themes';
 import { connect } from 'react-redux';
 import { setRedirectToTrade } from '../../ducks/ui';
-import { getWalletBalancesWithRates } from 'ducks/balances';
+import { getTotalSynthsBalance } from 'ducks/balances';
 import OneInchCard from 'screens/MintrActions/Migrate/OneInchCard';
+import { formatCurrency } from 'helpers/formatters';
 
 interface BurnIntermediaryProps {
 	totalsUSDDebt: number;
 	setRedirectToTrade: Function;
-	walletBalancesWithRates: any;
+	totalSynthsBalance: number;
 }
 
+const HEADER_CONTENT = {
+	default: {
+		title: 'Burn all L1 debt',
+		subtext:
+			'You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via 1inch.',
+		icon: <BurnErrorIcon />,
+	},
+	'1inch': {
+		title: 'Buy sUSD with ETH via 1inch',
+		subtext: 'Before you can burn all your debt, you need to buy sUSD.',
+		icon: <OneInchIcon />,
+	},
+};
 const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	totalsUSDDebt,
 	setRedirectToTrade,
-	walletBalancesWithRates,
+	totalSynthsBalance,
 }) => {
-	const [usdValueOfSynths, setUSDValueOfSynths] = useState<number>(0);
 	const [showOneInchCard, setShowOneInchCard] = useState<boolean>(false);
-	const calculateUSDSumOfSynths = useCallback(() => {
-		const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
-		if (balances > 0) {
-			const sumOfSynths = balances.reduce((a, b) => {
-				return a + b;
-			});
-			setUSDValueOfSynths(sumOfSynths);
-		} else {
-			setUSDValueOfSynths(0);
-		}
-	}, [walletBalancesWithRates]);
 
-	useEffect(() => {
-		if (!walletBalancesWithRates) return;
-		const calculateUSDSumOfSynths = () => {
-			const balances = walletBalancesWithRates.synths.map(synth => synth.valueUSD);
-			if (balances > 0) {
-				const sumOfSynths = balances.reduce((a, b) => {
-					return a + b;
-				});
-				setUSDValueOfSynths(sumOfSynths);
-			} else {
-				setUSDValueOfSynths(0);
-			}
-		};
-		calculateUSDSumOfSynths();
-	}, [calculateUSDSumOfSynths, walletBalancesWithRates]);
 	const handleRedirectToTrade = () => {
 		setRedirectToTrade(true);
 	};
 
+	const renderDefaultLayout = () => (
+		<>
+			<Flex>
+				<Subtitle>REQUIRED AMOUNT:</Subtitle>
+				<Subtext>{totalsUSDDebt} sUSD</Subtext>
+			</Flex>
+			<Flex>
+				<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
+					<ButtonIcon>
+						<TradeIcon />
+					</ButtonIcon>
+					<ButtonTitle>TRADE SYNTHS</ButtonTitle>
+					<ButtonSubtext>{`Balance: $${formatCurrency(
+						totalSynthsBalance || 0
+					)} USD`}</ButtonSubtext>
+				</ContainerButton>
+				<ContainerButton onClick={() => setShowOneInchCard(true)} href={null} target="_blank">
+					<ButtonIcon>
+						<OneInchIcon />
+					</ButtonIcon>
+					<ButtonTitle>BUY sUSD</ButtonTitle>
+					<ButtonSubtext>from 1inch</ButtonSubtext>
+				</ContainerButton>
+			</Flex>
+		</>
+	);
+
+	const headerIconContent = HEADER_CONTENT[showOneInchCard ? '1inch' : 'default'];
 	return (
 		<PageContainer>
 			<Stepper activeIndex={0} />
 			<HeaderIcon
-				title="Burn all L1 debt"
-				subtext={
-					showOneInchCard
-						? 'Before you can burn all your debt, you need to buy sUSD.'
-						: 'You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via Curve or Uniswap.'
-				}
-				icon={<BurnErrorIcon />}
+				title={headerIconContent.title}
+				subtext={headerIconContent.subtext}
+				icon={headerIconContent.icon}
 			/>
-			{!!showOneInchCard ? (
-				<OneInchCard />
-			) : (
-				<>
-					<Flex>
-						<Subtitle>REQUIRED AMOUNT:</Subtitle>
-						<Subtext>{totalsUSDDebt} sUSD</Subtext>
-					</Flex>
-					<Flex>
-						<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
-							<ButtonIcon>
-								<TradeIcon />
-							</ButtonIcon>
-							<ButtonTitle>TRADE SYNTHS</ButtonTitle>
-							<ButtonSubtext>`Balance: $${usdValueOfSynths} USD`</ButtonSubtext>
-						</ContainerButton>
-						<ContainerButton onClick={() => setShowOneInchCard(true)} href={null} target="_blank">
-							<ButtonIcon>
-								<DEXAG />
-							</ButtonIcon>
-							<ButtonTitle>BUY sUSD</ButtonTitle>
-							<ButtonSubtext>from your favourite decentralized exchange</ButtonSubtext>
-						</ContainerButton>
-					</Flex>
-				</>
-			)}
+			{showOneInchCard ? <OneInchCard /> : renderDefaultLayout()}
 		</PageContainer>
 	);
 };
@@ -133,44 +119,48 @@ const Subtext = styled.p`
 `;
 
 const ContainerButton = styled.a`
-	background: #282862;
-	border: 1px solid #282862;
+	background: #1b1b3f;
 	box-sizing: border-box;
 	border-radius: 5px;
 	display: flex;
 	justify-content: center;
-	width: 400px;
 	flex-direction: column;
 	align-items: center;
 	margin: 0px 8px;
-	height: 250px;
+	height: 221px;
+	width: 280px;
 	cursor: pointer;
+	&:hover {
+		background: #282862;
+	}
 `;
 
 const ButtonIcon = styled.div`
 	display: flex;
 `;
 
-const ButtonTitle = styled.p`
+const ButtonTitle = styled.h3`
 	font-family: ${fontFamilies.regular};
 	font-size: 24px;
 	line-height: 29px;
 	text-align: center;
 	letter-spacing: 1.5px;
 	color: #ffffff;
+	margin: 26px 0 9px 0;
 `;
 
 const ButtonSubtext = styled.p`
 	font-family: ${fontFamilies.regular};
 	font-size: 16px;
 	line-height: 100%;
+	margin: 0;
 	text-align: center;
 	letter-spacing: 0.2px;
 	color: #cacaf1;
 `;
 
 const mapStateToProps = (state: any) => ({
-	walletBalancesWithRates: getWalletBalancesWithRates(state),
+	totalSynthsBalance: getTotalSynthsBalance(state),
 });
 
 const mapDispatchToProps = {

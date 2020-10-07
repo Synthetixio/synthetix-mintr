@@ -136,6 +136,8 @@ export const getWalletBalancesWithRates = createSelector(
 	}
 );
 
+export const getTotalSynthsBalance = (state: RootState) => getBalanceState(state).totalSynths;
+
 function* fetchBalances() {
 	const currentWallet = yield select(getCurrentWallet);
 	if (!currentWallet) return false;
