@@ -99,7 +99,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 							/>
 						);
 					} else {
-						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} notify={notify} />;
+						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} />;
 					}
 				}
 			case 2:
