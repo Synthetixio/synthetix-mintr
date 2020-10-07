@@ -56,6 +56,9 @@
 			"open": "left to claim rewards",
 			"blocked": "Claiming rewards is <1>blocked</1>"
 		},
+		"liquidation": {
+			"title": "Liquidation ratio"
+		},
 		"ratio": {
 			"current": "Current collateralization ratio",
 			"target": "Target collateralization ratio"
@@ -632,6 +635,7 @@
 		"debtBalance": "Your debt begins as the amount of sUSD you initially mint, and fluctuates according to gains or losses made by other Synth holders. Any time someone holds a Synth that appreciates in value, that gain is distributed proportionally between all the staked SNX holders’ debts. To unlock all your staked SNX, you must first pay off your debt.",
 		"synthsBalance": "Synths are the synthetic assets in the Synthetix system, including sUSD, sBTC, iBTC, and all of the other assets available at Synthetix.Exchange. This figure is the total value of all the Synths held in this wallet. If you wish to convert some Synths back into sUSD, click the TRADE button.",
 		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
-		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
+		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens.",
+		"liquidation": "This is the ratio at which your SNX can be liquidated. Liquidation was added in SIP-15, and once your C-Ratio goes below the liquidation ratio there is currently a {{liquidationDelay}} hours delay period before you can be liquidated."
 	}
 }
