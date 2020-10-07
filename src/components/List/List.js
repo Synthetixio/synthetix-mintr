@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const List = styled.table`
 	width: 100%;
-	border-spacing: 0 10px;
+	border-spacing: 0 5px;
 `;
 export const ListHead = styled.thead``;
 export const ListBody = styled.tbody``;
@@ -40,8 +40,8 @@ export const ListHeaderCell = styled.th`
 `;
 
 export const ListCell = styled.td`
-	padding: 0 20px;
-	height: 45px;
+	padding: 0 10px;
+	height: 30px;
 	white-space: nowrap;
 	border-top: 1px solid ${props => props.theme.colorStyles.borders};
 	border-bottom: 1px solid ${props => props.theme.colorStyles.borders};

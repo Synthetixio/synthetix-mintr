@@ -3,17 +3,28 @@ import styled from 'styled-components';
 
 import Dashboard from 'screens/Dashboard';
 import MintrPanel from 'screens/MintrPanel';
-import L2Banner from 'components/Banner/L2Banner';
+import Banner from 'components/BannerL2';
+import l2Wallets from 'assets/data/l2-wallets.json';
 
-const Main: FC = () => (
-	<MainWrapper>
-		<L2Banner />
-		<DashboardWrapper>
-			<Dashboard />
-			<MintrPanel />
-		</DashboardWrapper>
-	</MainWrapper>
-);
+type MainProps = {
+	wallet: string;
+};
+
+const Main: FC<MainProps> = ({ wallet }) => {
+	console.log(wallet);
+	const bannerIsVisible = l2Wallets.find(
+		({ address }) => address.toLowerCase() === wallet.toLowerCase()
+	);
+	return (
+		<>
+			{bannerIsVisible ? <Banner /> : null}
+			<MainWrapper>
+				<Dashboard />
+				<MintrPanel />
+			</MainWrapper>
+		</>
+	);
+};
 
 const MainWrapper = styled.div`
 	width: 100%;

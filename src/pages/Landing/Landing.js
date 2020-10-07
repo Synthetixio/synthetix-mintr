@@ -182,12 +182,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<Link href={LINKS.Support} target="_blank">
 						<ButtonTertiaryLabel>{t('button.havingTrouble')}</ButtonTertiaryLabel>
 					</Link>
-					<Link
-						href={`https://www.synthetix.io/uploads/synthetix_litepaper${
-							i18n.language === 'zh-CN' ? '_mandarin' : ''
-						}.pdf`}
-						target="_blank"
-					>
+					<Link href={'https://docs.synthetix.io/litepaper/'} target="_blank">
 						<ButtonTertiaryLabel>{t('button.whatIsSynthetix')}</ButtonTertiaryLabel>
 					</Link>
 					<ExternalLink
