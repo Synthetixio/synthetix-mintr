@@ -51,7 +51,7 @@ const Container = styled.div<any>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: ${props => (props.margin ? props.margin : '25px 0')};
+	margin: ${props => (props.margin ? props.margin : '25px 0 22px 0')};
 `;
 
 const Block = styled.div`
@@ -73,6 +73,7 @@ const StatText = styled.p`
 	text-align: center;
 	letter-spacing: 0.175px;
 	color: #cacaf1;
+	margin: 0;
 `;
 
 const mapStateToProps = state => ({
