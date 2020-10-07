@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
 import { Welcome } from './Welcome';
 import Deposit from './Deposit';
-import { Metamask } from './Metamask';
 import { Success } from './Success';
 import Burn from './Burn';
 import BurnIntermediary from './BurnIntermediary';
@@ -105,8 +104,6 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 			case 2:
 				return <Deposit onComplete={() => setStep(3)} />;
 			case 3:
-				return <Metamask onComplete={() => setStep(4)} />;
-			case 4:
 				return <Success onComplete={() => handleFinish()} />;
 			default:
 				return <Welcome onNext={() => setStep(1)} />;
