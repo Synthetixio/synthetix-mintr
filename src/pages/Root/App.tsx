@@ -46,7 +46,7 @@ const CurrentPage: FC<CurrentPageProps> = ({ isOnMaintenance, page, wallet }) =>
 		case PAGES_BY_KEY.WALLET_SELECTION:
 			return <WalletSelection />;
 		case PAGES_BY_KEY.MAIN:
-			return <Main />;
+			return <Main wallet={wallet} />;
 		case PAGES_BY_KEY.L2ONBOARDING:
 			return <L2Onboarding />;
 		default:
