@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import Dashboard from 'screens/Dashboard';
 import MintrPanel from 'screens/MintrPanel';
-import Banner from 'components/BannerL2';
+import L2Banner from 'components/BannerL2';
+import LiquidationBanner from 'components/BannerLiquidation';
 import l2Wallets from 'assets/data/l2-wallets.json';
 
 type MainProps = {
@@ -11,13 +12,14 @@ type MainProps = {
 };
 
 const Main: FC<MainProps> = ({ wallet }) => {
-	console.log(wallet);
-	const bannerIsVisible = l2Wallets.find(
+	const l2BannerIsVisible = l2Wallets.find(
 		({ address }) => address.toLowerCase() === wallet.toLowerCase()
 	);
+
 	return (
 		<>
-			{bannerIsVisible ? <Banner /> : null}
+			{l2BannerIsVisible ? <L2Banner /> : null}
+			<LiquidationBanner />
 			<MainWrapper>
 				<Dashboard />
 				<MintrPanel />
