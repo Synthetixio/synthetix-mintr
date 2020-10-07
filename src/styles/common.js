@@ -36,3 +36,7 @@ export const FlexDivCentered = styled(FlexDiv)`
 export const Strong = styled.strong`
 	font-family: 'apercu-bold';
 `;
+
+export const FlexDivCol = styled(FlexDiv)`
+	flex-direction: column;
+`;

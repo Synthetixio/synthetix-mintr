@@ -7,8 +7,9 @@ import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { getWalletDetails } from 'ducks/wallet';
 import { connect } from 'react-redux';
 import { getWalletBalances } from 'ducks/balances';
-import { CRYPTO_CURRENCY_TO_KEY } from '../../constants/currency';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
+import GasIndicator from 'components/L2Onboarding/GasIndicator';
+import ErrorMessage from '../../components/ErrorMessage';
 
 interface DepositProps {
 	onComplete: Function;
@@ -18,10 +19,16 @@ interface DepositProps {
 
 export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, walletBalances }) => {
 	const [snxBalance, setSNXBalance] = useState<number>(0);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+
+	// @TODO: Change gasLimit hard code
+	const gasLimit = 50000;
 
 	useEffect(() => {
 		const getSNXBalance = async () => {
-			setSNXBalance(walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX]);
+			console.log(walletBalances);
+			setSNXBalance(walletBalances.crypto['SNX']);
 		};
 		getSNXBalance();
 	}, [walletBalances]);
@@ -31,16 +38,24 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, wal
 			<Stepper activeIndex={3} />
 			<HeaderIcon
 				title="Deposit all SNX"
-				subtext="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam magnis duis fermentum."
+				subtext="This migrates your SNX from Layer 1 to Layer 2. If you complete this step, your SNX will not be on L1 anymore."
 				icon={<SendIcon />}
 			/>
 			<ContainerStats>
 				<StatBox multiple subtext={'DEPOSITING:'} tokenName="SNX" content={snxBalance.toString()} />
 			</ContainerStats>
-			{/* <ContainerStats>
-				<ErrorMessage message={gasEstimateError} />
+			{errorMessage && (
+				<ContainerStats style={{ margin: 0 }}>
+					<ErrorMessage message={errorMessage} />
+				</ContainerStats>
+			)}
+			<ContainerStats>
+				<GasIndicator
+					style={{ margin: 0 }}
+					isFetchingGasLimit={isFetchingGasLimit}
+					gasLimit={gasLimit}
+				/>
 			</ContainerStats>
-			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} /> */}
 			<CTAButton
 				onClick={() => {
 					onComplete();

@@ -14,11 +14,11 @@ import ErrorMessage from '../../components/ErrorMessage';
 import { addSeconds, differenceInSeconds } from 'date-fns';
 import errorMapper from 'helpers/errorMapper';
 import { Subtext } from 'components/Typography';
-import { ISSUANCE_EVENTS } from 'constants/events';
 import { useTranslation } from 'react-i18next';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 import { getDebtStatusData } from 'ducks/debtStatus';
+import { getEtherscanTxLink } from 'helpers/explorers';
 
 interface BurnProps {
 	onComplete: Function;
@@ -26,6 +26,7 @@ interface BurnProps {
 	currentGasPrice: any;
 	currentsUSDBalance: number;
 	debtData: any;
+	notify: any;
 }
 
 const Burn: React.FC<BurnProps> = ({
@@ -34,13 +35,15 @@ const Burn: React.FC<BurnProps> = ({
 	currentGasPrice,
 	currentsUSDBalance,
 	debtData,
+	notify,
 }) => {
 	const [transferableAmount, setTransferableAmount] = useState<number>(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
-	const { currentWallet, walletType } = walletDetails;
+	const { currentWallet, walletType, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const [isBurning, setIsBurning] = useState<boolean>(false);
 	const { t } = useTranslation();
 
 	const useGetGasEstimate = (
@@ -67,7 +70,6 @@ const Burn: React.FC<BurnProps> = ({
 					);
 					setGasLimit(addBufferToGasLimit(gasEstimate));
 				} catch (e) {
-					console.log(e);
 					const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 					setError(t(errorMessage));
 				}
@@ -142,8 +144,9 @@ const Burn: React.FC<BurnProps> = ({
 	}, [debtData, setMaxTransferableAmount]);
 
 	const onBurn = async () => {
+		setIsBurning(true);
 		const {
-			snxJS: { Synthetix, Issuer, sUSD },
+			snxJS: { Synthetix, Issuer },
 		} = snxJSConnector;
 		try {
 			if (await Synthetix.isWaitingPeriod(bytesFormatter('sUSD')))
@@ -152,24 +155,25 @@ const Burn: React.FC<BurnProps> = ({
 			if (!(await Issuer.canBurnSynths(currentWallet)))
 				throw new Error('Waiting period to burn is still ongoing');
 
-			let transaction;
-
 			const amountToBurn = snxJSConnector.utils.parseEther(debtData.debtBalance.toString());
-			transaction = await Synthetix.burnSynths(amountToBurn, {
+			const tx = await Synthetix.burnSynths(amountToBurn, {
 				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
 
-			if (transaction) {
-				sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
-					if (account === currentWallet) {
-						onComplete();
-					}
+			if (notify && tx) {
+				const { emitter } = notify.hash(tx.hash);
+				emitter.on('txConfirmed', () => {
+					setIsBurning(false);
+					onComplete();
+					return {
+						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
+					};
 				});
 			}
 		} catch (e) {
-			console.log(e);
 			const errorMessage = errorMapper(e, walletType);
+			setIsBurning(false);
 			console.log(errorMessage);
 		}
 	};
@@ -207,7 +211,9 @@ const Burn: React.FC<BurnProps> = ({
 		} else {
 			return (
 				<CTAButton
-					disabled={isFetchingGasLimit || gasEstimateError || debtData.debtBalance === 0}
+					disabled={
+						isFetchingGasLimit || gasEstimateError || debtData.debtBalance === 0 || isBurning
+					}
 					onClick={onBurn}
 				>
 					Burn
@@ -221,7 +227,7 @@ const Burn: React.FC<BurnProps> = ({
 			<Stepper activeIndex={0} />
 			<HeaderIcon
 				title="Burn all L1 debt"
-				subtext="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam magnis duis fermentum."
+				subtext="To begin migrating your SNX, first you’ll need to burn enough sUSD to cover your debt and unlock your staked SNX. "
 				icon={<BurnIcon />}
 			/>
 			<ContainerStats>
@@ -238,10 +244,14 @@ const Burn: React.FC<BurnProps> = ({
 					content={`${transferableAmount ?? 0}`}
 				/>
 			</ContainerStats>
-			<ContainerStats>
-				<ErrorMessage message={gasEstimateError} />
+			{gasEstimateError && (
+				<ContainerStats style={{ margin: 0 }}>
+					<ErrorMessage message={gasEstimateError} />
+				</ContainerStats>
+			)}
+			<ContainerStats style={{ margin: 0 }}>
+				<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			</ContainerStats>
-			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			{renderSubmitButton()}
 		</PageContainer>
 	);

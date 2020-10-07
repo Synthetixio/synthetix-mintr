@@ -14,9 +14,6 @@ export const Stepper: React.FC<StepperProps> = ({ activeIndex }) => {
 		{
 			title: '2: DEPOSIT SNX',
 		},
-		{
-			title: '3: METAMASK',
-		},
 	];
 	return (
 		<ContainerStepper>
