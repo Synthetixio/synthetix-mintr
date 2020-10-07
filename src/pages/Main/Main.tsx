@@ -3,12 +3,8 @@ import styled from 'styled-components';
 
 import Dashboard from 'screens/Dashboard';
 import MintrPanel from 'screens/MintrPanel';
-import Banner from 'components/BannerL2';
+import L2Banner from 'components/Banner/L2Banner';
 import l2Wallets from 'assets/data/l2-wallets.json';
-
-type MainProps = {
-	wallet: string;
-};
 
 const Main: FC<MainProps> = ({ wallet }) => {
 	console.log(wallet);
@@ -16,14 +12,17 @@ const Main: FC<MainProps> = ({ wallet }) => {
 		({ address }) => address.toLowerCase() === wallet.toLowerCase()
 	);
 	return (
-		<>
-			{bannerIsVisible ? <Banner /> : null}
-			<MainWrapper>
+		<MainWrapper>
+			<L2Banner />
+			<DashboardWrapper>
 				<Dashboard />
 				<MintrPanel />
-			</MainWrapper>
-		</>
+			</DashboardWrapper>
+		</MainWrapper>
 	);
+};
+type MainProps = {
+	wallet: string;
 };
 
 const MainWrapper = styled.div`

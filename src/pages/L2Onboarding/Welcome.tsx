@@ -15,17 +15,13 @@ export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 		{
 			icon: <BurnIcon />,
 			title: 'STEP 1: Burn all DEBT',
-			copy: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+			copy: 'Burn enough sUSD to cover your debt, as displayed in the left-hand panel on Mintr. ',
 		},
 		{
 			icon: <SendIcon />,
 			title: 'STEP 2: DEPOSIT SNX to L2',
-			copy: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-		},
-		{
-			icon: <img src={MetamaskPng} alt="metamask-icon" />,
-			title: 'STEP 3: SWITCH TO METAMASK ',
-			copy: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+			copy:
+				'This migrates your SNX from Layer 1 to Layer 2. If you complete this step, your SNX will not be on L1 anymore.',
 		},
 	];
 
@@ -41,13 +37,14 @@ export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			<GradientText>WELCOME TO</GradientText>
 			<Header>MINTR on L2</Header>
 			<Subtitle>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sodales mauris gravida etiam
-				magnis duis fermentum.
+				These steps complete the process of migrating your SNX from Layer 1 to Layer 2.
 			</Subtitle>
 			<ContainerSteps>
 				{steps.map(({ icon, title, copy }, i) => returnStepBox(icon, title, copy, i))}
 			</ContainerSteps>
-			<CTAButton onClick={() => onNext()}>Get Started</CTAButton>
+			<CTAButton style={{ marginTop: 16 }} onClick={() => onNext()}>
+				Get Started
+			</CTAButton>
 		</PageContainer>
 	);
 };
@@ -74,6 +71,7 @@ const Subtitle = styled.p`
 	font-size: 18px;
 	text-align: center;
 	color: #cacaf1;
+	margin-top: 8px;
 `;
 
 const ContainerSteps = styled.div`
@@ -102,6 +100,7 @@ const StepTitle = styled.p`
 const StepDescription = styled.p`
 	font-family: ${fontFamilies.regular};
 	font-size: 16px;
+	width: 400px;
 	line-height: 24px;
 	margin: 0 24px;
 	text-align: center;
