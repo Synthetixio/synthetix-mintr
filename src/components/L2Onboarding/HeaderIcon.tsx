@@ -25,7 +25,7 @@ const Header = styled.p`
 	letter-spacing: 0.2px;
 	color: #ffffff;
 	text-shadow: 0px 0px 10px #b47598;
-	margin: 16px 0px;
+	margin: 0px;
 `;
 
 const Subtext = styled.p`
@@ -35,9 +35,8 @@ const Subtext = styled.p`
 	letter-spacing: 0.2px;
 	color: #cacaf1;
 	width: 600px;
-	height: 100px;
 `;
 
 const Icon = styled.div`
-	margin-top: 16px;
+	margin: 16px;
 `;
