@@ -9,29 +9,30 @@ import { GWEI_UNIT } from 'constants/network';
 export const sUSDTokenAddress = '0x57ab1ec28d129707052df4df418d58a2d46d5f51';
 export const ethTokenAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 
-const useOneInch = (isAppReady: boolean, signer: Signer | Provider) => {
+const useOneInch = (signer: Signer | Provider) => {
 	const [oneInchContract, setOneInchContract] = useState<Contract | null>(null);
 
 	useEffect(() => {
-		if (isAppReady && signer) {
+		if (signer) {
 			const contract = new Contract(
 				oneSplitAuditContract.addresses[SUPPORTED_NETWORKS_MAP.MAINNET],
 				oneSplitAuditContract.abi,
 				signer
 			);
+
 			setOneInchContract(contract);
 		}
-	}, [isAppReady, signer]);
+	}, [signer]);
 
-	const swap = async (amount: string, gasPrice: number) => {
+	const swap = async (amount: string, gasPrice: number, gasLimit: number) => {
 		try {
 			if (oneInchContract != null) {
 				const amountBN = utils.parseEther(amount);
-				const swapRates = await oneInchContract.functions.getExpectedReturn(
+				const swapRates = await oneInchContract.getExpectedReturn(
 					ethTokenAddress,
 					sUSDTokenAddress,
 					amountBN,
-					5,
+					100,
 					0
 				);
 
@@ -44,8 +45,10 @@ const useOneInch = (isAppReady: boolean, signer: Signer | Provider) => {
 					0,
 				];
 
-				return oneInchContract.functions.swap(...swapParams, {
-					gasPrice: gasPrice * GWEI_UNIT,
+				return oneInchContract.swap(...swapParams, {
+					gasPrice,
+					gasLimit,
+					value: amountBN,
 				});
 			}
 		} catch (e) {

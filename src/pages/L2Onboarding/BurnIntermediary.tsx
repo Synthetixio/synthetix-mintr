@@ -10,7 +10,7 @@ import { fontFamilies } from 'styles/themes';
 import { connect } from 'react-redux';
 import { setRedirectToTrade } from '../../ducks/ui';
 import { getTotalSynthsBalance } from 'ducks/balances';
-import OneInchCard from 'screens/MintrActions/Migrate/OneInchCard';
+import OneInchCard from 'pages/L2Onboarding/OneInchCard';
 import { formatCurrency } from 'helpers/formatters';
 
 interface BurnIntermediaryProps {
@@ -28,10 +28,11 @@ const HEADER_CONTENT = {
 	},
 	'1inch': {
 		title: 'Buy sUSD with ETH via 1inch',
-		subtext: 'Before you can burn all your debt, you need to buy sUSD.',
+		subtext: '',
 		icon: <OneInchIcon />,
 	},
 };
+
 const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	totalsUSDDebt,
 	setRedirectToTrade,

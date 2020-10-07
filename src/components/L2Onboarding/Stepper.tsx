@@ -29,6 +29,7 @@ export const Stepper: React.FC<StepperProps> = ({ activeIndex }) => {
 
 const ContainerStepper = styled.div`
 	display: flex;
+	margin-bottom: 20px;
 `;
 
 const Section = styled.div`
