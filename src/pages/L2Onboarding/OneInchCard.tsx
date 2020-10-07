@@ -4,7 +4,6 @@ import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
 import { getWalletBalances } from 'ducks/balances';
 import { DebtStatus, getDebtStatusData } from 'ducks/debtStatus';
-import { GasPrice, getCurrentGasPrice } from 'ducks/network';
 import { getRates, Rates } from 'ducks/rates';
 import { utils } from 'ethers';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
@@ -15,17 +14,24 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
+import { GasPrice, getCurrentGasPrice } from 'ducks/network';
+import { createTransaction } from 'ducks/transactions';
+import Spinner from 'components/Spinner';
 
 export const OneInchCard = ({
 	rates,
 	debtStatus,
 	walletBalances = { crypto: { sUSD: 0, ETH: 0 } },
+	onComplete,
 	currentGasPrice,
+	createTransaction,
 }: {
 	rates: Rates;
 	debtStatus: DebtStatus;
 	walletBalances: any;
+	onComplete: Function;
 	currentGasPrice: GasPrice;
+	createTransaction: Function;
 }) => {
 	const baseCurrencyKey = CRYPTO_CURRENCY_TO_KEY.ETH;
 	const quoteCurrencyKey = CRYPTO_CURRENCY_TO_KEY.sUSD;
@@ -46,6 +52,7 @@ export const OneInchCard = ({
 	const [error, setError] = useState<string | null>(null);
 	const [isFetchingGasLimit, setIsFetchingGasLimit] = useState<boolean>(false);
 	const [gasLimit, setGasLimit] = useState<number | null>(null);
+	const [isTxPending, setIsTxPending] = useState<boolean>(false);
 
 	useEffect(() => {
 		const getGasEstimate = async () => {
@@ -82,7 +89,6 @@ export const OneInchCard = ({
 			}
 		};
 		getGasEstimate();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [oneInchContract, baseCurrencyAmount]);
 
 	return (
@@ -112,14 +118,42 @@ export const OneInchCard = ({
 			/>
 
 			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
-			<StyledCTAButton
-				disabled={!gasLimit || error}
-				onClick={async () =>
-					swap(baseCurrencyAmount.toString(), currentGasPrice.formattedPrice, gasLimit)
-				}
-			>
-				Buy Now
-			</StyledCTAButton>
+			{isTxPending ? (
+				<Spinner />
+			) : (
+				<StyledCTAButton
+					disabled={!gasLimit || error}
+					onClick={async () => {
+						try {
+							const tx = await swap(
+								baseCurrencyAmount.toString(),
+								currentGasPrice.formattedPrice,
+								gasLimit
+							);
+
+							if (tx) {
+								createTransaction({
+									hash: tx.hash,
+									status: 'pending',
+									info: '1Inch ETH <> sUSD exchange',
+									hasNotification: true,
+								});
+								snxJSConnector.provider.waitForTransaction(tx.hash).then(() => {
+									setIsTxPending(false);
+									onComplete();
+								});
+								setIsTxPending(true);
+							}
+						} catch (e) {
+							console.log(e);
+							setError(e.message);
+							setIsTxPending(false);
+						}
+					}}
+				>
+					Buy Now
+				</StyledCTAButton>
+			)}
 			{error && <ErrorMessage message={error} />}
 		</FormContainer>
 	);
@@ -149,4 +183,8 @@ const mapStateToProps = (state: any) => ({
 	currentGasPrice: getCurrentGasPrice(state),
 });
 
-export default connect(mapStateToProps)(OneInchCard);
+const mapDispatchToProps = {
+	createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OneInchCard);

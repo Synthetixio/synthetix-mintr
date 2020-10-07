@@ -98,7 +98,12 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 							/>
 						);
 					} else {
-						return <BurnIntermediary totalsUSDDebt={debtDataStatus.debtBalance} />;
+						return (
+							<BurnIntermediary
+								totalsUSDDebt={debtDataStatus.debtBalance}
+								onComplete={() => setSufficientBalance(true)}
+							/>
+						);
 					}
 				}
 			case 2:

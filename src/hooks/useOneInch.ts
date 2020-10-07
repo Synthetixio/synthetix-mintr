@@ -4,7 +4,6 @@ import { Contract, Signer, utils } from 'ethers';
 import oneSplitAuditContract from 'helpers/contracts/oneinch/oneSplitAuditContract';
 import { SUPPORTED_NETWORKS_MAP } from 'helpers/networkHelper';
 import { Provider } from 'ethers/providers';
-import { GWEI_UNIT } from 'constants/network';
 
 export const sUSDTokenAddress = '0x57ab1ec28d129707052df4df418d58a2d46d5f51';
 export const ethTokenAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
