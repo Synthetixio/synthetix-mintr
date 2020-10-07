@@ -39,7 +39,5 @@ const Subtext = styled.p`
 `;
 
 const Icon = styled.div`
-	min-height: 100px;
-	max-height: 100px;
-	margin-bottom: 16px;
+	margin-top: 16px;
 `;

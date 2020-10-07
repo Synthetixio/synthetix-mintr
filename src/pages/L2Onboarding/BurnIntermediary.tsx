@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
@@ -19,6 +19,19 @@ interface BurnIntermediaryProps {
 	totalSynthsBalance: number;
 }
 
+const HEADER_CONTENT = {
+	default: {
+		title: 'Burn all L1 debt',
+		subtext:
+			'You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via 1inch.',
+		icon: <BurnErrorIcon />,
+	},
+	'1inch': {
+		title: 'Buy sUSD with ETH via 1inch',
+		subtext: 'Before you can burn all your debt, you need to buy sUSD.',
+		icon: <OneInchIcon />,
+	},
+};
 const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	totalsUSDDebt,
 	setRedirectToTrade,
@@ -30,46 +43,43 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 		setRedirectToTrade(true);
 	};
 
+	const renderDefaultLayout = () => (
+		<>
+			<Flex>
+				<Subtitle>REQUIRED AMOUNT:</Subtitle>
+				<Subtext>{totalsUSDDebt} sUSD</Subtext>
+			</Flex>
+			<Flex>
+				<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
+					<ButtonIcon>
+						<TradeIcon />
+					</ButtonIcon>
+					<ButtonTitle>TRADE SYNTHS</ButtonTitle>
+					<ButtonSubtext>{`Balance: $${formatCurrency(
+						totalSynthsBalance || 0
+					)} USD`}</ButtonSubtext>
+				</ContainerButton>
+				<ContainerButton onClick={() => setShowOneInchCard(true)} href={null} target="_blank">
+					<ButtonIcon>
+						<OneInchIcon />
+					</ButtonIcon>
+					<ButtonTitle>BUY sUSD</ButtonTitle>
+					<ButtonSubtext>from 1inch</ButtonSubtext>
+				</ContainerButton>
+			</Flex>
+		</>
+	);
+
+	const headerIconContent = HEADER_CONTENT[showOneInchCard ? '1inch' : 'default'];
 	return (
 		<PageContainer>
 			<Stepper activeIndex={0} />
 			<HeaderIcon
-				title="Burn all L1 debt"
-				subtext={
-					showOneInchCard
-						? 'Before you can burn all your debt, you need to buy sUSD.'
-						: 'You currently don’t have enough sUSD to burn your L1 debt. To get more sUSD, either trade your other Synths for sUSD or purchase sUSD directly via 1inch.'
-				}
-				icon={<BurnErrorIcon />}
+				title={headerIconContent.title}
+				subtext={headerIconContent.subtext}
+				icon={headerIconContent.icon}
 			/>
-			{!!showOneInchCard ? (
-				<OneInchCard />
-			) : (
-				<>
-					<Flex>
-						<Subtitle>REQUIRED AMOUNT:</Subtitle>
-						<Subtext>{totalsUSDDebt} sUSD</Subtext>
-					</Flex>
-					<Flex>
-						<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
-							<ButtonIcon>
-								<TradeIcon />
-							</ButtonIcon>
-							<ButtonTitle>TRADE SYNTHS</ButtonTitle>
-							<ButtonSubtext>{`Balance: $${formatCurrency(
-								totalSynthsBalance || 0
-							)} USD`}</ButtonSubtext>
-						</ContainerButton>
-						<ContainerButton onClick={() => setShowOneInchCard(true)} href={null} target="_blank">
-							<ButtonIcon>
-								<OneInchIcon />
-							</ButtonIcon>
-							<ButtonTitle>BUY sUSD</ButtonTitle>
-							<ButtonSubtext>from 1inch</ButtonSubtext>
-						</ContainerButton>
-					</Flex>
-				</>
-			)}
+			{showOneInchCard ? <OneInchCard /> : renderDefaultLayout()}
 		</PageContainer>
 	);
 };
