@@ -3,10 +3,10 @@ import Input from 'components/Input';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 import TransactionPriceIndicator from 'components/TransactionPriceIndicator';
 import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
-import { GWEI_UNIT } from 'constants/network';
 import { getAppIsReady } from 'ducks/app';
 import { getWalletBalances } from 'ducks/balances';
 import { DebtStatus, getDebtStatusData } from 'ducks/debtStatus';
+import { GasPrice, getCurrentGasPrice } from 'ducks/network';
 import { getRates, Rates } from 'ducks/rates';
 import { utils } from 'ethers';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
@@ -15,40 +15,35 @@ import useOneInch, { ethTokenAddress, sUSDTokenAddress } from 'hooks/useOneInch'
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import COLORS from 'styles/colors';
 
 export const OneInchCard = ({
 	appIsReady,
 	rates,
 	debtStatus,
 	walletBalances = { crypto: { sUSD: 0 } },
+	currentGasPrice,
 }: {
 	appIsReady: boolean;
 	rates: Rates;
 	debtStatus: DebtStatus;
 	walletBalances: any;
+	currentGasPrice: GasPrice;
 }) => {
 	const quoteCurrencyKey = CRYPTO_CURRENCY_TO_KEY.ETH;
 	const baseCurrencyKey = CRYPTO_CURRENCY_TO_KEY.sUSD;
-	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
-	const [gasLimit, setGasLimit] = useState(0);
-	const { swap, oneInchContract } = useOneInch(
-		appIsReady,
-		snxJSConnector.snxJS.contractSettings.signer
-	);
+	const { signer } = snxJSConnector;
+	const { swap, oneInchContract } = useOneInch(appIsReady, signer);
+
 	const amountToBuy = debtStatus.debtBalance - walletBalances.crypto[baseCurrencyKey];
-
-	const gasEstimateError = useGetGasEstimate(
-		setFetchingGasLimit,
-		setGasLimit,
-		oneInchContract,
-		amountToBuy
-	);
-
 	const [quoteCurrencyAmount, setQuoteCurrencyAmount] = useState<string>(
 		`${amountToBuy / rates[quoteCurrencyKey]}`
 	);
 	const [baseCurrencyAmount, setBaseCurrencyAmount] = useState<string>(`${amountToBuy}`);
+
+	const { gasEstimate, isFetchingGasLimit, error: gasEstimateError } = useGetGasEstimate(
+		oneInchContract,
+		baseCurrencyAmount
+	);
 
 	return (
 		<>
@@ -65,10 +60,21 @@ export const OneInchCard = ({
 					value={baseCurrencyAmount}
 					placeholder="0.00"
 				/>
-				<WhiteText>{`ETH: ${quoteCurrencyAmount}`}</WhiteText>
+				<div>{`ETH: ${quoteCurrencyAmount}`}</div>
 				<br />
-				<TransactionPriceIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
-				<CTAButton onClick={() => swap(quoteCurrencyAmount, gasLimit * GWEI_UNIT)}>
+				<TransactionPriceIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasEstimate} />
+				<CTAButton
+					onClick={async () => {
+						try {
+							const tx = await swap(quoteCurrencyAmount, currentGasPrice.price);
+							if (tx) {
+								console.log(tx);
+							}
+						} catch (e) {
+							console.error(e);
+						}
+					}}
+				>
 					Buy Now
 				</CTAButton>
 				{!!gasEstimateError && <ErrorMessage message={gasEstimateError} />}
@@ -77,8 +83,10 @@ export const OneInchCard = ({
 	);
 };
 
-const useGetGasEstimate = (setFetchingGasLimit, setGasLimit, oneInchContract, amount) => {
+const useGetGasEstimate = (oneInchContract, amount) => {
 	const [error, setError] = useState(null);
+	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [gasEstimate, setGasEstimate] = useState(1);
 	useEffect(() => {
 		if (oneInchContract === null) {
 			return () => {};
@@ -92,7 +100,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit, oneInchContract, am
 					ethTokenAddress,
 					sUSDTokenAddress,
 					amountBN,
-					100,
+					5,
 					0
 				);
 				const gasEstimate = await oneInchContract.estimate.swap(
@@ -104,10 +112,9 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit, oneInchContract, am
 					0
 				);
 				setFetchingGasLimit(false);
-				setGasLimit(addBufferToGasLimit(gasEstimate));
+				setGasEstimate(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
 				setFetchingGasLimit(false);
-				console.log(e);
 				const errorMessage = (e && e.message) || 'Error while getting gas estimate';
 				setError(errorMessage);
 			}
@@ -115,7 +122,7 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit, oneInchContract, am
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [oneInchContract, amount]);
-	return error;
+	return { gasEstimate, isFetchingGasLimit, error };
 };
 
 const Form = styled.div`
@@ -123,15 +130,12 @@ const Form = styled.div`
 	margin: 0px 0px 10px 0px;
 `;
 
-const WhiteText = styled.div`
-	color: ${COLORS.white};
-`;
-
 const mapStateToProps = (state: any) => ({
 	rates: getRates(state),
 	appIsReady: getAppIsReady(state),
 	debtStatus: getDebtStatusData(state),
 	walletBalances: getWalletBalances(state),
+	currentGasPrice: getCurrentGasPrice(state),
 });
 
 export default connect(mapStateToProps)(OneInchCard);

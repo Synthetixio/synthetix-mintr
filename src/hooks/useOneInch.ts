@@ -4,6 +4,7 @@ import { Contract, Signer, utils } from 'ethers';
 import oneSplitAuditContract from 'helpers/contracts/oneinch/oneSplitAuditContract';
 import { SUPPORTED_NETWORKS_MAP } from 'helpers/networkHelper';
 import { Provider } from 'ethers/providers';
+import { GWEI_UNIT } from 'constants/network';
 
 export const sUSDTokenAddress = '0x57ab1ec28d129707052df4df418d58a2d46d5f51';
 export const ethTokenAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
@@ -30,7 +31,7 @@ const useOneInch = (isAppReady: boolean, signer: Signer | Provider) => {
 					ethTokenAddress,
 					sUSDTokenAddress,
 					amountBN,
-					100,
+					5,
 					0
 				);
 
@@ -43,11 +44,9 @@ const useOneInch = (isAppReady: boolean, signer: Signer | Provider) => {
 					0,
 				];
 
-				const tx = oneInchContract.functions.swap(...swapParams, {
-					value: amountBN,
-					gasPrice,
+				return oneInchContract.functions.swap(...swapParams, {
+					gasPrice: gasPrice * GWEI_UNIT,
 				});
-				return tx;
 			}
 		} catch (e) {
 			return Promise.reject(e);

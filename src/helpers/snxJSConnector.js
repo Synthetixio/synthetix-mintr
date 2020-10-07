@@ -3,9 +3,11 @@ import {
 	getEthereumNetwork,
 	INFURA_JSON_RPC_URLS,
 	SUPPORTED_WALLETS_MAP,
+	INFURA_PROJECT_ID,
 	PORTIS_APP_ID,
+	NETWORK_NAMES,
 } from './networkHelper';
-import { ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import {
 	uniswapV1,
 	uniswapV2,
@@ -16,6 +18,7 @@ import {
 	oldCurvepool,
 	iEthRewards,
 	iEth2Rewards,
+	iEth4Rewards,
 	balancerpool,
 	balancerSNXRewards,
 	curveSBTC,
@@ -62,6 +65,11 @@ let snxJSConnector = {
 			this.iEth2RewardsContract = new ethers.Contract(
 				iEth2Rewards.address,
 				iEth2Rewards.abi,
+				this.signer
+			);
+			this.iEth4RewardsContract = new ethers.Contract(
+				iEth4Rewards.address,
+				iEth4Rewards.abi,
 				this.signer
 			);
 			this.iBtcRewardsContract = new ethers.Contract(
@@ -230,10 +238,21 @@ const connectToPortis = async (networkId, networkName) => {
 };
 
 const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
+	const customProvider = getProvider({ networkId });
 	if (type === SUPPORTED_WALLETS_MAP.LEDGER) {
 		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
-		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
+		return {
+			derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH,
+			provider: customProvider,
+		};
 	}
+
+	if (type === SUPPORTED_WALLETS_MAP.TREZOR) {
+		return {
+			provider: customProvider,
+		};
+	}
+
 	if (type === SUPPORTED_WALLETS_MAP.COINBASE) {
 		return {
 			appName: 'Mintr',
@@ -265,6 +284,7 @@ export const setSigner = ({ type, networkId, derivationPath, networkName }) => {
 	snxJSConnector.setContractSettings({
 		networkId,
 		signer,
+		provider: signer.provider,
 	});
 };
 
@@ -295,5 +315,8 @@ export const connectToWallet = async ({ wallet, derivationPath }) => {
 			return {};
 	}
 };
+
+export const getProvider = ({ networkId }) =>
+	new providers.InfuraProvider(NETWORK_NAMES[networkId].toLowerCase(), INFURA_PROJECT_ID);
 
 export default snxJSConnector;
