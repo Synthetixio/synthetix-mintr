@@ -64,9 +64,8 @@ const Burn: React.FC<BurnProps> = ({
 					if (issuanceDelay) throw new Error('Waiting period to burn is still ongoing');
 					if (burnAmount > sUSDBalance) throw new Error('input.error.notEnoughToBurn');
 					setFetchingGasLimit(true);
-					const amountToBurn = snxJSConnector.utils.parseEther(burnAmount.toString());
 					const gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.burnSynths(
-						amountToBurn
+						debtData.debtBalanceBN
 					);
 					setGasLimit(addBufferToGasLimit(gasEstimate));
 				} catch (e) {
@@ -155,8 +154,7 @@ const Burn: React.FC<BurnProps> = ({
 			if (!(await Issuer.canBurnSynths(currentWallet)))
 				throw new Error('Waiting period to burn is still ongoing');
 
-			const amountToBurn = snxJSConnector.utils.parseEther(debtData.debtBalance.toString());
-			const tx = await Synthetix.burnSynths(amountToBurn, {
+			const tx = await Synthetix.burnSynths(debtData.debtBalanceBN, {
 				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
@@ -241,7 +239,14 @@ const Burn: React.FC<BurnProps> = ({
 					multiple
 					subtext={'UNLOCKING:'}
 					tokenName="SNX"
-					content={`${transferableAmount ?? 0}`}
+					content={`${
+						Math.max(
+							(debtData.debtBalance - debtData.debtEscrow) /
+								debtData.targetCRatio /
+								debtData.SNXPrice,
+							0
+						) ?? 0
+					}`}
 				/>
 			</ContainerStats>
 			{gasEstimateError && (
