@@ -37,7 +37,6 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 			try {
 				const results = await Promise.all([
 					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
-					snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
 					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
 					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
 					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
@@ -46,7 +45,6 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 				]);
 				const [
 					debt,
-					sUSDBalance,
 					issuanceRatio,
 					SNXPrice,
 					totalRewardEscrow,
@@ -54,20 +52,9 @@ const useGetDebtData = (walletAddress, sUSDBytes) => {
 					issuableSynths,
 				] = results.map(bigNumberFormatter);
 
-				let maxBurnAmount, maxBurnAmountBN;
-				if (debt > sUSDBalance) {
-					maxBurnAmount = sUSDBalance;
-					maxBurnAmountBN = results[1];
-				} else {
-					maxBurnAmount = debt;
-					maxBurnAmountBN = results[0];
-				}
 				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
 				setData({
 					issuanceRatio,
-					sUSDBalance,
-					maxBurnAmount,
-					maxBurnAmountBN,
 					SNXPrice,
 					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
 					debtEscrow: Math.max(escrowBalance * SNXPrice * issuanceRatio + debt - issuableSynths, 0),
@@ -99,15 +86,7 @@ const Burn: React.FC<BurnProps> = ({
 	const { t } = useTranslation();
 
 	const sUSDBytes = bytesFormatter('sUSD');
-	const {
-		maxBurnAmount,
-		maxBurnAmountBN,
-		sUSDBalance,
-		issuanceRatio,
-		SNXPrice,
-		burnAmountToFixCRatio,
-		debtEscrow,
-	} = useGetDebtData(currentWallet, sUSDBytes);
+	const { issuanceRatio, SNXPrice, debtEscrow } = useGetDebtData(currentWallet, sUSDBytes);
 
 	const useGetGasEstimate = (
 		burnAmount,
@@ -294,7 +273,9 @@ const Burn: React.FC<BurnProps> = ({
 					multiple
 					subtext={'UNLOCKING:'}
 					tokenName="SNX"
-					content={`${Math.max((maxBurnAmount - debtEscrow) / issuanceRatio / SNXPrice, 0) ?? 0}`}
+					content={`${
+						Math.max((debtData.debtBalance - debtEscrow) / issuanceRatio / SNXPrice, 0) ?? 0
+					}`}
 				/>
 			</ContainerStats>
 			{gasEstimateError && (
