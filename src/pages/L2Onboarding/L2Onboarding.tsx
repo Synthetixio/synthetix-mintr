@@ -53,11 +53,10 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 		if (debtDataStatus.debtBalance !== null) {
 			if (sUSDBalanceNB >= debtDataStatus.debtBalance) {
 				setSufficientBalance(true);
-				setCheckingBalances(false);
 			} else {
 				setSufficientBalance(false);
-				setCheckingBalances(false);
 			}
+			setCheckingBalances(false);
 		}
 	}, [debtDataStatus, currentWallet]);
 
@@ -83,7 +82,9 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 						</Center>
 					);
 				} else {
-					if (sufficientBalance) {
+					if (debtDataStatus.debtBalance === 0) {
+						setStep(2);
+					} else if (sufficientBalance) {
 						return (
 							<Burn
 								onComplete={() => setStep(2)}
