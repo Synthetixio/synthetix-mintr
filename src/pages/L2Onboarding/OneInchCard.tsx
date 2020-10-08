@@ -45,10 +45,10 @@ export const OneInchCard = ({
 
 	const amountToBuy = debtStatus.debtBalance - walletBalances.crypto[baseCurrencyKey];
 
-	const [baseCurrencyAmount, setBaseCurrencyAmount] = useState<number>(
-		amountToBuy / rates[baseCurrencyKey]
+	const [baseCurrencyAmount, setBaseCurrencyAmount] = useState<string>(
+		(amountToBuy / rates[baseCurrencyKey]).toString()
 	);
-	const [quoteCurrencyAmount, setQuoteCurrencyAmount] = useState<number>(amountToBuy);
+	const [quoteCurrencyAmount, setQuoteCurrencyAmount] = useState<string>(amountToBuy.toString());
 	const [error, setError] = useState<string | null>(null);
 	const [isFetchingGasLimit, setIsFetchingGasLimit] = useState<boolean>(false);
 	const [gasLimit, setGasLimit] = useState<number | null>(null);
@@ -91,28 +91,40 @@ export const OneInchCard = ({
 		getGasEstimate();
 	}, [oneInchContract, baseCurrencyAmount]);
 
+	useEffect(() => {
+		setError(null);
+		if (baseCurrencyAmount > ethBalance) {
+			setError('Insufficient ETH Balance');
+		}
+	}, [baseCurrencyAmount, ethBalance]);
+
 	return (
 		<FormContainer>
 			<Balance>{`Balance: ${formatCurrency(ethBalance, 4)} ETH`}</Balance>
 			<Input
-				onMax={() => null}
+				onMax={() => {
+					setBaseCurrencyAmount(ethBalance.toString());
+					setQuoteCurrencyAmount((ethBalance * rates[baseCurrencyKey]).toString());
+				}}
+				showMax={true}
 				currency={baseCurrencyKey}
 				onChange={(e: any) => {
 					const value = Number(e.target.value);
 
-					setBaseCurrencyAmount(value);
-					setQuoteCurrencyAmount(value * rates[baseCurrencyKey]);
+					setBaseCurrencyAmount(value.toString());
+					setQuoteCurrencyAmount((value * rates[baseCurrencyKey]).toString());
 				}}
 				value={baseCurrencyAmount}
 			/>
+
 			<Input
-				onMax={() => null}
+				showMax={false}
 				currency={quoteCurrencyKey}
 				onChange={(e: any) => {
 					const value = Number(e.target.value);
 
-					setQuoteCurrencyAmount(value);
-					setBaseCurrencyAmount(value / rates[baseCurrencyKey]);
+					setQuoteCurrencyAmount(value.toString());
+					setBaseCurrencyAmount((value / rates[baseCurrencyKey]).toString());
 				}}
 				value={quoteCurrencyAmount}
 			/>

@@ -5,20 +5,29 @@ import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 type InputProps = {
 	currency: string;
 	onChange: (e: any) => void;
-	value: number;
-	onMax: () => void;
+	value: number | string;
+	onMax?: () => void;
+	showMax?: boolean;
 };
 
-const InputComponent: FC<InputProps> = ({ currency, onChange, onMax, value }) => {
+const InputComponent: FC<InputProps> = ({
+	currency,
+	onChange,
+	onMax = () => {},
+	value,
+	showMax,
+}) => {
 	return (
 		<InputWrapper>
 			<InputBlock>
 				<Input onChange={onChange} type="number" step="any" placeholder="0" value={value}></Input>
 				<Currency>{currency}</Currency>
 			</InputBlock>
-			<InputBlock>
-				<ButtonMax onClick={onMax}>Max</ButtonMax>
-			</InputBlock>
+			{showMax && (
+				<InputBlock>
+					<ButtonMax onClick={onMax}>Max</ButtonMax>
+				</InputBlock>
+			)}
 		</InputWrapper>
 	);
 };
