@@ -45,10 +45,13 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 		setNotify(notify);
 	}, [networkId]);
 
-	const validateAvailableBalance = useCallback(() => {
+	const validateAvailableBalance = useCallback(async () => {
+		const sUSDBalanceBN = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
+		const sUSDBalanceNB = bigNumberFormatter(sUSDBalanceBN);
+		setSUSDBalance(sUSDBalanceNB);
 		if (!debtDataStatus) return;
 		if (debtDataStatus.debtBalance !== null) {
-			if (sUSDBalance >= debtDataStatus.debtBalance) {
+			if (sUSDBalanceNB >= debtDataStatus.debtBalance) {
 				setSufficientBalance(true);
 				setCheckingBalances(false);
 			} else {
@@ -56,22 +59,13 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 				setCheckingBalances(false);
 			}
 		}
-	}, [debtDataStatus, sUSDBalance]);
+	}, [debtDataStatus, currentWallet]);
 
 	useEffect(() => {
-		const fetchDepotData = async () => {
-			try {
-				const sUsdWalletBalance = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
-				setSUSDBalance(bigNumberFormatter(sUsdWalletBalance));
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		fetchDepotData();
 		validateAvailableBalance();
 		const refreshInterval = setInterval(validateAvailableBalance, 5000);
 		return () => clearInterval(refreshInterval);
-	}, [validateAvailableBalance, debtDataStatus, currentWallet]);
+	}, [validateAvailableBalance, debtDataStatus]);
 
 	const handleFinish = () => {
 		// Direct to Mintr.io
@@ -103,7 +97,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 								notify={notify}
 								currentsUSDBalance={sUSDBalance}
 								totalsUSDDebt={debtDataStatus.debtBalance}
-								onComplete={() => setSufficientBalance(true)}
+								onComplete={() => validateAvailableBalance()}
 							/>
 						);
 					}
