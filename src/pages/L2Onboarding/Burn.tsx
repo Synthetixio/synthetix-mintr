@@ -37,7 +37,6 @@ const Burn: React.FC<BurnProps> = ({
 	debtData,
 	notify,
 }) => {
-	const [transferableAmount, setTransferableAmount] = useState<number>(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
 	const { currentWallet, walletType, networkId } = walletDetails;
@@ -133,14 +132,6 @@ const Burn: React.FC<BurnProps> = ({
 		getIssuanceDelay();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getMaxSecsLeftInWaitingPeriod, getIssuanceDelay]);
-
-	const setMaxTransferableAmount = useCallback(() => {
-		setTransferableAmount(debtData.transferable);
-	}, [debtData]);
-
-	useEffect(() => {
-		setMaxTransferableAmount();
-	}, [debtData, setMaxTransferableAmount]);
 
 	const onBurn = async () => {
 		setIsBurning(true);
