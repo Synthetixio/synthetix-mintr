@@ -7,20 +7,39 @@ const DEFAULT_SUSD_RATE = 1;
 
 export const getDebtStatus = async (walletAddress: string) => {
 	const {
-		snxJS: { SynthetixState, Synthetix },
+		snxJS: { SynthetixState, Synthetix, SynthetixEscrow, RewardEscrow, ExchangeRates },
 	} = snxJSConnector as any;
+	const debtBalanceBN = await Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD'));
+	const SNXBytes = bytesFormatter('SNX');
 	const result = await Promise.all([
 		SynthetixState.issuanceRatio(),
 		Synthetix.collateralisationRatio(walletAddress),
 		Synthetix.transferableSynthetix(walletAddress),
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
+		ExchangeRates.rateForCurrency(SNXBytes),
+		RewardEscrow.totalEscrowedAccountBalance(walletAddress),
+		SynthetixEscrow.balanceOf(walletAddress),
+		Synthetix.maxIssuableSynths(walletAddress),
 	]);
-	const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
+	const [
+		targetCRatio,
+		currentCRatio,
+		transferable,
+		debtBalance,
+		SNXPrice,
+		totalRewardEscrow,
+		totalTokenSaleEscrow,
+		issuableSynths,
+	] = result.map(bigNumberFormatter);
+	const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
 	return {
 		targetCRatio,
 		currentCRatio,
 		transferable,
 		debtBalance,
+		SNXPrice,
+		debtEscrow: Math.max(escrowBalance * SNXPrice * targetCRatio + debtBalance - issuableSynths, 0),
+		debtBalanceBN,
 	};
 };
 
