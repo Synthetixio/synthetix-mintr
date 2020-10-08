@@ -84,6 +84,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 				} else {
 					if (debtDataStatus.debtBalance === 0) {
 						setStep(2);
+						break;
 					} else if (sufficientBalance) {
 						return (
 							<Burn
@@ -104,7 +105,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 					}
 				}
 			case 2:
-				return <Deposit onComplete={() => setStep(3)} />;
+				return <Deposit onComplete={() => setStep(3)} notify={notify} />;
 			case 3:
 				return <Success onComplete={() => handleFinish()} />;
 			default:
