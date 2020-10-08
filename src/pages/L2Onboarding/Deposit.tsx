@@ -27,7 +27,6 @@ export const Deposit: React.FC<DepositProps> = ({ onComplete, walletDetails, wal
 
 	useEffect(() => {
 		const getSNXBalance = async () => {
-			console.log(walletBalances);
 			setSNXBalance(walletBalances.crypto['SNX']);
 		};
 		getSNXBalance();

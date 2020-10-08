@@ -5,7 +5,6 @@ import MintrPanel from 'screens/MintrPanel';
 import L2Banner from 'components/Banner/L2Banner';
 import l2Wallets from 'assets/data/l2-wallets.json';
 const Main: FC<MainProps> = ({ wallet }) => {
-	console.log(wallet);
 	const bannerIsVisible = l2Wallets.find(
 		({ address }) => address.toLowerCase() === wallet.toLowerCase()
 	);
