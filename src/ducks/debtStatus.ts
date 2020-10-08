@@ -18,6 +18,8 @@ export type DebtStatus = {
 	currentCRatio: number;
 	transferableSNX: number;
 	debtBalanceOf: number;
+	liquidationRatio: number;
+	liquidationDelay: number;
 };
 
 const initialState: DebtStatusSlice = {

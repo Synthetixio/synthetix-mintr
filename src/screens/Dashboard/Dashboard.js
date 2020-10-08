@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash';
 import { formatCurrency } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import { showModal } from 'ducks/modal';
+import { getCurrentTheme } from 'ducks/ui';
 import { getWalletBalances, fetchBalancesRequest, getIsFetchingBalances } from 'ducks/balances';
 import {
 	getDebtStatusData,
@@ -22,11 +23,14 @@ import Header from 'components/Header';
 import { MicroSpinner } from 'components/Spinner';
 
 import { ButtonTertiary } from 'components/Button';
-import { H5, ButtonTertiaryLabel } from 'components/Typography';
+import { H5, ButtonTertiaryLabel, DataLarge, Figure } from 'components/Typography';
 import Skeleton from 'components/Skeleton';
+import Tooltip from 'components/Tooltip';
+import { Info } from 'components/Icons';
 import BalanceTable from './BalanceTable';
 import BarCharts from './BarCharts';
 import CollRatios from './CollRatios';
+import { FlexDivCentered } from 'styles/common';
 
 const Dashboard = ({
 	walletDetails,
@@ -40,6 +44,7 @@ const Dashboard = ({
 	isFetchingBalances,
 	isFetchingDebtData,
 	isFetchingEscrowData,
+	currentTheme,
 }) => {
 	const { t } = useTranslation();
 	const { currentWallet } = walletDetails;
@@ -69,6 +74,25 @@ const Dashboard = ({
 						</ButtonContainer>
 					</ContainerHeader>
 					<CollRatios debtStatusData={debtStatusData} />
+					<PricesContainer>
+						<LiquidationContainer>
+							<DataLarge>{t('dashboard.liquidation.title')}</DataLarge>
+							<FigureContainer>
+								<StyledFigure>{debtStatusData ? debtStatusData.liquidationRatio : 0}%</StyledFigure>
+								<Tooltip
+									mode={currentTheme}
+									title={t('tooltip.liquidation', {
+										liquidationDelay: debtStatusData ? debtStatusData.liquidationDelay / 3600 : 0,
+									})}
+									placement="top"
+								>
+									<IconContainer>
+										<Info />
+									</IconContainer>
+								</Tooltip>
+							</FigureContainer>
+						</LiquidationContainer>
+					</PricesContainer>
 					<PricesContainer>
 						{['SNX', 'ETH'].map(asset => {
 							return (
@@ -200,6 +224,24 @@ const CurrencyPrice = styled.div`
 	color: ${props => props.theme.colorStyles.body};
 `;
 
+const LiquidationContainer = styled(FlexDivCentered)`
+	justify-content: space-between;
+	width: 100%;
+`;
+
+const StyledFigure = styled(Figure)`
+	margin: 6px 0 0 0;
+	font-size: 22px;
+`;
+
+const FigureContainer = styled(FlexDivCentered)``;
+
+const IconContainer = styled.div`
+	margin-left: 10px;
+	width: 23px;
+	height: 23px;
+`;
+
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	walletBalances: getWalletBalances(state),
@@ -209,6 +251,7 @@ const mapStateToProps = state => ({
 	isFetchingBalances: getIsFetchingBalances(state),
 	isFetchingDebtData: getIsFetchingBDebtData(state),
 	isFetchingEscrowData: getIsFetchingEscrowData(state),
+	currentTheme: getCurrentTheme(state),
 });
 
 const mapDispatchToProps = {
