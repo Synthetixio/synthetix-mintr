@@ -8,6 +8,9 @@ import { Provider } from 'ethers/providers';
 export const sUSDTokenAddress = '0x57ab1ec28d129707052df4df418d58a2d46d5f51';
 export const ethTokenAddress = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 
+// Looks like gas estimate for 1inch isn't accurate all
+const GAS_LIMIT_BUFFER = 100000;
+
 const useOneInch = (signer: Signer | Provider) => {
 	const [oneInchContract, setOneInchContract] = useState<Contract | null>(null);
 
@@ -46,7 +49,7 @@ const useOneInch = (signer: Signer | Provider) => {
 
 				return oneInchContract.swap(...swapParams, {
 					gasPrice,
-					gasLimit,
+					gasLimit: gasLimit + GAS_LIMIT_BUFFER,
 					value: amountBN,
 				});
 			}
