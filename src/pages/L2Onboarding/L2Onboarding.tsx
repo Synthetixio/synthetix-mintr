@@ -29,7 +29,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	walletDetails,
 	debtDataStatus,
 }) => {
-	const [step, setStep] = useState<number>(0);
+	const [step, setStep] = useState<number>(3);
 	const [sufficientBalance, setSufficientBalance] = useState<boolean | string>('');
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
@@ -67,7 +67,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	}, [validateAvailableBalance, debtDataStatus]);
 
 	const handleFinish = () => {
-		// Direct to Mintr.io
+		window.open('https://l2.mintr.synthetix.io', '_self');
 	};
 
 	const returnStep = () => {
