@@ -19,7 +19,7 @@ const initialState: AppSliceState = {
 	isFetched: false,
 	isRefreshing: false,
 	fetchError: null,
-	isSystemUpgrading: true,
+	isSystemUpgrading: false,
 };
 
 const sliceName = 'app';
@@ -73,8 +73,7 @@ function* fetchSystemStatus() {
 		snxJS: { SystemStatus },
 	} = snxJSConnector;
 	try {
-		// const isSystemUpgrading = yield SystemStatus.isSystemUpgrading();
-		const isSystemUpgrading = true;
+		const isSystemUpgrading = yield SystemStatus.isSystemUpgrading();
 		yield put(fetchAppStatusSuccess({ reason: isSystemUpgrading }));
 		return true;
 	} catch (e) {
