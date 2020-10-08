@@ -100,6 +100,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 					} else {
 						return (
 							<BurnIntermediary
+								notify={notify}
 								currentsUSDBalance={sUSDBalance}
 								totalsUSDDebt={debtDataStatus.debtBalance}
 								onComplete={() => setSufficientBalance(true)}

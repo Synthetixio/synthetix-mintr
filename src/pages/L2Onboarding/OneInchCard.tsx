@@ -15,8 +15,9 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import { GasPrice, getCurrentGasPrice } from 'ducks/network';
-import { createTransaction } from 'ducks/transactions';
 import Spinner from 'components/Spinner';
+import { getEtherscanTxLink } from 'helpers/explorers';
+import { getWalletDetails } from 'ducks/wallet';
 
 export const OneInchCard = ({
 	rates,
@@ -24,21 +25,23 @@ export const OneInchCard = ({
 	walletBalances = { crypto: { sUSD: 0, ETH: 0 } },
 	onComplete,
 	currentGasPrice,
-	createTransaction,
+	notify,
+	walletDetails,
 }: {
 	rates: Rates;
 	debtStatus: DebtStatus;
 	walletBalances: any;
 	onComplete: Function;
 	currentGasPrice: GasPrice;
-	createTransaction: Function;
+	notify: any;
+	walletDetails: any;
 }) => {
 	const baseCurrencyKey = CRYPTO_CURRENCY_TO_KEY.ETH;
 	const quoteCurrencyKey = CRYPTO_CURRENCY_TO_KEY.sUSD;
 
 	const { signer } = snxJSConnector;
 	const { swap, oneInchContract } = useOneInch(signer);
-
+	const { networkId } = walletDetails;
 	const {
 		crypto: { ETH: ethBalance },
 	} = walletBalances;
@@ -137,24 +140,23 @@ export const OneInchCard = ({
 					disabled={!gasLimit || error}
 					onClick={async () => {
 						try {
+							setIsTxPending(true);
+
 							const tx = await swap(
 								baseCurrencyAmount.toString(),
 								currentGasPrice.formattedPrice,
 								gasLimit
 							);
 
-							if (tx) {
-								createTransaction({
-									hash: tx.hash,
-									status: 'pending',
-									info: '1Inch ETH <> sUSD exchange',
-									hasNotification: true,
-								});
-								snxJSConnector.provider.waitForTransaction(tx.hash).then(() => {
+							if (notify && tx) {
+								const { emitter } = notify.hash(tx.hash);
+								emitter.on('txConfirmed', () => {
 									setIsTxPending(false);
 									onComplete();
+									return {
+										onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
+									};
 								});
-								setIsTxPending(true);
 							}
 						} catch (e) {
 							console.log(e);
@@ -193,10 +195,7 @@ const mapStateToProps = (state: any) => ({
 	debtStatus: getDebtStatusData(state),
 	walletBalances: getWalletBalances(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	walletDetails: getWalletDetails(state),
 });
 
-const mapDispatchToProps = {
-	createTransaction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OneInchCard);
+export default connect(mapStateToProps, null)(OneInchCard);
