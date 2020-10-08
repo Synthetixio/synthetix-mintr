@@ -9,7 +9,7 @@ import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
-import { getCurrentWallet } from 'ducks/wallet';
+import { getCurrentWallet, getWalletDetails } from 'ducks/wallet';
 
 import MaintenancePage from '../MaintenanceMessage';
 import NotificationCenter from 'components/NotificationCenter';
@@ -19,12 +19,14 @@ import Main from '../Main';
 import MobileLanding from '../MobileLanding';
 
 import MainLayout from './components/MainLayout';
+import { NotifyProvider } from 'contexts/NotifyContext';
 
 const mapStateToProps = (state: RootState) => ({
 	currentTheme: getCurrentTheme(state),
 	currentPage: getCurrentPage(state),
 	appIsOnMaintenance: getAppIsOnMaintenance(state),
 	currentWallet: getCurrentWallet(state),
+	walletDetails: getWalletDetails(state),
 });
 
 const connector = connect(mapStateToProps, null);
@@ -61,25 +63,28 @@ const App: FC<AppProps> = ({
 	currentPage,
 	appIsOnMaintenance,
 	currentWallet,
+	walletDetails,
 }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
-
+	const { networkId } = walletDetails;
 	return (
-		<ThemeProvider theme={themeStyle}>
-			{appIsReady && (
-				<>
-					<GlobalEventsGate />
-					<MainLayout>
-						<CurrentPage
-							isOnMaintenance={appIsOnMaintenance}
-							page={currentPage}
-							wallet={currentWallet}
-						/>
-						<NotificationCenter />
-					</MainLayout>
-				</>
-			)}
-		</ThemeProvider>
+		<NotifyProvider networkId={networkId}>
+			<ThemeProvider theme={themeStyle}>
+				{appIsReady && (
+					<>
+						<GlobalEventsGate />
+						<MainLayout>
+							<CurrentPage
+								isOnMaintenance={appIsOnMaintenance}
+								page={currentPage}
+								wallet={currentWallet}
+							/>
+							<NotificationCenter />
+						</MainLayout>
+					</>
+				)}
+			</ThemeProvider>
+		</NotifyProvider>
 	);
 };
 
