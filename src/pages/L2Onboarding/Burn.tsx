@@ -7,7 +7,7 @@ import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { connect } from 'react-redux';
 import { getWalletDetails } from 'ducks/wallet';
 import { getCurrentGasPrice } from 'ducks/network';
-import { bytesFormatter, secondsToTime } from 'helpers/formatters';
+import { bigNumberFormatter, bytesFormatter, secondsToTime } from 'helpers/formatters';
 import snxJSConnector from 'helpers/snxJSConnector';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -29,6 +29,59 @@ interface BurnProps {
 	notify: any;
 }
 
+const useGetDebtData = (walletAddress, sUSDBytes) => {
+	const [data, setData] = useState({});
+	const SNXBytes = bytesFormatter('SNX');
+	useEffect(() => {
+		const getDebtData = async () => {
+			try {
+				const results = await Promise.all([
+					snxJSConnector.snxJS.Synthetix.debtBalanceOf(walletAddress, sUSDBytes),
+					snxJSConnector.snxJS.sUSD.balanceOf(walletAddress),
+					snxJSConnector.snxJS.SynthetixState.issuanceRatio(),
+					snxJSConnector.snxJS.ExchangeRates.rateForCurrency(SNXBytes),
+					snxJSConnector.snxJS.RewardEscrow.totalEscrowedAccountBalance(walletAddress),
+					snxJSConnector.snxJS.SynthetixEscrow.balanceOf(walletAddress),
+					snxJSConnector.snxJS.Synthetix.maxIssuableSynths(walletAddress),
+				]);
+				const [
+					debt,
+					sUSDBalance,
+					issuanceRatio,
+					SNXPrice,
+					totalRewardEscrow,
+					totalTokenSaleEscrow,
+					issuableSynths,
+				] = results.map(bigNumberFormatter);
+
+				let maxBurnAmount, maxBurnAmountBN;
+				if (debt > sUSDBalance) {
+					maxBurnAmount = sUSDBalance;
+					maxBurnAmountBN = results[1];
+				} else {
+					maxBurnAmount = debt;
+					maxBurnAmountBN = results[0];
+				}
+				const escrowBalance = totalRewardEscrow + totalTokenSaleEscrow;
+				setData({
+					issuanceRatio,
+					sUSDBalance,
+					maxBurnAmount,
+					maxBurnAmountBN,
+					SNXPrice,
+					burnAmountToFixCRatio: Math.max(debt - issuableSynths, 0),
+					debtEscrow: Math.max(escrowBalance * SNXPrice * issuanceRatio + debt - issuableSynths, 0),
+				});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getDebtData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [walletAddress]);
+	return data as any;
+};
+
 const Burn: React.FC<BurnProps> = ({
 	onComplete,
 	walletDetails,
@@ -44,6 +97,17 @@ const Burn: React.FC<BurnProps> = ({
 	const [gasLimit, setGasLimit] = useState(0);
 	const [isBurning, setIsBurning] = useState<boolean>(false);
 	const { t } = useTranslation();
+
+	const sUSDBytes = bytesFormatter('sUSD');
+	const {
+		maxBurnAmount,
+		maxBurnAmountBN,
+		sUSDBalance,
+		issuanceRatio,
+		SNXPrice,
+		burnAmountToFixCRatio,
+		debtEscrow,
+	} = useGetDebtData(currentWallet, sUSDBytes);
 
 	const useGetGasEstimate = (
 		burnAmount,
@@ -230,14 +294,7 @@ const Burn: React.FC<BurnProps> = ({
 					multiple
 					subtext={'UNLOCKING:'}
 					tokenName="SNX"
-					content={`${
-						Math.max(
-							(debtData.debtBalance - debtData.debtEscrow) /
-								debtData.targetCRatio /
-								debtData.SNXPrice,
-							0
-						) ?? 0
-					}`}
+					content={`${Math.max((maxBurnAmount - debtEscrow) / issuanceRatio / SNXPrice, 0) ?? 0}`}
 				/>
 			</ContainerStats>
 			{gasEstimateError && (
