@@ -15,6 +15,7 @@ import { formatCurrency } from 'helpers/formatters';
 
 interface BurnIntermediaryProps {
 	totalsUSDDebt: number;
+	currentsUSDBalance: number;
 	setRedirectToTrade: Function;
 	totalSynthsBalance: number;
 	onComplete: Function;
@@ -36,6 +37,7 @@ const HEADER_CONTENT = {
 
 const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	totalsUSDDebt,
+	currentsUSDBalance,
 	setRedirectToTrade,
 	totalSynthsBalance,
 	onComplete,
@@ -48,6 +50,10 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 
 	const renderDefaultLayout = () => (
 		<>
+			<Flex>
+				<Subtitle>CURRENT BALANCE:</Subtitle>
+				<Subtext>{currentsUSDBalance} sUSD</Subtext>
+			</Flex>
 			<Flex>
 				<Subtitle>REQUIRED AMOUNT:</Subtitle>
 				<Subtext>{totalsUSDDebt} sUSD</Subtext>
@@ -99,7 +105,6 @@ const Flex = styled.div`
 	display: flex;
 	justify-content: center;
 	width: 100%;
-	margin: 16px 0px;
 `;
 
 const Subtitle = styled.p`
