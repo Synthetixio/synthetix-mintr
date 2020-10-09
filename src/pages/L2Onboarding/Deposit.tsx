@@ -105,7 +105,7 @@ export const Deposit: React.FC<DepositProps> = ({
 				const { emitter } = notify.hash(tx.hash);
 				emitter.on('txConfirmed', () => {
 					setTxPending(false);
-					onComplete();
+					onComplete(tx.hash);
 					return {
 						message: 'Deposit confirmed',
 						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),

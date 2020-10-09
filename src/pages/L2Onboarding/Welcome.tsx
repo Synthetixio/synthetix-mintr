@@ -10,7 +10,7 @@ interface WelcomeProps {
 	onNext: Function;
 }
 
-export const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
+const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 	const steps = [
 		{
 			icon: <BurnIcon />,
@@ -119,3 +119,5 @@ const GradientText = styled.p`
 	-moz-background-clip: text;
 	-moz-text-fill-color: transparent;
 `;
+
+export default Welcome;
