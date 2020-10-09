@@ -47,11 +47,15 @@ export const OneInchCard = ({
 		crypto: { ETH: ethBalance },
 	} = walletBalances;
 
-	const amountToBuy = debtStatus.debtBalance !== 0 ? walletBalances.crypto[baseCurrencyKey] : 0;
+	const amountToBuy =
+		debtStatus.debtBalance && walletBalances.crypto[quoteCurrencyKey]
+			? debtStatus.debtBalance - walletBalances.crypto[quoteCurrencyKey]
+			: 0;
 
 	const [baseCurrencyAmount, setBaseCurrencyAmount] = useState<string>(
 		(amountToBuy / rates[baseCurrencyKey]).toString()
 	);
+
 	const [quoteCurrencyAmount, setQuoteCurrencyAmount] = useState<string>(amountToBuy.toString());
 	const [error, setError] = useState<string | null>(null);
 	const [isFetchingGasLimit, setIsFetchingGasLimit] = useState<boolean>(false);

@@ -19,6 +19,7 @@ import { addBufferToGasLimit } from 'helpers/networkHelper';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 import { getDebtStatusData } from 'ducks/debtStatus';
 import { getEtherscanTxLink } from 'helpers/explorers';
+import Spinner from 'components/Spinner';
 
 interface BurnProps {
 	onComplete: Function;
@@ -240,12 +241,12 @@ const Burn: React.FC<BurnProps> = ({
 					</Subtext>
 				</RetryButtonWrapper>
 			);
+		} else if (isBurning) {
+			return <Spinner />;
 		} else {
 			return (
 				<CTAButton
-					disabled={
-						isFetchingGasLimit || gasEstimateError || debtData.debtBalance === 0 || isBurning
-					}
+					disabled={isFetchingGasLimit || gasEstimateError || debtData.debtBalance === 0}
 					onClick={onBurn}
 				>
 					Burn
