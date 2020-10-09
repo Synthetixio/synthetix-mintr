@@ -14,7 +14,7 @@ interface L2BannerProps {
 	walletBalances: any;
 }
 const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage, walletBalances }) => {
-	// Only show the banner if their SNX balance is 5000 or less. 
+	// Only show the banner if their SNX balance is 5000 or less
 	const showBanner =
 		walletBalances &&
 		walletBalances.crypto &&
