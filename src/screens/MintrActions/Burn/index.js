@@ -13,10 +13,13 @@ import { SliderContext } from '../../../components/ScreenSlider';
 
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
 import errorMapper from '../../../helpers/errorMapper';
-import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import { useTranslation } from 'react-i18next';
+import { notifyHandler } from 'helpers/notifyHelper';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});
@@ -120,16 +123,22 @@ const useGetGasEstimate = (
 	return error;
 };
 
-const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) => {
+const Burn = ({
+	onDestroy,
+	walletDetails,
+	currentGasPrice,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [burnAmount, setBurnAmount] = useState('');
 	const [transferableAmount, setTransferableAmount] = useState('');
-	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
-	const { currentWallet, walletType, networkName } = walletDetails;
+	const { currentWallet, walletType, networkName, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { notify } = useNotifyContext();
 
 	const sUSDBytes = bytesFormatter('sUSD');
 	const {
@@ -231,24 +240,23 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 				});
 			}
 
-			if (transaction) {
-				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: `Burning ${formatCurrency(burnToTarget ? burnAmountToFixCRatio : burnAmount)} sUSD`,
-					hasNotification: true,
-				});
+			if (notify && transaction) {
+				const refetch = () => {
+					fetchDebtStatusRequest();
+					fetchBalancesRequest();
+				};
+
+				const message = `Burnt ${formatCurrency(
+					burnToTarget ? burnAmountToFixCRatio : burnAmount
+				)} sUSD`;
+
+				notifyHandler(notify, transaction.hash, networkId, refetch, message);
 				handleNext(2);
 			}
 		} catch (e) {
 			console.log(e);
 			const errorMessage = errorMapper(e, walletType);
 			console.log(errorMessage);
-			setTransactionInfo({
-				...transactionInfo,
-				transactionError: errorMessage,
-			});
 			handleNext(2);
 		}
 	};
@@ -259,7 +267,6 @@ const Burn = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) 
 		goBack: handlePrev,
 		maxBurnAmount,
 		issuanceRatio,
-		...transactionInfo,
 		burnAmount,
 		setBurnAmount: amount => {
 			const amountNB = Number(amount);
@@ -299,7 +306,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	createTransaction,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Burn);

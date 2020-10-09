@@ -11,9 +11,12 @@ import { SliderContext } from '../../../components/ScreenSlider';
 import { bytesFormatter, bigNumberFormatter, formatCurrency } from '../../../helpers/formatters';
 
 import errorMapper from '../../../helpers/errorMapper';
-import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
+import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 const useGetIssuanceData = (walletAddress, sUSDBytes) => {
 	const [data, setData] = useState({});
@@ -81,13 +84,19 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 	return error;
 };
 
-const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) => {
+const Mint = ({
+	onDestroy,
+	walletDetails,
+	currentGasPrice,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [mintAmount, setMintAmount] = useState('');
-	const [transactionInfo, setTransactionInfo] = useState({});
-	const { currentWallet, walletType, networkName } = walletDetails;
+	const { currentWallet, walletType, networkName, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { notify } = useNotifyContext();
 
 	const sUSDBytes = bytesFormatter('sUSD');
 	const { issuableSynths, issuanceRatio, SNXPrice, debtBalance, snxBalance } = useGetIssuanceData(
@@ -121,25 +130,21 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 					transactionSettings
 				);
 			}
-			if (transaction) {
-				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: `Minting ${formatCurrency(mintAmount)} sUSD`,
-					hasNotification: true,
-					type: 'mint',
-				});
+			if (notify && transaction) {
+				const refetch = () => {
+					fetchDebtStatusRequest();
+					fetchBalancesRequest();
+				};
+				const message = `Minted ${formatCurrency(mintAmount)} sUSD`;
+
+				notifyHandler(notify, transaction.hash, networkId, refetch, message);
+
 				handleNext(2);
 			}
 		} catch (e) {
 			console.log(e);
 			const errorMessage = errorMapper(e, walletType);
 			console.log(errorMessage);
-			setTransactionInfo({
-				...transactionInfo,
-				transactionError: errorMessage,
-			});
 			handleNext(2);
 		}
 	};
@@ -155,7 +160,6 @@ const Mint = ({ onDestroy, walletDetails, currentGasPrice, createTransaction }) 
 		setMintAmount,
 		issuanceRatio,
 		SNXPrice,
-		...transactionInfo,
 		isFetchingGasLimit,
 		gasLimit,
 		gasEstimateError,
@@ -174,7 +178,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	createTransaction,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Mint);

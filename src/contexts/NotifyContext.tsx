@@ -18,6 +18,7 @@ export const NotifyProvider: React.FC<INotifyProvider> = ({ children, networkId 
 			Notify({
 				dappId: '4e6901c8-10da-420c-9b5e-316fad480172',
 				networkId: networkId,
+				darkMode: true,
 			})
 		);
 	}, [networkId]);
@@ -32,4 +33,4 @@ export const NotifyProvider: React.FC<INotifyProvider> = ({ children, networkId 
 	);
 };
 
-export const usePoolContext = () => useContext(NotifyContext);
+export const useNotifyContext = () => useContext(NotifyContext);
