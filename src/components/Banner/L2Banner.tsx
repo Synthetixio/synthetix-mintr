@@ -12,7 +12,10 @@ interface L2BannerProps {
 const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage }) => {
 	return (
 		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
-			<StyledPMedium>Save on gas fees by staking on l2. Click here to move to l2!</StyledPMedium>
+			<StyledPMedium>
+				This wallet is eligible to participate in the Optimistic Ethereum L2 Testnet Trial - Try it
+				out now and earn L2 SNX rewards!
+			</StyledPMedium>
 			<DiagonalArrow />
 		</ContainerBanner>
 	);
