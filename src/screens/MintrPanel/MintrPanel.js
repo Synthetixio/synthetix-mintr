@@ -10,9 +10,9 @@ import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { DelegateModal } from '../../components/Modal';
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
-import { isGoerliTestnet } from 'helpers/networkHelper';
 
 import { getWalletDetails } from '../../ducks/wallet';
+import { SUPPORTED_NETWORKS_MAP } from 'helpers/networkHelper';
 
 const renderScreen = screen => {
 	switch (screen) {
@@ -34,9 +34,13 @@ const MainContainer = ({
 	currentTab,
 	modalState: { modalType, modalProps },
 	setCurrentTab,
-	walletDetails,
+	walletDetails: { networkId },
 }) => {
 	const { t } = useTranslation();
+	const RESTRICTED_TABS = {
+		[SUPPORTED_NETWORKS_MAP.GOERLI]: { depot: true, escrow: true, lpRewards: true },
+	};
+
 	return (
 		<MainContainerWrapper>
 			<Overlay isVisible={modalType}></Overlay>
@@ -47,11 +51,7 @@ const MainContainer = ({
 							key={tab}
 							isSelected={tab === currentTab}
 							onClick={() => setCurrentTab({ tab })}
-							disabled={
-								tab !== 'home' &&
-								tab !== 'transactionsHistory' &&
-								isGoerliTestnet(walletDetails.networkId)
-							}
+							disabled={RESTRICTED_TABS[networkId] && RESTRICTED_TABS[networkId][tab]}
 						>
 							{/* i18next-extract-disable-next-line */}
 							{t(`mainNavigation.tabs.${tab}`)}

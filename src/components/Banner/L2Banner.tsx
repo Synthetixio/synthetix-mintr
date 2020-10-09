@@ -9,7 +9,6 @@ import { fontFamilies } from 'styles/themes';
 interface L2BannerProps {
 	setCurrentPage: Function;
 }
-
 const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage }) => {
 	return (
 		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
