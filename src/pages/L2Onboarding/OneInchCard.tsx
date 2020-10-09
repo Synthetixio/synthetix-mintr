@@ -18,6 +18,7 @@ import { GasPrice, getCurrentGasPrice } from 'ducks/network';
 import Spinner from 'components/Spinner';
 import { getEtherscanTxLink } from 'helpers/explorers';
 import { getWalletDetails } from 'ducks/wallet';
+import { PLarge } from 'components/Typography';
 
 export const OneInchCard = ({
 	rates,
@@ -46,7 +47,7 @@ export const OneInchCard = ({
 		crypto: { ETH: ethBalance },
 	} = walletBalances;
 
-	const amountToBuy = debtStatus.debtBalance - walletBalances.crypto[baseCurrencyKey];
+	const amountToBuy = debtStatus.debtBalance !== 0 ? walletBalances.crypto[baseCurrencyKey] : 0;
 
 	const [baseCurrencyAmount, setBaseCurrencyAmount] = useState<string>(
 		(amountToBuy / rates[baseCurrencyKey]).toString()
@@ -56,10 +57,11 @@ export const OneInchCard = ({
 	const [isFetchingGasLimit, setIsFetchingGasLimit] = useState<boolean>(false);
 	const [gasLimit, setGasLimit] = useState<number | null>(null);
 	const [isTxPending, setIsTxPending] = useState<boolean>(false);
+	const [isCheckingBalance, setIsCheckingBalance] = useState<boolean>(false);
 
 	useEffect(() => {
 		const getGasEstimate = async () => {
-			if (!oneInchContract || !baseCurrencyAmount) return;
+			if (!oneInchContract) return;
 			setError(null);
 			try {
 				setIsFetchingGasLimit(true);
@@ -135,6 +137,11 @@ export const OneInchCard = ({
 			<GasIndicator isFetchingGasLimit={isFetchingGasLimit} gasLimit={gasLimit} />
 			{isTxPending ? (
 				<Spinner />
+			) : isCheckingBalance ? (
+				<>
+					<Spinner />
+					<PLarge style={{ textAlign: 'center' }}>Checking Balances...</PLarge>
+				</>
 			) : (
 				<StyledCTAButton
 					disabled={!gasLimit || error}
@@ -152,9 +159,11 @@ export const OneInchCard = ({
 								const { emitter } = notify.hash(tx.hash);
 								emitter.on('txConfirmed', () => {
 									setIsTxPending(false);
+									setIsCheckingBalance(true);
 									onComplete();
 									return {
 										onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
+										autoDismiss: false,
 									};
 								});
 							}
@@ -162,6 +171,7 @@ export const OneInchCard = ({
 							console.log(e);
 							setError(e.message);
 							setIsTxPending(false);
+							setIsCheckingBalance(false);
 						}
 					}}
 				>
