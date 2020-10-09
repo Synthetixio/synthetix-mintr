@@ -53,14 +53,14 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	const renderDefaultLayout = () => (
 		<>
 			<Flex>
-				<Subtitle>CURRENT BALANCE:</Subtitle>
+				<BalanceHeading>CURRENT BALANCE:</BalanceHeading>
 				<Subtext>{currentsUSDBalance} sUSD</Subtext>
 			</Flex>
-			<Flex>
-				<Subtitle>REQUIRED AMOUNT:</Subtitle>
+			<FlexNoMarginTop>
+				<BalanceHeading>REQUIRED AMOUNT:</BalanceHeading>
 				<Subtext>{totalsUSDDebt} sUSD</Subtext>
-			</Flex>
-			<Flex>
+			</FlexNoMarginTop>
+			<ButtonRow>
 				<ContainerButton onClick={() => handleRedirectToTrade()} href={null} target="_blank">
 					<ButtonIcon>
 						<TradeIcon />
@@ -77,7 +77,7 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 					<ButtonTitle>BUY sUSD</ButtonTitle>
 					<ButtonSubtext>from 1inch</ButtonSubtext>
 				</ContainerButton>
-			</Flex>
+			</ButtonRow>
 		</>
 	);
 
@@ -113,7 +113,17 @@ const Flex = styled.div`
 	width: 100%;
 `;
 
-const Subtitle = styled.p`
+const FlexNoMarginTop = styled(Flex)`
+	& > * {
+		margin-top: 0;
+	}
+`;
+
+const ButtonRow = styled(Flex)`
+	margin-top: 40px;
+`;
+
+const BalanceHeading = styled.p`
 	font-family: ${fontFamilies.regular};
 	font-size: 20px;
 	line-height: 24px;
