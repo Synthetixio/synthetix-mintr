@@ -15,13 +15,14 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 		{
 			icon: <BurnIcon />,
 			title: 'STEP 1: Burn all DEBT',
-			copy: 'Burn enough sUSD to cover your debt, as displayed in the left-hand panel on Mintr. ',
+			copy:
+				'Burn enough Goerli sUSD to cover your debt, as displayed in the left-hand panel on Mintr.',
 		},
 		{
 			icon: <SendIcon />,
 			title: 'STEP 2: DEPOSIT SNX to L2',
 			copy:
-				'This migrates your SNX from Layer 1 to Layer 2. If you complete this step, your SNX will not be on L1 anymore.',
+				'This migrates your Goerli SNX from Layer 1 to Layer 2. If you complete this step, your Goerli SNX will not be on L1 anymore.',
 		},
 	];
 
@@ -37,9 +38,10 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			<CenteredContainer>
 				<GradientText>WELCOME TO</GradientText>
 			</CenteredContainer>
-			<Header>MINTR on L2</Header>
+			<Header>MINTR on L2 Testnet</Header>
 			<Subtitle>
-				These steps complete the process of migrating your SNX from Layer 1 to Layer 2.
+				These steps complete the process of migrating your Goerli Testnet SNX from Layer 1 to Layer
+				2.
 			</Subtitle>
 			<FlexDivCentered>
 				{steps.map(({ icon, title, copy }, i) => returnStepBox(icon, title, copy, i))}
