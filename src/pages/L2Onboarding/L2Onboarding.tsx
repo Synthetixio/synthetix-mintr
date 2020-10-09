@@ -12,6 +12,7 @@ import Spinner from '../../components/Spinner';
 import { getWalletBalancesWithRates } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
 import Notify from 'bnc-notify';
+import { BLOCKNATIVE_KEY } from 'helpers/networkHelper';
 
 import Welcome from './Welcome';
 import Deposit from './Deposit';
@@ -40,9 +41,8 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	const [l2TransactionHash, setL2TransactionHash] = useState(null);
 
 	useEffect(() => {
-		// @TODO: Replace with correct prod key
 		const notify = Notify({
-			dappId: '4e6901c8-10da-420c-9b5e-316fad480172',
+			dappId: BLOCKNATIVE_KEY,
 			networkId: networkId,
 		});
 		setNotify(notify);

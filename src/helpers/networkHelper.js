@@ -65,6 +65,8 @@ export const L2_MESSENGER_ADDRESS = '0xd85B4C397E760F2f481b3C66A390a67bda882F77'
 
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
+export const BLOCKNATIVE_KEY = process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY;
+
 export const hasWeb3 = () => {
 	return window.web3;
 };
