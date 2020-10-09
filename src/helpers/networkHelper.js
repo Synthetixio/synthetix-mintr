@@ -57,6 +57,12 @@ export const SUPPORTED_WALLETS_MAP = {
 	PORTIS: 'Portis',
 };
 
+export const OVM_RPC_URL = 'http://uat.optimism.io:8545';
+
+export const L1_MESSENGER_ADDRESS = '0xd952a53095A360B80e05338B934D334f72fEAe48';
+
+export const L2_MESSENGER_ADDRESS = '0xd85B4C397E760F2f481b3C66A390a67bda882F77';
+
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const hasWeb3 = () => {

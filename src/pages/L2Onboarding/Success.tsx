@@ -4,28 +4,28 @@ import { ReactComponent as SuccessIcon } from '../../assets/images/L2/success.sv
 import { Stepper } from '../../components/L2Onboarding/Stepper';
 import { HeaderIcon } from 'components/L2Onboarding/HeaderIcon';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
+import { ExternalLink } from 'styles/common';
+import { getL2ExplorerTxLink } from 'helpers/explorers';
 
 interface SuccessProps {
 	onComplete: Function;
+	transactionHash: string;
 }
 
-export const Success: React.FC<SuccessProps> = ({ onComplete }) => {
+const Success: React.FC<SuccessProps> = ({ onComplete, transactionHash }) => {
 	return (
 		<PageContainer>
-			<Stepper />
+			<Stepper activeIndex={3} />
 			<HeaderIcon
 				title="Switch to L2 complete!"
 				subtext="Your SNX has now been migrated to L2 from L1, for increased transaction speed and reduced gas costs. "
 				icon={<SuccessIcon />}
 			/>
-			<CTAButton
-				style={{ margin: 48 }}
-				onClick={() => {
-					onComplete();
-				}}
-			>
-				Take me to mintr on l2
-			</CTAButton>
+
+			<ButtonBlock>
+				<StyledLink href={getL2ExplorerTxLink(transactionHash)}>Verify transaction ↗</StyledLink>
+				<Button onClick={onComplete}>Take me to mintr on l2</Button>
+			</ButtonBlock>
 		</PageContainer>
 	);
 };
@@ -37,3 +37,23 @@ const PageContainer = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+
+const ButtonBlock = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 60px;
+`;
+
+const Button = styled(CTAButton)`
+	margin-top: 36px;
+`;
+
+const StyledLink = styled(ExternalLink)`
+	text-transform: uppercase;
+	font-family: 'apercu-bold';
+	font-size: 14px;
+	color: #00e2df;
+`;
+
+export default Success;

@@ -5,11 +5,6 @@ import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
-import { Welcome } from './Welcome';
-import Deposit from './Deposit';
-import { Success } from './Success';
-import Burn from './Burn';
-import BurnIntermediary from './BurnIntermediary';
 import { bigNumberFormatter } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import snxJSConnector from '../../helpers/snxJSConnector';
@@ -17,6 +12,13 @@ import Spinner from '../../components/Spinner';
 import { getWalletBalancesWithRates } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
 import Notify from 'bnc-notify';
+
+import Welcome from './Welcome';
+import Deposit from './Deposit';
+import Success from './Success';
+import Burn from './Burn';
+import BurnIntermediary from './BurnIntermediary';
+import SwitchInProgress from './SwitchInProgress';
 
 interface L2OnboardingProps {
 	setCurrentPage: Function;
@@ -26,7 +28,7 @@ interface L2OnboardingProps {
 
 export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	setCurrentPage,
-	walletDetails,
+	walletDetails: { currentWallet, networkId },
 	debtDataStatus,
 }) => {
 	const [step, setStep] = useState<number>(0);
@@ -34,7 +36,8 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
 	const [notify, setNotify] = useState(null);
-	const { currentWallet, networkId } = walletDetails;
+	const [l1TransactionHash, setL1TransactionHash] = useState(null);
+	const [l2TransactionHash, setL2TransactionHash] = useState(null);
 
 	useEffect(() => {
 		// @TODO: Replace with correct prod key
@@ -49,6 +52,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 		const sUSDBalanceBN = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
 		const sUSDBalanceNB = bigNumberFormatter(sUSDBalanceBN);
 		setSUSDBalance(sUSDBalanceNB);
+
 		if (!debtDataStatus) return;
 		if (debtDataStatus.debtBalance !== null) {
 			if (sUSDBalanceNB >= debtDataStatus.debtBalance) {
@@ -62,7 +66,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 
 	useEffect(() => {
 		validateAvailableBalance();
-		const refreshInterval = setInterval(validateAvailableBalance, 5000);
+		const refreshInterval = setInterval(validateAvailableBalance, 60 * 1000);
 		return () => clearInterval(refreshInterval);
 	}, [validateAvailableBalance, debtDataStatus]);
 
@@ -105,9 +109,28 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 					}
 				}
 			case 2:
-				return <Deposit onComplete={() => setStep(3)} notify={notify} />;
+				return (
+					<Deposit
+						onComplete={transactionHash => {
+							setL1TransactionHash(transactionHash);
+							setStep(3);
+						}}
+						notify={notify}
+					/>
+				);
 			case 3:
-				return <Success onComplete={() => handleFinish()} />;
+				return (
+					<SwitchInProgress
+						onComplete={transactionHash => {
+							setL2TransactionHash(transactionHash);
+							setStep(4);
+						}}
+						networkId={networkId}
+						transactionHash={l1TransactionHash}
+					/>
+				);
+			case 4:
+				return <Success onComplete={() => handleFinish()} transactionHash={l2TransactionHash} />;
 			default:
 				return <Welcome onNext={() => setStep(1)} />;
 		}
