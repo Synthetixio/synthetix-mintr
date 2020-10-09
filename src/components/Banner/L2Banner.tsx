@@ -18,6 +18,7 @@ const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage, walletBalances }) =
 	const showBanner =
 		walletBalances &&
 		walletBalances.crypto &&
+		walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX] > 0 &&
 		walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX] <= 5000;
 	return showBanner ? (
 		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
