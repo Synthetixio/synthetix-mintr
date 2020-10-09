@@ -177,7 +177,7 @@ export const Deposit: React.FC<DepositProps> = ({
 
 	return (
 		<PageContainer>
-			<Stepper activeIndex={3} />
+			<Stepper activeIndex={1} />
 			<HeaderIcon
 				title="Deposit all SNX"
 				subtext="This migrates your SNX from Layer 1 to Layer 2. If you complete this step, your SNX will not be on L1 anymore."
