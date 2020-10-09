@@ -11,6 +11,7 @@ import PageContainer from 'components/PageContainer';
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
 import { isMainNet } from 'helpers/networkHelper';
+import { getRedirectToTrade } from 'ducks/ui';
 
 const initialScenario = null;
 
@@ -29,9 +30,11 @@ const actionLabelMapper = {
 	},
 };
 
-const Home = ({ walletDetails: { networkId } }) => {
+const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 	const { t } = useTranslation();
-	const [currentScenario, setCurrentScenario] = useState(initialScenario);
+	const [currentScenario, setCurrentScenario] = useState(
+		redirectToTrade ? 'trade' : initialScenario
+	);
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
@@ -91,9 +94,6 @@ const ButtonRow = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 34px;
-	/* margin: 0 0 40px 0;
-	display: flex;
-	justify-content: space-between; */
 `;
 
 const ActionImage = styled.img`
@@ -103,6 +103,7 @@ const ActionImage = styled.img`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
+	redirectToTrade: getRedirectToTrade(state),
 });
 
 export default connect(mapStateToProps, null)(Home);

@@ -17,6 +17,7 @@ import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../hel
 
 import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
+import { getRedirectToTrade, setRedirectToTrade } from 'ducks/ui';
 
 const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 	const [data, setData] = useState(null);
@@ -110,7 +111,14 @@ const useGetGasEstimate = (
 	return error;
 };
 
-const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice }) => {
+const Trade = ({
+	onDestroy,
+	walletDetails,
+	createTransaction,
+	currentGasPrice,
+	redirectToTrade,
+	setRedirectToTrade,
+}) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [baseSynth, setBaseSynth] = useState(null);
 	const [baseAmount, setBaseAmount] = useState('');
@@ -121,6 +129,13 @@ const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice })
 	const { currentWallet, walletType, networkName } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+
+	useEffect(() => {
+		if (redirectToTrade) {
+			setRedirectToTrade(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [redirectToTrade]);
 
 	const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
 	const gasEstimateError = useGetGasEstimate(
@@ -239,10 +254,12 @@ const Trade = ({ onDestroy, walletDetails, createTransaction, currentGasPrice })
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	redirectToTrade: getRedirectToTrade(state),
 });
 
 const mapDispatchToProps = {
 	createTransaction,
+	setRedirectToTrade,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trade);
