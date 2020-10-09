@@ -5,17 +5,26 @@ import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from '../../constants/ui';
 import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
+import { RootState } from 'ducks/types';
+import { getWalletBalances } from 'ducks/balances';
+import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
 
 interface L2BannerProps {
 	setCurrentPage: Function;
+	walletBalances: any;
 }
-const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage }) => {
-	return (
+const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage, walletBalances }) => {
+	// Only show the banner if their SNX balance is 5000 or less. 
+	const showBanner =
+		walletBalances &&
+		walletBalances.crypto &&
+		walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX] <= 5000;
+	return showBanner ? (
 		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
 			<StyledPMedium>Save on gas fees by staking on l2. Click here to move to l2!</StyledPMedium>
 			<DiagonalArrow />
 		</ContainerBanner>
-	);
+	) : null;
 };
 
 const ContainerBanner = styled.div`
@@ -37,8 +46,12 @@ const StyledPMedium = styled.p`
 	margin-right: 4px;
 `;
 
+const mapStateToProps = (state: RootState) => ({
+	walletBalances: getWalletBalances(state),
+});
+
 const mapDispatchToProps = {
 	setCurrentPage,
 };
 
-export default connect(null, mapDispatchToProps)(L2Banner);
+export default connect(mapStateToProps, mapDispatchToProps)(L2Banner);
