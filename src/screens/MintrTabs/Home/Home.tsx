@@ -10,7 +10,7 @@ import PageContainer from 'components/PageContainer';
 
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
-import { isMainNet } from 'helpers/networkHelper';
+import { isGoerliTestnet, isMainNet } from 'helpers/networkHelper';
 import { getRedirectToTrade } from 'ducks/ui';
 
 const initialScenario = null;
@@ -35,6 +35,7 @@ const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 	const [currentScenario, setCurrentScenario] = useState(
 		redirectToTrade ? 'trade' : initialScenario
 	);
+
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
@@ -43,7 +44,7 @@ const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 				{ACTIONS.map(action => {
 					return (
 						<Button
-							disabled={action === 'track' && !isMainNet(networkId)}
+							disabled={(action === 'track' && !isMainNet(networkId)) || isGoerliTestnet(networkId)}
 							key={action}
 							onClick={() => setCurrentScenario(action)}
 							big
@@ -61,7 +62,7 @@ const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 	);
 };
 
-const Button = styled.button`
+const Button = styled.button<{ big }>`
 	flex: 1;
 	cursor: pointer;
 	height: 352px;

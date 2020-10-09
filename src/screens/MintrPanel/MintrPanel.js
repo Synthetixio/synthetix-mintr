@@ -10,6 +10,9 @@ import { Home, Depot, Transactions, Escrow, LPRewards } from '../MintrTabs';
 import { TabButton } from '../../components/Button';
 import { DelegateModal } from '../../components/Modal';
 import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
+import { isGoerliTestnet } from 'helpers/networkHelper';
+
+import { getWalletDetails } from '../../ducks/wallet';
 
 const renderScreen = screen => {
 	switch (screen) {
@@ -27,7 +30,12 @@ const renderScreen = screen => {
 	}
 };
 
-const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setCurrentTab }) => {
+const MainContainer = ({
+	currentTab,
+	modalState: { modalType, modalProps },
+	setCurrentTab,
+	walletDetails,
+}) => {
 	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
@@ -39,6 +47,11 @@ const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setC
 							key={tab}
 							isSelected={tab === currentTab}
 							onClick={() => setCurrentTab({ tab })}
+							disabled={
+								tab !== 'home' &&
+								tab !== 'transactionsHistory' &&
+								isGoerliTestnet(walletDetails.networkId)
+							}
 						>
 							{/* i18next-extract-disable-next-line */}
 							{t(`mainNavigation.tabs.${tab}`)}
@@ -79,6 +92,7 @@ const Overlay = styled.div`
 const mapStateToProps = state => ({
 	currentTab: getCurrentTab(state),
 	modalState: getModalState(state),
+	walletDetails: getWalletDetails(state),
 });
 
 const mapDispatchToProps = {
