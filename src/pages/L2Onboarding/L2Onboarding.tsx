@@ -29,7 +29,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	walletDetails,
 	debtDataStatus,
 }) => {
-	const [step, setStep] = useState<number>(3);
+	const [step, setStep] = useState<number>(0);
 	const [sufficientBalance, setSufficientBalance] = useState<boolean | string>('');
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
