@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SendIcon } from '../../assets/images/L2/send.svg';
 import { Stepper } from '../../components/L2Onboarding/Stepper';
@@ -20,6 +20,13 @@ import { bigNumberFormatter } from 'helpers/formatters';
 import errorMapper from 'helpers/errorMapper';
 import Spinner from 'components/Spinner';
 
+const INTERVAL_TIMER = 5000;
+
+const ESTIMATE_TYPES = {
+	APPROVE: 'approve',
+	DEPOSIT: 'deposit',
+};
+
 interface DepositProps {
 	onComplete: Function;
 	walletDetails: any;
@@ -35,12 +42,15 @@ export const Deposit: React.FC<DepositProps> = ({
 	currentGasPrice,
 	notify,
 }) => {
-	const [snxBalance, setSNXBalance] = useState<number>(0);
+	const snxBalance = (walletBalances && walletBalances.crypto['SNX']) || 0;
+
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
-	const [estimateType, setEstimateType] = useState('approve');
+	const [estimateType, setEstimateType] = useState(ESTIMATE_TYPES.APPROVE);
 	const [hasAllowance, setAllowance] = useState(false);
 	const [txPending, setTxPending] = useState(false);
+	const [gasEstimateError, setGasEstimateError] = useState(null);
+
 	const { t } = useTranslation();
 	const { networkId, currentWallet, walletType } = walletDetails;
 
@@ -64,7 +74,8 @@ export const Deposit: React.FC<DepositProps> = ({
 				const { emitter } = notify.hash(tx.hash);
 				emitter.on('txConfirmed', () => {
 					setTxPending(false);
-					fetchAllowance();
+					console.log('here');
+					setAllowance(true);
 					return {
 						message: 'Approval confirmed',
 						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
@@ -108,50 +119,37 @@ export const Deposit: React.FC<DepositProps> = ({
 		}
 	};
 
-	const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
-		const [error, setError] = useState(null);
-		useEffect(() => {
-			const {
-				snxJS: { SecondaryDeposit, Synthetix },
-				utils,
-			} = snxJSConnector;
-			const getGasEstimate = async () => {
-				setError(null);
-				try {
-					setFetchingGasLimit(true);
-					let gasEstimate;
-					if (estimateType === 'approve') {
-						gasEstimate = await Synthetix.contract.estimate.approve(
-							SecondaryDeposit.contract.address,
-							utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
-						);
-					} else {
-						const snxBalanceBN = utils.parseEther(snxBalance.toString());
-						gasEstimate = await SecondaryDeposit.contract.estimate.deposit(snxBalanceBN);
-					}
-					setGasLimit(addBufferToGasLimit(gasEstimate));
-				} catch (e) {
-					const errorMessage = (e && e.message) || 'input.error.gasEstimate';
-					setError(t(errorMessage));
-				}
-				setFetchingGasLimit(false);
-			};
-			getGasEstimate();
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [setFetchingGasLimit, setGasLimit, estimateType]);
-		return error;
-	};
-
-	const gasEstimateError = useGetGasEstimate(setFetchingGasLimit, setGasLimit);
-
 	useEffect(() => {
-		const getSNXBalance = async () => {
-			setSNXBalance(walletBalances.crypto['SNX']);
+		const {
+			snxJS: { SecondaryDeposit, Synthetix },
+			utils,
+		} = snxJSConnector;
+		const getGasEstimate = async () => {
+			setGasEstimateError(null);
+			try {
+				setFetchingGasLimit(true);
+				let gasEstimate;
+				if (estimateType === ESTIMATE_TYPES.APPROVE) {
+					gasEstimate = await Synthetix.contract.estimate.approve(
+						SecondaryDeposit.contract.address,
+						utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
+					);
+				} else {
+					const snxBalanceBN = utils.parseEther(snxBalance.toString());
+					gasEstimate = await SecondaryDeposit.contract.estimate.deposit(snxBalanceBN);
+				}
+				setGasLimit(addBufferToGasLimit(gasEstimate));
+			} catch (e) {
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setGasEstimateError(t(errorMessage));
+			}
+			setFetchingGasLimit(false);
 		};
-		getSNXBalance();
-	}, [walletBalances]);
+		getGasEstimate();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [setFetchingGasLimit, setGasLimit, estimateType]);
 
-	const fetchAllowance = useCallback(async () => {
+	const fetchAllowance = async () => {
 		const {
 			snxJS: { Synthetix, SecondaryDeposit },
 		} = snxJSConnector;
@@ -159,21 +157,23 @@ export const Deposit: React.FC<DepositProps> = ({
 			const allowance = await Synthetix.allowance(currentWallet, SecondaryDeposit.contract.address);
 			const hasAllowance = bigNumberFormatter(allowance) !== 0;
 			if (hasAllowance) {
-				setEstimateType('deposit');
+				setEstimateType(ESTIMATE_TYPES.DEPOSIT);
 			} else {
-				setEstimateType('approve');
+				setEstimateType(ESTIMATE_TYPES.APPROVE);
 			}
 			setAllowance(bigNumberFormatter(allowance) === 0 ? false : true);
 		} catch (e) {
 			console.log(e);
 		}
-	}, [currentWallet]);
+	};
 
 	useEffect(() => {
+		if (!currentWallet) return;
 		fetchAllowance();
-		const refreshInterval = setInterval(fetchAllowance, 5000);
+		const refreshInterval = setInterval(fetchAllowance, INTERVAL_TIMER);
 		return () => clearInterval(refreshInterval);
-	}, [fetchAllowance]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentWallet]);
 
 	return (
 		<PageContainer>

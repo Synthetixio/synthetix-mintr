@@ -26,7 +26,7 @@ interface L2OnboardingProps {
 
 export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	setCurrentPage,
-	walletDetails,
+	walletDetails: { currentWallet, networkId },
 	debtDataStatus,
 }) => {
 	const [step, setStep] = useState<number>(0);
@@ -34,7 +34,6 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
 	const [notify, setNotify] = useState(null);
-	const { currentWallet, networkId } = walletDetails;
 
 	useEffect(() => {
 		// @TODO: Replace with correct prod key
@@ -49,6 +48,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 		const sUSDBalanceBN = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
 		const sUSDBalanceNB = bigNumberFormatter(sUSDBalanceBN);
 		setSUSDBalance(sUSDBalanceNB);
+
 		if (!debtDataStatus) return;
 		if (debtDataStatus.debtBalance !== null) {
 			if (sUSDBalanceNB >= debtDataStatus.debtBalance) {
@@ -62,7 +62,7 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 
 	useEffect(() => {
 		validateAvailableBalance();
-		const refreshInterval = setInterval(validateAvailableBalance, 5000);
+		const refreshInterval = setInterval(validateAvailableBalance, 60 * 1000);
 		return () => clearInterval(refreshInterval);
 	}, [validateAvailableBalance, debtDataStatus]);
 

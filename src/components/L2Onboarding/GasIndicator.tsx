@@ -24,7 +24,6 @@ const TransactionPriceIndicator = ({
 	ethRate,
 	...style
 }) => {
-	// const { t } = useTranslation();
 	return (
 		<Container {...style}>
 			<Block>
