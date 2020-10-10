@@ -1,7 +1,7 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { takeLatest, put, select } from 'redux-saga/effects';
 import orderBy from 'lodash/orderBy';
-import { CRYPTO_CURRENCY_TO_KEY } from '../constants/currency';
+import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
 import { getRates } from './rates';
 import { getCurrentWallet } from './wallet';
 import { getBalances } from 'dataFetcher';
@@ -137,6 +137,9 @@ export const getWalletBalancesWithRates = createSelector(
 );
 
 export const getTotalSynthsBalance = (state: RootState) => getBalanceState(state).totalSynths;
+
+export const getSNXBalance = (state: RootState) =>
+	getBalanceState(state)?.crypto?.[CRYPTO_CURRENCY_TO_KEY.SNX];
 
 function* fetchBalances() {
 	const currentWallet = yield select(getCurrentWallet);

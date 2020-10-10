@@ -6,23 +6,17 @@ import { PAGES_BY_KEY } from '../../constants/ui';
 import { connect } from 'react-redux';
 import { fontFamilies } from 'styles/themes';
 import { RootState } from 'ducks/types';
-import { getWalletBalances } from 'ducks/balances';
-import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
+import { getSNXBalance } from 'ducks/balances';
 import { getWalletDetails } from 'ducks/wallet';
 import { isGoerliTestnet } from 'helpers/networkHelper';
 
 interface L2BannerProps {
 	setCurrentPage: Function;
-	walletBalances: any;
 	walletDetails: any;
+	snxBalance: number;
 }
-const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage, walletBalances, walletDetails }) => {
-	// Only show the banner if their SNX balance is 5000 or less
-	const showBanner =
-		isGoerliTestnet(walletDetails.networkId) &&
-		walletBalances &&
-		walletBalances.crypto &&
-		walletBalances.crypto[CRYPTO_CURRENCY_TO_KEY.SNX] > 0;
+const L2Banner: React.FC<L2BannerProps> = ({ setCurrentPage, snxBalance, walletDetails }) => {
+	const showBanner = isGoerliTestnet(walletDetails.networkId) && snxBalance;
 
 	return showBanner ? (
 		<ContainerBanner onClick={() => setCurrentPage(PAGES_BY_KEY.L2ONBOARDING)}>
@@ -55,7 +49,7 @@ const StyledPMedium = styled.p`
 `;
 
 const mapStateToProps = (state: RootState) => ({
-	walletBalances: getWalletBalances(state),
+	snxBalance: getSNXBalance(state),
 	walletDetails: getWalletDetails(state),
 });
 
