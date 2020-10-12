@@ -49,18 +49,6 @@ const GlobalEventsGate: FC<PropsFromRedux> = ({
 		// 	snxJS: { sUSD, FeePool, Synthetix, RewardEscrow, SynthetixEscrow },
 		// } = snxJSConnector;
 
-		// sUSD.contract.on(ISSUANCE_EVENTS.ISSUED, (account: string) => {
-		// 	if (account === currentWallet) {
-		// 		fetchDebtStatusRequest();
-		// 		fetchBalancesRequest();
-		// 	}
-		// });
-		// sUSD.contract.on(ISSUANCE_EVENTS.BURNED, (account: string) => {
-		// 	if (account === currentWallet) {
-		// 		fetchDebtStatusRequest();
-		// 		fetchBalancesRequest();
-		// 	}
-		// });
 		// FeePool.contract.on(FEEPOOL_EVENTS.CLAIMED, (account: string) => {
 		// 	if (account === currentWallet) {
 		// 		fetchBalancesRequest();
