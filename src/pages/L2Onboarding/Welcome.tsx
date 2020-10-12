@@ -22,7 +22,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			icon: <SendIcon />,
 			title: 'STEP 2: DEPOSIT SNX to L2',
 			copy:
-				'This migrates your SNX from Goerli testnet Layer 1 to Layer 2 testnet. This will not affect your L1 SNX on mainnet. ',
+				"This migrates your SNX from Goerli testnet L1 to L2 testnet. This won't affect your L1 SNX on mainnet. ",
 		},
 	];
 

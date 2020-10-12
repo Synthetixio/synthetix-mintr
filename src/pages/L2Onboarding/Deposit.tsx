@@ -14,13 +14,15 @@ import snxJSConnector from 'helpers/snxJSConnector';
 import { TOKEN_ALLOWANCE_LIMIT } from 'constants/network';
 import { getCurrentGasPrice } from 'ducks/network';
 import { getEtherscanTxLink } from 'helpers/explorers';
-import { addBufferToGasLimit } from 'helpers/networkHelper';
+import { addBufferToGasLimit, formatGasPrice } from 'helpers/networkHelper';
 import { useTranslation } from 'react-i18next';
 import { bigNumberFormatter } from 'helpers/formatters';
 import errorMapper from 'helpers/errorMapper';
 import Spinner from 'components/Spinner';
 
 const INTERVAL_TIMER = 5000;
+
+const DEFAULT_GAS_PRICE = 1;
 
 const ESTIMATE_TYPES = {
 	APPROVE: 'approve',
@@ -67,7 +69,7 @@ export const Deposit: React.FC<DepositProps> = ({
 				utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit,
-					gasPrice: currentGasPrice.formattedPrice,
+					gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
 				}
 			);
 			if (notify && tx) {
@@ -99,7 +101,7 @@ export const Deposit: React.FC<DepositProps> = ({
 			const snxBalanceBN = utils.parseEther(snxBalance.toString());
 			const tx = await SecondaryDeposit.contract.deposit(snxBalanceBN, {
 				gasLimit,
-				gasPrice: currentGasPrice.formattedPrice,
+				gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
 			});
 			if (notify && tx) {
 				const { emitter } = notify.hash(tx.hash);
@@ -192,11 +194,11 @@ export const Deposit: React.FC<DepositProps> = ({
 				</ContainerStats>
 			)}
 			<ContainerStats>
-				<GasIndicator
+				{/* <GasIndicator
 					style={{ margin: 0 }}
 					isFetchingGasLimit={isFetchingGasLimit}
 					gasLimit={gasLimit}
-				/>
+				/> */}
 			</ContainerStats>
 			{txPending ? (
 				<Spinner />
