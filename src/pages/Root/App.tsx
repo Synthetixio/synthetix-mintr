@@ -68,23 +68,21 @@ const App: FC<AppProps> = ({
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
 	const { networkId } = walletDetails;
 	return (
-		<NotifyProvider networkId={networkId}>
-			<ThemeProvider theme={themeStyle}>
-				{appIsReady && (
-					<>
-						<GlobalEventsGate />
-						<MainLayout>
-							<CurrentPage
-								isOnMaintenance={appIsOnMaintenance}
-								page={currentPage}
-								wallet={currentWallet}
-							/>
-							<NotificationCenter />
-						</MainLayout>
-					</>
-				)}
-			</ThemeProvider>
-		</NotifyProvider>
+		<ThemeProvider theme={themeStyle}>
+			{appIsReady && (
+				<NotifyProvider networkId={networkId ? networkId : 1}>
+					<GlobalEventsGate />
+					<MainLayout>
+						<CurrentPage
+							isOnMaintenance={appIsOnMaintenance}
+							page={currentPage}
+							wallet={currentWallet}
+						/>
+						<NotificationCenter />
+					</MainLayout>
+				</NotifyProvider>
+			)}
+		</ThemeProvider>
 	);
 };
 
