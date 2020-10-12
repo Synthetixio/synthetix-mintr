@@ -67,8 +67,6 @@ export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const BLOCKNATIVE_KEY = process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY;
 
-console.log(process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY);
-
 export const hasWeb3 = () => {
 	return window.web3;
 };
