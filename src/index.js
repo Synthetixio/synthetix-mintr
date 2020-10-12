@@ -15,3 +15,16 @@ ReactDOM.render(
 	</Suspense>,
 	document.getElementById('root')
 );
+
+if (module.hot) {
+	module.hot.accept('./pages/Root', () => {
+		ReactDOM.render(
+			<Suspense fallback={<div />}>
+				<Provider store={store}>
+					<Root />
+				</Provider>
+			</Suspense>,
+			document.getElementById('root')
+		);
+	});
+}

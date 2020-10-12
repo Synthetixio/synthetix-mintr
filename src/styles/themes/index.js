@@ -1,7 +1,7 @@
 import themeLight from './light';
 import themeDark from './dark';
 
-const fontFamilies = {
+export const fontFamilies = {
 	regular: 'apercu-regular',
 	medium: 'apercu-medium',
 	bold: 'apercu-bold',

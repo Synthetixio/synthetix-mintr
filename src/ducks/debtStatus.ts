@@ -17,6 +17,7 @@ export type DebtStatus = {
 	targetCRatio: number;
 	currentCRatio: number;
 	transferableSNX: number;
+	debtBalance: number;
 	debtBalanceOf: number;
 	liquidationRatio: number;
 	liquidationDelay: number;
