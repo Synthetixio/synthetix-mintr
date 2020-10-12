@@ -180,7 +180,7 @@ export const Deposit: React.FC<DepositProps> = ({
 			<Stepper activeIndex={1} />
 			<HeaderIcon
 				title="Deposit all SNX"
-				subtext="This migrates your SNX from Layer 1 to Layer 2. If you complete this step, your SNX will not be on L1 anymore."
+				subtext="This migrates your SNX from Goerli testnet Layer 1 to Layer 2 testnet. If you complete this step, it will not affect your L1 SNX on mainnet."
 				icon={<SendIcon />}
 			/>
 			<ContainerStats>

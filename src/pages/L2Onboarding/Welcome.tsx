@@ -22,7 +22,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			icon: <SendIcon />,
 			title: 'STEP 2: DEPOSIT SNX to L2',
 			copy:
-				'This migrates your Goerli SNX from Layer 1 to Layer 2. If you complete this step, your Goerli SNX will not be on L1 anymore.',
+				'This migrates your SNX from Goerli testnet Layer 1 to Layer 2 testnet. This will not affect your L1 SNX on mainnet. ',
 		},
 	];
 
@@ -40,8 +40,8 @@ const Welcome: React.FC<WelcomeProps> = ({ onNext }) => {
 			</CenteredContainer>
 			<Header>MINTR on L2 Testnet</Header>
 			<Subtitle>
-				These steps complete the process of migrating your Goerli Testnet SNX from Layer 1 to Layer
-				2.
+				These steps complete the process of migrating your SNX from Goerli testnet Layer 1 to Layer
+				2 testnet.
 			</Subtitle>
 			<FlexDivCentered>
 				{steps.map(({ icon, title, copy }, i) => returnStepBox(icon, title, copy, i))}
