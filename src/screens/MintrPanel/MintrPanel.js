@@ -30,6 +30,15 @@ const renderScreen = screen => {
 	}
 };
 
+const RESTRICTED_TABS = {
+	[SUPPORTED_NETWORKS_MAP.GOERLI]: {
+		depot: true,
+		escrow: true,
+		lpRewards: true,
+		transactionsHistory: true,
+	},
+};
+
 const MainContainer = ({
 	currentTab,
 	modalState: { modalType, modalProps },
@@ -37,9 +46,6 @@ const MainContainer = ({
 	walletDetails: { networkId },
 }) => {
 	const { t } = useTranslation();
-	const RESTRICTED_TABS = {
-		[SUPPORTED_NETWORKS_MAP.GOERLI]: { depot: true, escrow: true, lpRewards: true },
-	};
 
 	return (
 		<MainContainerWrapper>

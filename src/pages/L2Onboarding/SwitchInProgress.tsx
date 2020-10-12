@@ -54,8 +54,8 @@ const SwitchInProgress: FC<SwitchInProgressProps> = ({
 		<PageContainer>
 			<Stepper activeIndex={2} />
 			<HeaderIcon
-				title="Switch in progress..."
-				subtext="Your SNX are being transferred from L1 to L2. This could take a few minutes."
+				title="Mingration in progress..."
+				subtext="Your transaction is being processed."
 				icon={<SwitchingIcon />}
 			/>
 			<Spinner />

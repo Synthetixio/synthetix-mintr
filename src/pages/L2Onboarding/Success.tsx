@@ -18,7 +18,7 @@ const Success: React.FC<SuccessProps> = ({ onComplete, transactionHash }) => {
 			<Stepper activeIndex={3} />
 			<HeaderIcon
 				title="Switch to L2 complete!"
-				subtext="Your SNX has now been migrated to L2 from L1, for increased transaction speed and reduced gas costs. "
+				subtext="Your SNX has now been migrated to L2 testnet from L1 Goerli testnet. You can now try the increased transaction speed and reduced gas costs."
 				icon={<SuccessIcon />}
 			/>
 
