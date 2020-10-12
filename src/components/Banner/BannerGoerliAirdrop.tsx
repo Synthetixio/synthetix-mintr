@@ -60,7 +60,7 @@ const L2Banner: FC<L2BannerProps> = ({ setCurrentPage, snxBalance, walletAddress
 		<ContainerBanner>
 			<StyledPMedium>
 				This wallet is eligible to participate in the Optimistic Ethereum L2 Testnet Trial - Try it
-				out now by connecting to the Goerli network!
+				out now by connecting to the Goerli network on Metamask!
 			</StyledPMedium>
 			<CloseButton onClick={onCloseButton}>
 				<DiagonalArrow />
