@@ -1,22 +1,20 @@
 import { getEtherscanTxLink } from 'helpers/explorers';
-import useInterval from 'hooks/useInterval';
 
 export function notifyHandler(notify, hash, networkId, callback, message) {
 	let { emitter } = notify.hash(hash);
-	emitter.on('all', () => {});
 	emitter.on('txConfirmed', result => {
-		useInterval(() => {
+		setTimeout(() => {
 			callback();
-		}, 5000);
-
+		}, 15000);
 		return {
 			message: message ? message : undefined,
-			onclick: () =>
+			onclick: () => {
 				window.open(
 					`${getEtherscanTxLink(networkId, result.hash)}`,
 					'_blank',
 					'noopener, norefferer'
-				),
+				);
+			},
 			autoDismiss: false,
 		};
 	});
