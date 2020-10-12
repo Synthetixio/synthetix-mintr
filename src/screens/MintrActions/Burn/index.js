@@ -136,6 +136,7 @@ const Burn = ({
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
 	const { currentWallet, walletType, networkName, networkId } = walletDetails;
+	const [transactionInfo, setTransactionInfo] = useState({});
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 	const { notify } = useNotifyContext();
@@ -249,7 +250,7 @@ const Burn = ({
 				const message = `Burnt ${formatCurrency(
 					burnToTarget ? burnAmountToFixCRatio : burnAmount
 				)} sUSD`;
-
+				setTransactionInfo({ transactionHash: transaction.hash });
 				notifyHandler(notify, transaction.hash, networkId, refetch, message);
 				handleNext(2);
 			}
@@ -257,6 +258,10 @@ const Burn = ({
 			console.log(e);
 			const errorMessage = errorMapper(e, walletType);
 			console.log(errorMessage);
+			setTransactionInfo({
+				...transactionInfo,
+				transactionError: errorMessage,
+			});
 			handleNext(2);
 		}
 	};
@@ -284,6 +289,7 @@ const Burn = ({
 		walletType,
 		networkName,
 		SNXPrice,
+		...transactionInfo,
 		isFetchingGasLimit,
 		gasLimit,
 		gasEstimateError,
