@@ -27,6 +27,15 @@ h5 {
 	text-transform: uppercase;
 }
 
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
 @font-face {
 	font-family: 'apercu-regular';
 	src: url('/fonts/apercu-regular.eot');

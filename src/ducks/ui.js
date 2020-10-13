@@ -12,6 +12,7 @@ export const uiSlice = createSlice({
 		currentTab: 'home',
 		tabParams: null,
 		gweiPopupIsVisible: false,
+		redirectToTrade: false,
 		...persistedState,
 	},
 	reducers: {
@@ -28,6 +29,13 @@ export const uiSlice = createSlice({
 			state.currentTab = tab;
 			state.tabParams = params;
 		},
+		setRedirectToTrade: (state, action) => {
+			if (action.payload) {
+				state.currentPage = 'MAIN';
+				state.currentTab = 'home';
+			}
+			state.redirectToTrade = action.payload;
+		},
 	},
 });
 
@@ -37,9 +45,10 @@ export const getCurrentTheme = state => state.ui.theme;
 export const getCurrentPage = state => getUiState(state).currentPage;
 export const getCurrentTab = state => getUiState(state).currentTab;
 export const getTabParams = state => getUiState(state).tabParams;
+export const getRedirectToTrade = state => getUiState(state).redirectToTrade;
 
-const { toggleTheme, setCurrentPage, setCurrentTab } = uiSlice.actions;
+const { toggleTheme, setCurrentPage, setCurrentTab, setRedirectToTrade } = uiSlice.actions;
 
-export { toggleTheme, setCurrentPage, setCurrentTab };
+export { toggleTheme, setCurrentPage, setCurrentTab, setRedirectToTrade };
 
 export default uiSlice.reducer;
