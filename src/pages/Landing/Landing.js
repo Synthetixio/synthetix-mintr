@@ -162,10 +162,10 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 					{SUPPORTED_WALLETS.map(wallet => {
 						const noMetamask = wallet === 'Metamask' && !hasWeb3();
-						const isCoinbase = wallet === 'Coinbase';
+
 						return (
 							<Button
-								disabled={noMetamask || isCoinbase}
+								disabled={noMetamask}
 								key={wallet}
 								onClick={onWalletClick({
 									wallet,
@@ -177,7 +177,6 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 								<Icon src={`images/wallets/${wallet.toLowerCase()}.svg`} />
 								<div>
 									<WalletConnectionH2>{wallet}</WalletConnectionH2>
-									{isCoinbase ? <StyledPSmall>(Coming soon)</StyledPSmall> : null}
 								</div>
 							</Button>
 						);
