@@ -20,7 +20,7 @@ import { bigNumberFormatter } from 'helpers/formatters';
 import errorMapper from 'helpers/errorMapper';
 import Spinner from 'components/Spinner';
 
-const INTERVAL_TIMER = 5000;
+const INTERVAL_TIMER = 3000;
 
 const DEFAULT_GAS_PRICE = 1;
 
@@ -76,8 +76,6 @@ export const Deposit: React.FC<DepositProps> = ({
 				const { emitter } = notify.hash(tx.hash);
 				emitter.on('txConfirmed', () => {
 					setTxPending(false);
-					console.log('here');
-					setAllowance(true);
 					return {
 						message: 'Approval confirmed',
 						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),

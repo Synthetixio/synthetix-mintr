@@ -12,7 +12,7 @@ import snxJSConnector from 'helpers/snxJSConnector';
 import { INFURA_JSON_RPC_URLS } from 'helpers/networkHelper';
 
 const GOERLI_NETWORK_ID = 5;
-const SYNTHETIX_GOERLI_ADDRESS = '0x50608a26BFf103290a4A47B152395047801E9280';
+const SYNTHETIX_GOERLI_ADDRESS = '0x0ab8DCB1f5DA04CE8f41695c7685c949dC240918';
 const STORAGE_ITEM = 'hideBannerGoerliAirdrop';
 
 interface L2BannerProps {

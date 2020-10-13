@@ -22,4 +22,4 @@ export const getEtherscanAddressLink = (networkId, address) => {
 	return `${baseURL}/address/${address}`;
 };
 
-export const getL2ExplorerTxLink = txId => `https://uat-l2-explorer.surge.sh/tx/${txId}`;
+export const getL2ExplorerTxLink = txId => `https://l2-explorer.surge.sh/tx/${txId}`;
