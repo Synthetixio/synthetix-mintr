@@ -9,13 +9,17 @@ import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import errorMapper from '../../../helpers/errorMapper';
-import { createTransaction } from 'ducks/transactions';
 import { getCurrentGasPrice } from 'ducks/network';
 import { getWalletBalancesToArray } from 'ducks/balances';
 import { getWalletDetails } from 'ducks/wallet';
 import { getDebtStatusData } from 'ducks/debtStatus';
+import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
+
 import { shortenAddress, bytesFormatter } from '../../../helpers/formatters';
 import { useTranslation } from 'react-i18next';
+import { notifyHandler } from 'helpers/notifyHelper';
+import { useNotifyContext } from 'contexts/NotifyContext';
 
 const useGetGasEstimate = (
 	currency,
@@ -88,9 +92,10 @@ const Send = ({
 	onDestroy,
 	walletDetails,
 	currentGasPrice,
-	createTransaction,
 	walletBalances,
 	debtStatusData,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
 }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [sendAmount, setSendAmount] = useState('');
@@ -98,9 +103,10 @@ const Send = ({
 	const [currentCurrency, setCurrentCurrency] = useState(null);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
-	const { currentWallet, walletType, networkName } = walletDetails;
+	const { currentWallet, walletType, networkName, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { notify } = useNotifyContext();
 
 	const gasEstimateError = useGetGasEstimate(
 		currentCurrency,
@@ -154,16 +160,17 @@ const Send = ({
 				sendDestination,
 				{ gasPrice: currentGasPrice.formattedPrice, gasLimit }
 			);
-			if (transaction) {
+			if (notify && transaction) {
+				const refetch = () => {
+					fetchBalancesRequest();
+					fetchDebtStatusRequest();
+				};
+				const message = `Sending ${Math.round(sendAmount, 3)} ${
+					currentCurrency.name
+				} to ${shortenAddress(sendDestination)}`;
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: `Sending ${Math.round(sendAmount, 3)} ${currentCurrency.name} to ${shortenAddress(
-						sendDestination
-					)}`,
-					hasNotification: true,
-				});
+				notifyHandler(notify, transaction.hash, networkId, refetch, message);
+
 				handleNext(2);
 			}
 		} catch (e) {
@@ -212,7 +219,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	createTransaction,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Send);

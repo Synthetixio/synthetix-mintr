@@ -9,14 +9,17 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { SliderContext } from '../../../components/ScreenSlider';
-import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
+import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 
 import { bigNumberFormatter, bytesFormatter, formatCurrency } from '../../../helpers/formatters';
 
 import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 import { getRedirectToTrade, setRedirectToTrade } from 'ducks/ui';
 
 const useGetWalletSynths = (walletAddress, setBaseSynth) => {
@@ -114,8 +117,9 @@ const useGetGasEstimate = (
 const Trade = ({
 	onDestroy,
 	walletDetails,
-	createTransaction,
 	currentGasPrice,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
 	redirectToTrade,
 	setRedirectToTrade,
 }) => {
@@ -126,9 +130,10 @@ const Trade = ({
 	const [feeRate, setFeeRate] = useState(0);
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const { currentWallet, walletType, networkName } = walletDetails;
+	const { currentWallet, walletType, networkName, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { notify } = useNotifyContext();
 
 	useEffect(() => {
 		if (redirectToTrade) {
@@ -200,17 +205,17 @@ const Trade = ({
 					gasLimit,
 				}
 			);
-			if (transaction) {
+			if (notify && transaction) {
+				const refetch = () => {
+					fetchBalancesRequest();
+					fetchDebtStatusRequest();
+				};
+				const message = `Exchanged ${formatCurrency(baseAmount, 3)} ${
+					baseSynth.name
+				} to ${formatCurrency(quoteAmount, 3)} sUSD`;
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: `Exchanging ${formatCurrency(baseAmount, 3)} ${baseSynth.name} to ${formatCurrency(
-						quoteAmount,
-						3
-					)} sUSD`,
-					hasNotification: true,
-				});
+				notifyHandler(notify, transaction.hash, networkId, refetch, message);
+
 				handleNext(2);
 			}
 		} catch (e) {
@@ -258,7 +263,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	createTransaction,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
 	setRedirectToTrade,
 };
 

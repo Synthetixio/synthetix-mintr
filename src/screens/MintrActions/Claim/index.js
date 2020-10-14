@@ -12,11 +12,16 @@ import Complete from './Complete';
 import { bigNumberFormatter } from '../../../helpers/formatters';
 import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 import { TRANSACTION_EVENTS_MAP } from '../../../constants/transactionHistory';
+import { fetchBalancesRequest } from 'ducks/balances';
+import { fetchDebtStatusRequest } from 'ducks/debtStatus';
+import { fetchEscrowRequest } from 'ducks/escrow';
 
 import { createTransaction } from '../../../ducks/transactions';
 import { getCurrentGasPrice } from '../../../ducks/network';
 import { getWalletDetails } from '../../../ducks/wallet';
 import errorMapper from '../../../helpers/errorMapper';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 const FEE_PERIOD = 0;
 
@@ -99,15 +104,18 @@ const Claim = ({
 	onDestroy,
 	walletDetails,
 	currentGasPrice,
-	createTransaction,
 	setCurrentTab,
 	currentTheme,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
+	fetchEscrowRequest,
 }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const { currentWallet, walletType, networkName } = walletDetails;
+	const { currentWallet, walletType, networkName, networkId } = walletDetails;
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
+	const { notify } = useNotifyContext();
 
 	const { closeIn, feesAreClaimable, feesAvailable, dataIsLoading } = useGetFeeData(currentWallet);
 	const gasEstimateError = useGetGasEstimate(setFetchingGasLimit, setGasLimit);
@@ -122,14 +130,17 @@ const Claim = ({
 				gasPrice: currentGasPrice.formattedPrice,
 				gasLimit,
 			});
-			if (transaction) {
+
+			if (notify && transaction) {
+				const refetch = () => {
+					fetchBalancesRequest();
+					fetchDebtStatusRequest();
+					fetchEscrowRequest();
+				};
+				const message = `Claimed rewards`;
 				setTransactionInfo({ transactionHash: transaction.hash });
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: 'Claiming rewards',
-					hasNotification: true,
-				});
+				notifyHandler(notify, transaction.hash, networkId, refetch, message);
+
 				handleNext(2);
 			}
 		} catch (e) {
@@ -184,6 +195,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
 	createTransaction,
 	setCurrentTab,
+	fetchDebtStatusRequest,
+	fetchBalancesRequest,
+	fetchEscrowRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Claim);
