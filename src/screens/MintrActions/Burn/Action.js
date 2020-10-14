@@ -223,7 +223,7 @@ const SubtextRow = styled.div`
 
 const AmountButton = styled.button`
 	padding: 8px 4px;
-	width: ${props => (props.width ? props.width : '100%')}
+	width: ${props => (props.width ? props.width : '100%')};
 	border: 1px solid ${props => props.theme.colorStyles.borders};
 	border-radius: 3px;
 	color: ${props => props.theme.colorStyles.buttonPrimaryText};

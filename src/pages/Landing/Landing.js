@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 

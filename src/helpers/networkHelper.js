@@ -8,6 +8,7 @@ export const SUPPORTED_NETWORKS = {
 	1: 'MAINNET',
 	3: 'ROPSTEN',
 	4: 'RINKEBY',
+	5: 'GOERLI',
 	42: 'KOVAN',
 };
 
@@ -15,6 +16,7 @@ export const NETWORK_NAMES = {
 	1: 'HOMESTEAD',
 	3: 'ROPSTEN',
 	4: 'RINKEBY',
+	5: 'GOERLI',
 	42: 'KOVAN',
 };
 
@@ -36,6 +38,7 @@ export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
 	3: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,
 	4: `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`,
+	5: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
@@ -54,7 +57,15 @@ export const SUPPORTED_WALLETS_MAP = {
 	PORTIS: 'Portis',
 };
 
+export const OVM_RPC_URL = 'https://goerli.optimism.io';
+
+export const L1_MESSENGER_ADDRESS = '0x833B2A211408123A06f4d94E7f0F3d6B643A76E7';
+
+export const L2_MESSENGER_ADDRESS = '0x82aaFaDc5eab1770f214996577F9F591F3EC8E19';
+
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
+
+export const BLOCKNATIVE_KEY = process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY;
 
 export const hasWeb3 = () => {
 	return window.web3;
@@ -123,3 +134,4 @@ export const addBufferToGasLimit = gasLimit =>
 	Math.round(Number(gasLimit) * (1 + GAS_LIMIT_BUFFER_PERCENTAGE));
 
 export const isMainNet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.MAINNET);
+export const isGoerliTestnet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.GOERLI);

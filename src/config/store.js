@@ -46,6 +46,15 @@ const finalCreateStore = compose(
 
 const store = finalCreateStore(reducers);
 
+if (process.env.NODE_ENV !== 'production') {
+	if (module.hot) {
+		module.hot.accept('ducks', () => {
+			const test = require('ducks');
+			store.replaceReducer(test);
+		});
+	}
+}
+
 sagaMiddleware.run(rootSaga);
 
 export default store;
