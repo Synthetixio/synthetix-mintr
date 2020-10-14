@@ -20,6 +20,7 @@ import errorMapper from '../../../helpers/errorMapper';
 import { useTranslation } from 'react-i18next';
 import { useNotifyContext } from 'contexts/NotifyContext';
 import { notifyHandler } from 'helpers/notifyHelper';
+import { getRedirectToTrade, setRedirectToTrade } from 'ducks/ui';
 
 const useGetWalletSynths = (walletAddress, setBaseSynth) => {
 	const [data, setData] = useState(null);
@@ -119,6 +120,8 @@ const Trade = ({
 	currentGasPrice,
 	fetchBalancesRequest,
 	fetchDebtStatusRequest,
+	redirectToTrade,
+	setRedirectToTrade,
 }) => {
 	const { handleNext, handlePrev } = useContext(SliderContext);
 	const [baseSynth, setBaseSynth] = useState(null);
@@ -131,6 +134,13 @@ const Trade = ({
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 	const { notify } = useNotifyContext();
+
+	useEffect(() => {
+		if (redirectToTrade) {
+			setRedirectToTrade(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [redirectToTrade]);
 
 	const synthBalances = useGetWalletSynths(currentWallet, setBaseSynth);
 	const gasEstimateError = useGetGasEstimate(
@@ -249,11 +259,13 @@ const Trade = ({
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
+	redirectToTrade: getRedirectToTrade(state),
 });
 
 const mapDispatchToProps = {
 	fetchBalancesRequest,
 	fetchDebtStatusRequest,
+	setRedirectToTrade,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trade);

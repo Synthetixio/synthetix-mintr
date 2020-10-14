@@ -15,8 +15,8 @@ import {
 } from 'styled-system';
 
 export default styled.div`
-  ${space}
-  ${fontSize}
+	${space}
+	${fontSize}
   ${fontStyle}
   ${color}
   ${size}
