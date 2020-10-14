@@ -135,5 +135,4 @@ export const addBufferToGasLimit = gasLimit =>
 
 export const isMainNet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.MAINNET);
 
-export const BLOCKNATIVE_KEY = process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY;
 export const isGoerliTestnet = networkId => networkId === Number(SUPPORTED_NETWORKS_MAP.GOERLI);
