@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import Notify from 'bnc-notify';
+import { BLOCKNATIVE_KEY } from 'helpers/networkHelper';
 
 interface INotifyProvider {
 	children: any;
@@ -16,7 +17,7 @@ export const NotifyProvider: React.FC<INotifyProvider> = ({ children, networkId 
 	useEffect(() => {
 		setNotify(
 			Notify({
-				dappId: '4e6901c8-10da-420c-9b5e-316fad480172',
+				dappId: BLOCKNATIVE_KEY,
 				networkId: networkId,
 				darkMode: true,
 			})

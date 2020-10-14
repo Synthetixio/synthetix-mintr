@@ -63,10 +63,9 @@ const App: FC<AppProps> = ({
 	currentPage,
 	appIsOnMaintenance,
 	currentWallet,
-	walletDetails,
+	walletDetails: { networkId },
 }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
-	const { networkId } = walletDetails;
 	return (
 		<ThemeProvider theme={themeStyle}>
 			{appIsReady && (
