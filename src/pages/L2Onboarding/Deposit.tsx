@@ -20,7 +20,7 @@ import { bigNumberFormatter } from 'helpers/formatters';
 import errorMapper from 'helpers/errorMapper';
 import Spinner from 'components/Spinner';
 
-const INTERVAL_TIMER = 5000;
+const INTERVAL_TIMER = 3000;
 
 const DEFAULT_GAS_PRICE = 1;
 
@@ -46,7 +46,7 @@ export const Deposit: React.FC<DepositProps> = ({
 }) => {
 	const snxBalance = (walletBalances && walletBalances.crypto['SNX']) || 0;
 
-	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
+	const [isWaitingForAllowance, setIsWaitingForAllowance] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 	const [estimateType, setEstimateType] = useState(ESTIMATE_TYPES.APPROVE);
 	const [hasAllowance, setAllowance] = useState(false);
@@ -76,8 +76,7 @@ export const Deposit: React.FC<DepositProps> = ({
 				const { emitter } = notify.hash(tx.hash);
 				emitter.on('txConfirmed', () => {
 					setTxPending(false);
-					console.log('here');
-					setAllowance(true);
+					setIsWaitingForAllowance(true);
 					return {
 						message: 'Approval confirmed',
 						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
@@ -129,7 +128,7 @@ export const Deposit: React.FC<DepositProps> = ({
 		const getGasEstimate = async () => {
 			setGasEstimateError(null);
 			try {
-				setFetchingGasLimit(true);
+				// setFetchingGasLimit(true);
 				let gasEstimate;
 				if (estimateType === ESTIMATE_TYPES.APPROVE) {
 					gasEstimate = await Synthetix.contract.estimate.approve(
@@ -145,11 +144,11 @@ export const Deposit: React.FC<DepositProps> = ({
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setGasEstimateError(t(errorMessage));
 			}
-			setFetchingGasLimit(false);
+			// setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [setFetchingGasLimit, setGasLimit, estimateType]);
+	}, [setGasLimit, estimateType]);
 
 	const fetchAllowance = async () => {
 		const {
@@ -160,6 +159,7 @@ export const Deposit: React.FC<DepositProps> = ({
 			const hasAllowance = bigNumberFormatter(allowance) !== 0;
 			if (hasAllowance) {
 				setEstimateType(ESTIMATE_TYPES.DEPOSIT);
+				setIsWaitingForAllowance(false);
 			} else {
 				setEstimateType(ESTIMATE_TYPES.APPROVE);
 			}
@@ -200,7 +200,7 @@ export const Deposit: React.FC<DepositProps> = ({
 					gasLimit={gasLimit}
 				/> */}
 			</ContainerStats>
-			{txPending ? (
+			{txPending || isWaitingForAllowance ? (
 				<Spinner />
 			) : hasAllowance ? (
 				<CTAButton

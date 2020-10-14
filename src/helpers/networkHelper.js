@@ -57,11 +57,11 @@ export const SUPPORTED_WALLETS_MAP = {
 	PORTIS: 'Portis',
 };
 
-export const OVM_RPC_URL = 'http://uat.optimism.io:8545';
+export const OVM_RPC_URL = 'https://goerli.optimism.io';
 
-export const L1_MESSENGER_ADDRESS = '0xd952a53095A360B80e05338B934D334f72fEAe48';
+export const L1_MESSENGER_ADDRESS = '0x833B2A211408123A06f4d94E7f0F3d6B643A76E7';
 
-export const L2_MESSENGER_ADDRESS = '0xd85B4C397E760F2f481b3C66A390a67bda882F77';
+export const L2_MESSENGER_ADDRESS = '0x82aaFaDc5eab1770f214996577F9F591F3EC8E19';
 
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
