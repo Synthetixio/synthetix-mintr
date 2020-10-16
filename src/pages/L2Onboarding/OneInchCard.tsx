@@ -16,9 +16,10 @@ import styled from 'styled-components';
 import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import { GasPrice, getCurrentGasPrice } from 'ducks/network';
 import Spinner from 'components/Spinner';
-import { getEtherscanTxLink } from 'helpers/explorers';
 import { getWalletDetails } from 'ducks/wallet';
 import { PLarge } from 'components/Typography';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 export const OneInchCard = ({
 	rates,
@@ -26,7 +27,6 @@ export const OneInchCard = ({
 	walletBalances = { crypto: { sUSD: 0, ETH: 0 } },
 	onComplete,
 	currentGasPrice,
-	notify,
 	walletDetails,
 }: {
 	rates: Rates;
@@ -34,7 +34,6 @@ export const OneInchCard = ({
 	walletBalances: any;
 	onComplete: Function;
 	currentGasPrice: GasPrice;
-	notify: any;
 	walletDetails: any;
 }) => {
 	const baseCurrencyKey = CRYPTO_CURRENCY_TO_KEY.ETH;
@@ -62,6 +61,14 @@ export const OneInchCard = ({
 	const [gasLimit, setGasLimit] = useState<number | null>(null);
 	const [isTxPending, setIsTxPending] = useState<boolean>(false);
 	const [isCheckingBalance, setIsCheckingBalance] = useState<boolean>(false);
+
+	const { notify } = useNotifyContext();
+
+	const onSwapTransactionConfirmed = () => {
+		setIsTxPending(false);
+		setIsCheckingBalance(true);
+		onComplete();
+	};
 
 	useEffect(() => {
 		const getGasEstimate = async () => {
@@ -160,16 +167,8 @@ export const OneInchCard = ({
 							);
 
 							if (notify && tx) {
-								const { emitter } = notify.hash(tx.hash);
-								emitter.on('txConfirmed', () => {
-									setIsTxPending(false);
-									setIsCheckingBalance(true);
-									onComplete();
-									return {
-										onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
-										autoDismiss: false,
-									};
-								});
+								const message = 'sUSD swap confirmed';
+								notifyHandler(notify, tx.hash, networkId, onSwapTransactionConfirmed, message);
 							}
 						} catch (e) {
 							console.log(e);

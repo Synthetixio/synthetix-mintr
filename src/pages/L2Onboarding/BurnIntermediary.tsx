@@ -19,7 +19,6 @@ interface BurnIntermediaryProps {
 	setRedirectToTrade: Function;
 	totalSynthsBalance: number;
 	onComplete: Function;
-	notify: any;
 }
 
 const HEADER_CONTENT = {
@@ -42,7 +41,6 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 	setRedirectToTrade,
 	totalSynthsBalance,
 	onComplete,
-	notify,
 }) => {
 	const [showOneInchCard, setShowOneInchCard] = useState<boolean>(false);
 
@@ -90,11 +88,7 @@ const BurnIntermediary: React.FC<BurnIntermediaryProps> = ({
 				subtext={headerIconContent.subtext}
 				icon={headerIconContent.icon}
 			/>
-			{showOneInchCard ? (
-				<OneInchCard onComplete={onComplete} notify={notify} />
-			) : (
-				renderDefaultLayout()
-			)}
+			{showOneInchCard ? <OneInchCard onComplete={onComplete} /> : renderDefaultLayout()}
 		</PageContainer>
 	);
 };

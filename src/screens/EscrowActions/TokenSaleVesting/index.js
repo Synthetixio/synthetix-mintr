@@ -5,26 +5,29 @@ import snxJSConnector from '../../../helpers/snxJSConnector';
 import { SliderContext } from '../../../components/ScreenSlider';
 
 import { getCurrentGasPrice } from '../../../ducks/network';
-import { createTransaction } from '../../../ducks/transactions';
+import { fetchEscrowRequest } from 'ducks/escrow';
 import { getWalletDetails } from '../../../ducks/wallet';
 
 import errorMapper from '../../../helpers/errorMapper';
 
 import Confirmation from './Confirmation';
 import Complete from './Complete';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 const TokenSaleVesting = ({
 	onDestroy,
 	vestAmount,
 	walletDetails,
-	createTransaction,
+	fetchEscrowRequest,
 	currentGasPrice,
 	gasLimit,
 	isFetchingGasLimit,
 }) => {
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
-	const { walletType, networkName } = walletDetails;
+	const { walletType, networkName, networkId } = walletDetails;
+	const { notify } = useNotifyContext();
 
 	useLayoutEffect(() => {
 		const vest = async () => {
@@ -33,20 +36,18 @@ const TokenSaleVesting = ({
 				snxJS: { SynthetixEscrow },
 			} = snxJSConnector;
 			try {
-				console.log('here');
 				const transaction = await SynthetixEscrow.vest({
 					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				});
-				if (transaction) {
+				if (notify && transaction) {
+					const refetch = () => {
+						fetchEscrowRequest();
+					};
+					const message = `Vesting confirmed`;
 					setTransactionInfo({ transactionHash: transaction.hash });
-					createTransaction({
-						hash: transaction.hash,
-						status: 'pending',
-						info: 'Vesting',
-						hasNotification: true,
-					});
-					handleNext(1);
+					notifyHandler(notify, transaction.hash, networkId, refetch, message);
+					handleNext(2);
 				}
 			} catch (e) {
 				console.log(e);
@@ -82,7 +83,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-	createTransaction,
+	fetchEscrowRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenSaleVesting);

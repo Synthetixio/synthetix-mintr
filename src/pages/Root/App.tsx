@@ -9,7 +9,7 @@ import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
-import { getCurrentWallet } from 'ducks/wallet';
+import { getCurrentWallet, getWalletDetails } from 'ducks/wallet';
 
 import MaintenancePage from '../MaintenanceMessage';
 import NotificationCenter from 'components/NotificationCenter';
@@ -19,6 +19,7 @@ import Main from '../Main';
 import MobileLanding from '../MobileLanding';
 
 import MainLayout from './components/MainLayout';
+import { NotifyProvider } from 'contexts/NotifyContext';
 import L2Onboarding from 'pages/L2Onboarding/L2Onboarding';
 
 const mapStateToProps = (state: RootState) => ({
@@ -26,6 +27,7 @@ const mapStateToProps = (state: RootState) => ({
 	currentPage: getCurrentPage(state),
 	appIsOnMaintenance: getAppIsOnMaintenance(state),
 	currentWallet: getCurrentWallet(state),
+	walletDetails: getWalletDetails(state),
 });
 
 const connector = connect(mapStateToProps, null);
@@ -64,12 +66,13 @@ const App: FC<AppProps> = ({
 	currentPage,
 	appIsOnMaintenance,
 	currentWallet,
+	walletDetails: { networkId },
 }) => {
 	const themeStyle = isDarkTheme(currentTheme) ? darkTheme : lightTheme;
 	return (
 		<ThemeProvider theme={themeStyle}>
 			{appIsReady && (
-				<>
+				<NotifyProvider networkId={networkId ? networkId : 1}>
 					<GlobalEventsGate />
 					<MainLayout>
 						<CurrentPage
@@ -79,7 +82,7 @@ const App: FC<AppProps> = ({
 						/>
 						<NotificationCenter />
 					</MainLayout>
-				</>
+				</NotifyProvider>
 			)}
 		</ThemeProvider>
 	);

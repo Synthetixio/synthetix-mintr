@@ -4,15 +4,12 @@ import { ReactComponent as CloseIcon } from '../../assets/images/L2/close-icon.s
 import { setCurrentPage } from '../../ducks/ui';
 import { PAGES_BY_KEY } from 'constants/ui';
 import { connect } from 'react-redux';
-import { fontFamilies } from 'styles/themes';
 import { bigNumberFormatter } from 'helpers/formatters';
 import { getWalletDetails } from 'ducks/wallet';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import Spinner from '../../components/Spinner';
 import { getWalletBalancesWithRates } from 'ducks/balances';
 import { getDebtStatusData } from 'ducks/debtStatus';
-import Notify from 'bnc-notify';
-import { BLOCKNATIVE_KEY } from 'helpers/networkHelper';
 
 import Welcome from './Welcome';
 import Deposit from './Deposit';
@@ -36,17 +33,8 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 	const [sufficientBalance, setSufficientBalance] = useState<boolean | string>('');
 	const [checkingBalances, setCheckingBalances] = useState<boolean>(true);
 	const [sUSDBalance, setSUSDBalance] = useState<number>(0);
-	const [notify, setNotify] = useState(null);
 	const [l1TransactionHash, setL1TransactionHash] = useState(null);
 	const [l2TransactionHash, setL2TransactionHash] = useState(null);
-
-	useEffect(() => {
-		const notify = Notify({
-			dappId: BLOCKNATIVE_KEY,
-			networkId: networkId,
-		});
-		setNotify(notify);
-	}, [networkId]);
 
 	const validateAvailableBalance = useCallback(async () => {
 		const sUSDBalanceBN = await snxJSConnector.snxJS.sUSD.balanceOf(currentWallet);
@@ -90,17 +78,10 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 						setStep(2);
 						break;
 					} else if (sufficientBalance) {
-						return (
-							<Burn
-								onComplete={() => setStep(2)}
-								currentsUSDBalance={sUSDBalance}
-								notify={notify}
-							/>
-						);
+						return <Burn onComplete={() => setStep(2)} currentsUSDBalance={sUSDBalance} />;
 					} else {
 						return (
 							<BurnIntermediary
-								notify={notify}
 								currentsUSDBalance={sUSDBalance}
 								totalsUSDDebt={debtDataStatus.debtBalance}
 								onComplete={() => validateAvailableBalance()}
@@ -115,7 +96,6 @@ export const L2Onboarding: React.FC<L2OnboardingProps> = ({
 							setL1TransactionHash(transactionHash);
 							setStep(3);
 						}}
-						notify={notify}
 					/>
 				);
 			case 3:
@@ -173,7 +153,7 @@ const StyledHeaderRow = styled.div`
 `;
 
 const Button = styled.button`
-	font-family: ${fontFamilies.regular};
+	font-family: ${props => props.theme.fontFamilies.regular};
 	text-transform: uppercase;
 	width: 159px;
 	height: 32px;
