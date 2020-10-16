@@ -55,7 +55,7 @@ const SwitchInProgress: FC<SwitchInProgressProps> = ({
 			<Stepper activeIndex={2} />
 			<HeaderIcon
 				title="Migration in progress..."
-				subtext="Your transaction is being processed."
+				subtext="This may take a few minutes to process. If it takes more than ten minutes, try refreshing the page."
 				icon={<SwitchingIcon />}
 			/>
 			<Spinner />

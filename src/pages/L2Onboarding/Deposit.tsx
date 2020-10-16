@@ -8,17 +8,18 @@ import { getWalletDetails } from 'ducks/wallet';
 import { connect } from 'react-redux';
 import { getWalletBalances } from 'ducks/balances';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
-import GasIndicator from 'components/L2Onboarding/GasIndicator';
+// import GasIndicator from 'components/L2Onboarding/GasIndicator';
 import ErrorMessage from '../../components/ErrorMessage';
 import snxJSConnector from 'helpers/snxJSConnector';
 import { TOKEN_ALLOWANCE_LIMIT } from 'constants/network';
 import { getCurrentGasPrice } from 'ducks/network';
-import { getEtherscanTxLink } from 'helpers/explorers';
 import { addBufferToGasLimit, formatGasPrice } from 'helpers/networkHelper';
 import { useTranslation } from 'react-i18next';
 import { bigNumberFormatter } from 'helpers/formatters';
 import errorMapper from 'helpers/errorMapper';
 import Spinner from 'components/Spinner';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 const INTERVAL_TIMER = 3000;
 
@@ -34,7 +35,6 @@ interface DepositProps {
 	walletDetails: any;
 	walletBalances: any;
 	currentGasPrice: any;
-	notify: any;
 }
 
 export const Deposit: React.FC<DepositProps> = ({
@@ -42,7 +42,6 @@ export const Deposit: React.FC<DepositProps> = ({
 	walletDetails,
 	walletBalances,
 	currentGasPrice,
-	notify,
 }) => {
 	const snxBalance = (walletBalances && walletBalances.crypto['SNX']) || 0;
 
@@ -53,8 +52,19 @@ export const Deposit: React.FC<DepositProps> = ({
 	const [txPending, setTxPending] = useState(false);
 	const [gasEstimateError, setGasEstimateError] = useState(null);
 
+	const { notify } = useNotifyContext();
 	const { t } = useTranslation();
 	const { networkId, currentWallet, walletType } = walletDetails;
+
+	const onAllowanceTransactionConfirmed = () => {
+		setTxPending(false);
+		setIsWaitingForAllowance(true);
+	};
+
+	const onDepositTransactionConfirmed = tx => {
+		setTxPending(false);
+		onComplete(tx.hash);
+	};
 
 	const handleApprove = async () => {
 		setTxPending(true);
@@ -73,15 +83,8 @@ export const Deposit: React.FC<DepositProps> = ({
 				}
 			);
 			if (notify && tx) {
-				const { emitter } = notify.hash(tx.hash);
-				emitter.on('txConfirmed', () => {
-					setTxPending(false);
-					setIsWaitingForAllowance(true);
-					return {
-						message: 'Approval confirmed',
-						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
-					};
-				});
+				const message = 'Approval confirmed';
+				notifyHandler(notify, tx.hash, networkId, onAllowanceTransactionConfirmed, message);
 			}
 		} catch (e) {
 			const errorMessage = errorMapper(e, walletType);
@@ -103,15 +106,8 @@ export const Deposit: React.FC<DepositProps> = ({
 				gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
 			});
 			if (notify && tx) {
-				const { emitter } = notify.hash(tx.hash);
-				emitter.on('txConfirmed', () => {
-					setTxPending(false);
-					onComplete(tx.hash);
-					return {
-						message: 'Deposit confirmed',
-						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
-					};
-				});
+				const message = 'Deposit confirmed';
+				notifyHandler(notify, tx.hash, networkId, () => onDepositTransactionConfirmed(tx), message);
 			}
 		} catch (e) {
 			const errorMessage = errorMapper(e, walletType);
