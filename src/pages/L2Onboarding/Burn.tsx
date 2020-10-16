@@ -178,7 +178,7 @@ const Burn: React.FC<BurnProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getMaxSecsLeftInWaitingPeriod, getIssuanceDelay]);
 
-	const onBurnTransactionConfirned = () => {
+	const onBurnTransactionConfirmed = () => {
 		setIsBurning(false);
 		onComplete();
 	};
@@ -202,7 +202,7 @@ const Burn: React.FC<BurnProps> = ({
 
 			if (notify && tx) {
 				const message = 'Burn confirmed';
-				notifyHandler(notify, tx.hash, networkId, onBurnTransactionConfirned, message);
+				notifyHandler(notify, tx.hash, networkId, onBurnTransactionConfirmed, message);
 			}
 		} catch (e) {
 			const errorMessage = errorMapper(e, walletType);
