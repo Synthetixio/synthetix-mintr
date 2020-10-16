@@ -8,13 +8,7 @@ export function notifyHandler(notify, hash, networkId, callback, message) {
 		}, 15000);
 		return {
 			message: message ? message : undefined,
-			onclick: () => {
-				window.open(
-					`${getEtherscanTxLink(networkId, result.hash)}`,
-					'_blank',
-					'noopener, norefferer'
-				);
-			},
+			link: getEtherscanTxLink(networkId, result.hash),
 			autoDismiss: false,
 		};
 	});
