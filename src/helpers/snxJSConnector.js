@@ -156,7 +156,7 @@ const connectToCoinbase = async (networkId, networkName) => {
 				...walletState,
 				currentWallet: accounts[0],
 				unlocked: true,
-				networkId: 1,
+				networkId,
 				networkName: networkName.toLowerCase(),
 			};
 		} else {
