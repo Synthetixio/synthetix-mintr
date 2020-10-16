@@ -18,8 +18,9 @@ import { useTranslation } from 'react-i18next';
 import { addBufferToGasLimit } from 'helpers/networkHelper';
 import { CTAButton } from 'components/L2Onboarding/component/CTAButton';
 import { getDebtStatusData } from 'ducks/debtStatus';
-import { getEtherscanTxLink } from 'helpers/explorers';
 import Spinner from 'components/Spinner';
+import { useNotifyContext } from 'contexts/NotifyContext';
+import { notifyHandler } from 'helpers/notifyHelper';
 
 interface BurnProps {
 	onComplete: Function;
@@ -27,7 +28,6 @@ interface BurnProps {
 	currentGasPrice: any;
 	currentsUSDBalance: number;
 	debtData: any;
-	notify: any;
 }
 
 const useGetDebtData = (walletAddress, sUSDBytes) => {
@@ -76,7 +76,6 @@ const Burn: React.FC<BurnProps> = ({
 	currentGasPrice,
 	currentsUSDBalance,
 	debtData,
-	notify,
 }) => {
 	const [waitingPeriod, setWaitingPeriod] = useState(0);
 	const [issuanceDelay, setIssuanceDelay] = useState(0);
@@ -84,7 +83,9 @@ const Burn: React.FC<BurnProps> = ({
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
 	const [gasLimit, setGasLimit] = useState(0);
 	const [isBurning, setIsBurning] = useState<boolean>(false);
+
 	const { t } = useTranslation();
+	const { notify } = useNotifyContext();
 
 	const sUSDBytes = bytesFormatter('sUSD');
 	const { issuanceRatio, SNXPrice, debtEscrow } = useGetDebtData(currentWallet, sUSDBytes);
@@ -177,6 +178,11 @@ const Burn: React.FC<BurnProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getMaxSecsLeftInWaitingPeriod, getIssuanceDelay]);
 
+	const onBurnTransactionConfirned = () => {
+		setIsBurning(false);
+		onComplete();
+	};
+
 	const onBurn = async () => {
 		setIsBurning(true);
 		const {
@@ -195,14 +201,8 @@ const Burn: React.FC<BurnProps> = ({
 			});
 
 			if (notify && tx) {
-				const { emitter } = notify.hash(tx.hash);
-				emitter.on('txConfirmed', () => {
-					setIsBurning(false);
-					onComplete();
-					return {
-						onclick: () => window.open(getEtherscanTxLink(networkId, tx.hash), '_blank'),
-					};
-				});
+				const message = 'Burn confirmed';
+				notifyHandler(notify, tx.hash, networkId, onBurnTransactionConfirned, message);
 			}
 		} catch (e) {
 			const errorMessage = errorMapper(e, walletType);
