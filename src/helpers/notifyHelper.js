@@ -2,13 +2,21 @@ import { getEtherscanTxLink } from 'helpers/explorers';
 
 export function notifyHandler(notify, hash, networkId, callback, message) {
 	let { emitter } = notify.hash(hash);
-	emitter.on('txConfirmed', result => {
+	const link = getEtherscanTxLink(networkId, hash);
+
+	emitter.on('all', () => {
+		return {
+			link,
+		};
+	});
+
+	emitter.on('txConfirmed', () => {
 		setTimeout(() => {
 			callback();
 		}, 15000);
 		return {
 			message: message ? message : undefined,
-			link: getEtherscanTxLink(networkId, result.hash),
+			link,
 			autoDismiss: false,
 		};
 	});
