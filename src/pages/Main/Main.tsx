@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Dashboard from 'screens/Dashboard';
 import MintrPanel from 'screens/MintrPanel';
 import BannerL2 from 'components/Banner/BannerL2';
-import BannerGoerliAirdrop from 'components/Banner/BannerGoerliAirdrop'
+import BannerGoerliAirdrop from 'components/Banner/BannerGoerliAirdrop';
 import LiquidationBanner from 'components/BannerLiquidation';
 
 type MainProps = {
