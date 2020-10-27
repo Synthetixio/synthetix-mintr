@@ -64,7 +64,7 @@ const POOLS_SECONDARY = [
 	},
 ];
 
-const POOLS_COMPLETED = ['ibtc', 'curvepoolSBTC', 'unipoolSETH', 'balancerSNX'];
+const POOLS_COMPLETED = ['curvepoolSBTC', 'unipoolSETH', 'balancerSNX'];
 
 const LPRewards = ({ currentTheme }) => {
 	const { t } = useTranslation();
