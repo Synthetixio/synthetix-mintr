@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import snxJSConnector from '../../helpers/snxJSConnector';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { bigNumberFormatter, formatCurrency } from '../../helpers/formatters';
+import { bigNumberFormatter, formatCurrency, bytesFormatter } from '../../helpers/formatters';
 import { PAGES_BY_KEY } from '../../constants/ui';
 
 import { setCurrentPage } from '../../ducks/ui';
@@ -51,6 +51,9 @@ const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateW
 			try {
 				const results = await snxJSConnector.signer.getNextAddresses(walletIndex, WALLET_PAGE_SIZE);
 				if (!results) throw new Error('Could not get addresses from wallet');
+				const {
+					snxJS: { Synthetix },
+				} = snxJSConnector;
 				const nextWallets = results.map(address => {
 					return {
 						address,
@@ -68,6 +71,7 @@ const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateW
 						snxBalance: await snxJSConnector.snxJS.Synthetix.collateral(wallet.address),
 						sUSDBalance: await snxJSConnector.snxJS.sUSD.balanceOf(wallet.address),
 						ethBalance: await snxJSConnector.provider.getBalance(wallet.address),
+						debt: await Synthetix.debtBalanceOf(wallet.address, bytesFormatter('sUSD')),
 					};
 				};
 
@@ -77,6 +81,7 @@ const useGetWallets = (paginatorIndex, derivationPath, availableWallets, updateW
 							snxBalance: bigNumberFormatter(balance.snxBalance),
 							sUSDBalance: bigNumberFormatter(balance.sUSDBalance),
 							ethBalance: bigNumberFormatter(balance.ethBalance),
+							debt: bigNumberFormatter(balance.debt),
 						};
 
 						updateWalletStatus({ availableWallets: [...availableWallets, ...nextWallets] });
@@ -212,7 +217,7 @@ const WalletConnection = ({
 									<List cellSpacing={0}>
 										<ListHead>
 											<ListHeaderRow>
-												{['Address', 'SNX', 'sUSD', 'ETH', ''].map((headerElement, i) => {
+												{['Address', 'SNX', 'sUSD', 'ETH', 'debt', ''].map((headerElement, i) => {
 													return (
 														<ListHeaderCell
 															style={{ textAlign: i > 0 ? 'right' : 'left' }}
@@ -254,6 +259,9 @@ const WalletConnection = ({
 															</ListCell>
 															<ListCell style={{ textAlign: 'right' }}>
 																<BalanceOrSpinner value={wallet.balances.ethBalance} />
+															</ListCell>
+															<ListCell style={{ textAlign: 'right' }}>
+																<BalanceOrSpinner value={wallet.balances.debt} />
 															</ListCell>
 															<ListCell
 																style={{ textAlign: 'right' }}
