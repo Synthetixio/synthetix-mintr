@@ -52,10 +52,16 @@ workflows:
 
   build-lint-test:
     jobs:
-      - build
+      - build:
+          context:
+            - Docker Auth
       - lint:
           requires:
             - build
+          context:
+            - Docker Auth
       # - test:
       #     requires:
       #       - build
+      #     context:
+      #       - Docker Auth
