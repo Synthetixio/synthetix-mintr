@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from 'ducks/types';
 import { getDebtStatusData } from 'ducks/debtStatus';
@@ -14,9 +14,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Banner: FC<PropsFromRedux> = ({ debtStatus }) => {
 	if (!debtStatus) return null;
-	const { currentCRatio, liquidationRatio, liquidationDelay } = debtStatus;
-	if (!currentCRatio) return null;
-	if (100 / currentCRatio >= liquidationRatio) return null;
+	const { liquidationDeadline, liquidationDelay } = debtStatus;
+
+	if (!liquidationDeadline) return null;
 
 	return (
 		<ContainerBanner>

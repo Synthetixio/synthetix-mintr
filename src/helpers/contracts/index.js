@@ -19,6 +19,7 @@ import iEth2Rewards from './iEth2Rewards';
 import iEth4Rewards from './iEth4Rewards';
 
 import iBtcRewards from './iBtcRewards';
+import iBtc2Rewards from './iBtc2Rewards';
 
 export {
 	uniswapV1,
@@ -30,6 +31,7 @@ export {
 	oldCurvepool,
 	iEthRewards,
 	iBtcRewards,
+	iBtc2Rewards,
 	balancerpool,
 	balancerSNXRewards,
 	curveSBTC,

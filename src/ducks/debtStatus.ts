@@ -21,6 +21,7 @@ export type DebtStatus = {
 	debtBalanceOf: number;
 	liquidationRatio: number;
 	liquidationDelay: number;
+	liquidationDeadline: number;
 };
 
 const initialState: DebtStatusSlice = {

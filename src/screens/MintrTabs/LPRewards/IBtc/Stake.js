@@ -28,6 +28,7 @@ const Stake = ({ walletDetails, goBack }) => {
 	const [currentScenario, setCurrentScenario] = useState({});
 	const { currentWallet } = walletDetails;
 	const {
+		iBtc2RewardsContract,
 		iBtcRewardsContract,
 		snxJS: { Exchanger, Synthetix },
 	} = snxJSConnector;
@@ -37,13 +38,14 @@ const Stake = ({ walletDetails, goBack }) => {
 		try {
 			const {
 				snxJS: { iBTC, Exchanger },
-				iBtcRewardsContract,
+				iBtc2RewardsContract,
 			} = snxJSConnector;
-			const [iBTCBalance, iBTCStaked, rewards, settlementOwing] = await Promise.all([
+			const [iBTCBalance, iBTCStaked, rewards, settlementOwing, rewardsOld] = await Promise.all([
 				iBTC.balanceOf(currentWallet),
-				iBtcRewardsContract.balanceOf(currentWallet),
-				iBtcRewardsContract.earned(currentWallet),
+				iBtc2RewardsContract.balanceOf(currentWallet),
+				iBtc2RewardsContract.earned(currentWallet),
 				Exchanger.settlementOwing(currentWallet, bytesFormatter('iBTC')),
+				iBtcRewardsContract.earned(currentWallet),
 			]);
 
 			const reclaimAmount = Number(settlementOwing.reclaimAmount);
@@ -55,6 +57,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				iBTCStaked: bigNumberFormatter(iBTCStaked),
 				iBTCStakedBN: iBTCStaked,
 				rewards: bigNumberFormatter(rewards),
+				rewardsOld: bigNumberFormatter(rewardsOld),
 				needsToSettle: reclaimAmount || rebateAmount,
 			});
 		} catch (e) {
@@ -69,15 +72,21 @@ const Stake = ({ walletDetails, goBack }) => {
 
 	useEffect(() => {
 		if (!currentWallet) return;
-		const { iBtcRewardsContract } = snxJSConnector;
+		const { iBtc2RewardsContract } = snxJSConnector;
 
-		iBtcRewardsContract.on('Staked', user => {
+		iBtc2RewardsContract.on('Staked', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
 		});
 
-		iBtcRewardsContract.on('Withdrawn', user => {
+		iBtc2RewardsContract.on('Withdrawn', user => {
+			if (user === currentWallet) {
+				fetchData();
+			}
+		});
+
+		iBtc2RewardsContract.on('RewardPaid', user => {
 			if (user === currentWallet) {
 				fetchData();
 			}
@@ -103,8 +112,9 @@ const Stake = ({ walletDetails, goBack }) => {
 
 		return () => {
 			if (snxJSConnector.initialized) {
-				iBtcRewardsContract.removeAllListeners('Staked');
-				iBtcRewardsContract.removeAllListeners('Withdrawn');
+				iBtc2RewardsContract.removeAllListeners('Staked');
+				iBtc2RewardsContract.removeAllListeners('Withdrawn');
+				iBtc2RewardsContract.removeAllListeners('RewardPaid');
 				iBtcRewardsContract.removeAllListeners('RewardPaid');
 				Synthetix.contract.removeAllListeners('ExchangeReclaim');
 				Synthetix.contract.removeAllListeners('ExchangeRebate');
@@ -121,7 +131,7 @@ const Stake = ({ walletDetails, goBack }) => {
 				<ButtonTertiary
 					as="a"
 					target="_blank"
-					href={`https://etherscan.io/address/${iBtcRewardsContract.address}`}
+					href={`https://etherscan.io/address/${iBtc2RewardsContract.address}`}
 				>
 					{t('lpRewards.shared.buttons.goToContract')} ↗
 				</ButtonTertiary>
@@ -157,12 +167,12 @@ const Stake = ({ walletDetails, goBack }) => {
 								label: t('lpRewards.shared.actions.staking'),
 								amount: `${balances && formatCurrency(balances.iBTCBalance)} iBTC`,
 								contractFunction: transactionSettings =>
-									iBtcRewardsContract.stake(
+									iBtc2RewardsContract.stake(
 										balances && balances.iBTCBalanceBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iBtcRewardsContract.estimate.stake(balances && balances.iBTCBalanceBN),
+									iBtc2RewardsContract.estimate.stake(balances && balances.iBTCBalanceBN),
 							})
 						}
 					>
@@ -176,8 +186,8 @@ const Stake = ({ walletDetails, goBack }) => {
 								label: t('lpRewards.shared.actions.claiming'),
 								amount: `${balances && formatCurrency(balances.rewards)} SNX`,
 								contractFunction: transactionSettings =>
-									iBtcRewardsContract.getReward(transactionSettings),
-								contractFunctionEstimate: () => iBtcRewardsContract.estimate.getReward(),
+									iBtc2RewardsContract.getReward(transactionSettings),
+								contractFunctionEstimate: () => iBtc2RewardsContract.estimate.getReward(),
 							})
 						}
 					>
@@ -194,12 +204,12 @@ const Stake = ({ walletDetails, goBack }) => {
 								amount: `${balances && formatCurrency(balances.iBTCStaked)} iBTC`,
 								param: balances && balances.iBTCStakedBN,
 								contractFunction: transactionSettings =>
-									iBtcRewardsContract.withdraw(
+									iBtc2RewardsContract.withdraw(
 										balances && balances.iBTCStakedBN,
 										transactionSettings
 									),
 								contractFunctionEstimate: () =>
-									iBtcRewardsContract.estimate.withdraw(balances && balances.iBTCStakedBN),
+									iBtc2RewardsContract.estimate.withdraw(balances && balances.iBTCStakedBN),
 							})
 						}
 					>
@@ -215,14 +225,33 @@ const Stake = ({ walletDetails, goBack }) => {
 									balances && formatCurrency(balances.rewards)
 								} SNX`,
 								contractFunction: transactionSettings =>
-									iBtcRewardsContract.exit(transactionSettings),
-								contractFunctionEstimate: () => iBtcRewardsContract.estimate.exit(),
+									iBtc2RewardsContract.exit(transactionSettings),
+								contractFunctionEstimate: () => iBtc2RewardsContract.estimate.exit(),
 							})
 						}
 					>
 						{t('lpRewards.shared.buttons.exit')}
 					</ButtonAction>
 				</ButtonRow>
+
+				{balances && balances.rewardsOld ? (
+					<ButtonRow>
+						<ButtonActionFullRow
+							onClick={() =>
+								setCurrentScenario({
+									action: 'claim',
+									label: t('lpRewards.shared.actions.claiming'),
+									amount: `${balances && formatCurrency(balances.rewardsOld)} SNX`,
+									contractFunction: transactionSettings =>
+										iBtcRewardsContract.getReward(transactionSettings),
+									contractFunctionEstimate: () => iBtcRewardsContract.estimate.getReward(),
+								})
+							}
+						>
+							{t('lpRewards.shared.buttons.claim-old')}
+						</ButtonActionFullRow>
+					</ButtonRow>
+				) : null}
 
 				{balances && balances.needsToSettle ? (
 					<ButtonRowBottom>
