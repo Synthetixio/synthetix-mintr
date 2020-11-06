@@ -248,7 +248,7 @@ const Stake = ({ walletDetails, goBack }) => {
 								})
 							}
 						>
-							{t('lpRewards.shared.buttons.exit-old')}
+							{t('lpRewards.shared.buttons.claim-old')}
 						</ButtonActionFullRow>
 					</ButtonRow>
 				) : null}
