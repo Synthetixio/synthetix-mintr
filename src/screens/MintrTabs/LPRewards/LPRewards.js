@@ -39,7 +39,7 @@ const POOLS_MAJOR = [
 		title: 'lpRewards.actions.ibtc.title',
 		name: 'ibtc',
 		image: '/images/currencies/iBTC.svg',
-		contract: 'iBtcRewardsContract',
+		contract: 'iBtc2RewardsContract',
 	},
 ];
 
@@ -73,11 +73,11 @@ const LPRewards = ({ currentTheme }) => {
 	const goBack = () => setCurrentPool(null);
 
 	useEffect(() => {
-		const { curvepoolContract, iEth4RewardsContract, iBtcRewardsContract } = snxJSConnector;
+		const { curvepoolContract, iEth4RewardsContract, iBtc2RewardsContract } = snxJSConnector;
 
 		const getRewardsAmount = async () => {
 			try {
-				const contracts = [curvepoolContract, iEth4RewardsContract, iBtcRewardsContract];
+				const contracts = [curvepoolContract, iEth4RewardsContract, iBtc2RewardsContract];
 				const rewardsData = await Promise.all(
 					contracts.map(contract => {
 						const getDuration = contract.DURATION || contract.rewardsDuration;

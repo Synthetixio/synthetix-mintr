@@ -23,18 +23,18 @@ const SetAllowance = ({ createTransaction, goBack, currentGasPrice }) => {
 		const {
 			snxJS: { iBTC },
 			utils: { parseEther },
-			iBtcRewardsContract,
+			iBtc2RewardsContract,
 		} = snxJSConnector;
 		try {
 			setError(null);
 
 			const gasEstimate = await iBTC.contract.estimate.approve(
-				iBtcRewardsContract.address,
+				iBtc2RewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 			);
 
 			const transaction = await iBTC.approve(
-				iBtcRewardsContract.address,
+				iBtc2RewardsContract.address,
 				parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit: Number(gasEstimate) + GAS_LIMIT_BUFFER,
