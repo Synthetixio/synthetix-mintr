@@ -23,12 +23,10 @@ export const getDebtStatus = async (walletAddress: string) => {
 		Synthetix.collateralisationRatio(walletAddress),
 		Synthetix.transferableSynthetix(walletAddress),
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
-		Liquidations.liquidationRatio(),
 		Liquidations.liquidationDelay(),
+		Liquidations.getLiquidationDeadlineForAccount(walletAddress),
 	]);
-	const [targetCRatio, currentCRatio, transferable, debtBalance, liquidationRatio] = result.map(
-		bigNumberFormatter
-	);
+	const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
 
 	return {
 		targetCRatio,
@@ -36,8 +34,8 @@ export const getDebtStatus = async (walletAddress: string) => {
 		transferable,
 		debtBalance,
 		debtBalanceBN,
-		liquidationRatio: 100 / liquidationRatio,
-		liquidationDelay: Number(result[5]),
+		liquidationDelay: Number(result[4]),
+		liquidationDeadline: Number(result[5]),
 	};
 };
 
