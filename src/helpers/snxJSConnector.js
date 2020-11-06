@@ -25,6 +25,7 @@ import {
 	sBTCRewards,
 	curveSUSDSwapContract,
 	iBtcRewards,
+	iBtc2Rewards,
 } from './contracts';
 
 let snxJSConnector = {
@@ -75,6 +76,11 @@ let snxJSConnector = {
 			this.iBtcRewardsContract = new ethers.Contract(
 				iBtcRewards.address,
 				iBtcRewards.abi,
+				this.signer
+			);
+			this.iBtc2RewardsContract = new ethers.Contract(
+				iBtc2Rewards.address,
+				iBtc2Rewards.abi,
 				this.signer
 			);
 			this.balancerpoolContract = new ethers.Contract(

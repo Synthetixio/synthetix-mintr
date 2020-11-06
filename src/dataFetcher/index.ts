@@ -25,6 +25,7 @@ export const getDebtStatus = async (walletAddress: string) => {
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
 		Liquidations.liquidationRatio(),
 		Liquidations.liquidationDelay(),
+		Liquidations.getLiquidationDeadlineForAccount(walletAddress),
 	]);
 	const [targetCRatio, currentCRatio, transferable, debtBalance, liquidationRatio] = result.map(
 		bigNumberFormatter
@@ -38,6 +39,7 @@ export const getDebtStatus = async (walletAddress: string) => {
 		debtBalanceBN,
 		liquidationRatio: 100 / liquidationRatio,
 		liquidationDelay: Number(result[5]),
+		liquidationDeadline: Number(result[6]),
 	};
 };
 

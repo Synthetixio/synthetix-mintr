@@ -22,11 +22,11 @@ const IBtc = ({ goBack, walletDetails }) => {
 		if (!snxJSConnector.initialized) return;
 		const {
 			snxJS: { iBTC },
-			iBtcRewardsContract,
+			iBtc2RewardsContract,
 		} = snxJSConnector;
 		try {
 			setIsLoading(true);
-			const allowance = await iBTC.allowance(currentWallet, iBtcRewardsContract.address);
+			const allowance = await iBTC.allowance(currentWallet, iBtc2RewardsContract.address);
 			setAllowance(!!bigNumberFormatter(allowance));
 			setIsLoading(false);
 		} catch (e) {
@@ -46,11 +46,11 @@ const IBtc = ({ goBack, walletDetails }) => {
 		if (!currentWallet) return;
 		const {
 			snxJS: { iBTC },
-			iBtcRewardsContract,
+			iBtc2RewardsContract,
 		} = snxJSConnector;
 
 		iBTC.contract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === iBtcRewardsContract.address) {
+			if (owner === currentWallet && spender === iBtc2RewardsContract.address) {
 				setAllowance(true);
 			}
 		});
