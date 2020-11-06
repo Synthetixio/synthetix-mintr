@@ -19,6 +19,7 @@ export type DebtStatus = {
 	transferableSNX: number;
 	debtBalance: number;
 	debtBalanceOf: number;
+	liquidationRatio: number;
 	liquidationDelay: number;
 	liquidationDeadline: number;
 };
