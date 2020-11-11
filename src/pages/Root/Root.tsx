@@ -71,6 +71,9 @@ const Root: FC<PropsFromRedux> = ({
 			fetchDebtStatusRequest();
 			fetchBalancesRequest();
 		}
+		if (appIsReady) {
+			fetchAppStatusRequest();
+		}
 	}, INTERVAL_TIMER);
 
 	useEffect(() => {
