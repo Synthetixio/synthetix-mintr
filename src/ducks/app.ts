@@ -74,9 +74,7 @@ const getAppState = (state: RootState) => state.app;
 export const getAppIsReady = (state: RootState) => getAppState(state).isReady;
 export const getAppIsOnMaintenance = (state: RootState) =>
 	!!getAppState(state).isSystemUpgrading ||
-	(!!getAppState(state).isPVT && process.env.VERCEL_GITHUB_COMMIT_REF === 'master');
-
-console.log(process.env);
+	(!!getAppState(state).isPVT && process.env.REACT_APP_IS_PROD === 'true');
 
 function* fetchSystemStatus() {
 	const {
