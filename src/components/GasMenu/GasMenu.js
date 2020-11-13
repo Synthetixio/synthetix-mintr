@@ -81,14 +81,14 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, cyan }) => {
 									<HoverListElement
 										onClick={() => {
 											setCurrentGasPrice({
-												gasPrice: networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].price,
-												time: networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].time,
+												gasPrice: networkPrices[NETWORK_SPEEDS_TO_KEY.FASTEST].price,
+												time: networkPrices[NETWORK_SPEEDS_TO_KEY.FASTEST].time,
 											});
 											setDropdownVisible(false);
 										}}
 									>
-										<div>{t('transactionSettings.speed.rapid')}</div>
-										<div>{networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].price}</div>
+										<div>{t('transactionSettings.speed.fastest')}</div>
+										<div>{networkPrices[NETWORK_SPEEDS_TO_KEY.FASTEST].price}</div>
 									</HoverListElement>
 								</>
 							) : null}

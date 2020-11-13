@@ -103,7 +103,7 @@ const handleGasNowRequest = async () => {
 		[NETWORK_SPEEDS_TO_KEY.FAST]: {
 			price: Math.round(data.fast / 1e8) / 10,
 		},
-		[NETWORK_SPEEDS_TO_KEY.RAPID]: {
+		[NETWORK_SPEEDS_TO_KEY.FASTEST]: {
 			price: Math.round(data.rapid / 1e8) / 10,
 		},
 	};
@@ -121,7 +121,7 @@ const handleEthGasStationRequest = async () => {
 			price: networkInfo.fast / 10,
 			time: networkInfo.fastWait,
 		},
-		[NETWORK_SPEEDS_TO_KEY.RAPID]: {
+		[NETWORK_SPEEDS_TO_KEY.FASTEST]: {
 			price: networkInfo.fastest / 10,
 			time: networkInfo.fastestWait,
 		},
