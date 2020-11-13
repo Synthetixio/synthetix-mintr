@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { setCurrentGasPrice, getNetworkPrices, getCurrentGasPrice } from '../../ducks/network';
 import ErrorMessage from '../../components/ErrorMessage';
+import { NETWORK_SPEEDS_TO_KEY } from 'constants/network';
 
 const MAX_GAS_MULTIPLE = 3;
 
@@ -15,7 +16,7 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, cyan }) => {
 	const [customGasPrice, setCustomGasPrice] = useState('');
 	const [errorMessage, setErrorMessage] = useState(null);
 
-	const fastPrice = networkPrices?.FAST?.price ?? 0;
+	const fastPrice = networkPrices?.[NETWORK_SPEEDS_TO_KEY.FAST]?.price ?? 0;
 
 	const gasPriceLimit = useMemo(() => {
 		return fastPrice > 0 ? Math.floor(fastPrice * MAX_GAS_MULTIPLE) : 0;
@@ -51,43 +52,43 @@ const GasMenu = ({ networkPrices, setCurrentGasPrice, cyan }) => {
 								/>
 							</ListElement>
 							{errorMessage && <StyledErrorMessage message={errorMessage} />}
-							{networkPrices && networkPrices.SLOW ? (
+							{networkPrices && networkPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE] ? (
 								<>
 									<HoverListElement
 										onClick={() => {
 											setCurrentGasPrice({
-												gasPrice: networkPrices.SLOW.price,
-												time: networkPrices.SLOW.time,
-											});
-											setDropdownVisible(false);
-										}}
-									>
-										<div>{t('transactionSettings.speed.slow')}</div>
-										<div>{networkPrices.SLOW.price}</div>
-									</HoverListElement>
-									<HoverListElement
-										onClick={() => {
-											setCurrentGasPrice({
-												gasPrice: networkPrices.AVERAGE.price,
-												time: networkPrices.AVERAGE.time,
+												gasPrice: networkPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE].price,
+												time: networkPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE].time,
 											});
 											setDropdownVisible(false);
 										}}
 									>
 										<div>{t('transactionSettings.speed.average')}</div>
-										<div>{networkPrices.AVERAGE.price}</div>
+										<div>{networkPrices[NETWORK_SPEEDS_TO_KEY.AVERAGE].price}</div>
 									</HoverListElement>
 									<HoverListElement
 										onClick={() => {
 											setCurrentGasPrice({
-												gasPrice: networkPrices.FAST.price,
-												time: networkPrices.FAST.time,
+												gasPrice: networkPrices[NETWORK_SPEEDS_TO_KEY.FAST].price,
+												time: networkPrices[NETWORK_SPEEDS_TO_KEY.FAST].time,
 											});
 											setDropdownVisible(false);
 										}}
 									>
 										<div>{t('transactionSettings.speed.fast')}</div>
-										<div>{networkPrices.FAST.price}</div>
+										<div>{networkPrices[NETWORK_SPEEDS_TO_KEY.FAST].price}</div>
+									</HoverListElement>
+									<HoverListElement
+										onClick={() => {
+											setCurrentGasPrice({
+												gasPrice: networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].price,
+												time: networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].time,
+											});
+											setDropdownVisible(false);
+										}}
+									>
+										<div>{t('transactionSettings.speed.rapid')}</div>
+										<div>{networkPrices[NETWORK_SPEEDS_TO_KEY.RAPID].price}</div>
 									</HoverListElement>
 								</>
 							) : null}

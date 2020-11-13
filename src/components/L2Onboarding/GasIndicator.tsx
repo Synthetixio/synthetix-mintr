@@ -35,7 +35,7 @@ const TransactionPriceIndicator = ({
 							{currentGasPrice
 								? ` GAS: $${formatCurrency(
 										getTransactionPrice(currentGasPrice.price, gasLimit, ethRate)
-								  )} / ~ SPEED ${currentGasPrice.time} mins`
+								  )} / ~ SPEED ${currentGasPrice.time || 0} mins`
 								: 0}
 						</StatText>
 						<GasMenu cyan={true} />
