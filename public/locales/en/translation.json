@@ -542,7 +542,8 @@
 		"speed": {
 			"slow": "Slow",
 			"average": "Average",
-			"fast": "Fast"
+			"fast": "Fast",
+			"rapid": "Rapid"
 		},
 		"button": {
 			"submit": "Submit"
