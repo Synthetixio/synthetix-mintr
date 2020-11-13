@@ -90,8 +90,8 @@ export const getNetworkPrices = (state: RootState) => getNetworkState(state).net
 function* fetchGasPrices() {
 	try {
 		const networkSpeeds = yield getNetworkSpeeds();
-		const avergageSpeed = networkSpeeds[NETWORK_SPEEDS_TO_KEY.AVERAGE];
-		const defaultSpeed = { ...avergageSpeed, formattedPrice: formatGasPrice(avergageSpeed.price) };
+		const fastSpeed = networkSpeeds[NETWORK_SPEEDS_TO_KEY.FAST];
+		const defaultSpeed = { ...fastSpeed, formattedPrice: formatGasPrice(fastSpeed.price) };
 		yield put(fetchGasPricesSuccess({ networkSpeeds, defaultSpeed }));
 		return true;
 	} catch (e) {
