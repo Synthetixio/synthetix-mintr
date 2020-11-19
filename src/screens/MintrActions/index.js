@@ -5,6 +5,7 @@ import Claim from './Claim';
 import Trade from './Trade';
 import Send from './Transfer';
 import Track from './Track';
+import Withdraw from './Withdraw';
 import Slider from '../../components/ScreenSlider';
 import { ACTIONS_MAP } from '../../constants/actions';
 
@@ -22,6 +23,8 @@ const getActionComponent = action => {
 			return Send;
 		case ACTIONS_MAP.track:
 			return Track;
+		case ACTIONS_MAP.withdrawL2:
+			return Withdraw;
 		default:
 			return;
 	}

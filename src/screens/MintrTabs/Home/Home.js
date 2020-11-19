@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { getWalletDetails } from 'ducks/wallet';
@@ -21,6 +21,12 @@ const actionLabelMapper = {
 	mint: { description: 'home.actions.mint.description', title: 'home.actions.mint.title' },
 	burn: { description: 'home.actions.burn.description', title: 'home.actions.burn.title' },
 	claim: { description: 'home.actions.claim.description', title: 'home.actions.claim.title' },
+	withdrawL2: {
+		description: 'home.actions.withdraw.description',
+		title: 'home.actions.withdraw.title',
+	},
+	inflate: { description: 'home.actions.inflate.description', title: 'home.actions.inflate.title' },
+	close: { description: 'home.actions.close.description', title: 'home.actions.close.title' },
 };
 
 const DEFAULT_GAS_LIMIT = 8000000;
@@ -81,6 +87,32 @@ const Home = ({ walletDetails: { networkId } }) => {
 		}
 	};
 
+	const handleOnButtonClick = action => {
+		switch (action) {
+			case 'inflate':
+				onMintSupply();
+				break;
+			case 'close':
+				onCloseFeePeriod();
+				break;
+			default:
+				setCurrentScenario(action);
+		}
+	};
+
+	const isActionButtonDisabled = action => {
+		switch (action) {
+			case 'inflate':
+				return isMintSupplyDisabled;
+			case 'close':
+				return isCloseFeePeriodDisabled;
+			case 'track':
+				return !isMainNet(networkId);
+			default:
+				return false;
+		}
+	};
+
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
@@ -96,42 +128,23 @@ const Home = ({ walletDetails: { networkId } }) => {
 			</InfoBanner> */}
 			<PageTitle>{t('home.intro.title')}</PageTitle>
 			<ButtonRow>
-				{ACTIONS.map(action => {
+				{ACTIONS.map((action, i) => {
 					return (
 						<Button
-							disabled={action === 'track' && !isMainNet(networkId)}
+							disabled={isActionButtonDisabled(action)}
 							key={action}
-							onClick={() => setCurrentScenario(action)}
+							onClick={() => handleOnButtonClick(action)}
 							big
 						>
 							<ButtonContainer>
 								<ActionImage src={`/images/actions/${action}.svg`} />
-								<StyledH2>{t(actionLabelMapper[action].title)}</StyledH2>
+								<StyledH2 small={i > 2}>{t(actionLabelMapper[action].title)}</StyledH2>
 								<PLarge>{t(actionLabelMapper[action].description)}</PLarge>
 							</ButtonContainer>
 						</Button>
 					);
 				})}
 			</ButtonRow>
-
-			<ButtonRowSmall>
-				<ButtonSmall onClick={onMintSupply} disabled={isMintSupplyDisabled}>
-					<ButtonContainerSmall>
-						<StyledImage src="/images/actions/inflate.svg" />
-						<StyledH4>Mint the weekly SNX supply</StyledH4>
-						<StyledPSmall>Inflate the SNX supply to mint this week's staking rewards</StyledPSmall>
-					</ButtonContainerSmall>
-				</ButtonSmall>
-				<ButtonSmall onClick={onCloseFeePeriod} disabled={isCloseFeePeriodDisabled}>
-					<ButtonContainerSmall>
-						<StyledImage style={{ height: '58px' }} src="/images/actions/close.svg" />
-						<StyledH4>Close the current fee period</StyledH4>
-						<StyledPSmall>
-							Allow stakers to claim their staking rewards by closing the fee period
-						</StyledPSmall>
-					</ButtonContainerSmall>
-				</ButtonSmall>
-			</ButtonRowSmall>
 		</PageContainer>
 	);
 };
@@ -203,6 +216,12 @@ const ButtonSmall = styled(Button)`
 `;
 
 const StyledH2 = styled(H2)`
+	${props =>
+		props.small &&
+		css`
+			font-size: 18px;
+			text-transform: none;
+		`}
 	margin-top: 0;
 `;
 
