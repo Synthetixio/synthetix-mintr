@@ -78,14 +78,14 @@ export async function getEthereumNetwork() {
 	}
 	let networkId = 1;
 	try {
-		if (window.web3?.eth?.net) {
+		if (window.ethereum?.networkVersion) {
+			networkId = Number(window.ethereum?.networkVersion);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		} else if (window.web3?.eth?.net) {
 			networkId = await window.web3.eth.net.getId();
 			return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
 		} else if (window.web3?.version?.network) {
 			networkId = Number(window.web3.version.network);
-			return { name: SUPPORTED_NETWORKS[networkId], networkId };
-		} else if (window.ethereum?.networkVersion) {
-			networkId = Number(window.ethereum?.networkVersion);
 			return { name: SUPPORTED_NETWORKS[networkId], networkId };
 		}
 		return defaultNetwork;
