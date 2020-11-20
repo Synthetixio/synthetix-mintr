@@ -13,7 +13,7 @@ import { RootState } from 'ducks/types';
 import App from './App';
 
 import snxJSConnector, { getProvider } from 'helpers/snxJSConnector';
-import { getEthereumNetwork } from 'helpers/networkHelper';
+import { getEthereumNetwork, onMetamaskNetworkChange } from 'helpers/networkHelper';
 import useInterval from 'hooks/useInterval';
 import { INTERVAL_TIMER } from 'constants/ui';
 
@@ -60,6 +60,7 @@ const Root: FC<PropsFromRedux> = ({
 			fetchGasPricesRequest();
 			fetchRatesRequest();
 			fetchAppStatusRequest();
+			onMetamaskNetworkChange();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [appIsReady]);

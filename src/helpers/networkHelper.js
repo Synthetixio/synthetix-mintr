@@ -152,10 +152,11 @@ export function onMetamaskAccountChange(cb) {
 	window.ethereum.on('accountsChanged', listener);
 }
 
-export function onMetamaskNetworkChange(cb) {
+export function onMetamaskNetworkChange() {
 	if (!window.ethereum) return;
-	const listener = throttle(cb, 1000);
-	window.ethereum.on('networkChanged', listener);
+	window.ethereum.on('chainChanged', () => {
+		document.location.reload();
+	});
 }
 
 export const addBufferToGasLimit = gasLimit =>
