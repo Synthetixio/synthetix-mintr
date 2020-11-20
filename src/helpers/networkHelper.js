@@ -68,12 +68,14 @@ export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const BLOCKNATIVE_KEY = process.env.REACT_APP_BLOCKNATIVE_NOTIFY_KEY;
 
-export const hasWeb3 = () => {
-	return window.web3;
-};
+export const hasEthereumInjected = () => !!window.ethereum;
+
+const defaultNetwork = { name: 'MAINNET', networkId: 1 };
 
 export async function getEthereumNetwork() {
-	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
+	if (!hasEthereumInjected()) {
+		return defaultNetwork;
+	}
 	let networkId = 1;
 	try {
 		if (window.web3?.eth?.net) {
@@ -86,10 +88,10 @@ export async function getEthereumNetwork() {
 			networkId = Number(window.ethereum?.networkVersion);
 			return { name: SUPPORTED_NETWORKS[networkId], networkId };
 		}
-		return { name: 'MAINNET', networkId };
+		return defaultNetwork;
 	} catch (e) {
 		console.log(e);
-		return { name: 'MAINNET', networkId };
+		return defaultNetwork;
 	}
 }
 

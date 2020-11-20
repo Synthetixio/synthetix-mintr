@@ -11,7 +11,7 @@ import { updateWalletStatus, getWalletDetails } from '../../ducks/wallet';
 import { getCurrentTheme } from '../../ducks/ui';
 
 import {
-	hasWeb3,
+	hasEthereumInjected,
 	SUPPORTED_WALLETS,
 	onMetamaskAccountChange,
 	SUPPORTED_WALLETS_MAP,
@@ -159,7 +159,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 				<Wallets>
 					<PMega m={'10px 0 20px 0'}>{t('onboarding.walletConnection.title')}</PMega>
 					{SUPPORTED_WALLETS.map(wallet => {
-						const noMetamask = wallet === 'Metamask' && !hasWeb3();
+						const noMetamask = wallet === 'Metamask' && !hasEthereumInjected();
 						return (
 							<Button
 								disabled={noMetamask}
