@@ -119,11 +119,6 @@ const connectToMetamask = async (networkId, networkName) => {
 		unlocked: false,
 	};
 	try {
-		// Otherwise we enable ethereum if needed (modern browsers)
-		if (window.ethereum) {
-			window.ethereum.autoRefreshOnNetworkChange = true;
-			await window.ethereum.enable();
-		}
 		const accounts = await snxJSConnector.signer.getNextAddresses();
 		if (accounts && accounts.length > 0) {
 			return {
