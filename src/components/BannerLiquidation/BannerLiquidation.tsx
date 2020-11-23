@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from 'ducks/types';
 import { getDebtStatusData } from 'ducks/debtStatus';
