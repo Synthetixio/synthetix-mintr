@@ -114,7 +114,7 @@ const Stake = ({ walletDetails, goBack }) => {
 			if (snxJSConnector.initialized) {
 				iEthRewardsContract.removeAllListeners('Staked');
 				iEthRewardsContract.removeAllListeners('Withdrawn');
-				iEth4RewardsContract.removeAllListeners('Withdrawn');
+				iEth4RewardsContract.removeAllListeners('RewardPaid');
 				iEthRewardsContract.removeAllListeners('RewardPaid');
 				Synthetix.contract.removeAllListeners('ExchangeReclaim');
 				Synthetix.contract.removeAllListeners('ExchangeRebate');
