@@ -22,11 +22,11 @@ const IEth = ({ goBack, walletDetails }) => {
 		if (!snxJSConnector.initialized) return;
 		const {
 			snxJS: { iETH },
-			iEth4RewardsContract,
+			iEthRewardsContract,
 		} = snxJSConnector;
 		try {
 			setIsLoading(true);
-			const allowance = await iETH.allowance(currentWallet, iEth4RewardsContract.address);
+			const allowance = await iETH.allowance(currentWallet, iEthRewardsContract.address);
 			setAllowance(!!bigNumberFormatter(allowance));
 			setIsLoading(false);
 		} catch (e) {
@@ -46,11 +46,11 @@ const IEth = ({ goBack, walletDetails }) => {
 		if (!currentWallet) return;
 		const {
 			snxJS: { iETH },
-			iEth4RewardsContract,
+			iEthRewardsContract,
 		} = snxJSConnector;
 
 		iETH.contract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === iEth4RewardsContract.address) {
+			if (owner === currentWallet && spender === iEthRewardsContract.address) {
 				setAllowance(true);
 			}
 		});
