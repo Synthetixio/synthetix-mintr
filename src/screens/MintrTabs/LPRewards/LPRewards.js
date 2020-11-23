@@ -90,8 +90,9 @@ const LPRewards = ({ currentTheme }) => {
 					const isPeriodFinished = new Date().getTime() > Number(periodFinish) * 1000;
 					contractRewards[contracts[i].address] = isPeriodFinished
 						? 0
-						: Math.trunc(Number(duration) * (rate / 1e18)) / durationInWeeks;
+						: Math.trunc((Number(duration) * (rate / 1e18)) / durationInWeeks);
 				});
+
 				setDistributions(contractRewards);
 			} catch (e) {
 				console.log(e);
