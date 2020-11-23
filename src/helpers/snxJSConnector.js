@@ -17,7 +17,6 @@ import {
 	synthSummary,
 	oldCurvepool,
 	iEthRewards,
-	iEth2Rewards,
 	iEth4Rewards,
 	balancerpool,
 	balancerSNXRewards,
@@ -61,11 +60,6 @@ let snxJSConnector = {
 			this.iEthRewardsContract = new ethers.Contract(
 				iEthRewards.address,
 				iEthRewards.abi,
-				this.signer
-			);
-			this.iEth2RewardsContract = new ethers.Contract(
-				iEth2Rewards.address,
-				iEth2Rewards.abi,
 				this.signer
 			);
 			this.iEth4RewardsContract = new ethers.Contract(

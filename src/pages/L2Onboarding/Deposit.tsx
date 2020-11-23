@@ -70,12 +70,12 @@ export const Deposit: React.FC<DepositProps> = ({
 		setTxPending(true);
 		const {
 			utils,
-			snxJS: { SecondaryDeposit, Synthetix },
+			snxJS: { SynthetixBridgeToOptimism, Synthetix },
 		} = snxJSConnector;
 
 		try {
 			const tx = await Synthetix.contract.approve(
-				SecondaryDeposit.contract.address,
+				SynthetixBridgeToOptimism.contract.address,
 				utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString()),
 				{
 					gasLimit,
@@ -97,11 +97,11 @@ export const Deposit: React.FC<DepositProps> = ({
 		setTxPending(true);
 		const {
 			utils,
-			snxJS: { SecondaryDeposit },
+			snxJS: { SynthetixBridgeToOptimism },
 		} = snxJSConnector;
 		try {
 			const snxBalanceBN = utils.parseEther(snxBalance.toString());
-			const tx = await SecondaryDeposit.contract.deposit(snxBalanceBN, {
+			const tx = await SynthetixBridgeToOptimism.contract.deposit(snxBalanceBN, {
 				gasLimit,
 				gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
 			});
@@ -118,7 +118,7 @@ export const Deposit: React.FC<DepositProps> = ({
 
 	useEffect(() => {
 		const {
-			snxJS: { SecondaryDeposit, Synthetix },
+			snxJS: { SynthetixBridgeToOptimism, Synthetix },
 			utils,
 		} = snxJSConnector;
 		const getGasEstimate = async () => {
@@ -128,12 +128,12 @@ export const Deposit: React.FC<DepositProps> = ({
 				let gasEstimate;
 				if (estimateType === ESTIMATE_TYPES.APPROVE) {
 					gasEstimate = await Synthetix.contract.estimate.approve(
-						SecondaryDeposit.contract.address,
+						SynthetixBridgeToOptimism.contract.address,
 						utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString())
 					);
 				} else {
 					const snxBalanceBN = utils.parseEther(snxBalance.toString());
-					gasEstimate = await SecondaryDeposit.contract.estimate.deposit(snxBalanceBN);
+					gasEstimate = await SynthetixBridgeToOptimism.contract.estimate.deposit(snxBalanceBN);
 				}
 				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
@@ -148,10 +148,13 @@ export const Deposit: React.FC<DepositProps> = ({
 
 	const fetchAllowance = async () => {
 		const {
-			snxJS: { Synthetix, SecondaryDeposit },
+			snxJS: { Synthetix, SynthetixBridgeToOptimism },
 		} = snxJSConnector;
 		try {
-			const allowance = await Synthetix.allowance(currentWallet, SecondaryDeposit.contract.address);
+			const allowance = await Synthetix.allowance(
+				currentWallet,
+				SynthetixBridgeToOptimism.contract.address
+			);
 			const hasAllowance = bigNumberFormatter(allowance) !== 0;
 			if (hasAllowance) {
 				setEstimateType(ESTIMATE_TYPES.DEPOSIT);
