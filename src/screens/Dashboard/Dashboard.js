@@ -30,7 +30,7 @@ import { Info } from 'components/Icons';
 import BalanceTable from './BalanceTable';
 import BarCharts from './BarCharts';
 import CollRatios from './CollRatios';
-import { FlexDivCentered } from 'styles/common';
+import { FlexDivCentered, ExternalLink } from 'styles/common';
 
 const Dashboard = ({
 	walletDetails,
@@ -112,16 +112,12 @@ const Dashboard = ({
 					<BarCharts debtData={debtStatusData} totalEscrow={totalEscrowedBalances} />
 					<BalanceTable debtData={debtStatusData} />
 					<Row margin="18px 0 0 0 ">
-						<Link href="https://synthetix.exchange" target="_blank">
+						<StyledExternalLink href="https://kwenta.io">
 							<ButtonTertiaryLabel>{t('dashboard.buttons.exchange')}</ButtonTertiaryLabel>
-						</Link>
-						<Link
-							href="https://dashboard.synthetix.io"
-							target="_blank"
-							style={{ marginLeft: '5px' }}
-						>
+						</StyledExternalLink>
+						<StyledExternalLink href="https://dashboard.synthetix.io" style={{ marginLeft: '5px' }}>
 							<ButtonTertiaryLabel>{t('dashboard.buttons.synthetixDashboard')}</ButtonTertiaryLabel>
-						</Link>
+						</StyledExternalLink>
 					</Row>
 				</Container>
 			</Content>
@@ -181,7 +177,7 @@ const Row = styled.div`
 	padding: ${props => (props.padding ? props.padding : 0)};
 `;
 
-const Link = styled.a`
+const StyledExternalLink = styled(ExternalLink)`
 	background-color: ${props => props.theme.colorStyles.buttonTertiaryBgFocus};
 	text-transform: uppercase;
 	text-decoration: none;
