@@ -7,11 +7,11 @@
 			},
 			"whatIsSynthetix": {
 				"title": "Qu'est-ce Synthetix?",
-				"description": "Synthetix est un protocole décentralisé d'émission d'actifs synthétiques construit sur Ethereum. Ces actifs synthétiques (Synths) sont créés via le staking du Synthetix Network Token (SNX), et ces Synths peuvent être échangés les uns contre les autres directement grâce aux smart contracts Synthetix sur Synthetix.Exchange."
+				"description": "Synthetix est un protocole décentralisé d'émission d'actifs synthétiques construit sur Ethereum. Ces actifs synthétiques (Synths) sont créés via le staking du Synthetix Network Token (SNX), et ces Synths peuvent être échangés les uns contre les autres directement grâce aux smart contracts Synthetix sur Kwenta.io."
 			},
 			"whyStakeSnx": {
 				"title": "Pourquoi staker SNX?",
-				"description": "Les personnes qui stakent du SNX (stakers) recevront deux types de récompenses. Premièrement, des récompenses liées au staking de SNX, qui sont créées par la politique inflationiste de la monnaie. Deuxièmement, des récompenses liées aux échanges de Synths faits sur Synthetix.Exchange."
+				"description": "Les personnes qui stakent du SNX (stakers) recevront deux types de récompenses. Premièrement, des récompenses liées au staking de SNX, qui sont créées par la politique inflationiste de la monnaie. Deuxièmement, des récompenses liées aux échanges de Synths faits sur Kwenta.io."
 			},
 			"howStakeSnx": {
 				"title": "Que doivent faire les stakers de SNX?",
@@ -75,7 +75,7 @@
 			"balance": "Balance"
 		},
 		"buttons": {
-			"exchange": "Visiter Synthetix.Exchange",
+			"exchange": "Visiter Kwenta.io",
 			"synthetixDashboard": "Visiter le Dashboard",
 			"refresh": "Rafraichir",
 			"delegate": "Déléguer"
@@ -166,7 +166,7 @@
 		"claim": {
 			"action": {
 				"title": "Réclamer",
-				"subtitle": "Si vous avez staké vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liée au staking, et récompense de SNX générée par les échanges de Synths faits sur Synthetix.Exchange.",
+				"subtitle": "Si vous avez staké vos SNX et créé des sUSD, vous pouvez prétendre à deux types de récompenses : récompense de SNX liée au staking, et récompense de SNX générée par les échanges de Synths faits sur Kwenta.io.",
 				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "Périodes de réclamation:",
@@ -212,10 +212,10 @@
 		"trade": {
 			"action": {
 				"title": "Echanger",
-				"subtitle": "Echangez vos Synths contre des sUSD. Pour l'application complète qui vous permet d'échanger n'importe quel Synth, utilisez Synthetix.Exchange.",
+				"subtitle": "Echangez vos Synths contre des sUSD. Pour l'application complète qui vous permet d'échanger n'importe quel Synth, utilisez Kwenta.io.",
 				"buttons": {
 					"trade": "Echanger maintenant",
-					"exchange": "Ouvrir Synthetix.Exchange"
+					"exchange": "Ouvrir Kwenta.io"
 				}
 			},
 			"confirmation": {
@@ -602,7 +602,7 @@
 	"tooltip": {
 		"claim": "Pour réclamer vos récompenses vous devez être dans les 1% du ratio de collatéralisation cible. Si vous êtes en dessous de ce chiffre, vous ne pourrez pas récupérer vos récompenses. Vous pouvez détruire des sUSD pour rétablir votre ratio.",
 		"debtBalance": "Votre dette est initialisée en fonction du montant de sUSD créés, et fluctue selon les gains et les pertes faits par les autres posesseurs de Synths. Chaque fois qu'une personne détient un Synth qui prend de la valeur, ce gain est redistribué proportionnellement entre toutes les dettes des détenteurs de SNX stakés. Pour dévérouiller tout vos SNX stakés, vous devez d'abord payer votre dette.",
-		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Synthetix.Exchange. Ce chiffre est la valeur totale de tout les Synths contenus dans ce portefeuille. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger.",
+		"synthsBalance": "Les Synths sont les actifs synthétiques du système Synthetix, incluant sUSD, sBTC, iBTC, et tous les autres actifs disponibles sur Kwenta.io. Ce chiffre est la valeur totale de tout les Synths contenus dans ce portefeuille. Si vous souhaitez convertir certains Synths en sUSD, cliquez sur le bouton Echanger.",
 		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
 		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}

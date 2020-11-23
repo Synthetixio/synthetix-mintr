@@ -7,11 +7,11 @@
 			},
 			"whatIsSynthetix": {
 				"title": "什么是 Synthetix?",
-				"description": "Synthetix 是一个建立在以太坊上的去中心化合成资产发行协议。这些合成的资产（Synths）来自于抵押 Synthetix Network Token（SNX），且可以直接用 Synthetix.Exchange 交易所上的 Synthetix 智能合约在彼此间直接交易。"
+				"description": "Synthetix 是一个建立在以太坊上的去中心化合成资产发行协议。这些合成的资产（Synths）来自于抵押 Synthetix Network Token（SNX），且可以直接用 Kwenta.io 交易所上的 Synthetix 智能合约在彼此间直接交易。"
 			},
 			"whyStakeSnx": {
 				"title": "为什么要抵押 SNX?",
-				"description": "SNX 持有人可以收到两种奖励。第一，持有人可以收到新增代币奖励，这些代币来自于通胀的货币政策。第二，Synth 的交易奖励，这些奖励来自于 Synthetix.Exchange 交易所的合成资产交易费。"
+				"description": "SNX 持有人可以收到两种奖励。第一，持有人可以收到新增代币奖励，这些代币来自于通胀的货币政策。第二，Synth 的交易奖励，这些奖励来自于 Kwenta.io 交易所的合成资产交易费。"
 			},
 			"howStakeSnx": {
 				"title": "SNX 持有人需要做什么？",
@@ -75,7 +75,7 @@
 			"balance": "余额"
 		},
 		"buttons": {
-			"exchange": "前往 Synthetix.Exchange",
+			"exchange": "前往 Kwenta.io",
 			"synthetixDashboard": "查看 Synthetix Dashboard",
 			"refresh": "刷新",
 			"delegate": "Delegate"
@@ -166,7 +166,7 @@
 		"claim": {
 			"action": {
 				"title": "申领",
-				"subtitle": "如果您抵押了 SNX 并铸造了 sUSD，您就有资格获得两种奖励：SNX 新增代币奖励，和 Synthetix.Exchange 产生的 Synth 交易奖励",
+				"subtitle": "如果您抵押了 SNX 并铸造了 sUSD，您就有资格获得两种奖励：SNX 新增代币奖励，和 Kwenta.io 产生的 Synth 交易奖励",
 				"timeLeft": "Time left to claim",
 				"table": {
 					"title": "申领周期：",
@@ -212,10 +212,10 @@
 		"trade": {
 			"action": {
 				"title": "交易",
-				"subtitle": "交易您的合成资产和 sUSD。使用 Synthetix.Exchange dApp 来交易所有 Synth 种类。",
+				"subtitle": "交易您的合成资产和 sUSD。使用 Kwenta.io dApp 来交易所有 Synth 种类。",
 				"buttons": {
 					"trade": "开始交易",
-					"exchange": "打开 Synthetix.Exchange"
+					"exchange": "打开 Kwenta.io"
 				}
 			},
 			"confirmation": {
@@ -249,7 +249,7 @@
 	"depot": {
 		"intro": {
 			"title": "仓库：",
-			"subtitle": "Synthetix.Exchange 将会把存在这里的 sUSD 卖出换成 ETH。您可以在排队中的任何时间取出您的 sUSD。最小存款为 50 sUSD。"
+			"subtitle": "Kwenta.io 将会把存在这里的 sUSD 卖出换成 ETH。您可以在排队中的任何时间取出您的 sUSD。最小存款为 50 sUSD。"
 		},
 		"table": {
 			"title": "最近活动:",
@@ -602,7 +602,7 @@
 	"tooltip": {
 		"claim": "要申领奖励，您的抵押率不能低于目标抵押率超过 10%。如果您的抵押率不够，奖励领取将被关闭，直到您销毁足够的 sUSD。",
 		"debtBalance": "一开始，您的债务等于初始铸造的 sUSD 数量，接下来，债务将随着其他合成资产持有人的收益和损失而波动。当有人持有的合成资产增值时，那部分收益将按比例来自于所有 SNX 持有人的债务。要解锁所有您抵押的 SNX，您需要首先还清您的债务。",
-		"synthsBalance": "Synth 是在 Synthetix 的系统中的合成资产，包括 sUSD, sBTC, iBTC, 和所有其他在 Synthetix.Exchange 的合成资产。这个数字是此钱包中所有合成资产的价值总和。如果您希望把它们换回 sUSD，请点击交易按钮。",
+		"synthsBalance": "Synth 是在 Synthetix 的系统中的合成资产，包括 sUSD, sBTC, iBTC, 和所有其他在 Kwenta.io 的合成资产。这个数字是此钱包中所有合成资产的价值总和。如果您希望把它们换回 sUSD，请点击交易按钮。",
 		"track": "<0>Issued debt:</0> This displays the total of all your mints and burns over time, revealing how only your C-Ratio management has affected your debt.<1 /><2>Actual debt:</2> This displays your total debt over time.",
 		"poolCompleted": "This incentive is now completed. Please collect any rewards accrued and withdraw your tokens."
 	}
