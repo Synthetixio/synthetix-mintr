@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { getWalletDetails } from 'ducks/wallet';
+import { getDebtStatusData } from 'ducks/debtStatus';
 
 import { PageTitle, PLarge, H2, H4, PSmall } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
@@ -31,11 +32,13 @@ const actionLabelMapper = {
 
 const DEFAULT_GAS_LIMIT = 8000000;
 
-const Home = ({ walletDetails: { networkId } }) => {
+const Home = ({ walletDetails: { networkId }, debtData }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	const [isMintSupplyDisabled, setIsMintSupplyDisabled] = useState(true);
 	const [isCloseFeePeriodDisabled, setIsCloseFeePeriodDisabled] = useState(true);
+
+	const debtBalance = debtData?.debtBalance ?? 0;
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -108,6 +111,8 @@ const Home = ({ walletDetails: { networkId } }) => {
 				return isCloseFeePeriodDisabled;
 			case 'track':
 				return !isMainNet(networkId);
+			case 'withdrawL2':
+				return debtBalance > 0;
 			default:
 				return false;
 		}
@@ -265,6 +270,7 @@ const IconContainer = styled.div`
 
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
+	debtData: getDebtStatusData(state),
 });
 
 export default connect(mapStateToProps, null)(Home);
