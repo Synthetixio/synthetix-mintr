@@ -58,7 +58,7 @@ const Action = ({
 							{t('mintrActions.withdraw.action.buttons.withdraw')}
 						</ButtonPrimary>
 					) : (
-						<ButtonPrimary onClick={onApprove} margin="auto">
+						<ButtonPrimary disabled={isWaitingForAllowance} onClick={onApprove} margin="auto">
 							{isWaitingForAllowance ? (
 								<StyledMicroSpinner color="#ffffff" />
 							) : (

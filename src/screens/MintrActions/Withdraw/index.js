@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import Action from './Action';
-// import Confirmation from './Confirmation';
-// import Complete from './Complete';
+import Confirmation from './Confirmation';
+import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { addBufferToGasLimit, formatGasPrice } from '../../../helpers/networkHelper';
@@ -18,7 +18,7 @@ import { shortenAddress, formatCurrency, bigNumberFormatter } from '../../../hel
 import { useTranslation } from 'react-i18next';
 import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
 
-const DEFAULT_GAS_PRICE = 1;
+const DEFAULT_GAS_PRICE = 0;
 
 const GAS_LIMIT_BUFFER = 10000;
 
@@ -41,21 +41,27 @@ const Withdraw = ({
 	const [gasLimit, setGasLimit] = useState(0);
 	const [gasEstimateError, setGasEstimateError] = useState(null);
 
-	const snxBalance =
-		walletBalances?.find(({ name }) => name === CRYPTO_CURRENCY_TO_KEY.SNX)?.balance ?? 0;
+	const snxBalanceInWallet =
+		walletBalances?.find(({ name }) => name === CRYPTO_CURRENCY_TO_KEY.SNX) ?? null;
+
+	const snxBalance = snxBalanceInWallet?.balance ?? 0;
+	const snxBalanceBN = snxBalanceInWallet?.balanceBN ?? 0;
 
 	const fetchAllowance = async () => {
 		const {
 			snxJS: { Synthetix, SynthetixBridgeToBase },
 		} = snxJSConnector;
 		try {
+			setIsWaitingForAllowance(true);
 			const allowance = await Synthetix.allowance(
 				currentWallet,
 				SynthetixBridgeToBase.contract.address
 			);
 			const hasAllowance = bigNumberFormatter(allowance) !== 0;
 			setAllowance(hasAllowance ? true : false);
+			setIsWaitingForAllowance(false);
 		} catch (e) {
+			setIsWaitingForAllowance(false);
 			console.log(e);
 		}
 	};
@@ -87,21 +93,52 @@ const Withdraw = ({
 	}, [currentWallet]);
 
 	const onWithdraw = async () => {
-		console.log('WITHDRAW');
+		const transactionSettings = {
+			gasPrice: 0,
+			gasLimit,
+		};
+		try {
+			const {
+				snxJS: { SynthetixBridgeToBase },
+			} = snxJSConnector;
+			handleNext(1);
+			const transaction = await SynthetixBridgeToBase.initiateWithdrawal(
+				snxBalanceBN,
+				transactionSettings
+			);
+			if (transaction) {
+				setTransactionInfo({ transactionHash: transaction.hash });
+				createTransaction({
+					hash: transaction.hash,
+					status: 'pending',
+					info: `Withdrawing ${formatCurrency(snxBalance)} SNX`,
+					hasNotification: true,
+					type: 'withdraw',
+				});
+				handleNext(2);
+			}
+		} catch (e) {
+			console.log(e);
+			const errorMessage = errorMapper(e, walletType);
+			console.log(errorMessage);
+			setTransactionInfo({
+				...transactionInfo,
+				transactionError: errorMessage,
+			});
+			handleNext(2);
+		}
 	};
 
 	useEffect(() => {
 		const {
-			snxJS: { SynthetixBridgeToBase, Synthetix },
-			utils,
+			snxJS: { SynthetixBridgeToBase },
 		} = snxJSConnector;
 		const getGasEstimate = async () => {
 			setGasEstimateError(null);
 			try {
-				// setFetchingGasLimit(true);
+				setFetchingGasLimit(true);
 				let gasEstimate;
 
-				const snxBalanceBN = utils.parseEther(snxBalance.toString());
 				gasEstimate = await SynthetixBridgeToBase.contract.estimate.initiateWithdrawal(
 					snxBalanceBN
 				);
@@ -111,11 +148,11 @@ const Withdraw = ({
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setGasEstimateError(t(errorMessage));
 			}
-			// setFetchingGasLimit(false);
+			setFetchingGasLimit(false);
 		};
 		getGasEstimate();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [setGasLimit]);
+	}, [hasAllowance]);
 
 	const onApprove = async () => {
 		const {
@@ -126,15 +163,16 @@ const Withdraw = ({
 		try {
 			setIsWaitingForAllowance(true);
 			const amountToAllow = utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString());
-			const gasEstimate = await Synthetix.contract.estimate.approve(
-				SynthetixBridgeToBase.contract.address,
-				amountToAllow
-			);
+			// const gasEstimate = await Synthetix.contract.estimate.approve(
+			// 	SynthetixBridgeToBase.contract.address,
+			// 	amountToAllow
+			// );
+
 			const transaction = await Synthetix.contract.approve(
 				SynthetixBridgeToBase.contract.address,
 				amountToAllow,
 				{
-					gasLimit: Number(gasEstimate) + GAS_LIMIT_BUFFER,
+					gasLimit: 1000000,
 					gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
 				}
 			);
@@ -170,7 +208,9 @@ const Withdraw = ({
 		networkName,
 	};
 
-	return [Action].map((SlideContent, i) => <SlideContent key={i} {...props} />);
+	return [Action, Confirmation, Complete].map((SlideContent, i) => (
+		<SlideContent key={i} {...props} />
+	));
 };
 
 const mapStateToProps = state => ({

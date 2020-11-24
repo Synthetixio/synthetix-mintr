@@ -143,6 +143,9 @@
 					"withdraw": "Withdraw now",
 					"approve": "Approve"
 				}
+			},
+			"confirmation": {
+				"actionDescription": "Withdrawing"
 			}
 		},
 		"mint": {
