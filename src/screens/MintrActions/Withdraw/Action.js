@@ -6,7 +6,6 @@ import { SlidePage } from 'components/ScreenSlider';
 import TransactionPriceIndicator from 'components/TransactionPriceIndicator';
 import { ButtonPrimary, ButtonTertiary } from 'components/Button';
 import { PLarge, H1, DataHeaderLarge } from 'components/Typography';
-import { MicroSpinner } from 'components/Spinner';
 
 import { FlexDiv } from 'styles/common';
 import { formatCurrency } from 'helpers/formatters';
@@ -17,8 +16,6 @@ const Action = ({
 	onApprove,
 	isFetchingGasLimit,
 	gasEstimateError,
-	isWaitingForAllowance,
-	hasAllowance,
 	snxBalance,
 	gasLimit,
 }) => {
@@ -49,32 +46,19 @@ const Action = ({
 						gasLimit={gasLimit}
 						style={{ margin: '0' }}
 					/>
-					{hasAllowance ? (
-						<ButtonPrimary
-							disabled={isFetchingGasLimit || gasEstimateError || !snxBalance}
-							onClick={onWithdraw}
-							margin="auto"
-						>
-							{t('mintrActions.withdraw.action.buttons.withdraw')}
-						</ButtonPrimary>
-					) : (
-						<ButtonPrimary disabled={isWaitingForAllowance} onClick={onApprove} margin="auto">
-							{isWaitingForAllowance ? (
-								<StyledMicroSpinner color="#ffffff" />
-							) : (
-								t('mintrActions.withdraw.action.buttons.approve')
-							)}
-						</ButtonPrimary>
-					)}
+					<ButtonPrimary
+						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance}
+						onClick={onWithdraw}
+						margin="auto"
+					>
+						{t('mintrActions.withdraw.action.buttons.withdraw')}
+					</ButtonPrimary>
+					}
 				</Bottom>
 			</Container>
 		</SlidePage>
 	);
 };
-
-const StyledMicroSpinner = styled(MicroSpinner)`
-	margin: 0 auto;
-`;
 
 const Container = styled.div`
 	width: 100%;

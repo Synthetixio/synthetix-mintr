@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { intervalToDuration } from 'date-fns';
 
 import { getWalletDetails } from 'ducks/wallet';
 import { getDebtStatusData } from 'ducks/debtStatus';
 
-import { PageTitle, PLarge, H2, H4, PSmall } from 'components/Typography';
+import { PLarge, H2, H4 } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
 import Tooltip from 'components/Tooltip';
 import { Info } from 'components/Icons';
@@ -15,6 +16,7 @@ import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
 import { isMainNet } from 'helpers/networkHelper';
 import snxJSConnector from 'helpers/snxJSConnector';
+import { L2_EVENTS } from 'constants/events';
 
 const initialScenario = null;
 
@@ -31,14 +33,42 @@ const actionLabelMapper = {
 };
 
 const DEFAULT_GAS_LIMIT = 8000000;
+const WITHDRAWAL_DELAY = 5 * 60 * 1000;
+
+const getCounddown = durationObject => {
+	const { days, hours, minutes } = durationObject;
+	if (days) {
+		return `${days} days ${minutes} minutes`;
+	} else if (hours) {
+		return `${hours} hours ${minutes} minutes`;
+	} else if (minutes) {
+		return `${minutes} minutes`;
+	} else return 'less than a minute';
+};
 
 const Home = ({ walletDetails: { networkId }, debtData }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	const [isMintSupplyDisabled, setIsMintSupplyDisabled] = useState(true);
 	const [isCloseFeePeriodDisabled, setIsCloseFeePeriodDisabled] = useState(true);
+	const [timeLeftBeforeWithdrawal, setTimeLeftBeforeWithdrawal] = useState(0);
 
 	const debtBalance = debtData?.debtBalance ?? 0;
+
+	const withdrawalInitiated = Number(localStorage.getItem(L2_EVENTS.WITHDRAWAL_INITIATED));
+
+	useEffect(() => {
+		const withdrawalTarget = withdrawalInitiated + WITHDRAWAL_DELAY;
+
+		if (withdrawalTarget && withdrawalTarget > Date.now()) {
+			const timeLeft = intervalToDuration({
+				start: new Date(),
+				end: new Date(withdrawalTarget),
+			});
+
+			setTimeLeftBeforeWithdrawal(getCounddown(timeLeft));
+		}
+	}, [withdrawalInitiated]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -121,17 +151,19 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
-			{/* <InfoBanner>
-				<InfoBannerCountdown>
-					Withdraw funds from L1 in:<Countdown>3 days 22 hours</Countdown>
-				</InfoBannerCountdown>
-				<Tooltip mode={null} title={'tooltip content'} placement="top">
-					<IconContainer>
-						<Info />
-					</IconContainer>
-				</Tooltip>
-			</InfoBanner> */}
-			<PageTitle>{t('home.intro.title')}</PageTitle>
+			{timeLeftBeforeWithdrawal ? (
+				<InfoBanner>
+					<InfoBannerCountdown>
+						Withdraw funds to L1 in:<Countdown>{timeLeftBeforeWithdrawal}</Countdown>
+					</InfoBannerCountdown>
+					<Tooltip mode={null} title={'tooltip content'} placement="top">
+						<IconContainer>
+							<Info />
+						</IconContainer>
+					</Tooltip>
+				</InfoBanner>
+			) : null}
+
 			<ButtonRow>
 				{ACTIONS.map((action, i) => {
 					return (

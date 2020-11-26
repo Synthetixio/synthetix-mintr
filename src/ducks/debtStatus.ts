@@ -16,7 +16,8 @@ export type DebtStatusSlice = {
 export type DebtStatus = {
 	targetCRatio: number;
 	currentCRatio: number;
-	transferableSNX: number;
+	transferable: number;
+	transferableBN: number;
 	debtBalanceOf: number;
 };
 

@@ -21,6 +21,7 @@ export const getDebtStatus = async (walletAddress: string) => {
 		currentCRatio,
 		transferable,
 		debtBalance,
+		transferableBN: result[2],
 	};
 };
 
