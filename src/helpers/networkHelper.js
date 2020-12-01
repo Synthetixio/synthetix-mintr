@@ -1,5 +1,6 @@
 import throttle from 'lodash/throttle';
 import invert from 'lodash/invert';
+import { providers } from 'ethers';
 
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
@@ -29,6 +30,7 @@ export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
 	3: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,
 	4: `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`,
+	5: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
