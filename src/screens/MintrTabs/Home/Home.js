@@ -2,21 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { intervalToDuration } from 'date-fns';
 
 import { getWalletDetails } from 'ducks/wallet';
 import { getDebtStatusData } from 'ducks/debtStatus';
 
-import { PLarge, H2, H4 } from 'components/Typography';
+import { PLarge, H2, PageTitle } from 'components/Typography';
 import PageContainer from 'components/PageContainer';
-import Tooltip from 'components/Tooltip';
-import { Info } from 'components/Icons';
 
 import MintrAction from '../../MintrActions';
 import { ACTIONS } from 'constants/actions';
 import { isMainNet } from 'helpers/networkHelper';
 import snxJSConnector from 'helpers/snxJSConnector';
-import { L2_EVENTS } from 'constants/events';
 
 const initialScenario = null;
 
@@ -33,42 +29,14 @@ const actionLabelMapper = {
 };
 
 const DEFAULT_GAS_LIMIT = 8000000;
-const WITHDRAWAL_DELAY = 5 * 60 * 1000;
-
-const getCounddown = durationObject => {
-	const { days, hours, minutes } = durationObject;
-	if (days) {
-		return `${days} days ${minutes} minutes`;
-	} else if (hours) {
-		return `${hours} hours ${minutes} minutes`;
-	} else if (minutes) {
-		return `${minutes} minutes`;
-	} else return 'less than a minute';
-};
 
 const Home = ({ walletDetails: { networkId }, debtData }) => {
 	const { t } = useTranslation();
 	const [currentScenario, setCurrentScenario] = useState(initialScenario);
 	const [isMintSupplyDisabled, setIsMintSupplyDisabled] = useState(true);
 	const [isCloseFeePeriodDisabled, setIsCloseFeePeriodDisabled] = useState(true);
-	const [timeLeftBeforeWithdrawal, setTimeLeftBeforeWithdrawal] = useState(0);
 
 	const debtBalance = debtData?.debtBalance ?? 0;
-
-	const withdrawalInitiated = Number(localStorage.getItem(L2_EVENTS.WITHDRAWAL_INITIATED));
-
-	useEffect(() => {
-		const withdrawalTarget = withdrawalInitiated + WITHDRAWAL_DELAY;
-
-		if (withdrawalTarget && withdrawalTarget > Date.now()) {
-			const timeLeft = intervalToDuration({
-				start: new Date(),
-				end: new Date(withdrawalTarget),
-			});
-
-			setTimeLeftBeforeWithdrawal(getCounddown(timeLeft));
-		}
-	}, [withdrawalInitiated]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -81,6 +49,7 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 					FeePool.feePeriodDuration(),
 					FeePool.recentFeePeriods(0),
 				]);
+
 				const now = Math.ceil(new Date().getTime() / 1000);
 				const startTime = Number(recentFeePeriods.startTime);
 				const duration = Number(feePeriodDuration);
@@ -142,7 +111,8 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 			case 'track':
 				return !isMainNet(networkId);
 			case 'withdrawL2':
-				return debtBalance > 0;
+				return false;
+			// return debtBalance > 0;
 			default:
 				return false;
 		}
@@ -151,19 +121,7 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
-			{timeLeftBeforeWithdrawal ? (
-				<InfoBanner>
-					<InfoBannerCountdown>
-						Withdraw funds to L1 in:<Countdown>{timeLeftBeforeWithdrawal}</Countdown>
-					</InfoBannerCountdown>
-					<Tooltip mode={null} title={'tooltip content'} placement="top">
-						<IconContainer>
-							<Info />
-						</IconContainer>
-					</Tooltip>
-				</InfoBanner>
-			) : null}
-
+			<PageTitle>{t('home.intro.title')}</PageTitle>
 			<ButtonRow>
 				{ACTIONS.map((action, i) => {
 					return (
@@ -186,47 +144,6 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	);
 };
 
-const StyledPSmall = styled(PLarge)`
-	margin-top: 0;
-	font-size: 14px;
-`;
-
-const StyledImage = styled.img`
-	height: 60px;
-`;
-
-const InfoBanner = styled.div`
-	border: 1px solid ${props => props.theme.colorStyles.borders};
-	border-radius: 5px;
-	padding: 10px 16px;
-	margin-bottom: 16px;
-	display: flex;
-	flex-direction: row;
-	border-radius: 20px;
-	margin-bottom: 42px;
-	color: #ffffff;
-	text-transform: uppercase;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-`;
-
-const InfoBannerCountdown = styled.div`
-	display: flex;
-`;
-
-const Countdown = styled.div`
-	margin-left: 5px;
-	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
-	background-clip: text;
-	background-size: 100%;
-	background-repeat: repeat;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	-moz-background-clip: text;
-	-moz-text-fill-color: transparent;
-`;
-
 const Button = styled.button`
 	flex: 1;
 	cursor: pointer;
@@ -247,11 +164,6 @@ const Button = styled.button`
 	}
 `;
 
-const ButtonSmall = styled(Button)`
-	height: auto;
-	max-width: 100%;
-`;
-
 const StyledH2 = styled(H2)`
 	${props =>
 		props.small &&
@@ -262,20 +174,10 @@ const StyledH2 = styled(H2)`
 	margin-top: 0;
 `;
 
-const StyledH4 = styled(H4)`
-	font-size: 16px;
-	margin-bottom: 6px;
-	text-transform: none;
-`;
-
 const ButtonContainer = styled.div`
 	padding: 10px;
 	margin: 0 auto;
 	height: 100%;
-`;
-
-const ButtonContainerSmall = styled.div`
-	padding: 20px;
 `;
 
 const ButtonRow = styled.div`
@@ -284,20 +186,9 @@ const ButtonRow = styled.div`
 	grid-gap: 34px;
 `;
 
-const ButtonRowSmall = styled(ButtonRow)`
-	grid-template-columns: repeat(2, 1fr);
-	margin-top: 34px;
-`;
-
 const ActionImage = styled.img`
 	height: 164px;
 	width: 164px;
-`;
-
-const IconContainer = styled.div`
-	margin-left: 10px;
-	width: 23px;
-	height: 23px;
 `;
 
 const mapStateToProps = state => ({

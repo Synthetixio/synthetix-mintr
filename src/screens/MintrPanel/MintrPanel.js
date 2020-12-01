@@ -1,19 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
-import { setCurrentTab, getCurrentTab } from '../../ducks/ui';
-import { getModalState } from '../../ducks/modal';
+import { setCurrentTab, getCurrentTab } from 'ducks/ui';
+import { getModalState } from 'ducks/modal';
 
-import { Home } from '../MintrTabs';
-import { DelegateModal } from '../../components/Modal';
-import { MODAL_TYPES_TO_KEY } from '../../constants/modal';
+import { Home, Withdrawals } from '../MintrTabs';
+import { TabButton } from 'components/Button';
+import { DelegateModal } from 'components/Modal';
+import { MODAL_TYPES_TO_KEY } from 'constants/modal';
+
+const renderScreen = screen => {
+	switch (screen) {
+		case 'home':
+		default:
+			return <Home />;
+		case 'withdrawals':
+			return <Withdrawals />;
+	}
+};
 
 const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setCurrentTab }) => {
+	const { t } = useTranslation();
 	return (
 		<MainContainerWrapper>
 			<Overlay isVisible={modalType}></Overlay>
-			<Home />;
+			<Header>
+				{['home', 'withdrawals'].map(tab => {
+					return (
+						<TabButton
+							key={tab}
+							isSelected={tab === currentTab}
+							onClick={() => setCurrentTab({ tab })}
+						>
+							{/* i18next-extract-disable-next-line */}
+							{t(`mainNavigation.tabs.${tab}`)}
+						</TabButton>
+					);
+				})}
+			</Header>
+			{renderScreen(currentTab)}
 			{modalType === MODAL_TYPES_TO_KEY.DELEGATE ? <DelegateModal {...modalProps} /> : null}
 		</MainContainerWrapper>
 	);
@@ -23,6 +50,13 @@ const MainContainerWrapper = styled('div')`
 	width: 100%;
 	background-color: ${props => props.theme.colorStyles.background};
 	position: relative;
+`;
+
+const Header = styled('div')`
+	display: flex;
+	justify-content: space-between;
+	height: 80px;
+	background-color: ${props => props.theme.colorStyles.menu};
 `;
 
 const Overlay = styled.div`

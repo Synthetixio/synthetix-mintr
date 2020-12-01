@@ -87,7 +87,8 @@
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Escrow",
-			"lpRewards": "LP rewards"
+			"lpRewards": "LP rewards",
+			"withdrawals": "Withdrawals"
 		}
 	},
 	"home": {
