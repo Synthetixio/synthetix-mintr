@@ -111,8 +111,7 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 			case 'track':
 				return !isMainNet(networkId);
 			case 'withdrawL2':
-				return false;
-			// return debtBalance > 0;
+				return debtBalance > 0;
 			default:
 				return false;
 		}
