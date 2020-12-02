@@ -50,6 +50,7 @@ const Withdraw = ({
 		const {
 			snxJS: { SynthetixBridgeToBase },
 		} = snxJSConnector;
+		console.log(SynthetixBridgeToBase);
 		const getGasEstimate = async () => {
 			setGasEstimateError(null);
 			try {
@@ -99,6 +100,7 @@ const Withdraw = ({
 			const {
 				snxJS: { SynthetixBridgeToBase },
 			} = snxJSConnector;
+
 			handleNext(1);
 			const transaction = await SynthetixBridgeToBase.initiateWithdrawal(
 				snxBalanceBN,
