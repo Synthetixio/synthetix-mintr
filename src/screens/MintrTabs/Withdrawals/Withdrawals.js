@@ -28,7 +28,7 @@ import {
 const NUM_BLOCKS_TO_FETCH = 10000000;
 const INTERVAL_TIMER = 60 * 1000;
 
-const getCounddown = durationObject => {
+const getCountdown = durationObject => {
 	const { days, hours, minutes } = durationObject;
 	if (days) {
 		return `${days} days ${minutes} minutes`;
@@ -76,7 +76,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 						timestamp,
 						isConfirmed: false,
 						isOld: timestamp + fraudProofWindow < Date.now(),
-						remaining: getCounddown(
+						remaining: getCountdown(
 							intervalToDuration({
 								start: new Date(timestamp + fraudProofWindow),
 								end: new Date(),
@@ -116,7 +116,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 					return {
 						...event,
 						isConfirmed: !!receipt,
-						transactionHash: receipt?.transactionHash ?? event.transactionHash,
+						transactionHash: receipt?.transactionHash ?? null,
 					};
 				})
 			);
@@ -234,11 +234,11 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 								Header: '',
 								accessor: 'transactionHash',
 								Cell: ({ value, row: { original } }) => {
-									return (
+									return value ? (
 										<StyledExternalLink href={getEtherscanTxLink(420, value, original.isConfirmed)}>
 											Verify
 										</StyledExternalLink>
-									);
+									) : null;
 								},
 								sortable: false,
 							},
