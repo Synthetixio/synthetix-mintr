@@ -18,6 +18,8 @@ import iEthRewards from './iEthRewards';
 import iEth2Rewards from './iEth2Rewards';
 import iBtcRewards from './iBtcRewards';
 
+import stateCommitmentChain from './stateCommitmentChain';
+
 export {
 	uniswapV1,
 	uniswapV2,
@@ -34,4 +36,5 @@ export {
 	sBTCRewards,
 	curveSUSDSwapContract,
 	iEth2Rewards,
+	stateCommitmentChain,
 };

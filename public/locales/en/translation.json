@@ -87,7 +87,8 @@
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Escrow",
-			"lpRewards": "LP rewards"
+			"lpRewards": "LP rewards",
+			"withdrawals": "Withdrawals"
 		}
 	},
 	"home": {
@@ -118,10 +119,36 @@
 			"track": {
 				"title": "Track",
 				"description": "Track your debt over time"
+			},
+			"withdraw": {
+				"title": "Withdraw",
+				"description": "Withdraw L2 SNX to L1"
+			},
+			"inflate": {
+				"title": "Mint the weekly SNX supply",
+				"description": "Inflate the SNX supply to mint this week's staking rewards"
+			},
+			"close": {
+				"title": "Close the current fee period",
+				"description": "Allow stakers to claim their staking rewards by closing the fee period"
 			}
 		}
 	},
 	"mintrActions": {
+		"withdraw": {
+			"action": {
+				"title": "Withdraw",
+				"subtitle": "Withdraw your SNX from L2 to L1",
+				"amount": "SNX amount to withdraw",
+				"buttons": {
+					"withdraw": "Withdraw now",
+					"approve": "Approve"
+				}
+			},
+			"confirmation": {
+				"actionDescription": "Withdrawing"
+			}
+		},
 		"mint": {
 			"action": {
 				"title": "Mint",

@@ -1,5 +1,6 @@
 import throttle from 'lodash/throttle';
 import invert from 'lodash/invert';
+import { providers } from 'ethers';
 
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
@@ -29,6 +30,7 @@ export const INFURA_JSON_RPC_URLS = {
 	1: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
 	3: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,
 	4: `https://rinkeby.infura.io/v3/${INFURA_PROJECT_ID}`,
+	5: `https://goerli.infura.io/v3/${INFURA_PROJECT_ID}`,
 	42: `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
 };
 
@@ -37,6 +39,12 @@ export const PORTIS_APP_ID = '81b6e4b9-9f28-4cce-b41f-2de90c4f906f';
 const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY;
 
 const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`;
+
+export const OVM_RPC_URL = 'https://goerli.optimism.io';
+
+export const L1_MESSENGER_ADDRESS = '0x5DC986a160add9865D9154BbdF1aa2995D09Ec06';
+
+export const L2_MESSENGER_ADDRESS = '0xD8538fABbf7c2538234BcF92FF9D5C3ECA9DBF22';
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
