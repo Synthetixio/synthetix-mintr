@@ -6,6 +6,7 @@ import { intervalToDuration, format } from 'date-fns';
 import { Watcher } from '@eth-optimism/watcher';
 
 import { getCurrentWallet } from 'ducks/wallet';
+import { getDebtStatusData } from 'ducks/debtStatus';
 
 import PageContainer from 'components/PageContainer';
 import { PageTitle, PLarge } from 'components/Typography';
@@ -26,7 +27,6 @@ import {
 
 const NUM_BLOCKS_TO_FETCH = 10000000;
 const INTERVAL_TIMER = 60 * 1000;
-const FRAUD_PROOF_WINDOW = 2 * 60 * 1000;
 
 const getCounddown = durationObject => {
 	const { days, hours, minutes } = durationObject;
@@ -39,11 +39,13 @@ const getCounddown = durationObject => {
 	} else return 'less than a minute';
 };
 
-const Withdrawals = ({ currentWallet }) => {
+const Withdrawals = ({ currentWallet, debtStatus }) => {
 	const [submittedWithdrawals, setSubmittedWithdrawals] = useState(null);
 	const [isFetchingSubmittedWithdrawals, setIsFetchingSubmittedWithdrawals] = useState(false);
 	const [pendingWithdrawals, setPendingWithdrawals] = useState(null);
 	const [isFetchingPendingWithdrawals, setIsFetchingPendingWithdrawals] = useState(false);
+
+	const fraudProofWindow = debtStatus?.fraudProofWindow ?? 0;
 
 	const fetchSubmittedWithdrawals = async () => {
 		const {
@@ -73,10 +75,10 @@ const Withdrawals = ({ currentWallet }) => {
 					return {
 						timestamp,
 						isConfirmed: false,
-						isOld: timestamp + FRAUD_PROOF_WINDOW < Date.now(),
+						isOld: timestamp + fraudProofWindow < Date.now(),
 						remaining: getCounddown(
 							intervalToDuration({
-								start: new Date(timestamp + FRAUD_PROOF_WINDOW),
+								start: new Date(timestamp + fraudProofWindow),
 								end: new Date(),
 							})
 						),
@@ -90,16 +92,12 @@ const Withdrawals = ({ currentWallet }) => {
 
 			events.forEach(event => {
 				if (event.isOld) {
-					pendings.push(event);
+					pendings.unshift(event);
 				} else submitteds.push(event);
 			});
 
 			setSubmittedWithdrawals(submitteds);
 			setIsFetchingSubmittedWithdrawals(false);
-
-			pendings = pendings.slice(-1);
-			setPendingWithdrawals(pendings);
-			setIsFetchingPendingWithdrawals(false);
 
 			const watcher = new Watcher({
 				l1: {
@@ -111,12 +109,19 @@ const Withdrawals = ({ currentWallet }) => {
 					messengerAddress: L2_MESSENGER_ADDRESS,
 				},
 			});
-
-			const msgHashes = await watcher.getMessageHashesFromL2Tx(pendings[0].transactionHash);
-			const receipt = await watcher.getL1TransactionReceipt(msgHashes[0]);
-			setPendingWithdrawals([
-				{ ...pendings[0], isConfirmed: true, transactionHash: receipt.transactionHash },
-			]);
+			const pendingsWithReceipt = await Promise.all(
+				pendings.map(async event => {
+					const msgHashes = await watcher.getMessageHashesFromL2Tx(event.transactionHash);
+					const receipt = await watcher.getL1TransactionReceipt(msgHashes[0], false);
+					return {
+						...event,
+						isConfirmed: !!receipt,
+						transactionHash: receipt?.transactionHash ?? event.transactionHash,
+					};
+				})
+			);
+			setPendingWithdrawals(pendingsWithReceipt);
+			setIsFetchingPendingWithdrawals(false);
 		} catch (e) {
 			console.log(e);
 			setIsFetchingSubmittedWithdrawals(false);
@@ -125,11 +130,11 @@ const Withdrawals = ({ currentWallet }) => {
 	};
 
 	useEffect(() => {
-		if (currentWallet) {
+		if (currentWallet && fraudProofWindow) {
 			fetchSubmittedWithdrawals();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentWallet]);
+	}, [currentWallet, fraudProofWindow]);
 
 	useInterval(() => {
 		if (currentWallet) {
@@ -139,11 +144,10 @@ const Withdrawals = ({ currentWallet }) => {
 
 	return (
 		<PageContainer>
-			<StyledPageTitle>Submitted</StyledPageTitle>
+			<StyledPageTitle>Pending</StyledPageTitle>
 			<PLarge>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit integer commodo volutpat
-				risus id nam tellus fames bibendum. Pharetra id nec sed justo ut. Praesent amet non pulvinar
-				pellentesque elementum, sit.
+				To withdraw your SNX from L2 back to L1, there is first a waiting period to confirm your
+				transaction.
 			</PLarge>
 			<TableWrapper>
 				{submittedWithdrawals && submittedWithdrawals.length > 0 ? (
@@ -191,11 +195,10 @@ const Withdrawals = ({ currentWallet }) => {
 					</SpinnerWrapper>
 				)}
 			</TableWrapper>
-			<StyledPageTitle>Pending</StyledPageTitle>
+			<StyledPageTitle>Ready to be relayed</StyledPageTitle>
 			<PLarge>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit integer commodo volutpat
-				risus id nam tellus fames bibendum. Pharetra id nec sed justo ut. Praesent amet non pulvinar
-				pellentesque elementum, sit.
+				Once your withdrawal has been through the waiting period, it must be picked up by the
+				relayer to migrate your SNX from L2 back to L1.
 			</PLarge>
 			<TableWrapper>
 				{pendingWithdrawals && pendingWithdrawals.length > 0 ? (
@@ -283,6 +286,7 @@ const StyledPageTitle = styled(PageTitle)`
 
 const mapStateToProps = state => ({
 	currentWallet: getCurrentWallet(state),
+	debtStatus: getDebtStatusData(state),
 });
 
 export default connect(mapStateToProps, null)(Withdrawals);

@@ -19,6 +19,7 @@ export type DebtStatus = {
 	transferable: number;
 	transferableBN: number;
 	debtBalanceOf: number;
+	fraudProofWindow: number;
 };
 
 const initialState: DebtStatusSlice = {

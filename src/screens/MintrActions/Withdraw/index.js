@@ -45,12 +45,13 @@ const Withdraw = ({
 
 	const snxBalance = debtStatus?.transferable ?? 0;
 	const snxBalanceBN = debtStatus?.transferableBN ?? 0;
+	const fraudProofWindow = debtStatus?.fraudProofWindow ?? 0;
 
 	useEffect(() => {
 		const {
 			snxJS: { SynthetixBridgeToBase },
 		} = snxJSConnector;
-		console.log(SynthetixBridgeToBase);
+
 		const getGasEstimate = async () => {
 			setGasEstimateError(null);
 			try {
@@ -61,6 +62,7 @@ const Withdraw = ({
 
 				setGasLimit(Number(gasEstimate));
 			} catch (e) {
+				console.log(e);
 				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
 				setGasEstimateError(t(errorMessage));
 			}
@@ -139,6 +141,7 @@ const Withdraw = ({
 		...transactionInfo,
 		walletType,
 		networkName,
+		fraudProofWindow,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (

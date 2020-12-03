@@ -19,10 +19,10 @@ let snxJSConnector = {
 		this.provider = this.snxJS.contractSettings.provider;
 		this.utils = this.snxJS.utils;
 		this.ethersUtils = this.snxJS.ethers.utils;
-		this.stateCommitmentChain = new ethers.Contract(
+		this.stateCommitmentChain = new Contract(
 			stateCommitmentChain.address,
 			stateCommitmentChain.abi,
-			new providers.Web3Provider(window.ethereum).getSigner()
+			new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[5])
 		);
 	},
 };
