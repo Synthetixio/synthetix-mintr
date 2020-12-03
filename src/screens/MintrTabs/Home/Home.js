@@ -36,8 +36,6 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	const [isMintSupplyDisabled, setIsMintSupplyDisabled] = useState(true);
 	const [isCloseFeePeriodDisabled, setIsCloseFeePeriodDisabled] = useState(true);
 
-	const debtBalance = debtData?.debtBalance ?? 0;
-
 	useEffect(() => {
 		const fetchData = async () => {
 			const {
@@ -111,7 +109,7 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 			case 'track':
 				return !isMainNet(networkId);
 			case 'withdrawL2':
-				return debtBalance > 0;
+				return false;
 			default:
 				return false;
 		}

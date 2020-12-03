@@ -20,6 +20,7 @@ const Action = ({
 	snxBalance,
 	gasLimit,
 	fraudProofWindow,
+	debtBalance,
 }) => {
 	const { t } = useTranslation();
 	return (
@@ -54,7 +55,7 @@ const Action = ({
 						style={{ margin: '0' }}
 					/>
 					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance}
+						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance || debtBalance}
 						onClick={onWithdraw}
 						margin="auto"
 					>

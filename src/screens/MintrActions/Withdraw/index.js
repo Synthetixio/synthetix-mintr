@@ -46,6 +46,7 @@ const Withdraw = ({
 	const snxBalance = debtStatus?.transferable ?? 0;
 	const snxBalanceBN = debtStatus?.transferableBN ?? 0;
 	const fraudProofWindow = debtStatus?.fraudProofWindow ?? 0;
+	const debtBalance = debtStatus?.debtBalance ?? 0;
 
 	useEffect(() => {
 		const {
@@ -135,6 +136,7 @@ const Withdraw = ({
 		onDestroy,
 		onWithdraw,
 		snxBalance,
+		debtBalance,
 		isFetchingGasLimit,
 		gasLimit,
 		gasEstimateError,
