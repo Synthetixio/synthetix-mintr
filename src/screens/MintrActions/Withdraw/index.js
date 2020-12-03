@@ -1,26 +1,26 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
 import Action from './Action';
 import Confirmation from './Confirmation';
 import Complete from './Complete';
 
-import snxJSConnector from '../../../helpers/snxJSConnector';
-import { addBufferToGasLimit, formatGasPrice } from '../../../helpers/networkHelper';
-import { SliderContext } from '../../../components/ScreenSlider';
-import { TOKEN_ALLOWANCE_LIMIT } from 'constants/network';
+import snxJSConnector from 'helpers/snxJSConnector';
+import { SliderContext } from 'components/ScreenSlider';
+import errorMapper from 'helpers/errorMapper';
 
-import errorMapper from '../../../helpers/errorMapper';
 import { createTransaction } from 'ducks/transactions';
 import { getCurrentGasPrice } from 'ducks/network';
-import { getWalletBalancesToArray } from 'ducks/balances';
+import { getDebtStatusData, fetchDebtStatusRequest } from 'ducks/debtStatus';
+import { fetchEscrowRequest } from 'ducks/escrow';
+import { fetchBalancesRequest } from 'ducks/balances';
 import { getWalletDetails } from 'ducks/wallet';
-import { shortenAddress, formatCurrency, bigNumberFormatter } from '../../../helpers/formatters';
-import { useTranslation } from 'react-i18next';
-import { CRYPTO_CURRENCY_TO_KEY } from 'constants/currency';
+import { formatCurrency } from 'helpers/formatters';
+
+import { L2_EVENTS } from 'constants/events';
 
 const DEFAULT_GAS_PRICE = 0;
-
-const GAS_LIMIT_BUFFER = 10000;
 
 const Withdraw = ({
 	onDestroy,
@@ -28,79 +28,82 @@ const Withdraw = ({
 	currentGasPrice,
 	createTransaction,
 	walletBalances,
+	debtStatus,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
+	fetchEscrowRequest,
 }) => {
-	const { handleNext, handlePrev } = useContext(SliderContext);
+	const { handleNext } = useContext(SliderContext);
 	const { t } = useTranslation();
 	const { walletType, networkName, currentWallet } = walletDetails;
 
-	const [error, setError] = useState(null);
 	const [transactionInfo, setTransactionInfo] = useState({});
 	const [isFetchingGasLimit, setFetchingGasLimit] = useState(false);
-	const [isWaitingForAllowance, setIsWaitingForAllowance] = useState(false);
-	const [hasAllowance, setAllowance] = useState(false);
+
 	const [gasLimit, setGasLimit] = useState(0);
 	const [gasEstimateError, setGasEstimateError] = useState(null);
 
-	const snxBalanceInWallet =
-		walletBalances?.find(({ name }) => name === CRYPTO_CURRENCY_TO_KEY.SNX) ?? null;
+	const snxBalance = debtStatus?.transferable ?? 0;
+	const snxBalanceBN = debtStatus?.transferableBN ?? 0;
+	const fraudProofWindow = debtStatus?.fraudProofWindow ?? 0;
+	const debtBalance = debtStatus?.debtBalance ?? 0;
 
-	const snxBalance = snxBalanceInWallet?.balance ?? 0;
-	const snxBalanceBN = snxBalanceInWallet?.balanceBN ?? 0;
-
-	const fetchAllowance = async () => {
+	useEffect(() => {
 		const {
-			snxJS: { Synthetix, SynthetixBridgeToBase },
+			snxJS: { SynthetixBridgeToBase },
 		} = snxJSConnector;
-		try {
-			setIsWaitingForAllowance(true);
-			const allowance = await Synthetix.allowance(
-				currentWallet,
-				SynthetixBridgeToBase.contract.address
-			);
-			const hasAllowance = bigNumberFormatter(allowance) !== 0;
-			setAllowance(hasAllowance ? true : false);
-			setIsWaitingForAllowance(false);
-		} catch (e) {
-			setIsWaitingForAllowance(false);
-			console.log(e);
-		}
-	};
+
+		const getGasEstimate = async () => {
+			setGasEstimateError(null);
+			try {
+				setFetchingGasLimit(true);
+				const gasEstimate = await SynthetixBridgeToBase.contract.estimate.initiateWithdrawal(
+					snxBalanceBN
+				);
+
+				setGasLimit(Number(gasEstimate));
+			} catch (e) {
+				console.log(e);
+				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
+				setGasEstimateError(t(errorMessage));
+			}
+			setFetchingGasLimit(false);
+		};
+		getGasEstimate();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [snxBalanceBN]);
 
 	useEffect(() => {
 		if (!currentWallet) return;
 		const {
-			snxJS: { SynthetixBridgeToBase, Synthetix },
+			snxJS: { SynthetixBridgeToBase },
 		} = snxJSConnector;
 
-		fetchAllowance();
-		SynthetixBridgeToBase.contract.on('WithdrawalInitiated', account => {
-			console.log('ddddddd', account);
+		SynthetixBridgeToBase.contract.on(L2_EVENTS.WITHDRAWAL_INITIATED, account => {
 			if (account === currentWallet) {
-				console.log('rororo');
-			}
-		});
-		Synthetix.contract.on('Approval', (owner, spender) => {
-			if (owner === currentWallet && spender === SynthetixBridgeToBase.contract.address) {
-				setAllowance(true);
-				setIsWaitingForAllowance(false);
+				localStorage.setItem(L2_EVENTS.WITHDRAWAL_INITIATED, Date.now());
+				fetchBalancesRequest();
+				fetchDebtStatusRequest();
+				fetchEscrowRequest();
 			}
 		});
 		return () => {
-			SynthetixBridgeToBase.contract.removeAllListeners('WithdrawalInitiated');
-			Synthetix.contract.removeAllListeners('Approval');
+			SynthetixBridgeToBase.contract.removeAllListeners(L2_EVENTS.WITHDRAWAL_INITIATED);
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentWallet]);
 
 	const onWithdraw = async () => {
 		const transactionSettings = {
-			gasPrice: 0,
+			gasPrice: DEFAULT_GAS_PRICE,
 			gasLimit,
 		};
 		try {
+			localStorage.setItem(L2_EVENTS.WITHDRAWAL_INITIATED, Date.now());
 			const {
 				snxJS: { SynthetixBridgeToBase },
 			} = snxJSConnector;
+
 			handleNext(1);
 			const transaction = await SynthetixBridgeToBase.initiateWithdrawal(
 				snxBalanceBN,
@@ -129,83 +132,18 @@ const Withdraw = ({
 		}
 	};
 
-	useEffect(() => {
-		const {
-			snxJS: { SynthetixBridgeToBase },
-		} = snxJSConnector;
-		const getGasEstimate = async () => {
-			setGasEstimateError(null);
-			try {
-				setFetchingGasLimit(true);
-				let gasEstimate;
-
-				gasEstimate = await SynthetixBridgeToBase.contract.estimate.initiateWithdrawal(
-					snxBalanceBN
-				);
-
-				setGasLimit(addBufferToGasLimit(gasEstimate));
-			} catch (e) {
-				const errorMessage = (e && e.message) || 'input.error.gasEstimate';
-				setGasEstimateError(t(errorMessage));
-			}
-			setFetchingGasLimit(false);
-		};
-		getGasEstimate();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hasAllowance]);
-
-	const onApprove = async () => {
-		const {
-			utils,
-			snxJS: { SynthetixBridgeToBase, Synthetix },
-		} = snxJSConnector;
-
-		try {
-			setIsWaitingForAllowance(true);
-			const amountToAllow = utils.parseEther(TOKEN_ALLOWANCE_LIMIT.toString());
-			// const gasEstimate = await Synthetix.contract.estimate.approve(
-			// 	SynthetixBridgeToBase.contract.address,
-			// 	amountToAllow
-			// );
-
-			const transaction = await Synthetix.contract.approve(
-				SynthetixBridgeToBase.contract.address,
-				amountToAllow,
-				{
-					gasLimit: 1000000,
-					gasPrice: formatGasPrice(DEFAULT_GAS_PRICE),
-				}
-			);
-			if (transaction) {
-				createTransaction({
-					hash: transaction.hash,
-					status: 'pending',
-					info: `Approving SNX`,
-					hasNotification: true,
-					type: 'approve',
-				});
-			}
-		} catch (e) {
-			console.log(e);
-			setIsWaitingForAllowance(false);
-		}
-	};
-
-	console.log(hasAllowance, isFetchingGasLimit, gasEstimateError);
-
 	const props = {
 		onDestroy,
 		onWithdraw,
-		onApprove,
 		snxBalance,
+		debtBalance,
 		isFetchingGasLimit,
 		gasLimit,
-		isWaitingForAllowance,
-		hasAllowance,
-		gasEstimateError: error,
+		gasEstimateError,
 		...transactionInfo,
 		walletType,
 		networkName,
+		fraudProofWindow,
 	};
 
 	return [Action, Confirmation, Complete].map((SlideContent, i) => (
@@ -216,11 +154,14 @@ const Withdraw = ({
 const mapStateToProps = state => ({
 	walletDetails: getWalletDetails(state),
 	currentGasPrice: getCurrentGasPrice(state),
-	walletBalances: getWalletBalancesToArray(state),
+	debtStatus: getDebtStatusData(state),
 });
 
 const mapDispatchToProps = {
 	createTransaction,
+	fetchBalancesRequest,
+	fetchDebtStatusRequest,
+	fetchEscrowRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Withdraw);

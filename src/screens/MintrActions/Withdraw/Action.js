@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { formatDistanceToNow } from 'date-fns';
 
 import { SlidePage } from 'components/ScreenSlider';
 import TransactionPriceIndicator from 'components/TransactionPriceIndicator';
 import { ButtonPrimary, ButtonTertiary } from 'components/Button';
 import { PLarge, H1, DataHeaderLarge } from 'components/Typography';
-import { MicroSpinner } from 'components/Spinner';
 
 import { FlexDiv } from 'styles/common';
 import { formatCurrency } from 'helpers/formatters';
@@ -17,10 +17,10 @@ const Action = ({
 	onApprove,
 	isFetchingGasLimit,
 	gasEstimateError,
-	isWaitingForAllowance,
-	hasAllowance,
 	snxBalance,
 	gasLimit,
+	fraudProofWindow,
+	debtBalance,
 }) => {
 	const { t } = useTranslation();
 	return (
@@ -34,7 +34,12 @@ const Action = ({
 					<Intro>
 						<ActionImage src="/images/actions/withdrawL2.svg" big />
 						<StyledH1>{t('mintrActions.withdraw.action.title')}</StyledH1>
-						<PLarge>{t('mintrActions.withdraw.action.subtitle')}</PLarge>
+						<PLarge>
+							In order to be eligible for the L2 SNX rewards from the trial, you must withdraw at
+							least 0.01 SNX this week (first burn all your debt in order to withdraw). The SNX you
+							withdraw will be available on L1 in{' '}
+							{formatDistanceToNow(new Date(Date.now() + fraudProofWindow))}.
+						</PLarge>
 					</Intro>
 					<FlexDiv>
 						<Box>
@@ -49,32 +54,19 @@ const Action = ({
 						gasLimit={gasLimit}
 						style={{ margin: '0' }}
 					/>
-					{hasAllowance ? (
-						<ButtonPrimary
-							disabled={isFetchingGasLimit || gasEstimateError || !snxBalance}
-							onClick={onWithdraw}
-							margin="auto"
-						>
-							{t('mintrActions.withdraw.action.buttons.withdraw')}
-						</ButtonPrimary>
-					) : (
-						<ButtonPrimary disabled={isWaitingForAllowance} onClick={onApprove} margin="auto">
-							{isWaitingForAllowance ? (
-								<StyledMicroSpinner color="#ffffff" />
-							) : (
-								t('mintrActions.withdraw.action.buttons.approve')
-							)}
-						</ButtonPrimary>
-					)}
+					<ButtonPrimary
+						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance || debtBalance}
+						onClick={onWithdraw}
+						margin="auto"
+					>
+						{t('mintrActions.withdraw.action.buttons.withdraw')}
+					</ButtonPrimary>
+					}
 				</Bottom>
 			</Container>
 		</SlidePage>
 	);
 };
-
-const StyledMicroSpinner = styled(MicroSpinner)`
-	margin: 0 auto;
-`;
 
 const Container = styled.div`
 	width: 100%;

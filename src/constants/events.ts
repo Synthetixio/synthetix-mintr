@@ -31,3 +31,7 @@ export const REWARD_ESCROW_EVENTS = {
 export const SYNTHETIX_ESCROW_EVENTS = {
 	VESTED: 'Vested',
 };
+
+export const L2_EVENTS = {
+	WITHDRAWAL_INITIATED: 'WithdrawalInitiated',
+};
