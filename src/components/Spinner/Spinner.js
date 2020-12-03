@@ -18,7 +18,7 @@ export const MicroSpinner = props => {
 		<MicroWrapper {...props}>
 			<Inner isMicro={true}>
 				{[0, 1, 2, 3].map(i => {
-					return <MicroCircle key={i} />;
+					return <MicroCircle {...props} key={i} />;
 				})}
 			</Inner>
 		</MicroWrapper>
@@ -158,7 +158,7 @@ const NotificationSpinnerCircle = styled(Circle)`
 `;
 
 const MicroCircle = styled(Circle)`
-	background-color: ${props => props.theme.colorStyles.hyperlink};
+	background-color: ${props => (props.color ? props.color : props.theme.colorStyles.hyperlink)};
 	width: 5px;
 	height: 5px;
 	top: 20px;

@@ -8,12 +8,14 @@ const DEFAULT_SUSD_RATE = 1;
 export const getDebtStatus = async (walletAddress: string) => {
 	const {
 		snxJS: { SystemSettings, Synthetix },
+		stateCommitmentChain,
 	} = snxJSConnector as any;
 	const result = await Promise.all([
 		SystemSettings.issuanceRatio(),
 		Synthetix.collateralisationRatio(walletAddress),
 		Synthetix.transferableSynthetix(walletAddress),
 		Synthetix.debtBalanceOf(walletAddress, bytesFormatter('sUSD')),
+		stateCommitmentChain.FRAUD_PROOF_WINDOW(),
 	]);
 	const [targetCRatio, currentCRatio, transferable, debtBalance] = result.map(bigNumberFormatter);
 	return {
@@ -21,6 +23,8 @@ export const getDebtStatus = async (walletAddress: string) => {
 		currentCRatio,
 		transferable,
 		debtBalance,
+		transferableBN: result[2],
+		fraudProofWindow: Number(result[4]) * 1000,
 	};
 };
 

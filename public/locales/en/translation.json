@@ -87,7 +87,8 @@
 			"depot": "Depot",
 			"transactionsHistory": "Transactions",
 			"escrow": "Escrow",
-			"lpRewards": "LP rewards"
+			"lpRewards": "LP rewards",
+			"withdrawals": "Withdrawals"
 		}
 	},
 	"home": {
@@ -140,8 +141,12 @@
 				"subtitle": "Withdraw your SNX from L2 to L1",
 				"amount": "SNX amount to withdraw",
 				"buttons": {
-					"withdraw": "Withdraw now"
+					"withdraw": "Withdraw now",
+					"approve": "Approve"
 				}
+			},
+			"confirmation": {
+				"actionDescription": "Withdrawing"
 			}
 		},
 		"mint": {

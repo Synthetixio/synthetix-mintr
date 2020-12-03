@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { formatDistanceToNow } from 'date-fns';
 
 import { SlidePage } from 'components/ScreenSlider';
 import TransactionPriceIndicator from 'components/TransactionPriceIndicator';
@@ -13,10 +14,13 @@ import { formatCurrency } from 'helpers/formatters';
 const Action = ({
 	onDestroy,
 	onWithdraw,
+	onApprove,
 	isFetchingGasLimit,
 	gasEstimateError,
 	snxBalance,
 	gasLimit,
+	fraudProofWindow,
+	debtBalance,
 }) => {
 	const { t } = useTranslation();
 	return (
@@ -30,7 +34,12 @@ const Action = ({
 					<Intro>
 						<ActionImage src="/images/actions/withdrawL2.svg" big />
 						<StyledH1>{t('mintrActions.withdraw.action.title')}</StyledH1>
-						<PLarge>{t('mintrActions.withdraw.action.subtitle')}</PLarge>
+						<PLarge>
+							In order to be eligible for the L2 SNX rewards from the trial, you must withdraw at
+							least 0.01 SNX this week (first burn all your debt in order to withdraw). The SNX you
+							withdraw will be available on L1 in{' '}
+							{formatDistanceToNow(new Date(Date.now() + fraudProofWindow))}.
+						</PLarge>
 					</Intro>
 					<FlexDiv>
 						<Box>
@@ -46,12 +55,13 @@ const Action = ({
 						style={{ margin: '0' }}
 					/>
 					<ButtonPrimary
-						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance}
+						disabled={isFetchingGasLimit || gasEstimateError || !snxBalance || debtBalance}
 						onClick={onWithdraw}
 						margin="auto"
 					>
 						{t('mintrActions.withdraw.action.buttons.withdraw')}
 					</ButtonPrimary>
+					}
 				</Bottom>
 			</Container>
 		</SlidePage>
