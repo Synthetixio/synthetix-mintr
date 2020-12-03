@@ -40,11 +40,11 @@ const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY;
 
 const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`;
 
-export const OVM_RPC_URL = 'https://uat.optimism.io';
+export const OVM_RPC_URL = 'https://goerli.optimism.io';
 
-export const L1_MESSENGER_ADDRESS = '0x1e3aa06079fDa5F395E663474ec5f7207A131bD2';
+export const L1_MESSENGER_ADDRESS = '0x5DC986a160add9865D9154BbdF1aa2995D09Ec06';
 
-export const L2_MESSENGER_ADDRESS = '0x39405fcB4fcc295DcFD16b08bD6f0bAd9D34E438';
+export const L2_MESSENGER_ADDRESS = '0xD8538fABbf7c2538234BcF92FF9D5C3ECA9DBF22';
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
