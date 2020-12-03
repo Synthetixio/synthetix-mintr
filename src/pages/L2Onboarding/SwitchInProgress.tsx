@@ -41,10 +41,9 @@ const SwitchInProgress: FC<SwitchInProgressProps> = ({
 
 			await watcher.l1.provider.waitForTransaction(transactionHash);
 			const [messageHash] = await watcher.getMessageHashesFromL1Tx(transactionHash);
-			watcher.onceL2Relay(messageHash, l2txhash => {
-				console.log('Got L2 Tx Hash:', l2txhash);
-				onComplete(l2txhash);
-			});
+			const receiptL2 = await watcher.getL2TransactionReceipt(messageHash);
+			console.log('Got L2 Tx Hash:', receiptL2.transactionHash);
+			onComplete(receiptL2.transactionHash);
 		};
 		listen();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
