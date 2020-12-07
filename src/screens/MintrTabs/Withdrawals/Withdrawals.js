@@ -31,7 +31,7 @@ const INTERVAL_TIMER = 60 * 1000;
 const getCountdown = durationObject => {
 	const { days, hours, minutes } = durationObject;
 	if (days) {
-		return `${days} days ${minutes} minutes`;
+		return `${days} days ${hours} hours ${minutes} minutes`;
 	} else if (hours) {
 		return `${hours} hours ${minutes} minutes`;
 	} else if (minutes) {
