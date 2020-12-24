@@ -1,6 +1,6 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.33.0-ovm",
+	"version": "2.35.2",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
@@ -44,7 +44,7 @@
 		"styled-components": "^4.3.2",
 		"styled-system": "^5.1.0",
 		"synthetix-data": "2.1.39",
-		"synthetix-js": "2.35.0-ovm-no-old-deposit",
+		"synthetix-js": "2.35.2",
 		"typescript": "3.7.5"
 	},
 	"devDependencies": {
