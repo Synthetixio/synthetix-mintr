@@ -1,5 +1,5 @@
 export default {
-	address: '0x3fdbBBd81b0962FDf486d74f94a68c70bA87C6C7',
+	address: '0x6d4F135aF7DFCd4BDF6dCb9D7911F5d243872a52',
 	abi: [
 		{
 			inputs: [
