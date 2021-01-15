@@ -101,7 +101,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 
 			const watcher = new Watcher({
 				l1: {
-					provider: new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[5]),
+					provider: new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[42]),
 					messengerAddress: L1_MESSENGER_ADDRESS,
 				},
 				l2: {
