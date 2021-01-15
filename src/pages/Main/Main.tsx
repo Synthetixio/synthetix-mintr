@@ -5,6 +5,7 @@ import MintrPanel from 'screens/MintrPanel';
 // import BannerL2 from 'components/Banner/BannerL2';
 // import BannerGoerliAirdrop from 'components/Banner/BannerGoerliAirdrop';
 import LiquidationBanner from 'components/BannerLiquidation';
+import BannerMigrate from 'components/Banner/BannerMigrate';
 
 type MainProps = {
 	wallet: string;
@@ -15,6 +16,7 @@ const Main: FC<MainProps> = ({ wallet }) => {
 		<>
 			{/* <BannerL2 />
 			<BannerGoerliAirdrop /> */}
+			<BannerMigrate />
 			<LiquidationBanner />
 			<MainWrapper>
 				<Dashboard />
