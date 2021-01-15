@@ -22,7 +22,7 @@ let snxJSConnector = {
 		this.stateCommitmentChain = new Contract(
 			stateCommitmentChain.address,
 			stateCommitmentChain.abi,
-			new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[42])
+			new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[1])
 		);
 	},
 };
