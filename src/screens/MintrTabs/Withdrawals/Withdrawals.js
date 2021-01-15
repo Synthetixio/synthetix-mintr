@@ -198,7 +198,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 			<StyledPageTitle>Ready to be relayed</StyledPageTitle>
 			<PLarge>
 				Once your withdrawal has been through the waiting period, it must be picked up by the
-				relayer to migrate your SNX from L2 back to L1.
+				relayer to migrate your SNX from L2 back to L1. This will take 24-48 hours.
 			</PLarge>
 			<TableWrapper>
 				{pendingWithdrawals && pendingWithdrawals.length > 0 ? (
