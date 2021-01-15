@@ -39,11 +39,10 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const {
-				snxJS: { SupplySchedule, FeePool },
+				snxJS: { FeePool },
 			} = snxJSConnector;
 			try {
-				const [isMintable, feePeriodDuration, recentFeePeriods] = await Promise.all([
-					SupplySchedule.isMintable(),
+				const [feePeriodDuration, recentFeePeriods] = await Promise.all([
 					FeePool.feePeriodDuration(),
 					FeePool.recentFeePeriods(0),
 				]);
@@ -52,7 +51,6 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 				const startTime = Number(recentFeePeriods.startTime);
 				const duration = Number(feePeriodDuration);
 
-				setIsMintSupplyDisabled(!isMintable);
 				setIsCloseFeePeriodDisabled(now <= duration + startTime);
 			} catch (e) {
 				console.log(e);
