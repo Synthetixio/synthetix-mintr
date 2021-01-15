@@ -48,7 +48,7 @@ export const L2_MESSENGER_ADDRESS = '0x4200000000000000000000000000000000000007'
 
 export const SUPPORTED_WALLETS_MAP = {
 	METAMASK: 'Metamask',
-	COINBASE: 'Coinbase',
+	// COINBASE: 'Coinbase',
 };
 
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
