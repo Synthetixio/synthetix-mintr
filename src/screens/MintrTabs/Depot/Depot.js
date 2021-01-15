@@ -182,7 +182,7 @@ const Depot = ({
 							{t('depot.buttons.more')}
 						</ButtonTertiary>
 						<ButtonTertiary
-							href={getEtherscanAddressLink(networkId, snxJSConnector.snxJS.Depot.contract.address)}
+							href={getEtherscanAddressLink(snxJSConnector.snxJS.Depot.contract.address)}
 							as="a"
 							target="_blank"
 						>

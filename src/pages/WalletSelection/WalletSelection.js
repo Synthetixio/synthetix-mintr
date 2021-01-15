@@ -263,7 +263,7 @@ const WalletConnection = ({
 																}}
 															>
 																<Link
-																	href={getEtherscanAddressLink(420, wallet.address)}
+																	href={getEtherscanAddressLink(wallet.address)}
 																	target="_blank"
 																>
 																	<LinkImg width="20" src="/images/etherscan-logo.png" />

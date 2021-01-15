@@ -52,11 +52,7 @@ const HiddenContentTable = ({ deposits, walletDetails: { networkId } }) => {
 									<TableDataMedium>{detail.date}</TableDataMedium>
 								</HiddenTableCell>
 								<HiddenTableCell>
-									<BorderlessButton
-										href={getEtherscanTxLink(networkId, detail.hash)}
-										as="a"
-										target="_blank"
-									>
+									<BorderlessButton href={getEtherscanTxLink(detail.hash)} as="a" target="_blank">
 										{t('button.navigation.view')}
 									</BorderlessButton>
 								</HiddenTableCell>

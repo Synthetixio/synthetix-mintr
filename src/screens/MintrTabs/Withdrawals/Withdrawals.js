@@ -176,9 +176,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 								accessor: 'transactionHash',
 								Cell: ({ value }) => {
 									return (
-										<StyledExternalLink href={getEtherscanTxLink(420, value)}>
-											Verify
-										</StyledExternalLink>
+										<StyledExternalLink href={getEtherscanTxLink(value)}>Verify</StyledExternalLink>
 									);
 								},
 								sortable: false,
@@ -235,7 +233,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 								accessor: 'transactionHash',
 								Cell: ({ value, row: { original } }) => {
 									return value ? (
-										<StyledExternalLink href={getEtherscanTxLink(420, value, original.isConfirmed)}>
+										<StyledExternalLink href={getEtherscanTxLink(value, original.isConfirmed)}>
 											Verify
 										</StyledExternalLink>
 									) : null;
