@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { withTranslation } from 'react-i18next';
 
-import RewardEscrow from './RewardEscrow';
-import TokenSaleEscrow from './TokenSaleEscrow';
+// import RewardEscrow from './RewardEscrow';
+// import TokenSaleEscrow from './TokenSaleEscrow';
 
 import PageContainer from '../../../components/PageContainer';
 import { PageTitle, PLarge } from 'components/Typography';
 import { ExternalLink } from 'styles/common';
 
-const DEFAULT_ESCROW_PAGE = 'rewardEscrow';
+// const DEFAULT_ESCROW_PAGE = 'rewardEscrow';
 
 const Escrow = () => {
 	// const [showTokenSale, setPage] = useState(DEFAULT_ESCROW_PAGE);
