@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
 import { addBufferToGasLimit } from '../../../helpers/networkHelper';
-import { bigNumberFormatter } from '../../../helpers/formatters';
 
 import { PageTitle, PLarge } from '../../../components/Typography';
-import { ButtonPrimary, ButtonSecondary } from '../../../components/Button';
+import { ButtonPrimary } from '../../../components/Button';
 
 import { getWalletDetails } from '../../../ducks/wallet';
 
@@ -16,6 +15,8 @@ import ErrorMessage from '../../../components/ErrorMessage';
 import EscrowActions from '../../EscrowActions';
 import TransactionPriceIndicator from '../../../components/TransactionPriceIndicator';
 import ScheduleTable from './ScheduleTable';
+
+const VESTING_ENTRIES_PAGINATION = 50;
 
 const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 	const { t } = useTranslation();
@@ -30,41 +31,67 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 	const fetchVestingData = useCallback(async () => {
 		if (!currentWallet) return;
 		const {
-			snxJS: { RewardEscrow },
+			snxJS: { RewardEscrowV2 },
 		} = snxJSConnector;
+
 		try {
-			let schedule = [];
-
-			let canVest = 0;
-			const currentUnixTime = new Date().getTime();
-
 			setVestingData({ loading: true });
 
-			const [accountSchedule, totalEscrowed, totalVested] = await Promise.all([
-				RewardEscrow.checkAccountSchedule(currentWallet),
-				RewardEscrow.totalEscrowedAccountBalance(currentWallet),
-				RewardEscrow.totalVestedAccountBalance(currentWallet),
+			const [numVestingEntries, totalEscrowed, totalVested] = await Promise.all([
+				RewardEscrowV2.numVestingEntries(currentWallet),
+				RewardEscrowV2.balanceOf(currentWallet),
+				RewardEscrowV2.totalVestedAccountBalance(currentWallet),
 			]);
-			for (let i = 0; i < accountSchedule.length; i += 2) {
-				const quantity = Number(bigNumberFormatter(accountSchedule[i + 1]));
 
-				if (!accountSchedule[i].isZero() && quantity) {
-					if (accountSchedule[i] * 1000 < currentUnixTime) {
-						canVest += quantity;
-					}
+			let vestingEntriesPromise = [];
+			let vestingEntriesIdPromise = [];
+			const totalVestingEntries = Number(numVestingEntries);
+
+			for (let index = 0; index < totalVestingEntries; index += VESTING_ENTRIES_PAGINATION) {
+				const pagination =
+					index + VESTING_ENTRIES_PAGINATION > totalVestingEntries
+						? totalVestingEntries - index
+						: VESTING_ENTRIES_PAGINATION;
+				vestingEntriesPromise.push(
+					RewardEscrowV2.getVestingSchedules(currentWallet, index, pagination)
+				);
+				vestingEntriesIdPromise.push(
+					RewardEscrowV2.getAccountVestingEntryIDs(currentWallet, index, pagination)
+				);
+			}
+
+			const [[vestingEntries], [vestingEntriesId]] = await Promise.all([
+				Promise.all(vestingEntriesPromise),
+				Promise.all(vestingEntriesIdPromise),
+			]);
+
+			let claimableAmount = 0;
+
+			if (vestingEntriesId != null) {
+				claimableAmount = await RewardEscrowV2.getVestingQuantity(currentWallet, vestingEntriesId);
+			}
+
+			let schedule = [];
+			let claimableEntryIds = [];
+
+			(vestingEntries ?? []).forEach(({ escrowAmount, entryID, endTime }) => {
+				const quantity = escrowAmount / 1e18;
+				if (quantity) {
+					claimableEntryIds.push(entryID);
 					schedule.push({
-						date: new Date(Number(accountSchedule[i]) * 1000),
 						quantity,
+						date: new Date(Number(endTime) * 1000),
 					});
 				}
-			}
+			});
 
 			setVestingData({
 				schedule,
 				loading: false,
-				canVest,
-				totalEscrowed: bigNumberFormatter(totalEscrowed),
-				totalVested: bigNumberFormatter(totalVested),
+				canVest: claimableAmount / 1e18,
+				totalEscrowed: totalEscrowed / 1e18,
+				totalVested: totalVested / 1e18,
+				claimableEntryIds,
 			});
 		} catch (e) {
 			console.log(e);
@@ -72,44 +99,49 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 		}
 	}, [currentWallet]);
 
-	const fetchGasLimit = useCallback(async () => {
-		setError(null);
-		setFetchingGasLimit(true);
-		const {
-			snxJS: { RewardEscrow },
-		} = snxJSConnector;
-		try {
-			const gasEstimate = await RewardEscrow.contract.estimate.vest();
-			setFetchingGasLimit(false);
-			setGasLimit(addBufferToGasLimit(gasEstimate));
-		} catch (e) {
-			console.log(e);
-			setFetchingGasLimit(false);
-			const errorMessage = (e && e.message) || 'error.type.gasEstimate';
-			setError(errorMessage);
-		}
-	}, []);
+	useEffect(() => {
+		const fetchGasLimit = async () => {
+			setError(null);
+			setFetchingGasLimit(true);
+			const {
+				snxJS: { RewardEscrowV2 },
+			} = snxJSConnector;
+			try {
+				if (vestingData && vestingData.claimableEntryIds) {
+					const gasEstimate = await RewardEscrowV2.contract.estimate.vest(
+						vestingData.claimableEntryIds
+					);
+					setFetchingGasLimit(false);
+					setGasLimit(addBufferToGasLimit(gasEstimate));
+				}
+			} catch (e) {
+				console.log(e);
+				setFetchingGasLimit(false);
+				const errorMessage = (e && e.message) || 'error.type.gasEstimate';
+				setError(errorMessage);
+			}
+		};
+		fetchGasLimit();
+	}, [vestingData]);
 
 	useEffect(() => {
 		fetchVestingData();
-		fetchGasLimit();
-	}, [fetchVestingData, fetchGasLimit]);
+	}, [fetchVestingData]);
 
 	useEffect(() => {
 		if (!currentWallet) return;
 		const {
-			snxJS: { RewardEscrow },
+			snxJS: { RewardEscrowV2 },
 		} = snxJSConnector;
 
-		RewardEscrow.contract.on('Vested', beneficiary => {
+		RewardEscrowV2.contract.on('Vested', beneficiary => {
 			if (currentWallet === beneficiary) {
 				fetchVestingData();
-				fetchGasLimit();
 			}
 		});
 		return () => {
 			if (snxJSConnector.initialized) {
-				RewardEscrow.contract.removeAllListeners('Vested');
+				RewardEscrowV2.contract.removeAllListeners('Vested');
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,6 +153,7 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 				action={currentScenario}
 				onDestroy={() => setCurrentScenario(null)}
 				vestAmount={vestingData.canVest}
+				entries={vestingData.claimableEntryIds}
 				gasLimit={gasLimit}
 				isFetchingGasLimit={isFetchingGasLimit}
 			/>
@@ -133,9 +166,6 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 
 			<ErrorMessage message={t(error)} />
 			<ButtonRow>
-				<ButtonSecondary width="48%" onClick={() => onPageChange('tokenSaleVesting')}>
-					{t('escrow.buttons.viewTokenSale')}
-				</ButtonSecondary>
 				<ButtonPrimary
 					disabled={hasNoVestingSchedule || error || !vestingData.canVest}
 					onClick={() => setCurrentScenario('rewardsVesting')}
@@ -152,7 +182,7 @@ const ButtonRow = styled.div`
 	margin-top: 40px;
 	display: flex;
 	width: 100%;
-	justify-content: space-between;
+	justify-content: center;
 `;
 
 const mapStateToProps = state => ({
