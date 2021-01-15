@@ -1,30 +1,20 @@
 import { SUPPORTED_NETWORKS, isMainNet } from './networkHelper';
 
-const getEtherScanBaseURL = (networkId, isL1) => {
-	const network = SUPPORTED_NETWORKS[networkId];
-
+const getEtherScanBaseURL = isL1 => {
 	if (isL1) {
-		return 'https://goerli.etherscan.io';
-	}
-
-	if (networkId === 420) {
-		return 'https://l2-explorer.surge.sh';
-	}
-	if (isMainNet(networkId) || network == null) {
 		return 'https://etherscan.io';
 	}
-
-	return `https://${network.toLowerCase()}.etherscan.io`;
+	return 'https://mainnet.l2-explorer.surge.sh';
 };
 
-export const getEtherscanTxLink = (networkId, txId, isL1) => {
-	const baseURL = getEtherScanBaseURL(networkId, isL1);
+export const getEtherscanTxLink = (txId, isL1) => {
+	const baseURL = getEtherScanBaseURL(isL1);
 
 	return `${baseURL}/tx/${txId}`;
 };
 
-export const getEtherscanAddressLink = (networkId, address) => {
-	const baseURL = getEtherScanBaseURL(networkId);
+export const getEtherscanAddressLink = address => {
+	const baseURL = getEtherScanBaseURL();
 
 	return `${baseURL}/address/${address}`;
 };

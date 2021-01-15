@@ -47,7 +47,7 @@ const TransactionNotification = ({ transaction, walletDetails, hideTransaction }
 			heading={t(getStatusSentence(status))}
 			confirmationTime={confirmationTime}
 			description={transaction.info}
-			link={getEtherscanTxLink(networkId, transaction.hash)}
+			link={getEtherscanTxLink(transaction.hash)}
 			linkLabel={t('button.navigation.view')}
 			onClose={() => hideTransaction(transaction.hash)}
 		/>

@@ -25,28 +25,33 @@ const TransactionPriceIndicator = ({
 }) => {
 	const { t } = useTranslation();
 	return (
-		<Container {...style}>
-			<Block>
-				<Subtext mr={'10px'}>{t('transactionSettings.priceIndicator')}</Subtext>
-			</Block>
-			<Block>
-				{isFetchingGasLimit ? (
-					<MicroSpinner />
-				) : (
-					<Fragment>
-						<Subtext>
-							{/* {currentGasPrice
+		<>
+			<Container {...style}>
+				<Block>
+					<Subtext mr={'10px'}>{t('transactionSettings.priceIndicator')}</Subtext>
+				</Block>
+				<Block>
+					{isFetchingGasLimit ? (
+						<MicroSpinner />
+					) : (
+						<Fragment>
+							<Subtext>
+								{/* {currentGasPrice
 								? `$${formatCurrency(
 										getTransactionPrice(currentGasPrice.price, gasLimit, ethRate)
 								  )} / ${currentGasPrice.price} GWEI`
 								: 0} */}
-							$0.00/0 GWEI
-						</Subtext>
-						{/* {canEdit ? <GasMenu /> : null} */}
-					</Fragment>
-				)}
+								$0.00/0 GWEI*
+							</Subtext>
+							{/* {canEdit ? <GasMenu /> : null} */}
+						</Fragment>
+					)}
+				</Block>
+			</Container>
+			<Block>
+				<Subtext mr={'10px'}>*Fees are temporarily subsidized by Optimism</Subtext>
 			</Block>
-		</Container>
+		</>
 	);
 };
 
@@ -54,7 +59,7 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: ${props => (props.margin ? props.margin : '25px 0')};
+	margin: ${props => (props.margin ? props.margin : '25px 0 0 0')};
 `;
 
 const Block = styled.div`

@@ -101,7 +101,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 
 			const watcher = new Watcher({
 				l1: {
-					provider: new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[5]),
+					provider: new providers.JsonRpcProvider(INFURA_JSON_RPC_URLS[1]),
 					messengerAddress: L1_MESSENGER_ADDRESS,
 				},
 				l2: {
@@ -176,9 +176,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 								accessor: 'transactionHash',
 								Cell: ({ value }) => {
 									return (
-										<StyledExternalLink href={getEtherscanTxLink(420, value)}>
-											Verify
-										</StyledExternalLink>
+										<StyledExternalLink href={getEtherscanTxLink(value)}>Verify</StyledExternalLink>
 									);
 								},
 								sortable: false,
@@ -198,7 +196,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 			<StyledPageTitle>Ready to be relayed</StyledPageTitle>
 			<PLarge>
 				Once your withdrawal has been through the waiting period, it must be picked up by the
-				relayer to migrate your SNX from L2 back to L1.
+				relayer to migrate your SNX from L2 back to L1. This will take 24-48 hours.
 			</PLarge>
 			<TableWrapper>
 				{pendingWithdrawals && pendingWithdrawals.length > 0 ? (
@@ -235,7 +233,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 								accessor: 'transactionHash',
 								Cell: ({ value, row: { original } }) => {
 									return value ? (
-										<StyledExternalLink href={getEtherscanTxLink(420, value, original.isConfirmed)}>
+										<StyledExternalLink href={getEtherscanTxLink(value, original.isConfirmed)}>
 											Verify
 										</StyledExternalLink>
 									) : null;

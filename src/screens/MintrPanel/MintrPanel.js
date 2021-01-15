@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { setCurrentTab, getCurrentTab } from 'ducks/ui';
 import { getModalState } from 'ducks/modal';
 
-import { Home, Withdrawals } from '../MintrTabs';
+import { Home, Withdrawals, Escrow } from '../MintrTabs';
 import { TabButton } from 'components/Button';
 import { DelegateModal } from 'components/Modal';
 import { MODAL_TYPES_TO_KEY } from 'constants/modal';
@@ -18,6 +18,8 @@ const renderScreen = screen => {
 			return <Home />;
 		case 'withdrawals':
 			return <Withdrawals />;
+		case 'escrow':
+			return <Escrow />;
 	}
 };
 
@@ -27,7 +29,7 @@ const MainContainer = ({ currentTab, modalState: { modalType, modalProps }, setC
 		<MainContainerWrapper>
 			<Overlay isVisible={modalType}></Overlay>
 			<Header>
-				{['home', 'withdrawals'].map(tab => {
+				{['home', 'withdrawals', 'escrow'].map(tab => {
 					return (
 						<TabButton
 							key={tab}

@@ -21,6 +21,7 @@ const RewardsVesting = ({
 	currentGasPrice,
 	gasLimit,
 	isFetchingGasLimit,
+	entries,
 }) => {
 	const { handleNext, hasLoaded } = useContext(SliderContext);
 	const [transactionInfo, setTransactionInfo] = useState({});
@@ -30,11 +31,10 @@ const RewardsVesting = ({
 		const vest = async () => {
 			if (!hasLoaded) return;
 			const {
-				snxJS: { RewardEscrow },
+				snxJS: { RewardEscrowV2 },
 			} = snxJSConnector;
 			try {
-				console.log('here');
-				const transaction = await RewardEscrow.vest({
+				const transaction = await RewardEscrowV2.vest(entries, {
 					gasPrice: currentGasPrice.formattedPrice,
 					gasLimit,
 				});
