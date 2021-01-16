@@ -35,9 +35,7 @@ const Action = ({
 						<ActionImage src="/images/actions/withdrawL2.svg" big />
 						<StyledH1>{t('mintrActions.withdraw.action.title')}</StyledH1>
 						<PLarge>
-							In order to be eligible for the L2 SNX rewards from the trial, you must withdraw at
-							least 0.01 SNX this week (first burn all your debt in order to withdraw). The SNX you
-							withdraw will be available on L1 in{' '}
+							The SNX you withdraw will be available on L1 in{' '}
 							{formatDistanceToNow(new Date(Date.now() + fraudProofWindow))}.
 						</PLarge>
 					</Intro>
