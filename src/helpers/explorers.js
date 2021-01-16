@@ -4,7 +4,7 @@ const getEtherScanBaseURL = isL1 => {
 	if (isL1) {
 		return 'https://etherscan.io';
 	}
-	return 'https://mainnet.l2-explorer.surge.sh';
+	return 'https://mainnet-l2-explorer.surge.sh';
 };
 
 export const getEtherscanTxLink = (txId, isL1) => {
