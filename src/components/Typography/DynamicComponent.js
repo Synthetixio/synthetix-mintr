@@ -14,9 +14,10 @@ import {
 	borderRadius,
 } from 'styled-system';
 
+// eslint-disable-line
 export default styled.div`
-  ${space}
-  ${fontSize}
+	${space}
+	${fontSize}
   ${fontStyle}
   ${color}
   ${size}

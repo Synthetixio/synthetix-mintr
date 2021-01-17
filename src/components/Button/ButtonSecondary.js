@@ -18,6 +18,7 @@ const ButtonSecondary = ({
 	);
 };
 
+// eslint-disable-line
 const Button = styled.button`
 	width: ${props => (props.width ? props.width : '400px')};
 	text-decoration: none;
@@ -27,20 +28,23 @@ const Button = styled.button`
 	height: ${props => (props.height ? props.height : '72px')};
 	border-radius: 5px;
 	border: solid 3px transparent;
-	background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
+	background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+		linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
 	background-origin: border-box;
-  background-clip: content-box, border-box;
-  box-shadow: 2px 1000px 1px ${props => props.theme.colorStyles.panels} inset;
+	background-clip: content-box, border-box;
+	box-shadow: 2px 1000px 1px ${props => props.theme.colorStyles.panels} inset;
 	text-transform: uppercase;
 	/* border: 2px solid ${props => props.theme.colorStyles.buttonPrimaryBg}; */
 	cursor: pointer;
 	background-color: transparent;
 	transition: all ease-in 0.1s;
 	&:hover {
-		background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),linear-gradient(130.52deg, #f4c625 -8.54%, #e652e9 101.04%);;
+		background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+			linear-gradient(130.52deg, #f4c625 -8.54%, #e652e9 101.04%);
 	}
-	`;
+`;
 
+// eslint-disable-line
 const GradientText = styled(ButtonSecondaryLabel)`
 	background: linear-gradient(130.52deg, #f49e25 -8.54%, #b252e9 101.04%);
 	background-clip: text;
