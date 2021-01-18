@@ -54,7 +54,7 @@ export const SUPPORTED_WALLETS_MAP = {
 export const SUPPORTED_WALLETS = Object.values(SUPPORTED_WALLETS_MAP);
 
 export const hasWeb3 = () => {
-	return window.web3;
+	return window.web3 || window.ethereum;
 };
 
 export async function getEthereumNetwork() {
