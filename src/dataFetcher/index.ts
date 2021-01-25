@@ -30,10 +30,10 @@ export const getDebtStatus = async (walletAddress: string) => {
 
 export const getEscrowData = async (walletAddress: string) => {
 	const {
-		snxJS: { RewardEscrow, SynthetixEscrow },
+		snxJS: { RewardEscrowV2, SynthetixEscrow },
 	} = snxJSConnector as any;
 	const results = await Promise.all([
-		RewardEscrow.totalEscrowedAccountBalance(walletAddress),
+		RewardEscrowV2.totalEscrowedAccountBalance(walletAddress),
 		SynthetixEscrow.balanceOf(walletAddress),
 	]);
 	const [stakingRewards, tokenSale] = results.map(bigNumberFormatter);
