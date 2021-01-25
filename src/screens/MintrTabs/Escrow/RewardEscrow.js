@@ -112,7 +112,7 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 						vestingData.claimableEntryIds
 					);
 					setFetchingGasLimit(false);
-					setGasLimit(addBufferToGasLimit(gasEstimate));
+					setGasLimit(Number(gasEstimate));
 				}
 			} catch (e) {
 				console.log(e);
