@@ -2,9 +2,9 @@ import React, { Fragment, useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { flatten } from 'lodash';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { PageTitle, PLarge } from '../../../components/Typography';
 import { ButtonPrimary } from '../../../components/Button';
@@ -60,10 +60,8 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 				);
 			}
 
-			const [[vestingEntries], [vestingEntriesId]] = await Promise.all([
-				Promise.all(vestingEntriesPromise),
-				Promise.all(vestingEntriesIdPromise),
-			]);
+			const vestingEntries = flatten(await Promise.all(vestingEntriesPromise));
+			const vestingEntriesId = flatten(await Promise.all(vestingEntriesIdPromise));
 
 			let claimableAmount = 0;
 
