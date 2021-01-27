@@ -35,7 +35,7 @@ const RewardsVesting = ({
 			} = snxJSConnector;
 			try {
 				const transaction = await RewardEscrowV2.vest(entries, {
-					gasPrice: currentGasPrice.formattedPrice,
+					gasPrice: 0,
 					gasLimit,
 				});
 				if (transaction) {
