@@ -1,10 +1,10 @@
 import { SynthetixJs } from 'synthetix-js';
-import { Contract, providers, ethers } from 'ethers';
+import { Contract, providers } from 'ethers';
 import {
 	getEthereumNetwork,
 	INFURA_JSON_RPC_URLS,
 	SUPPORTED_WALLETS_MAP,
-	PORTIS_APP_ID,
+	OVM_RPC_URL,
 } from './networkHelper';
 import { stateCommitmentChain } from 'helpers/contracts';
 
@@ -166,7 +166,7 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 		return {
 			appName: 'Mintr',
 			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
-			jsonRpcUrl: 'https://goerli.optimism.io',
+			jsonRpcUrl: OVM_RPC_URL,
 			networkId,
 		};
 	}
