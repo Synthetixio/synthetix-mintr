@@ -46,7 +46,12 @@ const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 						<Button
 							disabled={(action === 'track' && !isMainNet(networkId)) || isGoerliTestnet(networkId)}
 							key={action}
-							onClick={() => setCurrentScenario(action)}
+							onClick={() => {
+								if (action === 'claim') {
+									window.open('https://staking.synthetix.io/earn/claim', '_self');
+								}
+								setCurrentScenario(action);
+							}}
 							big
 						>
 							<ButtonContainer>
