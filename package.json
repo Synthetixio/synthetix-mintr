@@ -19,7 +19,7 @@
 		"axios": "^0.19.2",
 		"browserslist": "^4.8.2",
 		"date-fns": "^2.0.1",
-		"ethers": "4.0.44",
+		"ethers": "^5.0.26",
 		"i18next": "^17.0.4",
 		"i18next-browser-languagedetector": "^3.0.1",
 		"i18next-xhr-backend": "^3.2.2",

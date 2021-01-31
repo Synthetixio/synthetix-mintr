@@ -1,6 +1,5 @@
 import React, { useEffect, FC } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { providers } from 'ethers';
 import { setAppReady, getAppIsReady, fetchAppStatusRequest } from 'ducks/app';
 import { fetchDebtStatusRequest } from 'ducks/debtStatus';
 import { fetchEscrowRequest } from 'ducks/escrow';
@@ -12,8 +11,6 @@ import { RootState } from 'ducks/types';
 
 import App from './App';
 
-import snxJSConnector from 'helpers/snxJSConnector';
-import { getEthereumNetwork } from 'helpers/networkHelper';
 import useInterval from 'hooks/useInterval';
 import { INTERVAL_TIMER } from 'constants/ui';
 
@@ -75,9 +72,6 @@ const Root: FC<PropsFromRedux> = ({
 
 	useEffect(() => {
 		const init = async () => {
-			const { networkId } = await getEthereumNetwork();
-			// const provider = new providers.JsonRpcProvider('https://goerli.optimism.io');
-			// snxJSConnector.setContractSettings({ networkId, provider });
 			setAppReady();
 		};
 		init();

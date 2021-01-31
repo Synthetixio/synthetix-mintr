@@ -42,7 +42,7 @@ const useGetGasEstimate = (
 						: snxJSConnector.utils.parseEther(amount.toString());
 				setFetchingGasLimit(true);
 				if (currency.name === 'SNX') {
-					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimate.transfer(
+					gasEstimate = await snxJSConnector.snxJS.Synthetix.contract.estimateGas.transfer(
 						destination,
 						amountBN
 					);
@@ -55,7 +55,7 @@ const useGetGasEstimate = (
 				} else {
 					gasEstimate = await snxJSConnector.snxJS[
 						currency.name
-					].contract.estimate.transferAndSettle(destination, amountBN);
+					].contract.estimateGas.transferAndSettle(destination, amountBN);
 				}
 				setGasLimit(addBufferToGasLimit(gasEstimate));
 			} catch (e) {
