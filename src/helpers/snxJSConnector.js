@@ -1,11 +1,6 @@
 import { SynthetixJs } from 'synthetix-js';
 import { Contract, providers, ethers } from 'ethers';
-import {
-	getEthereumNetwork,
-	INFURA_JSON_RPC_URLS,
-	SUPPORTED_WALLETS_MAP,
-	PORTIS_APP_ID,
-} from './networkHelper';
+import { getEthereumNetwork, INFURA_JSON_RPC_URLS, SUPPORTED_WALLETS_MAP } from './networkHelper';
 import { stateCommitmentChain } from 'helpers/contracts';
 
 let snxJSConnector = {

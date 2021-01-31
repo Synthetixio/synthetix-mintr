@@ -57,7 +57,7 @@ const Withdraw = ({
 			setGasEstimateError(null);
 			try {
 				setFetchingGasLimit(true);
-				const gasEstimate = await SynthetixBridgeToBase.contract.estimate.initiateWithdrawal(
+				const gasEstimate = await SynthetixBridgeToBase.contract.estimateGas.initiateWithdrawal(
 					snxBalanceBN
 				);
 

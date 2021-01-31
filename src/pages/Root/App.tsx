@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { connect, ConnectedProps } from 'react-redux';
 
-import GlobalEventsGate from 'gates/GlobalEventsGate';
 import { RootState } from 'ducks/types';
 import { getAppIsOnMaintenance } from 'ducks/app';
 import { isDarkTheme, lightTheme, darkTheme } from 'styles/themes';
@@ -11,7 +10,6 @@ import { isMobileOrTablet } from 'helpers/browserHelper';
 import { getCurrentTheme, getCurrentPage } from 'ducks/ui';
 
 import MaintenancePage from '../MaintenanceMessage';
-import Soonthetix from '../Soonthetix';
 import NotificationCenter from 'components/NotificationCenter';
 import Landing from '../Landing';
 import WalletSelection from '../WalletSelection';
@@ -61,7 +59,6 @@ const App: FC<AppProps> = ({ appIsReady, currentTheme, currentPage, appIsOnMaint
 		<ThemeProvider theme={themeStyle}>
 			{appIsReady && (
 				<>
-					<GlobalEventsGate />
 					<MainLayout>
 						<CurrentPage isOnMaintenance={appIsOnMaintenance} page={currentPage} />
 						<NotificationCenter />
