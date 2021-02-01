@@ -69,7 +69,7 @@ const Withdrawals = ({ currentWallet, debtStatus }) => {
 				logs.map(async l => {
 					const block = await provider.getBlock(l.blockNumber);
 					const parsedLogs = SynthetixBridgeToBase.contract.interface.parseLog(l);
-					const { amount } = parsedLogs.values;
+					const { amount } = parsedLogs.args;
 					const timestamp = Number(block.timestamp * 1000);
 
 					return {
