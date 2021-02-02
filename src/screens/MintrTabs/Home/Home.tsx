@@ -47,9 +47,6 @@ const Home = ({ walletDetails: { networkId }, redirectToTrade }) => {
 							disabled={(action === 'track' && !isMainNet(networkId)) || isGoerliTestnet(networkId)}
 							key={action}
 							onClick={() => {
-								if (action === 'claim') {
-									window.open('https://staking.synthetix.io/earn/claim', '_self');
-								}
 								setCurrentScenario(action);
 							}}
 							big
