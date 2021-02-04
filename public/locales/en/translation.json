@@ -141,7 +141,7 @@
 				"subtitle": "Withdraw your SNX from L2 to L1",
 				"amount": "SNX amount to withdraw",
 				"buttons": {
-					"withdraw": "Initiate withdraw",
+					"withdraw": "Initiate withdrawal",
 					"approve": "Approve"
 				}
 			},
