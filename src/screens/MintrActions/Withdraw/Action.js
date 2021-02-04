@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { formatDistanceToNow } from 'date-fns';
 
 import { SlidePage } from 'components/ScreenSlider';
 import TransactionPriceIndicator from 'components/TransactionPriceIndicator';
@@ -35,8 +34,9 @@ const Action = ({
 						<ActionImage src="/images/actions/withdrawL2.svg" big />
 						<StyledH1>{t('mintrActions.withdraw.action.title')}</StyledH1>
 						<PLarge>
-							The SNX you withdraw will be available on L1 in{' '}
-							{formatDistanceToNow(new Date(Date.now() + fraudProofWindow))}.
+							Warning: withdrawing your SNX will take 7-10 days to be received on L1, during which
+							time you will not have access to your funds. Once you initiate a withdrawal you will
+							not be able to cancel it.
 						</PLarge>
 					</Intro>
 					<FlexDiv>
