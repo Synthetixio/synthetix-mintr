@@ -1,6 +1,6 @@
 {
 	"name": "synthetix-mintr",
-	"version": "2.38.0",
+	"version": "2.38.0-sccp-77-defi-rebalance",
 	"private": true,
 	"license": "MIT",
 	"author": "Synthetix",
