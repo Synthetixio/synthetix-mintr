@@ -60,9 +60,9 @@ const useGetGasEstimate = (mintAmount, issuableSynths, setFetchingGasLimit, setG
 				if (mintAmount <= 0 || mintAmount > issuableSynths)
 					throw new Error('input.error.notEnoughToMint');
 				if (mintAmount === issuableSynths) {
-					gasEstimate = await Synthetix.contract.estimate.issueMaxSynths();
+					gasEstimate = await Synthetix.contract.estimateGas.issueMaxSynths();
 				} else {
-					gasEstimate = await Synthetix.contract.estimate.issueSynths(
+					gasEstimate = await Synthetix.contract.estimateGas.issueSynths(
 						snxJSConnector.utils.parseEther(mintAmount.toString())
 					);
 				}

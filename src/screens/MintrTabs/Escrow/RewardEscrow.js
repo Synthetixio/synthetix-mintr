@@ -106,7 +106,7 @@ const RewardEscrow = ({ onPageChange, walletDetails: { currentWallet } }) => {
 			} = snxJSConnector;
 			try {
 				if (vestingData && vestingData.claimableEntryIds) {
-					const gasEstimate = await RewardEscrowV2.contract.estimate.vest(
+					const gasEstimate = await RewardEscrowV2.contract.estimateGas.vest(
 						vestingData.claimableEntryIds
 					);
 					setFetchingGasLimit(false);
