@@ -99,24 +99,33 @@ const Home = ({ walletDetails: { networkId }, debtData }) => {
 	};
 
 	const isActionButtonDisabled = action => {
-		switch (action) {
-			case 'inflate':
-				return isMintSupplyDisabled;
-			case 'close':
-				return isCloseFeePeriodDisabled;
-			case 'track':
-				return !isMainNet(networkId);
-			case 'withdrawL2':
-				return false;
-			default:
-				return false;
-		}
+		return true;
+		// switch (action) {
+		// 	case 'inflate':
+		// 		return isMintSupplyDisabled;
+		// 	case 'close':
+		// 		return isCloseFeePeriodDisabled;
+		// 	case 'track':
+		// 		return !isMainNet(networkId);
+		// 	case 'withdrawL2':
+		// 		return false;
+		// 	default:
+		// 		return false;
+		// }
 	};
 
 	return (
 		<PageContainer>
 			<MintrAction action={currentScenario} onDestroy={() => setCurrentScenario(null)} />
 			<PageTitle>{t('home.intro.title')}</PageTitle>
+			<ErrorAlert>
+				Transactions on L2 have been disabled due to an ongoing issue. For more information please
+				visit the{' '}
+				<a href="https://discord.gg/4wxzBbf4" target="_blank">
+					#announcements
+				</a>{' '}
+				channel on our discord server.
+			</ErrorAlert>
 			<ButtonRow>
 				{ACTIONS.map((action, i) => {
 					return (
@@ -184,6 +193,20 @@ const ButtonRow = styled.div`
 const ActionImage = styled.img`
 	height: 164px;
 	width: 164px;
+`;
+
+const ErrorAlert = styled.div`
+	background: #ff000096;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 8px;
+	margin-bottom: 20px;
+
+	&,
+	a,
+	a:visited {
+		color: white;
+	}
 `;
 
 const mapStateToProps = state => ({
