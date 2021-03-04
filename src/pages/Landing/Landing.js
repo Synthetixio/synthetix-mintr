@@ -16,6 +16,7 @@ import {
 	SUPPORTED_WALLETS,
 	onMetamaskAccountChange,
 	SUPPORTED_WALLETS_MAP,
+	getEthereumNetwork,
 } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
 import { H1, H2, PMega, PSmall, ButtonTertiaryLabel } from '../../components/Typography';
@@ -42,7 +43,10 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 			if (walletStatus.walletType === SUPPORTED_WALLETS_MAP.METAMASK) {
 				onMetamaskAccountChange(async () => {
 					const address = await snxJSConnector.signer.getNextAddresses();
-					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK]({});
+					const { ethereumNetworkName } = await getEthereumNetwork();
+					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK](
+						ethereumNetworkName.toLowerCase()
+					);
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,

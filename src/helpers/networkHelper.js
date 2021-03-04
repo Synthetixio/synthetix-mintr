@@ -40,8 +40,6 @@ const DEFIPULSE_API_KEY = process.env.REACT_APP_DEFIPULSE_API_KEY;
 
 const ETH_GAS_STATION_URL = `https://ethgasstation.info/api/ethgasAPI.json?api-key=${DEFIPULSE_API_KEY}`;
 
-export const OVM_RPC_URL = 'https://mainnet.optimism.io';
-
 export const L1_MESSENGER_ADDRESS = '0xfBE93ba0a2Df92A8e8D40cE00acCF9248a6Fc812';
 
 export const L2_MESSENGER_ADDRESS = '0x4200000000000000000000000000000000000007';
@@ -58,25 +56,34 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	return { name: 'OVM', networkId: 10 };
-	// if (!window.web3) return { name: 'MAINNET', networkId: 1 };
-	// let networkId = 1;
-	// try {
-	// 	if (window.web3?.eth?.net) {
-	// 		networkId = await window.web3.eth.net.getId();
-	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
-	// 	} else if (window.web3?.version?.network) {
-	// 		networkId = Number(window.web3.version.network);
-	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId };
-	// 	} else if (window.ethereum?.networkVersion) {
-	// 		networkId = Number(window.ethereum?.networkVersion);
-	// 		return { name: SUPPORTED_NETWORKS[networkId], networkId };
-	// 	}
-	// 	return { name: 'MAINNET', networkId };
-	// } catch (e) {
-	// 	console.log(e);
-	// 	return { name: 'MAINNET', networkId };
-	// }
+	console.log(await getSignerNetwork());
+	const { name: ethereumNetworkName, networkId } = await getSignerNetwork();
+	return {
+		ovmNetworkName: 'OVM',
+		ovmNetworkId: networkId === 1 ? 10 : 69,
+		ethereumNetworkName,
+	};
+}
+
+async function getSignerNetwork() {
+	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
+	let networkId = 1;
+	try {
+		if (window.web3?.eth?.net) {
+			networkId = await window.web3.eth.net.getId();
+			return { name: SUPPORTED_NETWORKS[networkId], networkId: Number(networkId) };
+		} else if (window.web3?.version?.network) {
+			networkId = Number(window.web3.version.network);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		} else if (window.ethereum?.networkVersion) {
+			networkId = Number(window.ethereum?.networkVersion);
+			return { name: SUPPORTED_NETWORKS[networkId], networkId };
+		}
+		return { name: 'MAINNET', networkId };
+	} catch (e) {
+		console.log(e);
+		return { name: 'MAINNET', networkId };
+	}
 }
 
 export const getNetworkSpeeds = async () => {

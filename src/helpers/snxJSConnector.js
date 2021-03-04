@@ -176,48 +176,30 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 	// 		appId: PORTIS_APP_ID,
 	// 	};
 	// }
+	if (type === SUPPORTED_WALLETS_MAP.METAMASK) {
+		return networkName;
+	}
 
 	return {};
 };
 
-export const setSigner = async ({ type, networkId, derivationPath, networkName }) => {
-	const signer = new snxJSConnector.signers[type](
-		getSignerConfig({ type, networkId, derivationPath, networkName })
+export const setSigner = async () => {
+	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
+	console.log({ ethereumNetworkName, ovmNetworkId, ovmNetworkName });
+	const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK](
+		ethereumNetworkName.toLowerCase()
 	);
-
 	snxJSConnector.setContractSettings({
-		networkId,
+		networkId: ovmNetworkId,
 		signer,
 		provider: signer.provider,
 	});
 };
 
 export const connectToWallet = async ({ wallet, derivationPath }) => {
-	const { name, networkId } = await getEthereumNetwork();
-	if (!name) {
-		return {
-			walletType: '',
-			unlocked: false,
-			unlockReason: 'NetworkNotSupported',
-		};
-	}
-	setSigner({ type: wallet, networkId, derivationPath, networkName: name });
-
-	switch (wallet) {
-		case SUPPORTED_WALLETS_MAP.METAMASK:
-			return connectToMetamask(networkId, name);
-		case SUPPORTED_WALLETS_MAP.COINBASE:
-			return connectToCoinbase(networkId, name);
-		case SUPPORTED_WALLETS_MAP.TREZOR:
-		case SUPPORTED_WALLETS_MAP.LEDGER:
-			return connectToHardwareWallet(networkId, name, wallet);
-		case SUPPORTED_WALLETS_MAP.WALLET_CONNECT:
-			return connectToWalletConnect(networkId, name);
-		case SUPPORTED_WALLETS_MAP.PORTIS:
-			return connectToPortis(networkId, name);
-		default:
-			return {};
-	}
+	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
+	setSigner();
+	connectToMetamask(ovmNetworkId, ovmNetworkName);
 };
 
 export default snxJSConnector;
