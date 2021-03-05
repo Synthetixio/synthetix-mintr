@@ -1,5 +1,5 @@
 import { SynthetixJs } from 'synthetix-js';
-import { Contract, providers, ethers } from 'ethers';
+import { Contract, providers } from 'ethers';
 import { getEthereumNetwork, INFURA_JSON_RPC_URLS, SUPPORTED_WALLETS_MAP } from './networkHelper';
 import { stateCommitmentChain } from 'helpers/contracts';
 
@@ -21,6 +21,7 @@ let snxJSConnector = {
 		);
 	},
 };
+window.snxJSConnector = snxJSConnector;
 
 const connectToMetamask = async (networkId, networkName) => {
 	const walletState = {
@@ -59,132 +60,136 @@ const connectToMetamask = async (networkId, networkName) => {
 	}
 };
 
-const connectToCoinbase = async (networkId, networkName) => {
-	const walletState = {
-		walletType: SUPPORTED_WALLETS_MAP.COINBASE,
-		unlocked: false,
-	};
-	try {
-		const accounts = await snxJSConnector.signer.getNextAddresses();
-		if (accounts && accounts.length > 0) {
-			return {
-				...walletState,
-				currentWallet: accounts[0],
-				unlocked: true,
-				networkId: 1,
-				networkName: networkName.toLowerCase(),
-			};
-		} else {
-			return {
-				...walletState,
-				unlockReason: 'CoinbaseNoAccounts',
-			};
-		}
-		// We updateWalletStatus with all the infos
-	} catch (e) {
-		console.log(e);
-		return {
-			...walletState,
-			unlockReason: 'ErrorWhileConnectingToCoinbase',
-			unlockMessage: e,
-		};
-	}
-};
+// const connectToCoinbase = async (networkId, networkName) => {
+// 	const walletState = {
+// 		walletType: SUPPORTED_WALLETS_MAP.COINBASE,
+// 		unlocked: false,
+// 	};
+// 	try {
+// 		const accounts = await snxJSConnector.signer.getNextAddresses();
+// 		if (accounts && accounts.length > 0) {
+// 			return {
+// 				...walletState,
+// 				currentWallet: accounts[0],
+// 				unlocked: true,
+// 				networkId: 1,
+// 				networkName: networkName.toLowerCase(),
+// 			};
+// 		} else {
+// 			return {
+// 				...walletState,
+// 				unlockReason: 'CoinbaseNoAccounts',
+// 			};
+// 		}
+// 		// We updateWalletStatus with all the infos
+// 	} catch (e) {
+// 		console.log(e);
+// 		return {
+// 			...walletState,
+// 			unlockReason: 'ErrorWhileConnectingToCoinbase',
+// 			unlockMessage: e,
+// 		};
+// 	}
+// };
 
-const connectToHardwareWallet = (networkId, networkName, walletType) => {
-	return {
-		walletType,
-		unlocked: true,
-		networkId,
-		networkName: networkName.toLowerCase(),
-	};
-};
+// const connectToHardwareWallet = (networkId, networkName, walletType) => {
+// 	return {
+// 		walletType,
+// 		unlocked: true,
+// 		networkId,
+// 		networkName: networkName.toLowerCase(),
+// 	};
+// };
 
-const connectToWalletConnect = async (networkId, networkName) => {
-	const walletState = {
-		walletType: SUPPORTED_WALLETS_MAP.WALLET_CONNECT,
-		unlocked: false,
-	};
-	try {
-		await snxJSConnector.signer.provider._web3Provider.enable();
-		const accounts = await snxJSConnector.signer.getNextAddresses();
-		if (accounts && accounts.length > 0) {
-			return {
-				...walletState,
-				currentWallet: accounts[0],
-				unlocked: true,
-				networkId,
-				networkName: networkName.toLowerCase(),
-			};
-		}
-	} catch (e) {
-		console.log(e);
-		return {
-			...walletState,
-			unlockReason: 'ErrorWhileConnectingToWalletConnect',
-			unlockMessage: e,
-		};
-	}
-};
+// const connectToWalletConnect = async (networkId, networkName) => {
+// 	const walletState = {
+// 		walletType: SUPPORTED_WALLETS_MAP.WALLET_CONNECT,
+// 		unlocked: false,
+// 	};
+// 	try {
+// 		await snxJSConnector.signer.provider._web3Provider.enable();
+// 		const accounts = await snxJSConnector.signer.getNextAddresses();
+// 		if (accounts && accounts.length > 0) {
+// 			return {
+// 				...walletState,
+// 				currentWallet: accounts[0],
+// 				unlocked: true,
+// 				networkId,
+// 				networkName: networkName.toLowerCase(),
+// 			};
+// 		}
+// 	} catch (e) {
+// 		console.log(e);
+// 		return {
+// 			...walletState,
+// 			unlockReason: 'ErrorWhileConnectingToWalletConnect',
+// 			unlockMessage: e,
+// 		};
+// 	}
+// };
 
-const connectToPortis = async (networkId, networkName) => {
-	const walletState = {
-		walletType: SUPPORTED_WALLETS_MAP.PORTIS,
-		unlocked: false,
-	};
-	try {
-		const accounts = await snxJSConnector.signer.getNextAddresses();
-		if (accounts && accounts.length > 0) {
-			return {
-				...walletState,
-				currentWallet: accounts[0],
-				unlocked: true,
-				networkId,
-				networkName: networkName.toLowerCase(),
-			};
-		}
-	} catch (e) {
-		console.log(e);
-		return {
-			...walletState,
-			unlockError: e.message,
-		};
-	}
-};
+// const connectToPortis = async (networkId, networkName) => {
+// 	const walletState = {
+// 		walletType: SUPPORTED_WALLETS_MAP.PORTIS,
+// 		unlocked: false,
+// 	};
+// 	try {
+// 		const accounts = await snxJSConnector.signer.getNextAddresses();
+// 		if (accounts && accounts.length > 0) {
+// 			return {
+// 				...walletState,
+// 				currentWallet: accounts[0],
+// 				unlocked: true,
+// 				networkId,
+// 				networkName: networkName.toLowerCase(),
+// 			};
+// 		}
+// 	} catch (e) {
+// 		console.log(e);
+// 		return {
+// 			...walletState,
+// 			unlockError: e.message,
+// 		};
+// 	}
+// };
 
-const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
-	if (type === SUPPORTED_WALLETS_MAP.LEDGER) {
-		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
-		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
-	}
-	if (type === SUPPORTED_WALLETS_MAP.COINBASE) {
-		return {
-			appName: 'Mintr',
-			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
-			jsonRpcUrl: 'https://goerli.optimism.io',
-			networkId,
-		};
-	}
-	// if (type === SUPPORTED_WALLETS_MAP.WALLET_CONNECT) {
-	// 	return {
-	// 		infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-	// 	};
-	// }
-	// if (type === SUPPORTED_WALLETS_MAP.PORTIS) {
-	// 	return {
-	// 		networkName: networkName.toLowerCase(),
-	// 		appId: PORTIS_APP_ID,
-	// 	};
-	// }
-	if (type === SUPPORTED_WALLETS_MAP.METAMASK) {
-		return networkName;
-	}
+// const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
+// 	if (type === SUPPORTED_WALLETS_MAP.LEDGER) {
+// 		const DEFAULT_LEDGER_DERIVATION_PATH = "44'/60'/0'/";
+// 		return { derivationPath: derivationPath || DEFAULT_LEDGER_DERIVATION_PATH };
+// 	}
+// 	if (type === SUPPORTED_WALLETS_MAP.COINBASE) {
+// 		return {
+// 			appName: 'Mintr',
+// 			appLogoUrl: `${window.location.origin}/images/mintr-leaf-logo.png`,
+// 			jsonRpcUrl: 'https://goerli.optimism.io',
+// 			networkId,
+// 		};
+// 	}
+// 	// if (type === SUPPORTED_WALLETS_MAP.WALLET_CONNECT) {
+// 	// 	return {
+// 	// 		infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+// 	// 	};
+// 	// }
+// 	// if (type === SUPPORTED_WALLETS_MAP.PORTIS) {
+// 	// 	return {
+// 	// 		networkName: networkName.toLowerCase(),
+// 	// 		appId: PORTIS_APP_ID,
+// 	// 	};
+// 	// }
+// 	if (type === SUPPORTED_WALLETS_MAP.METAMASK) {
+// 		return networkName;
+// 	}
 
-	return {};
-};
+// 	return {};
+// };
 
 export const setSigner = async () => {
-	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
+	const {
+		ethereumNetworkName,
+		ovmNetworkId,
+		// ovmNetworkName
+	} = await getEthereumNetwork();
 	const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK](
 		ethereumNetworkName.toLowerCase()
 	);
@@ -196,7 +201,11 @@ export const setSigner = async () => {
 };
 
 export const connectToWallet = async () => {
-	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
+	const {
+		// ethereumNetworkName,
+		ovmNetworkId,
+		ovmNetworkName,
+	} = await getEthereumNetwork();
 	await setSigner();
 	return await connectToMetamask(ovmNetworkId, ovmNetworkName);
 };

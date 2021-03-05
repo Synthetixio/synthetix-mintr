@@ -75,9 +75,9 @@ const useGetGasEstimate = (setFetchingGasLimit, setGasLimit) => {
 		const getGasEstimate = async () => {
 			setError(null);
 			try {
-				const {
-					snxJS: { FeePool },
-				} = snxJSConnector;
+				// const {
+				// 	snxJS: { FeePool },
+				// } = snxJSConnector;
 				setFetchingGasLimit(true);
 				// const gasEstimate = await FeePool.contract.estimateGas.claimFees();
 				setFetchingGasLimit(false);

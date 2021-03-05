@@ -7,7 +7,6 @@ import Confirmation from './Confirmation';
 import Complete from './Complete';
 
 import snxJSConnector from '../../../helpers/snxJSConnector';
-import { addBufferToGasLimit } from '../../../helpers/networkHelper';
 
 import { SliderContext } from '../../../components/ScreenSlider';
 

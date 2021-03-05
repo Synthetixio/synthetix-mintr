@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
 import invert from 'lodash/invert';
-import { providers } from 'ethers';
+// import { providers } from 'ethers';
 
 import { NETWORK_SPEEDS_TO_KEY } from '../constants/network';
 import { GWEI_UNIT, GAS_LIMIT_BUFFER_PERCENTAGE } from '../constants/network';
@@ -64,7 +64,7 @@ export async function getEthereumNetwork() {
 	};
 }
 
-async function getSignerNetwork() {
+export async function getSignerNetwork() {
 	if (!window.web3) return { name: 'MAINNET', networkId: 1 };
 	let networkId = 1;
 	try {

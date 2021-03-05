@@ -8,11 +8,7 @@ import { showModal } from '../../ducks/modal';
 import { getEthRate } from '../../ducks/rates';
 
 import { Subtext } from '../Typography';
-import { formatCurrency } from '../../helpers/formatters';
 import { MicroSpinner } from '../Spinner';
-import GasMenu from '../GasMenu';
-
-import { getTransactionPrice } from '../../helpers/networkHelper';
 
 const TransactionPriceIndicator = ({
 	canEdit = true,

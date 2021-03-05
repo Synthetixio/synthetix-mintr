@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
+// import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
@@ -20,7 +20,13 @@ import {
 	getEthereumNetwork,
 } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
-import { H1, H2, PMega, PSmall, ButtonTertiaryLabel } from '../../components/Typography';
+import {
+	H1,
+	H2,
+	PMega,
+	//PSmall,
+	ButtonTertiaryLabel,
+} from '../../components/Typography';
 import Logo from '../../components/Logo';
 
 import { Globe } from '../../components/Icons';
@@ -138,7 +144,7 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 				setCurrentPage,
 			})();
 		}
-	}, []);
+	}, [setCurrentPage, updateWalletStatus]);
 
 	return (
 		<LandingPageContainer>
@@ -226,9 +232,9 @@ const LandingPageContainer = styled.div`
 	display: flex;
 `;
 
-const StyledPSmall = styled(PSmall)`
-	margin: 0;
-`;
+// const StyledPSmall = styled(PSmall)`
+// 	margin: 0;
+// `;
 
 const OnboardingContainer = styled.div`
 	width: 100%;

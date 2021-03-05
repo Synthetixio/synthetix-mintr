@@ -154,7 +154,7 @@ const WalletConnection = ({
 		walletType,
 		walletPaginatorIndex = 0,
 		availableWallets = [],
-		networkName,
+		// networkName,
 		networkId,
 	} = walletDetails;
 
