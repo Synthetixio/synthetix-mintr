@@ -56,7 +56,6 @@ export const hasWeb3 = () => {
 };
 
 export async function getEthereumNetwork() {
-	console.log(await getSignerNetwork());
 	const { name: ethereumNetworkName, networkId } = await getSignerNetwork();
 	return {
 		ovmNetworkName: 'OVM',

@@ -185,7 +185,6 @@ const getSignerConfig = ({ type, networkId, derivationPath, networkName }) => {
 
 export const setSigner = async () => {
 	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
-	console.log({ ethereumNetworkName, ovmNetworkId, ovmNetworkName });
 	const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK](
 		ethereumNetworkName.toLowerCase()
 	);
@@ -196,10 +195,10 @@ export const setSigner = async () => {
 	});
 };
 
-export const connectToWallet = async ({ wallet, derivationPath }) => {
+export const connectToWallet = async () => {
 	const { ethereumNetworkName, ovmNetworkId, ovmNetworkName } = await getEthereumNetwork();
-	setSigner();
-	connectToMetamask(ovmNetworkId, ovmNetworkName);
+	await setSigner();
+	return await connectToMetamask(ovmNetworkId, ovmNetworkName);
 };
 
 export default snxJSConnector;

@@ -15,6 +15,7 @@ import {
 	hasWeb3,
 	SUPPORTED_WALLETS,
 	onMetamaskAccountChange,
+	onMetamaskNetworkChange,
 	SUPPORTED_WALLETS_MAP,
 	getEthereumNetwork,
 } from '../../helpers/networkHelper';
@@ -41,6 +42,7 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 		updateWalletStatus({ ...walletStatus, availableWallets: [] });
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === SUPPORTED_WALLETS_MAP.METAMASK) {
+				window.localStorage.setItem('metamask-connected', 1);
 				onMetamaskAccountChange(async () => {
 					const address = await snxJSConnector.signer.getNextAddresses();
 					const { ethereumNetworkName } = await getEthereumNetwork();
@@ -55,6 +57,9 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 					if (address && address[0]) {
 						updateWalletStatus({ currentWallet: address[0] });
 					}
+				});
+				onMetamaskNetworkChange(async () => {
+					window.location.reload(); // todo
 				});
 			}
 			setCurrentPage(PAGES_BY_KEY.MAIN);
@@ -123,6 +128,18 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	const { derivationPath } = walletDetails;
+
+	React.useEffect(() => {
+		if (!!window.localStorage.getItem('metamask-connected') && hasWeb3()) {
+			onWalletClick({
+				wallet: 'Metamask',
+				// derivationPath,
+				updateWalletStatus,
+				setCurrentPage,
+			})();
+		}
+	}, []);
+
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
