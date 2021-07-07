@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
+// import i18n from 'i18next';
 
 import snxJSConnector, { connectToWallet } from '../../helpers/snxJSConnector';
 
@@ -15,10 +15,18 @@ import {
 	hasWeb3,
 	SUPPORTED_WALLETS,
 	onMetamaskAccountChange,
+	onMetamaskNetworkChange,
 	SUPPORTED_WALLETS_MAP,
+	getEthereumNetwork,
 } from '../../helpers/networkHelper';
 import { ButtonPrimary, ButtonSecondary } from '../../components/Button';
-import { H1, H2, PMega, PSmall, ButtonTertiaryLabel } from '../../components/Typography';
+import {
+	H1,
+	H2,
+	PMega,
+	//PSmall,
+	ButtonTertiaryLabel,
+} from '../../components/Typography';
 import Logo from '../../components/Logo';
 
 import { Globe } from '../../components/Icons';
@@ -40,9 +48,13 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 		updateWalletStatus({ ...walletStatus, availableWallets: [] });
 		if (walletStatus && walletStatus.unlocked && walletStatus.currentWallet) {
 			if (walletStatus.walletType === SUPPORTED_WALLETS_MAP.METAMASK) {
+				window.localStorage.setItem('metamask-connected', 1);
 				onMetamaskAccountChange(async () => {
 					const address = await snxJSConnector.signer.getNextAddresses();
-					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK]({});
+					const { ethereumNetworkName } = await getEthereumNetwork();
+					const signer = new snxJSConnector.signers[SUPPORTED_WALLETS_MAP.METAMASK](
+						ethereumNetworkName.toLowerCase()
+					);
 					snxJSConnector.setContractSettings({
 						networkId: walletStatus.networkId,
 						signer,
@@ -51,6 +63,9 @@ const onWalletClick = ({ wallet, derivationPath, updateWalletStatus, setCurrentP
 					if (address && address[0]) {
 						updateWalletStatus({ currentWallet: address[0] });
 					}
+				});
+				onMetamaskNetworkChange(async () => {
+					window.location.reload(); // todo
 				});
 			}
 			setCurrentPage(PAGES_BY_KEY.MAIN);
@@ -119,6 +134,18 @@ const Landing = ({ currentTheme, walletDetails, updateWalletStatus, setCurrentPa
 	const [pageIndex, setPageIndex] = useState(0);
 	const [flagDropdownIsVisible, setFlagVisibility] = useState(false);
 	const { derivationPath } = walletDetails;
+
+	React.useEffect(() => {
+		if (!!window.localStorage.getItem('metamask-connected') && hasWeb3()) {
+			onWalletClick({
+				wallet: 'Metamask',
+				// derivationPath,
+				updateWalletStatus,
+				setCurrentPage,
+			})();
+		}
+	}, [setCurrentPage, updateWalletStatus]);
+
 	return (
 		<LandingPageContainer>
 			<OnboardingContainer>
@@ -205,9 +232,9 @@ const LandingPageContainer = styled.div`
 	display: flex;
 `;
 
-const StyledPSmall = styled(PSmall)`
-	margin: 0;
-`;
+// const StyledPSmall = styled(PSmall)`
+// 	margin: 0;
+// `;
 
 const OnboardingContainer = styled.div`
 	width: 100%;

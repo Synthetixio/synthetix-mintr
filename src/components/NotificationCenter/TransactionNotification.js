@@ -22,9 +22,13 @@ const getStatusSentence = status => {
 	}
 };
 
-const TransactionNotification = ({ transaction, walletDetails, hideTransaction }) => {
+const TransactionNotification = ({
+	transaction,
+	// walletDetails,
+	hideTransaction,
+}) => {
 	const { t } = useTranslation();
-	const { networkId } = walletDetails;
+	// const { networkId } = walletDetails;
 	const [status, setStatus] = useState(transaction.status);
 	const [confirmationTime, setConfirmationTime] = useState(0);
 	useEffect(() => {

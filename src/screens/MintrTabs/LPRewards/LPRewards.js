@@ -231,13 +231,13 @@ const StyledDataLarge = styled(DataLarge)`
 	font-size: 22px;
 `;
 
-const DistributionRow = styled.div`
-	display: flex;
-	flex-direction: column;
-	& > :not(:first-child) {
-		margin-top: 10px;
-	}
-`;
+// const DistributionRow = styled.div`
+// 	display: flex;
+// 	flex-direction: column;
+// 	& > :not(:first-child) {
+// 		margin-top: 10px;
+// 	}
+// `;
 
 const StyledSubtext = styled(Subtext)`
 	text-transform: uppercase;
